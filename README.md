@@ -30,11 +30,13 @@ But still it's pretty much fun to play with!
     $ yarn install
     $ yarn start --port 8081
     ```
-- Open https://localhost:8081/controller.html 
-- Open https://localhost:8081 in a second window
+- Open http://localhost:8081/controller.html 
+- Open http://localhost:8081 in a second window
 - Split the two windows left and right
 - Try some of the setups from presets (controller->lowerleft)
 - Play around
+
+More server options can be found [here](docs/server-options.md)
 
 ## Questions & Answers
 - Create an issue for your question

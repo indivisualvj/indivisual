@@ -6,10 +6,14 @@ let path = require('path');
 let express = require('express');
 let sio = require('socket.io');
 let https = require('https');
+let http = require('http');
 let commandLineArgs = require('command-line-args');
 
 let options = commandLineArgs([
-    { name: "port", alias: "p", type: String, defaultOption: true }
+    { name: "port", alias: "p", type: String, defaultOption: true },
+    { name: "https", type: Boolean },
+    { name: "ssl-key", type: String },
+    { name: "ssl-cert", type: String },
 ]);
 
 _setup();
@@ -21,19 +25,25 @@ const _SAMPLES = path.resolve(conf.directories.samples);
 const _ASSETS = path.resolve(conf.directories.assets);
 const _STORAGE = path.resolve(conf.directories.storage);
 const _PORT = options.port ? options.port : conf.port;
+const _HTTPS = typeof options.https != "undefined";
+const _SSL_KEY = options['ssl-key'] ? options['ssl-key'] : 'ssl/server.key';
+const _SSL_CERT = options['ssl-cert'] ? options['ssl-cert'] : 'ssl/server.crt';
 
-let privateKey = fs.readFileSync('ssl/server.key');
-let certificate = fs.readFileSync('ssl/server.crt');
-
-let credentials = {
-    key: privateKey,
-    cert: certificate,
-    requestCert: false,
-    rejectUnauthorized: false
-};
 
 let app = express();
-let server = https.createServer(credentials, app);
+let server = null;
+if(_HTTPS) {
+    let credentials = {
+        key: fs.readFileSync(_SSL_KEY),
+        cert: fs.readFileSync(_SSL_CERT),
+        requestCert: false,
+        rejectUnauthorized: false
+    };
+    console.log('using ssl');
+    server = https.createServer(credentials, app);
+} else {
+    server = http.createServer(app);
+}
 
 let io = sio.listen(server);
 
@@ -87,6 +97,9 @@ if (process.argv.length > 2) {
 
 server.listen(_PORT);
 console.log('server running on port: ' + _PORT);
+let proto = _HTTPS ? 'https' : 'http';
+console.log('open ' + proto + '://localhost:' + _PORT + '/controller.html in your browser');
+console.log('open ' + proto + '://localhost:' + _PORT + ' in another tab in your browser');
 
 app.use(express.static('..'));
 

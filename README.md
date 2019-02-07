@@ -92,5 +92,10 @@ In this case you can add your own plugins for the most settings available.
 
 - ... more explanation here ...
 
+## Contributing
+If you have any suggestion or features or you found some bugs,
+feel free to contribute to this project.
+Just open a pull requests or an issue.
+
 ## Pending
 - Some serious glContext lost issues

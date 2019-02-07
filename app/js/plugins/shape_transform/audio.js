@@ -65,38 +65,34 @@ HC.plugins.shape_transform.audio = _class(false, HC.ShapeTransformPlugin, {
     }
 });
 
-HC.plugins.shape_transform.audiox = _class(false, HC.ShapeTransformPlugin, {
+HC.plugins.shape_transform.audiox = _class(false, HC.plugins.shape_transform.audio, {
     name: 'audio x',
 
     apply: function (shape) {
-        var layer = this.layer;
-        layer.getShapeTransformPlugin('audio').apply(shape, 'x');
+        HC.plugins.shape_transform.audio.prototype.apply.call(this, shape, 'x');
     }
 });
 
-HC.plugins.shape_transform.audioy = _class(false, HC.ShapeTransformPlugin, {
+HC.plugins.shape_transform.audioy = _class(false, HC.plugins.shape_transform.audio, {
     name: 'audio y',
 
     apply: function (shape) {
-        var layer = this.layer;
-        layer.getShapeTransformPlugin('audio').apply(shape, 'y');
+        HC.plugins.shape_transform.audio.prototype.apply.call(this, shape, 'y');
     }
 });
 
-HC.plugins.shape_transform.audioz = _class(false, HC.ShapeTransformPlugin, {
+HC.plugins.shape_transform.audioz = _class(false, HC.plugins.shape_transform.audio, {
     name: 'audio z',
 
     apply: function (shape) {
-        var layer = this.layer;
-        layer.getShapeTransformPlugin('audio').apply(shape, 'z');
+        HC.plugins.shape_transform.audio.prototype.apply.call(this, shape, 'z');
     }
 });
 
-HC.plugins.shape_transform.audioxy = _class(false, HC.ShapeTransformPlugin, {
+HC.plugins.shape_transform.audioxy = _class(false, HC.plugins.shape_transform.audio, {
     name: 'audio xy',
 
     apply: function (shape) {
-        var layer = this.layer;
-        layer.getShapeTransformPlugin('audio').apply(shape, 'xy');
+        HC.plugins.shape_transform.audio.prototype.apply.call(this, shape, 'xy');
     }
 });

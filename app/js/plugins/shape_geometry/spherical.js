@@ -3,7 +3,7 @@ HC.plugins.shape_geometry.decagon = _class(false, HC.ShapeGeometryPlugin, {
         var layer = this.layer;
 
 
-        var geometry = new THREE.TetrahedronGeometry(layer.shapeSize(1), this.settings.shape_variant - 1);
+        var geometry = new THREE.TetrahedronGeometry(layer.shapeSize(.5), this.settings.shape_variant - 1);
         return geometry;
     }
 });

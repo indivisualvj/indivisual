@@ -45,6 +45,7 @@ Many thanks to:
 
 - Google for their lightning fast browser
 - All the people contributing to web browser technology
+- https://github.com/nodejs/node
 - https://github.com/mrdoob/three.js
 - https://github.com/tweenjs/tween.js
 - https://github.com/glowbox/maptasticjs

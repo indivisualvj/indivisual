@@ -379,7 +379,7 @@ THREE.UnrealBloomPass.prototype = Object.assign( Object.create( THREE.Pass.proto
 													 lerpBloomFactor(bloomFactors[4]) * vec4(bloomTintColors[4], 1.0) * texture2D(blurTexture5, vUv) );\
 					if (opacify) {\
 					float sum = col.r + col.g + col.b;\
-					float opc = sum/3.0;\
+					float opc = sqrt(sum/3.0);\
 					gl_FragColor = vec4(col.rgb, opc);\
 					}\
 					else {\

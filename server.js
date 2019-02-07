@@ -6,6 +6,11 @@ let path = require('path');
 let express = require('express');
 let sio = require('socket.io');
 let https = require('https');
+let commandLineArgs = require('command-line-args');
+
+let options = commandLineArgs([
+    { name: "port", alias: "p", type: String, defaultOption: true }
+]);
 
 _setup();
 const _ROOT = path.resolve('.');
@@ -15,6 +20,7 @@ const _SESSIONS = path.resolve(conf.directories.sessions);
 const _SAMPLES = path.resolve(conf.directories.samples);
 const _ASSETS = path.resolve(conf.directories.assets);
 const _STORAGE = path.resolve(conf.directories.storage);
+const _PORT = options.port ? options.port : conf.port;
 
 let privateKey = fs.readFileSync('ssl/server.key');
 let certificate = fs.readFileSync('ssl/server.crt');
@@ -79,8 +85,8 @@ if (process.argv.length > 2) {
     }
 }
 
-server.listen(conf.port);
-console.log('server running on port: ' + conf.port);
+server.listen(_PORT);
+console.log('server running on port: ' + _PORT);
 
 app.use(express.static('..'));
 

@@ -28,7 +28,7 @@ If you don't have yarn, please read the [yarn installation guide](https://yarnpk
 Execute following lines in your command line:
 ```
 $ yarn install
-$ yarn start
+$ yarn start --port 8081
 ```
 
 - Open https://localhost:8081/controller.html 

@@ -23,14 +23,13 @@ Therefore things do not work together perfectly sometimes.
 But still it's pretty much fun to play with!
 
 ## Getting Started
-If you don't have yarn, please read the [yarn installation guide](https://yarnpkg.com/lang/en/docs/install)
-
-Execute following lines in your command line:
-```
-$ yarn install
-$ yarn start --port 8081
-```
-
+- Install [Node.js](https://nodejs.org/en/download/)
+- Install [yarn](https://yarnpkg.com/lang/en/docs/install)
+- Execute the following lines in your command line:
+    ```
+    $ yarn install
+    $ yarn start --port 8081
+    ```
 - Open https://localhost:8081/controller.html 
 - Open https://localhost:8081 in a second window
 - Split the two windows left and right

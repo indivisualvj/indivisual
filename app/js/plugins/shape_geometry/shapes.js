@@ -2,8 +2,8 @@ HC.plugins.shape_geometry.plane = _class(false, HC.ShapeGeometryPlugin, {
     create: function () {
         var layer = this.layer;
 
-        var matrix = layer.getPatternPlugin('matrix');
-        var geometry = new THREE.PlaneGeometry(layer.diameterVector.x, layer.diameterVector.y, matrix.columnCount(layer), matrix.rowCount(layer));
+        var segments = Math.pow(this.settings.shape_variant, this.settings.shape_variant);
+        var geometry = new THREE.PlaneGeometry(layer.diameterVector.x, layer.diameterVector.y, segments, segments);
         return geometry;
     }
 });

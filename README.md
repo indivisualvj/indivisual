@@ -24,7 +24,7 @@ But still it's pretty much fun to play with!
 
 ## Getting Started
 - Install [Node.js](https://nodejs.org/en/download/)
-- Install [yarn](https://yarnpkg.com/lang/en/docs/install)
+- Install [yarn](https://yarnpkg.com/lang/en/docs/install) or if you have npm just execute `npm install -g yarn`
 - Execute the following lines in your command line:
     ```
     $ yarn install

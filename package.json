@@ -4,6 +4,7 @@
   "description": "VJ-Synthesizer",
   "main": "server.js",
   "dependencies": {
+    "command-line-args": "^5.0.2",
     "express": "^4.16.4",
     "socket.io": "^2.2.0"
   },

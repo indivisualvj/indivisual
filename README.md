@@ -22,9 +22,15 @@ Therefore things do not work together perfectly sometimes.
 
 But still it's pretty much fun to play with!
 
-## Getting Startet
-- Execute install.sh (or call npm install)
-- Execute server.sh
+## Getting Started
+If you don't have yarn, please read the [yarn installation guide](https://yarnpkg.com/lang/en/docs/install)
+
+Execute following lines in your command line:
+```
+$ yarn install
+$ yarn start
+```
+
 - Open https://localhost:8081/controller.html 
 - Open https://localhost:8081 in a second window
 - Split the two windows left and right

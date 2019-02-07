@@ -81,9 +81,7 @@ HC.Layer.prototype.doOverlay = function (shape) {
         }
 
         var plugin = this.getPatternOverlayPlugin();
-        if (plugin) {
-            plugin.apply(nu);
-        }
+        this.doPlugin(plugin, nu);
 
         if (this.settings.pattern_overlay_volume != 1) {
             var fade = ((2 * Math.abs(this.settings.pattern_overlay_volume)) - 1);

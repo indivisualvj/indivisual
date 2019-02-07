@@ -69,7 +69,6 @@ HC.plugins.pattern_overlay.off = _class(false, HC.PatternPlugin, {
     index: 1,
     name: 'off',
     apply: function (shape) {
-        var layer = this.layer;
 
     }
 });

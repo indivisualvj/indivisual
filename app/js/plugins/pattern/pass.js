@@ -8,7 +8,6 @@ HC.plugins.pattern.pass = _class(
         },
 
         before: function (shape) {
-// todo als overlay wird die matrix nicht zugeteilt
             var params = this.params(shape);
             if (!params.velocity) {
                 var matrix = this.layer.getPatternPlugin('matrix');

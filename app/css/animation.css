@@ -1,0 +1,92 @@
+body {
+    width: 100%;
+    height: 100vh;
+    background: black;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    transform-style: preserve-3d;
+}
+
+*::-webkit-scrollbar-corner {
+    height: 0;
+    display: none;
+}
+*::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    background: #1a1a1a;
+}
+*::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background: #676767;
+}
+
+/**:fullscreen, *:-webkit-full-screen, *:-moz-full-screen {*/
+    /*background-color: rgba(0,0,0,0);*/
+/*}*/
+
+.glowhover:hover {
+    box-shadow: 0px 0px 5px #2fa1d6; /*rgba(255, 10, 10, 0.7);*/
+}
+
+[data-selected="true"] {
+    box-shadow: 0px 0px 0px 1px #2fa1d6 !important;
+}
+
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    transform-style: preserve-3d;
+}
+
+audio {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+video {
+    display: none;
+}
+
+pre#log {
+    position: absolute;
+    z-index: 1000;
+    bottom: 0;
+    right: 0;
+    display: block;
+    width: 23vw;
+    height: 48px;
+    padding: 2px;
+    margin: 0;
+    box-sizing: border-box;
+    opacity: 0.3;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #2fd62f;
+    font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+    font-size: 12px;
+    overflow: hidden;
+    -webkit-transition: width 0.25s, height 0.25s, opacity 0.25s;
+    transition: width 0.25s, height 0.25s, opacity 0.25s;
+}
+
+pre#log:hover,
+pre#log:focus,
+pre#log[data-selected] {
+    width: 40vw;
+    height: 20vw;
+    opacity: 1;
+    overflow: auto;
+}
+
+a {
+    display: block;
+    height: 20px;
+    font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+    font-size: 12px;
+    /*color: rgba(10, 255, 10, 1);*/
+    color: #2fa1d6;
+}

@@ -1,0 +1,152 @@
+
+sample:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+
+input: #sequence inputs
+  off: off
+  0: sample 0
+  1: sample 1
+  2: sample 2
+  3: sample 3
+  4: sample 4
+  5: sample 5
+
+overlay:
+  0: 0
+  1: 1
+  2: 2
+  3: 3
+  4: 4
+  off: off
+
+beats:
+  2: 2
+  4: 4
+  8: 8
+  16: 16
+  32: 32
+
+sequence:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+
+source:
+  animation: animation
+  sequence: sequence
+  perspective: perspective
+#  video: video
+#  camera: camera
+  display: display
+  black: black
+  offline: offline
+  lighting: lighting
+
+material_map:
+  none: none
+  seq0: sequence0
+  seq1: sequence1
+  seq2: sequence2
+  seq3: sequence3
+  seq4: sequence4
+
+oscillator:
+  off: off
+  audio: audio
+  appearexpout: appear & expout
+  appearlogout: appear & logout
+  expindisappear: expin & disappear
+  logindisappear: login & disappear
+  sinusfulls: sinus (fulls)
+  onoffquarter: on & off (quarter)
+  onoffhalf: on & off (half)
+  onofffull: on & off (full)
+  onoffdouble: on & off (double)
+  onoffpeak: on & off (peak)
+  blitzhalf: blitz (half)
+  blitzquarter: blitz (quarter)
+  blitzeight: blitz (eight)
+  blitzpeak: blitz (peak)
+  blitzpeakslow: blitz (peak/slow)
+
+blendmode:
+  0: source-over
+  1: source-atop
+  2: source-in
+  3: source-out
+  4: destination-over
+  5: destination-atop
+  6: destination-in
+  7: destination-out
+  8: xor
+  9: multiply
+  10: difference
+  11: color-dodge
+  12: color-burn
+#  soft-light: soft-light
+  13: hard-light
+#  lighter: lighter
+#  overlay: overlay
+#  exclusion: exclusion
+#  screen: screen
+#  lighten: lighten
+#  darken: darken
+#  hue: hue
+#  saturation: saturation
+#  color: color
+#  luminosity: luminosity
+
+lighting_speed:
+  peak: peak
+  full: fulls
+  half: halfs
+  quarter: quarters
+  eight: eights
+  sixteen: sixteens
+#  random: random
+
+lighting_color:
+  current: current
+  complementary: complementary
+  hsl: hsl
+  red: red
+  green: green
+  blue: blue
+  cyan: cyan
+  magenta: magenta
+  yellow: yellow
+
+lighting_type:
+  off: off
+  randomblitzrgb: randomblitz RGB
+  randomblitzamber: randomblitz AMBER
+  randomblitzwhite: randomblitz WHITE
+  randomblitzuv: randomblitz UV
+  randomoneonrgb: random one on RGB
+  randomoneonamber: random one on AMBER
+  randomoneonwhite: random one on WHITE
+  randomoneonuv: random one on UV
+  shufflergb: shuffle RGB
+  shuffleamber: shuffle AMBER
+#  shufflewhite: shuffle WHITE
+  shuffleuv: shuffle UV
+  wavergb: wave RGB
+  waveamber: wave AMBER
+#  wavewhite: wave WHITE
+  waveuv: wave UV
+  allrgb: all RGB
+#  allamber: all AMBER
+#  allwhite: all WHITE
+#  alluv: all UV
+  strobemodulorgb: strobe modulo RGB
+  strobemoduloamber: strobe modulo AMBER
+  strobemodulowhite: strobe modulo WHITE
+  strobemodulouv: strobe modulo UV
+  randomall: random all

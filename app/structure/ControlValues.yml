@@ -1,0 +1,45 @@
+session:
+  root: root
+
+layer:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 18
+  - 19
+  - 20
+
+shuffle_mode:
+  - layers (forward)
+  - layers (reversed)
+  - layers (random)
+
+#filter_type:
+#  off: off
+#  lowpass: lowpass
+#  highpass: highpass
+#  bandpass: bandpass
+
+_keys:
+  g_controls:
+    play: spc
+    reset: del
+    monitor: hm
+    push_layers: end
+    push_sources: pgd
+    rst_shaders: pgu
+    debug: "-"

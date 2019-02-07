@@ -1,0 +1,40 @@
+{
+  "comment": "server config file",
+
+  "port": 8081,
+
+  "shared": [
+    "js/shared",
+    "js/source",
+    "js/display",
+    "js/plugins"
+  ],
+
+  "animation": [
+    "js/animation.js",
+    "js/animation"
+  ],
+
+  "controller": [
+    "js/controller.js",
+    "js/controller"
+  ],
+
+  "postprocessing": [
+    "lib/three/shaders",
+    "lib/three/postprocessing"
+  ],
+
+  "directories": {
+    "app": "app",
+    "bin": "bin",
+    "sessions": "sessions",
+    "storage": "storage",
+    "samples": "samples",
+    "assets": "assets"
+  },
+  "defaults": {
+    "displays": {"display0_visible":true,"display0_mapping":"{\"targetPoints\":[[5760,3240],[7040,3240],[7040,3960],[5760,3960]]}"},
+    "controls": {"layer":0,"play":true,"usemic":true}
+  }
+}

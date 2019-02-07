@@ -1,0 +1,22 @@
+{
+  "name": "indivisual.vj",
+  "version": "1.0.0",
+  "description": "VJ-Synthesizer",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.16.4",
+    "socket.io": "^2.2.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/blutze/indivisual.git"
+  },
+  "author": "Benjamin Lutze",
+  "license": "MIT",
+  "homepage": "https://bitbucket.org/blutze/indivisual#readme"
+}

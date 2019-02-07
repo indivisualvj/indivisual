@@ -1,0 +1,1 @@
+// bones: https://threejs.org/docs/#api/en/objects/SkinnedMesh

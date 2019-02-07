@@ -1,0 +1,85 @@
+
+masking_shape:
+  off: off
+#  circle: circle
+  triangle: triangle
+#  trianglesquare: triangle square
+  rect: rect
+  quad: quad
+  pentagon: pentagon
+  hexagon: hexagon
+  octagon: octagon
+  decagon: decagon
+  dodecagon: dodecagon
+  hectagon: hectagon
+  icosagon: icosagon
+
+display:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+
+video:
+  - 0
+  - 1
+  - 2
+  - 3
+  - 4
+
+display_visibility:
+  visible: visible
+  randomblitz: random blitz
+  randomsmear: random smear
+#  stackf: stack
+#  stackr: stack (reversed)
+  stackoof: stack one off
+  stackoor: stack one off (reversed)
+  randomflash: random flash
+  random: random
+  randomoneoff: random one off
+  randomoneon: random one on
+  randomall: random all
+#  hidden: hidden
+
+display_speed:
+  peak: peak
+  layer: layer
+  full: fulls
+  half: halfs
+  quarter: quarters
+  eight: eights
+  midi: midi
+#  random: random
+
+border_mode:
+  parent: parent
+  visible: visible
+  growcw: grow clockwise
+  growacw: grow anti-clockwise
+  jumpcw: jump clockwise
+  jumpacw: jump anti-clockwise
+  linecw: line clockwise
+  lineacw: line anti-clockwise
+  randomline: random line
+  randomall: random all
+
+border_speed:
+  peak: peak
+  full: fulls
+  half: halfs
+  quarter: quarters
+  eight: eights
+#  random: random

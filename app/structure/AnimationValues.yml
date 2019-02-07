@@ -1,0 +1,134 @@
+pattern_rotation: {}
+offset_mode: {}
+rotation_offset_mode: {}
+shape_mode: {}
+sizing_mode: {}
+coloring_mode: {}
+filter_mode: {}
+pattern: {}
+pattern_overlay: {}
+pattern_mover: {}
+shape_transform: {}
+shape_modifier: {}
+oscillate: {}
+material_mesh: {}
+material_style: {}
+shape_geometry: {}
+camera_mode: {}
+sizing_flip: {}
+shape_rhythm: {}
+shape_delay: {}
+rotation_direction: {}
+rotation_mode: {}
+shape_pairing: {}
+background_mode: {}
+shape_lookat: {}
+shaders: {}
+lighting_type: {}
+lighting_pattern: {}
+lighting_lookat: {}
+rhythm: {} # not a plugin but loaded from HC.Beatkeeper.prototype.speeds
+
+rotation_easing: # todo plugins
+  quint: quint
+  circ: circ
+  back: back
+  judder: judder
+  off: off
+
+material_map:
+  none: none
+
+material_side:
+  0: front
+  1: back
+  2: double
+
+material_mapping:
+  default: default
+  f2b: front2back
+
+material_blending:
+  NoBlending: off
+  NormalBlending: normal
+  AdditiveBlending: additive
+#  SubtractiveBlending: subtractive
+#  MultiplyBlending: multiply
+#  CustomBlending: custom
+
+material_blendequation:
+  AddEquation: add
+  SubtractEquation: subtract
+  ReverseSubtractEquation: reverse
+  MinEquation: min
+  MaxEquation: max
+  
+material_blendsrc:
+  ZeroFactor: Zero
+  OneFactor: One
+  SrcColorFactor: SrcColor
+  OneMinusSrcColorFactor: OneMinusSrcColor
+  SrcAlphaFactor: SrcAlpha
+  OneMinusSrcAlphaFactor: OneMinusSrcAlpha
+  DstAlphaFactor: DstAlpha
+  OneMinusDstAlphaFactor: OneMinusDstAlpha
+  DstColorFactor: DstColor
+  OneMinusDstColorFactor: OneMinusDstColor
+  SrcAlphaSaturateFactor: SrcAlphaSaturate
+
+material_blenddst:
+  ZeroFactor: Zero
+  OneFactor: One
+  SrcColorFactor: SrcColor
+  OneMinusSrcColorFactor: OneMinusSrcColor
+  SrcAlphaFactor: SrcAlpha
+  OneMinusSrcAlphaFactor: OneMinusSrcAlpha
+  DstAlphaFactor: DstAlpha
+  OneMinusDstAlphaFactor: OneMinusDstAlpha
+  DstColorFactor: DstColor
+  OneMinusDstColorFactor: OneMinusDstColor
+
+rotation_offsetx_oscillate: {}
+rotation_offsety_oscillate: {}
+rotation_offsetz_oscillate: {}
+shape_lookat_centerx_oscillate: {}
+shape_lookat_centery_oscillate: {}
+shape_lookat_centerz_oscillate: {}
+pattern_overlay_volume_oscillate: {}
+pattern_padding_oscillate: {}
+oscillate_scale: {}
+coloring_volume_oscillate: {}
+filter_volume_oscillate: {}
+layer_rotationx_oscillate: {}
+layer_rotationy_oscillate: {}
+layer_rotationz_oscillate: {}
+camera_rotationx_oscillate: {}
+camera_rotationy_oscillate: {}
+camera_rotationz_oscillate: {}
+offset_x_oscillate: {}
+offset_y_oscillate: {}
+offset_z_oscillate: {}
+sizing_scale_oscillate: {}
+sizing_x_oscillate: {}
+sizing_y_oscillate: {}
+sizing_z_oscillate: {}
+coloring_hue_oscillate: {}
+coloring_sat_oscillate: {}
+coloring_lum_oscillate: {}
+coloring_opacity_oscillate: {}
+camera_mode_volume_oscillate: {}
+camera_x_oscillate: {}
+camera_y_oscillate: {}
+camera_z_oscillate: {}
+background_volume_oscillate: {}
+lighting_intensity_oscillate: {}
+lighting_angle_oscillate: {}
+lighting_penumbra_oscillate: {}
+lighting_pattern_padding_oscillate: {}
+lighting_lookat_centerx_oscillate: {}
+lighting_lookat_centery_oscillate: {}
+lighting_lookat_centerz_oscillate: {}
+lighting_pattern_rotation_oscillate: {}
+lighting_pattern_centerx_oscillate: {}
+lighting_pattern_centery_oscillate: {}
+lighting_pattern_centerz_oscillate: {}

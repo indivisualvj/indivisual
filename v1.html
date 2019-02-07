@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Happy Colours</title>
+
+<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+<script type="text/javascript">
+	
+$.fn.animateRotate = function (angle, delay, dur, func) {
+    // caching the object for performance reasons
+    var elem = $(this);
+    var max = (hsl?2:5)*speed;
+    var min = 1*speed;
+    var dr = Math.floor(Math.random() * (max - min + 1)) + min;
+    var dg = Math.floor(Math.random() * (max - min + 1)) + min;
+    var db = Math.floor(Math.random() * (max - min + 1)) + min;
+    var c = 0;
+    var r = 0;
+    var g = 0;
+    var b = 0;
+    var deg = 0;
+
+    if (elem.attr('r')) {
+    	r = parseInt(elem.attr('r'));
+    }
+    if (elem.attr('g')) {
+    	g = parseInt(elem.attr('g'));
+    }
+    if (elem.attr('b')) {
+    	b = parseInt(elem.attr('b'));
+    }
+
+    if (elem.attr('deg')) {
+    	deg = parseFloat(elem.attr('deg'));
+    }
+
+    $({deg: 0}).delay(delay).animate({deg: angle}, {
+        duration: dur,
+        step: function(now) {
+
+			if (elem.attr('depr')) {
+            	elem.removeAttr('depr');
+            	elem.fadeOut(delay, function () {
+            		elem.remove();
+            	});
+            	return;
+            }
+
+            elem.css({
+            	transform: rotationFunctions[func] + '(' + (now+deg) + 'deg)',
+                background: hsl ? 'hsl(' + r + ', ' + g + '%, ' + b + '%)' : 'rgb(' + r + ', ' + g + ', ' + b + ')'
+            });
+            
+            //elem.html('r: ' + r + ' / g: ' + g + ' / b: ' + b + '<br />dur: ' + dur + '<br />deg: ' + (now+deg)%180);
+
+			if (Math.round(now+deg)%180==0) {
+				max = 3;
+				min = 1;
+				func = rotationFunction == 0 ? 
+					(Math.floor(Math.random() * (max - min + 1)) + min) : rotationFunction;
+				elem.attr('func', func);
+			}
+
+        	if (hsl) {
+				
+				if (r+dr <= 360 && r+dr >= 0) {
+    				r+=dr;
+	    		} else {
+	    			dr*=-1;
+	    			r = Math.min(r, 360);
+	    		}
+	    		
+	    		if (g+dg <= 100 && g+dg >= 0) {
+	    			g+=dg;
+	    		} else {
+	    			dg*=-1;
+	    			g = Math.min(g, 100);
+	    		}
+
+	    		if (b+db <= 100 && b+db >= 0) {
+	    			b+=db;
+	    		} else {
+	    			db*=-1;
+	    			b = Math.min(b, 100);
+	    		}
+
+        	} else {
+				
+				if (r+dr <= 255 && r+dr >= 0) {
+	    			r+=dr;
+	    		} else {
+	    			dr*=-1;
+	    			r = Math.min(r, 255);
+	    		}
+	    		
+	    		if (g+dg <= 255 && g+dg >= 0) {
+	    			g+=dg;
+	    		} else {
+	    			dg*=-1;
+	    			g = Math.min(g, 255);
+	    		}
+	    		
+	    		if (b+db <= 255 && b+db >= 0) {
+	    			b+=db;
+	    		} else {
+	    			db*=-1;
+	    			b = Math.min(b, 255);
+	    		}
+        	}
+
+    		elem.attr('deg', (now+deg));
+
+        },
+        complete: function () {
+        	elem.attr('r', r);
+            elem.attr('g', g);
+            elem.attr('b', b);
+
+            if (elem.attr('depr')) {
+            	elem.fadeOut(delay, function () {
+            		elem.remove();
+            	});
+            } else {
+				var deg = Math.floor(Math.random() * (maxDeg - minDeg + 1)) + minDeg;
+				var max=1;
+				var min=-1;
+				var dir = Math.floor(Math.random() * (max - min + 1)) + min;
+
+				var func = parseInt(elem.attr('func'));
+
+				elem.animateRotate(deg*dir, deg*8/speed, deg*16/speed, func);
+        	}
+        }
+    });
+};
+
+$(document).ready( function () {
+	
+	initPanel();
+	$(window).bind("resize", function () { initPanel() });
+
+	var speeds = $('#speed div');
+	speeds.click (function () {
+		speed = parseInt($(this).text());
+		speeds.removeClass('selected');
+		$(this).addClass('selected');
+	});
+
+	$('#speed h5').click (function () {
+		if (speed+1 < 6) {
+			speed++;
+			speeds.removeClass('selected');
+			$(speeds.get(5-speed)).addClass('selected');
+		}
+	});
+
+	$('#speed h6').click (function () {
+		if (speed-1 > 0) {
+			speed--;
+			speeds.removeClass('selected');
+			$(speeds.get(5-speed)).addClass('selected');
+		}
+	});
+
+	$('#rotation h5').click (function () {
+		var div = $('#rotation div');
+		var cur = maxDegs.indexOf(parseInt(div.text()));
+		cur++;
+		
+		if (cur >= maxDegs.length) {
+			cur = 0;
+		}
+		maxDeg = maxDegs[cur];
+		minDeg = maxDeg/2;
+		div.text(maxDegs[cur]);
+	});
+
+	$('#rotation h6').click (function () {
+		var div = $('#rotation div');
+		var cur = maxDegs.indexOf(parseInt(div.text()));
+		cur--;
+		
+		if (cur < 0) {
+			cur = maxDegs.length-1;
+		}
+		maxDeg = maxDegs[cur];
+		minDeg = maxDeg/2;
+		div.text(maxDegs[cur]);
+	});
+
+	$('#func #color').click (function () {
+		hsl = !hsl;
+		$(this).text(hsl?'HSL':'RGB');
+	});
+
+	$('#func #rotofunc').click (function () {
+		var funcCaptions = ['auto', 'X', 'Y', 'Z'];
+		rotationFunction++;
+		if (rotationFunction >= funcCaptions.length) {
+			rotationFunction = 0;
+		}
+		$(this).text(funcCaptions[rotationFunction]);
+		initPanel();
+	});
+
+	$('#columns h5').click (function () {
+		cc++;
+		if (cc > 20) {
+			cc = 2;
+		}
+		$('#columns div').text(cc);
+		initPanel();
+	});
+
+	$('#columns h6').click (function () {
+		cc--;
+		if (cc < 2) {
+			cc = 20;
+		}
+		$('#columns div').text(cc);
+		initPanel();
+	});
+
+	$('#width h5').click (function () {
+		if (width < 100) {
+			width+=25;
+			$('#width div').text(width + "%");
+			initPanel();
+		}
+	});
+
+	$('#width h6').click (function () {
+		if (width > 25) {
+			width-=25;
+			$('#width div').text(width + "%");
+			initPanel();
+		}
+	});
+
+});
+
+var speed = 2;
+var cc    = 10;
+var width = 50;
+var thinOut = 3;
+var changeInStack = false;
+var maxDeg = 360;
+var minDeg = maxDeg/2;
+var maxDegs = [180, 360, 720, 1080];
+var hsl = true;
+var rotationFunctions = ['auto', 'rotateX', 'rotateY', 'rotate'];
+var rotationFunction  = 0;
+
+function initPanel() 
+{
+	if (!changeInStack) {
+		changeInStack = true;
+		setTimeout(function () {
+			_initPanel();
+			changeInStack = false;
+		}, 1000);
+	}
+}
+
+function _initPanel()
+{
+	var panel = $('#panel');
+	panel.css('width', width + "%");
+	$('.polygon').attr('depr', true);
+
+	panel.height($(window).height());
+	var w = panel.width()/cc;
+	var h = w;
+	var l = 0;
+	var lc = Math.round(panel.height()/h);
+	var p = 0;
+	for (i = 0; i < lc*cc; i++) {
+		pol = $('<div class="polygon"></div>');
+		var max = hsl?360:255;
+	    var min = 0;
+		var r = Math.floor(Math.random() * (max - min + 1)) + min;
+		if(hsl)max = 100;
+		var g = Math.floor(Math.random() * (max - min + 1)) + min;
+		var b = Math.floor(Math.random() * (max - min + 1)) + min;
+		pol.attr('r', r);
+		pol.attr('g', g);
+		pol.attr('b', b);
+		pol.width(w);
+		pol.height(h);
+		if (i > 0 && i % cc == 0) {
+			l++;
+			p=0;
+		}
+		pol.css('top', l*h);
+		pol.css('left', p*w);
+		panel.append(pol);
+		pol.fadeOut(0);
+		p++;
+	}
+
+	var pols = $('.polygon');
+
+	for (i = 0; i < pols.length; i+=thinOut) {
+		var max = 0;
+	    var min = thinOut;
+		var thin = Math.floor(Math.random() * (max - min + 1)) + min;
+
+		$(pols.get(i+thin)).remove();
+	}
+
+	pols.each( function () {
+		var me = $(this);
+		var deg = Math.floor(Math.random() * (maxDeg - minDeg + 1)) + minDeg;
+		var max=1;
+		var min=-1;
+		var dir = Math.floor(Math.random() * (max - min + 1)) + min;
+		max = 3;
+		min = 1;
+		var func = rotationFunction == 0 ? 
+			(Math.floor(Math.random() * (max - min + 1)) + min) : rotationFunction;
+		me.attr('func', func);
+		me.delay(deg*8/speed).fadeIn(500);
+		me.animateRotate(deg*dir, deg*8/speed, deg*16/speed, func);
+	});
+}	
+
+</script>
+
+<style type="text/css">
+
+body {
+	background: black;
+	overflow: hidden;
+
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+#panel {
+	position: relative;
+	width: 50%;
+	margin: 0 auto;
+	font-size: 300%;
+	color: white;
+	cursor: pointer;
+}
+
+.polygon {
+	position: absolute;
+	top: 0;
+	left: 0;
+	box-shadow: 0px 0px 10px black;
+	background: black;
+}
+
+#controls {
+	position: fixed;
+	top: 30px;
+	left: 0;
+}
+
+#speed, 
+#columns, 
+#width, 
+#rotation,
+#func {
+	background: rgba(0, 0, 0, 0.7);
+	color: white;
+	width: 40px;
+	margin: 30px 0 0 0;
+	cursor: pointer;
+	font-family: arial;
+	font-size: 20px;
+	line-height: 20px;
+	text-align: center;
+}
+
+#speed *, 
+#columns *, 
+#width *, 
+#rotation *,
+#func * {
+	padding: 4px;
+	width: 32px;
+	height: 20px;
+}
+
+#columns div {
+	line-height: 24px;
+}
+
+#columns div,
+#width div {
+	font-size: 13px;
+	line-height: 22px;
+}
+
+#speed div,
+#rotation div {
+	font-size: 13px;
+	line-height: 21px;
+}
+
+#func div {
+	font-size: 14px;
+    font-weight: bold;
+    line-height: 20px;
+}
+
+h5, h6 {
+	font-size: 30px;
+	padding: 0;
+	margin: 0;
+}
+
+.selected {
+	background: rgba(10, 255, 10, 0.7);
+}
+
+#owner {
+	position: fixed;
+	left: 5px;
+	bottom: 5px;
+
+	padding: 4px;
+	background: rgba(0, 0, 0, 0.7);
+	color: white;
+	cursor: pointer;
+	font-family: arial;
+	font-size: 12px;
+	line-height: 12px;
+	text-align: center;
+}
+
+</style>
+
+</head>
+<body>
+<div id="panel"></div>
+
+<div id="controls">
+	<div id="speed">
+		<h5>+</h5>
+		<div>5</div>
+		<div>4</div>
+		<div>3</div>
+		<div class="selected">2</div>
+		<div>1</div>
+		<h6>-</h6>
+	</div>
+
+	<div id="rotation">
+		<h5>+</h5>
+		<div>360</div>
+		<h6>-</h6>
+	</div>
+
+	<div id="func">
+		<div id="rotofunc">auto</div>
+		<div id="color">HSL</div>
+	</div>
+
+	<div id="width">
+		<h5>+</h5>
+		<div>50%</div>
+		<h6>-</h6>
+	</div>
+
+	<div id="columns">
+		<h5>+</h5>
+		<div>10</div>
+		<h6>-</h6>
+	</div>
+
+</div>
+<div id="owner">
+	&copy; Benjamin Lutze
+</div>
+</body>
+</html>

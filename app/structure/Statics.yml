@@ -1,0 +1,31 @@
+powersave: false
+
+display:
+  fps: false
+  visibility:
+    index: 0
+    random: false
+  border:
+    random: false
+
+tmp:
+  stored_sample:
+  loaded_sample:
+  sample_map_size: ''
+
+oscillator: [] # necessary for managing _oscillate values
+
+shuffle:
+  beats:
+    counter: 0
+    last: 0
+
+timeouts:
+  resize: false
+  mapping: []
+  mask: []
+  thumbs: []
+
+three:
+  textures: {}
+  fonts: {}

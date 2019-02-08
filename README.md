@@ -24,20 +24,22 @@ But still it's pretty much fun to play with!
 
 ## Getting Started
 - Install [Node.js](https://nodejs.org/en/download/)
-- Install [yarn](https://yarnpkg.com/lang/en/docs/install)
+- Install [yarn](https://yarnpkg.com/lang/en/docs/install) or if you have npm just execute `npm install -g yarn`
 - Execute the following lines in your command line:
     ```
     $ yarn install
     $ yarn start --port 8081
     ```
-- Open https://localhost:8081/controller.html 
-- Open https://localhost:8081 in a second window
+- Open http://localhost:8081/controller.html 
+- Open http://localhost:8081 in a second window
 - Split the two windows left and right
 - Try some of the setups from presets (controller->lowerleft)
 - Play around
 - Try to learn something in this Quick and Dirty Video Tutorial
     [![](http://img.youtube.com/vi/aPwviMbDYH8/0.jpg)](http://www.youtube.com/watch?v=aPwviMbDYH8 "")
 
+
+More server options can be found [here](docs/server-options.md)
 
 ## Questions & Answers
 - Create an issue for your question

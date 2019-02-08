@@ -32,13 +32,6 @@ But still it's pretty much fun to play with!
     ```
 - Open https://localhost:8081/controller.html 
 - Open https://localhost:8081 in a second window
-- Don't hesitate if your browser throws something like this:
-    
-    This is a SSL warning. We can't use a public SSL certificate 
-    but we have to use SSL to have microphone and audio input working. Therefore SSL hast to be enabled.
-    Just click on the "Advanced" button and then on "Proceed to localhost (unsafe)".
-    
-  ![](readme/images/NET::ERR_CERT_AUTHORITY_INVALID.png) 
 - Split the two windows left and right
 - Try some of the setups from presets (controller->lowerleft)
 - Play around

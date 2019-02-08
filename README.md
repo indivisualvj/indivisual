@@ -41,7 +41,7 @@ But still it's pretty much fun to play with!
 ### Deprecated Powerful Features on Insecure (non SSL) Origins
 When not using localhost, it is not possible to use microphone or audio input without SSL.
 - You can run chrome with the --unsafely-treat-insecure-origin-as-secure="http://example.com" flag (replacing "example.com" with the origin you actually want to test)
-    Like described in this [article](https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-powerful-features-on-insecure-origins)
+    like described in this [article](https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-powerful-features-on-insecure-origins)
 - Or you have to enable SSL
 - Server options can be found [here](docs/server-options.md)
 

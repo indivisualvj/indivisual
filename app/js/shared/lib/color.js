@@ -112,6 +112,13 @@ function hslToHex (color) {
     return '#' + rgbToHex(c.r, c.g, c.b);
 }
 
+/**
+ *
+ * @param r
+ * @param g
+ * @param b
+ * @returns {string}
+ */
 function rgbToHex(r, g, b) {
 
     var hex = [
@@ -123,6 +130,11 @@ function rgbToHex(r, g, b) {
     return hex.join("");
 }
 
+/**
+ *
+ * @param c
+ * @returns {string}
+ */
 function pad2(c) {
     return c.length == 1 ? '0' + c : '' + c;
 }
@@ -159,8 +171,7 @@ function copyHsl(from, to) {
  * @param t
  * @returns {*}
  */
-function hue2rgb(p, q, t)
-{
+function hue2rgb(p, q, t) {
     if(t < 0) t += 1;
     if(t > 1) t -= 1;
     if(t < 1/6) return p + (q - p) * 6 * t;
@@ -175,8 +186,7 @@ function hue2rgb(p, q, t)
  * @param max
  * @returns {number}
  */
-function bound01(n, max)
-{
+function bound01(n, max) {
     n = Math.min(max, Math.max(0, n));
 
     // Handle floating point rounding errors

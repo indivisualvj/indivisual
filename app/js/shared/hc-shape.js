@@ -24,7 +24,7 @@
         this._rotation = new THREE.Object3D();
         this._rotation.add(this._rotationOffset);
         this._rotation.name = '_rotation' + index;
-        this._position = new THREE.Object3D();
+        this._position = new THREE.Object3D(); // todo nur noch über .positioner() aufrufen!??!!?
         this._position.add(this._rotation);
         this._position.name = '_position' + index;
 

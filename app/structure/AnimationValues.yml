@@ -36,6 +36,14 @@ rotation_easing: # todo plugins
   judder: judder
   off: off
 
+background_input: #background_mode inputs
+  off: off
+  0: sequence 0
+  1: sequence 1
+  2: sequence 2
+  3: sequence 3
+  4: sequence 4
+
 material_map:
   none: none
 
@@ -52,8 +60,8 @@ material_blending:
   NoBlending: off
   NormalBlending: normal
   AdditiveBlending: additive
-#  SubtractiveBlending: subtractive
-#  MultiplyBlending: multiply
+  SubtractiveBlending: subtractive (background)
+  MultiplyBlending: multiply (background)
 #  CustomBlending: custom
 
 material_blendequation:

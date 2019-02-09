@@ -25,7 +25,7 @@ HC.Osci = {
      * @param add
      */
     cosInOut: function (prc, add) {
-        return (add || 0) + this.cos(prc) / 2 + .5;
+        return (add || 0) + this.cosinus(prc) / 2 + .5;
     },
 
     /**

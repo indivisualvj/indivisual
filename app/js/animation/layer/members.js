@@ -164,8 +164,9 @@ HC.Layer.prototype.getShapeDelay = function (shape) {
  * @param value
  */
 HC.Layer.prototype.setBackground = function (value) {
-    if (value && !isObject(value)) {
-        this.three.scene.background = new THREE.Color(value);
+    if (value) {
+        this.three.scene.background = value;
+
     } else {
         this.three.scene.background = null;
     }

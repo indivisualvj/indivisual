@@ -69,3 +69,11 @@ HC.plugins.shape_transform.wavexby = _class(false, HC.plugins.shape_transform.wa
         HC.plugins.shape_transform.wave.prototype.apply.call(this, shape, 'y', new THREE.Vector3(1, 0, 0));
     }
 });
+
+HC.plugins.shape_transform.wavexybz = _class(false, HC.plugins.shape_transform.wave, {
+    name: 'wave xy by z',
+
+    apply: function (shape) {
+        HC.plugins.shape_transform.wave.prototype.apply.call(this, shape, 'z', new THREE.Vector3(1, 1, 0));
+    }
+});

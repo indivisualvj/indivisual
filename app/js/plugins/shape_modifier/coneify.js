@@ -6,25 +6,16 @@ HC.plugins.shape_modifier.coneify = _class(false, HC.ShapeModifierPlugin, {
             source = source || 'y';
             axes = axes || new THREE.Vector3(1, 1, 1);
 
-            if (!this.angle) {
-                this.angle = 0;
-                this.min = 0;
-                this.max = 0;
-            }
-
-            var dir = this.settings.shape_modifier_volume > 0 ? 1 : -1;
-
             var vertices = geometry.vertices;
-            var vbackup = geometry.vertices;
 
             if (vertices) {
+
+                this.min = this.max = 0;
 
                 for (var i = 0; i < vertices.length; i++) {
 
                     var vtc = vertices[i];
-                    var vtcb = vbackup[i];
-
-                    var v = vtcb[source];
+                    var v = vtc[source];
 
                     this.min = Math.min(v, this.min);
                     this.max = Math.max(v, this.max);
@@ -33,17 +24,13 @@ HC.plugins.shape_modifier.coneify = _class(false, HC.ShapeModifierPlugin, {
                 for (var i = 0; i < vertices.length; i++) {
 
                     var vtc = vertices[i];
-                    var vtcb = vbackup[i];
+                    var v = vtc[source] * this.settings.shape_modifier_volume;
+                    var div = Math.abs(this.min - this.max);
+                    v /= div;
 
-                    var v = vtcb[source];
-
-                    var div = (this.min - this.max);
-
-                    v = dir * (((v + .5 * div) / div)) / 2 * Math.abs(this.settings.shape_modifier_volume);
-
-                    vtc.x = vtcb.x + vtcb.x * v * axes.x;
-                    vtc.y = vtcb.y + vtcb.y * v * axes.y;
-                    vtc.z = vtcb.z + vtcb.z * v * axes.z;
+                    vtc.x += vtc.x * v * axes.x;
+                    vtc.y += vtc.y * v * axes.y;
+                    vtc.z += vtc.z * v * axes.z;
 
                     geometry.verticesNeedUpdate = true;
 
@@ -70,5 +57,13 @@ HC.plugins.shape_modifier.coneifyxby = _class(false, HC.plugins.shape_modifier.c
 
     create: function (shape) {
         return HC.plugins.shape_modifier.coneify.prototype.create.call(this, shape, 'y', new THREE.Vector3(1, 0, 0));
+    }
+});
+
+HC.plugins.shape_modifier.coneifyxybz = _class(false, HC.plugins.shape_modifier.coneify, {
+    name: 'coneify xy by z',
+
+    create: function (shape) {
+        return HC.plugins.shape_modifier.coneify.prototype.create.call(this, shape, 'z', new THREE.Vector3(1, 1, 0));
     }
 });

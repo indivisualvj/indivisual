@@ -148,16 +148,21 @@
          */
         dispose: function () {
 
+            var sc = this.three.scene;
             this.settings = false;
             this.shapes = false;
             this.plugins = {};
             this._shapes = false;
 
-            this.three.scene.remove(this._layer);
+            sc.remove(this._layer);
             this._layer.traverse(threeDispose);
             this._lighting = false;
             this._rotation = false;
             this._shapes = false;
+
+            if (sc.background && sc.background.dispose) {
+                sc.background.dispose();
+            }
 
             if (this.shape) {
                 this.shape._position.traverse(threeDispose);

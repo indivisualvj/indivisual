@@ -102,7 +102,7 @@
                 inst._init(1);
             };
             tag.onabort = tag.onerror = function (err) {
-                console.err(err);
+                console.error(err);
                 listener.fire('sample.render.error', this.id, this);
             }
         },

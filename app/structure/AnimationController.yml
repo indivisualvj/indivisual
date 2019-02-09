@@ -57,6 +57,7 @@ lighting_lookat:
 background:
   background_mode:
   background_color:
+  background_input:
   background_volume:
   background_volume_oscillate:
 

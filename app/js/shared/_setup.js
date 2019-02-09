@@ -267,6 +267,7 @@ var resources = [
 
                 if (f.name.match(/\.png/)) {
                     statics.AnimationValues.material_map[f.name] = f.name;
+                    statics.AnimationValues.background_input[f.name] = f.name;
                 }
             }
 

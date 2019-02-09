@@ -7,40 +7,40 @@ HC.plugins.oscillate.cosinus = _class(false, HC.OscillatePlugin, {
     }
 });
 
-HC.plugins.oscillate.sininout = _class(false, HC.OscillatePlugin, {
+HC.plugins.oscillate.cosinout = _class(false, HC.OscillatePlugin, {
     name: 'cosinus 0/1 (current)',
 
     apply: function (key) {
         var layer = this.layer;
         var speed = layer.getCurrentSpeed();
-        this.activate(key, HC.Osci.sinInOut(speed.prc));
+        this.activate(key, HC.Osci.cosInOut(speed.prc));
     }
 });
 
-HC.plugins.oscillate.sininouthexa = _class(false, HC.OscillatePlugin, {
+HC.plugins.oscillate.cosinouthexa = _class(false, HC.OscillatePlugin, {
     name: 'cosinus 0/1 (hexa)',
 
     apply: function (key) {
         var speed = beatkeeper.getSpeed('hexa');
-        this.activate(key, HC.Osci.sinInOut(speed.prc));
+        this.activate(key, HC.Osci.cosInOut(speed.prc));
     }
 });
 
-HC.plugins.oscillate.sininoutdotfivehexa = _class(false, HC.OscillatePlugin, {
+HC.plugins.oscillate.cosinoutdotfivehexa = _class(false, HC.OscillatePlugin, {
     name: 'cosinus 0.5/1.5 (hexa)',
 
     apply: function (key) {
         var speed = beatkeeper.getSpeed('hexa');
-        this.activate(key, HC.Osci.sinInOut(speed.prc, .5));
+        this.activate(key, HC.Osci.cosInOut(speed.prc, .5));
     }
 });
 
-HC.plugins.oscillate.sininoutdotfive32 = _class(false, HC.OscillatePlugin, {
+HC.plugins.oscillate.cosinoutdotfive32 = _class(false, HC.OscillatePlugin, {
     name: 'cosinus 0.5/1.5 (32)',
 
     apply: function (key) {
         var speed = beatkeeper.getSpeed('32');
-        this.activate(key, HC.Osci.sinInOut(speed.prc, .5));
+        this.activate(key, HC.Osci.cosInOut(speed.prc, .5));
     }
 });
 

@@ -27,6 +27,7 @@ HC.plugins.background_mode.input = _class(false, HC.BackgroundModePlugin, {
         if (this.img) {
             if (!this.img.complete) {
                 this.img.render(false, {prc: 0}, '#000000');
+                statics.powersave = false; // todo ugly
 
             } else {
                 this.layer.setBackground(new THREE.CanvasTexture(this.img.getFrame(0)));

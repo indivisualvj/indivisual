@@ -21,7 +21,7 @@ HC.Layer.prototype.centerCamera = function () {
  */
 HC.Layer.prototype.updateCameraFov = function () {
     var cam = this.getCamera();
-    var sina = sinAlpha(this.halfDiameterVector.y*1.015, this.cameraDefaultDistance());
+    var sina = sinAlpha(this.halfDiameterVector.y * 1.015, this.cameraDefaultDistance());
 
     cam.fov = sina * statics.DisplaySettings.fov;
 };
@@ -55,5 +55,5 @@ HC.Layer.prototype.cameraIntersectsObject = function (object) {
  */
 HC.Layer.prototype.cameraDefaultDistance = function (multiplier) {
 
-    return 2 * this.resolution().y * (multiplier || 1);
+    return this.diameterVector.length() * (multiplier || 1);
 };

@@ -26,10 +26,11 @@ HC.Layer.prototype.randomColor = function () {
  * @returns {Vector3}
  */
 HC.Layer.prototype.lookAtVector = function () {
+    var v = this.cameraDefaultDistance();
     return new THREE.Vector3(
-        this.diameterVector.length() * this.settings.shape_lookat_centerx,
-        this.diameterVector.length() * this.settings.shape_lookat_centery,
-        this.cameraDefaultDistance(1) * this.settings.shape_lookat_centerz
+        v * this.settings.shape_lookat_centerx,
+        v * this.settings.shape_lookat_centery,
+        v * this.settings.shape_lookat_centerz
     );
 };
 

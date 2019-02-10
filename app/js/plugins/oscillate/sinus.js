@@ -57,7 +57,6 @@ HC.plugins.oscillate.oscillator = _class(false, HC.OscillatePlugin, {
     name: 'oscillate',
 
     apply: function (key) {
-        var layer = this.layer;
         this.activate(key, HC.Osci.wobble(0, this.settings));
     }
 });
@@ -76,7 +75,6 @@ HC.plugins.oscillate.sinusosci1 = _class(
     }, HC.OscillatePlugin, {
         name: 'sinus by osci1_period',
         apply: function (key) {
-            var layer = this.layer;
             this.settings.osci1_period = this.settings.osci1_period;
             this.settings.rhythm = this.settings.rhythm;
             this.activate(key, HC.Osci.wobble(0, this.settings));
@@ -99,7 +97,6 @@ HC.plugins.oscillate.sinusosci2 = _class(
     }, HC.OscillatePlugin, {
         name: 'sinus by osci2_period',
         apply: function (key) {
-            var layer = this.layer;
             this.settings.osci2_period = this.settings.osci2_period;
             this.settings.rhythm = this.settings.rhythm;
             this.activate(key, HC.Osci.wobble(0, this.settings));
@@ -122,7 +119,6 @@ HC.plugins.oscillate.sinusosci3 = _class(
     }, HC.OscillatePlugin, {
         name: 'sinus by osci3_period',
         apply: function (key) {
-            var layer = this.layer;
             this.settings.osci3_period = this.settings.osci3_period;
             this.settings.rhythm = this.settings.rhythm;
             this.activate(key, HC.Osci.wobble(0, this.settings));

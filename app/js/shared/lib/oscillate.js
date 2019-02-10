@@ -100,29 +100,31 @@ console.log(n, pa);
      *
      * @param progress
      * @param settings
+     * @param func
      * @returns {number}
      */
-    wobble: function (progress, settings) {
+    wobble: function (progress, settings, func) {
         var p = 1;
 
         var bpm = 60000 / statics.ControlSettings.tempo;
         var div = beatkeeper.rhythmDivider(settings.rhythm) / 2;
+        func = func || Math.sin;
         progress = progress || Math.PI * animation.now;
 
         if (settings.osci1_period !== 0) {
             var pr = progress / (bpm * settings.osci1_period);
             pr *= div;
-            p = settings.osci1_amp * Math.sin(pr);
+            p = settings.osci1_amp * func(pr);
         }
         if (settings.osci2_period !== 0) {
             var pr = progress / (bpm * settings.osci2_period);
             pr *= div;
-            p += settings.osci2_amp * Math.sin(pr);
+            p += settings.osci2_amp * func(pr);
         }
         if (settings.osci3_period !== 0) {
             var pr = progress / (bpm * settings.osci3_period);
             pr *= div;
-            p += settings.osci3_amp * Math.sin(pr);
+            p += settings.osci3_amp * func(pr);
         }
 
         return p;

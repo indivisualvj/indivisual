@@ -2,10 +2,11 @@ HC.plugins.lighting_pattern = HC.plugins.lighting_pattern || {};
 
 HC.LightingPatternPlugin = _class(false, HC.Plugin, {
     centerVector: function () {
+        var v = this.layer.cameraDefaultDistance(.25);
         return new THREE.Vector3(
-            this.layer.diameterVector.length() * this.settings.lighting_pattern_centerx,
-            this.layer.diameterVector.length() * this.settings.lighting_pattern_centery,
-            this.layer.cameraDefaultDistance(1) * this.settings.lighting_pattern_centerz
+            v * this.settings.lighting_pattern_centerx,
+            v * this.settings.lighting_pattern_centery,
+            v * this.settings.lighting_pattern_centerz
         );
     },
 

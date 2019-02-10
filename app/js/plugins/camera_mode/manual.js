@@ -5,13 +5,14 @@ HC.plugins.camera_mode.manual = _class(false, HC.CameraModePlugin, {
         var layer = this.layer;
 
         var cam = layer.getCamera();
-        var cdd = layer.cameraDefaultDistance(1);
+        var dd = layer.cameraDefaultDistance();
+
         cam.zoom = this.settings.camera_mode_volume;
         cam.lookAt(layer.staticCenterVector);
         cam.position.set(
-            0 + this.settings.camera_x * layer.halfDiameterVector.x,
-            0 + this.settings.camera_y * layer.halfDiameterVector.y,
-            cdd + cdd * this.settings.camera_z
+            this.settings.camera_x * dd,
+            this.settings.camera_y * dd,
+            this.settings.camera_z * dd
         );
         cam.rotation.set(
             this.settings.camera_rotationx * RAD,

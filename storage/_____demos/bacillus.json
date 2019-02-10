@@ -16,7 +16,7 @@
 "camera_x_oscillate":"off",
 "camera_y":0,
 "camera_y_oscillate":"off",
-"camera_z":0,
+"camera_z":1,
 "camera_z_oscillate":"off",
 "coloring_mode":"one",
 "coloring_volume":1,

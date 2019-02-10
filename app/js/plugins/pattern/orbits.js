@@ -31,7 +31,6 @@ HC.plugins.pattern.orbits = _class(false, HC.PatternPlugin, {
         }
 
         var shell = params.shellIndex;
-        var centerVector = layer.patternCenterVector(true);
         var p = this.settings.pattern_padding;
         var px = this.settings.pattern_paddingx;
         var py = this.settings.pattern_paddingy;

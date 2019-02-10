@@ -7,10 +7,11 @@ HC.LightingLookatPlugin = _class(false, HC.Plugin, {
     },
 
     centerVector: function () {
+        var v = this.layer.cameraDefaultDistance(.25);
         return new THREE.Vector3(
-            this.layer.diameterVector.length() / 4 * this.settings.lighting_lookat_centerx,
-            this.layer.diameterVector.length() * this.settings.lighting_lookat_centery,
-            this.layer.cameraDefaultDistance(1) * this.settings.lighting_lookat_centerz
+            v * this.settings.lighting_lookat_centerx,
+            v * this.settings.lighting_lookat_centery,
+            v * this.settings.lighting_lookat_centerz
         );
     }
 });

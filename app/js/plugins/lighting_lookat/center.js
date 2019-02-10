@@ -21,10 +21,10 @@ HC.plugins.lighting_lookat.center = _class(false, HC.LightingLookatPlugin, {
 
 HC.plugins.lighting_lookat.straight = _class(false, HC.LightingLookatPlugin, {
    apply: function (light) {
+// todo after randomshape light.target is a shape!
        if (!light.target.parent) {
            this.layer._lighting.add(light.target);
        }
-
        light.target.position.copy(light.position);
        var cv = this.centerVector();
        cv.multiplyScalar(8);

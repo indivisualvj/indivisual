@@ -29,7 +29,7 @@ lighting_pattern: {}
 lighting_lookat: {}
 rhythm: {} # not a plugin but loaded from HC.Beatkeeper.prototype.speeds
 
-rotation_easing: # todo plugins
+rotation_easing:
   quint: quint
   circ: circ
   back: back

@@ -503,8 +503,8 @@ var Shapetastic = function(inst) {
         var cnty = inst.canvas.height / 2;
         x = cx - cntx;
         y = cy - cnty;
-        x = x / renderer.currentLayer.resolution('half').x, 3;
-        y = y / renderer.currentLayer.resolution('half').y, 3;
+        x = x / renderer.currentLayer.resolution('half').x;
+        y = y / renderer.currentLayer.resolution('half').y;
 
         return {x: x, y: y};
     };

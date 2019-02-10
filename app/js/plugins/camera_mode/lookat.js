@@ -17,10 +17,16 @@ HC.plugins.camera_mode.lookatshape = _class(
         name: 'look at a shape',
         apply: function (peak) {
             var layer = this.layer;
-
-            var cam = layer.getCamera();
             var speed = beatkeeper.getSpeed('double');
+            var cam = layer.getCamera();
 
+            var dd = layer.cameraDefaultDistance();
+            cam.zoom = this.settings.camera_mode_volume;
+            cam.position.set(
+                this.settings.camera_x * dd,
+                this.settings.camera_y * dd,
+                this.settings.camera_z * dd
+            );
 
             if (!this.shape || (!peak && speed.prc == 0) || (peak && audio.peak && randomBool())) {
 
@@ -59,8 +65,6 @@ HC.plugins.camera_mode.lookatshape = _class(
             this.shared.shape = this.shape;
             this.shared.targetLook = this.targetLook;
             this.shared.currentLook = this.currentLook;
-
-            cam.zoom = this.settings.camera_mode_volume;
         }
     }
 );
@@ -68,8 +72,6 @@ HC.plugins.camera_mode.lookatshape = _class(
 HC.plugins.camera_mode.lookatshapepeak = _class(false, HC.CameraModePlugin, {
     name: 'look at a shape on peak',
     apply: function () {
-        var layer = this.layer;
-
-        layer.getCameraModePlugin('lookatshape').apply(true);
+        this.layer.getCameraModePlugin('lookatshape').apply(true);
     }
 });

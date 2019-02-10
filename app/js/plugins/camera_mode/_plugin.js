@@ -6,6 +6,7 @@ HC.CameraModePlugin = _class(false, HC.Plugin, {
         layer.centerCamera();
         layer.updateCameraFov();
     },
+
     after: function () {
         var layer = this.layer;
         layer.getCamera().updateProjectionMatrix();

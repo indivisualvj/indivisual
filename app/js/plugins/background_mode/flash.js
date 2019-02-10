@@ -1,7 +1,4 @@
-HC.plugins.background_mode.flash = _class(
-    function () {
-        this.backflash = false;
-    }, HC.BackgroundModePlugin, {
+HC.plugins.background_mode.flash = _class(false, HC.BackgroundModePlugin, {
         name: 'flash background color',
         apply: function (color) {
             var layer = this.layer;

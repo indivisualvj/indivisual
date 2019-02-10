@@ -8,7 +8,7 @@ HC.plugins.camera_mode.flytoshape = _class(false, HC.CameraModePlugin, {
         var layer = this.layer;
 
         var lookatshape = layer.getCameraModePlugin('lookatshape');
-        lookatshape.apply(peak);
+        lookatshape.apply(peak, false);
 
         var cam = layer.getCamera();
         var shared = lookatshape.shared;

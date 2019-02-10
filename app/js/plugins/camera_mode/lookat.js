@@ -15,18 +15,20 @@ HC.plugins.camera_mode.lookatshape = _class(
 
     }, HC.CameraModePlugin, {
         name: 'look at a shape',
-        apply: function (peak) {
+        apply: function (peak, setPosition) {
             var layer = this.layer;
             var speed = beatkeeper.getSpeed('double');
             var cam = layer.getCamera();
 
             var dd = layer.cameraDefaultDistance();
             cam.zoom = this.settings.camera_mode_volume;
-            cam.position.set(
-                this.settings.camera_x * dd,
-                this.settings.camera_y * dd,
-                this.settings.camera_z * dd
-            );
+            if (setPosition !== false) {
+                cam.position.set(
+                    this.settings.camera_x * dd,
+                    this.settings.camera_y * dd,
+                    this.settings.camera_z * dd
+                );
+            }
 
             if (!this.shape || (!peak && speed.prc == 0) || (peak && audio.peak && randomBool())) {
 

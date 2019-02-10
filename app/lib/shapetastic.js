@@ -39,10 +39,10 @@ var Shapetastic = function(inst) {
      * @private
      */
     var _drawShape = function (e, vtcs, fill) {
-        
+
         var cx = inst.canvas.width / 2;
         var cy = inst.canvas.height / 2;
-        var m = renderer.currentLayer.resolution('half').x;
+        var m = renderer.currentLayer.shapeSize(.5);
 
         var ix = __getIx();
         var iy = __getIy();
@@ -105,7 +105,7 @@ var Shapetastic = function(inst) {
         var n = _nearest(_vtcs(), vtc);
         var cx = inst.canvas.width / 2;
         var cy = inst.canvas.height / 2;
-        var m = renderer.currentLayer.resolution('half').x;
+        var m = renderer.currentLayer.shapeSize(.5);
         if (n) {
 
             var vn = new THREE.Vector2(n[0], n[1]);
@@ -163,10 +163,10 @@ var Shapetastic = function(inst) {
         var layer = renderer.currentLayer;
         var cx = inst.canvas.width/2;
         var cy = inst.canvas.height/2;
-        var l = cx - layer.resolution('half').x;
-        var r = cx + layer.resolution('half').x;
-        var t = cy - layer.resolution('half').y;
-        var b = cy + layer.resolution('half').y;
+        var l = cx - layer.shapeSize(.5);
+        var r = cx + layer.shapeSize(.5);
+        var t = cy - layer.shapeSize(.5);
+        var b = cy + layer.shapeSize(.5);
 
         ctx.strokeStyle = 'yellow';
         ctx.lineWidth = 1;
@@ -177,9 +177,7 @@ var Shapetastic = function(inst) {
         ctx.lineTo(r, t);
         ctx.stroke();
 
-        ctx.strokeRect(inst.canvas.width/2 - layer.resolution('half').x, inst.canvas.height/2 - layer.resolution('half').y, layer.resolution().x, layer.resolution().y);
-
-
+        ctx.strokeRect(inst.canvas.width/2 - layer.shapeSize(.5), inst.canvas.height/2 - layer.shapeSize(.5), layer.shapeSize(1), layer.shapeSize(1));
     };
 
     /**
@@ -503,8 +501,8 @@ var Shapetastic = function(inst) {
         var cnty = inst.canvas.height / 2;
         x = cx - cntx;
         y = cy - cnty;
-        x = x / renderer.currentLayer.resolution('half').x;
-        y = y / renderer.currentLayer.resolution('half').y;
+        x = x / renderer.currentLayer.shapeSize(.5), 3;
+        y = y / renderer.currentLayer.shapeSize(.5), 3;
 
         return {x: x, y: y};
     };

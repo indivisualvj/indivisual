@@ -185,6 +185,7 @@
                     face.c = tmp;
                 }
             }
+            // todo not emissive black faces...
 
             return geometry;
         }

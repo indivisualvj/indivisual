@@ -92,7 +92,6 @@ var Maptastic = function(config) {
             context.globalAlpha = 1;
             context.fillStyle = "black";
             context.lineWidth = .5;
-            //context.fillRect(0,0,canvas.width,canvas.height);
 
             context.strokeStyle = "#ffffff";
             context.beginPath();
@@ -116,8 +115,8 @@ var Maptastic = function(config) {
             context.beginPath();
 
             if (original) {
-                stepX = original.width / 8;
-                stepY = original.height / 8;
+                stepX = original.x / 8;
+                stepY = original.y / 8;
             }
             var cx = canvas.width / 2;
             var cy = canvas.height / 2;
@@ -138,8 +137,8 @@ var Maptastic = function(config) {
         }
 
         if (original) {
-            var w = original.width;
-            var h = original.height;
+            var w = original.x;
+            var h = original.y;
             context.strokeStyle = '#f0f';
             context.lineWidth = 2;
             var ofx = (canvas.width - w) / 2;
@@ -253,16 +252,6 @@ var Maptastic = function(config) {
             }
         }
 
-        //if (original) {
-        //    var w = original.width;
-        //    var h = original.height;
-        //    context.strokeStyle = '#f0f';
-        //    context.lineWidth = 3;
-        //    var ofx = (canvas.width - w) / 2;
-        //    var ofy = (canvas.height - h) / 2;
-        //    context.strokeRect(ofx, ofy, w, h);
-        //}
-
         // Draw mouse crosshairs
         if(showCrosshairs) {
             context.strokeStyle = "yellow";
@@ -328,8 +317,8 @@ var Maptastic = function(config) {
     var centerLayer = function (layer, factor, screen, center) {
         if (!layer)return;
 
-        var cw = original.width / .2;
-        var ch = original.height / .2;
+        var cw = original.x / .2;
+        var ch = original.y / .2;
 
         if (center) {
             cw = center.x;
@@ -836,11 +825,6 @@ var Maptastic = function(config) {
             'targetPoints' : []
         };
 
-        //var l = layer.width * 0.25;
-        //var t = layer.height * 0.25;
-        //var r = l * 3;
-        //var b = t * 3;
-
         if (!sourcePoints) {
             var l = 0;
             var t = 0;
@@ -1005,8 +989,8 @@ var Maptastic = function(config) {
 
     var resize = function() {
         if (original) {
-            canvas.width = original.width * 10;
-            canvas.height = original.height * 10;
+            canvas.width = original.x * 10;
+            canvas.height = original.y * 10;
 
         } else {
             canvas.width = window.innerWidth;

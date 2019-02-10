@@ -20,7 +20,7 @@ HC.OscillatePlugin = _class(false, HC.Plugin, {
 
         } else {
             // key does not exist
-            this.cache[ckey] = Object.create(this.preset) || 0;
+            this.cache[ckey] = isObject(this.preset) ? Object.create(this.preset) : 0;
         }
 
         return this.cache[ckey];

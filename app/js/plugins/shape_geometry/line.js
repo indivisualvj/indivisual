@@ -4,7 +4,7 @@ HC.plugins.shape_geometry.lineh = _class(false, HC.ShapeGeometryPlugin, {
         var layer = this.layer;
 
         var segments = Math.pow(2, this.settings.shape_variant);
-        var geometry = new THREE.PlaneGeometry(Math.max(renderer.width, renderer.height) * 4, layer.shapeSize(1) / 20, segments, Math.max(1, segments / 8));
+        var geometry = new THREE.PlaneGeometry(Math.max(renderer.resolution.x, renderer.resolution.y) * 4, layer.shapeSize(1) / 20, segments, Math.max(1, segments / 8));
         return geometry;
     }
 });
@@ -15,7 +15,7 @@ HC.plugins.shape_geometry.linev = _class(false, HC.ShapeGeometryPlugin, {
         var layer = this.layer;
 
         var segments = Math.pow(2, this.settings.shape_variant);
-        var geometry = new THREE.PlaneGeometry(layer.shapeSize(1) / 20, Math.max(renderer.width, renderer.height) * 4, Math.max(1, segments / 8), segments);
+        var geometry = new THREE.PlaneGeometry(layer.shapeSize(1) / 20, Math.max(renderer.resolution.x, renderer.resolution.y) * 4, Math.max(1, segments / 8), segments);
         return geometry;
     }
 });

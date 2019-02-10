@@ -58,7 +58,7 @@ HC.plugins.pattern.matrix = _class(
         columnCount: function () {
             var layer = this.layer;
             if (this.columns === false) {
-                this.columns = Math.floor(layer.width / layer.shapeSize(1));
+                this.columns = Math.floor(layer.resolution().x / layer.shapeSize(1));
             }
             return this.columns;
         },

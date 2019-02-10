@@ -604,7 +604,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                     displayman.resize(renderer.getResolution());
 
                                 } else {
-                                    beatkeeper.reset();
                                     renderer.resetLayer(renderer.currentLayer);
                                 }
                             }

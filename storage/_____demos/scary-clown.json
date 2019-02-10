@@ -53,7 +53,7 @@
 "material_uvx":2,
 "material_uvy":1,
 "material_uvofx":0.5,
-"material_uvofy":0.5,
+"material_uvofy":0.45,
 "material_volume":1,
 "offset_audio":false,
 "offset_limit":false,

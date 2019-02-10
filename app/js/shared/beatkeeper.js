@@ -328,7 +328,8 @@
          *
          */
         reset: function () {
-
+            this.resetCounters(HC.now());
+            this.resetTrigger();
         },
 
         /**

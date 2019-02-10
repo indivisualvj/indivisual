@@ -3,7 +3,7 @@
  * @returns {number}
  */
 HC.Layer.prototype.patternCenterX = function () {
-    return this.width/2 + this.width * this.settings.pattern_centerx; // todo globally use diameterv.length() instead of width/height
+    return this.resolution('half').x + this.diameterVector.length() * this.settings.pattern_centerx; // todo globally use diameterv.length() instead of width/height
 };
 
 /**
@@ -11,7 +11,7 @@ HC.Layer.prototype.patternCenterX = function () {
  * @returns {number}
  */
 HC.Layer.prototype.patternCenterY = function () {
-    return this.height/2 + this.height * this.settings.pattern_centery;
+    return this.resolution('half').y + this.diameterVector.length() * this.settings.pattern_centery;
 };
 
 /**

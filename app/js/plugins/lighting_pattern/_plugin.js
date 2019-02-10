@@ -3,8 +3,8 @@ HC.plugins.lighting_pattern = HC.plugins.lighting_pattern || {};
 HC.LightingPatternPlugin = _class(false, HC.Plugin, {
     centerVector: function () {
         return new THREE.Vector3(
-            this.layer.diameterVector.x * this.settings.lighting_pattern_centerx,
-            this.layer.diameterVector.y * this.settings.lighting_pattern_centery,
+            this.layer.diameterVector.length() * this.settings.lighting_pattern_centerx,
+            this.layer.diameterVector.length() * this.settings.lighting_pattern_centery,
             this.layer.cameraDefaultDistance(1) * this.settings.lighting_pattern_centerz
         );
     },

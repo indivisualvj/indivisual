@@ -30,7 +30,7 @@
 
                     case 'animation':
                     default:
-                        source = new HC.Source(renderer, renderer.width, renderer.height);
+                        source = new HC.Source(renderer, renderer.resolution.x, renderer.resolution.y);
                         break;
 
                     case 'sequence':
@@ -513,8 +513,8 @@
          * @param resolution
          */
         resize: function (resolution) {
-            this.width = resolution.width;
-            this.height = resolution.height;
+            this.width = resolution.x;
+            this.height = resolution.y;
         },
 
         /**

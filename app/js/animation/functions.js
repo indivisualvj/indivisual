@@ -43,9 +43,8 @@ HC.Animation.prototype.prepareMonitor = function () {
     var onResize = function () {
         var w = window.innerWidth;
         var resolution = renderer.getResolution();
-        var aspect = resolution.width / resolution.height;
 
-        statics.DisplaySettings.resolution = w + 'x' + (w/aspect);
+        statics.DisplaySettings.resolution = w + 'x' + (w/resolution.aspect);
         renderer.fullReset(true);
         sourceman.resize(renderer.getResolution());
         displayman.resize(renderer.getResolution());

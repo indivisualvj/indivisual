@@ -36,8 +36,12 @@ HC.Layer.prototype.shapeColor = function (random, complementary) {
  */
 HC.Layer.prototype.shapeSize = function (multiplier) {
 
-    var preset = this.width / this.settings.shape_size;
-    return preset  * (multiplier || 1);
+    if (this._shapeSize != this.settings.shape_size) {
+        this._shapeSize = this.settings.shape_size;
+        var preset = this.resolution().x / this._shapeSize;
+        this._shapeSizePixels = preset;
+    }
+    return this._shapeSizePixels * (multiplier || 1);
 };
 
 /**

@@ -55,5 +55,5 @@ HC.Layer.prototype.cameraIntersectsObject = function (object) {
  */
 HC.Layer.prototype.cameraDefaultDistance = function (multiplier) {
 
-    return 2 * this.height * (multiplier || 1);
+    return 2 * this.resolution().y * (multiplier || 1);
 };

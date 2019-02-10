@@ -39,7 +39,7 @@
 "filter_sync":false,
 "filter_volume":1,
 "filter_volume_oscillate":"off",
-"material_mesh":"lambert",
+"mesh_material":"lambert",
 "material_blending":"NormalBlending",
 "material_blendequation":"AddEquation",
 "material_blendsrc":"SrcAlphaFactor",

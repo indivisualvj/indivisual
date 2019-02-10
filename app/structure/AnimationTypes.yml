@@ -22,7 +22,7 @@ layer_rotationx: [-180, 180, 0.01, half]
 layer_rotationy: [-180, 180, 0.01, half]
 layer_rotationz: [-180, 180, 0.01, half]
 
-material_mesh: [half]
+mesh_material: [half]
 material_blending: [half]
 #material_blendequation: [half]
 #material_blendsrc: [half]

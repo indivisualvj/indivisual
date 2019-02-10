@@ -1,10 +1,10 @@
-HC.plugins.material_mesh.monjori = _class(false, HC.MaterialMeshPlugin, {
+HC.plugins.mesh_material.monjori = _class(false, HC.MeshMaterialPlugin, {
     apply: function (geometry) {
         var material = new THREE.ShaderMaterial(HC.MonjoriShader);
         material.uniforms.resolution.value.x = this.layer.resolution().x;
         material.uniforms.resolution.value.y = this.layer.resolution().y;
         material.color = new THREE.Color();
-        listener.register('animation.updateRuntime', 'material_mesh.warp', function (now) {
+        listener.register('animation.updateRuntime', 'mesh_material.monjori', function (now) {
             material.uniforms.time.value = (now - beatkeeper.beatStartTime) / (60000 / statics.ControlSettings.tempo);
         });
         var mesh = new THREE.Mesh(geometry, material);

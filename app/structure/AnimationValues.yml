@@ -11,7 +11,7 @@ pattern_mover: {}
 shape_transform: {}
 shape_modifier: {}
 oscillate: {}
-material_mesh: {}
+mesh_material: {}
 material_style: {}
 shape_geometry: {}
 camera_mode: {}

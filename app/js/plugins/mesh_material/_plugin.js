@@ -1,8 +1,8 @@
 // todo refactor: mesh_material
 
-HC.plugins.material_mesh = HC.plugins.material_mesh || {};
+HC.plugins.mesh_material = HC.plugins.mesh_material || {};
 
-HC.MaterialMeshPlugin = _class(false, HC.Plugin, {
+HC.MeshMaterialPlugin = _class(false, HC.Plugin, {
     after: function (mesh) {
         var m = mesh.material;
         // m.dithering = true;

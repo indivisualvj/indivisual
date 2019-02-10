@@ -1,4 +1,4 @@
-HC.plugins.material_mesh.phong = _class(false, HC.MaterialMeshPlugin, {
+HC.plugins.mesh_material.phong = _class(false, HC.MeshMaterialPlugin, {
     index: 2,
     apply: function (geometry) {
         var material = new THREE.MeshPhongMaterial();

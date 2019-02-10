@@ -37,7 +37,7 @@
 "filter_sync":false,
 "filter_volume":1,
 "filter_volume_oscillate":"off",
-"material_mesh":"phong",
+"mesh_material":"phong",
 "material_blending":"NoBlending",
 "material_mapping":"default",
 "material_shininess":100,

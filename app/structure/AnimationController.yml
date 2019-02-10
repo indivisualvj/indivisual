@@ -123,7 +123,7 @@ shape:
 
 
 material:
-  material_mesh:
+  mesh_material:
   material_style:
   material_blending:
 #  material_blendequation:

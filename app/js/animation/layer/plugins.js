@@ -247,7 +247,7 @@ HC.Layer.prototype.getFilterModePlugin = function (name) {
  * @returns {*|boolean}
  */
 HC.Layer.prototype.getMaterialMeshPlugin = function (name) {
-    return this.getPlugin('material_mesh', name);
+    return this.getPlugin('mesh_material', name);
 };
 
 /**

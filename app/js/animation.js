@@ -534,7 +534,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     case 'shape_modifier_volume':
                     case 'shape_geometry':
                     case 'shape_transform':
-                    case 'material_mesh':
+                    case 'mesh_material':
                     case 'material_mapping':
                     case 'material_uvx':
                     case 'material_uvy':

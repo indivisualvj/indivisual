@@ -43,7 +43,7 @@ HC.Layer.prototype.lightColor = function (value) {
     if (this.lights && this.lights.length) {
         var c = new THREE.Color(value);
 
-        if (c.r == 0 && c.g == 0 && c.b == 0) {
+        if (c.r == 0 && c.g == 0 && c.b == 0) { // is black. change to white.
             c = new THREE.Color(0xffffff);
         }
 

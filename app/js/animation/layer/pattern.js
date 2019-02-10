@@ -3,7 +3,7 @@
  * @returns {number}
  */
 HC.Layer.prototype.patternCenterX = function () {
-    return this.width/2 + this.width * this.settings.pattern_centerx;
+    return this.width/2 + this.width * this.settings.pattern_centerx; // todo globally use diameterv.length() instead of width/height
 };
 
 /**

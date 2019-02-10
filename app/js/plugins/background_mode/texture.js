@@ -12,8 +12,8 @@ HC.plugins.background_mode.texture = _class(false, HC.BackgroundModePlugin, {
                 var img = new HC.Image(i, path);
                 img.update(
                     statics.ControlSettings.tempo,
-                    this.layer.diameterVector.x / this.settings.background_volume,
-                    this.layer.diameterVector.y / this.settings.background_volume
+                    this.layer.resolution().x / this.settings.background_volume,
+                    this.layer.resolution().y / this.settings.background_volume
                 );
 
                 this.img = img;

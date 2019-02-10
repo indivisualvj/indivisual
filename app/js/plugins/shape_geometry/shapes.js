@@ -3,7 +3,7 @@ HC.plugins.shape_geometry.plane = _class(false, HC.ShapeGeometryPlugin, {
         var layer = this.layer;
 
         var segments = Math.pow(this.settings.shape_variant, this.settings.shape_variant);
-        var geometry = new THREE.PlaneGeometry(layer.diameterVector.x, layer.diameterVector.y, segments, segments);
+        var geometry = new THREE.PlaneGeometry(layer.resolution().x, layer.resolution().y, segments, segments);
         return geometry;
     }
 });

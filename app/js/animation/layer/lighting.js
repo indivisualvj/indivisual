@@ -10,8 +10,8 @@ HC.Layer.prototype.resetLighting = function () {
     }
 
     this._lighting = new THREE.Group();
-    this._lighting.position.x = this.halfDiameterVector.x;
-    this._lighting.position.y = -this.halfDiameterVector.y;
+    this._lighting.position.x = this.resolution('half').x;
+    this._lighting.position.y = -this.resolution('half').y;
     this._lighting.name = '_lighting' + this.index;
     this._layer.add(this._lighting);
 

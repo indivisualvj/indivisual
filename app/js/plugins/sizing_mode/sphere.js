@@ -14,7 +14,7 @@ HC.plugins.sizing_mode.sphere = _class(false, HC.SizingModePlugin, {
         var layer = this.layer;
         var pos = shape.position();
         var dist = Math.max(pos.distanceTo(center), 1);
-        var _dist = layer.diameterVector.length();
+        var _dist = layer.resolution().length();
 
         if (revert) {
             var diff = (dist - _dist);

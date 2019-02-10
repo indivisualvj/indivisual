@@ -4,8 +4,8 @@ HC.plugins.shaders.repeat = _class(false, HC.ShaderPlugin, {
         if (!this.pass) {
             this.pass = new THREE.ShaderPass(THREE.RepeatShader);
         }
-        this.pass.uniforms.resolution.value.x = this.layer.diameterVector.x;
-        this.pass.uniforms.resolution.value.y = this.layer.diameterVector.y;
+        this.pass.uniforms.resolution.value.x = this.layer.resolution().x;
+        this.pass.uniforms.resolution.value.y = this.layer.resolution().y;
 
         return this.pass;
     },

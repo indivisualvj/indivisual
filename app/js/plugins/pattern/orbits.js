@@ -36,7 +36,7 @@ HC.plugins.pattern.orbits = _class(false, HC.PatternPlugin, {
         var py = this.settings.pattern_paddingy;
         var pz = this.settings.pattern_paddingz;
 
-        var shellDiamenter = layer.halfDiameterVector.length() / 4;
+        var shellDiamenter = layer.resolution('half').length() / 4;
         var radius = shellDiamenter * shell * p;
         var maxX = radius * px;
         var maxY = radius * py;

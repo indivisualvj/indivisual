@@ -55,11 +55,11 @@
 
             this._rotation = new THREE.Group();
             this._rotation.name = '_rotation' + this.index;
-            this._rotation.position.set(this.halfDiameterVector.x, -this.halfDiameterVector.y, 0);
+            this._rotation.position.set(this.resolution('half').x, -this.resolution('half').y, 0);
 
             this._shapes = new THREE.Group();
             this._shapes.name = '_shapes' + this.index;
-            this._shapes.position.set(-this.halfDiameterVector.x, this.halfDiameterVector.y, 0);
+            this._shapes.position.set(-this.resolution('half').x, this.resolution('half').y, 0);
 
             this._rotation.add(this._shapes);
             this._layer.add(this._rotation);
@@ -71,20 +71,18 @@
          */
         initBoundaries: function (resolution) {
 
-            this._resolution = {full: resolution};
-            var width = this.resolution().x;
-            var height = this.resolution().y;
+            var width = resolution.x;
+            var height = resolution.y;
 
-            this.three.camera.aspect = this.resolution().aspect;
+            this._resolution = {
+                full: new THREE.Vector2(width, height),
+                half: new THREE.Vector2(width / 2, height / 2),
+                relative: new THREE.Vector2(width, height).divide(new THREE.Vector2(1280, 720)),
+                'default': new THREE.Vector2(1280, 720)
+            };
 
-            this.defaultResolutionVector = new THREE.Vector2(1280, 720);
-            this.diameterVector = new THREE.Vector2(width, height);
-            this.halfDiameterVector = new THREE.Vector2(width / 2, height / 2);
-            this.relativeDiameterVector = new THREE.Vector2().copy(this.diameterVector).divide(this.defaultResolutionVector);
-            this.staticCenterVector = new THREE.Vector3(0, 0, 0);
-
-            this._resolution.half = this.halfDiameterVector;
-            this._resolution.relative = this.relativeDiameterVector;
+            this._resolution.full.aspect = resolution.aspect;
+            this.three.camera.aspect = resolution.aspect;
         },
 
         /**
@@ -94,7 +92,7 @@
          */
         resolution: function (variant) {
 
-            if (variant in this._resolution) {
+            if (variant && variant in this._resolution) {
                 return this._resolution[variant];
             }
 

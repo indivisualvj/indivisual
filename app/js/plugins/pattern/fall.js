@@ -13,7 +13,7 @@ HC.plugins.pattern.fall = _class(false, HC.PatternPlugin, {
 
         var params = this.params(shape);
 
-        if (!params.threshold || shape.y() > layer.diameterVector.y + layer.shapeSize(1)) {
+        if (!params.threshold || shape.y() > layer.resolution().y + layer.shapeSize(1)) {
             var matrix = layer.getPatternPlugin('matrix');
             var gridPosition = matrix.gridPosition(shape);
             var gap = layer.shapeSize(1) * this.settings.pattern_paddingy;
@@ -29,8 +29,8 @@ HC.plugins.pattern.fall = _class(false, HC.PatternPlugin, {
         }
 
         if (params.velocity.y > 0
-            && shape.y() < layer.diameterVector.y - layer.shapeSize(3)
-            && shape.y() - params.threshold > layer.diameterVector.y / 8
+            && shape.y() < layer.resolution().y - layer.shapeSize(3)
+            && shape.y() - params.threshold > layer.resolution().y / 8
             && 15 == randomInt(0, 15)
         ) {
             params.threshold = shape.y();

@@ -8,7 +8,7 @@ HC.plugins.pattern.dropletsv = _class(false, HC.PatternPlugin, {
 
         var params = this.params(shape);
 
-        if (shape.y() < 0 - layer.shapeSize(1) || shape.y() > layer.diameterVector.y + layer.shapeSize(1)) {
+        if (shape.y() < 0 - layer.shapeSize(1) || shape.y() > layer.resolution().y + layer.shapeSize(1)) {
             params.velocity = 0;
         }
 
@@ -40,7 +40,7 @@ HC.plugins.pattern.dropletsh = _class(false, HC.PatternPlugin, {
         var layer = this.layer;
         var params = this.params(shape);
 
-        if (shape.x() < 0 - layer.shapeSize(1) || shape.x() > layer.diameterVector.x + layer.shapeSize(1)) {
+        if (shape.x() < 0 - layer.shapeSize(1) || shape.x() > layer.resolution().x + layer.shapeSize(1)) {
             params.velocity = 0;
         }
 

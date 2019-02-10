@@ -7,7 +7,7 @@ HC.plugins.pattern.sphere = _class(false, HC.PatternPlugin, {
 
 
         var point = this.spherePosition(shape);
-        var radius = layer.halfDiameterVector.y * this.settings.pattern_padding;
+        var radius = layer.resolution('half').y * this.settings.pattern_padding;
 
         if (this.settings.pattern_audio) {
             var or = radius;
@@ -74,9 +74,9 @@ HC.plugins.pattern.spray = _class(false, HC.PatternPlugin, {
 
         if (!params.initial
             || shape.y() < 0 - layer.shapeSize(1)
-            || shape.y() > layer.diameterVector.y + layer.shapeSize(1)
+            || shape.y() > layer.resolution().y + layer.shapeSize(1)
             || shape.x() < 0 - layer.shapeSize(1)
-            || shape.x() > layer.diameterVector.x + layer.shapeSize(1)
+            || shape.x() > layer.resolution().x + layer.shapeSize(1)
         ) {
             layer.getPatternPlugin('sphere').apply(shape);
             var sp = shape.position().clone();
@@ -124,9 +124,9 @@ HC.plugins.pattern.pulse = _class(false, HC.PatternPlugin, {
 
         if (!params.initial // wenn man immer da rein fällt gibts ein tolles gerumble!
             || shape.y() < 0 - layer.shapeSize(1)
-            || shape.y() > layer.diameterVector.y + layer.shapeSize(1)
+            || shape.y() > layer.resolution().y + layer.shapeSize(1)
             || shape.x() < 0 - layer.shapeSize(1)
-            || shape.x() > layer.diameterVector.x + layer.shapeSize(1)
+            || shape.x() > layer.resolution().x + layer.shapeSize(1)
             || shape.z() > layer.cameraDefaultDistance()
             || shape.z() < -layer.cameraDefaultDistance()
         ) {

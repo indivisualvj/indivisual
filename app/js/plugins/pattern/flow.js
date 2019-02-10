@@ -21,7 +21,7 @@ HC.plugins.pattern.flow = _class(false, HC.PatternPlugin, {
 
         if (!params.velocity.y) {
             x = ox + gridPosition.x * gap;
-            y = (randomInt(-layer.shapeSize(1), layer.diameterVector.y, false));
+            y = (randomInt(-layer.shapeSize(1), layer.resolution().y, false));
             z = 0;
             shape.position(x, y, z);
             params.velocity.x = randomFloat(-0.04, 0.05, 3, true);
@@ -30,14 +30,14 @@ HC.plugins.pattern.flow = _class(false, HC.PatternPlugin, {
 
         } else if (shape.y() < -layer.shapeSize(1)) {
             x = ox + gridPosition.x * gap;
-            y = (layer.diameterVector.y + layer.shapeSize(1));
+            y = (layer.resolution().y + layer.shapeSize(1));
             z = 0;
             shape.position(x, y, z);
             params.velocity.x = randomFloat(-0.04, 0.05, 3, true);
             params.velocity.y = randomFloat(0.03, 0.4, 3, false);
             params.velocity.z = randomFloat(0.03, 0.4, 3, true);
 
-        } else if (shape.y() > layer.diameterVector.y + layer.shapeSize(1)) {
+        } else if (shape.y() > layer.resolution().y + layer.shapeSize(1)) {
             x = ox + gridPosition.x * gap;
             y = (0 - layer.shapeSize(1));
             z = 0;

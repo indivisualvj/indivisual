@@ -14,7 +14,7 @@ HC.plugins.camera_mode.switch = _class(false, HC.CameraModePlugin, {
             var pos = cam.position;
 
             pos.copy(this.layer.random3dPosition());
-            cam.lookAt(this.layer.staticCenterVector);
+            cam.lookAt(new THREE.Vector3(0, 0, 0));
 
             return true;
         }

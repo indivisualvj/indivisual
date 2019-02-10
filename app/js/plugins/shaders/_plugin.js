@@ -7,8 +7,8 @@ HC.ShaderPlugin = _class(false, HC.Plugin, {
 
     updateResolution: function () {
         if (this.pass && this.pass.uniforms && this.pass.uniforms.resolution) {
-            this.pass.uniforms.resolution.value.x = this.layer.diameterVector.x;
-            this.pass.uniforms.resolution.value.y = this.layer.diameterVector.y;
+            this.pass.uniforms.resolution.value.x = this.layer.resolution().x;
+            this.pass.uniforms.resolution.value.y = this.layer.resolution().y;
         }
     },
 

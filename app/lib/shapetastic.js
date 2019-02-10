@@ -42,7 +42,7 @@ var Shapetastic = function(inst) {
         
         var cx = inst.canvas.width / 2;
         var cy = inst.canvas.height / 2;
-        var m = renderer.currentLayer.halfDiameterVector.x;
+        var m = renderer.currentLayer.resolution('half').x;
 
         var ix = __getIx();
         var iy = __getIy();
@@ -105,7 +105,7 @@ var Shapetastic = function(inst) {
         var n = _nearest(_vtcs(), vtc);
         var cx = inst.canvas.width / 2;
         var cy = inst.canvas.height / 2;
-        var m = renderer.currentLayer.halfDiameterVector.x;
+        var m = renderer.currentLayer.resolution('half').x;
         if (n) {
 
             var vn = new THREE.Vector2(n[0], n[1]);
@@ -163,10 +163,10 @@ var Shapetastic = function(inst) {
         var layer = renderer.currentLayer;
         var cx = inst.canvas.width/2;
         var cy = inst.canvas.height/2;
-        var l = cx - layer.halfDiameterVector.x;
-        var r = cx + layer.halfDiameterVector.x;
-        var t = cy - layer.halfDiameterVector.y;
-        var b = cy + layer.halfDiameterVector.y;
+        var l = cx - layer.resolution('half').x;
+        var r = cx + layer.resolution('half').x;
+        var t = cy - layer.resolution('half').y;
+        var b = cy + layer.resolution('half').y;
 
         ctx.strokeStyle = 'yellow';
         ctx.lineWidth = 1;
@@ -177,7 +177,7 @@ var Shapetastic = function(inst) {
         ctx.lineTo(r, t);
         ctx.stroke();
 
-        ctx.strokeRect(inst.canvas.width/2 - layer.halfDiameterVector.x, inst.canvas.height/2 - layer.halfDiameterVector.y, layer.diameterVector.x, layer.diameterVector.y);
+        ctx.strokeRect(inst.canvas.width/2 - layer.resolution('half').x, inst.canvas.height/2 - layer.resolution('half').y, layer.resolution().x, layer.resolution().y);
 
 
     };
@@ -503,8 +503,8 @@ var Shapetastic = function(inst) {
         var cnty = inst.canvas.height / 2;
         x = cx - cntx;
         y = cy - cnty;
-        x = x / renderer.currentLayer.halfDiameterVector.x, 3;
-        y = y / renderer.currentLayer.halfDiameterVector.y, 3;
+        x = x / renderer.currentLayer.resolution('half').x, 3;
+        y = y / renderer.currentLayer.resolution('half').y, 3;
 
         return {x: x, y: y};
     };

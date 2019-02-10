@@ -4,7 +4,7 @@ HC.plugins.pattern.cube = _class(false, HC.PatternPlugin, {
     apply: function (shape) {
         var layer = this.layer;
 
-        var edge = layer.diameterVector.y * this.settings.pattern_padding;
+        var edge = layer.resolution().y * this.settings.pattern_padding;
         var w = edge * this.settings.pattern_paddingx;
         var h = edge * this.settings.pattern_paddingy;
         var d = edge * this.settings.pattern_paddingz;

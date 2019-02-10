@@ -15,7 +15,7 @@ HC.plugins.pattern.ring = _class(false, HC.PatternPlugin, {
         var seg = Math.PI * 2 / sides;
         var hseg = -Math.PI * 0.5;
 
-        var r = (Math.min(layer.halfDiameterVector.x, layer.halfDiameterVector.y - layer.shapeSize(1))) * this.settings.pattern_padding;
+        var r = (Math.min(layer.resolution('half').x, layer.resolution('half').y - layer.shapeSize(1))) * this.settings.pattern_padding;
 
         var i = shape.index % sides;
 

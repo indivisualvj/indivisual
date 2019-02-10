@@ -9,7 +9,7 @@ HC.plugins.pattern.bacillus = _class(false, HC.PatternPlugin, {
         var speed = layer.getShapeSpeed(shape);
         var params = this.params(shape);
 
-        var prcp = layer.diameterVector.x / 600;
+        var prcp = layer.resolution().x / 600;
         var prcn = prcp * -1;
 
         var avx = randomInt(prcn, prcp) / shape.size() * this.settings.pattern_padding * this.settings.pattern_paddingx;
@@ -76,12 +76,12 @@ HC.plugins.pattern.bacillus = _class(false, HC.PatternPlugin, {
             if (dir.x < 0) {
                 shape.x(-layer.shapeSize(shape.size()));
             } else if (dir.x > 0) {
-                shape.x(layer.diameterVector.x + layer.shapeSize(shape.size()));
+                shape.x(layer.resolution().x + layer.shapeSize(shape.size()));
             }
             if (dir.y > 0) {
                 shape.y(-layer.shapeSize(shape.size()));
             } else if (dir.y < 0) {
-                shape.y(layer.diameterVector.y + layer.shapeSize(shape.size()));
+                shape.y(layer.resolution().y + layer.shapeSize(shape.size()));
             }
 
             var a = shape.rotation().z;

@@ -52,14 +52,14 @@ HC.plugins.pattern.slime = _class(
                     inst.layer.positionIn2dSpace(shape, x, y, 0);
 
                     var pos = shape.position();
-                    if (pos.x > layer.diameterVector.x) {
-                        pos.x = layer.diameterVector.x;
+                    if (pos.x > layer.resolution().x) {
+                        pos.x = layer.resolution().x;
                     }
                     if (pos.x < 0) {
                         pos.x = 0;
                     }
-                    if (pos.y < -layer.diameterVector.y) {
-                        pos.y = -layer.diameterVector.y;
+                    if (pos.y < -layer.resolution().y) {
+                        pos.y = -layer.resolution().y;
                     }
                     if (pos.y > 0) {
                         pos.y = 0;

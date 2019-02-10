@@ -1,4 +1,4 @@
-HC.plugins.background_mode.input = _class(false, HC.BackgroundModePlugin, {
+HC.plugins.background_mode.texture = _class(false, HC.BackgroundModePlugin, {
     apply: function () {
         var i = this.settings.background_input;
         var id = i + this.settings.background_volume;

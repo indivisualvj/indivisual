@@ -63,21 +63,21 @@ HC.plugins.oscillate.oscillator = _class(false, HC.OscillatePlugin, {
 
 HC.plugins.oscillate.sinusosci1 = _class(
     function () {
-        this.settings = {
+        this.osci = {
             osci1_period: 1,
             osci1_amp: 1,
-            osci2_period: 1,
+            osci2_period: 0,
             osci2_amp: 0,
-            osci3_period: 1,
+            osci3_period: 0,
             osci3_amp: 0,
             rhythm: 'half'
         };
     }, HC.OscillatePlugin, {
         name: 'sinus by osci1_period',
         apply: function (key) {
-            this.settings.osci1_period = this.settings.osci1_period;
-            this.settings.rhythm = this.settings.rhythm;
-            this.activate(key, HC.Osci.wobble(0, this.settings));
+            this.osci.osci1_period = this.settings.osci1_period;
+            this.osci.rhythm = this.settings.rhythm;
+            this.activate(key, HC.Osci.wobble(0, this.osci));
 
         }
     }
@@ -85,21 +85,21 @@ HC.plugins.oscillate.sinusosci1 = _class(
 
 HC.plugins.oscillate.sinusosci2 = _class(
     function () {
-        this.settings = {
-            osci1_period: 1,
+        this.osci = {
+            osci1_period: 0,
             osci1_amp: 0,
             osci2_period: 1,
             osci2_amp: 1,
-            osci3_period: 1,
+            osci3_period: 0,
             osci3_amp: 0,
             rhythm: 'half'
         };
     }, HC.OscillatePlugin, {
         name: 'sinus by osci2_period',
         apply: function (key) {
-            this.settings.osci2_period = this.settings.osci2_period;
-            this.settings.rhythm = this.settings.rhythm;
-            this.activate(key, HC.Osci.wobble(0, this.settings));
+            this.osci.osci2_period = this.settings.osci2_period;
+            this.osci.rhythm = this.settings.rhythm;
+            this.activate(key, HC.Osci.wobble(0, this.osci));
 
         }
     }
@@ -107,10 +107,10 @@ HC.plugins.oscillate.sinusosci2 = _class(
 
 HC.plugins.oscillate.sinusosci3 = _class(
     function () {
-        this.settings = {
-            osci1_period: 1,
+        this.osci = {
+            osci1_period: 0,
             osci1_amp: 0,
-            osci2_period: 1,
+            osci2_period: 0,
             osci2_amp: 0,
             osci3_period: 1,
             osci3_amp: 1,
@@ -119,9 +119,9 @@ HC.plugins.oscillate.sinusosci3 = _class(
     }, HC.OscillatePlugin, {
         name: 'sinus by osci3_period',
         apply: function (key) {
-            this.settings.osci3_period = this.settings.osci3_period;
-            this.settings.rhythm = this.settings.rhythm;
-            this.activate(key, HC.Osci.wobble(0, this.settings));
+            this.osci.osci3_period = this.settings.osci3_period;
+            this.osci.rhythm = this.settings.rhythm;
+            this.activate(key, HC.Osci.wobble(0, this.osci));
 
         }
     }

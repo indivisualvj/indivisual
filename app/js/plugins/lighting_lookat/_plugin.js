@@ -2,6 +2,10 @@ HC.plugins.lighting_lookat = HC.plugins.lighting_lookat || {};
 
 HC.LightingLookatPlugin = _class(false, HC.Plugin, {
 
+    params: function (light) {
+        return light.userData;
+    },
+
     isFirstShape: function (light) {
         return light.userData.index == 0;
     },

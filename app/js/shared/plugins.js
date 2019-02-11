@@ -76,14 +76,38 @@ HC.Plugin = _class(false, false, {
             .delay(dly);
     },
 
+    /**
+     * Start tweens synchronized
+     * @param tween
+     */
     tweenStart: function (tween) {
         tween.start(HC.now() - this.layer.lastUpdate);
     },
 
-    apply: function () {
-        console.error('HC.Plugin: .apply() must be implemented in derived plugin.');
-    },
+    /**
+     * Prepare etc.
+     * Using isFirstShape plugins can be cancelled here if processing all shapes is not necessary.
+     * @returns {boolean} true means continue, false means stop (do not call apply+after)
+     */
+    //before: function () {}
 
+    /**
+     *
+     * @returns {boolean} true means continue, false means stop (do not call after)
+     */
+    // apply: function () {}
+
+    /**
+     * Clean up etc.
+     */
+    // after: function () {}
+
+    /**
+     * For plugins to determine if it is first or layer's dummy shape.
+     * @see before
+     * @param shape
+     * @returns {boolean}
+     */
     isFirstShape: function (shape) {
         return shape.index == 0;
     }

@@ -1,8 +1,6 @@
 HC.plugins.mesh_material.monjori = _class(false, HC.MeshMaterialPlugin, {
     apply: function (geometry) {
         var material = new THREE.ShaderMaterial(HC.MonjoriShader);
-        material.uniforms.resolution.value.x = this.layer.resolution().x;
-        material.uniforms.resolution.value.y = this.layer.resolution().y;
         material.color = new THREE.Color();
         listener.register('animation.updateRuntime', 'mesh_material.monjori', function (now) {
             material.uniforms.time.value = (now - beatkeeper.beatStartTime) / (60000 / statics.ControlSettings.tempo);
@@ -17,15 +15,13 @@ HC.plugins.mesh_material.monjori = _class(false, HC.MeshMaterialPlugin, {
 HC.MonjoriShader = {
 
     uniforms: {
-        time: { type: 'f', value: 1.0 },
-        resolution: { type: 'v2', value: {x: 0, y: 0} }
+        time: { type: 'f', value: 1.0 }
     },
     
     fragmentShader: [
 // 'Monjori' by Mic (2009) modified by tesuji
 // Code for the 1k intro Monjori from the demoscene (http://www.pouet.net/prod.php?which=52761)
 
-        "uniform vec2 resolution;",
         "uniform float time;",
         "varying vec2 vUv;",
         "void main(void)",

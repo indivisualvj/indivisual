@@ -3,7 +3,7 @@
  * @returns {number}
  */
 HC.Layer.prototype.patternCenterX = function () {
-    return this.width/2 + this.width * this.settings.pattern_centerx;
+    return this.resolution('half').x + this.cameraDefaultDistance(.25) * this.settings.pattern_centerx; // todo globally use diameterv.length() instead of width/height
 };
 
 /**
@@ -11,7 +11,7 @@ HC.Layer.prototype.patternCenterX = function () {
  * @returns {number}
  */
 HC.Layer.prototype.patternCenterY = function () {
-    return this.height/2 + this.height * this.settings.pattern_centery;
+    return this.resolution('half').y + this.cameraDefaultDistance(.25) * this.settings.pattern_centery;
 };
 
 /**
@@ -19,7 +19,7 @@ HC.Layer.prototype.patternCenterY = function () {
  * @returns {number}
  */
 HC.Layer.prototype.patternCenterZ = function () {
-    return this.cameraDefaultDistance() * this.settings.pattern_centerz;
+    return this.cameraDefaultDistance(.25) * this.settings.pattern_centerz;
 };
 
 /**

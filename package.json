@@ -15,9 +15,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@bitbucket.org/blutze/indivisual.git"
+    "url": "git@github.com:indivisualvj/indivisual.git"
   },
-  "author": "Benjamin Lutze",
+  "author": "indivisualvj / https://github.com/indivisualvj",
   "license": "MIT",
-  "homepage": "https://bitbucket.org/blutze/indivisual#readme"
+  "homepage": "https://github.com/indivisualvj/indivisual"
 }

@@ -32,14 +32,14 @@ HC.plugins.pattern.pass = _class(
             }
 
             var dir = (gridPosition.y % 2 ? -1 : 1) * this.dir;
-            var step = animation.diffPrc * dir * params.velocity * layer.relativeDiameterVector.x;
+            var step = animation.diffPrc * dir * params.velocity * layer.resolution('relative').x;
             step *= this.settings.pattern_paddingx;
             shape._position.translateX(step);
 
             var shapeSize = layer.shapeSize(shape.size());
             if (dir < 0 && shape.position().x < -shapeSize) {
-                shape.position().x = layer.diameterVector.x + shapeSize;
-            } else if (dir > 0 && shape.position().x > layer.diameterVector.x + shapeSize) {
+                shape.position().x = layer.resolution().x + shapeSize;
+            } else if (dir > 0 && shape.position().x > layer.resolution().x + shapeSize) {
                 shape.position().x = -shapeSize;
             }
         }

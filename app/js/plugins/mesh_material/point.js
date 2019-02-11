@@ -1,4 +1,4 @@
-HC.plugins.material_mesh.point = _class(false, HC.MaterialMeshPlugin, {
+HC.plugins.mesh_material.point = _class(false, HC.MeshMaterialPlugin, {
     name: 'points (no transform -> edges only)',
     apply: function (geometry, index) {
         var material = new THREE.PointsMaterial();
@@ -10,7 +10,7 @@ HC.plugins.material_mesh.point = _class(false, HC.MaterialMeshPlugin, {
     }
 });
 
-HC.plugins.material_mesh.transformablepoints = _class(false, HC.MaterialMeshPlugin, {
+HC.plugins.mesh_material.transformablepoints = _class(false, HC.MeshMaterialPlugin, {
     name: 'points (transform)',
     apply: function (geometry, index) {
         var material = new THREE.PointsMaterial();

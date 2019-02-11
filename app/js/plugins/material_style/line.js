@@ -8,7 +8,7 @@ HC.plugins.material_style.chessline = _class(false, HC.MaterialStylePlugin, {
             var pa = this.params(shape);
 
             if (shape.index % 2 == 1 && !pa.mesh) {
-                var mesh = layer.getMaterialMeshPlugin('line').apply(shape.getGeometry());
+                var mesh = layer.getMeshMaterialPlugin('line').apply(shape.getGeometry());
                 pa.mesh = mesh;
                 shape.setMesh(mesh);
             }
@@ -27,7 +27,7 @@ HC.plugins.material_style.randompeakline = _class(false, HC.MaterialStylePlugin,
             var pa = this.params(shape);
 
             if (!pa.states.length) {
-                var mesh = layer.getMaterialMeshPlugin('line').apply(shape.getGeometry());
+                var mesh = layer.getMeshMaterialPlugin('line').apply(shape.getGeometry());
                 pa.states.push(mesh);
                 pa.states.push(shape.mesh);
             }

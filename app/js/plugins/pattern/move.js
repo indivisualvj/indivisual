@@ -17,8 +17,8 @@ HC.plugins.pattern.move = _class(false, HC.PatternPlugin, {
 
         if (!params.velocity) {
 
-            x = randomInt(0, layer.diameterVector.x);
-            y = randomInt(0, layer.diameterVector.y);
+            x = randomInt(0, layer.resolution().x);
+            y = randomInt(0, layer.resolution().y);
             z = 0;
             shape.position(x, y, z);
 
@@ -35,18 +35,18 @@ HC.plugins.pattern.move = _class(false, HC.PatternPlugin, {
 
         shape.position().add(dir);
 
-        if (x > layer.diameterVector.x + layer.shapeSize(.5)) {
+        if (x > layer.resolution().x + layer.shapeSize(.5)) {
             shape.x(-layer.shapeSize(.5));
 
         } else if (x < -layer.shapeSize(.5)) {
-            shape.x(layer.diameterVector.x + layer.shapeSize(.5));
+            shape.x(layer.resolution().x + layer.shapeSize(.5));
         }
 
-        if (y > layer.diameterVector.y + layer.shapeSize(.5)) {
+        if (y > layer.resolution().y + layer.shapeSize(.5)) {
             shape.y(-layer.shapeSize(.5));
 
         } else if (y < -layer.shapeSize(.5)) {
-            shape.y(layer.diameterVector.y + layer.shapeSize(.5));
+            shape.y(layer.resolution().y + layer.shapeSize(.5));
         }
 
         if (z > layer.cameraDefaultDistance() || z < -layer.cameraDefaultDistance()) {

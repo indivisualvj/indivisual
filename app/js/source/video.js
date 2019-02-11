@@ -207,7 +207,7 @@
                         }
                     }
                     if (this.started) {
-                        statics.powersave = true;
+                        animation.powersave = true;
                         if (this.pointer >= this.frames.length) {
                             this.finish();
 

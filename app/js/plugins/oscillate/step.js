@@ -5,7 +5,6 @@ HC.plugins.oscillate.twostep = _class(
         name: 'twostep 0/1 on peak',
 
         apply: function (key) {
-            var layer = this.layer;
             var pa = this.params(key);
 
             HC.Osci.step(pa, 2, beatkeeper.getSpeed('full'), true);
@@ -21,9 +20,8 @@ HC.plugins.oscillate.twostepminus = _class(
         name: 'twostep -1/1 on peak',
 
         apply: function (key) {
-            var layer = this.layer;
             var pa = this.params(key);
-            HC.Osci.step(pa, 2, beatkeeper.getSpeed('full'), true);
+            HC.Osci.step(pa, 2, beatkeeper.getSpeed('full'), true, true);
             this.activate(key, pa.value);
         }
     }
@@ -79,7 +77,7 @@ HC.plugins.oscillate.threestepminus = _class(
 
         apply: function (key) {
             var pa = this.params(key);
-            HC.Osci.step(pa, 3, beatkeeper.getSpeed('full'), true);
+            HC.Osci.step(pa, 3, beatkeeper.getSpeed('full'), true, true);
             this.activate(key, pa.value);
         }
     }
@@ -148,8 +146,9 @@ HC.plugins.oscillate.fourstepminus = _class(
         name: 'fourstep -1/1 on peak',
 
         apply: function (key) {
+
             var pa = this.params(key);
-            HC.Osci.step(pa, 4, beatkeeper.getSpeed('full'), true);
+            HC.Osci.step(pa, 4, beatkeeper.getSpeed('full'), true, true);
             this.activate(key, pa.value);
         }
     }

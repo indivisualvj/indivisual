@@ -314,8 +314,8 @@
          * @param resolution
          */
         resize: function (resolution) {
-            this.width = resolution.width;
-            this.height = resolution.height;
+            this.width = resolution.x;
+            this.height = resolution.y;
             this.maptastic.resize(resolution);
             this.updateDisplays();
         },

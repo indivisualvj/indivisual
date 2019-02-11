@@ -18,7 +18,7 @@ HC.plugins.camera_mode.mirror = _class(
             cam.position.y *= this.mirror.y;
             cam.position.z *= this.mirror.z;
 
-            cam.lookAt(this.layer.staticCenterVector);
+            cam.lookAt(new THREE.Vector3(0, 0, 0));
         }
     }
 );

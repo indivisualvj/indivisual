@@ -6,13 +6,12 @@
 
     /**
      *
-     * @param width
-     * @param height
+     * @param resolution
      * @param index
      * @param three
      * @constructor
      */
-    HC.Layer = function (width, height, index, three) {
+    HC.Layer = function (resolution, index, three) {
         this.index = index;
         this.preset = false;
         this.settings = false;
@@ -22,8 +21,6 @@
         this.shape = false;
         this.plugins = {};
 
-        this.width = width;
-        this.height = height;
         this.tween = new TWEEN.Group();
         this.lastUpdate = 0;
         this._rotation = false;
@@ -41,7 +38,7 @@
         this._composer = new THREE.EffectComposer(this.three.renderer, this.three.target);
         this._composer.addPass(new THREE.RenderPass(this.three.scene, this.three.camera));
 
-        this.initBoundaries();
+        this.resetSizes(resolution);
     };
 
     HC.Layer.prototype = {
@@ -58,11 +55,11 @@
 
             this._rotation = new THREE.Group();
             this._rotation.name = '_rotation' + this.index;
-            this._rotation.position.set(this.halfDiameterVector.x, -this.halfDiameterVector.y, 0);
+            this._rotation.position.set(this.resolution('half').x, -this.resolution('half').y, 0);
 
             this._shapes = new THREE.Group();
             this._shapes.name = '_shapes' + this.index;
-            this._shapes.position.set(-this.halfDiameterVector.x, this.halfDiameterVector.y, 0);
+            this._shapes.position.set(-this.resolution('half').x, this.resolution('half').y, 0);
 
             this._rotation.add(this._shapes);
             this._layer.add(this._rotation);
@@ -70,28 +67,43 @@
 
         /**
          *
+         * @param resolution
          */
-        initBoundaries: function () {
-            var width = this.width;
-            var height = this.height;
+        initBoundaries: function (resolution) {
 
-            var aspect = this.width / this.height;
-            this.three.camera.aspect = aspect;
+            var width = resolution.x;
+            var height = resolution.y;
 
-            this.defaultResolutionVector = new THREE.Vector2(1280, 720);
-            this.diameterVector = new THREE.Vector2(width, height);
-            this.halfDiameterVector = new THREE.Vector2(width / 2, height / 2);
-            this.relativeDiameterVector = new THREE.Vector2().copy(this.diameterVector).divide(this.defaultResolutionVector);
-            this.staticCenterVector = new THREE.Vector3(0, 0, 0);
+            this._resolution = {
+                full: new THREE.Vector2(width, height),
+                half: new THREE.Vector2(width / 2, height / 2),
+                relative: new THREE.Vector2(width, height).divide(new THREE.Vector2(1280, 720)),
+                'default': new THREE.Vector2(1280, 720)
+            };
+
+            this._resolution.full.aspect = resolution.aspect;
+            this.three.camera.aspect = resolution.aspect;
         },
 
         /**
          *
-         * @param resolution
+         * @param variant
+         * @returns {*}
          */
-        fullReset: function (resolution) {
+        resolution: function (variant) {
+
+            if (variant && variant in this._resolution) {
+                return this._resolution[variant];
+            }
+
+            return this._resolution.full;
+        },
+
+        /**
+         *
+         */
+        fullReset: function () {
             this.resetPlugins();
-            this.resetSizes(resolution);
             this.resetShapes();
             this.resetLighting();
             this.updateShaders();
@@ -103,17 +115,10 @@
          */
         resetSizes: function (resolution) {
 
-            if (resolution !== undefined) {
-                this.width = resolution.width;
-                this.height = resolution.height;
-            }
-            var width = this.width;
-            var height = this.height;
-
-            this.initBoundaries();
+            this.initBoundaries(resolution);
 
             if (this._composer) {
-                this._composer.setSize(width, height);
+                this._composer.setSize(this.resolution().x, this.resolution().y);
             }
         },
 

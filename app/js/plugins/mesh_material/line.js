@@ -1,4 +1,4 @@
-HC.plugins.material_mesh.line = _class(false, HC.MaterialMeshPlugin, {
+HC.plugins.mesh_material.line = _class(false, HC.MeshMaterialPlugin, {
     name: 'line (no transform)',
     apply: function (geometry) {
         var material = new THREE.LineBasicMaterial();

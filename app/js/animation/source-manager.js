@@ -30,7 +30,7 @@
 
                     case 'animation':
                     default:
-                        source = new HC.Source(renderer, renderer.width, renderer.height);
+                        source = new HC.Source(renderer, renderer.resolution.x, renderer.resolution.y);
                         break;
 
                     case 'sequence':
@@ -216,7 +216,7 @@
                 });
 
                 listener.register('sample.init.end', sample.id, function (target) {
-                    statics.powersave = false;
+                    animation.powersave = false;
                     messaging.emitAttr('[data-id="' + enabledKey + '"]', 'data-color', 'green');
                     messaging.emitAttr('[data-id="' + enabledKey + '"]', 'style', '');
                     messaging.emitAttr('[data-id="' + enabledKey + '"]', 'data-label', 'ready');
@@ -243,7 +243,7 @@
                 });
 
                 listener.register('sample.render.error', sample.id, function (target) {
-                    statics.powersave = false;
+                    animation.powersave = false;
                     messaging.emitAttr('[data-id="' + recordKey + '"]', 'data-color', 'yellow');
                     messaging.emitAttr('[data-id="' + recordKey + '"]', 'data-label', '!error');
                     messaging.emitMidi('glow', MIDI_ROW_ONE[sample.index], {timeout: 500, times: 3});
@@ -251,7 +251,7 @@
                 });
 
                 listener.register('sample.render.end', sample.id, function (target) {
-                    statics.powersave = false;
+                    animation.powersave = false;
 
                     var recordKey  = getSampleRecordKey(target.index);
 
@@ -513,8 +513,8 @@
          * @param resolution
          */
         resize: function (resolution) {
-            this.width = resolution.width;
-            this.height = resolution.height;
+            this.width = resolution.x;
+            this.height = resolution.y;
         },
 
         /**

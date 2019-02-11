@@ -5,13 +5,14 @@ HC.plugins.camera_mode.manual = _class(false, HC.CameraModePlugin, {
         var layer = this.layer;
 
         var cam = layer.getCamera();
-        var cdd = layer.cameraDefaultDistance(1);
+        var dd = layer.cameraDefaultDistance();
+
         cam.zoom = this.settings.camera_mode_volume;
-        cam.lookAt(layer.staticCenterVector);
+        cam.lookAt(new THREE.Vector3(0, 0, 0));
         cam.position.set(
-            0 + this.settings.camera_x * layer.halfDiameterVector.x,
-            0 + this.settings.camera_y * layer.halfDiameterVector.y,
-            cdd + cdd * this.settings.camera_z
+            this.settings.camera_x * dd,
+            this.settings.camera_y * dd,
+            this.settings.camera_z * dd
         );
         cam.rotation.set(
             this.settings.camera_rotationx * RAD,
@@ -24,12 +25,10 @@ HC.plugins.camera_mode.manual = _class(false, HC.CameraModePlugin, {
     }
 });
 
-HC.plugins.camera_mode.manualcenter = _class(false, HC.CameraModePlugin, {
+HC.plugins.camera_mode.manualcenter = _class(false, HC.plugins.camera_mode.manual, {
     index: 2,
     name: 'static lookat center',
     apply: function () {
-        this.layer
-            .getCameraModePlugin('manual')
-            .apply(this.layer.staticCenterVector);
+        HC.plugins.camera_mode.manual.prototype.apply.call(this, new THREE.Vector3(0, 0, 0));
     }
 });

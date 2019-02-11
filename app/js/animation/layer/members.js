@@ -26,10 +26,11 @@ HC.Layer.prototype.randomColor = function () {
  * @returns {Vector3}
  */
 HC.Layer.prototype.lookAtVector = function () {
+    var v = this.cameraDefaultDistance();
     return new THREE.Vector3(
-        this.diameterVector.x * this.settings.shape_lookat_centerx,
-        this.diameterVector.y * this.settings.shape_lookat_centery,
-        this.cameraDefaultDistance(1) * this.settings.shape_lookat_centerz
+        v * this.settings.shape_lookat_centerx,
+        v * this.settings.shape_lookat_centery,
+        v * this.settings.shape_lookat_centerz
     );
 };
 
@@ -113,8 +114,8 @@ HC.Layer.prototype.shaders = function (sh) {
  */
 HC.Layer.prototype.random3dPosition = function(depthMultiplier, reduce) {
     return new THREE.Vector3(
-        randomInt(0, this.halfDiameterVector.x * this.settings.pattern_paddingx - (reduce || 0), true),
-        randomInt(0, this.halfDiameterVector.y * this.settings.pattern_paddingy - (reduce || 0), true),
+        randomInt(0, this.resolution('half').x * this.settings.pattern_paddingx - (reduce || 0), true),
+        randomInt(0, this.resolution('half').y * this.settings.pattern_paddingy - (reduce || 0), true),
         randomInt(0, this.cameraDefaultDistance(depthMultiplier || 0) * this.settings.pattern_paddingz, true)
     );
 };
@@ -127,8 +128,8 @@ HC.Layer.prototype.random3dPosition = function(depthMultiplier, reduce) {
  */
 HC.Layer.prototype.random2dPosition = function(depthMultiplier, reduce) {
     return new THREE.Vector3(
-        randomInt(0, this.diameterVector.x),
-        randomInt(0, -this.diameterVector.y),
+        randomInt(0, this.resolution().x),
+        randomInt(0, -this.resolution().y),
         randomInt(0, this.cameraDefaultDistance(depthMultiplier || 0) * this.settings.pattern_paddingz, true)
     );
 };

@@ -220,7 +220,6 @@ HC.Layer.prototype.doColoring = function (shape) {
     }
     var color = shape.color;
     shape.opacity(color.o * this.settings.coloring_opacity);
-    shape.shininess(this.settings.material_shininess);
 
     return proceed;
 };
@@ -233,6 +232,7 @@ HC.Layer.prototype.doMaterial = function (shape) {
     shape.strokeWidth(this.settings.material_volume);
 
     try {
+        // todo add all map features like so: https://threejs.org/docs/#api/en/materials/MeshStandardMaterial
         shape.updateMaterial(statics.material_map, this.settings.coloring_emissive);
 
     } catch (e) {
@@ -323,14 +323,16 @@ HC.Layer.prototype.doOscillate = function (enable) {
         var okey = key + '_oscillate';
         if (okey in this.settings) {
             var osci = this.settings[okey];
-            if (osci in HC.plugins.oscillate && HC.plugins.oscillate[osci].executable !== false) {
+            if (osci in HC.plugins.oscillate) {
                 var plugin = this.getOscillatePlugin(osci);
-                if (plugin && enable) {
-                    plugin.store(key);
-                    plugin.apply(key);
+                if (plugin && plugin.apply) {
+                    if (enable) {
+                        plugin.store(key);
+                        plugin.apply(key);
 
-                } else if (plugin) {
-                    plugin.restore(key);
+                    } else {
+                        plugin.restore(key);
+                    }
                 }
             }
         }

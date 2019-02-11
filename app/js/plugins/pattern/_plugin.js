@@ -27,8 +27,8 @@ HC.PatternPlugin = _class(false, HC.Plugin, {
         if (true) {//beatkeeper.getSpeed('sixteen').prc == 0) {
 
             // bounds check
-            var mx = this.layer.halfDiameterVector.x + (extend || 0);
-            var my = this.layer.halfDiameterVector.y + (extend || 0);
+            var mx = this.layer.resolution('half').x + (extend || 0);
+            var my = this.layer.resolution('half').y + (extend || 0);
             var mz = this.layer.cameraDefaultDistance(depthMultiplier || 0);
 
             var world = new THREE.Vector3();

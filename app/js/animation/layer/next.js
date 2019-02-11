@@ -54,8 +54,12 @@ HC.Layer.prototype.nextMesh = function (index) {
     geometry = this.nextShapeModifier(geometry);
 
     if (geometry) {
-        var plugin = this.getMaterialMeshPlugin();
-        if (plugin && plugin.apply) {
+        var plugin = this.getMeshMaterialPlugin();
+        if (plugin) {
+            if (plugin.before) {
+                geometry = plugin.before(geometry);
+            }
+
             var mesh = plugin.apply(geometry, index);
 
             if (plugin.after) {

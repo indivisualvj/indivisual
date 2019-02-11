@@ -21,7 +21,7 @@ HC.plugins.lighting_lookat.randomshapepeak = _class(false, HC.LightingLookatPlug
 
 HC.plugins.lighting_lookat.randomshapes = _class(false, HC.LightingLookatPlugin, {
     apply: function (light, peak) {
-        var params = light.userData;
+        var params = this.params(light);
         var speed = params.speed || this.layer.getCurrentSpeed();
         if (!params.shape || (!peak && speed.prc == 0) || (peak && audio.peak && randomBool())) {
             params.shape = this.layer.getRandomShape();

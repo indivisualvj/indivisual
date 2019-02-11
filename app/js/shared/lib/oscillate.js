@@ -83,6 +83,7 @@ HC.Osci = {
             while (n == pa.next) {
                 n = (randomInt(0, steps, negative) / steps);
             }
+
             pa.next = n;
             if (pa.next > 1) debug;
         }
@@ -97,33 +98,33 @@ HC.Osci = {
 
     /**
      *
-     * @param offset
+     * @param progress
      * @param settings
+     * @param func
      * @returns {number}
      */
-    wobble: function (offset, settings) {
+    wobble: function (progress, settings, func) {
         var p = 1;
 
         var bpm = 60000 / statics.ControlSettings.tempo;
         var div = beatkeeper.rhythmDivider(settings.rhythm) / 2;
+        func = func || Math.sin;
+        progress = progress || Math.PI * animation.now;
 
         if (settings.osci1_period !== 0) {
-            var progress = Math.PI * animation.now;
-            progress /= (bpm * settings.osci1_period);
-            progress *= div;
-            p = settings.osci1_amp * Math.sin(offset + progress);
+            var pr = progress / (bpm * settings.osci1_period);
+            pr *= div;
+            p = settings.osci1_amp * func(pr);
         }
         if (settings.osci2_period !== 0) {
-            var progress = Math.PI * animation.now;
-            progress /= (bpm * settings.osci2_period);
-            progress *= div;
-            p += settings.osci2_amp * Math.sin(offset + progress);
+            var pr = progress / (bpm * settings.osci2_period);
+            pr *= div;
+            p += settings.osci2_amp * func(pr);
         }
         if (settings.osci3_period !== 0) {
-            var progress = Math.PI * animation.now;
-            progress /= (bpm * settings.osci3_period);
-            progress *= div;
-            p += settings.osci3_amp * Math.sin(offset + progress);
+            var pr = progress / (bpm * settings.osci3_period);
+            pr *= div;
+            p += settings.osci3_amp * func(pr);
         }
 
         return p;

@@ -2,14 +2,12 @@ HC.plugins.oscillate = HC.plugins.oscillate || {};
 
 HC.OscillatePlugin = _class(false, HC.Plugin, {
 
-    _cache: function () {
+    construct: function (layer, settings, tree, key) {
+        HC.Plugin.prototype.construct.call(this, layer, settings, tree, key);
         this.cache = this.cache || {};
     },
 
     params: function (key, value) {
-        var layer = this.layer;
-        var index = layer.index;
-        this._cache(index);
 
         // create a unique key to cache progress etc.
         var ckey = '_' + (isObject(key) ? '_object_' : key);
@@ -22,14 +20,13 @@ HC.OscillatePlugin = _class(false, HC.Plugin, {
 
         } else {
             // key does not exist
-            this.cache[ckey] = this.preset || 0;
+            this.cache[ckey] = isObject(this.preset) ? Object.create(this.preset) : 0;
         }
 
         return this.cache[ckey];
     },
 
     store: function (key) {
-        this._cache();
 
         // store original value
         if (isObject(key)) {
@@ -43,10 +40,6 @@ HC.OscillatePlugin = _class(false, HC.Plugin, {
     },
 
     restore: function (key) {
-        var layer = this.layer;
-        var index = layer.index;
-        this._cache(index);
-
         // restore original value
         if (isObject(key)) {
             var ckey = (isObject(key) ? '_object_' : key);
@@ -59,7 +52,7 @@ HC.OscillatePlugin = _class(false, HC.Plugin, {
     },
 
     activate: function (key, value, overwrite) {
-        var layer = this.layer;
+
         if (isObject(key)) {
             if (overwrite) {
                 key.value = value;

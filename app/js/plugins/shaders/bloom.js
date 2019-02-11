@@ -2,9 +2,9 @@ HC.plugins.shaders.bloom = _class(false, HC.ShaderPlugin, {
     index: 40,
     create: function () {
         if (!this.pass) {
-            this.pass = new THREE.UnrealBloomPass(this.layer.diameterVector);
+            this.pass = new THREE.UnrealBloomPass(this.layer.resolution());
         }
-        this.pass.setSize(this.layer.diameterVector.x, this.layer.diameterVector.y);
+        this.pass.setSize(this.layer.resolution().x, this.layer.resolution().y);
 
         return this.pass;
     },

@@ -2,9 +2,9 @@ HC.plugins.shaders.smaa = _class(false, HC.ShaderPlugin, {
     index: 5,
     create: function () {
         if (!this.pass) {
-            this.pass = new THREE.SMAAPass(this.layer.diameterVector.x, this.layer.diameterVector.y);
+            this.pass = new THREE.SMAAPass(this.layer.resolution().x, this.layer.resolution().y);
         }
-        this.pass.setSize(this.layer.diameterVector.x, this.layer.diameterVector.y);
+        this.pass.setSize(this.layer.resolution().x, this.layer.resolution().y);
 
         return this.pass;
     },

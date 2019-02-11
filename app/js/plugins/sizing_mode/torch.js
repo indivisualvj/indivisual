@@ -21,12 +21,12 @@ HC.plugins.sizing_mode.torch = _class(
                 var x = Math.sin(a * RAD) * jump;
                 var y = Math.cos(a * RAD) * jump;
 
-                if ((this.mover.x < 0 && x < 0) || (this.mover.x > layer.diameterVector.x && x > 0)) {
+                if ((this.mover.x < 0 && x < 0) || (this.mover.x > layer.resolution().x && x > 0)) {
                     x *= -1;
                     // console.log('x', this.mover.x, x);
                 }
 
-                if ((this.mover.y < 0 && y < 0) || (this.mover.y > layer.diameterVector.y && y > 0)) {
+                if ((this.mover.y < 0 && y < 0) || (this.mover.y > layer.resolution().y && y > 0)) {
                     y *= -1;
                     // console.log('y', this.mover.y, y);
                 }

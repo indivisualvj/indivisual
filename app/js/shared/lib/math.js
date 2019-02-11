@@ -50,8 +50,7 @@ function randomFloat(min, max, digits, negative) {
  * @param digits
  * @returns {number}
  */
-function round(v, digits)
-{
+function round(v, digits) {
     var p = Math.pow(10, digits||0);
     v = Math.round(p * v);
     v = v / p;
@@ -76,6 +75,6 @@ function cutoff(value, max) {
  * @param max
  * @returns {number}
  */
-function bondage(value, min, max) {
+function clamp(value, min, max) {
     return Math.max(Math.min(value, max), min);
 }

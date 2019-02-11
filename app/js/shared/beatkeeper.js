@@ -125,7 +125,7 @@
                 var offset = elapsed - estimated;
 
                 speed.pitch = offset;
-                speed.duration = bondage(duration - offset, duration * .85, duration * 1.15);
+                speed.duration = clamp(duration - offset, duration * .85, duration * 1.15);
 
                 if (DEBUG && Math.abs(offset) > duration && speed.divider == 4) {
                     console.log(
@@ -218,7 +218,8 @@
 
             if (prc > 99.9 && prc < 100.1) {
                 nuSpeed = false; // speed seems to be ok
-// todo evtl. die beatstart mit firstpeak abgleichen bzw. so lange warten bis ein vielfaches von firstpeak erreicht etc.
+                // todo resetCounters to firstPeak ?
+
             } else if (prc > 75 && prc < 125) {
                 this.resetCounters(firstPeak);
                 nuSpeed = peakBpm;
@@ -328,7 +329,8 @@
          *
          */
         reset: function () {
-
+            this.resetCounters(HC.now());
+            this.resetTrigger();
         },
 
         /**

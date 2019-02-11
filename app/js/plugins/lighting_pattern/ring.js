@@ -14,7 +14,7 @@ HC.plugins.lighting_pattern.ring = _class(false, HC.LightingPatternPlugin, {
         var seg = Math.PI * 2 / sides;
         var hseg = -Math.PI * 0.5;
 
-        var r = layer.halfDiameterVector.x/2 * this.settings.lighting_pattern_padding;
+        var r = layer.resolution('half').x/2 * this.settings.lighting_pattern_padding;
         var i = light.userData.index % sides;
 
         var cos = Math.cos(hseg + seg * i);

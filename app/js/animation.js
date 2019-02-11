@@ -107,7 +107,8 @@ document.addEventListener('DOMContentLoaded', function () {
         this.last = this.now;
         this.running = false;
         this.offline = false;
-        this.doNotDisplay = false;
+        this.powersave = false;
+        this.doNotDisplay = false; // render displays only every second frame if FPS is set to 60
         this.diff = 0;
         this.duration = 1000 / 60;
         this.lastUpdate = 0;
@@ -135,11 +136,6 @@ document.addEventListener('DOMContentLoaded', function () {
             /**
              * do general stuff
              */
-
-            // if (IS_ANIMATION) {
-            //     this.doShuffle();
-            // }
-
             var speed = beatkeeper.getDefaultSpeed();
 
             if (speed.prc == 0) {
@@ -434,7 +430,7 @@ document.addEventListener('DOMContentLoaded', function () {
             messaging.emitAttr('[data-id="material_map"]', 'data-label', statics.tmp.sample_map_size);
 
             if (animation.stats) {
-                var state = (statics.powersave?'i':'') + (animation.offline?'o':'');
+                var state = (animation.powersave?'i':'') + (animation.offline?'o':'');
                 var vals = [
                     'fps:'+animation.fps + state,
                     'rms:'+animation.rmsAverage()];
@@ -534,7 +530,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     case 'shape_modifier_volume':
                     case 'shape_geometry':
                     case 'shape_transform':
-                    case 'material_mesh':
+                    case 'mesh_material':
                     case 'material_mapping':
                     case 'material_uvx':
                     case 'material_uvy':
@@ -604,7 +600,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                     displayman.resize(renderer.getResolution());
 
                                 } else {
-                                    beatkeeper.reset();
                                     renderer.resetLayer(renderer.currentLayer);
                                 }
                             }

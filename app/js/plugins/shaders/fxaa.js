@@ -38,10 +38,10 @@ HC.plugins.shaders.fxaa = _class(false, HC.ShaderPlugin, {
     },
 
     valueByWidth: function (v) {
-        return v / this.layer.diameterVector.x;
+        return v / this.layer.resolution().x;
     },
 
     valueByHeight: function (v) {
-        return v / this.layer.diameterVector.y;
+        return v / this.layer.resolution().y;
     }
 });

@@ -18,7 +18,7 @@ camera_x: 0
 camera_x_oscillate: 'off'
 camera_y: 0
 camera_y_oscillate: 'off'
-camera_z:  0
+camera_z:  1
 camera_z_oscillate: 'off'
 
 coloring_mode: 'off'
@@ -44,13 +44,15 @@ filter_sync: false
 filter_volume: 1.0
 filter_volume_oscillate: 'off'
 
-material_mesh: 'lambert'
+mesh_material: 'lambert'
 material_blending: NormalBlending
 material_blendequation: AddEquation
 material_blendsrc: SrcAlphaFactor
 material_blenddst: OneMinusSrcAlphaFactor
 material_mapping: 'default'
 material_shininess: 2
+material_roughness: 0.5
+material_metalness: 0.5
 material_side: 2
 material_softshading: false
 material_map: 'none'

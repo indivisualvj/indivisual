@@ -10,8 +10,8 @@ HC.Layer.prototype.resetLighting = function () {
     }
 
     this._lighting = new THREE.Group();
-    this._lighting.position.x = this.halfDiameterVector.x;
-    this._lighting.position.y = -this.halfDiameterVector.y;
+    this._lighting.position.x = this.resolution('half').x;
+    this._lighting.position.y = -this.resolution('half').y;
     this._lighting.name = '_lighting' + this.index;
     this._layer.add(this._lighting);
 
@@ -43,7 +43,7 @@ HC.Layer.prototype.lightColor = function (value) {
     if (this.lights && this.lights.length) {
         var c = new THREE.Color(value);
 
-        if (c.r == 0 && c.g == 0 && c.b == 0) {
+        if (c.r == 0 && c.g == 0 && c.b == 0) { // is black. change to white.
             c = new THREE.Color(0xffffff);
         }
 
@@ -88,7 +88,6 @@ HC.Layer.prototype.resetFog = function () {
     }
 
     if (this.settings.lighting_fog) {
-        if (this.index == 0)console.log(this.settings.lighting_fog_near, this.settings.lighting_fog_far);
         var fog = new THREE.Fog(0x000000, this.settings.lighting_fog_near, this.settings.lighting_fog_far);
         this.three.scene.fog = fog;
     }

@@ -1,17 +1,23 @@
 # indivisual - VJ-Synthesizer
 
-## What is it? (Features/Antifeatures)
-- YEAH BABY!!! indivisual - VJ-Synthesizer!!!
-- ... more explanation here ...
+## What is it?
+YEAH BABY!!! 
+
+indivisual - VJ-Synthesizer is a rhythm based animation tool giving you the ability to have shapes dancing and flickering to the music.
+The most settings can be "oscillated" so that different variations on how a shape is moved, rotatet, transformed, modified, colored, 
+lit, sized, postprocessed, ... can be mixed in.  
+There also is a mechanism to record samples and then mix them in sequences with different composite operations. 
+Those sequences can be flipped, sliced, accelerated, slowed, ... and also cans be used as shape material.
+
+To get an idea of what can be done with it, visit my [Youtube channel](https://www.youtube.com/channel/UC2QczAUG69575hFIRg2JDcQ)  
 
 
 ## Things you have to know
 indivisual VJ-Synthesizer works best and also is only developed on google-chrome.
 I tried it on firefox but the performance is bad. 
-Also i never tried it on another platform than linux (ubuntu & mint).
 
-There is no clean code in here. There also is no explicit design pattern 
-except a self designed plugin concept.
+There is no clean code in there. There also is no explicit design pattern 
+except a plugin concept designed by myself.
 
 However i tried to cleanup and remove the messiest parts of it since i retired 
 from my part time job as a VJ performing video life acts in some well known clubs in Munich.
@@ -24,7 +30,7 @@ But still it's pretty much fun to play with!
 
 ## Getting Started
 - Install [Node.js](https://nodejs.org/en/download/)
-- Install [yarn](https://yarnpkg.com/lang/en/docs/install) or if you have npm just execute `npm install -g yarn`
+- Install [yarn](https://yarnpkg.com/lang/en/docs/install) or via npm: `npm install -g yarn`
 - Execute the following lines in your command line:
     ```
     $ yarn install
@@ -51,7 +57,7 @@ When not using localhost, it is not possible to use microphone or audio input wi
 ## Used Libraries and Credits
 Many thanks to:
 
-- Google for their lightning fast browser
+- Google for their lightning fast browser/engine
 - All the people contributing to web browser technology
 - https://github.com/nodejs/node
 - https://github.com/mrdoob/three.js
@@ -64,6 +70,9 @@ Many thanks to:
 - https://www.shadertoy.com/
 
 ## How To
+
+### Understand
+- A lot of settings are based on three.js settings. To understand these, you have to dig into three.js [docs](https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene)  
 
 ### Mapping
 - Focus the animation or setup window 
@@ -97,7 +106,7 @@ This feature is pretty crazy to use. But for some cases it does its job pretty w
 - ... more explanation here ...
 
 ### MIDI Controllers
-- If you own a Arturia Beatstep, simply connect it. If the device uses factory settings, it will work immediately and the layout will just work fine.
+- If you own a [Arturia Beatstep](https://www.arturia.com/beatstep/overview), simply connect it. If the device uses factory settings, it will work immediately and the layout will just work fine.
 - Otherwise you have to build up your own layout. Have a look at [MidiController.yml](app/structure/MidiController.yml) 
 - ... more explanation here ...  
 
@@ -110,7 +119,7 @@ In this case you can add your own plugins for the most settings available.
 ## Contributing
 If you have any suggestion or features or you found some bugs,
 feel free to contribute to this project.
-Just open a pull requests or an issue.
+Just open a pull request or an issue.
 
 ## Pending
 - Some serious glContext lost issues

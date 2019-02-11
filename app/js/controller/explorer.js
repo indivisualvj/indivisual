@@ -330,7 +330,7 @@
                     visible: true,
                     children: []
                 };
-                messaging.mkdir(STORAGE_DIR, name, false, false, function (result) {
+                messaging.mkdir(STORAGE_DIR, name, false, function (result) {
                     _log(result);
                     model.children.unshift(nu);
                 });

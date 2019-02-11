@@ -28,7 +28,7 @@ HC.plugins.pattern.bar = _class(
 
                 if (this.isFirstShape(shape)) {
                     this.orientation = randomBool();
-                    this.position = randomInt(0, this.orientation ? layer.halfDiameterVector.y : layer.halfDiameterVector.x, true);
+                    this.position = randomInt(0, this.orientation ? layer.resolution('half').y : layer.resolution('half').x, true);
                 }
 
                 var from = params.current;
@@ -38,11 +38,11 @@ HC.plugins.pattern.bar = _class(
                 };
 
                 if (this.orientation) {
-                    to.x = -layer.halfDiameterVector.x + layer.diameterVector.x / layer.shapeCount() * randomInt(0, layer.shapeCount());
+                    to.x = -layer.resolution('half').x + layer.resolution().x / layer.shapeCount() * randomInt(0, layer.shapeCount());
                     to.y = this.position;
                 } else {
                     to.x = this.position;
-                    to.y = -layer.halfDiameterVector.y + layer.diameterVector.y / layer.shapeCount() * randomInt(0, layer.shapeCount());
+                    to.y = -layer.resolution('half').y + layer.resolution().y / layer.shapeCount() * randomInt(0, layer.shapeCount());
                 }
 
                 var tween = this.tweenShape(shape, from, to);

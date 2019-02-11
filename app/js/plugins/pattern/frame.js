@@ -19,15 +19,15 @@ HC.plugins.pattern.frame = _class(
             var ratio = this.settings.pattern_paddingx / this.settings.pattern_paddingy;
 
             if (ratio < 1) {
-                var u = 2 * (layer.diameterVector.x * this.settings.pattern_paddingx + layer.diameterVector.y * this.settings.pattern_paddingy);
-                var prc = (layer.diameterVector.y * this.settings.pattern_paddingy) / u;
+                var u = 2 * (layer.resolution().x * this.settings.pattern_paddingx + layer.resolution().y * this.settings.pattern_paddingy);
+                var prc = (layer.resolution().y * this.settings.pattern_paddingy) / u;
 
                 ry = Math.ceil(layer.shapeCount() * prc) - 1;
                 rx = this.shapeCountHalf - ry;
 
             } else if (ratio >= 1) {
-                var u = 2 * (layer.diameterVector.x * this.settings.pattern_paddingx + layer.diameterVector.y * this.settings.pattern_paddingy);
-                var prc = layer.diameterVector.x * this.settings.pattern_paddingx / u;
+                var u = 2 * (layer.resolution().x * this.settings.pattern_paddingx + layer.resolution().y * this.settings.pattern_paddingy);
+                var prc = layer.resolution().x * this.settings.pattern_paddingx / u;
 
                 rx = Math.ceil(layer.shapeCount() * prc);
                 ry = this.shapeCountHalf - rx;
@@ -35,8 +35,8 @@ HC.plugins.pattern.frame = _class(
 
             var px = this.settings.pattern_padding * this.settings.pattern_paddingx;
             var py = this.settings.pattern_padding * this.settings.pattern_paddingy;
-            var w = (layer.diameterVector.x - layer.shapeSize(1)) * px;
-            var h = (layer.diameterVector.y - layer.shapeSize(1)) * py;
+            var w = (layer.resolution().x - layer.shapeSize(1)) * px;
+            var h = (layer.resolution().y - layer.shapeSize(1)) * py;
             var gx = w / rx;
             var gy = h / ry;
             var l = w / -2;

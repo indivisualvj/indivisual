@@ -12,11 +12,9 @@
     HC.Renderer = function (config) {
         this.type = 'animation';
         this.layers = config.layers;
-        this.width = 800;
-        this.height = 600;
         this.flipx = 1;
         this.flipy = 1;
-        this.resolution = {width: this.width, height: this.height};
+        this.resolution = {x: 1280, y: 720, aspect: 1280/720};
         this._renderer = false;
         this.three = {
             renderer: false,
@@ -38,9 +36,6 @@
          * @param keepsettings
          */
         fullReset: function (keepsettings) {
-            beatkeeper.resetTrigger();
-
-            // this.initThreeJs();
             this.resize();
             this.initLayers(keepsettings);
             this.setLayer(0);
@@ -113,11 +108,12 @@
                 var op = false;
                 var os = false;
                 var ol = this.layers[i];
-                /**
-                 * maybe keepsettings but never discard settings from layers excluded by ControlSettings.shuffleable
-                 * those layers are there to record samples while animation is offline or to test certain settings/setups
-                 */
+
                 if (ol) {
+                    /**
+                     * maybe keepsettings but never discard settings from layers excluded by ControlSettings.shuffleable
+                     * those layers are there to record samples while animation is offline or to test certain settings/setups
+                     */
                     if ((keepsettings || !layerShuffleable(i))) {
                         op = this.layers[i].preset;
                         os = this.layers[i].settings;
@@ -125,7 +121,7 @@
                     ol.dispose();
                 }
 
-                var l = new HC.Layer(this.width, this.height, i, this.three);
+                var l = new HC.Layer(this.resolution, i, this.three);
 
                 l.preset = op;
                 l.settings = os || statics.AnimationSettings.defaults();
@@ -235,9 +231,8 @@
         /**
          *
          * @param layer
-         * @param resolution
          */
-        resetLayer: function (layer, resolution) {
+        resetLayer: function (layer) {
 
             if (isNumber(layer) || isString(layer)) {
                 layer = this.layers[layer];
@@ -245,7 +240,7 @@
 
             this.nextLayer = false;
 
-            layer.fullReset(resolution);
+            layer.fullReset();
         },
 
         /**
@@ -253,44 +248,29 @@
          */
         resize: function () {
             var res = this.getResolution();
-            this.width = res.width;
-            this.height = res.height;
+            this.resolution = res;
 
             if (this.three.scene) {
-                this.three.scene.position.x = -this.width / 2;
-                this.three.scene.position.y = this.height / 2;
+                this.three.scene.position.x = -res.x / 2;
+                this.three.scene.position.y = res.y / 2;
             }
 
             if (this.three.renderer) {
-                this.three.renderer.setSize(this.width, this.height);
+                this.three.renderer.setSize(res.x, res.y);
             }
 
             if (this.three.perspective0) {
-                var aspect = this.width / this.height;
+                var aspect = res.aspect;
                 this.three.perspective0.aspect = aspect;
                 this.three.perspective1.aspect = aspect;
                 this.three.perspective2.aspect = aspect;
             }
 
-            // this.initBoundaries();
         },
 
         /**
          *
-         */
-        // initBoundaries: function () {
-        //     var width = this.width;
-        //     var height = this.height;
-        //     this.defaultResolutionVector = new THREE.Vector2(1280, 720);
-        //     this.diameterVector = new THREE.Vector2(width, height);
-        //     this.halfDiameterVector = new THREE.Vector2(width / 2, height / 2);
-        //     this.relativeDiameterVector = new THREE.Vector2().copy(this.diameterVector).divide(this.defaultResolutionVector);
-        //     this.staticCenterVector = new THREE.Vector3(0, 0, 0);
-        // },
-
-        /**
-         *
-         * @returns {{aspect: number, width: number, height: number}}
+         * @returns {{aspect: number, x: number, y: number}}
          */
         getResolution: function () {
             var resolution;
@@ -301,7 +281,7 @@
                 if (sp.length > 1) {
                     var w = parseInt(sp[0]);
                     var h = parseInt(sp[1]);
-                    resolution = {width: w, height: h, aspect: h / w};
+                    resolution = {x: w, y: h, aspect: w / h};
                 }
             }
 

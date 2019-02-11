@@ -29,10 +29,10 @@ HC.plugins.coloring_mode.reactivergb = _class(false, HC.ColoringModePlugin, {
         var prc;
         if (radial) {
             var ps = new THREE.Vector2(shape.x(), shape.y());
-            var dv = layer.halfDiameterVector;
+            var dv = layer.resolution('half');
             ps.sub(dv);
 
-            prc = (reactive ? 6 : 3) * (layer.halfDiameterVector.length() - ps.length()) / layer.halfDiameterVector.length();
+            prc = (reactive ? 6 : 3) * (layer.resolution('half').length() - ps.length()) / layer.resolution('half').length();
 
         } else {
             prc = m1 * (1 + gridPosition.y) / matrix.rowCount(layer); // original KEEP!

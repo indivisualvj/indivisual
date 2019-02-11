@@ -122,7 +122,7 @@
             }
 
             this.frameCount = frames;
-            statics.powersave = true;
+            animation.powersave = true;
 
             var _init = function (i) {
                 if (inst.initializing) {
@@ -138,7 +138,7 @@
                     if (i % 10 == 0) {
                         inst.pointer = i;
                         listener.fire('sample.init.progress', inst.id, inst);
-                        statics.powersave = true;
+                        animation.powersave = true;
                     }
 
                     i++;
@@ -152,7 +152,7 @@
                     } else {
                         inst.initialized = true;
                         inst.pointer = 0;
-                        statics.powersave = false;
+                        animation.powersave = false;
                         listener.fire('sample.init.end', inst.id, inst);
                     }
                 }

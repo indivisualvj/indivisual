@@ -17,7 +17,7 @@ function renderSample (sample, image, progress, color, hook) {
             }
         }
         if (sample.started) {
-            statics.powersave = true;
+            animation.powersave = true;
             if (progress.prc == 0) {
                 if (sample.counter >= sample.beats) {
                     sample.finish(sample.record);
@@ -67,7 +67,7 @@ function storeSample (sample, name, resolution)
     var _mov = function () {
 
         if (sample.isReady()) {
-            statics.powersave = true;
+            animation.powersave = true;
 
             var frame = sample.frames[sample.pointer];
             if (ctx) {
@@ -93,7 +93,7 @@ function storeSample (sample, name, resolution)
                 }, animation.threadTimeout(diff/animation.duration));
 
             } else {
-                statics.powersave = false;
+                animation.powersave = false;
                 listener.fire('sample.store.end', sample.id, sample);
             }
         }

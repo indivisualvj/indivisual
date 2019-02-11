@@ -6,6 +6,12 @@ HC.ShapeGeometryPlugin = _class(false, HC.Plugin, {
         if (!this.geometry) { // all meshes use the same geometry
             var geometry = this.create();
 
+            if (!geometry._uvsAssigned) {
+                if (this.settings.material_mapping == 'f2b') {
+                    this.assignUVs(geometry);
+                }
+            }
+
             this.geometry = geometry;
         }
 

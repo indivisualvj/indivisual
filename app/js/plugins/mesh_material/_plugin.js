@@ -3,14 +3,6 @@ HC.plugins.mesh_material = HC.plugins.mesh_material || {};
 HC.MeshMaterialPlugin = _class(false, HC.Plugin, {
     before: function (geometry) {
 
-        if (!geometry._uvsAssigned) {
-
-            if (this.settings.material_mapping == 'f2b') {
-                this.assignUVs(geometry);
-            }
-
-        }
-
         if (geometry.mergeVertices) {
             geometry.mergeVertices();
         }

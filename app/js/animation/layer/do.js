@@ -232,6 +232,7 @@ HC.Layer.prototype.doMaterial = function (shape) {
     shape.strokeWidth(this.settings.material_volume);
 
     try {
+        // todo add all map features like so: https://threejs.org/docs/#api/en/materials/MeshStandardMaterial
         shape.updateMaterial(statics.material_map, this.settings.coloring_emissive);
 
     } catch (e) {

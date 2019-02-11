@@ -135,11 +135,6 @@ document.addEventListener('DOMContentLoaded', function () {
             /**
              * do general stuff
              */
-
-            // if (IS_ANIMATION) {
-            //     this.doShuffle();
-            // }
-
             var speed = beatkeeper.getDefaultSpeed();
 
             if (speed.prc == 0) {

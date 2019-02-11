@@ -218,7 +218,8 @@
 
             if (prc > 99.9 && prc < 100.1) {
                 nuSpeed = false; // speed seems to be ok
-// todo evtl. die beatstart mit firstpeak abgleichen bzw. so lange warten bis ein vielfaches von firstpeak erreicht etc.
+                // todo resetCounters to firstPeak ?
+
             } else if (prc > 75 && prc < 125) {
                 this.resetCounters(firstPeak);
                 nuSpeed = peakBpm;

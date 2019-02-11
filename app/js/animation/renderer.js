@@ -272,7 +272,7 @@
          *
          * @returns {{aspect: number, x: number, y: number}}
          */
-        getResolution: function () { // todo refactor name to ?
+        getResolution: function () {
             var resolution;
 
             var res = statics.DisplaySettings.resolution;

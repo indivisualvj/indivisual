@@ -322,14 +322,16 @@ HC.Layer.prototype.doOscillate = function (enable) {
         var okey = key + '_oscillate';
         if (okey in this.settings) {
             var osci = this.settings[okey];
-            if (osci in HC.plugins.oscillate && HC.plugins.oscillate[osci].executable !== false) {
+            if (osci in HC.plugins.oscillate) {
                 var plugin = this.getOscillatePlugin(osci);
-                if (plugin && enable) {
-                    plugin.store(key);
-                    plugin.apply(key);
+                if (plugin && plugin.apply) {
+                    if (enable) {
+                        plugin.store(key);
+                        plugin.apply(key);
 
-                } else if (plugin) {
-                    plugin.restore(key);
+                    } else {
+                        plugin.restore(key);
+                    }
                 }
             }
         }

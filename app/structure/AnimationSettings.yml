@@ -51,6 +51,8 @@ material_blendsrc: SrcAlphaFactor
 material_blenddst: OneMinusSrcAlphaFactor
 material_mapping: 'default'
 material_shininess: 2
+material_roughness: 0.5
+material_metalness: 0.5
 material_side: 2
 material_softshading: false
 material_map: 'none'

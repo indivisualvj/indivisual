@@ -132,6 +132,8 @@ material:
   material_side:
   material_shininess:
   material_volume:
+  material_roughness:
+  material_metalness:
   material_softshading:
   material_map:
   material_mapping:

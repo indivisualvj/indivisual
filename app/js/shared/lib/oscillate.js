@@ -83,7 +83,7 @@ HC.Osci = {
             while (n == pa.next) {
                 n = (randomInt(0, steps, negative) / steps);
             }
-console.log(n, pa);
+
             pa.next = n;
             if (pa.next > 1) debug;
         }

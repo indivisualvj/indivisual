@@ -233,14 +233,6 @@
             return this.mesh.material.opacity;
         },
 
-        shininess: function (v) {
-            if (v !== undefined) {
-                if ('shininess' in this.mesh.material) {
-                    this.mesh.material.shininess = v;
-                }
-            }
-        },
-
         strokeWidth: function (v) {
             if (v !== undefined) {
                 this.mesh.material.linewidth = Math.abs(v);
@@ -267,6 +259,16 @@
                 } else {
                     this.mesh.material.emissive.setHSL(0, 0, 0);
                 }
+            }
+
+            if (this.mesh.material.shininess != this._layer.settings.material_shininess) {
+                this.mesh.material.shininess = this._layer.settings.material_shininess;
+            }
+            if (this.mesh.material.roughness != this._layer.settings.material_roughness) {
+                this.mesh.material.roughness = this._layer.settings.material_roughness;
+            }
+            if (this.mesh.material.metalness != this._layer.settings.material_metalness) {
+                this.mesh.material.metalness = this._layer.settings.material_metalness;
             }
 
             if (map) {

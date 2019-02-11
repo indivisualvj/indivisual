@@ -88,7 +88,6 @@ HC.Layer.prototype.resetFog = function () {
     }
 
     if (this.settings.lighting_fog) {
-        if (this.index == 0)console.log(this.settings.lighting_fog_near, this.settings.lighting_fog_far);
         var fog = new THREE.Fog(0x000000, this.settings.lighting_fog_near, this.settings.lighting_fog_far);
         this.three.scene.fog = fog;
     }

@@ -220,7 +220,6 @@ HC.Layer.prototype.doColoring = function (shape) {
     }
     var color = shape.color;
     shape.opacity(color.o * this.settings.coloring_opacity);
-    shape.shininess(this.settings.material_shininess);
 
     return proceed;
 };

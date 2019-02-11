@@ -236,8 +236,8 @@
         strokeWidth: function (v) {
             if (v !== undefined) {
                 this.mesh.material.linewidth = Math.abs(v);
-                this.mesh.material.wireframeLinewidth = v;
-                this.mesh.material.size = v;
+                this.mesh.material.wireframeLinewidth = Math.abs(2 * v);
+                this.mesh.material.size = Math.abs(v * 40);
             }
 
             return this.mesh.material.wireframeLinewidth;

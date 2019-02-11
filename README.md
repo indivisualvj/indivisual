@@ -71,6 +71,22 @@ Many thanks to:
 
 ## How To
 
+### Tutorials
+- Getting started
+- Displays, Video, Mapping & Masking
+- Source, Sequences & Samples
+- Audio, Timing & Osci
+- Lighting & Background
+- Camera & Layer
+- Pattern
+- Shape & Material
+- Coloring & Filter
+- Rotation & Locking
+- Sizing & Offset
+- Shaders (Postprocessing)
+
+[Complete Playlist](https://www.youtube.com/playlist?list=PLQn3ZXgzn8P3BI43-pDmU4rVFzVmQh5DQ)
+
 ### Understand
 - A lot of settings are based on three.js settings. To understand these, you have to dig into three.js [docs](https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene)  
 
@@ -95,13 +111,14 @@ Many thanks to:
 ### Samples & Sequences
 - ... awesome ...
 - Slow on GPUs but fast on INTEL's internal graphics cards
-- Who could help me getting this into the GPU's memory -> contact me
 
 ### Shape-Editor
-This feature is pretty crazy to use. But for some cases it does its job pretty well. Have a look at head.json or leaves.json in _____demos.
+This feature is tricky to use. 
+But for some cases it does its job pretty well. 
+Have a look at presets/_demos.
 
 - In the controller, set shape_geometry to custom
-- Open https://localhost:8081/setup.html
+- Open http://localhost:8081/setup.html
 - Press S to enable shape controls
 - ... more explanation here ...
 

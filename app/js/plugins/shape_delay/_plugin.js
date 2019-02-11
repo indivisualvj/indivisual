@@ -19,7 +19,7 @@ HC.ShapeDelayPlugin = _class(false, HC.Plugin, {
         var rp = layer.getShapeSpeed(shape);
 
         params.delay -= params.delay * rp.speed.prc;
-        params.delay = bondage(params.delay, 0, rp.duration); // bondage to 0 or duration ...
+        params.delay = clamp(params.delay, 0, rp.duration); // bondage to 0 or duration ...
         rp.duration -= params.delay; // ... so that duration can't be less than 0
 
     },

@@ -2,7 +2,11 @@ node_modules
 npm-debug.log
 bin/*
 sessions/root/
+
+storage/*
+!storage/_demos/*
 storage/*/\.*
+
 samples/*
 .idea
 .settings

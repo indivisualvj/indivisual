@@ -125,7 +125,7 @@
                 var offset = elapsed - estimated;
 
                 speed.pitch = offset;
-                speed.duration = bondage(duration - offset, duration * .85, duration * 1.15);
+                speed.duration = clamp(duration - offset, duration * .85, duration * 1.15);
 
                 if (DEBUG && Math.abs(offset) > duration && speed.divider == 4) {
                     console.log(

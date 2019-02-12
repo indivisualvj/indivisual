@@ -11,34 +11,10 @@ Those sequences can be flipped, sliced, accelerated, slowed down, ... and also c
 
 To get an idea of what can be done with it, visit my [YouTube channel](https://www.youtube.com/channel/UC2QczAUG69575hFIRg2JDcQ)  
 
-
-## Things you have to know
-indivisual VJ-Synthesizer works best and also is only developed on google-chrome.
-I tried it on firefox but the performance is bad. 
-
-There is no clean code in there. There also is no explicit design pattern 
-except a plugin concept designed by myself.
-
-However i tried to cleanup and remove the messiest parts of it since i retired 
-from my part time job as a VJ performing video life acts in some well known clubs in Munich.
-I also retired from being a professional developer due to my inability 
-to use popular programming techniques and design patterns.  
-
-Therefore things do not work together perfectly sometimes.
-
-But still it's pretty much fun to play with!
-
 ## Getting Started
+- To get the best performance you should install [Google Chrome](https://www.google.com/chrome/) 
 - Install [Node.js](https://nodejs.org/en/download/)
 - Install [yarn](https://yarnpkg.com/lang/en/docs/install) 
-- Or via npm: 
-    ```
-    npm install -g yarn
-    ```
-    On linux systems you might have to use sudo:
-    ```
-    sudo npm install -g yarn
-    ```
 - Execute the following lines in your command line within the installation directory:
     ```
     $ yarn install
@@ -52,6 +28,19 @@ But still it's pretty much fun to play with!
 - Play around
 - Try to learn something in this Quick and Dirty Video Tutorial
     [![](http://img.youtube.com/vi/aPwviMbDYH8/0.jpg)](http://www.youtube.com/watch?v=aPwviMbDYH8 "")
+
+## For Developers
+There is no clean code in there. There also is no explicit design pattern 
+except a plugin concept designed by myself.
+
+However i tried to cleanup and remove the messiest parts of it since i retired 
+from my part time job as a VJ performing video life acts in some well known clubs in Munich.
+I also retired from being a professional developer due to my inability 
+to use popular programming techniques and design patterns.  
+
+Therefore things do not work together perfectly sometimes.
+
+But still it's pretty much fun to play with!
 
 ### Deprecated Powerful Features on Insecure (non SSL) Origins
 When not running on localhost, it is not possible to use microphone or audio input without SSL.

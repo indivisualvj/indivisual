@@ -116,28 +116,32 @@
             this.sceneObject().lookAt(vector);
         },
 
+        sceneRotation: function () {
+            return this._rotation;
+        },
+
         rotationX: function (x) {
             if (x !== undefined) {
-                this._rotation.rotation.x = x * RAD;
+                this.sceneRotation().rotation.x = x * RAD;
             }
 
-            return this._rotation.rotation.x;
+            return this.sceneRotation().rotation.x;
         },
 
         rotationY: function (y) {
             if (y !== undefined) {
-                this._rotation.rotation.y = y * -RAD;
+                this.sceneRotation().rotation.y = y * -RAD;
             }
 
-            return this._rotation.rotation.y;
+            return this.sceneRotation().rotation.y;
         },
 
         rotationZ: function (z) {
             if (z !== undefined) {
-                this._rotation.rotation.z = z * -RAD;
+                this.sceneRotation().rotation.z = z * -RAD;
             }
 
-            return this._rotation.rotation.z;
+            return this.sceneRotation().rotation.z;
         },
 
         rotation: function (x, y, z) {
@@ -145,50 +149,58 @@
             this.rotationY(y);
             this.rotationZ(z);
 
-            return this._rotation.rotation;
+            return this.sceneRotation().rotation;
+        },
+
+        sceneRotationOffset: function () {
+            return this._rotationOffset;
         },
 
         rotationOffset: function (x, y, z) {
-            this._rotationOffset.rotation.set(x * RAD, y * -RAD, z * -RAD);
+            this.sceneRotationOffset().rotation.set(x * RAD, y * -RAD, z * -RAD);
+        },
+
+        sceneScale: function () {
+            return this._scale;
         },
 
         scaleX: function (v) {
             if (v !== undefined) {
 
                 if (v == 0) {
-                    this._scale.scale.x = 0.001;
+                    this.sceneScale().scale.x = 0.001;
                 } else {
-                    this._scale.scale.x = v;
+                    this.sceneScale().scale.x = v;
                 }
             }
 
-            return this._scale.scale.x;
+            return this.sceneScale().scale.x;
         },
 
         scaleY: function (v) {
             if (v !== undefined) {
 
                 if (v == 0) {
-                    this._scale.scale.y = 0.001;
+                    this.sceneScale().scale.y = 0.001;
                 } else {
-                    this._scale.scale.y = v;
+                    this.sceneScale().scale.y = v;
                 }
             }
 
-            return this._scale.scale.y;
+            return this.sceneScale().scale.y;
         },
 
         scaleZ: function (v) {
             if (v !== undefined) {
 
                 if (v == 0) {
-                    this._scale.scale.z = 0.001;
+                    this.sceneScale().scale.z = 0.001;
                 } else {
-                    this._scale.scale.z = v;
+                    this.sceneScale().scale.z = v;
                 }
             }
 
-            return this._scale.scale.z;
+            return this.sceneScale().scale.z;
         },
 
         scale: function (x, y, z) {
@@ -196,20 +208,20 @@
             this.scaleY(y);
             this.scaleZ(z);
 
-            return this._scale.scale;
+            return this.sceneScale().scale;
         },
 
         size: function () {
-            return this._scale.scale.length() / this.normalScale;
+            return this.sceneScale().scale.length() / this.normalScale;
         },
 
         flip: function (x, y, z) {
 
-            this._scale.scale.x *= x;
-            this._scale.scale.y *= y;
-            this._scale.scale.z *= z;
+            this.sceneScale().scale.x *= x;
+            this.sceneScale().scale.y *= y;
+            this.sceneScale().scale.z *= z;
 
-            return this._scale.scale;
+            return this.sceneScale().scale;
         },
 
         offset: function (x, y, z) {

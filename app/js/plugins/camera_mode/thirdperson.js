@@ -13,7 +13,7 @@ HC.plugins.camera_mode.thirdperson = _class(false, HC.CameraModePlugin, {
             layer.shapeSize(1) * this.settings.camera_y,
             layer.shapeSize(-2) - layer.shapeSize(1) * this.settings.camera_z,
         );
-        var cameraOffset = relativeCameraOffset.applyMatrix4(shape._rotation.matrixWorld);
+        var cameraOffset = relativeCameraOffset.applyMatrix4(shape.sceneRotation().matrixWorld);
         camera.position.x = cameraOffset.x;
         camera.position.y = cameraOffset.y;
         camera.position.z = cameraOffset.z;

@@ -4,6 +4,7 @@
 
 var messaging = false;
 var audio     = false;
+var audioman  = false;
 var beatkeeper = false;
 var animation  = false;
 var renderer = false;
@@ -39,7 +40,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 HC.SourceController.createAllControls();
 
                 listener = new HC.Listener();
-                audio = new HC.Audio();
+                audioman = new HC.AudioManager();
+                audio = new HC.AudioAnalyzer(audioman.audioContext);
                 beatkeeper = new HC.Beatkeeper();
 
                 renderer = new HC.Renderer({
@@ -143,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (speed.prc == 0) {
                 if (IS_ANIMATION) {
                     var detectedSpeed = false;
-                    if (audio.isActive) {
+                    if (audioman.isActive()) {
                         if (statics.ControlSettings.peak_bpm_detect
                             && audio.peakReliable
                         ) {
@@ -162,7 +164,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            if (audio.isActive) {
+            if (audioman.isActive()) {
                 var config = {
                     useWaveform: renderer.currentLayer.settings.audio_use_waveform,
                     volume: statics.ControlSettings.volume,
@@ -416,7 +418,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 var vo = round(audio.avgVolume, 2) + '';
                 messaging.emitAttr('#audio', 'data-mnemonic', vo);
 
-                if (audio.isActive) {
+                if (audioman.isActive()) {
                     var au = [
                         audio.peakBPM.toFixed(2),
                     ];
@@ -650,11 +652,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         case 'usemic':
                             audio.reset();
-                            if (statics.ControlSettings.usemic) {
-                                audio.initMicrophone();
-
-                            } else {
-                                audio.isActive = false;
+                            if (value) {
+                                if (!audioman.isActive()) {
+                                    audio.initAnalyzer(audioman.context);
+                                    audioman.initMicrophone(audio.connect);
+                                }
                             }
                             break;
 

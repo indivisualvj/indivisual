@@ -145,7 +145,7 @@ HC.plugins.pattern.pulse = _class(false, HC.PatternPlugin, {
         if (speed.progress < 1) { //
             params.velocity *= -1;
 
-        } else if (audio.isActive) {
+        } else if (audioman.isActive()) {
             if (audio.peak) {
                 params.volume = this.settings.pattern_sync == false
                     ? shape.shapeVolume() : audio.volume;

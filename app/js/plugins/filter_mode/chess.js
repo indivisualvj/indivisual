@@ -8,7 +8,7 @@ HC.plugins.filter_mode.chess2 = _class(
             var layer = this.layer;
 
             if (this.isFirstShape(shape)) {
-                if (audio.isActive && audio.peak) {
+                if (audioman.isActive() && audio.peak) {
                     this.invert = !this.invert;
                 }
             }

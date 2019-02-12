@@ -8,12 +8,10 @@
      *
      * @constructor
      */
-    HC.Audio = function () {
-        // this.lastPeakData = [];
+    HC.AudioAnalyzer = function () {
         this.peakBPM = 0;
         this.peakReliable = false;
         this.peakCount = 0;
-        this.isActive = false;
         this.peak = false;
         this.firstPeak = 0;
         this.volumes = false;
@@ -34,141 +32,58 @@
         var minPR = 2;
         var freqData;
         var domainData;
-        var audioBuffer;
         var binCount; //1024
 
         var levelBins;
 
-        var source;
-        var microphone;
-        var audioContext;
-        var analyser;
-        var filter;
+        var analyzer;
 
         /**
          *
          * @param v
          */
         this.smoothingTimeConstant = function(v) {
-            if (v !== undefined && analyser && v) {
-                analyser.smoothingTimeConstant = v;
+            if (v !== undefined && analyzer && v) {
+                analyzer.smoothingTimeConstant = v;
             }
 
-            return analyser ? analyser.smoothingTimeConstant : false;
+            return analyzer ? analyzer.smoothingTimeConstant : false;
         };
 
         /**
          *
          */
-        this.initAudio = function() {
-            if (!this.isActive) {
-                window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        this.initAnalyzer = function(context) {
+            analyzer = context.createAnalyser();
+            analyzer.fftSize = 1024;
+            // analyzer.connect(context.destination);
+            binCount = analyzer.frequencyBinCount;
+            this.volumes = new Array(binCount);
+            this.volumes.fill(0);
+            levelBins = Math.floor(binCount / LEVELS);
 
-                audioContext = new (window.AudioContext)();
-                analyser = audioContext.createAnalyser();
-                analyser.fftSize = 1024;
-                analyser.connect(audioContext.destination);
-                binCount = analyser.frequencyBinCount;
-                this.volumes = new Array(binCount);
-                this.volumes.fill(0);
-                levelBins = Math.floor(binCount / LEVELS);
+            freqData = new Uint8Array(binCount);
+            domainData = new Uint8Array(binCount);
 
-                freqData = new Uint8Array(binCount);
-                domainData = new Uint8Array(binCount);
-            }
+            return analyzer;
         };
 
-        /**
-         *
-         */
-        this.initMicrophone = function() {
-            if (!this.isActive) {
-                this.initAudio();
-
-                //x-browser
-                navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia
-                || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-
-                if (navigator.mediaDevices.getUserMedia) {
-
-                    var inst = this;
-                    try {
-                        navigator.mediaDevices.getUserMedia({audio: true, video: false})
-                            .then(
-                                function (stream) {
-                                    //reinit here or get an echo on the mic
-                                    source = audioContext.createBufferSource();
-                                    analyser = audioContext.createAnalyser();
-
-                                    microphone = audioContext.createMediaStreamSource(stream);
-                                    microphone.connect(analyser);
-                                    inst.isActive = true;
-                                }
-                            , function (ex) {
-                                _log('audio', ex.message, true);
-                            });
-                    } catch (ex) {
-                        _log('audio', ex.message, true);
-                    }
-
-                } else {
-                    _log('audio', 'could not getUserMedia', true);
-                }
-
-            } else {
-                audio.isActive = true;
-            }
-        };
-
-
-        /**
-         *
-         * @param config
-         */
-        // this.updateFilter = function (config) {
-        //
-        //     if (!this.isActive) return;
-        //
-        //     if (config.type == 'off') {
-        //         microphone.disconnect();
-        //         analyser.disconnect();
-        //         microphone.connect(analyser);
-        //         // analyser.connect(audioContext.destination);
-        //         filter = false;
-        //
-        //         return;
-        //     }
-        //     if (!filter) {
-        //         microphone.disconnect();
-        //         analyser.disconnect();
-        //
-        //         filter = audioContext.createBiquadFilter();
-        //         var dest = microphone.connect(filter);
-        //         filter.connect(analyser);
-        //         // analyser.connect(audioContext.destination);
-        //     }
-        //
-        //     filter.type = config.type;
-        //     filter.frequency.value = config.frequency;
-        //
-        // }
+        this.connect = function (source) {
+            source.connect(analyzer);
+        } ;
 
         /**
          *
          * @param config
          */
         this.update = function(config) {
-            if (!this.isActive) {
-                this.reset();
-                return;
-            }
 
             var useWaveform = config.useWaveform;
             if (useWaveform) {
-                analyser.getByteTimeDomainData(domainData);
+                analyzer.getByteTimeDomainData(domainData);
             }
 
-            analyser.getByteFrequencyData(freqData);
+            analyzer.getByteFrequencyData(freqData);
 
             lastVolume = this.volume;
 
@@ -239,7 +154,6 @@
                     this.firstPeak    = peakData[i - minPR].time;
                     var timespan = lastPeak - this.firstPeak;
                     this.peakBPM      = round(60000 / (timespan / minPR), 3);
-                    // this.lastPeakData = peakData;
                     this.peakReliable = 0;
 
                     var avgDiff = 60000 / this.peakBPM;
@@ -322,7 +236,6 @@
             this.volume = 0;
             this.avgVolume = 0;
             this.peak = false;
-            this.lastPeakData = [];
             this.peakBPM = 0;
             this.peakReliable = false;
             this.firstPeak = 0;

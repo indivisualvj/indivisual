@@ -47692,7 +47692,7 @@
 	exports.PositionalAudio = PositionalAudio;
 	exports.AudioContext = AudioContext;
 	exports.AudioAnalyser = AudioAnalyser;
-	exports.Audio = Audio;
+	exports.AudioAnalyzer = Audio;
 	exports.VectorKeyframeTrack = VectorKeyframeTrack;
 	exports.StringKeyframeTrack = StringKeyframeTrack;
 	exports.QuaternionKeyframeTrack = QuaternionKeyframeTrack;

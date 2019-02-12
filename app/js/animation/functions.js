@@ -51,5 +51,5 @@ HC.Animation.prototype.prepareMonitor = function () {
     };
 
     window.addEventListener('resize', onResize);
-    onResize();
+    onResize(true);
 };

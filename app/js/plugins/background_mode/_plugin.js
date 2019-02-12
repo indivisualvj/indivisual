@@ -4,8 +4,8 @@ HC.BackgroundModePlugin = _class(false, HC.Plugin, {
     color: false, // static
 
     /**
-     * Manipulate the static .color value to have a BackgroundMode wide status
-     * todo add static values and manipulation where info has to be and can be shared?
+     * Manipulate the static .color property to have a BackgroundMode wide status
+     *
      * @param color
      * @returns {boolean}
      */

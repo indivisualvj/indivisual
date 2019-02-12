@@ -33,8 +33,9 @@
     "samples": "samples",
     "assets": "assets"
   },
+
   "defaults": {
-    "displays": {"display0_visible":true,"display0_mapping":"{\"targetPoints\":[[5760,3240],[7040,3240],[7040,3960],[5760,3960]]}"},
-    "controls": {"layer":0,"play":true,"usemic":true}
+    "displays": {"display0_visible":true},
+    "controls": {"play":true,"usemic":true}
   }
 }

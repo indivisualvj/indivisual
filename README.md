@@ -7,15 +7,30 @@ indivisual - VJ-Synthesizer is a rhythm based animation tool giving you the abil
 The most settings can be "oscillated" so that different variations on how a shape is moved, rotatet, transformed, modified, colored, 
 lit, sized, postprocessed, ... can be mixed in.  
 There also is a mechanism to record samples and then mix them in sequences with different composite operations. 
-Those sequences can be flipped, sliced, accelerated, slowed, ... and also cans be used as shape material.
+Those sequences can be flipped, sliced, accelerated, slowed down, ... and also cans be used as shape material.
 
-To get an idea of what can be done with it, visit my [Youtube channel](https://www.youtube.com/channel/UC2QczAUG69575hFIRg2JDcQ)  
+To get an idea of what can be done with it, visit my [YouTube channel](https://www.youtube.com/channel/UC2QczAUG69575hFIRg2JDcQ)  
 
+## Getting Started
+- To get the best performance you should install [Google Chrome](https://www.google.com/chrome/) 
+- Install [Node.js](https://nodejs.org/en/download/)
+- Install [yarn](https://yarnpkg.com/lang/en/docs/install) 
+- After installing yarn you might have to close the command line and open a new one
+- Execute the following lines in your command line within the installation directory:
+    ```
+    $ yarn install
+    $ yarn start --port 8081
+    ```
+- Open http://localhost:8081/controller.html 
+- Open http://localhost:8081 in a second window
+- Split the two windows left and right
+- Or open it as single page application http://localhost:8081/inline.html
+- Try some of the setups from presets (controller->lowerleft)
+- Play around
+- Try to learn something in this Quick and Dirty Video Tutorial
+    [![](http://img.youtube.com/vi/aPwviMbDYH8/0.jpg)](http://www.youtube.com/watch?v=aPwviMbDYH8 "")
 
-## Things you have to know
-indivisual VJ-Synthesizer works best and also is only developed on google-chrome.
-I tried it on firefox but the performance is bad. 
-
+## For Developers
 There is no clean code in there. There also is no explicit design pattern 
 except a plugin concept designed by myself.
 
@@ -28,28 +43,13 @@ Therefore things do not work together perfectly sometimes.
 
 But still it's pretty much fun to play with!
 
-## Getting Started
-- Install [Node.js](https://nodejs.org/en/download/)
-- Install [yarn](https://yarnpkg.com/lang/en/docs/install) or via npm: `npm install -g yarn`
-- Execute the following lines in your command line:
-    ```
-    $ yarn install
-    $ yarn start --port 8081
-    ```
-- Open http://localhost:8081/controller.html 
-- Open http://localhost:8081 in a second window
-- Split the two windows left and right
-- Try some of the setups from presets (controller->lowerleft)
-- Play around
-- Try to learn something in this Quick and Dirty Video Tutorial
-    [![](http://img.youtube.com/vi/aPwviMbDYH8/0.jpg)](http://www.youtube.com/watch?v=aPwviMbDYH8 "")
-
 ### Deprecated Powerful Features on Insecure (non SSL) Origins
-When not using localhost, it is not possible to use microphone or audio input without SSL.
-- You can run chrome with the --unsafely-treat-insecure-origin-as-secure="http://example.com" flag (replacing "example.com" with the origin you actually want to test)
+When not running on localhost, it is not possible to use microphone or audio input without SSL.
+- You can either run chrome with the --unsafely-treat-insecure-origin-as-secure="http://example.com" flag (replacing "example.com" with the origin you actually want to test)
     like described in this [article](https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-powerful-features-on-insecure-origins)
 - Or you have to enable SSL
-- Server options can be found [here](docs/server-options.md)
+
+Server options can be found [here](docs/server-options.md)
 
 ## Questions & Answers
 - Create an issue for your question

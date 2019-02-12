@@ -18,6 +18,7 @@
          *
          */
         initMaptastic: function () {
+            var inst = this;
             return Maptastic({
                 crosshairs: true,
                 autoSave: false,
@@ -31,7 +32,7 @@
                             //sourcePoints: e.sourcePoints,
                             targetPoints: e.targetPoints
                         };
-                        displayman.onMapping(id, mapping);
+                        inst.onMapping(id, mapping);
                     }
                 }
             });
@@ -101,6 +102,10 @@
                     var points = display.loadMapping();
 
                     this.maptastic.addLayer(canvas, points.targetPoints, points.sourcePoints);
+
+                    if (!points.targetPoints) {
+                        this.centerDisplay(display.index, 1, true, false);
+                    }
 
                 } else {
                     this.maptastic.removeLayer(canvas);
@@ -271,12 +276,17 @@
          *
          * @param i
          * @param factor
+         * @param screen
+         * @param notify
+         * @returns {*}
          */
-        centerDisplay: function (i, factor) {
+        centerDisplay: function (i, factor, screen, notify) {
             var display = this.getDisplay(i);
             if (display) {
-                this.maptastic.centerByElement(display.canvas, factor);
+                return this.maptastic.centerByElement(display.canvas, factor, screen, notify);
             }
+
+            return false;
         },
 
         /**

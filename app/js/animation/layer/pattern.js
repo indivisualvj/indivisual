@@ -3,7 +3,7 @@
  * @returns {number}
  */
 HC.Layer.prototype.patternCenterX = function () {
-    return this.resolution('half').x + this.cameraDefaultDistance(.25) * this.settings.pattern_centerx; // todo globally use diameterv.length() instead of width/height
+    return this.resolution('half').x + this.cameraDefaultDistance(.25) * this.settings.pattern_centerx;
 };
 
 /**

@@ -387,14 +387,13 @@
             var bounds = this._clipBounds(this.keepbounds);
             var points = this._getMaptasticPoints(bounds);
             var sourcePoints = points;
-            var targetPoints = points;
-            var stored = statics.DisplaySettings[this.id + '_mapping'];
+            var targetPoints = false;
+            var stored = this.getMapping();
             if (stored) {
                 try {
                     var mapping = JSON.parse(stored);
                     targetPoints = mapping.targetPoints;
                 } catch (e) {
-
                 }
             }
 
@@ -402,6 +401,14 @@
                 sourcePoints: sourcePoints,
                 targetPoints: targetPoints
             };
+        },
+
+        /**
+         *
+         * @returns {*}
+         */
+        getMapping: function () {
+            return statics.DisplaySettings[this.id + '_mapping'];
         },
 
         /**

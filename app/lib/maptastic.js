@@ -1114,16 +1114,22 @@ var Maptastic = function(config) {
         'findLayer': function (element) {
             return findLayer(element);
         },
-        'centerByElement': function (element, factor) {
+        'centerByElement': function (element, factor, screen, notify) {
             if (element) {
                 var layer = findLayer(element);
-                centerLayer(layer, factor);
+                centerLayer(layer, factor, screen);
                 updateTransform();
                 if (configActive) {
                     draw();
                 }
-                notifyChangeListener(layer);
+                if (notify !== false) {
+                    notifyChangeListener(layer);
+                }
+
+                return layer.targetPoints;
             }
+
+            return false;
         },
         'refresh': function () {
             if (getConfigEnabled()) {

@@ -170,7 +170,7 @@
             }
 
             if (this.shape) {
-                this.shape._position.traverse(threeDispose);
+                this.shape.sceneObject().traverse(threeDispose);
                 this.shape = false;
             }
 

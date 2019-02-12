@@ -51,5 +51,23 @@ HC.Animation.prototype.prepareMonitor = function () {
     };
 
     window.addEventListener('resize', onResize);
-    onResize();
+    onResize(true);
+};
+
+/**
+ *
+ */
+HC.Animation.prototype.prepareAnimation = function () {
+    var onResize = function () {
+        for (var i = 0; i < statics.DisplayValues.display.length; i++) {
+            var display = displayman.getDisplay(i);
+            if (display) {
+                if (!display.getMapping()) {
+                    displayman.centerDisplay(i, 1, true, false);
+                }
+            }
+        }
+    };
+
+    window.addEventListener('resize', onResize);
 };

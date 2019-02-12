@@ -59,7 +59,6 @@ Many thanks to:
 
 - Google for their lightning fast browser/engine
 - All the people contributing to web browser technology
-- https://github.com/nodejs/node
 - https://github.com/mrdoob/three.js
 - https://github.com/tweenjs/tween.js
 - https://github.com/glowbox/maptasticjs
@@ -67,6 +66,8 @@ Many thanks to:
 - https://github.com/dataarts/dat.gui
 - https://github.com/mrdoob/stats.js
 - https://github.com/chandlerprall/ThreeCSG
+- https://github.com/nodejs/node
+- https://github.com/yarnpkg/yarn
 - https://www.shadertoy.com/
 
 ## How To

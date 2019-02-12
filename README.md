@@ -15,6 +15,7 @@ To get an idea of what can be done with it, visit my [YouTube channel](https://w
 - To get the best performance you should install [Google Chrome](https://www.google.com/chrome/) 
 - Install [Node.js](https://nodejs.org/en/download/)
 - Install [yarn](https://yarnpkg.com/lang/en/docs/install) 
+- After installing yarn you might have to close the command line and open a new one
 - Execute the following lines in your command line within the installation directory:
     ```
     $ yarn install

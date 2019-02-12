@@ -13,9 +13,8 @@
         navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
-        this.context = new (window.AudioContext)();
         var inst = this;
-        var source;
+        var source = false;
 
         /**
          *
@@ -34,7 +33,6 @@
                                 if (callback) {
                                     callback(source);
                                 }
-
                             }
                             , function (ex) {
                                 _log('audio', ex.message, true);
@@ -69,7 +67,30 @@
          * @returns {boolean}
          */
         this.isActive = function () {
-            return source !== undefined;
+            return source != false;
+        };
+
+        /**
+         *
+         */
+        this.reset = function () {
+            if (source) {
+                source.disconnect();
+            }
+
+            source = false;
+
+            this.initContext();
+        };
+
+        /**
+         *
+         */
+        this.initContext = function () {
+            if (this.context) {
+                this.context.close();
+            }
+            this.context = new (window.AudioContext)();
         }
 
     }

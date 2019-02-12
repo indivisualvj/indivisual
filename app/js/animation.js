@@ -144,12 +144,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (speed.prc == 0) {
                 if (IS_ANIMATION) {
+
                     var detectedSpeed = false;
+
                     if (audioman.isActive()) {
-                        if (statics.ControlSettings.peak_bpm_detect
-                            && audio.peakReliable
-                        ) {
+
+                        if (statics.ControlSettings.peak_bpm_detect && audio.peakReliable) {
+
                             detectedSpeed = beatkeeper.speedByPeakBpm(audio.firstPeak, audio.peakBPM, statics.ControlSettings.tempo);
+
                             if (detectedSpeed) {
                                 audio.peakReliable = false;
                                 messaging.emitLog('peakBPM', detectedSpeed);
@@ -654,18 +657,17 @@ document.addEventListener('DOMContentLoaded', function () {
                             audio.reset();
                             if (value) {
                                 if (!audioman.isActive()) {
-                                    audio.initAnalyzer(audioman.context);
-                                    audioman.initMicrophone(audio.connect);
+                                    audioman.reset();
+                                    var analyzer = audio.init(audioman.context);
+                                    audioman.initMicrophone(function (source) {
+                                        source.connect(analyzer);
+                                    });
                                 }
+
+                            } else {
+                                audioman.reset();
                             }
                             break;
-
-                        // case 'filter_type':
-                        // case 'filter_frequency':
-                        //     audio.updateFilter({
-                        //         type: statics.ControlSettings.filter_type,
-                        //         frequency: statics.ControlSettings.filter_frequency
-                        //     });
 
                         case 'shuffle':
                             if (value) {

@@ -53,13 +53,11 @@
         /**
          *
          */
-        this.initAnalyzer = function(context) {
+        this.init = function(context) {
             analyzer = context.createAnalyser();
             analyzer.fftSize = 1024;
-            // analyzer.connect(context.destination);
             binCount = analyzer.frequencyBinCount;
-            this.volumes = new Array(binCount);
-            this.volumes.fill(0);
+            this.volumes = new Array(binCount).fill(0);
             levelBins = Math.floor(binCount / LEVELS);
 
             freqData = new Uint8Array(binCount);
@@ -67,10 +65,6 @@
 
             return analyzer;
         };
-
-        this.connect = function (source) {
-            source.connect(analyzer);
-        } ;
 
         /**
          *

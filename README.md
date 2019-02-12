@@ -7,7 +7,7 @@ indivisual - VJ-Synthesizer is a rhythm based animation tool giving you the abil
 The most settings can be "oscillated" so that different variations on how a shape is moved, rotatet, transformed, modified, colored, 
 lit, sized, postprocessed, ... can be mixed in.  
 There also is a mechanism to record samples and then mix them in sequences with different composite operations. 
-Those sequences can be flipped, sliced, accelerated, slowed, ... and also cans be used as shape material.
+Those sequences can be flipped, sliced, accelerated, slowed down, ... and also cans be used as shape material.
 
 To get an idea of what can be done with it, visit my [Youtube channel](https://www.youtube.com/channel/UC2QczAUG69575hFIRg2JDcQ)  
 

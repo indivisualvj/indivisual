@@ -30,8 +30,16 @@ But still it's pretty much fun to play with!
 
 ## Getting Started
 - Install [Node.js](https://nodejs.org/en/download/)
-- Install [yarn](https://yarnpkg.com/lang/en/docs/install) or via npm: `npm install -g yarn`
-- Execute the following lines in your command line:
+- Install [yarn](https://yarnpkg.com/lang/en/docs/install) 
+- Or via npm: 
+    ```
+    npm install -g yarn
+    ```
+    On linux systems you might have to use sudo:
+    ```
+    sudo npm install -g yarn
+    ```
+- Execute the following lines in your command line within the installation directory:
     ```
     $ yarn install
     $ yarn start --port 8081
@@ -39,17 +47,19 @@ But still it's pretty much fun to play with!
 - Open http://localhost:8081/controller.html 
 - Open http://localhost:8081 in a second window
 - Split the two windows left and right
+- Or open it as single page application http://localhost:8081/inline.html
 - Try some of the setups from presets (controller->lowerleft)
 - Play around
 - Try to learn something in this Quick and Dirty Video Tutorial
     [![](http://img.youtube.com/vi/aPwviMbDYH8/0.jpg)](http://www.youtube.com/watch?v=aPwviMbDYH8 "")
 
 ### Deprecated Powerful Features on Insecure (non SSL) Origins
-When not using localhost, it is not possible to use microphone or audio input without SSL.
-- You can run chrome with the --unsafely-treat-insecure-origin-as-secure="http://example.com" flag (replacing "example.com" with the origin you actually want to test)
+When not running on localhost, it is not possible to use microphone or audio input without SSL.
+- You can either run chrome with the --unsafely-treat-insecure-origin-as-secure="http://example.com" flag (replacing "example.com" with the origin you actually want to test)
     like described in this [article](https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-powerful-features-on-insecure-origins)
 - Or you have to enable SSL
-- Server options can be found [here](docs/server-options.md)
+
+Server options can be found [here](docs/server-options.md)
 
 ## Questions & Answers
 - Create an issue for your question

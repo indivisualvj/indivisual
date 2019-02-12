@@ -86,6 +86,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     if (IS_MONITOR) {
                         animation.prepareMonitor();
+                    } else {
+                        animation.prepareAnimation();
                     }
                 };
                 messaging.sync(callback);

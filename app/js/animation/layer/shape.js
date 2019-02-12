@@ -58,7 +58,7 @@ HC.Layer.prototype.shapeCount = function () {
  */
 HC.Layer.prototype.addShape = function (child) {
     child._layer = this;
-    this._shapes.add(child._position);
+    this._shapes.add(child.sceneObject());
 };
 
 /**

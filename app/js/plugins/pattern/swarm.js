@@ -66,7 +66,7 @@ HC.plugins.pattern.swarm = _class(
 
                 v *= 2;
             }
-            shape._position.translateZ(Math.sqrt(v));
+            shape.sceneObject().translateZ(Math.sqrt(v));
 
         },
 
@@ -87,7 +87,7 @@ HC.plugins.pattern.swarm = _class(
         nextTarget: function (shape, peak) {
             var layer = this.layer;
             var params = this.params(shape);
-            var cam = shape._position;
+            var cam = shape.sceneObject();
 
             params.tween = true;
             params.shape = false;
@@ -118,10 +118,9 @@ HC.plugins.pattern.swarm = _class(
         },
 
         lookTween: function (shape) {
-            var layer = this.layer;
             var params = this.params(shape);
             var speed = params.speed;
-            var cam = shape._position;
+            var cam = shape.sceneObject();
 
             if (params.shape) {
                 params.shape.getWorldPosition(params.targetLook);

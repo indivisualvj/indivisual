@@ -24,7 +24,7 @@
         this._rotation = new THREE.Object3D();
         this._rotation.add(this._rotationOffset);
         this._rotation.name = '_rotation' + index;
-        this._position = new THREE.Object3D(); // todo nur noch über .positioner() aufrufen!??!!?
+        this._position = new THREE.Object3D();
         this._position.add(this._rotation);
         this._position.name = '_position' + index;
 
@@ -70,11 +70,15 @@
             return v === undefined ? 1 : v;
         },
 
+        sceneObject: function () {
+            return this._position;
+        },
+
         position: function (x, y, z) {
             this.x(x);
             this.y(y);
             this.z(z);
-            return this._position.position;
+            return this.sceneObject().position;
         },
 
         getWorldPosition: function (target) {
@@ -84,32 +88,32 @@
         x: function (v) {
             if (v !== undefined) {
                 v = isNaN(v) ? 0 : v;
-                this._position.position.x = v;
+                this.sceneObject().position.x = v;
             }
 
-            return this._position.position.x;
+            return this.sceneObject().position.x;
         },
 
         y: function (v) {
             if (v !== undefined) {
                 v = isNaN(v) ? 0 : v;
-                this._position.position.y = v * -1;
+                this.sceneObject().position.y = v * -1;
             }
 
-            return this._position.position.y * -1;
+            return this.sceneObject().position.y * -1;
         },
 
         z: function (v) {
             if (v !== undefined) {
                 v = isNaN(v) ? 0 : v;
-                this._position.position.z = v;
+                this.sceneObject().position.z = v;
             }
 
-            return this._position.position.z;
+            return this.sceneObject().position.z;
         },
 
         lookAt: function (vector) {
-            this._position.lookAt(vector);
+            this.sceneObject().lookAt(vector);
         },
 
         rotationX: function (x) {
@@ -363,7 +367,7 @@
         },
         //
         // dispose: function () {
-        //     this._position.traverse(threeDispose);
+        //     this.sceneObject().traverse(threeDispose);
         // }
     }
 })();

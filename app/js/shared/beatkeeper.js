@@ -218,7 +218,7 @@
 
             if (prc > 99.9 && prc < 100.1) {
                 nuSpeed = false; // speed seems to be ok
-                // todo resetCounters to firstPeak ?
+                // resetCounters to firstPeak ?
 
             } else if (prc > 75 && prc < 125) {
                 this.resetCounters(firstPeak);

@@ -1,7 +1,7 @@
 HC.plugins.shape_lookat.center = _class(false, HC.ShapeLookatPlugin, {
     apply: function (shape) {
         var vector = this.layer.lookAtVector();
-        shape._position.lookAt(vector);
+        shape.lookAt(vector);
     }
 });
 
@@ -16,7 +16,7 @@ HC.plugins.shape_lookat.centerz = _class(false, HC.ShapeLookatPlugin, {
         var x = vec.x - cvec.x;
         var y = vec.y - cvec.y;
         var angle = Math.atan2(y, x);
-        shape._position.rotation.set(0, 0, -angle);
+        shape.sceneObject().rotation.set(0, 0, -angle);
         shape.rotationZ(0);
     }
 });

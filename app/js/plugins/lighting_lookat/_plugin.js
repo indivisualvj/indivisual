@@ -1,6 +1,6 @@
 HC.plugins.lighting_lookat = HC.plugins.lighting_lookat || {};
 
-HC.LightingLookatPlugin = _class(false, HC.Plugin, {
+HC.LightingLookatPlugin = _class(false, HC.AnimationPlugin, {
 
     params: function (light) {
         return light.userData;

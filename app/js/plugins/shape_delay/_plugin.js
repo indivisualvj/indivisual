@@ -1,6 +1,6 @@
 HC.plugins.shape_delay = HC.plugins.shape_delay || {};
 
-HC.ShapeDelayPlugin = _class(false, HC.Plugin, {
+HC.ShapeDelayPlugin = _class(false, HC.AnimationPlugin, {
     injections: {
         delay: 0
     },

@@ -14,7 +14,7 @@ shuffleable: ''
 tempo: 120.00
 beat: true
 peak_bpm_detect: true
-usemic: false
+audio: 'off'
 usestream: false
 latency: -60
 volume: 1.00

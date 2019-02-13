@@ -1,6 +1,6 @@
 HC.plugins.lighting_pattern = HC.plugins.lighting_pattern || {};
 
-HC.LightingPatternPlugin = _class(false, HC.Plugin, {
+HC.LightingPatternPlugin = _class(false, HC.AnimationPlugin, {
     centerVector: function () {
         var v = this.layer.cameraDefaultDistance(.25);
         return new THREE.Vector3(

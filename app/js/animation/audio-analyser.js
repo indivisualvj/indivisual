@@ -8,7 +8,7 @@
      *
      * @constructor
      */
-    HC.AudioAnalyzer = function () {
+    HC.AudioAnalyser = function () {
         this.peakBPM = 0;
         this.peakReliable = false;
         this.peakCount = 0;
@@ -18,7 +18,6 @@
 
         const PEAK_THRESHOLD_START = 1.2;
         const PEAK_THRESHOLD_END = 3.6;
-        const LEVELS = 16;//32;O
 
         var lastVolume = 0;
         var peakData = [];
@@ -27,43 +26,40 @@
         var volumeSum = 0;
         var volumeCount = 0;
 
+        var minPeakReliable = 2;
         var lastPeak = 0;
 
-        var minPR = 2;
         var freqData;
         var domainData;
         var binCount; //1024
 
-        var levelBins;
-
-        var analyzer;
+        var analyser;
 
         /**
          *
          * @param v
          */
         this.smoothingTimeConstant = function(v) {
-            if (v !== undefined && analyzer && v) {
-                analyzer.smoothingTimeConstant = v;
+            if (v !== undefined && analyser && v) {
+                analyser.smoothingTimeConstant = v;
             }
 
-            return analyzer ? analyzer.smoothingTimeConstant : false;
+            return analyser ? analyser.smoothingTimeConstant : false;
         };
 
         /**
          *
          */
-        this.init = function(context) {
-            analyzer = context.createAnalyser();
-            analyzer.fftSize = 1024;
-            binCount = analyzer.frequencyBinCount;
+        this.createAnalyser = function(context) {
+            analyser = context.createAnalyser();
+            analyser.fftSize = 1024;
+            binCount = analyser.frequencyBinCount;
             this.volumes = new Array(binCount).fill(0);
-            levelBins = Math.floor(binCount / LEVELS);
 
             freqData = new Uint8Array(binCount);
             domainData = new Uint8Array(binCount);
 
-            return analyzer;
+            return analyser;
         };
 
         /**
@@ -74,10 +70,10 @@
 
             var useWaveform = config.useWaveform;
             if (useWaveform) {
-                analyzer.getByteTimeDomainData(domainData);
+                analyser.getByteTimeDomainData(domainData);
             }
 
-            analyzer.getByteFrequencyData(freqData);
+            analyser.getByteFrequencyData(freqData);
 
             lastVolume = this.volume;
 
@@ -144,26 +140,26 @@
                 lastPeak = now;
 
                 // calculate BPM
-                if (i > minPR) {
-                    this.firstPeak    = peakData[i - minPR].time;
+                if (i > minPeakReliable) {
+                    this.firstPeak    = peakData[i - minPeakReliable].time;
                     var timespan = lastPeak - this.firstPeak;
-                    this.peakBPM      = round(60000 / (timespan / minPR), 3);
+                    this.peakBPM      = round(60000 / (timespan / minPeakReliable), 3);
                     this.peakReliable = 0;
 
                     var avgDiff = 60000 / this.peakBPM;
 
-                    for(var pi = i - minPR; pi < i; pi++) {
+                    for(var pi = i - minPeakReliable; pi < i; pi++) {
                         var a = peakData[pi - 1];
                         var b = peakData[pi];
                         var d = b.time - a.time;
                         var prc = (avgDiff / d) * 100;
 
                         if (prc < 96 || prc > 104) {
-                            if (this.peakReliable < minPR) {
+                            if (this.peakReliable < minPeakReliable) {
 
                                 // reduce minPR to try with smaller datasets
-                                if (minPR > 4) {
-                                    minPR--;
+                                if (minPeakReliable > 4) {
+                                    minPeakReliable--;
                                 }
                                 this.peakReliable = false;
 
@@ -179,7 +175,7 @@
 
                     // reset minPR if peak is reliable
                     if (this.peakReliable) {
-                        minPR = 16;
+                        minPeakReliable = 16;
                     }
 
                     // reset after 128 or if peak is reliable
@@ -237,7 +233,7 @@
             peakData = [];
             peakThreshold = 1.2;
             lastPeak = 0;
-            minPR = 2;
+            minPeakReliable = 2;
         };
     };
     

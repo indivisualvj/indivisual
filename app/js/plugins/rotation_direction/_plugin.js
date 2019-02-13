@@ -1,6 +1,6 @@
 HC.plugins.rotation_direction = HC.plugins.rotation_direction || {};
 
-HC.RotationDirectionPlugin = _class(false, HC.Plugin, {
+HC.RotationDirectionPlugin = _class(false, HC.AnimationPlugin, {
     injections: {
         dir: 0,
         directions: {

@@ -193,7 +193,7 @@
             delete data.reset;
             delete data.layers;
             delete data.settings;
-            //delete data.usemic;
+            //delete data.audio;
             delete data.monitor;
 
             return data;

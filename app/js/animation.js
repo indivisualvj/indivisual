@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 listener = new HC.Listener();
                 audioman = new HC.AudioManager();
-                audio = new HC.AudioAnalyzer(audioman.audioContext);
+                audio = new HC.AudioAnalyser(audioman.audioContext);
                 beatkeeper = new HC.Beatkeeper();
 
                 renderer = new HC.Renderer({
@@ -653,14 +653,14 @@ document.addEventListener('DOMContentLoaded', function () {
                             this.updatePlay();
                             break;
 
-                        case 'usemic':
+                        case 'audio':
                             audio.reset();
                             if (value) {
                                 if (!audioman.isActive()) {
                                     audioman.reset();
-                                    var analyzer = audio.init(audioman.context);
-                                    audioman.initMicrophone(function (source) {
-                                        source.connect(analyzer);
+                                    audioman.initPlugin(value, function (source) {
+                                        source.connect(audio.createAnalyser(audioman.context));
+                                        audioman.start();
                                     });
                                 }
 

@@ -1,6 +1,6 @@
 HC.plugins.coloring_mode = HC.plugins.coloring_mode || {};
 
-HC.ColoringModePlugin = _class(false, HC.Plugin, {
+HC.ColoringModePlugin = _class(false, HC.AnimationPlugin, {
 
     before: function (shape) {
         var locked = this.shapeColoringModeLocked(shape);
@@ -10,13 +10,12 @@ HC.ColoringModePlugin = _class(false, HC.Plugin, {
     },
 
     after: function (shape) {
-        var layer = this.layer;
         var c = shape.color;
         c.h += this.settings.coloring_hue;
         c.s *= this.settings.coloring_sat;
         c.l *= this.settings.coloring_lum * 2;
 
-        if (statics.ControlSettings.usemic && this.settings.coloring_audio) {
+        if (audioman.isActive() && this.settings.coloring_audio) {
             var v = audio.volume;
             if (!this.settings.coloring_sync) {
                 v = shape.shapeVolume();

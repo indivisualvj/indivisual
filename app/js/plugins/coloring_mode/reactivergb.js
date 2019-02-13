@@ -23,7 +23,7 @@ HC.plugins.coloring_mode.reactivergb = _class(false, HC.ColoringModePlugin, {
             }
 
             v = (!sync ? fbdv : audio.volume);
-            m1 = (statics.ControlSettings.usemic ? 8 : 2);
+            m1 = (audioman.isActive() ? 8 : 2);
         }
 
         var prc;

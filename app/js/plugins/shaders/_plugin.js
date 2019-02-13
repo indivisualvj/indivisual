@@ -1,6 +1,6 @@
 HC.plugins.shaders = HC.plugins.shaders || {};
 
-HC.ShaderPlugin = _class(false, HC.Plugin, {
+HC.ShaderPlugin = _class(false, HC.AnimationPlugin, {
     create: function () {
         console.error('HC.ShaderPlugin: .create() must be implemented in derived plugin.');
     },

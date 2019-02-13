@@ -1,10 +1,12 @@
 HC.plugins.oscillate = HC.plugins.oscillate || {};
 
-HC.OscillatePlugin = _class(false, HC.Plugin, {
+HC.OscillatePlugin = _class(false, HC.AnimationPlugin, {
 
     construct: function (layer, settings, tree, key) {
-        HC.Plugin.prototype.construct.call(this, layer, settings, tree, key);
+        HC.AnimationPlugin.prototype.construct.call(this, layer, settings, tree, key);
         this.cache = this.cache || {};
+
+        return this;
     },
 
     params: function (key, value) {

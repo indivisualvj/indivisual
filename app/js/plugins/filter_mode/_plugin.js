@@ -1,6 +1,6 @@
 HC.plugins.filter_mode = HC.plugins.filter_mode || {};
 
-HC.FilterModePlugin = _class(false, HC.Plugin, {
+HC.FilterModePlugin = _class(false, HC.AnimationPlugin, {
     before: function (shape) {
         var locked = this.shapeFilterModeLocked(shape);
         if (locked) {

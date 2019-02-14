@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (audio.peak) {
                     messaging.emitMidi('glow', MIDI_PEAK_FEEDBACK, {timeout: 125});
 
-                    listener.fireAll('audio.peak');
+                    listener.fireAll('AudioAnalyser.peak');
                 }
 
             } else {
@@ -656,13 +656,13 @@ document.addEventListener('DOMContentLoaded', function () {
                         case 'audio':
                             audio.reset();
                             if (value) {
-                                if (!audioman.isActive()) {
+                                // if (!audioman.isActive()) {
                                     audioman.reset();
                                     audioman.initPlugin(value, function (source) {
                                         source.connect(audio.createAnalyser(audioman.context));
                                         audioman.start();
                                     });
-                                }
+                                // }
 
                             } else {
                                 audioman.reset();

@@ -188,7 +188,7 @@ HC.plugins.shape_rhythm.randompeak = _class(
     function () {
         this.peak = false;
         var inst = this;
-        listener.register('audio.peak', 'HC.plugins.shape_rhythm.randompeak', function () {
+        listener.register('AudioAnalyser.peak', 'HC.plugins.shape_rhythm.randompeak', function () {
             inst.peak = randomBool();
 
         });

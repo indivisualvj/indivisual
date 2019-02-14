@@ -1,6 +1,6 @@
 // handling mp3 files inspired by https://uberviz.io/viz/word-problems/
 
-if (!IS_CONTROLLER) {
+if (IS_ANIMATION) {
     document.addEventListener('DOMContentLoaded', function () {
         console.log('HC.audio.mp3: adding events for playback on mp3 drop');
         document.addEventListener('dragover', function (e) {

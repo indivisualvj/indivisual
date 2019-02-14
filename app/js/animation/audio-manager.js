@@ -44,9 +44,9 @@
         /**
          *
          */
-        this.reset = function () {
+        this.stop = function () {
             if (this.plugin) {
-                this.plugin.disconnect();
+                this.plugin.stop();
             }
 
             this.initContext();

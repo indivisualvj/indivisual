@@ -33,33 +33,33 @@
         var domainData;
         var binCount; //1024
 
-        var analyser;
+        this.analyser;
 
         /**
          *
          * @param v
          */
         this.smoothingTimeConstant = function(v) {
-            if (v !== undefined && analyser && v) {
-                analyser.smoothingTimeConstant = v;
+            if (v !== undefined && this.analyser && v) {
+                this.analyser.smoothingTimeConstant = v;
             }
 
-            return analyser ? analyser.smoothingTimeConstant : false;
+            return this.analyser ? this.analyser.smoothingTimeConstant : false;
         };
 
         /**
          *
          */
         this.createAnalyser = function(context) {
-            analyser = context.createAnalyser();
-            analyser.fftSize = 1024;
-            binCount = analyser.frequencyBinCount;
+            this.analyser = context.createAnalyser();
+            this.analyser.fftSize = 1024;
+            binCount = this.analyser.frequencyBinCount;
             this.volumes = new Array(binCount).fill(0);
 
             freqData = new Uint8Array(binCount);
             domainData = new Uint8Array(binCount);
 
-            return analyser;
+            return this.analyser;
         };
 
         /**
@@ -70,10 +70,10 @@
 
             var useWaveform = config.useWaveform;
             if (useWaveform) {
-                analyser.getByteTimeDomainData(domainData);
+                this.analyser.getByteTimeDomainData(domainData);
             }
 
-            analyser.getByteFrequencyData(freqData);
+            this.analyser.getByteFrequencyData(freqData);
 
             lastVolume = this.volume;
 

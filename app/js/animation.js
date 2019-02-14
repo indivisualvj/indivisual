@@ -654,18 +654,19 @@ document.addEventListener('DOMContentLoaded', function () {
                             break;
 
                         case 'audio':
-                            audio.reset();
-                            if (value) {
-                                // if (!audioman.isActive()) {
-                                    audioman.reset();
+                            if (IS_ANIMATION) {
+                                audio.reset();
+                                if (value) {
+                                    audioman.stop();
                                     audioman.initPlugin(value, function (source) {
-                                        source.connect(audio.createAnalyser(audioman.context));
+                                        var analyser = audio.createAnalyser(audioman.context);
+                                        source.connect(analyser);
                                         audioman.start();
                                     });
-                                // }
 
-                            } else {
-                                audioman.reset();
+                                } else {
+                                    audioman.stop();
+                                }
                             }
                             break;
 

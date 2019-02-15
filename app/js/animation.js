@@ -317,7 +317,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateRuntime: function () {
             this.now = HC.now() - this.lastUpdate;
             this.diff = this.now - this.last;
-            this.diffPrc = this.diff/(1000/60); // todo normalize to 60 fps
+            this.diffPrc = this.diff/(1000/60);
             this.rms = this.duration - this.ms;
             this._rmsc++;
             this._rmss+=this.rms;

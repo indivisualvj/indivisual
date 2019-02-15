@@ -56,9 +56,9 @@ HC.plugins.shape_transform.audio = _class(false, HC.ShapeTransformPlugin, {
                 vtc.y = vtcb.y * y;
                 vtc.z = vtcb.z * z;
 
-                shape.geometry.verticesNeedUpdate = true;
-
             }
+            shape.geometry.verticesNeedUpdate = true;
+
         } else if (!vertices) {
             console.warn('No transform for ' + shape.geometry.type);
         }

@@ -1,6 +1,6 @@
 HC.plugins.pattern = HC.plugins.pattern || {};
 
-HC.PatternPlugin = _class(false, HC.Plugin, {
+HC.PatternPlugin = _class(false, HC.AnimationPlugin, {
 
     sharedMoverParams: function (ox, oy, gapx, gapy) { // essential for panning torching bouncing pattern_mover
         if (arguments.length == 4) {

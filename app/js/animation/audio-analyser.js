@@ -8,19 +8,16 @@
      *
      * @constructor
      */
-    HC.Audio = function () {
-        // this.lastPeakData = [];
+    HC.AudioAnalyser = function () {
         this.peakBPM = 0;
         this.peakReliable = false;
         this.peakCount = 0;
-        this.isActive = false;
         this.peak = false;
         this.firstPeak = 0;
         this.volumes = false;
 
         const PEAK_THRESHOLD_START = 1.2;
         const PEAK_THRESHOLD_END = 3.6;
-        const LEVELS = 16;//32;O
 
         var lastVolume = 0;
         var peakData = [];
@@ -29,146 +26,54 @@
         var volumeSum = 0;
         var volumeCount = 0;
 
+        var minPeakReliable = 2;
         var lastPeak = 0;
 
-        var minPR = 2;
         var freqData;
         var domainData;
-        var audioBuffer;
         var binCount; //1024
 
-        var levelBins;
-
-        var source;
-        var microphone;
-        var audioContext;
-        var analyser;
-        var filter;
+        this.analyser;
 
         /**
          *
          * @param v
          */
         this.smoothingTimeConstant = function(v) {
-            if (v !== undefined && analyser && v) {
-                analyser.smoothingTimeConstant = v;
+            if (v !== undefined && this.analyser && v) {
+                this.analyser.smoothingTimeConstant = v;
             }
 
-            return analyser ? analyser.smoothingTimeConstant : false;
+            return this.analyser ? this.analyser.smoothingTimeConstant : false;
         };
 
         /**
          *
          */
-        this.initAudio = function() {
-            if (!this.isActive) {
-                window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        this.createAnalyser = function(context) {
+            this.analyser = context.createAnalyser();
+            this.analyser.fftSize = 1024;
+            binCount = this.analyser.frequencyBinCount;
+            this.volumes = new Array(binCount).fill(0);
 
-                audioContext = new (window.AudioContext)();
-                analyser = audioContext.createAnalyser();
-                analyser.fftSize = 1024;
-                analyser.connect(audioContext.destination);
-                binCount = analyser.frequencyBinCount;
-                this.volumes = new Array(binCount);
-                this.volumes.fill(0);
-                levelBins = Math.floor(binCount / LEVELS);
+            freqData = new Uint8Array(binCount);
+            domainData = new Uint8Array(binCount);
 
-                freqData = new Uint8Array(binCount);
-                domainData = new Uint8Array(binCount);
-            }
+            return this.analyser;
         };
-
-        /**
-         *
-         */
-        this.initMicrophone = function() {
-            if (!this.isActive) {
-                this.initAudio();
-
-                //x-browser
-                navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia
-                || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-
-                if (navigator.mediaDevices.getUserMedia) {
-
-                    var inst = this;
-                    try {
-                        navigator.mediaDevices.getUserMedia({audio: true, video: false})
-                            .then(
-                                function (stream) {
-                                    //reinit here or get an echo on the mic
-                                    source = audioContext.createBufferSource();
-                                    analyser = audioContext.createAnalyser();
-
-                                    microphone = audioContext.createMediaStreamSource(stream);
-                                    microphone.connect(analyser);
-                                    inst.isActive = true;
-                                }
-                            , function (ex) {
-                                _log('audio', ex.message, true);
-                            });
-                    } catch (ex) {
-                        _log('audio', ex.message, true);
-                    }
-
-                } else {
-                    _log('audio', 'could not getUserMedia', true);
-                }
-
-            } else {
-                audio.isActive = true;
-            }
-        };
-
-
-        /**
-         *
-         * @param config
-         */
-        // this.updateFilter = function (config) {
-        //
-        //     if (!this.isActive) return;
-        //
-        //     if (config.type == 'off') {
-        //         microphone.disconnect();
-        //         analyser.disconnect();
-        //         microphone.connect(analyser);
-        //         // analyser.connect(audioContext.destination);
-        //         filter = false;
-        //
-        //         return;
-        //     }
-        //     if (!filter) {
-        //         microphone.disconnect();
-        //         analyser.disconnect();
-        //
-        //         filter = audioContext.createBiquadFilter();
-        //         var dest = microphone.connect(filter);
-        //         filter.connect(analyser);
-        //         // analyser.connect(audioContext.destination);
-        //     }
-        //
-        //     filter.type = config.type;
-        //     filter.frequency.value = config.frequency;
-        //
-        // }
 
         /**
          *
          * @param config
          */
         this.update = function(config) {
-            if (!this.isActive) {
-                this.reset();
-                return;
-            }
 
             var useWaveform = config.useWaveform;
             if (useWaveform) {
-                analyser.getByteTimeDomainData(domainData);
+                this.analyser.getByteTimeDomainData(domainData);
             }
 
-            analyser.getByteFrequencyData(freqData);
+            this.analyser.getByteFrequencyData(freqData);
 
             lastVolume = this.volume;
 
@@ -235,27 +140,26 @@
                 lastPeak = now;
 
                 // calculate BPM
-                if (i > minPR) {
-                    this.firstPeak    = peakData[i - minPR].time;
+                if (i > minPeakReliable) {
+                    this.firstPeak    = peakData[i - minPeakReliable].time;
                     var timespan = lastPeak - this.firstPeak;
-                    this.peakBPM      = round(60000 / (timespan / minPR), 3);
-                    // this.lastPeakData = peakData;
+                    this.peakBPM      = round(60000 / (timespan / minPeakReliable), 3);
                     this.peakReliable = 0;
 
                     var avgDiff = 60000 / this.peakBPM;
 
-                    for(var pi = i - minPR; pi < i; pi++) {
+                    for(var pi = i - minPeakReliable; pi < i; pi++) {
                         var a = peakData[pi - 1];
                         var b = peakData[pi];
                         var d = b.time - a.time;
                         var prc = (avgDiff / d) * 100;
 
                         if (prc < 96 || prc > 104) {
-                            if (this.peakReliable < minPR) {
+                            if (this.peakReliable < minPeakReliable) {
 
                                 // reduce minPR to try with smaller datasets
-                                if (minPR > 4) {
-                                    minPR--;
+                                if (minPeakReliable > 4) {
+                                    minPeakReliable--;
                                 }
                                 this.peakReliable = false;
 
@@ -271,7 +175,7 @@
 
                     // reset minPR if peak is reliable
                     if (this.peakReliable) {
-                        minPR = 16;
+                        minPeakReliable = 16;
                     }
 
                     // reset after 128 or if peak is reliable
@@ -322,7 +226,6 @@
             this.volume = 0;
             this.avgVolume = 0;
             this.peak = false;
-            this.lastPeakData = [];
             this.peakBPM = 0;
             this.peakReliable = false;
             this.firstPeak = 0;
@@ -330,7 +233,7 @@
             peakData = [];
             peakThreshold = 1.2;
             lastPeak = 0;
-            minPR = 2;
+            minPeakReliable = 2;
         };
     };
     

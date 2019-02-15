@@ -23,13 +23,15 @@ HC.Shape.prototype.initPlugins = function () {
     }
 };
 
-HC.Plugin = _class(false, false, {
+HC.AnimationPlugin = _class(false, false, {
 
     construct: function (layer, settings, tree, key) {
         this.layer = layer;
         this.settings = settings;
         this.tree = tree;
         this.key = key;
+
+        return this;
     },
 
     inject: function () {
@@ -110,5 +112,37 @@ HC.Plugin = _class(false, false, {
      */
     isFirstShape: function (shape) {
         return shape.index == 0;
+    }
+});
+
+HC.audio = HC.audio || {};
+
+HC.AudioPlugin = _class(false, false, {
+
+    construct: function (context) {
+        this.context = context;
+        this.source;
+        this.stream;
+        return this;
+    },
+
+    start: function () {
+
+    },
+
+    stop: function () {
+        this.disconnect();
+    },
+
+    isActive: function () {
+        return this.source;
+    },
+
+    disconnect: function () {
+        if (this.source) {
+            this.source.disconnect();
+        }
+
+        this.source = false;
     }
 });

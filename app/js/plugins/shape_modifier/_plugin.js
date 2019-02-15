@@ -1,6 +1,6 @@
 HC.plugins.shape_modifier = HC.plugins.shape_modifier || {};
 
-HC.ShapeModifierPlugin = _class(false, HC.Plugin, {
+HC.ShapeModifierPlugin = _class(false, HC.AnimationPlugin, {
 
     apply: function (geometry) {
         if (!this.geometry) { // all meshes use the same geometry

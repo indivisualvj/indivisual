@@ -43,9 +43,8 @@ HC.plugins.shape_transform.wave = _class(false, HC.ShapeTransformPlugin, {
                     vtc.y = vtcb.y + vtcb.y * v * axes.y;
                     vtc.z = vtcb.z + vtcb.z * v * axes.z;
 
-                    shape.geometry.verticesNeedUpdate = true;
-
                 }
+                shape.geometry.verticesNeedUpdate = true;
 
             } else if (!vertices) {
                 console.warn('No transform for ' + shape.geometry.type);

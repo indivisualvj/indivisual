@@ -1,6 +1,6 @@
 HC.plugins.shape_rhythm = HC.plugins.shape_rhythm || {};
 
-HC.ShapeRhythmPlugin = _class(false, HC.Plugin, {
+HC.ShapeRhythmPlugin = _class(false, HC.AnimationPlugin, {
     injections: {
         speed: false,
         duration: 0,

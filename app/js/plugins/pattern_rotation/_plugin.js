@@ -1,6 +1,6 @@
 HC.plugins.pattern_rotation = HC.plugins.pattern_rotation || {};
 
-HC.PatternRotationPlugin = _class(false, HC.Plugin, {
+HC.PatternRotationPlugin = _class(false, HC.AnimationPlugin, {
     before: function () {
         var roto = this.layer.shape.rotation();
         var rove = roto.toVector3();

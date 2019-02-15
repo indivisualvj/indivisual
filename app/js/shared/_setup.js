@@ -95,24 +95,14 @@ var resources = [
         file: 'structure/ShaderValues.yml',
         callback: function (data, finished) {
             var settings = jsyaml.load(data.contents);
-
             statics.ShaderValues = new HC.Settings(settings);
             finished();
         }
     },
-    // {
-    //     file: 'structure/ShaderSettings.yml',
-    //     callback: function (data, finished) {
-    //         statics.ShaderSettings = new HC.Settings(jsyaml.load(data.contents));
-    //         // console.log(JSON.stringify(statics.ShaderSettings.initial).replace(/,"/g, ",\n\""));
-    //         finished();
-    //     }
-    // },
     {
         file: 'structure/ShaderTypes.yml',
         callback: function (data, finished) {
             statics.ShaderTypes = new HC.Settings(jsyaml.load(data.contents));
-            // console.log(JSON.stringify(statics.ShaderTypes.initial).replace(/,"/g, ",\n\""));
             finished();
         }
     },
@@ -121,7 +111,7 @@ var resources = [
         callback: function (data, finished) {
             var settings = jsyaml.load(data.contents);
 
-            _loadPlugins(settings);
+            _loadAnimationPlugins(settings);
             statics.ShaderSettings = new HC.Settings(_loadShaderSettings(settings.shaders));
             _loadRhythms(settings);
 
@@ -157,7 +147,11 @@ var resources = [
     {
         file: 'structure/ControlValues.yml',
         callback: function (data, finished) {
-            statics.ControlValues = new HC.Settings(jsyaml.load(data.contents));
+            var settings = jsyaml.load(data.contents);
+
+            _loadAudioPlugins(settings);
+
+            statics.ControlValues = new HC.Settings(settings);
             finished();
         }
     },
@@ -309,9 +303,53 @@ function loadResources(resources, callback) {
 /**
  *
  * @param settings
+ * @param tree
+ * @param section
+ * @param plugins
  * @private
  */
-function _loadPlugins(settings) {
+function _loadPlugins(settings, tree, section, plugins) {
+
+    var pluginKeys = Object.keys(plugins);
+
+    pluginKeys.sort(function (a, b) {
+        var ai = plugins[a].prototype.index || 99999;
+        var bi = plugins[b].prototype.index || 99999;
+        var an = plugins[a].prototype.name || a;
+        var bn = plugins[b].prototype.name || b;
+
+        var cmpi = ai - bi;
+        if (cmpi == 0) {
+            return an.localeCompare(bn);
+        }
+        return cmpi;
+    });
+
+    for (var i = 0; i < pluginKeys.length; i++) {
+
+        var pluginKey = pluginKeys[i];
+        var plugin = tree[section][pluginKey];
+
+        settings[section][pluginKey] = plugin.prototype.name || pluginKey;
+
+    }
+}
+
+/**
+ *
+ * @param settings
+ * @private
+ */
+function _loadAudioPlugins(settings) {
+    _loadPlugins(settings, HC, 'audio', HC.audio);
+}
+
+/**
+ *
+ * @param settings
+ * @private
+ */
+function _loadAnimationPlugins(settings) {
 
     Object.assign(HC.plugins.pattern_overlay, HC.plugins.pattern);
 
@@ -320,34 +358,12 @@ function _loadPlugins(settings) {
     for (var pi = 0; pi < sectionKeys.length; pi++) {
 
         var section = sectionKeys[pi];
-        var plugins = HC.plugins[section];
 
         // create plugin namespaces to work in
         HC.Shape.prototype.injected.plugins[section] = {};
 
-        var pluginKeys = Object.keys(plugins);
+        _loadPlugins(settings, HC.plugins, section, HC.plugins[section]);
 
-        pluginKeys.sort(function (a, b) {
-            var ai = plugins[a].prototype.index || 99999;
-            var bi = plugins[b].prototype.index || 99999;
-            var an = plugins[a].prototype.name || a;
-            var bn = plugins[b].prototype.name || b;
-
-            var cmpi = ai - bi;
-            if (cmpi == 0) {
-                return an.localeCompare(bn);
-            }
-            return cmpi;
-        });
-
-        for (var i = 0; i < pluginKeys.length; i++) {
-
-            var pluginKey = pluginKeys[i];
-            var plugin = HC.plugins[section][pluginKey];
-
-            settings[section][pluginKey] = plugin.prototype.name || pluginKey;
-
-        }
     }
 
     var keys = Object.keys(settings);

@@ -1,6 +1,6 @@
 HC.plugins.background_mode = HC.plugins.background_mode || {};
 
-HC.BackgroundModePlugin = _class(false, HC.Plugin, {
+HC.BackgroundModePlugin = _class(false, HC.AnimationPlugin, {
     color: false, // static
 
     /**

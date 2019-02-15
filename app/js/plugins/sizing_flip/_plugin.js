@@ -1,3 +1,3 @@
 HC.plugins.sizing_flip = HC.plugins.sizing_flip || {};
 
-HC.SizingFlipPlugin = _class(false, HC.Plugin, {});
+HC.SizingFlipPlugin = _class(false, HC.AnimationPlugin, {});

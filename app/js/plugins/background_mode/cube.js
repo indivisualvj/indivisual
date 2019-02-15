@@ -1,3 +1,3 @@
 /**
- *  todo https://threejs.org/docs/#api/en/textures/CubeTexture
+ *  https://threejs.org/docs/#api/en/textures/CubeTexture
  */

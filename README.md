@@ -15,7 +15,12 @@ To get an idea of what can be done with it, visit my [YouTube channel](https://w
 - To get the best performance you should install [Google Chrome](https://www.google.com/chrome/) 
 - Install [Node.js](https://nodejs.org/en/download/)
 - Install [yarn](https://yarnpkg.com/lang/en/docs/install) 
-- After installing yarn you might have to close the command line and open a new one
+- On debian you can install both by executing
+  ```
+  sh ./debian-installer.sh
+  ```
+  to install Node.js and yarn.
+- After installing yarn you might have to restart the command line/terminal window. 
 - Execute the following lines in your command line within the installation directory:
     ```
     $ yarn install
@@ -59,7 +64,6 @@ Many thanks to:
 
 - Google for their lightning fast browser/engine
 - All the people contributing to web browser technology
-- https://github.com/nodejs/node
 - https://github.com/mrdoob/three.js
 - https://github.com/tweenjs/tween.js
 - https://github.com/glowbox/maptasticjs
@@ -67,7 +71,10 @@ Many thanks to:
 - https://github.com/dataarts/dat.gui
 - https://github.com/mrdoob/stats.js
 - https://github.com/chandlerprall/ThreeCSG
+- https://github.com/nodejs/node
+- https://github.com/yarnpkg/yarn
 - https://www.shadertoy.com/
+- connect audiobuffer to https://uberviz.io/viz/word-problems/
 
 ## How To
 

@@ -61,7 +61,7 @@
             debug: statics.ControlSettings.debug,
             tempo: statics.ControlSettings.tempo,
             beat: statics.ControlSettings.beat,
-            usemic: statics.ControlSettings.usemic,
+            audio: statics.ControlSettings.audio,
             peak_bpm_detect: statics.ControlSettings.peak_bpm_detect,
             layer: statics.ControlSettings.layer,
 
@@ -75,7 +75,7 @@
         };
 
         // this['g_audio'] = {
-            // usemic: statics.ControlSettings.usemic,
+            // audio: statics.ControlSettings.audio,
             // volume: statics.ControlSettings.volume,
             // latency: statics.ControlSettings.latency,
             // filter_type: statics.ControlSettings.filter_type,

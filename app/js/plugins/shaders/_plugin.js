@@ -1,6 +1,6 @@
 HC.plugins.shaders = HC.plugins.shaders || {};
 
-HC.ShaderPlugin = _class(false, HC.Plugin, {
+HC.ShaderPlugin = _class(false, HC.AnimationPlugin, {
     create: function () {
         console.error('HC.ShaderPlugin: .create() must be implemented in derived plugin.');
     },
@@ -40,7 +40,7 @@ HC.ShaderPlugin = _class(false, HC.Plugin, {
         sh = sh || this.settings.shaders[name];
 
         if (sh.random) {
-            if ((audio.isActive && audio.peak && randomBool(3)) || (this.layer.getCurrentSpeed().prc == 0 && randomBool())) {
+            if ((audioman.isActive() && audio.peak && randomBool(3)) || (this.layer.getCurrentSpeed().prc == 0 && randomBool())) {
                 glsh.enabled = !glsh.enabled;
             }
         } else {
@@ -91,7 +91,7 @@ HC.ShaderPlugin = _class(false, HC.Plugin, {
                             }
                         }
 
-                        if (audio.isActive && shs.audio) {
+                        if (audioman.isActive() && shs.audio) {
 
                             if (shs._type && isInteger(shs._type[2])) {
 

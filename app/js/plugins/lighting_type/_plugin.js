@@ -1,6 +1,6 @@
 HC.plugins.lighting_type = HC.plugins.lighting_type || {};
 
-HC.LightingTypePlugin = _class(false, HC.Plugin, {
+HC.LightingTypePlugin = _class(false, HC.AnimationPlugin, {
 
     apply: function (index) {
         var light = this.create();

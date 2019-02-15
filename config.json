@@ -36,6 +36,6 @@
 
   "defaults": {
     "displays": {"display0_visible":true},
-    "controls": {"play":true,"usemic":true}
+    "controls": {"play":true,"audio":"off"}
   }
 }

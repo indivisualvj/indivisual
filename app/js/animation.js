@@ -4,6 +4,7 @@
 
 var messaging = false;
 var audio     = false;
+var audioman  = false;
 var beatkeeper = false;
 var animation  = false;
 var renderer = false;
@@ -39,7 +40,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 HC.SourceController.createAllControls();
 
                 listener = new HC.Listener();
-                audio = new HC.Audio();
+                audioman = new HC.AudioManager();
+                audio = new HC.AudioAnalyser(audioman.audioContext);
                 beatkeeper = new HC.Beatkeeper();
 
                 renderer = new HC.Renderer({
@@ -142,12 +144,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (speed.prc == 0) {
                 if (IS_ANIMATION) {
+
                     var detectedSpeed = false;
-                    if (audio.isActive) {
-                        if (statics.ControlSettings.peak_bpm_detect
-                            && audio.peakReliable
-                        ) {
+
+                    if (audioman.isActive()) {
+
+                        if (statics.ControlSettings.peak_bpm_detect && audio.peakReliable) {
+
                             detectedSpeed = beatkeeper.speedByPeakBpm(audio.firstPeak, audio.peakBPM, statics.ControlSettings.tempo);
+
                             if (detectedSpeed) {
                                 audio.peakReliable = false;
                                 messaging.emitLog('peakBPM', detectedSpeed);
@@ -162,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            if (audio.isActive) {
+            if (audioman.isActive()) {
                 var config = {
                     useWaveform: renderer.currentLayer.settings.audio_use_waveform,
                     volume: statics.ControlSettings.volume,
@@ -176,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (audio.peak) {
                     messaging.emitMidi('glow', MIDI_PEAK_FEEDBACK, {timeout: 125});
 
-                    listener.fireAll('audio.peak');
+                    listener.fireAll('AudioAnalyser.peak');
                 }
 
             } else {
@@ -208,6 +213,31 @@ document.addEventListener('DOMContentLoaded', function () {
             sourceman.render(this.doNotDisplay);
             if (!this.doNotDisplay) {
                 displayman.render();
+            }
+        },
+
+        /**
+         *
+         */
+        updatePlay: function () {
+            if (IS_MONITOR) {
+                statics.ControlSettings.play = statics.ControlSettings.monitor;
+            }
+
+            if (statics.ControlSettings.play) {
+                // beatkeeper.trigger(statics.ControlSettings.beat, false, statics.ControlSettings.tempo, false);
+                // beatkeeper.resetTrigger();
+                this.play();
+
+            } else {
+                this.pause();
+            }
+
+            if (statics.ControlSettings.play) {
+                sourceman.startVideos();
+
+            } else {
+                sourceman.stopVideos();
             }
         },
 
@@ -250,7 +280,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     inst.ms = HC.now() - inst.lastUpdate - inst.last; // time spent on animating and rendering
 
-                    inst.duration = Math.round(1000 / statics.DisplaySettings.fps);
                     if (statics.DisplaySettings.fps < 60) {
                         setTimeout(function () {
                             requestAnimationFrame(render);
@@ -288,7 +317,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateRuntime: function () {
             this.now = HC.now() - this.lastUpdate;
             this.diff = this.now - this.last;
-            this.diffPrc = this.diff/this.duration;
+            this.diffPrc = this.diff/(1000/60); // todo normalize to 60 fps
             this.rms = this.duration - this.ms;
             this._rmsc++;
             this._rmss+=this.rms;
@@ -392,7 +421,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 var vo = round(audio.avgVolume, 2) + '';
                 messaging.emitAttr('#audio', 'data-mnemonic', vo);
 
-                if (audio.isActive) {
+                if (audioman.isActive()) {
                     var au = [
                         audio.peakBPM.toFixed(2),
                     ];
@@ -609,7 +638,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         case 'layer':
                             audio.peakCount = 0;
-                            renderer.nextLayer = renderer.layers[statics.ControlSettings.layer];
+                            renderer.nextLayer = renderer.layers[value];
                             break;
 
                         case 'tempo':
@@ -621,42 +650,25 @@ document.addEventListener('DOMContentLoaded', function () {
                                 break;
                             }
                         case 'play':
-                            if (IS_MONITOR) {
-                                statics.ControlSettings.play = statics.ControlSettings.monitor;
-                            }
-
-                            if (statics.ControlSettings.play) {
-                                beatkeeper.trigger(statics.ControlSettings.beat, false, statics.ControlSettings.tempo, false);
-                                beatkeeper.resetTrigger();
-                                animation.play();
-
-                            } else {
-                                animation.pause();
-                            }
-                            if (value) {
-                                sourceman.startVideos();
-
-                            } else {
-                                sourceman.stopVideos();
-                            }
+                            this.updatePlay();
                             break;
 
-                        case 'usemic':
-                            audio.reset();
-                            if (statics.ControlSettings.usemic) {
-                                audio.initMicrophone();
+                        case 'audio':
+                            if (IS_ANIMATION) {
+                                audio.reset();
+                                if (value) {
+                                    audioman.stop();
+                                    audioman.initPlugin(value, function (source) {
+                                        var analyser = audio.createAnalyser(audioman.context);
+                                        source.connect(analyser);
+                                        audioman.start();
+                                    });
 
-                            } else {
-                                audio.isActive = false;
+                                } else {
+                                    audioman.stop();
+                                }
                             }
                             break;
-
-                        // case 'filter_type':
-                        // case 'filter_frequency':
-                        //     audio.updateFilter({
-                        //         type: statics.ControlSettings.filter_type,
-                        //         frequency: statics.ControlSettings.filter_frequency
-                        //     });
 
                         case 'shuffle':
                             if (value) {
@@ -779,6 +791,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (display) {
                     switch (item) {
+                        case 'fps':
+                            this.duration = Math.round(1000 / value);
+                            break;
+
                         case 'resolution':
                             renderer.fullReset(true);
                             sourceman.resize(renderer.getResolution());

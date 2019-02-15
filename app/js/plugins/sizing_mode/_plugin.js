@@ -1,6 +1,6 @@
 HC.plugins.sizing_mode = HC.plugins.sizing_mode || {};
 
-HC.SizingModePlugin = _class(false, HC.Plugin, {
+HC.SizingModePlugin = _class(false, HC.AnimationPlugin, {
     after: function (shape) {
         var layer = this.layer;
         if (this.settings.sizing_audio) {

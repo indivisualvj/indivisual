@@ -1,6 +1,6 @@
 HC.plugins.material_style = HC.plugins.material_style || {};
 
-HC.MaterialStylePlugin = _class(false, HC.Plugin, {
+HC.MaterialStylePlugin = _class(false, HC.AnimationPlugin, {
     injections: {
         stroke: false
     },

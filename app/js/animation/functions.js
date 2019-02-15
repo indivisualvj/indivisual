@@ -5,6 +5,17 @@ HC.Animation.prototype.initEvents = function () {
     document.onselectstart = function() {
         return false;
     };
+
+    if (IS_ANIMATION) {
+        var to;
+        document.addEventListener('mousemove', function () {
+            document.body.style.cursor = 'default';
+            clearTimeout(to);
+            to = setTimeout(function () {
+                document.body.style.cursor = 'none';
+            }, 2000);
+        });
+    }
 };
 
 /**

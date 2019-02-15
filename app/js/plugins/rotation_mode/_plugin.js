@@ -4,7 +4,7 @@
 
 HC.plugins.rotation_mode = HC.plugins.rotation_mode || {};
 
-HC.RotationModePlugin = _class(false, HC.Plugin, {
+HC.RotationModePlugin = _class(false, HC.AnimationPlugin, {
     injections: {
         current: {
             x: 0,

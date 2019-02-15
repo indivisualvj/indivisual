@@ -139,7 +139,7 @@
             if (!(key in statics.DisplaySettings)) {
                 statics.DisplaySettings[key + '_visible'] = statics.DisplaySettings[okey + '_visible'];
                 statics.DisplaySettings[key + '_mapping'] = statics.DisplaySettings[okey + '_mapping'];
-                statics.DisplaySettings[key + '_zindex'] = i+1;
+                statics.DisplaySettings[key + '_zindex'] = i + 1;
 
                 statics.DisplaySettings[key + '_mask_shape'] = statics.DisplaySettings[okey + '_mask_shape'];
                 statics.DisplaySettings[key + '_keepbounds'] = statics.DisplaySettings[okey + '_keepbounds'];

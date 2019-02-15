@@ -4,7 +4,7 @@ HC.plugins.shape_geometry.text = _class(false, HC.ShapeGeometryPlugin, {
         var geometry = new THREE.TextGeometry(this.settings.shape_vertices || 'indivisual', {
             font: statics.three.fonts.coolvetica,
             size: this.layer.shapeSize(.19),
-            height: this.settings.shape_variant*10,
+            height: this.settings.shape_variant * 10,
             curveSegments: 12,
             bevelEnabled: true,
             bevelThickness: 1,

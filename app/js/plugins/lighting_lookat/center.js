@@ -38,10 +38,10 @@ HC.plugins.lighting_lookat.straight = _class(false, HC.LightingLookatPlugin, {
 
     apply: function (light) {
 
-       light.target.position.copy(light.position);
-       var cv = this.centerVector();
-       cv.multiplyScalar(8);
-       light.target.position.add(cv);
-       light.target.position.z = this.centerVector().z;
-   }
+        light.target.position.copy(light.position);
+        var cv = this.centerVector();
+        cv.multiplyScalar(8);
+        light.target.position.add(cv);
+        light.target.position.z = this.centerVector().z;
+    }
 });

@@ -69,7 +69,6 @@ HC.plugins.pattern.spray = _class(false, HC.PatternPlugin, {
         var layer = this.layer;
 
 
-
         var params = this.params(shape);
 
         if (!params.initial

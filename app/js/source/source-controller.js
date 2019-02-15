@@ -158,7 +158,7 @@
             statics.SourceValues[beatKey] = statics.SourceValues.beats;
 
             controls[getSampleEnabledKey(i)] = false;
-            controls[getSampleRecordKey(i)]  = false;
+            controls[getSampleRecordKey(i)] = false;
             controls[beatKey] = 8;
 
             var _reset = function (smp) {

@@ -163,7 +163,7 @@ HC.ShaderPlugin = _class(false, HC.AnimationPlugin, {
                     }
 
                 } else { // one level deeper
-                     return this.apply(skey, shs);
+                    return this.apply(skey, shs);
                 }
             }
         }

@@ -1,5 +1,3 @@
-
-
 (function () {
     HC.Source = function (instance, width, height) {
         this.instance = instance;

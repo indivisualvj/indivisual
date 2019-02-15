@@ -87,7 +87,7 @@
 })();
 
 
-(function() {
+(function () {
 
     /**
      *
@@ -109,7 +109,7 @@
             this.isdefault = null;
             this.initial = this.copy(values);
 
-            for(var key in values) {
+            for (var key in values) {
                 this[key] = values[key];
             }
         },
@@ -124,7 +124,7 @@
             this.isdefault = null;
 
             var isFunc = typeof value == 'function' || typeof this[key] == 'function';
-            
+
             if (key in this && isFunc) {
                 // do nothing
                 return value;
@@ -151,7 +151,7 @@
         },
 
         /**
-         * 
+         *
          * @param target
          * @param source
          */

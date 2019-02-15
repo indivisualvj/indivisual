@@ -1,6 +1,6 @@
 HC.audio.microphone = _class(false, HC.AudioPlugin, {
 
-    init: function(callback) {
+    init: function (callback) {
 
         var inst = this;
         if (navigator.mediaDevices.getUserMedia) {

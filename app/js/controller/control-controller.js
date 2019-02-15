@@ -75,11 +75,11 @@
         };
 
         // this['g_audio'] = {
-            // audio: statics.ControlSettings.audio,
-            // volume: statics.ControlSettings.volume,
-            // latency: statics.ControlSettings.latency,
-            // filter_type: statics.ControlSettings.filter_type,
-            // filter_frequency: statics.ControlSettings.filter_frequency
+        // audio: statics.ControlSettings.audio,
+        // volume: statics.ControlSettings.volume,
+        // latency: statics.ControlSettings.latency,
+        // filter_type: statics.ControlSettings.filter_type,
+        // filter_frequency: statics.ControlSettings.filter_frequency
 
         // };
     }

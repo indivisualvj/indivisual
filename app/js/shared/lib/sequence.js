@@ -16,7 +16,7 @@ function applySequenceSlice(sequence, frames, start, end) {
         sp -= ve - frames;
     }
 
-    sequence.start = Math.min(frames-1, Math.round(sp));
-    sequence.end = Math.min(frames-1, Math.round(ep));
+    sequence.start = Math.min(frames - 1, Math.round(sp));
+    sequence.end = Math.min(frames - 1, Math.round(ep));
     sequence.length = sequence.end - sequence.start;
 }

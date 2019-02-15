@@ -41,7 +41,7 @@
         /**
          *
          */
-        init: function() {
+        init: function () {
             if (this.initSID()) {
                 this.program.name += '@' + this.sid;
                 G_INSTANCE = this.program.name;
@@ -76,7 +76,7 @@
          */
         connect: function (callback) {
             _log(this.program.name, 'connecting...', true);
-            this.socket = io.connect(null, {'secure': true, 'forceNew':true});
+            this.socket = io.connect(null, {'secure': true, 'forceNew': true});
 
             this.initEvents();
 
@@ -284,7 +284,7 @@
                 }
 
                 statics.ControlSettings.clean(data, statics.ControlSettings.initial);
-                
+
                 var config = {
                     action: 'controls',
                     data: data,
@@ -364,9 +364,9 @@
                 if (data instanceof HC.Settings) {
                     data = data.prepare();
                 }
-                
+
                 statics.AnimationSettings.clean(data, statics.AnimationSettings.initial);
-                
+
                 var config = {
                     action: 'settings',
                     data: data,

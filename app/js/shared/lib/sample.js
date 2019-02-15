@@ -5,7 +5,7 @@
  * @param progress
  * @param color
  */
-function renderSample (sample, image, progress, color, hook) {
+function renderSample(sample, image, progress, color, hook) {
     if (image && sample.frames) {
         if (!sample.started) {
             if (progress.prc == 0) {
@@ -51,8 +51,7 @@ function renderSample (sample, image, progress, color, hook) {
  * @param name
  * @param resolution
  */
-function storeSample (sample, name, resolution)
-{
+function storeSample(sample, name, resolution) {
 
     sample.pointer = 0;
     var canvas = false;
@@ -90,7 +89,7 @@ function storeSample (sample, name, resolution)
 
                 setTimeout(function () {
                     requestAnimationFrame(_mov);
-                }, animation.threadTimeout(diff/animation.duration));
+                }, animation.threadTimeout(diff / animation.duration));
 
             } else {
                 animation.powersave = false;

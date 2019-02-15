@@ -45,15 +45,15 @@ HC.Controller.prototype.initKeyboard = function () {
 
     window.addEventListener('keyup', function (e) {
         statics.ctrlKey = e.ctrlKey;
-        statics.altKey  = e.altKey;
-        statics.shiftKey  = e.shiftKey;
+        statics.altKey = e.altKey;
+        statics.shiftKey = e.shiftKey;
     });
 
     window.addEventListener('keydown', function (e) {
 
         statics.ctrlKey = e.ctrlKey;
-        statics.altKey  = e.altKey;
-        statics.shiftKey  = e.shiftKey;
+        statics.altKey = e.altKey;
+        statics.shiftKey = e.shiftKey;
 
         if (e.ctrlKey && (e.shiftKey || e.altKey)) {
             return;

@@ -3,10 +3,10 @@
  */
 
 var messaging = false;
-var audio     = false;
-var audioman  = false;
+var audio = false;
+var audioman = false;
 var beatkeeper = false;
-var animation  = false;
+var animation = false;
 var renderer = false;
 var displayman = false;
 var sourceman = false;
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-(function() {
+(function () {
 
     /**
      *
@@ -135,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     HC.Animation.prototype = {
 
-        animate: function() {
+        animate: function () {
 
             /**
              * do general stuff
@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         play: function () {
-            if (this.running)return;
+            if (this.running) return;
             this.running = true;
 
             if (this.lastUpdate) {
@@ -317,15 +317,15 @@ document.addEventListener('DOMContentLoaded', function () {
         updateRuntime: function () {
             this.now = HC.now() - this.lastUpdate;
             this.diff = this.now - this.last;
-            this.diffPrc = this.diff/(1000/60);
+            this.diffPrc = this.diff / (1000 / 60);
             this.rms = this.duration - this.ms;
             this._rmsc++;
-            this._rmss+=this.rms;
+            this._rmss += this.rms;
             this.last = this.now;
 
             listener.fireAll('animation.updateRuntime', animation.now);
         },
-        
+
         /**
          *
          */
@@ -410,10 +410,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (statics.ControlSettings.beat) {
                 var speed = beatkeeper.getDefaultSpeed();
-                var btk = ['bpm:'+beatkeeper.bpm,
-                    'b:'+speed.beats,
-                    'd:'+speed.duration.toFixed(0),
-                    'p:'+beatkeeper.speeds.quarter.pitch.toFixed(0)
+                var btk = ['bpm:' + beatkeeper.bpm,
+                    'b:' + speed.beats,
+                    'd:' + speed.duration.toFixed(0),
+                    'p:' + beatkeeper.speeds.quarter.pitch.toFixed(0)
                 ];
 
                 messaging.emitAttr('#beat', 'data-label', btk.join(' / '));
@@ -430,7 +430,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 //messaging.emitAttr('#beat', 'data-color', 'red', 'green');<
                 messaging.emitMidi('glow', MIDI_BEAT_FEEDBACK, {timeout: 125});
                 if (detectedSpeed) {
-                    messaging.emitMidi('glow', MIDI_PEAKBPM_FEEDBACK, {timeout: 15000/detectedSpeed, times: 8});
+                    messaging.emitMidi('glow', MIDI_PEAKBPM_FEEDBACK, {timeout: 15000 / detectedSpeed, times: 8});
                 }
                 if (statics.DisplaySettings.display_speed == 'midi') {
                     messaging.emitMidi('clock', MIDI_CLOCK_NEXT, {duration: beatkeeper.getDefaultSpeed().duration});
@@ -453,7 +453,7 @@ document.addEventListener('DOMContentLoaded', function () {
             var sh = statics.ControlSettings.shuffle;
             var count = statics.ControlSettings.shuffle_usepeak ? audio.peakCount :
                 (statics.shuffle.beats.counter % Math.abs(statics.ControlSettings.shuffle_switch_every));
-            messaging.emitAttr('#layer', 'data-label', count + (sh?'s':''));
+            messaging.emitAttr('#layer', 'data-label', count + (sh ? 's' : ''));
 
             var layerDisplayValue = (statics.ControlSettings.layer + 1);
             messaging.emitAttr('#layers', 'data-mnemonic', layerDisplayValue);
@@ -461,10 +461,10 @@ document.addEventListener('DOMContentLoaded', function () {
             messaging.emitAttr('[data-id="material_map"]', 'data-label', statics.tmp.sample_map_size);
 
             if (animation.stats) {
-                var state = (animation.powersave?'i':'') + (animation.offline?'o':'');
+                var state = (animation.powersave ? 'i' : '') + (animation.offline ? 'o' : '');
                 var vals = [
-                    'fps:'+animation.fps + state,
-                    'rms:'+animation.rmsAverage()];
+                    'fps:' + animation.fps + state,
+                    'rms:' + animation.rmsAverage()];
                 messaging.emitAttr('#play', 'data-label', vals.join(' / '));
             }
         },
@@ -507,7 +507,7 @@ document.addEventListener('DOMContentLoaded', function () {
         },
 
         /**
-         * 
+         *
          * @param layer
          * @param item
          * @param value
@@ -706,13 +706,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     var action = false;
                     if (item.match(/^sample\d+_store/) && value) {
                         //var sample =
-                            sourceman.storeSample(number_extract(item, 'sample'), value, 1, false);
+                        sourceman.storeSample(number_extract(item, 'sample'), value, 1, false);
                         this.updateSource(item, false, false, true, false);
 
-                    }  else if (item.match(/^sample\d+_load/) && value) {
+                    } else if (item.match(/^sample\d+_load/) && value) {
                         if (display || IS_MONITOR) {
                             //var sample =
-                                sourceman.loadSample(number_extract(item, 'sample'), value);
+                            sourceman.loadSample(number_extract(item, 'sample'), value);
                         }
                         this.updateSource(item, false, false, true, false);
 

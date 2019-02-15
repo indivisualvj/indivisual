@@ -1,4 +1,3 @@
-
 /**
  *
  * @param i
@@ -176,13 +175,13 @@ function getSequenceInUse(i) {
 function getSequenceHasParent(i) {
 
     var material = statics.SourceValues.material_map[statics.SourceSettings.material_map];
-    var key      = getSequenceKey(i);
+    var key = getSequenceKey(i);
     if (material == key && renderer) {
         return true;
     }
 
     for (var dpl = 0; dpl < statics.DisplayValues.display.length; dpl++) {
-        var visible  = getDisplayVisible(dpl);
+        var visible = getDisplayVisible(dpl);
         if (visible) {
             var src = getDisplaySource(dpl);
             if (src == 'sequence') {
@@ -297,7 +296,7 @@ function getDisplayVisible(i) {
 }
 
 /**
- * 
+ *
  * @param i
  * @returns {string}
  */
@@ -306,7 +305,7 @@ function getSequenceStartKey(i) {
 }
 
 /**
- * 
+ *
  * @param i
  * @returns {string}
  */
@@ -315,7 +314,7 @@ function getSequenceEndKey(i) {
 }
 
 /**
- * 
+ *
  * @param i
  * @returns {*}
  */

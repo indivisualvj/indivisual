@@ -15,9 +15,9 @@ HC.plugins.mesh_material.monjori = _class(false, HC.MeshMaterialPlugin, {
 HC.MonjoriShader = {
 
     uniforms: {
-        time: { type: 'f', value: 1.0 }
+        time: {type: 'f', value: 1.0}
     },
-    
+
     fragmentShader: [
 // 'Monjori' by Mic (2009) modified by tesuji
 // Code for the 1k intro Monjori from the demoscene (http://www.pouet.net/prod.php?which=52761)
@@ -50,7 +50,7 @@ HC.MonjoriShader = {
         "f=(sin(a*g)+1.0)/2.0;",
         "gl_FragColor=vec4(vec3(f*i/1.6,i/2.0+d/13.0,i)*d*p.x+vec3(i/1.3+d/8.0,i/2.0+d/18.0,i)*d*(1.0-p.x),1.0);",
         "}"
-        ].join('\n'),
+    ].join('\n'),
 
     vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
 };

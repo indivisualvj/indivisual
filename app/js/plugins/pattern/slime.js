@@ -34,12 +34,12 @@ HC.plugins.pattern.slime = _class(
                 if (this.isFirstShape(shape)) {
                     this.next = layer.random3dPosition(0, 0);
                     this.direction = randomBool() ? -1 : 1;
-                    this.angle += randomFloat(0, Math.PI/2, 2) * this.direction;
+                    this.angle += randomFloat(0, Math.PI / 2, 2) * this.direction;
                 }
                 params.next.x = this.next.x;
                 params.next.y = this.next.y;
                 params.next.z = 0;
-                params.next.angle = this.angle + (Math.PI / layer.shapeCount() * shape.index) * randomFloat(1/Math.PI, 2/Math.PI, 2);
+                params.next.angle = this.angle + (Math.PI / layer.shapeCount() * shape.index) * randomFloat(1 / Math.PI, 2 / Math.PI, 2);
                 params.next.radius = randomInt(layer.shapeSize(1.5), layer.shapeSize(2) * this.settings.pattern_padding);
 
                 var inst = this;

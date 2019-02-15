@@ -1,4 +1,3 @@
-
 /**
  *
  * @returns {{s: number, h: *, l: number, da: *, db: *, dc: *, o: number}}
@@ -112,7 +111,7 @@ HC.Layer.prototype.shaders = function (sh) {
  * @param reduce
  * @returns {Vector3}
  */
-HC.Layer.prototype.random3dPosition = function(depthMultiplier, reduce) {
+HC.Layer.prototype.random3dPosition = function (depthMultiplier, reduce) {
     return new THREE.Vector3(
         randomInt(0, this.resolution('half').x * this.settings.pattern_paddingx - (reduce || 0), true),
         randomInt(0, this.resolution('half').y * this.settings.pattern_paddingy - (reduce || 0), true),
@@ -126,7 +125,7 @@ HC.Layer.prototype.random3dPosition = function(depthMultiplier, reduce) {
  * @param reduce
  * @returns {Vector3}
  */
-HC.Layer.prototype.random2dPosition = function(depthMultiplier, reduce) {
+HC.Layer.prototype.random2dPosition = function (depthMultiplier, reduce) {
     return new THREE.Vector3(
         randomInt(0, this.resolution().x),
         randomInt(0, -this.resolution().y),

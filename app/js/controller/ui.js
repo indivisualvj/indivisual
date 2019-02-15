@@ -1,5 +1,3 @@
-
-
 /**
  *
  * @param controllers
@@ -146,7 +144,7 @@ HC.Controller.prototype._addControl = function (options, settings, values, types
             if (!bnd || bnd.length < 1) {
                 console.log('error in ' + ksub);
             } else {
-                ctl.__li.setAttribute('data-class', bnd[bnd.length-1]);
+                ctl.__li.setAttribute('data-class', bnd[bnd.length - 1]);
             }
         }
 
@@ -573,7 +571,7 @@ HC.Controller.prototype.updateIndicator = function (seq) {
         var beats = 0;
         if (data) {
             var start = getSequenceStart(seq);
-            var end   = getSequenceEnd(seq);
+            var end = getSequenceEnd(seq);
             var frames = data.frames;
             var sequence = {
                 start: 0,
@@ -592,7 +590,7 @@ HC.Controller.prototype.updateIndicator = function (seq) {
 
         indicatorNode.setAttribute('data-label', beats.toFixed(2));
         indicatorNode.style.left = left + '%';
-        indicatorNode.style.width = (width-.5) + '%';
+        indicatorNode.style.width = (width - .5) + '%';
     }
 
 };
@@ -614,7 +612,7 @@ HC.Controller.prototype.updateClip = function (seq) {
     var sequenceQuery = sequenceKey + '_';
     var sequenceNodes = document.querySelectorAll('[data-id^="' + sequenceQuery + '"]');
     var firstNode = sequenceNodes[0];
-    var lastNode = sequenceNodes[sequenceNodes.length-3]; // -3 because _rereset
+    var lastNode = sequenceNodes[sequenceNodes.length - 3]; // -3 because _rereset
 
     var data = false;
     if (sampleKey in statics.DataSettings) {

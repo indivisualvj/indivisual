@@ -59,9 +59,9 @@ HC.plugins.shape_transform.wobble = _class(false, HC.ShapeTransformPlugin, {
                         };
                     }
 
-                    vtcb._rumble.x += animation.diffPrc * randomFloat(0, .25*Math.PI, 2, true);
-                    vtcb._rumble.y += animation.diffPrc * randomFloat(0, .25*Math.PI, 2, true);
-                    vtcb._rumble.z += animation.diffPrc * randomFloat(0, .25*Math.PI, 2, true);
+                    vtcb._rumble.x += animation.diffPrc * randomFloat(0, .25 * Math.PI, 2, true);
+                    vtcb._rumble.y += animation.diffPrc * randomFloat(0, .25 * Math.PI, 2, true);
+                    vtcb._rumble.z += animation.diffPrc * randomFloat(0, .25 * Math.PI, 2, true);
 
                     var w1 = multiplier * HC.Osci.wobble(vtcb._rumble.x, params.osci);
                     var w2 = multiplier * HC.Osci.wobble(vtcb._rumble.y, params.osci);

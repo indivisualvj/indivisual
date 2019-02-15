@@ -107,14 +107,14 @@
             var x2 = 0;
             var y2 = 0;
 
-            for (var i = 0; i < this.points.length; i+=2) {
+            for (var i = 0; i < this.points.length; i += 2) {
                 var x = this.points[i];
-                var y = this.points[i+1];
+                var y = this.points[i + 1];
 
-                x1 = Math.min (x, x1);
-                y1 = Math.min (y, y1);
-                x2 = Math.max (x, x2);
-                y2 = Math.max (y, y2);
+                x1 = Math.min(x, x1);
+                y1 = Math.min(y, y1);
+                x2 = Math.max(x, x2);
+                y2 = Math.max(y, y2);
             }
             x1 -= 1;
             y1 -= 1;
@@ -134,8 +134,8 @@
                 var _paint = function (points, ctx) {
                     ctx.beginPath();
                     ctx.moveTo(points[0], points[1]);
-                    for (var i = 2; i < points.length; i+=2) {
-                        ctx.lineTo(points[i], points[i+1]);
+                    for (var i = 2; i < points.length; i += 2) {
+                        ctx.lineTo(points[i], points[i + 1]);
                     }
                     ctx.closePath();
                 };

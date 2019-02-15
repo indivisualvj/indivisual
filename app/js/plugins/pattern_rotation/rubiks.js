@@ -37,7 +37,7 @@ HC.plugins.pattern_rotation.rubiks = _class(
             shape.position().copy(cp);
         },
 
-        getShapeEuler: function(shape) {
+        getShapeEuler: function (shape) {
             var plugin = this.layer.getPatternPlugin('cube');
             var grid = plugin.cubePosition(shape);
             var eu = new THREE.Euler();

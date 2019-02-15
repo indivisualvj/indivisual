@@ -1,5 +1,3 @@
-
-
 (function () {
     /**
      *
@@ -56,7 +54,7 @@
                 }
             }
 
-            this.canvas.width  = this.width  = this.pixel.length * 4 * this.scale;
+            this.canvas.width = this.width = this.pixel.length * 4 * this.scale;
             this.canvas.height = this.height = 1 * this.scale;
         },
 
@@ -118,7 +116,7 @@
             var m = this.lighting_type;
 
             if (redo && i == 0 && statics.SourceSettings.lighting_type == 'randomall'
-                && statics.shuffle.beats.counter >= statics.ControlSettings.shuffle_switch_every-1) {
+                && statics.shuffle.beats.counter >= statics.ControlSettings.shuffle_switch_every - 1) {
 
                 var k = Object.keys(statics.SourceValues.lighting_type);
                 var c = randomInt(1, k.length - 2);
@@ -130,7 +128,7 @@
                 this.pixel[i].color = color;
 
             } else if (redo && m.match(/^shuffle/)) {
-                var on = randomInt(0, this.pixel.length, false) > this.pixel.length/1.5;
+                var on = randomInt(0, this.pixel.length, false) > this.pixel.length / 1.5;
                 this.pixel[i].brightness = on ? 1.0 : 0.0;
                 this.pixel[i].color = color;
 
@@ -143,7 +141,7 @@
 
             } else if (m.match(/^randomblitz/)) {
                 if (redo && this.pixel[i].brightness == 0.0) {
-                    var on = randomInt(0, this.pixel.length, false) > this.pixel.length/1.5;
+                    var on = randomInt(0, this.pixel.length, false) > this.pixel.length / 1.5;
                     this.pixel[i].brightness = on ? 1.0 : 0.0;
 
                 } else if (this.pixel[i].brightness > 0.0) {
@@ -157,7 +155,7 @@
                     for (var f = 0; f < this.pixel.length; f++) {
                         this.pixel[f].brightness = 0.0;
                     }
-                    var n = randomInt(0, this.pixel.length-1, false);
+                    var n = randomInt(0, this.pixel.length - 1, false);
                     this.pixel[n].brightness = 1.0;
                 }
                 if (this.pixel[i].brightness > 0.0) {
@@ -170,7 +168,7 @@
                     if (i == 0) {
                         this._strobeModuloOdd = !this._strobeModuloOdd;
                     }
-                    if ((this._strobeModuloOdd && i%2==1)|| (!this._strobeModuloOdd && i%2==0)) {
+                    if ((this._strobeModuloOdd && i % 2 == 1) || (!this._strobeModuloOdd && i % 2 == 0)) {
                         this.pixel[i].brightness = 1.0;
                         this.pixel[i].color = color;
                     }

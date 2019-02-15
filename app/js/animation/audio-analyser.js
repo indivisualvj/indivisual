@@ -39,7 +39,7 @@
          *
          * @param v
          */
-        this.smoothingTimeConstant = function(v) {
+        this.smoothingTimeConstant = function (v) {
             if (v !== undefined && this.analyser && v) {
                 this.analyser.smoothingTimeConstant = v;
             }
@@ -50,7 +50,7 @@
         /**
          *
          */
-        this.createAnalyser = function(context) {
+        this.createAnalyser = function (context) {
             this.analyser = context.createAnalyser();
             this.analyser.fftSize = 1024;
             binCount = this.analyser.frequencyBinCount;
@@ -66,7 +66,7 @@
          *
          * @param config
          */
-        this.update = function(config) {
+        this.update = function (config) {
 
             var useWaveform = config.useWaveform;
             if (useWaveform) {
@@ -97,7 +97,7 @@
             this.volume = (this.volume + lastVolume) / 2; // make it softer
 
             volumeSum += this.volume;
-            volumeCount ++;
+            volumeCount++;
 
             if (volumeCount >= 60) {
                 this.avgVolume = volumeSum / volumeCount;
@@ -124,7 +124,7 @@
                 peakThreshold = PEAK_THRESHOLD_END;
             }
 
-            var stepNow  = this.volume / lastVolume;
+            var stepNow = this.volume / lastVolume;
 
             if (stepNow > peakThreshold && this.volume > 0.1 && diff > config.minDiff) {
                 this.peak = true;
@@ -141,14 +141,14 @@
 
                 // calculate BPM
                 if (i > minPeakReliable) {
-                    this.firstPeak    = peakData[i - minPeakReliable].time;
+                    this.firstPeak = peakData[i - minPeakReliable].time;
                     var timespan = lastPeak - this.firstPeak;
-                    this.peakBPM      = round(60000 / (timespan / minPeakReliable), 3);
+                    this.peakBPM = round(60000 / (timespan / minPeakReliable), 3);
                     this.peakReliable = 0;
 
                     var avgDiff = 60000 / this.peakBPM;
 
-                    for(var pi = i - minPeakReliable; pi < i; pi++) {
+                    for (var pi = i - minPeakReliable; pi < i; pi++) {
                         var a = peakData[pi - 1];
                         var b = peakData[pi];
                         var d = b.time - a.time;
@@ -222,7 +222,7 @@
         /**
          *
          */
-        this.reset = function() {
+        this.reset = function () {
             this.volume = 0;
             this.avgVolume = 0;
             this.peak = false;
@@ -236,5 +236,5 @@
             minPeakReliable = 2;
         };
     };
-    
+
 })();

@@ -2,7 +2,7 @@
  *
  */
 HC.Animation.prototype.initEvents = function () {
-    document.onselectstart = function() {
+    document.onselectstart = function () {
         return false;
     };
 
@@ -55,7 +55,7 @@ HC.Animation.prototype.prepareMonitor = function () {
         var w = window.innerWidth;
         var resolution = renderer.getResolution();
 
-        statics.DisplaySettings.resolution = w + 'x' + (w/resolution.aspect);
+        statics.DisplaySettings.resolution = w + 'x' + (w / resolution.aspect);
         renderer.fullReset(true);
         sourceman.resize(renderer.getResolution());
         displayman.resize(renderer.getResolution());

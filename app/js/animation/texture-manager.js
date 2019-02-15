@@ -14,7 +14,8 @@
 
             this.remove(canvas.id);
 
-            if (copy) { /** !!!SLOW!!! **/
+            if (copy) {
+                /** !!!SLOW!!! **/
                 var cpcnvs = document.createElement('canvas');
                 var ctx = cpcnvs.getContext('2d');
                 cpcnvs.width = canvas.width;

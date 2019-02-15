@@ -1,5 +1,3 @@
-
-
 (function () {
     /**
      *
@@ -37,7 +35,7 @@
             var w = Math.min(this.width, this._width);
             var h = Math.min(this.height, this._height);
             this.readArea = new HC.Rectangle(Math.max(0, dx), Math.max(0, dy), w, h);
-            this.writeArea = new HC.Rectangle(Math.max(0, dx*-1), Math.max(0, dy*-1), w, h);
+            this.writeArea = new HC.Rectangle(Math.max(0, dx * -1), Math.max(0, dy * -1), w, h);
         },
 
         /**
@@ -134,7 +132,7 @@
                 if (inst.initializing) {
 
                     if (inst.fps < 45 && i % 2 == 1) {
-                        inst.frames.push(inst.frames[i-1]);
+                        inst.frames.push(inst.frames[i - 1]);
 
                     } else {
                         var cv = document.createElement('canvas');
@@ -220,7 +218,7 @@
                             var target = this.frames[this.pointer];
                             if (target) {
                                 if (this.fps < 45 && this.pointer % 2 == 1) {
-                                    this.frames[this.pointer] = this.frames[this.pointer-1];
+                                    this.frames[this.pointer] = this.frames[this.pointer - 1];
 
                                 } else {
                                     /**

@@ -15,9 +15,9 @@ _CLIENT = 'client';
 _MONITOR = 'monitor';
 
 IS_CONTROLLER = G_INSTANCE == _CONTROLLER;
-IS_SETUP      = G_INSTANCE == _SETUP;
-IS_ANIMATION  = G_INSTANCE == _ANIMATION;
-IS_MONITOR    = G_INSTANCE == _MONITOR;
+IS_SETUP = G_INSTANCE == _SETUP;
+IS_ANIMATION = G_INSTANCE == _ANIMATION;
+IS_MONITOR = G_INSTANCE == _MONITOR;
 
 MIDI_CLOCK_NEXT = [248, 251];
 MIDI_ROW_ONE = {
@@ -72,7 +72,7 @@ LAYER_KEYCODES = {
 OSD_TIMEOUT = 2000;
 RAD = Math.PI / 180;
 DEG = 180 / Math.PI;
-SQUARE_DIAMETER = (Math.sqrt(2*2+2*2)/2);
+SQUARE_DIAMETER = (Math.sqrt(2 * 2 + 2 * 2) / 2);
 ANTIALIAS = true;
 
 var HC = {};
@@ -290,7 +290,7 @@ function loadResources(resources, callback) {
         var file = filePath(rsc.base || APP_DIR, rsc.file);
         messaging._emit({action: action, file: file, name: rsc.name}, function (data) {
             rsc.callback(data, function () {
-                _load(index+1, finished);
+                _load(index + 1, finished);
             });
         });
     };
@@ -383,7 +383,7 @@ function _loadAnimationPlugins(settings) {
  * @param settings
  * @private
  */
-function _loadRhythms (settings) {
+function _loadRhythms(settings) {
     var speeds = HC.Beatkeeper.prototype.speeds;
     for (var key in speeds) {
         if (speeds[key].visible !== false) {
@@ -412,7 +412,7 @@ function _loadShaderSettings(values) {
  *
  * @private
  */
-function _setup (callback) {
+function _setup(callback) {
     if (!(_HASH in statics.ControlValues.session)) {
         statics.ControlValues.session[_HASH] = _HASH;
     }

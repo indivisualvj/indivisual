@@ -1,5 +1,3 @@
-
-
 (function () {
     /**
      *
@@ -214,7 +212,7 @@
 
                     var index = 0;
 
-                    for (var i = 0; i < frameCount; i+=step) {
+                    for (var i = 0; i < frameCount; i += step) {
                         var ri = Math.floor(i);
                         var file = files[ri];
                         file = filePath(SAMPLE_DIR, inst.id, ri + '.png');
@@ -228,7 +226,7 @@
                         image.onload = function () {
 
                             inst._clip.thumbs[this._index] = this;
-                            loaded+=step;
+                            loaded += step;
                             if (loaded >= frameCount) {
                                 inst._clip.ready = true;
                                 callback(inst);

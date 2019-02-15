@@ -1,4 +1,3 @@
-
 HC.plugins.shape_rhythm.doublequad = _class(false, HC.ShapeRhythmPlugin, {
     name: 'double/quad',
     apply: function (shape) {

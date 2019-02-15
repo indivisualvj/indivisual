@@ -2,7 +2,7 @@ HC.plugins.shape_geometry.rect = _class(false, HC.ShapeGeometryPlugin, {
     create: function () {
         var layer = this.layer;
         var geometry = new HC.DirectionalCircle({
-            radius: layer.shapeSize(SQUARE_DIAMETER/2),
+            radius: layer.shapeSize(SQUARE_DIAMETER / 2),
             sides: 4,
             direction: 7
         }).create();

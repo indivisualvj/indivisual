@@ -46,7 +46,8 @@ audio {
     z-index: 9999999999;
     position: absolute;
     bottom: 5px;
-    left: 5px;
+    left: 20%;
+    width: 60%;
 }
 
 video {

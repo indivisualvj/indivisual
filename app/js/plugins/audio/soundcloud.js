@@ -45,17 +45,18 @@ HC.audio.soundcloud = _class(false, HC.AudioPlugin, {
         if (HC.audio.soundcloud.dropEvent) {
             if (!this.audioTag) {
                 var audio = document.createElement('audio');
+                audio.crossOrigin = "anonymous";
                 audio.setAttribute('controls', '');
                 document.body.append(audio);
 
-                // var to;
-                // document.addEventListener('mousemove', function () {
-                //     audio.style.visibility = 'visible';
-                //     clearTimeout(to);
-                //     to = setTimeout(function () {
-                //         audio.style.visibility = 'hidden';
-                //     }, 2000);
-                // });
+                var to;
+                document.addEventListener('mousemove', function () {
+                    audio.style.visibility = 'visible';
+                    clearTimeout(to);
+                    to = setTimeout(function () {
+                        audio.style.visibility = 'hidden';
+                    }, 2000);
+                });
 
                 this.audioTag = audio;
             }
@@ -80,9 +81,9 @@ HC.audio.soundcloud = _class(false, HC.AudioPlugin, {
                 callback(inst.source);
             };
 
-            // inst.audioTag.addEventListener('canplay', onCanPlay);
+            inst.audioTag.addEventListener('canplay', onCanPlay);
             inst.audioTag.setAttribute('src', sound.stream_url + '?client_id=' + SOUNDCLOUD_CLIENT_ID);
-            onCanPlay();
+            // onCanPlay();
 
         });
 

@@ -62,7 +62,7 @@ HC.AnimationPlugin = _class(false, false, {
         var dly = delay.delay;
 
         // tweens may never be longer than their superordinate delay + duration
-        var time = speed.speed.duration-speed.duration-delay.delay-speed.speed.progress;
+        var time = speed.speed.duration - speed.duration - delay.delay - speed.speed.progress;
         if (time < 0) {
             time = Math.abs(time) + 5;
             if (delay.delay > time) {

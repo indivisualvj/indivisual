@@ -1,5 +1,3 @@
-
-
 (function () {
     /**
      *
@@ -71,7 +69,7 @@
             this.height = Math.round(height);
             this._canvas.width = this.width;
             this._canvas.height = this.height;
-            
+
             if (this.sample) {
                 var start = statics.SourceSettings[this.id + '_start'];
                 var end = statics.SourceSettings[this.id + '_end'];
@@ -138,11 +136,11 @@
                 if (this.audio && this.jump) {
                     this._raceonpeak(beat);
 
-                // sample audio
+                    // sample audio
                 } else if (this.audio) {
                     this._audio(beat);
 
-                // sample jump
+                    // sample jump
                 } else if (this.jump) {
                     this._jump(beat);
 
@@ -155,7 +153,7 @@
                     this._pointer = this.start;
 
                 } else if (this._pointer < this.start) {
-                    this._pointer = this.end-1;
+                    this._pointer = this.end - 1;
                 }
 
             }
@@ -262,10 +260,10 @@
                         ctx.scale(1, flipy);
                     }
                     if (image.width != this.width || image.height != this.height) {
-                        ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, this.width*flipx, this.height*flipy);
+                        ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, this.width * flipx, this.height * flipy);
 
                     } else {
-                        ctx.drawImage(image, 0, 0, image.width*flipx, image.height*flipy);
+                        ctx.drawImage(image, 0, 0, image.width * flipx, image.height * flipy);
                     }
                     //statics.tmp._draw++;
 
@@ -328,8 +326,8 @@
             }
 
             var eprc = this.counter + prcb.prc;
-            var prc  = eprc / beats;
-            var p    = this.length * prc;
+            var prc = eprc / beats;
+            var p = this.length * prc;
             this._pointer = this.start + Math.ceil(p);
         },
 
@@ -402,7 +400,7 @@
         _audio: function (beat) {
 
             //var p = audio.volume - 0.25;
-            
+
             var p = (audio.volume - 0.28) * 10;
             p = Math.min(1, Math.max(-1, p)); // kann aktuell stocken. wäre evtl was für jump+audio oder audio_judder
 
@@ -445,7 +443,7 @@
         loadOscillators: function () {
 
             var plugin = 'oscillate';
-            var items  = HC.plugins[plugin];
+            var items = HC.plugins[plugin];
 
             this.oscillators[plugin] = this.oscillators[plugin] || {};
 

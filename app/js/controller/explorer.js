@@ -38,9 +38,9 @@
 
             Vue.config.debug = DEBUG;
             Vue.directive('filter', function () {
-                var data  = this.vm.treeData;
-                var sv    = this.vm.searchValue;
-                var reset = sv?sv.length == 0:true;
+                var data = this.vm.treeData;
+                var sv = this.vm.searchValue;
+                var reset = sv ? sv.length == 0 : true;
 
                 function _search(_data) {
                     if (_data.root) {
@@ -72,6 +72,7 @@
                     }
                     return found;
                 }
+
                 _search(data);
 
             });
@@ -113,13 +114,13 @@
 
                 if (this.model.type == 'preset') { // load default
                     var dflt = statics.AnimationSettings.defaults();
-                    requestAnimationFrame( function () {
+                    requestAnimationFrame(function () {
                         controller.preset(false, dflt);
                     });
 
                 } else { // load preset
                     messaging.load(STORAGE_DIR, this.model.dir, this.model.name, function (data) {
-                        requestAnimationFrame( function () {
+                        requestAnimationFrame(function () {
 
                             if (statics.ctrlKey) { //load shaders into present presets
                                 controller.shaders(data.dir + '/' + data.name, JSON.parse(data.contents));
@@ -135,7 +136,7 @@
 
             loadPresets: function () {
                 var children = this.model.children;
-                var dflt   = [];
+                var dflt = [];
 
                 for (var i = 0; i < children.length; i++) {
                     var child = children[i];
@@ -234,7 +235,7 @@
 
             deletePreset: function () {
                 var current = this;
-                var parent  = current.$parent;
+                var parent = current.$parent;
 
                 messaging.delete(STORAGE_DIR, this.model.dir, this.model.name, function (result) {
                     _log(result);

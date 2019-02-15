@@ -51,7 +51,7 @@ HC.Animation.prototype.shuffleLayer = function (recursions) {
     if (renderer.layers[i].settings
         && !renderer.layers[i].settings.isDefault()
         && i != statics.ControlSettings.layer
-        //&& layerShuffleable(i)
+    //&& layerShuffleable(i)
     ) {
         this.updateControl('layer', i, true, false, false);
         return true;

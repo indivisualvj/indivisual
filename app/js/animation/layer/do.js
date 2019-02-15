@@ -48,7 +48,9 @@ HC.Layer.prototype.doPairing = function (shape) {
  */
 HC.Layer.prototype.doOverlay = function (shape) {
 
-    if (shape.dummy) { return; }
+    if (shape.dummy) {
+        return;
+    }
 
     if (this.settings.pattern_overlay != 'off'
         && this.settings.pattern_overlay_volume != 0

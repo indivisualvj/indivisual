@@ -16,7 +16,7 @@ HC.Layer.prototype.shapeColor = function (random, complementary) {
     } else if (this.shapes.length) {
 
         if (random) {
-            index = randomInt(0, this.shapes.length-1);
+            index = randomInt(0, this.shapes.length - 1);
         }
 
         var shape = this.shapes[index];
@@ -66,5 +66,5 @@ HC.Layer.prototype.addShape = function (child) {
  * @returns {*}
  */
 HC.Layer.prototype.getRandomShape = function () {
-    return this.shapes[randomInt(0, this.shapes.length-1)];
+    return this.shapes[randomInt(0, this.shapes.length - 1)];
 };

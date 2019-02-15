@@ -1,4 +1,4 @@
-(function() {
+(function () {
     /**
      *
      * @param width
@@ -6,11 +6,11 @@
      * @constructor
      */
     HC.RoundedRect = function (width, height) {
-        width*=.95;
-        height*=.95;
-        this.radius = new THREE.Vector2(width, height).length()*0.1;
-        this.hw = width/2;
-        this.hh = height/2;
+        width *= .95;
+        height *= .95;
+        this.radius = new THREE.Vector2(width, height).length() * 0.1;
+        this.hw = width / 2;
+        this.hh = height / 2;
         this.corner = new THREE.Vector2(this.radius, this.radius).length();
     };
 
@@ -22,21 +22,21 @@
         create: function () {
             var shape = new THREE.Shape();
             var radius = this.radius;
-            var ninety = Math.PI/2;
+            var ninety = Math.PI / 2;
             var hw = this.hw;
             var hh = -this.hh;
 
             // lowerleft
-            shape.absarc(-hw+radius, hh+radius, radius, 180*RAD, 270*RAD);
+            shape.absarc(-hw + radius, hh + radius, radius, 180 * RAD, 270 * RAD);
             // shape.lineTo(hw-radius, hh);
             // lowerright
-            shape.absarc(hw-radius, hh+radius, radius, -ninety, 0);
+            shape.absarc(hw - radius, hh + radius, radius, -ninety, 0);
             // shape.lineTo(hw, -hh+radius);
             // upperright
-            shape.absarc(hw-radius, -hh-radius, radius, 0*RAD, 90*RAD);
+            shape.absarc(hw - radius, -hh - radius, radius, 0 * RAD, 90 * RAD);
             // shape.lineTo(-hw+radius, -hh);
             // upperleft
-            shape.absarc(-hw+radius, -hh-radius, radius, 90*RAD, 180*RAD);
+            shape.absarc(-hw + radius, -hh - radius, radius, 90 * RAD, 180 * RAD);
             // shape.lineTo(-hw, hh-radius);
 
             var geo = new THREE.ShapeGeometry(shape);
@@ -45,8 +45,8 @@
     }
 })();
 
-(function() {
-    HC.DirectionalCircle = function(config) {
+(function () {
+    HC.DirectionalCircle = function (config) {
 
         this._sides = config.sides;
         this._radius = config.radius;
@@ -60,7 +60,7 @@
             var radius = this._radius;
             var dir = this._direction;
             var div = Math.PI * 0.5;
-            var hseg = -div + (div/sides) * (dir-1);
+            var hseg = -div + (div / sides) * (dir - 1);
 
             var geo = new THREE.CircleGeometry(radius, sides, hseg);
             return geo;
@@ -82,7 +82,7 @@
             var dir = this._direction;
             var sides = this._sides;
             var div = Math.PI * 0.5;
-            var hseg = (div/sides) * (dir-1);
+            var hseg = (div / sides) * (dir - 1);
             var step = Math.PI * 2 / sides;
 
             var x = Math.sin(hseg) * radius;
@@ -90,8 +90,8 @@
             shape.moveTo(x, -y);
 
             for (var i = 0; i < sides; i++) {
-                x = Math.sin(step*i+hseg) * radius;
-                var y = Math.cos(step*i+hseg) * radius;
+                x = Math.sin(step * i + hseg) * radius;
+                var y = Math.cos(step * i + hseg) * radius;
                 shape.lineTo(x, -y);
             }
             var geometry = new THREE.ShapeGeometry(shape);
@@ -103,48 +103,22 @@
 /**
  *
  */
-(function() {
-    HC.Rect = function(config) {
+(function () {
+    HC.Rect = function (config) {
 
-        this._hw = config.width/2;
-        this._hh = config.height/2;
+        this._hw = config.width / 2;
+        this._hh = config.height / 2;
     };
 
     HC.Rect.prototype = {
         create: function () {
 
             var shape = new THREE.Shape();
-            shape.moveTo( -this._hw ,this._hh );
-            shape.lineTo( this._hw, this._hh);
-            shape.lineTo( this._hw, -this._hh);
-            shape.lineTo( -this._hw, -this._hh );
-            shape.lineTo( -this._hw, this._hh );
-
-            var geometry = new THREE.ShapeGeometry( shape );
-
-            return geometry;
-        }
-    };
-})();
-
-/**
- *
- */
-(function() {
-    HC.RightTriangle = function(config) {
-
-        this._hw = config.width/2;
-        this._hh = config.height/2;
-    };
-
-    HC.RightTriangle.prototype = {
-        create: function () {
-
-            var shape = new THREE.Shape();
-            shape.moveTo( -this._hw ,this._hh );
-            shape.lineTo( this._hw, this._hh);
-            shape.lineTo( this._hw, -this._hh);
-            shape.lineTo( -this._hw, this._hh);
+            shape.moveTo(-this._hw, this._hh);
+            shape.lineTo(this._hw, this._hh);
+            shape.lineTo(this._hw, -this._hh);
+            shape.lineTo(-this._hw, -this._hh);
+            shape.lineTo(-this._hw, this._hh);
 
             var geometry = new THREE.ShapeGeometry(shape);
 
@@ -156,14 +130,41 @@
 /**
  *
  */
-(function() {
-    HC.CustomGeometry = function() {};
+(function () {
+    HC.RightTriangle = function (config) {
+
+        this._hw = config.width / 2;
+        this._hh = config.height / 2;
+    };
+
+    HC.RightTriangle.prototype = {
+        create: function () {
+
+            var shape = new THREE.Shape();
+            shape.moveTo(-this._hw, this._hh);
+            shape.lineTo(this._hw, this._hh);
+            shape.lineTo(this._hw, -this._hh);
+            shape.lineTo(-this._hw, this._hh);
+
+            var geometry = new THREE.ShapeGeometry(shape);
+
+            return geometry;
+        }
+    };
+})();
+
+/**
+ *
+ */
+(function () {
+    HC.CustomGeometry = function () {
+    };
     HC.CustomGeometry.prototype = {
         fromString: function (vtcs, multiplier) {
 
             vtcs = vtcs
                 ? '[' + vtcs + ']'
-                : '[['+(-1)+','+(1)+',0],['+(1)+','+(1)+',0],['+(1)+','+(-1)+',0]]';
+                : '[[' + (-1) + ',' + (1) + ',0],[' + (1) + ',' + (1) + ',0],[' + (1) + ',' + (-1) + ',0]]';
             vtcs = JSON.parse(vtcs);
 
             var geometry = new THREE.Geometry();
@@ -172,14 +173,14 @@
                 var vtc = vtcs[i];
                 var vec = new THREE.Vector3(round(multiplier * vtc[0], 0), round(multiplier * vtc[1], 0), 0);
                 geometry.vertices.push(vec);
-                if (i % 3 == 0)geometry.faces.push(new THREE.Face3(i + 0, i + 1, i + 2));
+                if (i % 3 == 0) geometry.faces.push(new THREE.Face3(i + 0, i + 1, i + 2));
             }
 
             geometry.computeFaceNormals();
             var n = geometry.faces;
             for (var i = 0; i < n.length; i++) {
                 var face = n[i];
-                if(face.normal.z < 0) { // check for twisted faces and twist
+                if (face.normal.z < 0) { // check for twisted faces and twist
                     var tmp = face.a;
                     face.a = face.c;
                     face.c = tmp;
@@ -196,7 +197,7 @@
  *
  * @param geometry
  */
-function assignUVs (geometry) {
+function assignUVs(geometry) {
     var layer = this.layer;
     geometry.computeBoundingBox();
     geometry._uvsAssigned = true;

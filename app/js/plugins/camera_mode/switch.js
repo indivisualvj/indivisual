@@ -33,9 +33,9 @@ HC.plugins.camera_mode.switchpeak = _class(false, HC.CameraModePlugin, {
 
 HC.plugins.camera_mode.switchlookat = _class(
     function () {
-    this.shape = false;
-    this.lookAtVector = false;
-}, HC.CameraModePlugin, {
+        this.shape = false;
+        this.lookAtVector = false;
+    }, HC.CameraModePlugin, {
         name: 'switch position lookat shape (current)',
         before: function () {
             this.layer.getCameraModePlugin('switch').before();

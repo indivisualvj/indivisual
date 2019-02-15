@@ -12,7 +12,7 @@ HC.LightingPatternPlugin = _class(false, HC.AnimationPlugin, {
 
     positionIn2dSpace: function (light, x, y, z) {
         var cp = new THREE.Vector3(x, y, z);
-        cp.applyEuler(new THREE.Euler(0, 0, -this.settings.lighting_pattern_rotation*90*RAD));
+        cp.applyEuler(new THREE.Euler(0, 0, -this.settings.lighting_pattern_rotation * 90 * RAD));
         cp.add(this.centerVector());
         light.position.copy(cp);
     }

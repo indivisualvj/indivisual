@@ -3,42 +3,42 @@ HC.plugins.shape_modifier.coneify = _class(false, HC.ShapeModifierPlugin, {
 
     create: function (geometry, source, axes) {
 
-            source = source || 'y';
-            axes = axes || new THREE.Vector3(1, 1, 1);
+        source = source || 'y';
+        axes = axes || new THREE.Vector3(1, 1, 1);
 
-            var vertices = geometry.vertices;
+        var vertices = geometry.vertices;
 
-            if (vertices) {
+        if (vertices) {
 
-                this.min = this.max = 0;
+            this.min = this.max = 0;
 
-                for (var i = 0; i < vertices.length; i++) {
+            for (var i = 0; i < vertices.length; i++) {
 
-                    var vtc = vertices[i];
-                    var v = vtc[source];
+                var vtc = vertices[i];
+                var v = vtc[source];
 
-                    this.min = Math.min(v, this.min);
-                    this.max = Math.max(v, this.max);
-                }
-
-                for (var i = 0; i < vertices.length; i++) {
-
-                    var vtc = vertices[i];
-                    var v = vtc[source] * this.settings.shape_modifier_volume;
-                    var div = Math.abs(this.min - this.max);
-                    v /= div;
-
-                    vtc.x += vtc.x * v * axes.x;
-                    vtc.y += vtc.y * v * axes.y;
-                    vtc.z += vtc.z * v * axes.z;
-
-                    geometry.verticesNeedUpdate = true;
-
-                }
-
-            } else if (!vertices) {
-                console.warn('No transform for ' + geometry.type);
+                this.min = Math.min(v, this.min);
+                this.max = Math.max(v, this.max);
             }
+
+            for (var i = 0; i < vertices.length; i++) {
+
+                var vtc = vertices[i];
+                var v = vtc[source] * this.settings.shape_modifier_volume;
+                var div = Math.abs(this.min - this.max);
+                v /= div;
+
+                vtc.x += vtc.x * v * axes.x;
+                vtc.y += vtc.y * v * axes.y;
+                vtc.z += vtc.z * v * axes.z;
+
+                geometry.verticesNeedUpdate = true;
+
+            }
+
+        } else if (!vertices) {
+            console.warn('No transform for ' + geometry.type);
+        }
 
         return geometry
     }

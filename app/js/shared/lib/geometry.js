@@ -20,9 +20,9 @@ function sinAlpha(a, b) {
  * @returns {number}
  */
 function heightFromThreeSides(a, b, c) {
-    var upper = (Math.pow(b,2) + Math.pow(c,2) - Math.pow(a,2));
-    var lower = 2*b*c;
-    var alpha = Math.acos( upper / lower );
+    var upper = (Math.pow(b, 2) + Math.pow(c, 2) - Math.pow(a, 2));
+    var lower = 2 * b * c;
+    var alpha = Math.acos(upper / lower);
     var hc = b * Math.sin(alpha);
     return hc;
 }
@@ -36,9 +36,9 @@ function heightFromThreeSides(a, b, c) {
  */
 function gammaFromThreeSides(a, b, c) {
     //
-    var upper = (Math.pow(a,2) + Math.pow(b,2) - Math.pow(c,2));
-    var lower = 2*a*b;
-    var gamma = Math.acos( upper / lower );
+    var upper = (Math.pow(a, 2) + Math.pow(b, 2) - Math.pow(c, 2));
+    var lower = 2 * a * b;
+    var gamma = Math.acos(upper / lower);
     return gamma * 180 / Math.PI;
 }
 

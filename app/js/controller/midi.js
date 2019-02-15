@@ -33,7 +33,7 @@ HC.Controller.prototype.initMidi = function (instance) {
         midi = midiAccess; // this is our raw MIDI data, inputs, outputs, and sysex status
         console.log('MIDI access available');
         var _onStateChange = function () {
-            if (midi.onstatechange == null)return;
+            if (midi.onstatechange == null) return;
             midi.onstatechange = null;
             var inputs = midi.inputs.values();
             var success = false;
@@ -124,7 +124,7 @@ HC.Controller.prototype.initMidi = function (instance) {
             } else {
                 var clocknow = message.timeStamp;
                 var diff = clocknow - clockfirst;
-                clockbpm = round(4*60*1000 / diff, 2);
+                clockbpm = round(4 * 60 * 1000 / diff, 2);
                 _log('clockbpm', clockbpm);
 
                 if (!statics.ControlSettings.peak_bpm_detect) { // tempo by MIDI clock
@@ -138,11 +138,11 @@ HC.Controller.prototype.initMidi = function (instance) {
             }
         }
 
-        if (data.length < 2)return;
+        if (data.length < 2) return;
         // console.log('', data); // MIDI data [144, 63, 73]
 
         var cmd = data[0];
-        var id  = data[1];
+        var id = data[1];
         var vel = (2 in data ? data[2] : 127);
 
         if (vel == 126 || vel == 1) { // glow/off
@@ -313,7 +313,7 @@ HC.Controller.prototype.initMidi = function (instance) {
                         var unit = 1;
                         step = (step) > 0 ? 1 : -1;
                         var cur = settings[name];
-                        cur = keys.indexOf(''+cur);
+                        cur = keys.indexOf('' + cur);
                         //cur = !isNaN(parseInt(cur)) ? parseInt(cur) : keys.indexOf(cur);
                         var next = cur + (step * unit);
 
@@ -390,7 +390,7 @@ HC.Controller.prototype.initMidi = function (instance) {
                 if (vel || vel === undefined) {
 
                     var step = vel - 64;
-                    var value = step>-1?true:false;
+                    var value = step > -1 ? true : false;
                     func.call(instance, name, value, true, true, false);
                     _showOSD(name, value, OSD_TIMEOUT, id);
 
@@ -400,7 +400,7 @@ HC.Controller.prototype.initMidi = function (instance) {
                 break;
 
             case 'push':
-                var value = vel>0;
+                var value = vel > 0;
                 func.call(instance, name, value, true, true, false);
                 if (value) {
                     _showOSD(name, value, false);
@@ -584,7 +584,7 @@ HC.Controller.prototype.initMidi = function (instance) {
      * @private
      */
     function _dmx(channel, fixture, port, color, brightness) {
-        _send([channel, fixture+port, 127]);
+        _send([channel, fixture + port, 127]);
     }
 
     /**

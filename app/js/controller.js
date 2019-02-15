@@ -2,8 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-var messaging  = false;
-var explorer   = false;
+var messaging = false;
+var explorer = false;
 var controller = false;
 var midi = false;
 var beatkeeper = false;
@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         explorer.setChanged(i, true);
                     }
 
-                   messaging.emitSettings(i, settings, false, false, true);
+                    messaging.emitSettings(i, settings, false, false, true);
                 }
             }
         },
@@ -619,7 +619,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 var n = 'display' + i;
-                var nv  = n + '_visible';
+                var nv = n + '_visible';
                 if (statics.DisplaySettings[nv]) {
                     var key = new RegExp('^' + n + '_' + item);
                     var ns = n + '_static';
@@ -711,7 +711,7 @@ document.addEventListener('DOMContentLoaded', function () {
         syncLayers: function () {
             var inst = this;
             for (var layer in layers) {
-                var to = parseInt(layer)*150;
+                var to = parseInt(layer) * 150;
 
                 var st = function (layer, to) {
                     setTimeout(function () {
@@ -827,7 +827,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         var s = l.settings;
 
                         if (!s.isDefault() && layerShuffleable(i)) {
-                            preset.push(i+1);
+                            preset.push(i + 1);
                         }
                     }
                 }

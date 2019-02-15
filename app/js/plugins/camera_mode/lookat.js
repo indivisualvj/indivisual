@@ -52,7 +52,7 @@ HC.plugins.camera_mode.lookatshape = _class(
                 var angle = cam.quaternion.angleTo(this.quatTo);
                 var m = Math.sqrt(angle + step);
 
-                if (angle < 2/distance) {
+                if (angle < 2 / distance) {
                     this._tween = false;
                     cam.lookAt(this.targetLook);
 

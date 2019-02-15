@@ -299,14 +299,14 @@ HC.Layer.prototype.getShapeDirection = function (shape) {
 /**
  *
  */
-HC.Layer.prototype.resetPlugins =  function () {
+HC.Layer.prototype.resetPlugins = function () {
 
     var pluginKeys = Object.keys(HC.plugins);
 
     for (var pi = 0; pi < pluginKeys.length; pi++) {
 
         var plugin = pluginKeys[pi];
-        var items  = HC.plugins[plugin];
+        var items = HC.plugins[plugin];
 
         this.plugins[plugin] = this.plugins[plugin] || {};
 
@@ -338,7 +338,7 @@ HC.Layer.prototype.resetPlugins =  function () {
  * @param plugin
  * @param name
  */
-HC.Layer.prototype.loadPlugin =  function (plugin, name) {
+HC.Layer.prototype.loadPlugin = function (plugin, name) {
     return new HC.plugins[plugin][name](this);
 };
 
@@ -348,6 +348,6 @@ HC.Layer.prototype.loadPlugin =  function (plugin, name) {
  * @param name
  * @param instance
  */
-HC.Layer.prototype.setPlugin =  function (plugin, name, instance) {
+HC.Layer.prototype.setPlugin = function (plugin, name, instance) {
     this.plugins[plugin][name] = instance;
 };

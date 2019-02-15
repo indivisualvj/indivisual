@@ -28,5 +28,5 @@ HC.Layer.prototype.patternCenterZ = function () {
  * @returns {Vector3}
  */
 HC.Layer.prototype.patternCenterVector = function (invertY) {
-    return new THREE.Vector3(this.patternCenterX(), this.patternCenterY()*(invertY?-1:1), this.patternCenterZ());
+    return new THREE.Vector3(this.patternCenterX(), this.patternCenterY() * (invertY ? -1 : 1), this.patternCenterZ());
 };

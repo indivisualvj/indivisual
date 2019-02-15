@@ -42,7 +42,7 @@ HC.plugins.shape_geometry.steprect = _class(false, HC.ShapeGeometryPlugin, {
 
 
         var div = 5;
-        var r = layer.shapeSize(SQUARE_DIAMETER/2);
+        var r = layer.shapeSize(SQUARE_DIAMETER / 2);
         var step = r / div;
         var geometry = new THREE.Geometry();
         for (var i = step; i <= r; i += step) {

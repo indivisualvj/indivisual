@@ -25,11 +25,11 @@ function splitToShuffleable(value) {
     if (value && isString(value)) {
         var arr = value.split(',');
         return arr.map(function (it) {
-            return parseInt(it)-1;
+            return parseInt(it) - 1;
         });
 
     } else if (isInteger(value)) {
-        return [value-1];
+        return [value - 1];
 
     } else {
         return [];
@@ -40,7 +40,7 @@ function splitToShuffleable(value) {
  *
  * @param obj
  */
-function threeDispose (obj) {
+function threeDispose(obj) {
     if (obj.dispose) {
         obj.dispose();
     }

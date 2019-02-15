@@ -51,7 +51,7 @@ function randomFloat(min, max, digits, negative) {
  * @returns {number}
  */
 function round(v, digits) {
-    var p = Math.pow(10, digits||0);
+    var p = Math.pow(10, digits || 0);
     v = Math.round(p * v);
     v = v / p;
 

@@ -6,7 +6,7 @@ if (IS_ANIMATION) {
         console.log('HC.audio.soundcloud: adding events for playback on soundcloud url drop');
 
         var script = document.createElement('script');
-        script.setAttribute('src','https://connect.soundcloud.com/sdk/sdk-3.3.1.js');
+        script.setAttribute('src', 'https://connect.soundcloud.com/sdk/sdk-3.3.1.js');
 
         script.onload = function () {
 

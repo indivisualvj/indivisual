@@ -64,7 +64,7 @@ HC.Display.borderModes = {
 
     'lineacw': function (ctx, points, pc, speed, prc) {
         points = points_reverse(points);
-        HC.Display.borderModes.linecw(ctx,points,pc,speed,prc);
+        HC.Display.borderModes.linecw(ctx, points, pc, speed, prc);
     },
 
     'jumpcw': function (ctx, points, pc, speed, prc) {
@@ -104,7 +104,7 @@ HC.Display.borderModes = {
 
     'jumpacw': function (ctx, points, pc, speed, prc) {
         points = points_reverse(points);
-        HC.Display.borderModes.jumpcw(ctx,points,pc,speed,prc);
+        HC.Display.borderModes.jumpcw(ctx, points, pc, speed, prc);
     },
 
     'growcw': function (ctx, points, pc, speed, prc) {
@@ -142,6 +142,6 @@ HC.Display.borderModes = {
 
     'growacw': function (ctx, points, pc, speed, prc) {
         points = points_reverse(points);
-        HC.Display.borderModes.growcw(ctx,points,pc,speed,prc);
+        HC.Display.borderModes.growcw(ctx, points, pc, speed, prc);
     }
 };

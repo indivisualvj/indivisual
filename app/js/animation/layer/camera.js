@@ -39,13 +39,13 @@ HC.Layer.prototype.cameraIntersectsObject = function (object) {
 // every time the camera or objects change position (or every frame)
 
     camera.updateMatrixWorld(); // make sure the camera matrix is updated
-    camera.matrixWorldInverse.getInverse( camera.matrixWorld );
-    cameraViewProjectionMatrix.multiplyMatrices( camera.projectionMatrix, camera.matrixWorldInverse );
-    frustum.setFromMatrix( cameraViewProjectionMatrix );
+    camera.matrixWorldInverse.getInverse(camera.matrixWorld);
+    cameraViewProjectionMatrix.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse);
+    frustum.setFromMatrix(cameraViewProjectionMatrix);
 
 // frustum is now ready to check all the objects you need
 
-    return ( frustum.intersectsObject( object ) );
+    return (frustum.intersectsObject(object));
 };
 
 /**

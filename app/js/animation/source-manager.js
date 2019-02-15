@@ -120,7 +120,7 @@
                         var type = [0, 0, 1];
                         if (sequence.sample) {
                             type[1] = sequence.sample.last();
-                            type[2] = round(sequence.sample.last()/50, 0);
+                            type[2] = round(sequence.sample.last() / 50, 0);
                         }
                         var conf = {SourceTypes: {}};
                         conf.SourceTypes[getSequenceStartKey(sequence.index)] = type;
@@ -162,7 +162,7 @@
                 if (i < statics.SourceValues.sample.length) {
                     sample = new HC.Sample(i);
 
-                } else if (i < iKeys.length-1 && i in statics.SourceValues.input) {
+                } else if (i < iKeys.length - 1 && i in statics.SourceValues.input) {
                     var file = statics.SourceValues.input[i];
                     var path = filePath(ASSET_DIR, file);
                     if (file.match(/.+\.(png|jpeg|jpg|tif|tiff|bmp)/)) {
@@ -181,7 +181,7 @@
                 this.samples[i] = sample;
 
                 var enabledKey = getSampleEnabledKey(sample.index);
-                var recordKey  = getSampleRecordKey(sample.index);
+                var recordKey = getSampleRecordKey(sample.index);
 
                 listener.register('sample.init.start', sample.id, function (target) {
                     messaging.emitAttr('[data-id="' + enabledKey + '"]', 'data-color', 'red');
@@ -253,7 +253,7 @@
                 listener.register('sample.render.end', sample.id, function (target) {
                     animation.powersave = false;
 
-                    var recordKey  = getSampleRecordKey(target.index);
+                    var recordKey = getSampleRecordKey(target.index);
 
                     if (statics.SourceSettings.contains(recordKey)) { // sample
                         animation.updateSource(recordKey, false, true, true, false);

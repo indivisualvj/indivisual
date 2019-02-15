@@ -25,7 +25,7 @@
                 progress: 0,
                 prc: 1,
                 beats: 0,
-                divider: 1/64,
+                divider: 1 / 64,
                 visible: false
             },
             "32": {
@@ -33,7 +33,7 @@
                 progress: 0,
                 prc: 1,
                 beats: 0,
-                divider: 1/32,
+                divider: 1 / 32,
                 visible: false
             },
             hexa: {
@@ -41,28 +41,28 @@
                 progress: 0,
                 prc: 1,
                 beats: 0,
-                divider: 1/16
+                divider: 1 / 16
             },
             octa: {
                 duration: 0,
                 progress: 0,
                 prc: 1,
                 beats: 0,
-                divider: 1/8
+                divider: 1 / 8
             },
             quad: {
                 duration: 0,
                 progress: 0,
                 prc: 1,
                 beats: 0,
-                divider: 1/4
+                divider: 1 / 4
             },
             double: {
                 duration: 0,
                 progress: 0,
                 prc: 1,
                 beats: 0,
-                divider: 1/2
+                divider: 1 / 2
             },
             full: {
                 duration: 0,
@@ -242,7 +242,7 @@
          * @returns {boolean}
          */
         getSpeed: function (rhythm) {
-            
+
             var speed = false;
 
             if (rhythm in this.speeds) {
@@ -303,7 +303,7 @@
             }
 
             var bpm = beats / (elapsed / 60000);
-            this.bpm  = round(bpm, 2);
+            this.bpm = round(bpm, 2);
         },
 
         /**
@@ -314,7 +314,7 @@
             this.beatStartTime = beatStartTime;
             var duration = 60000 / statics.ControlSettings.tempo;
             var elapsed = HC.now() - this.beatStartTime;
-            var ebeats  = Math.floor((elapsed / duration) / 4);
+            var ebeats = Math.floor((elapsed / duration) / 4);
 
             // _log('resetCounters', {ebeats:ebeats}, false, DEBUG);
 

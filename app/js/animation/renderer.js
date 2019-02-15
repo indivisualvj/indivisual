@@ -2,7 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-(function() {
+(function () {
 
     /**
      *
@@ -14,7 +14,7 @@
         this.layers = config.layers;
         this.flipx = 1;
         this.flipy = 1;
-        this.resolution = {x: 1280, y: 720, aspect: 1280/720};
+        this.resolution = {x: 1280, y: 720, aspect: 1280 / 720};
         this._renderer = false;
         this.three = {
             renderer: false,
@@ -53,7 +53,7 @@
                 this.three.renderer.view = this.three.renderer.domElement;
                 this.three.renderer.view.id = 'threeWebGL';
 
-                this.three.renderer.view.addEventListener( 'webglcontextlost', function () {
+                this.three.renderer.view.addEventListener('webglcontextlost', function () {
                     listener.fireAll('webglcontextlost');
                 });
 

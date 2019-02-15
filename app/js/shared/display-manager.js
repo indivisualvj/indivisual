@@ -447,7 +447,7 @@
 
                 case -5:
                     display.blitz = (randomBool()
-                    || statics.DisplaySettings.force_display_visibility) ? 4 : 0;
+                        || statics.DisplaySettings.force_display_visibility) ? 4 : 0;
                     display.visible = true;
                     break;
             }
@@ -502,7 +502,7 @@
                 case 'randomoneon':
                     if ((speed === false && audio.peak) || speed === 0) {
                         if (index == 0) {
-                            statics.display.visibility.index = randomInt(0, this.displayMap.length-1);
+                            statics.display.visibility.index = randomInt(0, this.displayMap.length - 1);
                         }
                     }
                     redo = statics.display.visibility.index == index ? 1 : 0;
@@ -511,7 +511,7 @@
                 case 'randomoneoff':
                     if ((speed === false && audio.peak) || speed === 0) {
                         if (index == 0) {
-                            statics.display.visibility.index = randomInt(0, this.displayMap.length-1);
+                            statics.display.visibility.index = randomInt(0, this.displayMap.length - 1);
                         }
                     }
                     redo = statics.display.visibility.index == index ? 0 : 1;
@@ -548,10 +548,10 @@
 
                 case 'stackf': //stack forward
                     var percentile = 1 / (this.displayMap.length + 1);
-                    var prc = percentile * (index+1);
+                    var prc = percentile * (index + 1);
                     //if (speed === false) {
                     this.visibilityStack(index, 1, speed);
-                    var i = statics.display.visibility.index+2;
+                    var i = statics.display.visibility.index + 2;
                     speed = i * percentile;
                     //}
                     if (speed > prc) {
@@ -569,7 +569,7 @@
                     var i = statics.display.visibility.index;
                     speed = i * percentile;
                     //}
-                    if (1-speed > prc) {
+                    if (1 - speed > prc) {
                         redo = 1;
                     } else {
                         redo = 0;
@@ -690,7 +690,7 @@
          * @returns {number}
          */
         flashTimeoutInFrames: function (speed) {
-            var timeout = this.getSpeed(speed).duration/2;
+            var timeout = this.getSpeed(speed).duration / 2;
             var count = Math.round((timeout / animation.duration) / 2);
             return count;
         },

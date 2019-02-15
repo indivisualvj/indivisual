@@ -18,7 +18,7 @@
          * @param name
          * @param callback
          */
-        this.initPlugin = function(name, callback) {
+        this.initPlugin = function (name, callback) {
             this.plugin = new HC.audio[name]().construct(this.context);
             this.plugin.init(callback);
         };

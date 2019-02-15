@@ -17,11 +17,11 @@ HC.Layer.prototype.animateShape = function (shape) {
     if (!delay.finished(shape)) {
         delay.update(shape, animation.diff);
 
-    // wait until duration is over
+        // wait until duration is over
     } else if (!duration.finished(shape)) {
         duration.update(shape, animation.diff);
 
-    // reconfigure when finished
+        // reconfigure when finished
     } else {
         this.nextShapeRhythm(shape);
         this.nextShapeDelay(shape);

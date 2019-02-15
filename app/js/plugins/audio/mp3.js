@@ -1,9 +1,8 @@
-// handling mp3 files inspired by https://uberviz.io/viz/word-problems/
+// handling media files inspired by https://uberviz.io/viz/word-problems/
 
-// todo update to work like soundcloud with audio tag
 if (IS_ANIMATION) {
     document.addEventListener('DOMContentLoaded', function () {
-        console.log('HC.audio.mp3: adding events for playback on mp3 drop');
+        console.log('HC.audio.mp3: adding events for playback on media file drop');
         document.addEventListener('dragover', function (e) {
             e.preventDefault();
         }, false);
@@ -12,8 +11,8 @@ if (IS_ANIMATION) {
             e.preventDefault();
 
             if (e.dataTransfer.files.length) {
-                HC.audio.mp3.dropEvent = e;
-                animation.updateControl('audio', 'mp3', true, true, false);
+                HC.audio.mediafile.dropEvent = e;
+                animation.updateControl('audio', 'mediafile', true, true, false);
             }
         };
 
@@ -21,17 +20,17 @@ if (IS_ANIMATION) {
     });
 }
 
-HC.audio.mp3 = _class(false, HC.AudioPlugin, {
+HC.audio.mediafile = _class(false, HC.AudioPlugin, {
 
     dropEvent: false,
 
     init: function (callback) {
-        if (!HC.audio.mp3.dropEvent) {
-            alert('You can now drag/drop a mp3 file into the animation window');
+        if (!HC.audio.mediafile.dropEvent) {
+            alert('You can now drag/drop a media file into the animation window');
 
         } else {
-            this.onDrop(HC.audio.mp3.dropEvent, callback);
-            HC.audio.mp3.dropEvent = false;
+            this.onDrop(HC.audio.mediafile.dropEvent, callback);
+            HC.audio.mediafile.dropEvent = false;
         }
     },
 

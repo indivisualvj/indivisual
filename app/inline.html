@@ -14,16 +14,17 @@
         html {
             height: 100%;
         }
+
         body {
             margin: 0;
             padding: 0;
             border: none;
-            /*background: #000000;*/
             min-height: 100%;
             height: 100%;
             display: block;
             overflow: hidden;
         }
+
         iframe {
             margin: 0;
             padding: 0;
@@ -31,17 +32,66 @@
             height: 100%;
             overflow: hidden;
         }
-        iframe.left {
+
+        iframe#animation {
             width: 65%;
         }
 
-        iframe.right {
-            width: 34.5%;
-            display: inline-block;
+        iframe#controller {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 35%;
+            display: block;
+        }
+
+        div#splitter {
+            cursor: e-resize;
+            position: absolute;
+            right: 35%;
+            top: 0;
+            width: 15px;
+            height: 99.8%;
+            background: dimgray;
+            border: 1px groove;
+
         }
     </style>
+    <script type="application/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            var controller = document.getElementById('controller');
+            var animation = document.getElementById('animation');
+            var splitter = document.getElementById('splitter');
+            var drag = false;
+            var visible = true;
+
+            var restore = function () {
+                splitter.removeEventListener('mouseover', restore);
+                visible = true;
+
+                controller.style.right = null;
+                splitter.style.right = null;
+                splitter.style.opacity = null;
+                animation.style.width = null;
+            };
+
+            splitter.addEventListener('mouseup', function (e) {
+                if (visible) {
+                    visible = false;
+                    controller.style.right = '-100%';
+                    splitter.style.opacity = '0';
+                    splitter.style.right = '0';
+                    animation.style.width = '100%';
+
+                    splitter.addEventListener('mouseover', restore);
+                }
+            });
+
+        });
+    </script>
     <body>
-    <iframe class="left" src="animation.html#inline"></iframe>
-    <iframe class="right" src="controller.html#inline"></iframe>
+    <iframe id="animation" src="animation.html#inline"></iframe>
+    <div id="splitter"></div>
+    <iframe id="controller" src="controller.html#inline"></iframe>
     </body>
 </html>

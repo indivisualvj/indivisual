@@ -15,21 +15,19 @@ To get an idea of what can be done with it, visit my [YouTube channel](https://w
 - To get the best performance you should install [Google Chrome](https://www.google.com/chrome/) 
 - Install [Node.js](https://nodejs.org/en/download/)
 - Install [yarn](https://yarnpkg.com/lang/en/docs/install) 
-- On debian you can install both by executing
+- On debian (ubuntu/mint/...) you can install Node.js and yarn by executing:
   ```
   sh ./debian-installer.sh
   ```
-  to install Node.js and yarn.
+
 - After installing yarn you might have to restart the command line/terminal window. 
 - Execute the following lines in your command line within the installation directory:
     ```
     $ yarn install
-    $ yarn start --port 8081
+    $ yarn start
     ```
-- Open http://localhost:8081/controller.html 
-- Open http://localhost:8081 in a second window
-- Split the two windows left and right
-- Or open it as single page application http://localhost:8081/inline.html
+- To use as single page application open http://localhost:8081/inline.html
+    - Learn how to use in seperated windows or even multiple machines [here](docs/setup-options.md)
 - Try some of the setups from presets (controller->lowerleft)
 - Play around
 - Try to learn something in this Quick and Dirty Video Tutorial
@@ -56,26 +54,6 @@ When not running on localhost, it is not possible to use microphone or audio inp
 
 Server options can be found [here](docs/server-options.md)
 
-## Questions & Answers
-- Create an issue for your question
-
-## Used Libraries and Credits
-Many thanks to:
-
-- Google for their lightning fast browser/engine
-- All the people contributing to web browser technology
-- https://github.com/mrdoob/three.js
-- https://github.com/tweenjs/tween.js
-- https://github.com/glowbox/maptasticjs
-- https://github.com/vuejs/vue
-- https://github.com/dataarts/dat.gui
-- https://github.com/mrdoob/stats.js
-- https://github.com/chandlerprall/ThreeCSG
-- https://github.com/nodejs/node
-- https://github.com/yarnpkg/yarn
-- https://www.shadertoy.com/
-- connect audiobuffer to https://uberviz.io/viz/word-problems/
-
 ## How To
 
 ### Tutorials
@@ -98,31 +76,14 @@ Many thanks to:
 - A lot of settings are based on three.js settings. To understand these, you have to dig into three.js [docs](https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene)  
 
 ### Mapping
-- Focus the animation or setup window 
-- Enable mapping controls: M
-- Show grid: B
-- Focus next/another display: TAB/MOUSE1 
-    - After a window resize event the mapping will not be updated until you open the mapping controls
-    - You can recenter your mapping by enabling it by M and press TAB
-- Move around: MOUSE1_DRAG or LEFT/RIGHT/UP/DOWN 
-- Press SHIFT + MOUSE1 any point to center the current display there
-- Press 1-9 to center and resize 1st to 9th division of the preset resolution
-    - SHIFT + 1-9 to does the same based on screen size
-- Flip display: V/H
-- Rotate 45°: R
-- Rotate stepwise: ALT + LEFT/RIGHT
-- Scale: ALT + UP/DOWN
-
-- ... more explanation here
+Click [here](docs/mapping.md)
 
 ### Samples & Sequences
 - ... awesome ...
 - Slow on GPUs but fast on INTEL's internal graphics cards
 
 ### Shape-Editor
-This feature is tricky to use. 
-But for some cases it does its job pretty well. 
-Have a look at presets/_demos.
+- ... more explanation here ...
 
 - In the controller, set shape_geometry to custom
 - Open http://localhost:8081/setup.html
@@ -140,6 +101,9 @@ In this case you can add your own plugins for the most settings available.
 
 - ... more explanation here ...
 
+## Questions & Answers
+- Create an issue for your question
+
 ## Contributing
 If you have any suggestion or features or you found some bugs,
 feel free to contribute to this project.
@@ -147,3 +111,20 @@ Just open a pull request or an issue.
 
 ## Pending
 - Some serious glContext lost issues
+
+## Used Libraries and Credits
+Many thanks to:
+
+- Google for their lightning fast browser/engine
+- All the people contributing to web browser technology
+- https://github.com/mrdoob/three.js
+- https://github.com/tweenjs/tween.js
+- https://github.com/glowbox/maptasticjs
+- https://github.com/vuejs/vue
+- https://github.com/dataarts/dat.gui
+- https://github.com/mrdoob/stats.js
+- https://github.com/chandlerprall/ThreeCSG
+- https://github.com/nodejs/node
+- https://github.com/yarnpkg/yarn
+- https://www.shadertoy.com/
+- https://uberviz.io/viz/word-problems/

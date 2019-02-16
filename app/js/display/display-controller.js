@@ -51,6 +51,15 @@
                     controller.updateDisplays(updates, true, true, true);
                     messaging.emitDisplays(updates, true, false, true);
                 },
+                auto: function () {
+                    for (var i = 0; i < statics.DisplayValues.display.length; i++) {
+                        var key = 'display' + i;
+                        var _key = key + '_mapping';
+                        var data = {};
+                        data[_key] = '';
+                        messaging.emitDisplays(data, true, true, false);
+                    }
+                },
                 full: function () {
                     for (var i = 0; i < statics.DisplayValues.display.length; i++) {
                         var key = 'display' + i;

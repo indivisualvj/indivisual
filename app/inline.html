@@ -34,23 +34,23 @@
         }
 
         iframe#animation {
-            width: 65.5%;
+            width: 65%;
         }
 
         iframe#controller {
             position: absolute;
             right: 0;
             top: 0;
-            width: 34.5%;
+            width: 35%;
             display: block;
         }
 
         div#splitter {
-            cursor: col-resize;
+            cursor: e-resize;
             position: absolute;
-            right: 34.5%;
+            right: 35%;
             top: 0;
-            width: 5px;
+            width: 15px;
             height: 99.8%;
             background: dimgray;
             border: 1px groove;
@@ -60,27 +60,31 @@
     <script type="application/javascript">
         document.addEventListener('DOMContentLoaded', function () {
             var controller = document.getElementById('controller');
+            var animation = document.getElementById('animation');
             var splitter = document.getElementById('splitter');
             var drag = false;
-            document.addEventListener('mousedown', function (e) {
-                if (e.currentTarget == splitter) {
-                    drag = e.pageX;
-                }
-            });
-            document.addEventListener('mouseup', function (e) {
-                drag = false;
-            });
-            document.addEventListener('mousemove', function (e) {
-                if (drag !== false) {
-                    var ww = window.innerWidth;
-                    var wwp = ww / 100;
-                    var ppp = 1 / wwp;
+            var visible = true;
 
-                    var r = splitter.getBoundingClientRect();
-                    var p = r.right + (e.pageX - drag);
-                    p *= ppp;
-                    console.log(p);
-                    // splitter.style.right = p + '%';                }
+            var restore = function () {
+                splitter.removeEventListener('mouseover', restore);
+                visible = true;
+
+                controller.style.right = null;
+                splitter.style.right = null;
+                splitter.style.opacity = null;
+                animation.style.width = null;
+            };
+
+            splitter.addEventListener('mouseup', function (e) {
+                if (visible) {
+                    visible = false;
+                    controller.style.right = '-100%';
+                    splitter.style.opacity = '0';
+                    splitter.style.right = '0';
+                    animation.style.width = '100%';
+
+                    splitter.addEventListener('mouseover', restore);
+                }
             });
 
         });

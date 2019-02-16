@@ -14,16 +14,17 @@
         html {
             height: 100%;
         }
+
         body {
             margin: 0;
             padding: 0;
             border: none;
-            /*background: #000000;*/
             min-height: 100%;
             height: 100%;
             display: block;
             overflow: hidden;
         }
+
         iframe {
             margin: 0;
             padding: 0;
@@ -31,17 +32,62 @@
             height: 100%;
             overflow: hidden;
         }
-        iframe.left {
-            width: 65%;
+
+        iframe#animation {
+            width: 65.5%;
         }
 
-        iframe.right {
+        iframe#controller {
+            position: absolute;
+            right: 0;
+            top: 0;
             width: 34.5%;
-            display: inline-block;
+            display: block;
+        }
+
+        div#splitter {
+            cursor: col-resize;
+            position: absolute;
+            right: 34.5%;
+            top: 0;
+            width: 5px;
+            height: 99.8%;
+            background: dimgray;
+            border: 1px groove;
+
         }
     </style>
+    <script type="application/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            var controller = document.getElementById('controller');
+            var splitter = document.getElementById('splitter');
+            var drag = false;
+            document.addEventListener('mousedown', function (e) {
+                if (e.currentTarget == splitter) {
+                    drag = e.pageX;
+                }
+            });
+            document.addEventListener('mouseup', function (e) {
+                drag = false;
+            });
+            document.addEventListener('mousemove', function (e) {
+                if (drag !== false) {
+                    var ww = window.innerWidth;
+                    var wwp = ww / 100;
+                    var ppp = 1 / wwp;
+
+                    var r = splitter.getBoundingClientRect();
+                    var p = r.right + (e.pageX - drag);
+                    p *= ppp;
+                    console.log(p);
+                    // splitter.style.right = p + '%';                }
+            });
+
+        });
+    </script>
     <body>
-    <iframe class="left" src="animation.html#inline"></iframe>
-    <iframe class="right" src="controller.html#inline"></iframe>
+    <iframe id="animation" src="animation.html#inline"></iframe>
+    <div id="splitter"></div>
+    <iframe id="controller" src="controller.html#inline"></iframe>
     </body>
 </html>

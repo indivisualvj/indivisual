@@ -98,8 +98,7 @@ if (process.argv.length > 2) {
 server.listen(_PORT);
 console.log('server running on port: ' + _PORT);
 let proto = _HTTPS ? 'https' : 'http';
-console.log('open ' + proto + '://localhost:' + _PORT + '/controller.html in your browser');
-console.log('open ' + proto + '://localhost:' + _PORT + ' in another tab in your browser');
+console.log('open ' + proto + '://localhost:' + _PORT + '/inline.html in your browser');
 
 app.use(express.static('..'));
 

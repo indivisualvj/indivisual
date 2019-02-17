@@ -98,7 +98,7 @@ if (process.argv.length > 2) {
 server.listen(_PORT);
 console.log('server running on port: ' + _PORT);
 let proto = _HTTPS ? 'https' : 'http';
-console.log('open ' + proto + '://localhost:' + _PORT + '/inline.html in your browser');
+console.log('open ' + proto + '://localhost:' + _PORT + ' in your browser');
 
 app.use(express.static('..'));
 
@@ -787,7 +787,7 @@ function initGet() {
      *
      */
     app.get('/', function (req, res) {
-        res.sendFile(path.resolve('app/animation.html'));
+        res.sendFile(path.resolve('app/inline.html'));
     });
 
     /**

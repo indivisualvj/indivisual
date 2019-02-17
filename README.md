@@ -26,7 +26,7 @@ To get an idea of what can be done with it, visit my [YouTube channel](https://w
     $ yarn install
     $ yarn start
     ```
-- To use as single page application open http://localhost:8081/inline.html
+- To use as single page application open http://localhost:8081
     - Learn how to use in seperated windows or even multiple machines [here](docs/setup-options.md)
 - Try some of the setups from presets (controller->lowerleft)
 - Play around

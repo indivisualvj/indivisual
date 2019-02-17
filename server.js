@@ -98,7 +98,7 @@ if (process.argv.length > 2) {
 server.listen(_PORT);
 console.log('server running on port: ' + _PORT);
 let proto = _HTTPS ? 'https' : 'http';
-console.log('open ' + proto + '://localhost:' + _PORT + '/inline.html in your browser');
+console.log('open ' + proto + '://localhost:' + _PORT + ' in your browser');
 
 app.use(express.static('..'));
 
@@ -620,12 +620,12 @@ function _load(data, callback, forceCallback) {
  * @returns {string}
  * @private
  */
-function _handle(req, sources) {
+function _sources(req, sources) {
 
     let compress = false;
     let name = req.originalUrl;
 
-    let file = _BIN + name; // no file_path! req originalUrl already contains leading slash ...
+    let file = _BIN + name; // do not use file_path! req originalUrl already contains leading slash ...
 
     let files = [];
     let __find = function (list, base) {
@@ -667,19 +667,18 @@ function _handle(req, sources) {
     };
 
     __find(sources, _APP);
-    _minify(files, file, compress);
+    _concat(files, file, compress);
 
     return file;
 }
 
 /**
  *
- * @param sources
+ * @param files
  * @param file
- * @param compress
  * @private
  */
-function _minify(files, file, compress) {
+function _concat(files, file) {
 
     try {
         let result = {code: ''};
@@ -788,7 +787,7 @@ function initGet() {
      *
      */
     app.get('/', function (req, res) {
-        res.sendFile(path.resolve('app/animation.html'));
+        res.sendFile(path.resolve('app/inline.html'));
     });
 
     /**
@@ -804,7 +803,7 @@ function initGet() {
     app.get('/animation.js', function (req, res) {
 
         let sources = [].concat(conf.shared).concat(conf.animation);
-        let file = _handle(req, sources);
+        let file = _sources(req, sources);
 
         res.sendFile(file);
 
@@ -816,7 +815,7 @@ function initGet() {
     app.get('/controller.js', function (req, res) {
 
         let sources = [].concat(conf.shared).concat(conf.controller);
-        let file = _handle(req, sources);
+        let file = _sources(req, sources);
 
         res.sendFile(file);
     });
@@ -827,7 +826,7 @@ function initGet() {
     app.get('/postprocessing.js', function (req, res) {
 
         let sources = [].concat(conf.postprocessing);
-        let file = _handle(req, sources);
+        let file = _sources(req, sources);
 
         res.sendFile(file);
 

@@ -93,10 +93,6 @@
                         this.counter = 0;
                     }
 
-                    //this.width = this.sample.width;
-                    //this.height = this.sample.height;
-                    //this._canvas.width = this.width;
-                    //this._canvas.height = this.height;
                     this._dirty = true;
                 }
             }
@@ -107,7 +103,7 @@
          * @returns {number}
          */
         brightness: function () {
-            var v = this._brightness;// * displayman.brightness();
+            var v = this._brightness;
             if (this._dirty) {
 
                 var plugin = this.oscillators[this.osci];

@@ -40,7 +40,7 @@ HC.Controller.prototype.initMidi = function (instance) {
             //loop over all available inputs and listen for any MIDI input
             for (var input = inputs.next(); input && !input.done; input = inputs.next()) {
                 // each time there is a midi message call the onMIDIMessage function
-                if (input.value.manufacturer != '') {
+                // if (input.value.manufacturer != '') {
                     if (!success) {
                         console.log('MIDI devices available:');
                         success = true;
@@ -48,7 +48,7 @@ HC.Controller.prototype.initMidi = function (instance) {
 
                     console.log(input.value.name, input.value);
                     input.value.onmidimessage = _onMessage;
-                }
+                // }
             }
             if (!success) {
                 console.log('no MIDI devices connected');

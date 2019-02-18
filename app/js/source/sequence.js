@@ -111,7 +111,7 @@
             if (this._dirty) {
 
                 var plugin = this.oscillators[this.osci];
-                if (plugin) {
+                if (plugin && plugin.apply) {
                     var shs = {value: v};
                     plugin.store(shs);
                     plugin.apply(shs);

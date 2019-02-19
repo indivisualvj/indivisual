@@ -7,7 +7,7 @@ console: true
 push_layers: false
 push_sources: false
 shuffle: false
-shuffle_usepeak: true
+shuffle_usepeak: false
 shuffle_mode: 0
 shuffle_switch_every: 16
 shuffleable: ''

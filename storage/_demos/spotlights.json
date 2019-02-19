@@ -2,7 +2,7 @@
 "oscillate":"off",
 "audio_smoothing":0.6,
 "audio_frequency":0,
-"audio_use_waveform":false,
+"audio_usewaveform":false,
 "camera_mode":"manual",
 "camera_mode_volume":1.25,
 "camera_mode_volume_oscillate":"off",

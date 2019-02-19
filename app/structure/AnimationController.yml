@@ -1,7 +1,7 @@
 audio & timing:
   audio_smoothing:
-    audio_frequency:
-  audio_use_waveform:
+  audio_thickness:
+  audio_usewaveform:
   rhythm:
 
 osci:

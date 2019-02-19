@@ -169,12 +169,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (audioman.isActive()) {
                 var config = {
-                    useWaveform: renderer.currentLayer.settings.audio_use_waveform,
+                    useWaveform: renderer.currentLayer.settings.audio_usewaveform,
                     volume: statics.ControlSettings.volume,
                     resetPeakCountAfter: statics.ControlSettings.shuffle_switch_every,
                     tempo: statics.ControlSettings.tempo,
                     minDiff: beatkeeper.getSpeed('sixteen').duration,
-                    now: this.now
+                    now: this.now,
+                    thickness: renderer.currentLayer.settings.audio_thickness
                 };
                 audio.update(config);
 

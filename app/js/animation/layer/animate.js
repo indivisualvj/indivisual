@@ -53,16 +53,13 @@ HC.Layer.prototype.animate = function (hook) {
         this.resetShapes();
     }
 
-    // if(this.tween.getAll().length == 0) {
-    //     this.lastUpdate = 0;
-    // }
     this.tween.update(HC.now() - this.lastUpdate, false);
 
     this.doOscillate(true);
 
-    if (audio.smoothingTimeConstant() != this.settings.audio_smoothing) {
-        audio.smoothingTimeConstant(this.settings.audio_smoothing);
-    }
+    // if (audio.smoothingTimeConstant() != this.settings.audio_smoothing) {
+    //     audio.smoothingTimeConstant(this.settings.audio_smoothing);
+    // }
 
     this.rotation(this.settings.layer_rotationx, this.settings.layer_rotationy, this.settings.layer_rotationz);
 

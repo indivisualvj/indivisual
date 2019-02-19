@@ -538,9 +538,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         layer.updateShaders();
                         break;
 
-                    case 'audio_smoothing':
-                        audio.smoothingTimeConstant(layer.settings.audio_smoothing);
-                        break;
+                    // case 'audio_smoothing':
+                    //     audio.smoothingTimeConstant(layer.settings.audio_smoothing);
+                    //     break;
 
                     case 'lighting_ambient':
                         layer.resetAmbientLight();

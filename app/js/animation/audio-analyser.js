@@ -90,7 +90,7 @@
 
                 if (!useWaveform && config.thickness && last > v) {
                     var reduce = (.1 - (.1 * config.thickness)) * animation.diffPrc;
-                    v = last - reduce;
+                    v = Math.max(v, last - reduce);
                     this.volumes[i] = v;
 
                 } else {

@@ -1,5 +1,5 @@
 audio & timing:
-  audio_smoothing:
+#  audio_smoothing:
   audio_thickness:
   audio_usewaveform:
   rhythm:

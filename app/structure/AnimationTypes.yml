@@ -204,6 +204,7 @@ coloring_opacity_oscillate: [half]
 audio_smoothing: [0.1, 0.9, 0.01, half]
 audio_frequency: [0, 256, 1, half]
 audio_thickness: [0, 0.99, 0.01, half]
+audio_usewaveform: [half]
 
 background_mode: [half]
 background_color: [half]

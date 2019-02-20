@@ -69,12 +69,10 @@ HC.Controller.prototype.initMidi = function (instance) {
     function _send(data) {
         var outputs = midi.outputs.values();
         for (var output = outputs.next(); output && !output.done; output = outputs.next()) {
-            if (IS_ANIMATION) {
-                var port = output.value.id;
-                var out = midi.outputs.get(port);
-                if (out) {
-                    out.send(data);
-                }
+            var port = output.value.id;
+            var out = midi.outputs.get(port);
+            if (out) {
+                out.send(data);
             }
         }
     }

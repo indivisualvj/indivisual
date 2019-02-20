@@ -655,7 +655,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             break;
 
                         case 'audio':
-                            if (IS_ANIMATION) {
+                            if (IS_ANIMATION || IS_MONITOR) {
                                 audio.reset();
                                 if (value) {
                                     audioman.stop();

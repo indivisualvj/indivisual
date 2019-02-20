@@ -19,6 +19,12 @@
          * @param callback
          */
         this.initPlugin = function (name, callback) {
+
+            // this is 1 ugly workaround
+            if (IS_MONITOR && name !== 'off') {
+                name = 'microphone';
+            }
+
             this.plugin = new HC.audio[name]().construct(this.context);
             this.plugin.init(callback);
         };

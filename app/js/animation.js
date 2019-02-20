@@ -324,7 +324,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this._rmss += this.rms;
             this.last = this.now;
 
-            listener.fireAll('animation.updateRuntime', animation.now);
+            listener.fireAll('animation.updateRuntime', (animation.now - beatkeeper.beatStartTime) / (60000 / statics.ControlSettings.tempo));
         },
 
         /**

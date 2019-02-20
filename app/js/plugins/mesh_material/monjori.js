@@ -3,7 +3,7 @@ HC.plugins.mesh_material.monjori = _class(false, HC.MeshMaterialPlugin, {
         var material = new THREE.ShaderMaterial(HC.MonjoriShader);
         material.color = new THREE.Color();
         listener.register('animation.updateRuntime', 'mesh_material.monjori', function (now) {
-            material.uniforms.time.value = (now - beatkeeper.beatStartTime) / (60000 / statics.ControlSettings.tempo);
+            material.uniforms.time.value = now;
         });
         var mesh = new THREE.Mesh(geometry, material);
 

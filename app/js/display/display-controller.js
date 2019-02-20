@@ -18,7 +18,7 @@
                 brightness: statics.DisplaySettings.brightness,
                 transparency: statics.DisplaySettings.transparency,
                 smearing: statics.DisplaySettings.smearing,
-                clearcolor: statics.DisplaySettings.clearcolor,
+                background: statics.DisplaySettings.background,
                 // clip_context: statics.DisplaySettings.clip_context,
                 mask_copy: function () {
                     var updates = {};

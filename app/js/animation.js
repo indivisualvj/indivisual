@@ -804,7 +804,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         case 'mapping':
                         case 'clip_context':
-                        case 'clearcolor':
+                        case 'background':
                             displayman.updateDisplays();
                             break;
 

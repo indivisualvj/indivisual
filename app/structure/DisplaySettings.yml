@@ -7,7 +7,7 @@ transparency: 1.0
 smearing: 0.0
 powersave: false
 clip_context: true
-clearcolor: '#000'
+background: '#000'
 keep_mapping_bounds: true
 border: 0
 border_mode: 'parent'

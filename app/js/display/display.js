@@ -83,7 +83,7 @@
                 br -= smearing * (1.0 - statics.DisplaySettings.transparency);
 
                 ctx.globalAlpha = Math.max(0.02, 1.0 - smearing) * statics.DisplaySettings.transparency;
-                ctx.fillStyle = statics.DisplaySettings.clearcolor;
+                ctx.fillStyle = statics.DisplaySettings.background;
                 ctx.fillRect(
                     bounds.x, bounds.y, bounds.width, bounds.height
                 );
@@ -309,7 +309,7 @@
             }
             this.mask = sh;
 
-            this.canvas.style.background = this.getSetBackground() ? statics.DisplaySettings.clearcolor : 'none';
+            this.canvas.style.background = this.getSetBackground() ? statics.DisplaySettings.background : 'none';
 
             return sh;
 

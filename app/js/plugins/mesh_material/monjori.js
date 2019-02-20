@@ -3,7 +3,7 @@ HC.plugins.mesh_material.monjori = _class(false, HC.MeshMaterialPlugin, {
         var material = new THREE.ShaderMaterial(this.shader);
         material.color = new THREE.Color();
         listener.register('animation.updateRuntime', 'mesh_material.monjori', function (now) {
-            material.uniforms.time.value = now;
+            material.uniforms.uTime.value = now;
         });
         var mesh = new THREE.Mesh(geometry, material);
 
@@ -13,17 +13,17 @@ HC.plugins.mesh_material.monjori = _class(false, HC.MeshMaterialPlugin, {
     shader: {
 
         uniforms: {
-            time: {type: 'f', value: 1.0}
+            uTime: {type: 'f', value: 1.0}
         },
         // 'Monjori' by Mic (2009) modified by tesuji
         // Code for the 1k intro Monjori from the demoscene (http://www.pouet.net/prod.php?which=52761)
         fragmentShader: `
-            uniform float time;
+            uniform float uTime;
             varying vec2 vUv;
             void main(void)
             {
                 vec2 p = -1.0 + 2.0 * vUv;
-                float a = time*40.0;
+                float a = uTime*40.0;
                 float d,e,f,g=1.0/40.0,h,i,r,q;
                 e=400.0*(p.x*0.5+0.5);
                 f=400.0*(p.y*0.5+0.5);

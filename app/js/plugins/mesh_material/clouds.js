@@ -3,7 +3,7 @@ HC.plugins.mesh_material.clouds = _class(false, HC.MeshMaterialPlugin, {
         var material = new THREE.ShaderMaterial(this.shader);
         material.color = new THREE.Color();
         listener.register('animation.updateRuntime', 'mesh_material.clouds', function (now) {
-            material.uniforms.time.value = now;
+            material.uniforms.uTime.value = now;
         });
         var mesh = new THREE.Mesh(geometry, material);
 
@@ -12,11 +12,11 @@ HC.plugins.mesh_material.clouds = _class(false, HC.MeshMaterialPlugin, {
     
     shader: {
         uniforms: {
-            time: {type: 'f', value: 1.0}
+            uTime: {type: 'f', value: 1.0}
         },
 
         fragmentShader: `
-            uniform float time;
+            uniform float uTime;
             varying vec2 vUv;
 
             const float cloudscale = 1.1;
@@ -39,14 +39,14 @@ HC.plugins.mesh_material.clouds = _class(false, HC.MeshMaterialPlugin, {
             float noise( in vec2 p ) {
                 const float K1 = 0.366025404; // (sqrt(3)-1)/2;
                 const float K2 = 0.211324865; // (3-sqrt(3))/6;
-                vec2 i = floor(p + (p.x+p.y)*K1);
+                vec2 i = floor(p + (p.x+p.y)*K1);	
                 vec2 a = p - i + (i.x+i.y)*K2;
                 vec2 o = (a.x>a.y) ? vec2(1.0,0.0) : vec2(0.0,1.0); //vec2 of = 0.5 + 0.5*vec2(sign(a.x-a.y), sign(a.y-a.x));
                 vec2 b = a - o + K2;
                 vec2 c = a - 1.0 + 2.0*K2;
                 vec3 h = max(0.5-vec3(dot(a,a), dot(b,b), dot(c,c) ), 0.0 );
                 vec3 n = h*h*h*h*vec3( dot(a,hash(i+0.0)), dot(b,hash(i+o)), dot(c,hash(i+1.0)));
-                return dot(n, vec3(70.0));
+                return dot(n, vec3(70.0));	
             }
             
             float fbm(vec2 n) {
@@ -61,13 +61,13 @@ HC.plugins.mesh_material.clouds = _class(false, HC.MeshMaterialPlugin, {
             
             // -----------------------------------------------
             
-            void main() {
-                vec2 iResolution = vec2(.5, .5);
+            void main () {
+                vec2 iResolution = vec2(1.0);
                 vec2 p = vUv.xy / iResolution.xy;
-                vec2 uv = p*vec2(iResolution.x/iResolution.y,1.0);
-                float time = time * speed;
+                vec2 uv = p*vec2(iResolution.x/iResolution.y,1.0);    
+                float time = uTime * speed;
                 float q = fbm(uv * cloudscale * 0.5);
-            
+                
                 //ridged noise shape
                 float r = 0.0;
                 uv *= cloudscale;
@@ -78,7 +78,7 @@ HC.plugins.mesh_material.clouds = _class(false, HC.MeshMaterialPlugin, {
                     uv = m*uv + time;
                     weight *= 0.7;
                 }
-            
+                
                 //noise shape
                 float f = 0.0;
                 uv = p*vec2(iResolution.x/iResolution.y,1.0);
@@ -90,12 +90,12 @@ HC.plugins.mesh_material.clouds = _class(false, HC.MeshMaterialPlugin, {
                     uv = m*uv + time;
                     weight *= 0.6;
                 }
-            
+                
                 f *= r + f;
-            
+                
                 //noise colour
                 float c = 0.0;
-                time = time * speed * 2.0;
+                time = uTime * speed * 2.0;
                 uv = p*vec2(iResolution.x/iResolution.y,1.0);
                 uv *= cloudscale*2.0;
                 uv -= q - time;
@@ -105,10 +105,10 @@ HC.plugins.mesh_material.clouds = _class(false, HC.MeshMaterialPlugin, {
                     uv = m*uv + time;
                     weight *= 0.6;
                 }
-            
+                
                 //noise ridge colour
                 float c1 = 0.0;
-                time = time * speed * 3.0;
+                time = uTime * speed * 3.0;
                 uv = p*vec2(iResolution.x/iResolution.y,1.0);
                 uv *= cloudscale*3.0;
                 uv -= q - time;
@@ -118,16 +118,16 @@ HC.plugins.mesh_material.clouds = _class(false, HC.MeshMaterialPlugin, {
                     uv = m*uv + time;
                     weight *= 0.6;
                 }
-            
+                
                 c += c1;
-            
+                
                 vec3 skycolour = mix(skycolour2, skycolour1, p.y);
                 vec3 cloudcolour = vec3(1.1, 1.1, 0.9) * clamp((clouddark + cloudlight*c), 0.0, 1.0);
-            
+               
                 f = cloudcover + cloudalpha*f*r;
-            
+                
                 vec3 result = mix(skycolour, clamp(skytint * skycolour + cloudcolour, 0.0, 1.0), clamp(f + c, 0.0, 1.0));
-            
+                
                 gl_FragColor = vec4( result, 1.0 );
             }
     

@@ -32,6 +32,7 @@ HC.Layer.prototype.resetBackground = function (recreate) {
     }
 
     if (recreate !== false) {
+
         this._background = new THREE.Group();
         this._background.position.x = this.resolution('half').x;
         this._background.position.y = -this.resolution('half').y;

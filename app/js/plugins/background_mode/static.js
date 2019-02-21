@@ -1,4 +1,5 @@
 HC.plugins.background_mode.static = _class(false, HC.BackgroundModePlugin, {
+    index: 20,
     apply: function () {
         if (this.current() != this._settingID()) {
             this.current(this._settingID());

@@ -1,4 +1,5 @@
 HC.plugins.background_mode.texture = _class(false, HC.BackgroundModePlugin, {
+    index: 40,
     apply: function () {
         var i = this.settings.background_input;
         var id = i + this.settings.background_volume;

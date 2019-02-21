@@ -19,5 +19,9 @@ HC.BackgroundModePlugin = _class(false, HC.AnimationPlugin, {
 
     _settingID: function () {
         return this._id() + this.settings.background_volume + this.settings.background_color;
+    },
+
+    dispose: function () {
+        this.current('');
     }
 });

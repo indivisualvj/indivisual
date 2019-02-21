@@ -5,6 +5,14 @@ HC.plugins.shape_lookat.center = _class(false, HC.ShapeLookatPlugin, {
     }
 });
 
+HC.plugins.shape_lookat.forcecenter = _class(false, HC.ShapeLookatPlugin, {
+    apply: function (shape) {
+        var vector = this.layer.lookAtVector();
+        shape.lookAt(vector);
+        shape.forceLookAt(vector);
+    }
+});
+
 HC.plugins.shape_lookat.centerz = _class(false, HC.ShapeLookatPlugin, {
     name: 'center z-axis',
     apply: function (shape) {

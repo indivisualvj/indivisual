@@ -64,6 +64,10 @@
             this.mesh = mesh;
         },
 
+        getMesh: function () {
+            return this.mesh;
+        },
+
         shapeVolume: function () {
             var i = this.index % audio.volumes.length;
             return audio.volumes[i];
@@ -113,6 +117,10 @@
 
         lookAt: function (vector) {
             this.sceneObject().lookAt(vector);
+        },
+
+        forceLookAt: function (vector) {
+            this.getMesh().lookAt(vector);
         },
 
         sceneRotation: function () {

@@ -9,7 +9,6 @@ HC.Layer.prototype.setBackground = function (value) {
 
     if (value instanceof THREE.Mesh) {
         this.resetBackground(true);
-        this.three.scene.background = null;
 
         this._background.add(value);
     }
@@ -17,7 +16,7 @@ HC.Layer.prototype.setBackground = function (value) {
         this.three.scene.background = value;
 
     } else {
-        this.three.scene.background = null;
+        // already reset in resetBackground
     }
 };
 
@@ -30,6 +29,8 @@ HC.Layer.prototype.resetBackground = function (recreate) {
         this._layer.remove(this._background);
         this._background.traverse(threeDispose);
     }
+
+    this.three.scene.background = null;
 
     if (recreate !== false) {
 

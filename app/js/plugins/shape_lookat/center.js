@@ -10,7 +10,6 @@ HC.plugins.shape_lookat.forcecenter = _class(false, HC.ShapeLookatPlugin, {
     index: 2,
     apply: function (shape) {
         var vector = this.layer.lookAtVector();
-        shape.lookAt(vector);
         shape.forceLookAt(vector);
     }
 });

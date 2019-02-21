@@ -117,9 +117,11 @@
 
         lookAt: function (vector) {
             this.sceneObject().lookAt(vector);
+            this.getMesh().rotation.set(0, 0, 0);
         },
 
         forceLookAt: function (vector) {
+            this.sceneObject().lookAt(vector);
             this.getMesh().lookAt(vector);
         },
 

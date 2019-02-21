@@ -26,6 +26,7 @@
         this._rotation = false;
         this._shapes = false;
         this._lighting = false;
+        this._background = false;
         this._layer = new THREE.Group();
         this._layer.name = '_layer' + index;
 
@@ -106,6 +107,7 @@
             this.resetPlugins();
             this.resetShapes();
             this.resetLighting();
+            this.resetBackground();
             this.updateShaders();
         },
 

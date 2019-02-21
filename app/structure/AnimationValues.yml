@@ -52,6 +52,11 @@ material_side:
   1: back
   2: double
 
+material_shadowside:
+  0: front
+  1: back
+  2: double
+
 material_mapping:
   default: default
   f2b: front2back

@@ -267,98 +267,106 @@
 
         updateMaterial: function (map, emissive) {
 
+            var settings = this._layer.settings;
+            var mat = this.mesh.material;
             var c = this.color;
-            this.mesh.material.color.setHSL(c.h / 360, c.s / 100, c.l / 100);
-            if (this.mesh.material.emissive) {
+            mat.color.setHSL(c.h / 360, c.s / 100, c.l / 100);
+            
+            if (mat.emissive) {
                 if (emissive !== false) {
-                    this.mesh.material.emissive.setHSL(c.h / 360, c.s / 100, c.l / 100);
+                    mat.emissive.setHSL(c.h / 360, c.s / 100, c.l / 100);
                 } else {
-                    this.mesh.material.emissive.setHSL(0, 0, 0);
+                    mat.emissive.setHSL(0, 0, 0);
                 }
             }
 
-            if (this.mesh.material.shininess != this._layer.settings.material_shininess) {
-                this.mesh.material.shininess = this._layer.settings.material_shininess;
+            if (mat.shininess != settings.material_shininess) {
+                mat.shininess = settings.material_shininess;
             }
-            if (this.mesh.material.roughness != this._layer.settings.material_roughness) {
-                this.mesh.material.roughness = this._layer.settings.material_roughness;
+            if (mat.roughness != settings.material_roughness) {
+                mat.roughness = settings.material_roughness;
             }
-            if (this.mesh.material.metalness != this._layer.settings.material_metalness) {
-                this.mesh.material.metalness = this._layer.settings.material_metalness;
+            if (mat.metalness != settings.material_metalness) {
+                mat.metalness = settings.material_metalness;
             }
 
             if (map) {
-                if (this.mesh.material.map != map) {
-                    this.mesh.material.map = map;
-                    this.mesh.material.emissiveMap = map;
-                    this.mesh.material.needsUpdate = true;
+                if (mat.map != map) {
+                    mat.map = map;
+                    mat.emissiveMap = map;
+                    mat.needsUpdate = true;
 
                 } else {
-                    if (this.mesh.material.emissive) {
+                    if (mat.emissive) {
                         // for mapped material disable color by setting to lum 1
-                        this.mesh.material.emissive.setHSL(0, 0, emissive ? 1 : 0);
+                        mat.emissive.setHSL(0, 0, emissive ? 1 : 0);
                     }
                 }
 
-            } else if (this.mesh.material.map) {
-                this.mesh.material.map = false;
-                this.mesh.material.emissiveMap = false;
-                this.mesh.material.needsUpdate = true;
+            } else if (mat.map) {
+                mat.map = false;
+                mat.emissiveMap = false;
+                mat.needsUpdate = true;
             }
 
-            var b = this._layer.settings.material_blending;
+            var b = settings.material_blending;
             if (b !== undefined) {
                 b = THREE[b];
 
-                if (this.mesh.material.blending != b) {
-                    this.mesh.material.blending = b;
-                    this.mesh.material.needsUpdate = true;
+                if (mat.blending != b) {
+                    mat.blending = b;
+                    mat.needsUpdate = true;
                 }
             }
 
-            b = this._layer.settings.material_blendequation;
+            b = settings.material_blendequation;
             if (b !== undefined) {
                 b = THREE[b];
 
-                if (this.mesh.material.blendEquation != b) {
-                    this.mesh.material.blendEquation = b;
-                    this.mesh.material.needsUpdate = true;
+                if (mat.blendEquation != b) {
+                    mat.blendEquation = b;
+                    mat.needsUpdate = true;
                 }
             }
 
-            b = this._layer.settings.material_blendsrc;
+            b = settings.material_blendsrc;
             if (b !== undefined) {
                 b = THREE[b];
 
-                if (this.mesh.material.blendSrc != b) {
-                    this.mesh.material.blendSrc = b;
-                    this.mesh.material.needsUpdate = true;
+                if (mat.blendSrc != b) {
+                    mat.blendSrc = b;
+                    mat.needsUpdate = true;
                 }
             }
 
-            b = this._layer.settings.material_blenddst;
+            b = settings.material_blenddst;
             if (b !== undefined) {
                 b = THREE[b];
 
-                if (this.mesh.material.blendDst != b) {
-                    this.mesh.material.blendDst = b;
-                    this.mesh.material.needsUpdate = true;
+                if (mat.blendDst != b) {
+                    mat.blendDst = b;
+                    mat.needsUpdate = true;
                 }
             }
 
-            if (this.mesh.material.flatShading == this._layer.settings.material_softshading) {
-                this.mesh.material.flatShading = !this._layer.settings.material_softshading;
-                this.mesh.material.needsUpdate = true;
+            if (mat.flatShading == settings.material_softshading) {
+                mat.flatShading = !settings.material_softshading;
+                mat.needsUpdate = true;
             }
 
-            if (this.mesh.material.side != this._layer.settings.material_side) {
-                this.mesh.material.side = this._layer.settings.material_side;
-                this.mesh.material.needsUpdate = true;
+            if (mat.side != settings.material_side) {
+                mat.side = settings.material_side;
+                mat.needsUpdate = true;
             }
 
-            if (this.mesh.castShadow != this._layer.settings.lighting_shadows) {
-                this.mesh.castShadow = this._layer.settings.lighting_shadows;
-                this.mesh.receiveShadow = this._layer.settings.lighting_shadows;
+            if (mat.shadowSide != settings.material_shadowside) {
+                mat.shadowSide = settings.material_shadowside;
+                mat.needsUpdate = true;
+            }
+
+            if (this.mesh.castShadow != settings.lighting_shadows) {
+                this.mesh.castShadow = settings.lighting_shadows;
+                this.mesh.receiveShadow = settings.lighting_shadows;
             }
         },
 

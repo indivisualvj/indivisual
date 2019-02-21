@@ -5,6 +5,8 @@ STORAGE_DIR = 'storage';
 SAMPLE_DIR = 'samples';
 SESSION_DIR = 'sessions';
 ASSET_DIR = 'assets';
+FONT_DIR = 'assets/fonts';
+TEXTURE_DIR = 'assets/textures';
 
 _HASH = document.location.hash ? document.location.hash.substr(1) : '';
 _SERVER = 'server';
@@ -74,6 +76,8 @@ RAD = Math.PI / 180;
 DEG = 180 / Math.PI;
 SQUARE_DIAMETER = (Math.sqrt(2 * 2 + 2 * 2) / 2);
 ANTIALIAS = true;
+
+var assetman;
 
 var HC = {};
 HC.now = window.performance.now.bind(window.performance);
@@ -250,6 +254,8 @@ var resources = [
         base: '.',
         file: ASSET_DIR,
         callback: function (files, finished) {
+            // todo AssetManager
+            assetman = new AssetManager(files);
             var keys = Object.keys(statics.SourceValues.input);
             var index = keys.length;
             for (var i = 0; i < files.length; i++) {

@@ -29,10 +29,13 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!reconnect) {
             loadResources(resources, function () {
 
-                new THREE.TextureLoader().load('/img/textures/rgb-noise.png', function (texture) {
+                // todo assetman load textures
+                new THREE.TextureLoader().load(filePath(TEXTURE_DIR, 'rgb-noise.png'), function (texture) {
                     statics.three.textures.rgbnoise = texture;
                 });
-                new THREE.FontLoader().load(filePath(ASSET_DIR, 'coolvetica.json'), function (font) {
+
+                // todo assetman load fonts
+                new THREE.FontLoader().load(filePath(FONT_DIR, 'coolvetica.json'), function (font) {
                     statics.three.fonts.coolvetica = font;
                 });
 

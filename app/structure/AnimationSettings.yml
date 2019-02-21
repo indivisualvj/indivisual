@@ -1,4 +1,5 @@
 name: 0
+uuid: ''
 oscillate: 'off' # dummy
 
 audio_smoothing: 0.6
@@ -56,6 +57,7 @@ material_roughness: 0.5
 material_metalness: 0.5
 material_side: 2
 material_softshading: false
+material_shadowside: 2
 material_map: 'none'
 material_style: fill
 material_uvx: 1

@@ -1,5 +1,6 @@
 HC.plugins.oscillate.timestamp = _class(false, HC.OscillatePlugin, {
     name: 'timestamp',
+    index: 10,
     apply: function (key) {
         this.activate(key, (animation.now - beatkeeper.beatStartTime) / (60000 / statics.ControlSettings.tempo));
     }
@@ -7,7 +8,7 @@ HC.plugins.oscillate.timestamp = _class(false, HC.OscillatePlugin, {
 
 HC.plugins.oscillate.incremental = _class(false, HC.OscillatePlugin, {
     name: 'incremental',
-
+    index: 10,
     apply: function (key) {
         var v = this.params(key);
 
@@ -22,7 +23,7 @@ HC.plugins.oscillate.incrementalpeak = _class(
         this.preset = {velocity: 1, progress: 0};
     }, HC.OscillatePlugin, {
         name: 'incremental (race on peak)',
-
+        index: 10,
         apply: function (key) {
             var pa = this.params(key);
             if (audio.peak && pa.velocity < 3) {
@@ -40,6 +41,7 @@ HC.plugins.oscillate.incrementalpeak = _class(
 
 HC.plugins.oscillate.audio = _class(false, HC.OscillatePlugin, {
     name: 'audio',
+    index: 10,
     apply: function (key) {
         this.activate(key, Math.min(1, 2.5 * audio.volume));
     }

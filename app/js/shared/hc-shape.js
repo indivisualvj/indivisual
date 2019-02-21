@@ -66,8 +66,7 @@
 
         shapeVolume: function () {
             var i = this.index % audio.volumes.length;
-            var v = audio.volumes[i];
-            return v === undefined ? 1 : v;
+            return audio.volumes[i];
         },
 
         sceneObject: function () {

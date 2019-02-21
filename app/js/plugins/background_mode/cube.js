@@ -5,15 +5,15 @@ HC.plugins.background_mode.cube = _class(false, HC.BackgroundModePlugin, {
 
             var color = new THREE.Color(this.settings.background_color);
             var res = this.layer.resolution().clone();
-            res.multiplyScalar(this.settings.background_volume);
-            var cube = new THREE.BoxBufferGeometry(res.x, res.y, res.length() * 2);
+            res.multiplyScalar(this.settings.background_volume * 2);
+            var cube = new THREE.BoxBufferGeometry(res.x, res.y, res.length());
             var mat = new THREE.MeshStandardMaterial({color: color, side: THREE.DoubleSide});
             var mesh = new THREE.Mesh(cube, mat);
             mesh.receiveShadow = true;
 
             this.layer.setBackground(mesh);
 
-            mesh.position.z = res.length() * .5;
+            mesh.position.z = 0;
         }
     }
 });

@@ -1,9 +1,11 @@
 name: 0
+uuid: ''
 oscillate: 'off' # dummy
 
 audio_smoothing: 0.6
 audio_frequency: 0
-audio_use_waveform: false
+audio_thickness: 0
+audio_usewaveform: false
 
 camera_mode: manual
 camera_mode_volume: 1.0
@@ -55,6 +57,7 @@ material_roughness: 0.5
 material_metalness: 0.5
 material_side: 2
 material_softshading: false
+material_shadowside: 2
 material_map: 'none'
 material_style: fill
 material_uvx: 1

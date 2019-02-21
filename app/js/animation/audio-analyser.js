@@ -39,19 +39,20 @@
          *
          * @param v
          */
-        this.smoothingTimeConstant = function (v) {
-            if (v !== undefined && this.analyser && v) {
-                this.analyser.smoothingTimeConstant = v;
-            }
-
-            return this.analyser ? this.analyser.smoothingTimeConstant : false;
-        };
+        // this.smoothingTimeConstant = function (v) {
+        //     if (v !== undefined && this.analyser && v) {
+        //         this.analyser.smoothingTimeConstant = v;
+        //     }
+        //
+        //     return this.analyser ? this.analyser.smoothingTimeConstant : false;
+        // };
 
         /**
          *
          */
         this.createAnalyser = function (context) {
             this.analyser = context.createAnalyser();
+            this.analyser.smoothingTimeConstant = .6;
             this.analyser.fftSize = 1024;
             binCount = this.analyser.frequencyBinCount;
             this.volumes = new Array(binCount).fill(0);
@@ -83,11 +84,19 @@
             for (var i = 0; i < binCount; i++) {
 
                 var val = freqData[i] / 256;
-                var fbdv = useWaveform ? domainData[i] / 256 : val;
+                var fbdv = useWaveform ? (domainData[i] / 256) : val;
                 values += val;
-                var last = this.volumes[i]
+                var last = this.volumes[i];
                 var v = fbdv * config.volume;
-                this.volumes[i] = (v + last) / 2;  // make it softer
+
+                if (!useWaveform && config.thickness && last > v) {
+                    var reduce = (.1 - (.1 * config.thickness)) * animation.diffPrc;
+                    v = Math.max(v, last - reduce);
+                    this.volumes[i] = v;
+
+                } else {
+                    this.volumes[i] = (v + last) / 2;  // make it softer
+                }
             }
 
             this.volume = values / binCount * config.volume;
@@ -229,6 +238,7 @@
             this.peakBPM = 0;
             this.peakReliable = false;
             this.firstPeak = 0;
+            this.volumes = new Array(binCount).fill(Math.random);
             lastVolume = 0;
             peakData = [];
             peakThreshold = 1.2;

@@ -1,19 +1,27 @@
 HC.plugins.background_mode = HC.plugins.background_mode || {};
 
 HC.BackgroundModePlugin = _class(false, HC.AnimationPlugin, {
-    color: false, // static
+    background: false, // static
 
     /**
      * Manipulate the static .color property to have a BackgroundMode wide status
      *
-     * @param color
+     * @param background
      * @returns {boolean}
      */
-    current: function (color) {
-        if (color !== undefined) {
-            HC.BackgroundModePlugin.prototype.color = color;
+    current: function (background) {
+        if (background !== undefined) {
+            HC.BackgroundModePlugin.prototype.background = background;
         }
 
-        return this.color
+        return HC.BackgroundModePlugin.prototype.background;
+    },
+
+    _settingID: function () {
+        return this._id() + this.settings.background_volume + this.settings.background_color;
+    },
+
+    dispose: function () {
+        this.current('');
     }
 });

@@ -1,7 +1,7 @@
 audio & timing:
-  audio_smoothing:
-    audio_frequency:
-  audio_use_waveform:
+#  audio_smoothing:
+  audio_thickness:
+  audio_usewaveform:
   rhythm:
 
 osci:
@@ -135,6 +135,7 @@ material:
   material_roughness:
   material_metalness:
   material_softshading:
+  material_shadowside:
   material_map:
   material_mapping:
   material_uvx:

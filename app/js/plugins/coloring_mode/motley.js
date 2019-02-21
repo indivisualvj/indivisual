@@ -2,7 +2,6 @@ HC.plugins.coloring_mode.motley = _class(false, HC.ColoringModePlugin, {
     name: 'motley',
     index: 2,
     apply: function (shape, min, max) {
-        var layer = this.layer;
 
         var color = shape.color;
         var mi2 = 60;
@@ -68,27 +67,28 @@ HC.plugins.coloring_mode.motley = _class(false, HC.ColoringModePlugin, {
     }
 });
 
-HC.plugins.coloring_mode.one = _class(
-    function () {
-        this.color = false;
+HC.plugins.coloring_mode.one = _class(false, HC.ColoringModePlugin, {
+    name: 'one',
+    index: 1,
+    apply: function (shape) {
+
+        if (this.isFirstShape(shape)) {
+            this.color = shape.color;
+
+            this.layer.getColoringModePlugin('motley').apply(shape, 40, 60);
+
+        } else if (this.color) {
+            shape.color.h = this.color.h;
+            shape.color.s = this.color.s;
+            shape.color.l = this.color.l;
+        }
     },
-    HC.ColoringModePlugin, {
-        name: 'one',
-        index: 1,
-        apply: function (shape) {
-            var layer = this.layer;
 
-            if (this.isFirstShape(shape)) {
-                if (!this.color) {
-                    this.color = shape.color;
-                }
-
-                layer.getColoringModePlugin('motley').apply(shape, 40, 60);
-            } else {
-                shape.color.h = this.color.h;
-                shape.color.s = this.color.s;
-                shape.color.l = this.color.l;
-            }
+    after: function (shape) {
+        var l = shape.color.l;
+        HC.ColoringModePlugin.prototype.after.call(this, shape);
+        if (!this.isFirstShape(shape)) {
+            shape.color.l = l;
         }
     }
-);
+});

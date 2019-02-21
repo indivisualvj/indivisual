@@ -29,10 +29,13 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!reconnect) {
             loadResources(resources, function () {
 
-                new THREE.TextureLoader().load('/img/textures/rgb-noise.png', function (texture) {
+                // todo assetman load textures
+                new THREE.TextureLoader().load(filePath(TEXTURE_DIR, 'rgb-noise.png'), function (texture) {
                     statics.three.textures.rgbnoise = texture;
                 });
-                new THREE.FontLoader().load(filePath(ASSET_DIR, 'coolvetica.json'), function (font) {
+
+                // todo assetman load fonts
+                new THREE.FontLoader().load(filePath(FONT_DIR, 'coolvetica.json'), function (font) {
                     statics.three.fonts.coolvetica = font;
                 });
 
@@ -169,12 +172,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (audioman.isActive()) {
                 var config = {
-                    useWaveform: renderer.currentLayer.settings.audio_use_waveform,
+                    useWaveform: renderer.currentLayer.settings.audio_usewaveform,
                     volume: statics.ControlSettings.volume,
                     resetPeakCountAfter: statics.ControlSettings.shuffle_switch_every,
                     tempo: statics.ControlSettings.tempo,
                     minDiff: beatkeeper.getSpeed('sixteen').duration,
-                    now: this.now
+                    now: this.now,
+                    thickness: renderer.currentLayer.settings.audio_thickness
                 };
                 audio.update(config);
 
@@ -323,7 +327,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this._rmss += this.rms;
             this.last = this.now;
 
-            listener.fireAll('animation.updateRuntime', animation.now);
+            listener.fireAll('animation.updateRuntime', (animation.now - beatkeeper.beatStartTime) / (60000 / statics.ControlSettings.tempo));
         },
 
         /**
@@ -537,9 +541,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         layer.updateShaders();
                         break;
 
-                    case 'audio_smoothing':
-                        audio.smoothingTimeConstant(layer.settings.audio_smoothing);
-                        break;
+                    // case 'audio_smoothing':
+                    //     audio.smoothingTimeConstant(layer.settings.audio_smoothing);
+                    //     break;
 
                     case 'lighting_ambient':
                         layer.resetAmbientLight();
@@ -654,7 +658,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             break;
 
                         case 'audio':
-                            if (IS_ANIMATION) {
+                            if (IS_ANIMATION || IS_MONITOR) {
                                 audio.reset();
                                 if (value) {
                                     audioman.stop();
@@ -803,7 +807,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         case 'mapping':
                         case 'clip_context':
-                        case 'clearcolor':
+                        case 'background':
                             displayman.updateDisplays();
                             break;
 

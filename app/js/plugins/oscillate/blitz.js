@@ -1,5 +1,6 @@
 HC.plugins.oscillate.blitzpeak = _class(false, HC.OscillatePlugin, {
     name: 'blitz (peak)',
+    index: 70,
     apply: function (key) {
         var pa = this.params(key);
 
@@ -17,7 +18,7 @@ HC.plugins.oscillate.blitzpeak = _class(false, HC.OscillatePlugin, {
 
 HC.plugins.oscillate.blitzpeakslow = _class(false, HC.OscillatePlugin, {
     name: 'blitz (peak/slow)',
-
+    index: 70,
     apply: function (key) {
         var layer = this.layer;
         var pa = this.params(key);
@@ -36,7 +37,7 @@ HC.plugins.oscillate.blitzpeakslow = _class(false, HC.OscillatePlugin, {
 
 HC.plugins.oscillate.blitzfull = _class(false, HC.OscillatePlugin, {
     name: 'blitz (full)',
-
+    index: 70,
     apply: function (key) {
         var layer = this.layer;
         var pa = this.params(key);
@@ -57,7 +58,7 @@ HC.plugins.oscillate.blitzfull = _class(false, HC.OscillatePlugin, {
 
 HC.plugins.oscillate.blitzhalf = _class(false, HC.OscillatePlugin, {
     name: 'blitz (half)',
-
+    index: 70,
     apply: function (key) {
         var layer = this.layer;
         var pa = this.params(key);
@@ -78,7 +79,7 @@ HC.plugins.oscillate.blitzhalf = _class(false, HC.OscillatePlugin, {
 
 HC.plugins.oscillate.blitzquarter = _class(false, HC.OscillatePlugin, {
     name: 'blitz (quarter)',
-
+    index: 70,
     apply: function (key) {
         var layer = this.layer;
         var pa = this.params(key);
@@ -99,7 +100,7 @@ HC.plugins.oscillate.blitzquarter = _class(false, HC.OscillatePlugin, {
 
 HC.plugins.oscillate.blitzeight = _class(false, HC.OscillatePlugin, {
     name: 'blitz (eight)',
-
+    index: 70,
     apply: function (key) {
         var layer = this.layer;
         var pa = this.params(key);

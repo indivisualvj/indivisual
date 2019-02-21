@@ -335,7 +335,7 @@
          */
         updateDisplays: function () {
 
-            document.body.style.backgroundColor = statics.DisplaySettings.clearcolor;
+            document.body.style.backgroundColor = statics.DisplaySettings.background;
 
             for (var i = 0; i < this.displays.length; i++) {
                 this.updateDisplay(i, false);

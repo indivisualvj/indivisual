@@ -33,12 +33,6 @@ HC.MeshMaterialPlugin = _class(false, HC.AnimationPlugin, {
         }
 
         return geometry;
-    },
-
-    after: function (mesh) {
-        var m = mesh.material;
-        // m.dithering = true;
-        m.shadowSide = THREE.BackSide;
-        // m.needsUpdate = true;
     }
+
 });

@@ -1,5 +1,5 @@
 HC.plugins.shaders.repeat = _class(false, HC.ShaderPlugin, {
-    index: 20,
+    index: 45,
     create: function () {
         if (!this.pass) {
             this.pass = new THREE.ShaderPass(THREE.RepeatShader);

@@ -158,16 +158,3 @@ HC.Layer.prototype.getShapeSpeed = function (shape) {
 HC.Layer.prototype.getShapeDelay = function (shape) {
     return this.getShapeDelayPlugin().params(shape);
 };
-
-/**
- *
- * @param value
- */
-HC.Layer.prototype.setBackground = function (value) {
-    if (value) {
-        this.three.scene.background = value;
-
-    } else {
-        this.three.scene.background = null;
-    }
-};

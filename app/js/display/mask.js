@@ -141,7 +141,7 @@
                 };
 
                 _paint(this.points, this.background.ctx);
-                this.background.ctx.fillStyle = statics.DisplaySettings.clearcolor;
+                this.background.ctx.fillStyle = statics.DisplaySettings.background;
                 this.background.ctx.fill();
 
                 _paint(this.points, this.ctx);

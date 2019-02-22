@@ -27,17 +27,10 @@ document.addEventListener('DOMContentLoaded', function () {
         _log(animation.name, 'connected', true, true);
 
         if (!reconnect) {
-            loadResources(resources, function () {
+            _loadResources(_setupResources(), function () {
 
-                // todo assetman load textures
-                new THREE.TextureLoader().load(filePath(TEXTURE_DIR, 'rgb-noise.png'), function (texture) {
-                    statics.three.textures.rgbnoise = texture;
-                });
-
-                // todo assetman load fonts
-                new THREE.FontLoader().load(filePath(FONT_DIR, 'coolvetica.json'), function (font) {
-                    statics.three.fonts.coolvetica = font;
-                });
+                assetman.loadTextures();
+                assetman.loadFonts();
 
                 HC.DisplayController.createAllControls();
                 HC.SourceController.createAllControls();
@@ -56,9 +49,14 @@ document.addEventListener('DOMContentLoaded', function () {
                         // now reset...
                         _log('HC.Renderer', 'another context loss...', true, true);
 
-                        for (var i in MIDI_ROW_ONE) { // glContext messed up... make that clear
-                            messaging.emitMidi('glow', MIDI_ROW_ONE[i], {timeout: 500, times: 15});
-                            messaging.emitMidi('glow', MIDI_ROW_TWO[i], {timeout: 500, times: 15});
+                        if (DEBUG) {
+                            for (var i in MIDI_ROW_ONE) { // glContext messed up... make that clear
+                                messaging.emitMidi('glow', MIDI_ROW_ONE[i], {timeout: 500, times: 15});
+                                messaging.emitMidi('glow', MIDI_ROW_TWO[i], {timeout: 500, times: 15});
+                            }
+
+                        } else {
+                            window.location.reload(true);
                         }
                     });
                 }

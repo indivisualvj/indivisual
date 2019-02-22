@@ -2,48 +2,94 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-
-// todo AssetManager
-class AssetManager {
-
+var HC = HC || {};
+{ // Hidden class to be added to HC namespace at [end of file]
     /**
      *
-     * @param files
      */
-    constructor (files) {
-        this.files = files;
-        this.images;
-        this.videos;
-        this.fonts;
-    }
+    class AssetManager {
 
-    /**
-     *
-     * @returns {{}|*}
-     */
-    getImages () {
-        if (!this.images) {
-            this.images = this.getFiles(/\.png/);
+        /**
+         *
+         * @param files
+         */
+        constructor() {
+            this.files = {};
+            this.images = {};
+            this.videos = {};
+            this.fonts = {};
         }
-        
-        return this.images;
-    }
 
-    /**
-     *
-     * @param regexp
-     */
-    getFiles(regexp) {
-        var files = {};
-        for (var i = 0; i < this.files.length; i++) {
-            var f = this.files[i];
-
-            if (!regexp || !f.name.match(regexp)) {
-                files[f.name] = f.name;
+        /**
+         *
+         * @param nu
+         */
+        addImages(nu) {
+            for (var i in nu) {
+                this.images[i] = nu[i];
             }
         }
 
-        return files;
+        /**
+         *
+         * @returns {{}|*}
+         */
+        getImages(regexp) {
+
+            if (regexp) {
+                return this._filter(this.images, regexp);
+            }
+            return this.images;
+        }
+
+        /**
+         *
+         * @param name
+         * @returns {*}
+         */
+        getImage(name) {
+            return this.images[name];
+        }
+
+        /**
+         *
+         * @param source
+         * @param regexp
+         * @private
+         */
+        _filter(source, regexp) {
+            var filtered = {};
+            for (var i in source) {
+                var f = source[i];
+
+                if (!regexp || !f.name.match(regexp)) {
+                    filtered[f.name] = f.name;
+                }
+            }
+
+            return filtered;
+        }
+
+        /**
+         *
+         */
+        loadFonts() {
+            new THREE.FontLoader().load(filePath(FONT_DIR, 'coolvetica.json'), function (font) {
+                statics.three.fonts.coolvetica = font;
+            });
+        }
+
+        /**
+         *
+         */
+        loadTextures() {
+            new THREE.TextureLoader().load(filePath(TEXTURE_DIR, 'rgb-noise.png'), function (texture) {
+                statics.three.textures.rgbnoise = texture;
+            });
+        }
+
     }
 
+    // add hidden class to HC namespace
+    HC.AssetManager = AssetManager;
 }

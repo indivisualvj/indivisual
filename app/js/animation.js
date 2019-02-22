@@ -460,8 +460,6 @@ document.addEventListener('DOMContentLoaded', function () {
             var layerDisplayValue = (statics.ControlSettings.layer + 1);
             messaging.emitAttr('#layers', 'data-mnemonic', layerDisplayValue);
 
-            messaging.emitAttr('[data-id="material_map"]', 'data-label', statics.tmp.sample_map_size);
-
             if (animation.stats) {
                 var state = (animation.powersave ? 'i' : '') + (animation.offline ? 'o' : '');
                 var vals = [
@@ -565,11 +563,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     case 'shape_transform':
                     case 'mesh_material':
                     case 'material_mapping':
-                    case 'material_uvx':
-                    case 'material_uvy':
-                    case 'material_uvofx':
-                    case 'material_uvofy':
-                    case 'material_map':
+                    // case 'material_uvx':
+                    // case 'material_uvy':
+                    // case 'material_uvofx':
+                    // case 'material_uvofy':
+                    // case 'material_map':
                     case 'shape_variant':
                         layer.resetShapes();
                         break;

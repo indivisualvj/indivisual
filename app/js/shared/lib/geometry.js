@@ -1,5 +1,27 @@
 /**
  *
+ * @param aw
+ * @param ah
+ * @param bw
+ * @param bh
+ * @returns {{readArea: HC.Rectangle, writeArea: HC.Rectangle}}
+ */
+function cropAtoB(aw, ah, bw, bh) {
+    // positive values mean a is bigger, negative values mean b is smaller
+    var dx = (aw - bw) / 2;
+    var dy = (ah - bh) / 2;
+
+    var w = Math.min(bw, aw);
+    var h = Math.min(bh, ah);
+    return {
+        readArea: new HC.Rectangle(Math.max(0, dx), Math.max(0, dy), w, h),
+        writeArea: new HC.Rectangle(Math.max(0, -dx), Math.max(0, -dy), w, h)
+    }
+}
+
+
+/**
+ *
  * @param a
  * @param b
  * @returns {number}

@@ -9,7 +9,7 @@ HC.Layer.prototype.nextShape = function (index, dummy) {
         ? new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial())
         : this.nextMesh(index);
 
-    var shape = new HC.Shape(mesh, index, this.randomColor());
+    var shape = new HC.Shape(mesh, index, randomColor());
     shape.dummy = dummy;
 
     this.nextShapeDirection(shape);

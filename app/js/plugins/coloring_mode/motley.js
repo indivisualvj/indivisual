@@ -1,68 +1,46 @@
 HC.plugins.coloring_mode.motley = _class(false, HC.ColoringModePlugin, {
     name: 'motley',
     index: 2,
-    apply: function (shape, min, max) {
+    injections: {
+        velocity: false
+    },
+    apply: function (shape, minL, maxL) {
+
+        var params = this.params(shape);
+        if (!params.velocity) {
+            let min = 1;
+            let max = 3;
+            params.velocity = new THREE.Vector3(
+                randomFloat(min, max, 2, true),
+                randomFloat(min, max, 2, true),
+                randomFloat(min, max, 2, true)
+            );
+        }
 
         var color = shape.color;
-        var mi2 = 60;
-        var ma2 = 100;
 
-        if (!min) {
-            min = 30;
-            max = 60;
+        var minS = 60;
+        var maxS = 100;
 
-        } else {
-            mi2 = 60;
-            ma2 = 100;
-        }
-
-        var da = color.da * animation.diff / 360 * this.settings.coloring_volume;
-        var db = color.db;
-        var dc = color.dc;
+        minL = minL || 30;
+        maxL = maxL || 60;
 
         // Hue
-        if (color.h + da < 360 && color.h + da > 0) {
-            color.h += da;
-
-        } else {
-            if (color.h + da < 0) {
-                color.h = 360;
-
-            } else {
-                color.h = 0;
-            }
-        }
+        color.h += params.velocity.x * animation.diffPrc / 2 * this.settings.coloring_volume;
+        color.h %= 360;
 
         // Saturation
-        if (color.s < mi2) {
-            color.s = mi2;
-
-        } else if (color.s > ma2) {
-            color.s = ma2;
-        }
-
-        if (color.s + db <= ma2 && color.s + db >= mi2) {
-            color.s += db * animation.diff / 80;
-
-        } else {
-            color.db *= -1;
-            color.s = Math.min(color.s, ma2);
+        color.s += params.velocity.y * animation.diffPrc / 5;
+        if (color.s < minS || color.s > maxS) {
+            params.velocity.y *= -1;
+            color.s = clamp(color.s, minS, maxS);
         }
 
         // Luminance
-        if (color.l < min) {
-            color.l = min;
-
-        } else if (color.l > max) {
-            color.l = max;
-        }
-
-        if (color.l + dc <= max && color.l + dc >= min) {
-            color.l += dc * animation.diff / 80;
-
-        } else {
-            color.dc *= -1;
-            color.l = Math.min(color.l, max);
+        color.l += params.velocity.z * animation.diffPrc / 5;
+        if (color.l < minL || color.l > maxL) {
+            params.velocity.z *= -1;
+            color.l = clamp(color.l, minL, maxL);
         }
     }
 });

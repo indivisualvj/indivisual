@@ -312,11 +312,29 @@
                     }
                 }
 
+                var repeat = mat.map.repeat;
+                var center = mat.map.center;
+
+                if (repeat.x != settings.material_uvx) {
+                    repeat.x = 1/settings.material_uvx;
+                }
+                if (repeat.y != settings.material_uvy) {
+                    repeat.y = 1/settings.material_uvy;
+                }
+                if (center.x != settings.material_uvofx) {
+                    center.x = settings.material_uvofx;
+                }
+                if (center.y != settings.material_uvofy) {
+                    center.y = settings.material_uvofy;
+                }
+
             } else if (mat.map) {
                 mat.map = false;
                 mat.emissiveMap = false;
                 mat.needsUpdate = true;
             }
+            
+
 
             var b = settings.material_blending;
             if (b !== undefined) {

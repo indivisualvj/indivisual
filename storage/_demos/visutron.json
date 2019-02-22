@@ -53,7 +53,7 @@
 "material_side":2,
 "material_softshading":false,
 "material_shadowside":2,
-"material_map":"none",
+"material_input":"none",
 "material_style":"fill",
 "material_uvx":1,
 "material_uvy":1,

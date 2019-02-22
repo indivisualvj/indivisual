@@ -57,10 +57,6 @@ HC.Layer.prototype.animate = function (hook) {
 
     this.doOscillate(true);
 
-    // if (audio.smoothingTimeConstant() != this.settings.audio_smoothing) {
-    //     audio.smoothingTimeConstant(this.settings.audio_smoothing);
-    // }
-
     this.rotation(this.settings.layer_rotationx, this.settings.layer_rotationy, this.settings.layer_rotationz);
 
     this.doCameraMode();

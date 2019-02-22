@@ -323,7 +323,7 @@ function setupResources () {
                 var images = assetman.addImages(files, 'name');
                 // add images into AnimationValues by name
                 for (var i in images) {
-                    statics.AnimationValues.material_map[i] = i;
+                    statics.AnimationValues.material_input[i] = i;
                     statics.AnimationValues.background_input[i] = i;
                 }
 

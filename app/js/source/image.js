@@ -30,12 +30,9 @@
                 this.init();
             }
 
-            var dx = (this._width - this.width) / 2;
-            var dy = (this._height - this.height) / 2;
-            var w = Math.min(this.width, this._width);
-            var h = Math.min(this.height, this._height);
-            this.readArea = new HC.Rectangle(Math.max(0, dx), Math.max(0, dy), w, h);
-            this.writeArea = new HC.Rectangle(Math.max(0, dx * -1), Math.max(0, dy * -1), w, h);
+            var crop = cropAtoB(this._width, this._height, this.width, this.height);
+            this.readArea = crop.readArea;
+            this.writeArea = crop.writeArea;
         },
 
         /**
@@ -71,27 +68,13 @@
 
             this.canvas = tag;
 
-            var meta = file.replace(/^[^\d]+/, '').replace(/\..{3,4}$/, '');
-            if (meta != file) {
-                meta = meta.split(',');
-                if (meta.length > 2) {
-                    var bpm = meta[0];
-                    var res = meta[1];
-                    var fps = meta[2];
-                    res = res.split('x');
-                    this._width = parseInt(res[0]);
-                    this._height = parseInt(res[1]);
-                    this._speed = parseInt(bpm);
-                    this.fps = parseInt(fps);
+            var meta = parseFileMeta(this.file);
+            this._width = meta.resolution.x;
+            this._height = meta.resolution.y;
+            this._tempo = meta.tempo;
+            this.fps = meta.fps;
 
-                } else {
-                    this._speed = 120;
-                    this._width = 1280;
-                    this._height = 720;
-                    this.fps = 30;
-                }
-            }
-            this.duration = Math.ceil(60000 / this._speed);
+            this.duration = Math.ceil(60000 / this._tempo);
             var inst = this;
             tag.onload = function () {
                 inst.beats = 1;

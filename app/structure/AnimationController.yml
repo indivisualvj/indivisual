@@ -136,7 +136,7 @@ material:
   material_metalness:
   material_softshading:
   material_shadowside:
-  material_map:
+  material_input:
   material_mapping:
   material_uvx:
   material_uvy:

@@ -51,11 +51,11 @@ source:
 
 material_map:
   none: none
-  seq0: sequence0
-  seq1: sequence1
-  seq2: sequence2
-  seq3: sequence3
-  seq4: sequence4
+  0: sequence0
+  1: sequence1
+  2: sequence2
+  3: sequence3
+  4: sequence4
 
 oscillator:
   off: off

@@ -1,30 +1,33 @@
 HC.plugins.shape_geometry = HC.plugins.shape_geometry || {};
+{
+    HC.ShapeGeometryPlugin = class Plugin extends HC.AnimationPlugin {
 
-HC.ShapeGeometryPlugin = _class(false, HC.AnimationPlugin, {
+        apply() {
+            if (!this.geometry) { // all meshes use the same geometry
+                var geometry = this.create();
 
-    apply: function () {
-        if (!this.geometry) { // all meshes use the same geometry
-            var geometry = this.create();
-
-            if (!geometry._uvsAssigned) {
-                if (this.settings.material_mapping == 'f2b') {
-                    this.assignUVs(geometry);
+                if (!geometry._uvsAssigned) {
+                    if (this.settings.material_mapping == 'f2b') {
+                        this.assignUVs(geometry);
+                    }
                 }
+
+                this.geometry = geometry;
             }
 
-            this.geometry = geometry;
+            return this.geometry;
         }
 
-        return this.geometry;
-    },
+        reset() {
+            this.geometry = false;
+        }
 
-    reset: function () {
-        this.geometry = false;
-    },
+        create() {
+            console.error('HC.ShapeGeometryPlugin: .create() must be implemented in derived plugin.');
+        }
 
-    create: function () {
-        console.error('HC.ShapeGeometryPlugin: .create() must be implemented in derived plugin.');
-    },
-
-    assignUVs: assignUVs,
-});
+        assignUVs(geometry) {
+            assignUVs(geometry)
+        }
+    }
+}

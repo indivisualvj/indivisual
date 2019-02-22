@@ -1,3 +1,3 @@
 HC.plugins.shape_pairing = HC.plugins.shape_pairing || {};
 
-HC.ShapePairingPlugin = _class(false, HC.AnimationPlugin, {});
+{ HC.ShapePairingPlugin =  class Plugin extends HC.AnimationPlugin {} }

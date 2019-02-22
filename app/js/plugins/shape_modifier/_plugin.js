@@ -1,24 +1,27 @@
 HC.plugins.shape_modifier = HC.plugins.shape_modifier || {};
+{
+    HC.ShapeModifierPlugin = class Plugin extends HC.AnimationPlugin {
 
-HC.ShapeModifierPlugin = _class(false, HC.AnimationPlugin, {
+        apply(geometry) {
+            if (!this.geometry) { // all meshes use the same geometry
+                geometry = this.create(geometry);
 
-    apply: function (geometry) {
-        if (!this.geometry) { // all meshes use the same geometry
-            geometry = this.create(geometry);
+                this.geometry = geometry;
+            }
 
-            this.geometry = geometry;
+            return this.geometry;
         }
 
-        return this.geometry;
-    },
+        reset() {
+            this.geometry = false;
+        }
 
-    reset: function () {
-        this.geometry = false;
-    },
+        create(geometry) {
+            console.error('HC.ShapeModifierPlugin: .create() must be implemented in derived plugin.');
+        }
 
-    create: function (geometry) {
-        console.error('HC.ShapeModifierPlugin: .create() must be implemented in derived plugin.');
-    },
-
-    assignUVs: assignUVs,
-});
+        assignUVs(geometry) {
+            assignUVs(geometry);
+        }
+    }
+}

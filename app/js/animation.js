@@ -227,8 +227,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (statics.ControlSettings.play) {
-                // beatkeeper.trigger(statics.ControlSettings.beat, false, statics.ControlSettings.tempo, false);
-                // beatkeeper.resetTrigger();
                 this.play();
 
             } else {

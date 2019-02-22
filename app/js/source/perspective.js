@@ -79,16 +79,18 @@
 
             if (this._last != animation.now) {
                 var key = 'perspective' + this.index;
-                var three = renderer.currentLayer.three;
+                var layer = renderer.currentLayer;
+                var three = layer.three;
                 var cam = renderer.three[key];
-                cam.position.x = 0;
-                cam.position.y = 0;
-                cam.position.z = three.camera.position.z;
-                cam.rotation.x = three.camera.rotation.x;
-                cam.rotation.y = three.camera.rotation.y + statics.DisplaySettings[key + '_angle'] * RAD;
-                cam.rotation.z = three.camera.rotation.z;
-                cam.fov = three.camera.fov * statics.DisplaySettings[key + '_fov'];
-                cam.zoom = three.camera.zoom * statics.DisplaySettings[key + '_zoom'];
+                var lcam = three.camera;
+                cam.position.x = lcam.position.x;
+                cam.position.y = lcam.position.y;
+                cam.position.z = lcam.position.z;
+                cam.rotation.x = lcam.rotation.x;
+                cam.rotation.y = lcam.rotation.y + statics.DisplaySettings[key + '_angle'] * RAD;
+                cam.rotation.z = lcam.rotation.z;
+                cam.fov = lcam.fov * statics.DisplaySettings[key + '_fov'];
+                cam.zoom = lcam.zoom * statics.DisplaySettings[key + '_zoom'];
 
                 cam.updateProjectionMatrix();
 

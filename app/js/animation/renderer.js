@@ -58,48 +58,14 @@
                 });
 
                 this.three.scene = new THREE.Scene();
-                // this.three.camera = new THREE.PerspectiveCamera(50, 1, 0.1, 500000);
                 this.three.perspective0 = new THREE.PerspectiveCamera(50, 1, 0.1, 500000);
                 this.three.perspective1 = new THREE.PerspectiveCamera(50, 1, 0.1, 500000);
                 this.three.perspective2 = new THREE.PerspectiveCamera(50, 1, 0.1, 500000);
 
-                // this.three.scene.add(this.three.camera);
-                // this.three.scene.add(this.three.perspective0);
-                // this.three.scene.add(this.three.perspective1);
-                // this.three.scene.add(this.three.perspective2);
+                // listener.register('layer.doCameraMode', 'perspectives', function (cam) {
 
-                // this.three.target = new THREE.WebGLRenderTarget();
-                //
-                // var shader = THREE.MappingShader;
-                // this.three.material = new THREE.ShaderMaterial( {
-                //
-                //     defines: Object.assign( {}, shader.defines ),
-                //     uniforms: shader.uniforms,
-                //     vertexShader: shader.vertexShader,
-                //     fragmentShader: shader.fragmentShader
-                //
-                // } );
-                //
-                // this.three.material.uniforms.tDiffuse.value = this.three.target.texture;
-                //
-                // this.three.scene = new THREE.Scene();
-                //
-                // this.three.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(this.width, this.height), this.three.material);
-                // this.three.quad.frustumCulled = false;
-                // this.three.scene.add(this.three.quad);
-
+                // })
             }
-            // if (this.three.quad) {
-            //     this.three.scene.remove(this.three.quad);
-            //     this.three.quad.geometry.dispose();
-            // }
-            // this.three.quad = new THREE.Mesh(new THREE.PlaneGeometry(this.width, this.height), this.three.material);
-            // this.three.quad.frustumCulled = false;
-            // this.three.scene.add(this.three.quad);
-            // this.three.camera = new THREE.OrthographicCamera(this.width/-2, this.width/2, this.height/2, this.height/-2, 0, 1);
-
-            // this.three.target.setSize(this.width, this.height);
-
         },
 
         initLayers: function (keepsettings) {
@@ -188,10 +154,6 @@
                 }
             }
 
-            // this.three.camera.layers.set(index);
-            // this.three.perspective0.layers.set(index);
-            // this.three.perspective1.layers.set(index);
-            // this.three.perspective2.layers.set(index);
         },
 
         /**
@@ -334,59 +296,6 @@
             } else {
                 this.three.renderer.render(this.three.scene, this.currentLayer.three.camera, this.three.target);
             }
-
-            // var v = this.three.quad.geometry.vertices;
-            // var sourcePoints = [];
-            // var targetPoints = [];
-            //
-            // for(var i in v) {
-            //     sourcePoints.push([v[i].x, v[i].y]);
-            //     targetPoints.push([v[i].x, v[i].y]);
-            // }
-            //
-            // var p = displayman.getDisplay(0).loadMapping();
-            // if (p) {
-            //     targetPoints = p.targetPoints;
-            // }
-            //
-            // for(var i in targetPoints) {
-            //     targetPoints[i][0] /= 10;
-            //     targetPoints[i][1] /= 10;
-            // }
-            //
-            // targetPoints[0][0] /= -2;
-            // targetPoints[0][1] /= 2;
-            // targetPoints[1][0] /= 2;
-            // targetPoints[1][1] /= 2;
-            // targetPoints[2][0] /= -2;
-            // targetPoints[2][1] /= -2;
-            // targetPoints[3][0] /= 2;
-            // targetPoints[3][1] /= -2;
-            //
-            //
-            // for (var a = [], b = [], i = 0, n = sourcePoints.length; i < n; ++i) {
-            //     var s = sourcePoints[i],
-            //         t = targetPoints[i];
-            //
-            //     t = [t[0], t[1]];
-            //     a.push([s[0], s[1], 1, 0, 0, 0, -s[0] * t[0], -s[1] * t[0]]), b.push(t[0]);
-            //     a.push([0, 0, 0, s[0], s[1], 1, -s[0] * t[1], -s[1] * t[1]]), b.push(t[1]);
-            // }
-            //
-            // var X = numeric.solve(a, b, true);
-            // var matrix = [
-            //     X[0], X[3], 0, X[6],
-            //     X[1], X[4], 0, X[7],
-            //     0,    0,    1, 0,
-            //     X[2], X[5], 0, 1
-            // ];
-            // matrix[12]=-145;
-            // matrix[13]=135;
-            // var m = new THREE.Matrix4().fromArray(matrix);
-            // this.three.material.uniforms.transform.value = m;
-
-
-            // this.three.renderer.render(this.three.scene, this.three.camera);
         },
 
         /**

@@ -13,6 +13,16 @@ HC.plugins.background_mode.cube = _class(false, HC.BackgroundModePlugin, {
 
             this.layer.setBackground(mesh);
 
+            var file;
+            if (file = assetman.getImage(this.settings.background_input)) {
+                new THREE.TextureLoader().load(filePath(IMAGE_DIR, file), function (tex) {
+                    mat.color.setHSL(0, 0, 1);
+                    // mat.emissive.setHSL(0, 0, 1);
+                    mat.map = tex;
+                    mat.emissiveMap = tex;
+                    mat.needsUpdate = true;
+                });
+            }
         }
     }
 });

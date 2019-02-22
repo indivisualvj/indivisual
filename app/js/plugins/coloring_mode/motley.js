@@ -1,6 +1,6 @@
 HC.plugins.coloring_mode.motley = _class(false, HC.ColoringModePlugin, {
     name: 'motley',
-    index: 2,
+    index: 20,
     injections: {
         velocity: false
     },
@@ -47,7 +47,7 @@ HC.plugins.coloring_mode.motley = _class(false, HC.ColoringModePlugin, {
 
 HC.plugins.coloring_mode.one = _class(false, HC.ColoringModePlugin, {
     name: 'one',
-    index: 1,
+    index: 10,
     apply: function (shape) {
 
         if (this.isFirstShape(shape)) {

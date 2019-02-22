@@ -1,6 +1,6 @@
 HC.plugins.camera_mode = HC.plugins.camera_mode || {};
 {
-    class Plugin extends HC.AnimationPlugin {
+    HC.CameraModePlugin = class Plugin extends HC.AnimationPlugin {
         before () {
             var layer = this.layer;
             layer.centerCamera();
@@ -12,6 +12,4 @@ HC.plugins.camera_mode = HC.plugins.camera_mode || {};
             layer.getCamera().updateProjectionMatrix();
         }
     }
-
-    HC.CameraModePlugin = Plugin
 }

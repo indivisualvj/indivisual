@@ -70,7 +70,7 @@
             if (event in this.events && id in this.events[event]) {
                 var _call = this.events[event][id];
                 if (_call) {
-                    console.log(event + '.' + id);
+                    // console.log(event + '.' + id);
                     _call(target);
                 }
             }

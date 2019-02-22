@@ -352,10 +352,18 @@ function setupResources () {
         var pluginKeys = Object.keys(plugins);
 
         pluginKeys.sort(function (a, b) {
-            var ai = plugins[a].prototype.index || 99999;
-            var bi = plugins[b].prototype.index || 99999;
-            var an = plugins[a].prototype.name || a;
-            var bn = plugins[b].prototype.name || b;
+
+            var ai = plugins[a].prototype.index || plugins[a].prototype.constructor.index || 99999;
+            var bi = plugins[b].prototype.index || plugins[b].prototype.constructor.index || 99999;
+            var an = plugins[a].prototype.name || plugins[a].prototype.constructor.name || a;
+            var bn = plugins[b].prototype.name || plugins[b].prototype.constructor.name || b;
+
+            if (an === 'Plugin') {
+                an = a;
+            }
+            if (bn === 'Plugin') {
+                bn = b;
+            }
 
             var cmpi = ai - bi;
             if (cmpi == 0) {

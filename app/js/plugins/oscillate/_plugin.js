@@ -1,74 +1,77 @@
 HC.plugins.oscillate = HC.plugins.oscillate || {};
+{
+    class Plugin extends HC.AnimationPlugin {
 
-HC.OscillatePlugin = _class(false, HC.AnimationPlugin, {
+        construct(layer, settings, tree, key) {
+            HC.AnimationPlugin.prototype.construct.call(this, layer, settings, tree, key);
+            this.cache = this.cache || {};
 
-    construct: function (layer, settings, tree, key) {
-        HC.AnimationPlugin.prototype.construct.call(this, layer, settings, tree, key);
-        this.cache = this.cache || {};
-
-        return this;
-    },
-
-    params: function (key, value) {
-
-        // create a unique key to cache progress etc.
-        var ckey = '_' + (isObject(key) ? '_object_' : key);
-
-        if (ckey in this.cache) {
-            // key already exists
-            if (value !== undefined) {
-                this.cache[ckey] = value;
-            }
-
-        } else {
-            // key does not exist
-            this.cache[ckey] = isObject(this.preset) ? Object.create(this.preset) : 0;
+            return this;
         }
 
-        return this.cache[ckey];
-    },
+        params(key, value) {
 
-    store: function (key) {
+            // create a unique key to cache progress etc.
+            var ckey = '_' + (isObject(key) ? '_object_' : key);
 
-        // store original value
-        if (isObject(key)) {
-            var ckey = (isObject(key) ? '_object_' : key);
-            this.cache[ckey] = key.value;
-
-        } else {
-            this.cache[key] = this.settings[key];
-        }
-
-    },
-
-    restore: function (key) {
-        // restore original value
-        if (isObject(key)) {
-            var ckey = (isObject(key) ? '_object_' : key);
-            key.value = this.cache[ckey];
-
-        } else {
-            this.settings[key] = this.cache[key];
-        }
-
-    },
-
-    activate: function (key, value, overwrite) {
-
-        if (isObject(key)) {
-            if (overwrite) {
-                key.value = value;
+            if (ckey in this.cache) {
+                // key already exists
+                if (value !== undefined) {
+                    this.cache[ckey] = value;
+                }
 
             } else {
-                key.value *= value;
+                // key does not exist
+                this.cache[ckey] = isObject(this.preset) ? Object.create(this.preset) : 0;
             }
 
-        } else {
-            if (overwrite) {
-                this.settings[key] = value;
+            return this.cache[ckey];
+        }
+
+        store(key) {
+
+            // store original value
+            if (isObject(key)) {
+                var ckey = (isObject(key) ? '_object_' : key);
+                this.cache[ckey] = key.value;
+
             } else {
-                this.settings[key] *= value;
+                this.cache[key] = this.settings[key];
+            }
+
+        }
+
+        restore(key) {
+            // restore original value
+            if (isObject(key)) {
+                var ckey = (isObject(key) ? '_object_' : key);
+                key.value = this.cache[ckey];
+
+            } else {
+                this.settings[key] = this.cache[key];
+            }
+
+        }
+
+        activate(key, value, overwrite) {
+
+            if (isObject(key)) {
+                if (overwrite) {
+                    key.value = value;
+
+                } else {
+                    key.value *= value;
+                }
+
+            } else {
+                if (overwrite) {
+                    this.settings[key] = value;
+                } else {
+                    this.settings[key] *= value;
+                }
             }
         }
     }
-});
+
+    HC.OscillatePlugin = Plugin;
+}

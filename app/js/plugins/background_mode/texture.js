@@ -8,7 +8,7 @@ HC.plugins.background_mode.texture = _class(false, HC.BackgroundModePlugin, {
             if (i != 'off' && isNaN(parseInt(i))) {
                 this.current(id);
                 var file = statics.AnimationValues.background_input[i];
-                var path = filePath(ASSET_DIR, file);
+                var path = filePath(IMAGE_DIR, file);
 
                 var img = new HC.Image(i, path);
                 img.update(

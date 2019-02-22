@@ -170,7 +170,7 @@ HC.Layer.prototype.doMaterialMap = function () {
                 if (!statics.three.textures[name]) {
 
                     var loader = new THREE.TextureLoader();
-                    var file = filePath('', ASSET_DIR, this.settings.material_map);
+                    var file = filePath('', IMAGE_DIR, this.settings.material_map);
                     var texture = loader.load(file, function (tex) {
                         statics.material_map = tex;
                         statics.tmp.sample_map_size = tex.image.width;

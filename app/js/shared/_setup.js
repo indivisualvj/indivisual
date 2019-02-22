@@ -5,10 +5,10 @@ STORAGE_DIR = 'storage';
 SAMPLE_DIR = 'samples';
 SESSION_DIR = 'sessions';
 ASSET_DIR = 'assets';
-FONT_DIR = 'assets/fonts';
-TEXTURE_DIR = 'assets/textures';
-IMAGE_DIR = 'assets/images';
-VIDEO_DIR = 'assets/videos';
+FONT_DIR = ASSET_DIR + '/fonts';
+TEXTURE_DIR = ASSET_DIR + '/textures';
+IMAGE_DIR = ASSET_DIR + '/images';
+VIDEO_DIR = ASSET_DIR + '/videos';
 
 _HASH = document.location.hash ? document.location.hash.substr(1) : '';
 _SERVER = 'server';
@@ -23,6 +23,7 @@ IS_SETUP = G_INSTANCE == _SETUP;
 IS_ANIMATION = G_INSTANCE == _ANIMATION;
 IS_MONITOR = G_INSTANCE == _MONITOR;
 
+// todo this is not constants. it is MidiController.yml
 MIDI_CLOCK_NEXT = [248, 251];
 MIDI_ROW_ONE = {
     "0": [176, 16],
@@ -93,9 +94,8 @@ var statics;
  *
  * @param resources
  * @param callback
- * @private
  */
-function _loadResources(resources, callback) {
+function loadResources(resources, callback) {
     var _load = function (index, finished) {
 
         if (index > resources.length - 1) {
@@ -133,9 +133,8 @@ function _loadResources(resources, callback) {
 /**
  * All setup operations are encapsulated into this function
  * @returns {*[]}
- * @private
  */
-function _setupResources () {
+function setupResources () {
     return [
         {
             file: 'structure/Statics.yml',
@@ -304,12 +303,13 @@ function _setupResources () {
             file: VIDEO_DIR,
             callback: function (files, finished) {
 
+                var videos = assetman.addVideos(files, 'name');
+
                 // add videos into source values by index
                 var keys = Object.keys(statics.SourceValues.input);
                 var index = keys.length;
-                for (var i = 0; i < files.length; i++) {
-                    var f = files[i];
-                    statics.SourceValues.input[index++] = f.name;
+                for (var i in videos) {
+                    statics.SourceValues.input[index++] = i;
                 }
 
                 finished();
@@ -320,21 +320,18 @@ function _setupResources () {
             base: '.',
             file: IMAGE_DIR,
             callback: function (files, finished) {
-                assetman.addImages(files);
-                var images = assetman.getImages();
+                var images = assetman.addImages(files, 'name');
                 // add images into AnimationValues by name
                 for (var i in images) {
-                    var f = images[i];
-                    statics.AnimationValues.material_map[f.name] = f.name;
-                    statics.AnimationValues.background_input[f.name] = f.name;
+                    statics.AnimationValues.material_map[i] = i;
+                    statics.AnimationValues.background_input[i] = i;
                 }
 
                 // add images into source values by index
                 var keys = Object.keys(statics.SourceValues.input);
                 var index = keys.length;
-                for (var i = 0; i < images.length; i++) {
-                    var f = images[i];
-                    statics.SourceValues.input[index++] = f.name;
+                for (var i in images) {
+                    statics.SourceValues.input[index++] = i;
                 }
 
                 finished();

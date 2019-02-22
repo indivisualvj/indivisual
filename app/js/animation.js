@@ -3,7 +3,7 @@
  */
 
 var messaging = false;
-var audio = false;
+var audio = false; // todo ->audioman.analyser? oder nur noch audioman.volumes etc?
 var audioman = false;
 var beatkeeper = false;
 var animation = false;
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
         _log(animation.name, 'connected', true, true);
 
         if (!reconnect) {
-            _loadResources(_setupResources(), function () {
+            loadResources(setupResources(), function () {
 
                 assetman.loadTextures();
                 assetman.loadFonts();

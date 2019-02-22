@@ -23,15 +23,15 @@ var HC = HC || {};
         /**
          *
          * @param nu
+         * @returns {*}
          */
-        addImages(nu) {
-            for (var i in nu) {
-                this.images[i] = nu[i];
-            }
+        addImages(nu, key) {
+            return this._add(this.images, nu, key);
         }
 
         /**
          *
+         * @param regexp
          * @returns {{}|*}
          */
         getImages(regexp) {
@@ -53,6 +53,37 @@ var HC = HC || {};
 
         /**
          *
+         * @param nu
+         * @param key
+         * @returns {*}
+         */
+        addVideos(nu, key) {
+            return this._add(this.videos, nu, key);
+        }
+
+        /**
+         *
+         * @returns {{}|*}
+         */
+        getVideos(regexp) {
+
+            if (regexp) {
+                return this._filter(this.videos, regexp);
+            }
+            return this.videos;
+        }
+
+        /**
+         *
+         * @param name
+         * @returns {*}
+         */
+        getVideo(name) {
+            return this.videos[name];
+        }
+
+        /**
+         *
          * @param source
          * @param regexp
          * @private
@@ -68,6 +99,23 @@ var HC = HC || {};
             }
 
             return filtered;
+        }
+
+        /**
+         *
+         * @param source
+         * @param nu
+         * @param key
+         * @returns {*}
+         * @private
+         */
+        _add(source, nu, key) {
+            for (var i in nu) {
+                var f = nu[i];
+                source[key?f[key]:i] = key?f[key]:f;
+            }
+
+            return source;
         }
 
         /**

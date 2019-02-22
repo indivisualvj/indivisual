@@ -134,7 +134,7 @@ function loadResources(resources, callback) {
  * All setup operations are encapsulated into this function
  * @returns {*[]}
  */
-function setupResources () {
+function setupResources() {
     return [
         {
             file: 'structure/Statics.yml',

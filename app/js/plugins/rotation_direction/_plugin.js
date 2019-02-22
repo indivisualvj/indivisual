@@ -8,10 +8,10 @@ HC.plugins.rotation_direction = HC.plugins.rotation_direction || {};
 
     HC.RotationDirectionPlugin.prototype.injections = {
         dir: 0,
-            directions: {
+        directions: {
             x: 0,
-                y: 0,
-                z: 0
+            y: 0,
+            z: 0
         }
     };
 }

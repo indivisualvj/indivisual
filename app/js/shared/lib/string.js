@@ -33,7 +33,7 @@ function filePath() {
  * @param file
  * @returns {{fps: number, resolution: {x: number, y: number}, speed: number}}
  */
-function parseFileMeta (file) {
+function parseFileMeta(file) {
 
     var meta = {
         tempo: 120,

@@ -15,8 +15,10 @@ function _extend(source, target) {
  * @param proto
  */
 function _class(constructor, parent, proto) {
-    var cls = constructor || function () {};
-    cls.prototype = _extend(parent || function () {}, proto);
+    var cls = constructor || function () {
+    };
+    cls.prototype = _extend(parent || function () {
+    }, proto);
 
     return cls;
 }

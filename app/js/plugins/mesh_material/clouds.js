@@ -9,7 +9,7 @@ HC.plugins.mesh_material.clouds = _class(false, HC.MeshMaterialPlugin, {
 
         return mesh;
     },
-    
+
     shader: {
         uniforms: {
             uTime: {type: 'f', value: 1.0}

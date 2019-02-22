@@ -1,7 +1,9 @@
 {
     class Plugin extends HC.AudioPlugin {
         static index = 1;
-        init(callback) {}
+
+        init(callback) {
+        }
     }
 
     HC.audio.off = Plugin;

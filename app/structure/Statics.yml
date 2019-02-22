@@ -9,7 +9,6 @@ display:
 tmp:
   stored_sample:
   loaded_sample:
-  sample_map_size: ''
 
 oscillator: [] # necessary for managing _oscillate values
 

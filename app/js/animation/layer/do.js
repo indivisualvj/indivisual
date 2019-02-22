@@ -112,86 +112,17 @@ HC.Layer.prototype.doOverlay = function (shape) {
  */
 HC.Layer.prototype.doMaterialMap = function () {
 
-    var map = statics.SourceSettings.material_map == 'none' ? this.settings.material_map : statics.SourceSettings.material_map;
-    var mapped = false;
+    var seq = statics.SourceSettings.material_map;
+    var map = this.settings.material_input;
     var color = false;
-    if (map !== 'none') {
-        if (map.match(/^seq/)) {
-            var i = number_extract(map, 'seq');
-            var seq = sourceman.getSequence(i);
-            var image = seq.current(renderer.current(), true);
-            if (seq && image) {
 
-                if (statics.shape_sequence != seq) {
-                    var edge = Math.min(image.width, image.height);
-                    var nearest = THREE.Math.floorPowerOfTwo(edge);
-                    while (nearest > edge) {
-                        nearest /= 2;
-                        nearest = THREE.Math.floorPowerOfTwo(nearest);
-                    }
-                    edge = nearest;
+    if (seq !== 'none') {
+        var plugin = this.getMaterialMapPlugin('sequence');
+        color = plugin.apply(parseInt(seq));
 
-                    var canvas = document.createElement('canvas');
-                    canvas.id = seq.id + '_map';
-                    canvas.width = edge;//image.width;
-                    canvas.height = edge;//image.height;
-                    canvas._ctx = canvas.getContext('2d');
-                    canvas._clipX = (image.width - edge) / 2;
-                    canvas._clipY = (image.height - edge) / 2;
-
-                    var tex = new THREE.CanvasTexture(canvas);//, undefined, undefined, undefined, undefined, THREE.NearestFilter);
-                    statics.material_map = tex;
-
-                    statics.shape_sequence = seq;
-                    statics.tmp.sample_map_size = canvas.width + 'x' + canvas.height;
-                }
-                var map = statics.material_map;
-                var img = map.image;
-                if (img) {
-                    var width = map.image.width;
-                    var height = map.image.height;
-                    if (img._ctx) {
-                        img._ctx.clearRect(0, 0, width, height);
-                        img._ctx.drawImage(image, img._clipX, img._clipY, width, height, 0, 0, width, height);
-                    }
-                    img._color = image._color;
-                    map.needsUpdate = true;
-                    mapped = true;
-                    color = image._color;
-                }
-            }
-
-        } else if (map.match(/\.png$/)) {
-
-            var name = this.settings.material_map;
-
-            if (!statics.material_map || statics.material_map.name != name) {
-
-                if (!statics.three.textures[name]) {
-
-                    var loader = new THREE.TextureLoader();
-                    var file = filePath('', ASSET_DIR, this.settings.material_map);
-                    var texture = loader.load(file, function (tex) {
-                        statics.material_map = tex;
-                        statics.tmp.sample_map_size = tex.image.width;
-                    });
-                    texture.name = this.settings.material_map;
-                    statics.three.textures[texture.name] = texture;
-
-                } else if (statics.three.textures[name].image) {
-                    statics.material_map = statics.three.textures[name];
-                    mapped = true;
-                }
-
-            } else {
-                mapped = true;
-            }
-        }
-    }
-    if (!mapped) {
-        statics.tmp.sample_map_size = '';
-        statics.material_map = false;
-        statics.shape_sequence = false;
+    } else {
+        var plugin = this.getMaterialMapPlugin('texture');
+        color = plugin.apply(map);
     }
 
     return color;
@@ -226,6 +157,10 @@ HC.Layer.prototype.doColoring = function (shape) {
     return proceed;
 };
 
+/**
+ *
+ * @param shape
+ */
 HC.Layer.prototype.doMaterial = function (shape) {
 
     var style = this.getMaterialStylePlugin();
@@ -234,7 +169,8 @@ HC.Layer.prototype.doMaterial = function (shape) {
     shape.strokeWidth(this.settings.material_volume);
 
     try {
-        shape.updateMaterial(statics.material_map, this.settings.coloring_emissive);
+        var map = this.getMaterialMap();
+        shape.updateMaterial(map, this.settings.coloring_emissive);
 
     } catch (e) {
         console.error(e);

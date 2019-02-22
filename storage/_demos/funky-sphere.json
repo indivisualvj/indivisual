@@ -43,7 +43,7 @@
 "material_shininess":100,
 "material_side":2,
 "material_shading":false,
-"material_map":"none",
+"material_input":"none",
 "material_style":"stroke",
 "material_uvx":1,
 "material_uvy":1,

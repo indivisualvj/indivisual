@@ -1,25 +1,5 @@
 /**
  *
- * @param item
- * @param prefix
- * @returns {number|boolean}
- */
-function number_extract(item, prefix) {
-
-    //console.log(prefix, item);
-    var regex = new RegExp(prefix + '(\\d+)');
-    var i = item.replace(regex, '$1');
-    i = parseInt(i);
-
-    if (!isNaN(i)) {
-        return i;
-    }
-
-    return item;
-}
-
-/**
- *
  * @param n
  * @returns {boolean}
  */

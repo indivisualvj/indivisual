@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!reconnect) {
 
-            loadResources(resources, function () {
+            loadResources(setupResources(), function () {
 
                 layers = new Array(statics.ControlValues.layer.length);
                 sm = new HC.SettingsManager(statics.AnimationSettings, layers);

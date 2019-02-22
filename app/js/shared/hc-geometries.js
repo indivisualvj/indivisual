@@ -192,30 +192,29 @@
     };
 })();
 
-
 /**
  *
  * @param geometry
  */
 function assignUVs(geometry) {
-    var layer = this.layer;
+    // var layer = this.layer;
     geometry.computeBoundingBox();
     geometry._uvsAssigned = true;
 
-    var uvx = layer.settings.material_uvx;
-    var uvy = layer.settings.material_uvy;
-    var ofx = layer.settings.material_uvofx;
-    var ofy = layer.settings.material_uvofy;
+    // var uvx = layer.settings.material_uvx;
+    // var uvy = layer.settings.material_uvy;
+    // var ofx = layer.settings.material_uvofx;
+    // var ofy = layer.settings.material_uvofy;
     var max = geometry.boundingBox.max;
     var min = geometry.boundingBox.min;
 
-    max.x *= uvx;
-    max.y *= uvy;
-    min.x *= uvx;
-    min.y *= uvy;
+    // max.x *= uvx;
+    // max.y *= uvy;
+    // min.x *= uvx;
+    // min.y *= uvy;
 
-    ofx = max.x / 2 - max.x * ofx;
-    ofy = max.y / 2 - max.y * ofy;
+    ofx = 0;//max.x / 2 - max.x * ofx;
+    ofy = 0;//max.y / 2 - max.y * ofy;
 
     var offset = new THREE.Vector2(ofx - min.x, ofy - min.y);
     var range = new THREE.Vector2(max.x - min.x, max.y - min.y);

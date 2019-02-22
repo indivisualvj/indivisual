@@ -8,7 +8,7 @@ HC.Layer.prototype.shapeColor = function (random, complementary) {
 
     var hex = '';
     var index = Math.floor(this.shapes.length / 2);
-    if (statics.material_map
+    if (statics.material_map // todo getMaterialMap
         && statics.material_map.image
         && statics.material_map.image._color) {
         hex = statics.material_map.image._color;

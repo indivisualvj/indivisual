@@ -1,5 +1,24 @@
-function hexToHsl(hex) {
+/**
+ *
+ * @returns {{s: *, h: *, l: *, o: number}}
+ */
+function randomColor () {
 
+    var vh = randomInt(0, 360);
+    var vs = randomInt(50, 100);
+    var vl = randomInt(25, 55);
+
+    var no = randomFloat(0.5, 0.9, 2, false);
+
+    return {h: vh, s: vs, l: vl, o: no};
+}
+
+/**
+ *
+ * @param hex
+ * @returns {{s, h, l}}
+ */
+function hexToHsl(hex) {
     var hex3 = /^([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/;
     var hex6 = /^([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/;
     var color = {r: 255, g: 255, b: 255};
@@ -66,6 +85,11 @@ function rgbToHsl(color) {
     return color;
 }
 
+/**
+ *
+ * @param color
+ * @returns {{r: number, b: number, g: number}}
+ */
 function hslToRgb(color) {
     var h = color.h,
         s = color.s,
@@ -101,7 +125,7 @@ function hslToRgb(color) {
 /**
  *
  * @param color
- * @returns {number}
+ * @returns {string}
  */
 function hslToHex(color) {
     var c = hslToRgb(color);

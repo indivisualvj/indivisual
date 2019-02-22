@@ -8,7 +8,7 @@ HC.plugins.filter_mode.flash = _class(
             var layer = this.layer;
 
             if (!this.color) {
-                this.color = layer.randomColor();
+                this.color = randomColor();
             }
             var color = this.color;
 
@@ -70,7 +70,7 @@ HC.plugins.filter_mode.strobe = _class(
             var layer = this.layer;
 
             if (!this.color) {
-                this.color = layer.randomColor();
+                this.color = randomColor();
             }
 
             var color = this.color;
@@ -80,7 +80,7 @@ HC.plugins.filter_mode.strobe = _class(
 
                 var pm = randomInt(80, 110);
                 if (speed.progress > speed.duration - pm
-                    || (beatkeeper.rhythmSlow(this.settings.rhythm)
+                    || (beatkeeper.rhythmSlow(this.settings.rhythm) // todo rhythmSlow WOOT
                         && speed.progress > speed.duration / 2 - pm
                         && speed.progress < speed.duration / 2)
                 ) {

@@ -9,3 +9,13 @@ storage/*/\.*
 .idea
 .settings
 .project
+
+assets
+!assets/fonts/coolvetica.json
+!assets/images/green-apple-leaf,120,1280x720,30.png
+!assets/images/indivisual-logo,120,1280x720,30.png
+!assets/images/kopf-120,512x512,30.png
+!assets/images/pennywise,120,1280x720,30.png
+!assets/textures/rgb-noise.png
+!assets/videos/dance,120,1280x720,30.mp4
+!assets/videos/walk,120,1280x720,30.mp4

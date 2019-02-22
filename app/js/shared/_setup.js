@@ -1,12 +1,14 @@
-DEBUG = true; //window.location.hostname == 'indivisual.lab' || window.location.hostname == 'indivisual.remote';
+DEBUG = false;
 
 APP_DIR = 'app';
 STORAGE_DIR = 'storage';
 SAMPLE_DIR = 'samples';
 SESSION_DIR = 'sessions';
 ASSET_DIR = 'assets';
-FONT_DIR = 'assets/fonts';
-TEXTURE_DIR = 'assets/textures';
+FONT_DIR = ASSET_DIR + '/fonts';
+TEXTURE_DIR = ASSET_DIR + '/textures';
+IMAGE_DIR = ASSET_DIR + '/images';
+VIDEO_DIR = ASSET_DIR + '/videos';
 
 _HASH = document.location.hash ? document.location.hash.substr(1) : '';
 _SERVER = 'server';
@@ -21,6 +23,7 @@ IS_SETUP = G_INSTANCE == _SETUP;
 IS_ANIMATION = G_INSTANCE == _ANIMATION;
 IS_MONITOR = G_INSTANCE == _MONITOR;
 
+// todo this is not constants. it is MidiController.yml
 MIDI_CLOCK_NEXT = [248, 251];
 MIDI_ROW_ONE = {
     "0": [176, 16],
@@ -77,204 +80,15 @@ DEG = 180 / Math.PI;
 SQUARE_DIAMETER = (Math.sqrt(2 * 2 + 2 * 2) / 2);
 ANTIALIAS = true;
 
-var assetman;
+var HC = HC || {};
 
-var HC = {};
 HC.now = window.performance.now.bind(window.performance);
 if (TWEEN) {
     TWEEN.now = HC.now;
 }
 
-var statics = false;
-
-var resources = [
-    {
-        file: 'structure/Statics.yml',
-        callback: function (data, finished) {
-            statics = new HC.Settings(jsyaml.load(data.contents));
-            finished();
-        }
-    },
-    {
-        file: 'structure/ShaderValues.yml',
-        callback: function (data, finished) {
-            var settings = jsyaml.load(data.contents);
-            statics.ShaderValues = new HC.Settings(settings);
-            finished();
-        }
-    },
-    {
-        file: 'structure/ShaderTypes.yml',
-        callback: function (data, finished) {
-            statics.ShaderTypes = new HC.Settings(jsyaml.load(data.contents));
-            finished();
-        }
-    },
-    {
-        file: 'structure/AnimationValues.yml',
-        callback: function (data, finished) {
-            var settings = jsyaml.load(data.contents);
-
-            _loadAnimationPlugins(settings);
-            statics.ShaderSettings = new HC.Settings(_loadShaderSettings(settings.shaders));
-            _loadRhythms(settings);
-
-            statics.AnimationValues = new HC.Settings(settings);
-            finished();
-        }
-    },
-    {
-        file: 'structure/AnimationSettings.yml',
-        callback: function (data, finished) {
-            data = jsyaml.load(data.contents);
-            data.shaders = statics.ShaderSettings;
-            // console.log(data.shaders);
-            statics.AnimationSettings = new HC.Settings(data, finished);
-            finished();
-        }
-    },
-    {
-        file: 'structure/AnimationController.yml',
-        callback: function (data, finished) {
-            data = jsyaml.load(data.contents);
-            statics.AnimationController = new HC.AnimationController(data, statics.AnimationSettings);
-            finished();
-        }
-    },
-    {
-        file: 'structure/AnimationTypes.yml',
-        callback: function (data, finished) {
-            statics.AnimationTypes = new HC.Settings(jsyaml.load(data.contents));
-            finished();
-        }
-    },
-    {
-        file: 'structure/ControlValues.yml',
-        callback: function (data, finished) {
-            var settings = jsyaml.load(data.contents);
-
-            _loadAudioPlugins(settings);
-
-            statics.ControlValues = new HC.Settings(settings);
-            finished();
-        }
-    },
-    {
-        file: 'structure/ControlSettings.yml',
-        callback: function (data, finished) {
-            statics.ControlSettings = new HC.Settings(jsyaml.load(data.contents));
-            finished();
-        }
-    },
-    {
-        file: 'structure/ControlTypes.yml',
-        callback: function (data, finished) {
-            statics.ControlTypes = new HC.Settings(jsyaml.load(data.contents));
-            finished();
-        }
-    },
-    {
-        file: 'structure/DisplayValues.yml',
-        callback: function (data, finished) {
-            statics.DisplayValues = new HC.Settings(jsyaml.load(data.contents));
-            finished();
-        }
-    },
-    {
-        file: 'structure/DisplaySettings.yml',
-        callback: function (data, finished) {
-            statics.DisplaySettings = new HC.Settings(jsyaml.load(data.contents));
-            finished();
-        }
-    },
-    {
-        file: 'structure/DisplayTypes.yml',
-        callback: function (data, finished) {
-            statics.DisplayTypes = new HC.Settings(jsyaml.load(data.contents));
-            finished();
-        }
-    },
-    {
-        file: 'structure/SourceValues.yml',
-        callback: function (data, finished) {
-            statics.SourceValues = new HC.Settings(jsyaml.load(data.contents));
-            finished();
-        }
-    },
-    {
-        file: 'structure/SourceSettings.yml',
-        callback: function (data, finished) {
-            statics.SourceSettings = new HC.Settings(jsyaml.load(data.contents));
-            finished();
-        }
-    },
-    {
-        file: 'structure/SourceTypes.yml',
-        callback: function (data, finished) {
-            statics.SourceTypes = new HC.Settings(jsyaml.load(data.contents));
-            finished();
-        }
-    },
-    {
-        file: 'structure/DataSettings.yml',
-        callback: function (data, finished) {
-            statics.DataSettings = new HC.Settings(jsyaml.load(data.contents));
-            finished();
-        }
-    },
-    {
-        file: 'structure/SourceTypes.yml',
-        callback: function (data, finished) {
-            statics.DataTypes = new HC.Settings(jsyaml.load(data.contents));
-            finished();
-        }
-    },
-    {
-        file: 'structure/MidiController.yml',
-        callback: function (data, finished) {
-            statics.MidiController = new HC.Settings(jsyaml.load(data.contents));
-            finished();
-        }
-    },
-    {
-        action: 'files',
-        base: '.',
-        file: SESSION_DIR,
-        callback: function (files, finished) {
-            for (var i = 0; i < files.length; i++) {
-                var f = files[i];
-                statics.ControlValues.session[f.name] = f.name;
-            }
-
-            finished();
-        }
-    },
-    {
-        action: 'files',
-        base: '.',
-        file: ASSET_DIR,
-        callback: function (files, finished) {
-            // todo AssetManager
-            assetman = new AssetManager(files);
-            var keys = Object.keys(statics.SourceValues.input);
-            var index = keys.length;
-            for (var i = 0; i < files.length; i++) {
-                var f = files[i];
-
-                if (!f.name.match(/\.json/)) {
-                    statics.SourceValues.input[index++] = f.name;
-                }
-
-                if (f.name.match(/\.png/)) {
-                    statics.AnimationValues.material_map[f.name] = f.name;
-                    statics.AnimationValues.background_input[f.name] = f.name;
-                }
-            }
-
-            finished();
-        }
-    }
-];
+var assetman = new HC.AssetManager();
+var statics;
 
 /**
  *
@@ -301,129 +115,335 @@ function loadResources(resources, callback) {
         });
     };
 
+    var _setup = function (callback) {
+        if (!(_HASH in statics.ControlValues.session)) {
+            statics.ControlValues.session[_HASH] = _HASH;
+        }
+
+        statics.ControlSettings.session = _HASH;
+
+        callback();
+    };
+
     _load(0, function () {
         _setup(callback);
     });
 }
 
 /**
- *
- * @param settings
- * @param tree
- * @param section
- * @param plugins
- * @private
+ * All setup operations are encapsulated into this function
+ * @returns {*[]}
  */
-function _loadPlugins(settings, tree, section, plugins) {
+function setupResources () {
+    return [
+        {
+            file: 'structure/Statics.yml',
+            callback: function (data, finished) {
+                statics = new HC.Settings(jsyaml.load(data.contents));
+                finished();
+            }
+        },
+        {
+            file: 'structure/ShaderValues.yml',
+            callback: function (data, finished) {
+                var settings = jsyaml.load(data.contents);
+                statics.ShaderValues = new HC.Settings(settings);
+                finished();
+            }
+        },
+        {
+            file: 'structure/ShaderTypes.yml',
+            callback: function (data, finished) {
+                statics.ShaderTypes = new HC.Settings(jsyaml.load(data.contents));
+                finished();
+            }
+        },
+        {
+            file: 'structure/AnimationValues.yml',
+            callback: function (data, finished) {
+                var settings = jsyaml.load(data.contents);
 
-    var pluginKeys = Object.keys(plugins);
+                _loadAnimationPlugins(settings);
+                statics.ShaderSettings = new HC.Settings(_loadShaderSettings(settings.shaders));
+                _loadRhythms(settings);
 
-    pluginKeys.sort(function (a, b) {
-        var ai = plugins[a].prototype.index || 99999;
-        var bi = plugins[b].prototype.index || 99999;
-        var an = plugins[a].prototype.name || a;
-        var bn = plugins[b].prototype.name || b;
+                statics.AnimationValues = new HC.Settings(settings);
+                finished();
+            }
+        },
+        {
+            file: 'structure/AnimationSettings.yml',
+            callback: function (data, finished) {
+                data = jsyaml.load(data.contents);
+                data.shaders = statics.ShaderSettings;
+                // console.log(data.shaders);
+                statics.AnimationSettings = new HC.Settings(data, finished);
+                finished();
+            }
+        },
+        {
+            file: 'structure/AnimationController.yml',
+            callback: function (data, finished) {
+                data = jsyaml.load(data.contents);
+                statics.AnimationController = new HC.AnimationController(data, statics.AnimationSettings);
+                finished();
+            }
+        },
+        {
+            file: 'structure/AnimationTypes.yml',
+            callback: function (data, finished) {
+                statics.AnimationTypes = new HC.Settings(jsyaml.load(data.contents));
+                finished();
+            }
+        },
+        {
+            file: 'structure/ControlValues.yml',
+            callback: function (data, finished) {
+                var settings = jsyaml.load(data.contents);
 
-        var cmpi = ai - bi;
-        if (cmpi == 0) {
-            return an.localeCompare(bn);
+                _loadAudioPlugins(settings);
+
+                statics.ControlValues = new HC.Settings(settings);
+                finished();
+            }
+        },
+        {
+            file: 'structure/ControlSettings.yml',
+            callback: function (data, finished) {
+                statics.ControlSettings = new HC.Settings(jsyaml.load(data.contents));
+                finished();
+            }
+        },
+        {
+            file: 'structure/ControlTypes.yml',
+            callback: function (data, finished) {
+                statics.ControlTypes = new HC.Settings(jsyaml.load(data.contents));
+                finished();
+            }
+        },
+        {
+            file: 'structure/DisplayValues.yml',
+            callback: function (data, finished) {
+                statics.DisplayValues = new HC.Settings(jsyaml.load(data.contents));
+                finished();
+            }
+        },
+        {
+            file: 'structure/DisplaySettings.yml',
+            callback: function (data, finished) {
+                statics.DisplaySettings = new HC.Settings(jsyaml.load(data.contents));
+                finished();
+            }
+        },
+        {
+            file: 'structure/DisplayTypes.yml',
+            callback: function (data, finished) {
+                statics.DisplayTypes = new HC.Settings(jsyaml.load(data.contents));
+                finished();
+            }
+        },
+        {
+            file: 'structure/SourceValues.yml',
+            callback: function (data, finished) {
+                statics.SourceValues = new HC.Settings(jsyaml.load(data.contents));
+                finished();
+            }
+        },
+        {
+            file: 'structure/SourceSettings.yml',
+            callback: function (data, finished) {
+                statics.SourceSettings = new HC.Settings(jsyaml.load(data.contents));
+                finished();
+            }
+        },
+        {
+            file: 'structure/SourceTypes.yml',
+            callback: function (data, finished) {
+                statics.SourceTypes = new HC.Settings(jsyaml.load(data.contents));
+                finished();
+            }
+        },
+        {
+            file: 'structure/DataSettings.yml',
+            callback: function (data, finished) {
+                statics.DataSettings = new HC.Settings(jsyaml.load(data.contents));
+                finished();
+            }
+        },
+        {
+            file: 'structure/SourceTypes.yml',
+            callback: function (data, finished) {
+                statics.DataTypes = new HC.Settings(jsyaml.load(data.contents));
+                finished();
+            }
+        },
+        {
+            file: 'structure/MidiController.yml',
+            callback: function (data, finished) {
+                statics.MidiController = new HC.Settings(jsyaml.load(data.contents));
+                finished();
+            }
+        },
+        {
+            action: 'files',
+            base: '.',
+            file: SESSION_DIR,
+            callback: function (files, finished) {
+                for (var i = 0; i < files.length; i++) {
+                    var f = files[i];
+                    statics.ControlValues.session[f.name] = f.name;
+                }
+
+                finished();
+            }
+        },
+        {
+            action: 'files',
+            base: '.',
+            file: VIDEO_DIR,
+            callback: function (files, finished) {
+
+                var videos = assetman.addVideos(files, 'name');
+
+                // add videos into source values by index
+                var keys = Object.keys(statics.SourceValues.input);
+                var index = keys.length;
+                for (var i in videos) {
+                    statics.SourceValues.input[index++] = i;
+                }
+
+                finished();
+            }
+        },
+        {
+            action: 'files',
+            base: '.',
+            file: IMAGE_DIR,
+            callback: function (files, finished) {
+                var images = assetman.addImages(files, 'name');
+                // add images into AnimationValues by name
+                for (var i in images) {
+                    statics.AnimationValues.material_input[i] = i;
+                    statics.AnimationValues.background_input[i] = i;
+                }
+
+                // add images into source values by index
+                var keys = Object.keys(statics.SourceValues.input);
+                var index = keys.length;
+                for (var i in images) {
+                    statics.SourceValues.input[index++] = i;
+                }
+
+                finished();
+            }
         }
-        return cmpi;
-    });
+    ];
 
-    for (var i = 0; i < pluginKeys.length; i++) {
+    /**
+     *
+     * @param settings
+     * @param tree
+     * @param section
+     * @param plugins
+     * @private
+     */
+    function _loadPlugins(settings, tree, section, plugins) {
 
-        var pluginKey = pluginKeys[i];
-        var plugin = tree[section][pluginKey];
+        var pluginKeys = Object.keys(plugins);
 
-        settings[section][pluginKey] = plugin.prototype.name || pluginKey;
+        pluginKeys.sort(function (a, b) {
+            var ai = plugins[a].prototype.index || 99999;
+            var bi = plugins[b].prototype.index || 99999;
+            var an = plugins[a].prototype.name || a;
+            var bn = plugins[b].prototype.name || b;
 
-    }
-}
+            var cmpi = ai - bi;
+            if (cmpi == 0) {
+                return an.localeCompare(bn);
+            }
+            return cmpi;
+        });
 
-/**
- *
- * @param settings
- * @private
- */
-function _loadAudioPlugins(settings) {
-    _loadPlugins(settings, HC, 'audio', HC.audio);
-}
+        for (var i = 0; i < pluginKeys.length; i++) {
 
-/**
- *
- * @param settings
- * @private
- */
-function _loadAnimationPlugins(settings) {
+            var pluginKey = pluginKeys[i];
+            var plugin = tree[section][pluginKey];
 
-    Object.assign(HC.plugins.pattern_overlay, HC.plugins.pattern);
+            settings[section][pluginKey] = plugin.prototype.name || pluginKey;
 
-    var sectionKeys = Object.keys(HC.plugins);
-
-    for (var pi = 0; pi < sectionKeys.length; pi++) {
-
-        var section = sectionKeys[pi];
-
-        // create plugin namespaces to work in
-        HC.Shape.prototype.injected.plugins[section] = {};
-
-        _loadPlugins(settings, HC.plugins, section, HC.plugins[section]);
-
-    }
-
-    var keys = Object.keys(settings);
-    for (var i = 0; i < keys.length; i++) {
-        var key = keys[i];
-        if (key.endsWith('_oscillate')) {
-            settings[key] = settings.oscillate;
-            statics.oscillator.push(key.replace('_oscillate', ''));
         }
     }
 
-    statics.ShaderValues.oscillate = settings.oscillate;
-}
+    /**
+     *
+     * @param settings
+     * @private
+     */
+    function _loadAudioPlugins(settings) {
+        _loadPlugins(settings, HC, 'audio', HC.audio);
+    }
 
-/**
- *
- * @param settings
- * @private
- */
-function _loadRhythms(settings) {
-    var speeds = HC.Beatkeeper.prototype.speeds;
-    for (var key in speeds) {
-        if (speeds[key].visible !== false) {
-            settings.rhythm[key] = key;
+    /**
+     *
+     * @param settings
+     * @private
+     */
+    function _loadAnimationPlugins(settings) {
+
+        Object.assign(HC.plugins.pattern_overlay, HC.plugins.pattern);
+
+        var sectionKeys = Object.keys(HC.plugins);
+
+        for (var pi = 0; pi < sectionKeys.length; pi++) {
+
+            var section = sectionKeys[pi];
+
+            // create plugin namespaces to work in
+            HC.Shape.prototype.injected.plugins[section] = {};
+
+            _loadPlugins(settings, HC.plugins, section, HC.plugins[section]);
+
+        }
+
+        var keys = Object.keys(settings);
+        for (var i = 0; i < keys.length; i++) {
+            var key = keys[i];
+            if (key.endsWith('_oscillate')) {
+                settings[key] = settings.oscillate;
+                statics.oscillator.push(key.replace('_oscillate', ''));
+            }
+        }
+
+        statics.ShaderValues.oscillate = settings.oscillate;
+    }
+
+    /**
+     *
+     * @param settings
+     * @private
+     */
+    function _loadRhythms(settings) {
+        var speeds = HC.Beatkeeper.prototype.speeds;
+        for (var key in speeds) {
+            if (speeds[key].visible !== false) {
+                settings.rhythm[key] = key;
+            }
         }
     }
-}
 
-/**
- *
- * @param values
- * @private
- */
-function _loadShaderSettings(values) {
-    var settings = {};
-    var keys = Object.keys(values);
-    for (var i = 0; i < keys.length; i++) {
-        var key = keys[i];
-        settings[key] = HC.plugins.shaders[key].prototype.settings;
+    /**
+     *
+     * @param values
+     * @private
+     */
+    function _loadShaderSettings(values) {
+        var settings = {};
+        var keys = Object.keys(values);
+        for (var i = 0; i < keys.length; i++) {
+            var key = keys[i];
+            settings[key] = HC.plugins.shaders[key].prototype.settings;
+        }
+
+        return settings;
     }
-
-    return settings;
-}
-
-/**
- *
- * @private
- */
-function _setup(callback) {
-    if (!(_HASH in statics.ControlValues.session)) {
-        statics.ControlValues.session[_HASH] = _HASH;
-    }
-
-    statics.ControlSettings.session = _HASH;
-
-    callback();
 }

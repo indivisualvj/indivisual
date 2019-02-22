@@ -162,16 +162,17 @@
                 if (i < statics.SourceValues.sample.length) {
                     sample = new HC.Sample(i);
 
-                } else if (i < iKeys.length - 1 && i in statics.SourceValues.input) {
+                } else if (i < iKeys.length && i in statics.SourceValues.input) {
                     var file = statics.SourceValues.input[i];
-                    var path = filePath(ASSET_DIR, file);
-                    if (file.match(/.+\.(png|jpeg|jpg|tif|tiff|bmp)/)) {
-                        sample = new HC.Image(i, path);
+
+                    if (assetman.getVideo(file)) {
+                        var path = filePath(VIDEO_DIR, file);
+                        sample = new HC.Video(i, path);
 
                     } else {
-                        sample = new HC.Video(i, path);
+                        var path = filePath(IMAGE_DIR, file);
+                        sample = new HC.Image(i, path);
                     }
-
                 }
 
                 if (!sample) {

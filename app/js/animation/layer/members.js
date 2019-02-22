@@ -1,23 +1,19 @@
 /**
  *
- * @returns {{s: number, h: *, l: number, da: *, db: *, dc: *, o: number}}
+ * @returns {CanvasTexture}
  */
-HC.Layer.prototype.randomColor = function () {
-    var max = 360;
-    var min = 0;
-    var vh = randomInt(min, max);
-    var vs = 10;
-    var vl = 10;
+HC.Layer.prototype.getMaterialMap = function () {
+    var seq = statics.SourceSettings.material_map;
+    if (seq !== 'none') {
+        var plugin = this.getMaterialMapPlugin('sequence');
 
-    var no = randomFloat(0.5, 0.9, 2, false);
+        return plugin.texture;
 
-    max = 3;
-    min = 1;
-    var vdh = randomInt(min, max);
-    var vds = randomInt(min, max);
-    var vdl = randomInt(min, max);
+    } else {
+        var plugin = this.getMaterialMapPlugin('texture');
 
-    return {h: vh, s: vs, l: vl, da: vdh, db: vds, dc: vdl, o: no};
+        return plugin.texture;
+    }
 };
 
 /**
@@ -25,6 +21,7 @@ HC.Layer.prototype.randomColor = function () {
  * @returns {Vector3}
  */
 HC.Layer.prototype.lookAtVector = function () {
+
     var v = this.cameraDefaultDistance();
     return new THREE.Vector3(
         v * this.settings.shape_lookat_centerx,

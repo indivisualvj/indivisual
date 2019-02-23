@@ -376,8 +376,9 @@ function setupResources() {
 
             var pluginKey = pluginKeys[i];
             var plugin = tree[section][pluginKey];
+            var name = plugin.prototype.name || plugin.prototype.constructor.name || pluginKey;
 
-            settings[section][pluginKey] = plugin.prototype.name || pluginKey;
+            settings[section][pluginKey] = name;
 
         }
     }

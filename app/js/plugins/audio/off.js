@@ -1,7 +1,10 @@
-HC.audio.off = _class(false, HC.AudioPlugin, {
-    index: 1,
-    init: function (callback) {
+{
+    class Plugin extends HC.AudioPlugin {
+        static index = 1;
 
+        init(callback) {
+        }
     }
 
-});
+    HC.audio.off = Plugin;
+}

@@ -3,9 +3,14 @@
  */
 
 HC.plugins.rotation_mode = HC.plugins.rotation_mode || {};
+{
+    HC.RotationModePlugin = class Plugin extends HC.AnimationPlugin {
+        isFirstShape(shape) {
+            return shape.index == -1;
+        }
+    };
 
-HC.RotationModePlugin = _class(false, HC.AnimationPlugin, {
-    injections: {
+    HC.RotationModePlugin.prototype.injections = {
         current: {
             x: 0,
             y: 0,
@@ -18,9 +23,5 @@ HC.RotationModePlugin = _class(false, HC.AnimationPlugin, {
         },
         tween: false,
         iterations: 0
-    },
-
-    isFirstShape: function (shape) {
-        return shape.index == -1;
     }
-});
+}

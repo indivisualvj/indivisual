@@ -181,7 +181,7 @@ lighting_shadows: false
 
 background_mode: 'transparent'
 background_color: '#000000'
-background_input: 'off'
+background_input: 'none'
 background_volume: 1
 background_volume_oscillate: 'off'
 

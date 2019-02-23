@@ -2,14 +2,14 @@ HC.plugins.mesh_material.clouds = _class(false, HC.MeshMaterialPlugin, {
     apply: function (geometry) {
         var material = new THREE.ShaderMaterial(this.shader);
         material.color = new THREE.Color();
-        listener.register('animation.updateRuntime', 'mesh_material.clouds', function (now) {
+        listener.register('animation.updateRuntime', 'material.uniforms.uTime.value', function (now) {
             material.uniforms.uTime.value = now;
         });
         var mesh = new THREE.Mesh(geometry, material);
 
         return mesh;
     },
-    
+
     shader: {
         uniforms: {
             uTime: {type: 'f', value: 1.0}

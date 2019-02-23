@@ -112,7 +112,7 @@ var HC = HC || {};
         _add(source, nu, key) {
             for (var i in nu) {
                 var f = nu[i];
-                source[key?f[key]:i] = key?f[key]:f;
+                source[key ? f[key] : i] = key ? f[key] : f;
             }
 
             return source;

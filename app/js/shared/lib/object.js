@@ -19,5 +19,6 @@ function _class(constructor, parent, proto) {
     };
     cls.prototype = _extend(parent || function () {
     }, proto);
+
     return cls;
 }

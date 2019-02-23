@@ -134,7 +134,7 @@ function loadResources(resources, callback) {
  * All setup operations are encapsulated into this function
  * @returns {*[]}
  */
-function setupResources () {
+function setupResources() {
     return [
         {
             file: 'structure/Statics.yml',
@@ -352,10 +352,18 @@ function setupResources () {
         var pluginKeys = Object.keys(plugins);
 
         pluginKeys.sort(function (a, b) {
-            var ai = plugins[a].prototype.index || 99999;
-            var bi = plugins[b].prototype.index || 99999;
-            var an = plugins[a].prototype.name || a;
-            var bn = plugins[b].prototype.name || b;
+
+            var ai = plugins[a].prototype.index || plugins[a].prototype.constructor.index || 99999;
+            var bi = plugins[b].prototype.index || plugins[b].prototype.constructor.index || 99999;
+            var an = plugins[a].prototype.name || plugins[a].prototype.constructor.name || a;
+            var bn = plugins[b].prototype.name || plugins[b].prototype.constructor.name || b;
+
+            if (an === 'Plugin') {
+                an = a;
+            }
+            if (bn === 'Plugin') {
+                bn = b;
+            }
 
             var cmpi = ai - bi;
             if (cmpi == 0) {
@@ -368,8 +376,13 @@ function setupResources () {
 
             var pluginKey = pluginKeys[i];
             var plugin = tree[section][pluginKey];
+            var name = plugin.prototype.name || plugin.prototype.constructor.name || pluginKey;
 
-            settings[section][pluginKey] = plugin.prototype.name || pluginKey;
+            if (name == 'Plugin') {
+                name = pluginKey;
+            }
+
+            settings[section][pluginKey] = name;
 
         }
     }

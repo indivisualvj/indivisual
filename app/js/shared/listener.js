@@ -41,13 +41,36 @@
          *
          * @param event
          * @param id
+         */
+        remove: function (event, id) {
+            if (event in this.events) {
+                if (id && id in this.events[event]) {
+                    delete this.events[event][id];
+
+                } else if (id === undefined) {
+                    delete this.events[event];
+                }
+            }
+        },
+
+        /**
+         *
+         */
+        reset: function () {
+            this.events = {};
+        },
+
+        /**
+         *
+         * @param event
+         * @param id
          * @param target
          */
         fire: function (event, id, target) {
             if (event in this.events && id in this.events[event]) {
                 var _call = this.events[event][id];
                 if (_call) {
-                    //console.log(event + '.' + id);
+                    // console.log(event + '.' + id);
                     _call(target);
                 }
             }
@@ -61,11 +84,7 @@
         fireAll: function (event, target) {
             if (event in this.events) {
                 for (id in this.events[event]) {
-                    var _call = this.events[event][id];
-                    if (_call) {
-                        //console.log(event + '.' + id);
-                        _call(target);
-                    }
+                    this.fire(event, id, target);
                 }
             }
         }

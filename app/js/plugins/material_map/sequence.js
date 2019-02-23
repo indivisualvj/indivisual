@@ -1,7 +1,7 @@
 {
     class Plugin extends HC.MaterialMapPlugin {
 
-        apply (i) {
+        apply(i) {
             var seq = sourceman.getSequence(i);
             var image = seq.current(renderer.current(), true);
 
@@ -22,7 +22,7 @@
             return false;
         }
 
-        updateTexture (map, image) {
+        updateTexture(map, image) {
             var img = map.image;
             if (img) {
                 var width = map.image.width;
@@ -36,7 +36,7 @@
             map.needsUpdate = true;
         }
 
-        initTexture (image) {
+        initTexture(image) {
             var edge = Math.min(image.width, image.height);
             var nearest = THREE.Math.floorPowerOfTwo(edge);
             while (nearest > edge) {

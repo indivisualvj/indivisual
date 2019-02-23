@@ -280,7 +280,7 @@
             var mat = this.mesh.material;
             var c = this.color;
             mat.color.setHSL(c.h / 360, c.s / 100, c.l / 100);
-            
+
             if (mat.emissive) {
                 if (emissive !== false) {
                     mat.emissive.setHSL(c.h / 360, c.s / 100, c.l / 100);
@@ -315,11 +315,13 @@
                 var repeat = mat.map.repeat;
                 var center = mat.map.center;
 
+                // todo .transformUv evtl beim zoom1 und verschieben.
+
                 if (repeat.x != settings.material_uvx) {
-                    repeat.x = 1/settings.material_uvx;
+                    repeat.x = 1 / settings.material_uvx;
                 }
                 if (repeat.y != settings.material_uvy) {
-                    repeat.y = 1/settings.material_uvy;
+                    repeat.y = 1 / settings.material_uvy;
                 }
                 if (center.x != settings.material_uvofx) {
                     center.x = settings.material_uvofx;
@@ -333,7 +335,6 @@
                 mat.emissiveMap = false;
                 mat.needsUpdate = true;
             }
-            
 
 
             var b = settings.material_blending;

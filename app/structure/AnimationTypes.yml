@@ -209,5 +209,5 @@ audio_usewaveform: [half]
 
 background_mode: [half]
 background_color: [half]
-background_volume: [-1, 2, 0.01, half]
+background_volume: [-5, 5, 0.01, half]
 background_volume_oscillate: [half]

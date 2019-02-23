@@ -213,8 +213,8 @@ function assignUVs(geometry) {
     // min.x *= uvx;
     // min.y *= uvy;
 
-    ofx = 0;//max.x / 2 - max.x * ofx;
-    ofy = 0;//max.y / 2 - max.y * ofy;
+    var ofx = 0;//max.x / 2 - max.x * ofx;
+    var ofy = 0;//max.y / 2 - max.y * ofy;
 
     var offset = new THREE.Vector2(ofx - min.x, ofy - min.y);
     var range = new THREE.Vector2(max.x - min.x, max.y - min.y);
@@ -222,7 +222,7 @@ function assignUVs(geometry) {
     geometry.faceVertexUvs[0] = [];
     var faces = geometry.faces;
 
-    for (i = 0; i < geometry.faces.length; i++) {
+    for (var i = 0; i < geometry.faces.length; i++) {
 
         var v1 = geometry.vertices[faces[i].a];
         var v2 = geometry.vertices[faces[i].b];

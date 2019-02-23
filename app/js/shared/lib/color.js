@@ -2,7 +2,7 @@
  *
  * @returns {{s: *, h: *, l: *, o: number}}
  */
-function randomColor () {
+function randomColor() {
 
     var vh = randomInt(0, 360);
     var vs = randomInt(50, 100);

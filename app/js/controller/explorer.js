@@ -240,7 +240,6 @@
                 messaging.delete(STORAGE_DIR, this.model.dir, this.model.name, function (result) {
                     _log(result);
                     parent.model.children.splice(current.$index, 1);
-                    current.$destroy();
                 });
             },
 

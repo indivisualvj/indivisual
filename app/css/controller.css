@@ -281,7 +281,14 @@ pre div {
 }
 
 pre a {
+    cursor: pointer;
     color: rgba(10, 255, 10, 1);
+    font-weight: bold;
+}
+
+pre .yellow {
+    color: rgba(255, 210, 10, 1);
+    font-weight: bold;
 }
 
 

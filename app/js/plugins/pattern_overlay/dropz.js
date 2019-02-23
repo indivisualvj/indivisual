@@ -1,6 +1,25 @@
 {
     class Plugin extends HC.AnimationPlugin {
         static name = 'drop Z';
+        static tutorial = {
+            activate: {
+                text: 'Accelerates shapes on Z-Axis towards the Camera. To make it work perfectly, set pattern_overlay_volume to 1.0',
+                action: function () {
+                    controller.closeAll();
+                    controller.openBySetting('pattern_overlay_volume');
+                    controller.updateSetting(statics.ControlSettings.layer, 'pattern_overlay_volume', 1, true, true);
+                }
+            },
+            invert: {
+                text: 'To invert movement, twist the layer by 180°',
+                action: function () {
+                    controller.closeAll();
+                    controller.openBySetting('layer_rotationy');
+                    controller.updateSetting(statics.ControlSettings.layer, 'layer_rotationy', 180, true, true);
+                }
+            }
+        };
+
         apply (shape) {
             var params = this.params(shape);
             var duration = this.layer.getShapeDuration(shape);
@@ -9,19 +28,16 @@
                 params.delay = duration / randomInt(1, 8);
                 params.velocity = 1;
 
-                this.layer.getPatternPlugin().apply(shape);
+                this.layer.doPlugin(this.layer.getPatternPlugin(), shape);
+                // this.layer.getPatternPlugin().apply(shape);
             }
 
+            //accelerate
             if (params.delay <= 0) {
-                //accelerate
-                if (this.settings.pattern_paddingz > 0) {
-                    params.velocity = Math.max(1, params.velocity);
 
-                } else if (this.settings.pattern_paddingz < 0) {
-                    params.velocity = Math.min(-1, params.velocity);
-                }
+                // go backwart by rotating the layer
                 var acc = Math.abs(this.settings.pattern_paddingz);
-
+                params.velocity = Math.max(1, params.velocity);
                 params.velocity *= (1.05 * animation.diffPrc * acc);
 
                 var so = shape.sceneObject();
@@ -32,8 +48,8 @@
                     params.velocity = 0;
                 }
 
+            //countdown
             } else {
-                //countdown
                 params.delay -= animation.diff;
             }
         }

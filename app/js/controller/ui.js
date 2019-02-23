@@ -385,15 +385,69 @@ HC.Controller.prototype.nextOpenFolder = function (control) {
     return control;
 };
 
+
+/**
+ *
+ * @param setting
+ */
+HC.Controller.prototype.openBySetting = function (setting) {
+    var control = this.controlParentBySetting(setting);
+    control.open();
+};
+
+/**
+ *
+ * @param setting
+ * @param [control]
+ * @returns {*}
+ */
+HC.Controller.prototype.controlParentBySetting = function (setting, control) {
+
+    control = control || this.gui;
+
+    for (var c in control.__controllers) {
+        var co = control.__controllers[c];
+        if (co.property == setting) {
+            // found
+            return control;
+        }
+    }
+    for (var k in control.__folders) {
+        var v = control.__folders[k];
+
+        var c = this.controlParentBySetting(setting, v);
+        if (c) {
+            return c;
+        }
+    }
+    return false;
+};
+
+/**
+ *
+ * @param item
+ * @param value
+ */
+HC.Controller.prototype.explainPlugin = function (item, value) {
+    if (item in HC.plugins) {
+        if (value in HC.plugins[item]) {
+            var proto = HC.plugins[item][value].prototype;
+            var desc = proto.tutorial || proto.constructor.tutorial;
+            if (desc) {
+                var key = item + '.' + value;
+                new HC.ScriptProcessor(key, desc).print();
+            }
+        }
+    }
+};
+
 /**
  *
  * @param control
  */
 HC.Controller.prototype.closeAll = function (control) {
 
-    if (!control) {
-        control = this.gui;
-    }
+    control = control || this.gui;
 
     if (control.__folders) {
         for (var k in control.__folders) {
@@ -473,10 +527,53 @@ HC.Controller.prototype.toggleByKey = function (ci, shiftKey) {
                 control.domElement.getElementsByTagName('select')[0].focus();
 
             } else {
-                _log(control);
+                HC.log(control);
             }
         }
     }
+};
+
+/**
+ *
+ * @param item
+ * @param control
+ * @param show
+ */
+HC.Controller.prototype.updateUi = function (item, control, show) {
+
+    if (!control) {
+        control = this.gui;
+        this.refreshLayerInfo();
+    }
+
+    var flds = control.__folders || [];
+
+    for (var key in flds) {
+        var fld = flds[key];
+
+        this.updateUi(item, fld, false);
+    }
+
+    var ctrls = control.__controllers || [];
+
+    for (var key in ctrls) {
+        var ctrl = ctrls[key];
+        if (!item || ctrl.__li.getAttribute('data-id') == item) {
+            ctrl.updateDisplay();
+        }
+    }
+
+    if (show) {
+        for (var i = 0; i < statics.DisplayValues.display.length; i++) {
+            var n = 'display' + i;
+            var v = statics.DisplaySettings[n + '_visible'];
+            this.showControls(n, 'g_sources', v);
+
+            n = '_display' + i;
+            this.showControls(n, 'g_displays', v);
+        }
+    }
+
 };
 
 /**

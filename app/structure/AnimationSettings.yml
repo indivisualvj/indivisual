@@ -1,7 +1,7 @@
 name: 0
 uuid: ''
-description: ''
-controllers: {}
+tutorial: {}
+
 oscillate: 'off' # placeholder for automated _oscillate functions
 
 audio_smoothing: 0.6

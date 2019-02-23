@@ -18,14 +18,14 @@
                                 }
                             }
                             , function (ex) {
-                                _log('audio', ex.message, true);
+                                HC.log('audio', ex.message, true);
                             });
                 } catch (ex) {
-                    _log('audio', ex.message, true);
+                    HC.log('audio', ex.message, true);
                 }
 
             } else {
-                _log('audio', 'could not getUserMedia', true);
+                HC.log('audio', 'could not getUserMedia', true);
             }
         }
 

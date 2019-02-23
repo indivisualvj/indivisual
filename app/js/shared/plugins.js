@@ -30,6 +30,11 @@ HC.Shape.prototype.initPlugins = function () {
             return this.tree + this.key;
         }
 
+        getDefinitions() {
+            var proto = Object.getPrototypeOf(this);
+            return proto.constructor || proto;
+        }
+
         construct(layer, settings, tree, key) {
             this.layer = layer;
             this.settings = settings;

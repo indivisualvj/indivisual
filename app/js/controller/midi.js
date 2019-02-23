@@ -122,7 +122,7 @@ HC.Controller.prototype.initMidi = function (instance) {
                 var clocknow = message.timeStamp;
                 var diff = clocknow - clockfirst;
                 clockbpm = round(4 * 60 * 1000 / diff, 2);
-                _log('clockbpm', clockbpm);
+                HC.log('clockbpm', clockbpm);
 
                 if (!statics.ControlSettings.peak_bpm_detect) { // tempo by MIDI clock
                     if (statics.ControlSettings.tempo != clockbpm) {
@@ -192,13 +192,13 @@ HC.Controller.prototype.initMidi = function (instance) {
                         }
                     }
                 } else {
-                    _log('midi_miss', data);
+                    HC.log('midi_miss', data);
                 }
             } else {
-                _log('midi_miss', data);
+                HC.log('midi_miss', data);
             }
         } else {
-            _log('midi_miss', data);
+            HC.log('midi_miss', data);
         }
     }
 

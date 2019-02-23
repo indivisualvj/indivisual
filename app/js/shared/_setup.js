@@ -1,4 +1,4 @@
-DEBUG = false;
+DEBUG = true;
 
 APP_DIR = 'app';
 STORAGE_DIR = 'storage';

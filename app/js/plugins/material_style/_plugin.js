@@ -9,5 +9,9 @@ HC.plugins.material_style = HC.plugins.material_style || {};
                 shape.mesh.material.needsUpdate = true;
             }
         }
-    }
+    };
+
+    HC.MaterialStylePlugin.prototype.injections = {
+        stroke: false
+    };
 }

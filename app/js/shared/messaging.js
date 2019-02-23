@@ -75,7 +75,7 @@
          * @param callback
          */
         connect: function (callback) {
-            _log(this.program.name, 'connecting...', true);
+            HC.log(this.program.name, 'connecting...', true);
             this.socket = io.connect(null, {'secure': true, 'forceNew': true});
 
             this.initEvents();
@@ -219,7 +219,7 @@
          */
         onLog: function (data) {
 
-            _log(data.key, data.value);
+            HC.log(data.key, data.value);
         },
 
         /**
@@ -412,7 +412,7 @@
          */
         sync: function (callback) {
 
-            _log(this.program.name, 'syncing...', true);
+            HC.log(this.program.name, 'syncing...', true);
 
             var data = {
                 sid: this.sid,

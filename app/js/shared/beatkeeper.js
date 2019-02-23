@@ -316,7 +316,7 @@
             var elapsed = HC.now() - this.beatStartTime;
             var ebeats = Math.floor((elapsed / duration) / 4);
 
-            // _log('resetCounters', {ebeats:ebeats}, false, DEBUG);
+            // HC.log('resetCounters', {ebeats:ebeats}, false, DEBUG);
 
             for (var s in this.speeds) {
                 s = this.speeds[s];

@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     messaging.connect(function (reconnect) {
 
-        _log(animation.name, 'connected', true, true);
+        HC.log(animation.name, 'connected', true, true);
 
         if (!reconnect) {
             loadResources(setupResources(), function () {
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (IS_ANIMATION) {
                     listener.register('webglcontextlost', animation.name, function () {
                         // now reset...
-                        _log('HC.Renderer', 'another context loss...', true, true);
+                        HC.log('HC.Renderer', 'another context loss...', true, true);
 
                         if (DEBUG) {
                             for (var i in MIDI_ROW_ONE) { // glContext messed up... make that clear
@@ -474,19 +474,19 @@ document.addEventListener('DOMContentLoaded', function () {
         loadSession: function (session) {
 
             if ('displays' in session) {
-                _log('displays', 'synced');
+                HC.log('displays', 'synced');
                 var displays = session.displays;
                 this.updateDisplays(displays, true, false, true);
             }
 
             if ('sources' in session) {
-                _log('sources', 'synced');
+                HC.log('sources', 'synced');
                 var sources = session.sources;
                 this.updateSources(sources, true, false, true);
             }
 
             if ('settings' in session) {
-                _log('settings', 'synced');
+                HC.log('settings', 'synced');
                 var settings = session.settings;
                 for (var k in settings) {
                     this.updateSettings(k, settings[k], true, false, true);
@@ -496,7 +496,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if ('controls' in session) {
-                _log('controls', 'synced');
+                HC.log('controls', 'synced');
                 var controls = session.controls;
                 this.updateControls(controls, true, false, true);
             }

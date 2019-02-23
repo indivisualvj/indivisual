@@ -3,11 +3,11 @@
  */
 
 var HC = HC || {};
-{ // Hidden class to be added to HC namespace at [end of file]
+{ // Hidden class to be added to HC via ... = class ...
     /**
      *
      */
-    class AssetManager {
+    HC.AssetManager = class AssetManager {
 
         /**
          *
@@ -137,7 +137,4 @@ var HC = HC || {};
         }
 
     }
-
-    // add hidden class to HC namespace
-    HC.AssetManager = AssetManager;
 }

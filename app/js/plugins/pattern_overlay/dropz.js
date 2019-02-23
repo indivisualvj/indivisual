@@ -28,7 +28,7 @@
                 so.translateZ(params.velocity);
 
                 var cam = this.layer.getCamera();
-                if (so.position.z > cam.position.z) {
+                if (so.position.z > cam.position.z * 1.1) {
                     params.velocity = 0;
                 }
 

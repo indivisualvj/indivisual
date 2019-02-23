@@ -4,6 +4,7 @@ sessions
 samples
 storage
 !storage/_demos/*
+!storage/_tutorials/*
 storage/*/\.*
 
 .idea

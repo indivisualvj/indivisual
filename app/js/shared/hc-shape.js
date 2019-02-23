@@ -315,6 +315,8 @@
                 var repeat = mat.map.repeat;
                 var center = mat.map.center;
 
+                // todo .transformUv evtl beim zoom1 und verschieben.
+
                 if (repeat.x != settings.material_uvx) {
                     repeat.x = 1 / settings.material_uvx;
                 }

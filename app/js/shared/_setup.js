@@ -378,6 +378,10 @@ function setupResources() {
             var plugin = tree[section][pluginKey];
             var name = plugin.prototype.name || plugin.prototype.constructor.name || pluginKey;
 
+            if (name == 'Plugin') {
+                name = pluginKey;
+            }
+
             settings[section][pluginKey] = name;
 
         }

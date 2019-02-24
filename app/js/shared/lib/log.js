@@ -6,15 +6,13 @@
      * @param key
      * @param func
      */
-    HC.logFunction = function logAction(key, func) {
+    HC.logFunction = function (key, func) {
 
         requestAnimationFrame(function () {
             var co = document.getElementById('log');
             if (co) {
                 var a = HC.logGetAnchor(key);
                 a.onclick = function (e) {
-                    e.preventDefault();
-                    e.stopPropagation();
                     func();
                 };
                 co.appendChild(a);

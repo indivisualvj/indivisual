@@ -9,6 +9,14 @@ HC.Controller.prototype.initLogEvents = function () {
             return co.getAttribute('fixed');
         };
 
+        var _reset = function () {
+            co.style.backgroundColor = 'rgba(0, 0, 0, 0.0)';
+            co.style.width = '';
+            co.style.height = '';
+            co.classList.remove('pinnable');
+            co.removeAttribute('fixed');
+        };
+        
         co.onmouseover = function (evt) {
             if (!_isFixed()) {
                 co.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
@@ -20,16 +28,13 @@ HC.Controller.prototype.initLogEvents = function () {
 
         co.onmouseout = function (evt) {
             if (!_isFixed()) {
-                co.style.backgroundColor = 'rgba(0, 0, 0, 0.0)';
-                co.style.width = '';
-                co.style.height = '';
-                co.classList.remove('pinnable');
+                _reset();
             }
         };
 
         co.onclick = function (evt) {
             if (_isFixed()) {
-                co.removeAttribute('fixed');
+                _reset();
 
             } else {
                 co.setAttribute('fixed', true);

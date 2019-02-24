@@ -313,7 +313,7 @@
          */
         storeSample: function (i, name, resolution, load) {
             var sample = this.getSample(i);
-            if (IS_ANIMATION && sample) { // todo kommt das überhaupt an?
+            if (IS_ANIMATION && sample) { // this is 1 ugly workaround
 
                 var dir = SAMPLE_DIR + '/' + name;
                 var callback = function () {

@@ -4,37 +4,9 @@
 HC.Controller.prototype.initLogEvents = function () {
     var co = document.getElementById('blockfocus');
     if (co) {
-
-        var _isFixed = function () {
-            return co.getAttribute('fixed');
-        };
-
-        var _reset = function () {
-            co.style.backgroundColor = 'rgba(0, 0, 0, 0.0)';
-            co.style.width = '';
-            co.style.height = '';
-            co.classList.remove('pinnable');
-            co.removeAttribute('fixed');
-        };
-        
-        co.onmouseover = function (evt) {
-            if (!_isFixed()) {
-                co.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
-                co.style.width = '200%';
-                co.style.height = '125%';
-                co.classList.add('pinnable');
-            }
-        };
-
-        co.onmouseout = function (evt) {
-            if (!_isFixed()) {
-                _reset();
-            }
-        };
-
         co.onclick = function (evt) {
-            if (_isFixed()) {
-                _reset();
+            if (co.getAttribute('fixed')) {
+                co.removeAttribute('fixed');
 
             } else {
                 co.setAttribute('fixed', true);

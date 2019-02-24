@@ -110,18 +110,26 @@ body {
 
     border: 1px solid transparent;
     border-radius: 3px;
+    background-color: rgba(0, 0, 0, 0.0);
 
     padding: 3px;
-
-    transition: all 500ms ease-in;
+    cursor: zoom-in;
+    transition: all 125ms;
 }
 
-#blockfocus.pinnable {
+#blockfocus[fixed] {
+    background-color: rgba(0, 0, 0, 0.8);
+    width: 200%;
+    height: 125%;
+    cursor: zoom-out;
+}
+
+#blockfocus:hover, #blockfocus[fixed] {
     border: 1px solid #2fa1d6;
 }
 
-#blockfocus.pinnable::after {
-    content: ' click to pin/unpin';
+#blockfocus:hover::after, #blockfocus[fixed]::after {
+    content: ' click to expand/reduce';
     font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
     font-size: 10px;
     font-weight: bold;

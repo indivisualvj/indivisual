@@ -112,6 +112,8 @@ shape_geometry: tile
 shape_size: 14
 shape_audio: false
 shape_variant: 1
+shape_segmentsa: 1
+shape_segmentsb: 1
 shape_limit: false
 shape_sync: true
 shape_vertices: ''

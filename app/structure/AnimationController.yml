@@ -109,6 +109,8 @@ pattern:
 shape:
   shape_geometry:
   shape_variant:
+  shape_segmentsa:
+  shape_segmentsb:
   shape_size:
   shape_limit:
   shape_sync:

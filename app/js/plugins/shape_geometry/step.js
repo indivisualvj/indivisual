@@ -5,7 +5,7 @@ HC.plugins.shape_geometry.stepcircle = _class(false, HC.ShapeGeometryPlugin, {
             action: function () {
                 controller.closeAll();
                 controller.toggleByProperty('shape_variant');
-                controller.updateSetting(statics.ControlSettings.layer, 'shape_variant', 4, true, true);
+                controller.updateSetting(statics.ControlSettings.layer, 'shape_variant', 6, true, true);
             },
         },
         visibility: {
@@ -23,11 +23,11 @@ HC.plugins.shape_geometry.stepcircle = _class(false, HC.ShapeGeometryPlugin, {
 
         var div = this.settings.shape_variant;
         var step = layer.shapeSize(.5) / div;
-        var z = div;
+        var z = 0;
         var geometry = new THREE.Geometry();
         for (var i = step; i <= layer.shapeSize(.5); i += step) {
             var circ = new THREE.CircleGeometry(i, 32);
-            circ.translate(0, 0, 3*div - 3*z++);
+            circ.translate(0, 0, 3*z++);
             var mesh = new THREE.Mesh(circ);
             geometry.merge(mesh.geometry, mesh.matrix);
         }
@@ -64,9 +64,11 @@ HC.plugins.shape_geometry.steprect = _class(false, HC.ShapeGeometryPlugin, {
         var div = this.settings.shape_variant;
         var r = layer.shapeSize(SQUARE_DIAMETER / 2);
         var step = r / div;
+        var z = 0;
         var geometry = new THREE.Geometry();
         for (var i = step; i <= r; i += step) {
             var circ = new THREE.CircleGeometry(i, 4, Math.PI / 4);
+            circ.translate(0, 0, 3*z++);
             var mesh = new THREE.Mesh(circ);
             geometry.merge(mesh.geometry, mesh.matrix);
         }

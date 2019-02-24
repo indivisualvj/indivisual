@@ -58,8 +58,11 @@
 
             if (args && args.length) {
 
-                if (args.length > 4) {
-                    instance[func](args[0], args[1], args[2], args[3], args[3]);
+                if (args.length > 5) {
+                    instance[func](args[0], args[1], args[2], args[3], args[4], args[5]);
+
+                } else if (args.length > 4) {
+                    instance[func](args[0], args[1], args[2], args[3], args[4]);
 
                 } else if (args.length > 3) {
                     instance[func](args[0], args[1], args[2], args[3]);
@@ -82,16 +85,15 @@
         log() {
 
             HC.clearLog();
+            HC.log('tutorial', this.key);
 
             for (var i in this.desc) {
                 var d = this.desc[i];
-                var key = '<span class="red">' + this.key + ' (' + i + ')</span>';
-                var value = '<span class="yellow">' + d.text + '</span>';
 
-                HC.log(key, value, false, false, true);
+                HC.log(HC.logGetRed(i), HC.logGetYellow(d.text));
 
                 if (d.action) {
-                    HC.logAction('>>let\'s do it!<<', d.action);
+                    HC.logFunction('>>let\'s do it!<<', d.action);
                 }
             }
         }

@@ -114,6 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
                 controller.initKeyboard();
+                controller.initLogEvents();
                 midi = controller.initMidi(controller);
 
                 onResize();
@@ -362,11 +363,11 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param value
          * @param display
          * @param forward
-         * @param force
+         * @param silent
          */
-        updateSetting: function (layer, item, value, display, forward, force) {
+        updateSetting: function (layer, item, value, display, forward, silent) {
 
-            if (typeof value != 'object') {
+            if (!silent && typeof value != 'object') {
                 HC.log(item, value);
                 this.explainPlugin(item, value);
             }
@@ -382,7 +383,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (forward) {
                     var data = {};
                     data[item] = value;
-                    messaging.emitSettings(layer, data, display, false, force)
+                    messaging.emitSettings(layer, data, display, false, false);
                 }
 
                 if (display !== false) {

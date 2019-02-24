@@ -1,19 +1,21 @@
 {
     var logHistory = {};
+
     /**
      *
      * @param key
-     * @param action
+     * @param func
      */
-    HC.logAction = function logAction(key, action) {
+    HC.logFunction = function logAction(key, func) {
 
         requestAnimationFrame(function () {
             var co = document.getElementById('log');
             if (co) {
-                var a = document.createElement('A');
-                a.innerText = key;
-                a.onclick = function () {
-                    action();
+                var a = HC.logGetAnchor(key);
+                a.onclick = function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    func();
                 };
                 co.appendChild(a);
                 co.scrollTop = co.scrollHeight;
@@ -67,7 +69,7 @@
                         elem = logHistory[key];
 
                     } else {
-                        elem = document.createElement('DIV');
+                        elem = document.createElement('div');
                         logHistory[key] = elem;
                     }
 
@@ -81,10 +83,44 @@
         });
     };
 
+    /**
+     *
+     */
     HC.clearLog = function () {
         var co = document.getElementById('log');
         if (co) {
             co.innerHTML = '';
         }
+    };
+
+    /**
+     *
+     * @param value
+     * @returns {string}
+     */
+    HC.logGetRed = function (value) {
+        return '<span class="red">' + value + '</span>';
+
+    };
+
+    /**
+     *
+     * @param value
+     * @returns {string}
+     */
+    HC.logGetYellow = function (value) {
+        return '<span class="yellow">' + value + '</span>';
+    };
+
+    /**
+     *
+     * @param value
+     * @returns {string}
+     */
+    HC.logGetAnchor = function (value) {
+        var a = document.createElement('a');
+        a.innerText = value;
+
+        return a;
     };
 }

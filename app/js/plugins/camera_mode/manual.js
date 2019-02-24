@@ -31,7 +31,7 @@ HC.plugins.camera_mode.manualcenter = _class(false, HC.plugins.camera_mode.manua
     apply: function () {
         HC.plugins.camera_mode.manual.prototype.apply.call(this, new THREE.Vector3(0, 0, 0));
     }
-});
+}); // todo sort
 
 HC.plugins.camera_mode.lightingpatternxyz = _class(false, HC.plugins.camera_mode.manual, {
     name: 'look at lighting_patternxyz',

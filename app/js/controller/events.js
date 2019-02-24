@@ -1,6 +1,46 @@
 /**
  *
  */
+HC.Controller.prototype.initLogEvents = function () {
+    var co = document.getElementById('blockfocus');
+    if (co) {
+
+        var _isFixed = function () {
+            return co.getAttribute('fixed');
+        };
+
+        co.onmouseover = function (evt) {
+            if (!_isFixed()) {
+                co.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+                co.style.width = '200%';
+                co.style.height = '125%';
+                co.classList.add('pinnable');
+            }
+        };
+
+        co.onmouseout = function (evt) {
+            if (!_isFixed()) {
+                co.style.backgroundColor = 'rgba(0, 0, 0, 0.0)';
+                co.style.width = '';
+                co.style.height = '';
+                co.classList.remove('pinnable');
+            }
+        };
+
+        co.onclick = function (evt) {
+            if (_isFixed()) {
+                co.removeAttribute('fixed');
+
+            } else {
+                co.setAttribute('fixed', true);
+            }
+        }
+    }
+};
+
+/**
+ *
+ */
 HC.Controller.prototype.initKeyboard = function () {
     var keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     var setMnemonics = function (control) {

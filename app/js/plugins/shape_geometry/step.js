@@ -14,7 +14,7 @@ HC.plugins.shape_geometry.stepcircle = _class(false, HC.ShapeGeometryPlugin, {
                 controller.closeAll();
                 controller.toggleByProperty('coloring_opacity');
                 controller.updateSetting(statics.ControlSettings.layer, 'coloring_opacity', .5, true, true);
-                controller.updateSetting(statics.ControlSettings.layer, 'material_blending', 'NormalBlending', true, true);
+                controller.updateSetting(statics.ControlSettings.layer, 'material_blending', 'NormalBlending', true, true, true);
             },
         }
     },

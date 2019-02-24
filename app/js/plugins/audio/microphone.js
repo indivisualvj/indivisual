@@ -1,4 +1,4 @@
-{
+{ // todo tutorial + explain auch für setControl setDisplay
     class Plugin extends HC.AudioPlugin {
 
         init(callback) {

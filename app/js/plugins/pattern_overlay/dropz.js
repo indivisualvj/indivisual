@@ -35,7 +35,7 @@
             //accelerate
             if (params.delay <= 0) {
 
-                // go backwart by rotating the layer
+                // go backwards by rotating the layer
                 var acc = Math.abs(this.settings.pattern_paddingz);
                 params.velocity = Math.max(1, params.velocity);
                 params.velocity *= (1.05 * animation.diffPrc * acc);

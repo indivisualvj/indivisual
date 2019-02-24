@@ -29,7 +29,7 @@ HC.plugins.pattern_mover.bounce = _class(
                 var jump = this.settings.pattern_padding * shapeDir;
 
                 var speed = layer.getCurrentSpeed();
-                jump *= (layer.shapeSize(1) * shape.size() * speed.prc) / 4;
+                jump *= animation.diffPrc * (layer.shapeSize(1) * shape.size() * speed.prc) / 4;
 
                 if (vertical) {
                     this.mover.y += jump;

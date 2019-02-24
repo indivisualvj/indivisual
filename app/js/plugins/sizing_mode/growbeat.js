@@ -38,13 +38,12 @@ HC.plugins.sizing_mode.growbeat = _class(false, HC.SizingModePlugin, {
         } else {
 
             var speed = layer.getShapeSpeed(shape);
-            var sgas = 10 / speed.duration;
-            var dudi = animation.diff / speed.duration;
+            var jump = 1 / speed.duration * animation.diffPrc;
 
-            params.active += sgas * dudi * 125 * this.settings.sizing_scale;
+            params.active += jump * 60 * this.settings.sizing_scale;
 
             var diff = animation.now - params.since;
-            if (diff > speed.duration / beatkeeper.rhythmDivider(this.settings.rhythm) * 5 / this.settings.sizing_scale) {
+            if (diff > speed.duration * 4 / this.settings.sizing_scale) {
                 params.active = 0.09;
             }
 

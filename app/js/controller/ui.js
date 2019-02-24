@@ -385,29 +385,37 @@ HC.Controller.prototype.nextOpenFolder = function (control) {
     return control;
 };
 
-
 /**
  *
- * @param setting
+ * @param name
  */
-HC.Controller.prototype.openBySetting = function (setting) {
-    var control = this.controlParentBySetting(setting);
-    control.open();
+HC.Controller.prototype.toggleByName = function (name) {
+    // todo für tutorials und öffnen von shaders
 };
 
 /**
  *
- * @param setting
+ * @param property
+ */
+HC.Controller.prototype.toggleByProperty = function (property) {
+    var control = this.getControlParentByProperty(property);
+    control.open();
+    this.scrollToControl(control);
+};
+
+/**
+ *
+ * @param property
  * @param [control]
  * @returns {*}
  */
-HC.Controller.prototype.controlParentBySetting = function (setting, control) {
+HC.Controller.prototype.getControlParentByProperty = function (property, control) {
 
     control = control || this.gui;
 
     for (var c in control.__controllers) {
         var co = control.__controllers[c];
-        if (co.property == setting) {
+        if (co.property == property) {
             // found
             return control;
         }
@@ -415,7 +423,7 @@ HC.Controller.prototype.controlParentBySetting = function (setting, control) {
     for (var k in control.__folders) {
         var v = control.__folders[k];
 
-        var c = this.controlParentBySetting(setting, v);
+        var c = this.getControlParentByProperty(property, v);
         if (c) {
             return c;
         }
@@ -435,7 +443,7 @@ HC.Controller.prototype.explainPlugin = function (item, value) {
             var desc = proto.tutorial || proto.constructor.tutorial;
             if (desc) {
                 var key = item + '.' + value;
-                new HC.ScriptProcessor(key, desc).print();
+                new HC.ScriptProcessor(key, desc).log();
             }
         }
     }
@@ -484,18 +492,7 @@ HC.Controller.prototype.toggleByKey = function (ci, shiftKey) {
     if (folderKeys && folderKeys.length > ci) { // open folder
         var control = open.__folders[folderKeys[ci]];
         control.open();
-        setTimeout(function () {
-            var container = control.__ul.parentNode.parentNode;
-            var coot = container.offsetTop;
-            var ctrl = container.offsetParent;
-            var ctot = ctrl.offsetTop;
-            if (ctrl.id != 'controller') {
-                coot += ctrl.offsetTop;
-                ctrl = ctrl.offsetParent;
-            }
-            var ot = coot - ctot;
-            ctrl.scrollTop = ot;
-        }, 125);
+        this.scrollToControl(control);
 
     } else if (!shiftKey
         && controllerKeys
@@ -531,6 +528,25 @@ HC.Controller.prototype.toggleByKey = function (ci, shiftKey) {
             }
         }
     }
+};
+
+/**
+ *
+ * @param control
+ */
+HC.Controller.prototype.scrollToControl = function (control) {
+    setTimeout(function () {
+        var container = control.__ul.parentNode.parentNode;
+        var coot = container.offsetTop;
+        var ctrl = container.offsetParent;
+        var ctot = ctrl.offsetTop;
+        if (ctrl.id != 'controller') {
+            coot += ctrl.offsetTop;
+            ctrl = ctrl.offsetParent;
+        }
+        var ot = coot - ctot;
+        ctrl.scrollTop = ot;
+    }, 125);
 };
 
 /**

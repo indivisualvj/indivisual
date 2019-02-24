@@ -126,7 +126,12 @@
                                 controller.shaders(data.dir + '/' + data.name, JSON.parse(data.contents));
 
                             } else { // load the preset
-                                controller.preset(data.dir + '/' + data.name, JSON.parse(data.contents));
+                                var key = data.dir + '/' + data.name;
+                                var contents = JSON.parse(data.contents);
+                                if (contents.tutorial) {
+                                    new HC.ScriptProcessor(key, contents.tutorial).log();
+                                }
+                                controller.preset(key, contents);
                                 explorer.setLoaded(statics.ControlSettings.layer, true);
                             }
                         });

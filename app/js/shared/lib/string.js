@@ -83,3 +83,39 @@ function number_extract(item, prefix) {
 
     return item;
 }
+
+/**
+ *
+ * @param value
+ * @returns {*}
+ */
+function parse(value) {
+    if (value === 'true') {
+        return true;
+
+    } else if (value === 'false') {
+        return false;
+
+    } else if (value.match(/^\d+$/)) {
+        return parseInt(value);
+
+    } else if (value.match(/^\d+\.\d+$/)) {
+        return parseFloat(value);
+    }
+
+    return value;
+}
+
+/**
+ *
+ * @param args
+ * @returns {*}
+ */
+function parseArray(args) {
+    for (var i in args) {
+        var a = args[i];
+        args[i] = parse(a);
+    }
+
+    return args;
+}

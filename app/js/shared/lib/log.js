@@ -10,13 +10,12 @@
         requestAnimationFrame(function () {
             var co = document.getElementById('log');
             if (co) {
-                co.appendChild(a);
                 var a = document.createElement('A');
                 a.innerText = key;
                 a.onclick = function () {
                     action();
                 };
-
+                co.appendChild(a);
                 co.scrollTop = co.scrollHeight;
             }
         });

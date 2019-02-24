@@ -155,7 +155,7 @@ HC.Controller.prototype.initKeyboard = function () {
         }
 
         var char = String.fromCharCode(e.keyCode);
-        var ci = -1;
+        var ci;
 
         if ((ci = keys.indexOf(char)) > -1) {
             e.preventDefault();

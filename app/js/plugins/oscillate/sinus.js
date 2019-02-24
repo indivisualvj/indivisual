@@ -55,7 +55,7 @@ HC.plugins.oscillate.sinusfulls = _class(false, HC.OscillatePlugin, {
 });
 
 HC.plugins.oscillate.oscillator = _class(false, HC.OscillatePlugin, {
-    name: 'oscillate',
+    name: 'oscillator',
     index: 40,
     apply: function (key) {
         this.activate(key, HC.Osci.wobble(0, this.settings));

@@ -19,60 +19,83 @@
                     for (var e in d.exec) {
                         var ex = d.exec[e];
 
-                        var instance = ex.instance;
-                        var func = ex.func;
-                        var args = ex.args;
+                        ex = ex.split(',');
 
-                        if (instance) {
-                            func = window[instance][func];
-                        }
+                        var instance = ex.shift();
+                        var func = ex.shift();
+                        var args = parseArray(ex);
 
-                        calls.push(this._generateCall(func, args));
+                        instance = this._getInstance(instance);
+
+                        calls.push({instance: instance, func: func, args: args});
                     }
+                    d.calls = calls;
 
-                    var action = function () {
-                        for (var i in calls) {
-                            calls[i]();
-                        }
+                    var inst = this;
+                    var _create = function (d) {
+                        return function () {
+                            for (var i in d.calls) {
+                                var c = d.calls[i];
+                                inst._call(c.instance, c.func, c.args);
+                            }
+                        };
                     };
-                    d.action = action;
+
+                    d.action = _create(d);
                 }
             }
         }
 
-        _generateCall(func, args) {
-            return function () {
+        _getInstance(instance) {
+            switch (instance) {
+                default:
+                case 'controller':
+                    return controller;
+            }
+        }
+
+        _call(instance, func, args) {
+
+            if (args && args.length) {
+
                 if (args.length > 4) {
-                    func(args[0], args[1], args[2], args[3], args[3]);
+                    instance[func](args[0], args[1], args[2], args[3], args[3]);
+
                 } else if (args.length > 3) {
-                    func(args[0], args[1], args[2], args[3]);
+                    instance[func](args[0], args[1], args[2], args[3]);
+
                 } else if (args.length > 2) {
-                    func(args[0], args[1], args[2]);
+                    instance[func](args[0], args[1], args[2]);
+
                 } else if (args.length > 1) {
-                    func(args[0], args[1]);
-                } else if (args.length > 0) {
-                    func(args[0]);
+                    instance[func](args[0], args[1]);
+
                 } else {
-                    func();
+                    instance[func](args[0]);
                 }
+
+            } else {
+                instance[func]();
             }
         }
 
         log() {
-            for (var i in desc) {
-                var d = desc[i];
-                var span = '<span class="yellow">' + d.text + '</span>';
-                HC.log(key + ' (' + i + ')', span, false, false, true);
+            for (var i in this.desc) {
+                var d = this.desc[i];
+                var key = '<span class="red">' + this.key + ' (' + i + ')</span>';
+                var value = '<span class="yellow">' + d.text + '</span>';
+
+                HC.log(key, value, false, false, true);
 
                 if (d.action) {
-                    HC.logAction('let\'s try!', d.action);
+                    HC.logAction('let\'s do it!', d.action);
                 }
             }
         }
 
         execute() {
-            for (var i in desc) {
-                var d = desc[i];
+            for (var i in this.desc) {
+                var d = this.desc[i];
                 if (d.action) {
                     d.action();
                 }

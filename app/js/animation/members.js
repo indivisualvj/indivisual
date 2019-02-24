@@ -64,7 +64,7 @@ HC.Animation.prototype.shuffleLayer = function (recursions) {
 /**
  *
  */
-HC.Animation.prototype.doShuffle = function () {
+HC.Animation.prototype.doShuffle = function () { // todo plugins
     var beats = beatkeeper.getDefaultSpeed().beats;
     var diff = Math.abs(beats - statics.shuffle.beats.last);
     statics.shuffle.beats.last = beats;

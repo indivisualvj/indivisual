@@ -536,7 +536,7 @@ HC.Controller.prototype.toggleByKey = function (ci, shiftKey) {
  */
 HC.Controller.prototype.scrollToControl = function (control) {
     setTimeout(function () {
-        var container = control.__ul.parentNode.parentNode;
+        var container = control.__ul.parentNode.parentNode; // todo funkt nicht im iframe
         var coot = container.offsetTop;
         var ctrl = container.offsetParent;
         var ctot = ctrl.offsetTop;

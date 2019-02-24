@@ -101,7 +101,7 @@
                 this.length = this.beats * this.duration;
 
                 var fps = statics.DisplaySettings.fps * 1.25;
-                var frames = IS_MONITOR ? 0 : Math.ceil(this.length / 1000 * fps);
+                var frames = IS_MONITOR ? 0 : Math.ceil(this.length / 1000 * fps); // todo kommt das im monitor überhaupt an?
 
                 this.__init(frames);
             }

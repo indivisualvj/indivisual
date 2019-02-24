@@ -184,7 +184,7 @@
          *
          * @param fallback
          * @param index
-         * @returns {_color|*|THREE.SpotLight._color|HC.Renderer._renderer.view._color|HC.Sequence._canvas._color|map.image._color}
+         * @returns {*}
          */
         getFillColor: function (fallback, index) {
             var color = fallback && fallback._color ? fallback._color : '#ff0000';

@@ -15,7 +15,6 @@
         this.flipx = 1;
         this.flipy = 1;
         this.resolution = {x: 1280, y: 720, aspect: 1280 / 720};
-        this._renderer = false;
         this.three = {
             renderer: false,
             scene: false
@@ -256,9 +255,10 @@
          */
         current: function () {
 
-            if (this._renderer && this._renderer.view) {
-                this._renderer.view._color = this.currentLayer.shapeColor(false);
-                return this._renderer.view;
+            var renderer = this.three.renderer;
+            if (renderer && renderer.view) {
+                renderer.view._color = this.currentLayer.shapeColor(false);
+                return renderer.view;
 
             } else {
                 return false;
@@ -286,9 +286,6 @@
          *
          */
         render: function () {
-
-            this._renderer = this.three.renderer;
-
             if (this.currentLayer.shaders()) {
                 this.currentLayer.doShaders();
                 this.currentLayer._composer.render();

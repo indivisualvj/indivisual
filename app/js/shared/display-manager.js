@@ -5,8 +5,8 @@
 (function () {
     HC.DisplayManager = function (config) {
         this.displays = config.display;
-        this.width = window.innerWidth;
-        this.height = window.innerHeight;
+        this.width = 1280;
+        this.height = 720;
         this.displayMap = [];
         this.maptastic = this.initMaptastic();
         this.cliptastic = this.initCliptastic();
@@ -44,7 +44,7 @@
          * @param mapping
          */
         onMapping: function (id, mapping) {
-            if (statics.timeouts.mapping[id]) {
+            if (statics.timeouts.mapping[id]) { // todo replace with local timeouts?
                 clearTimeout(statics.timeouts.mapping[id]);
             }
             if (animation) {
@@ -98,7 +98,7 @@
         enableMaptastic: function (display, enable) {
             if (display) {
                 var canvas = display.canvas;
-                if (enable && !IS_MONITOR) {
+                if (enable) {
                     var points = display.loadMapping();
 
                     this.maptastic.addLayer(canvas, points.targetPoints, points.sourcePoints);

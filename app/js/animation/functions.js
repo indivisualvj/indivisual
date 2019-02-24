@@ -6,7 +6,7 @@ HC.Animation.prototype.initEvents = function () {
         return false;
     };
 
-    if (IS_ANIMATION) {
+    if (IS_ANIMATION) { // no mousemove cursor thingy for _SETUP and _MONITOR
         var to;
         document.addEventListener('mousemove', function () {
             document.body.style.cursor = 'default';
@@ -37,32 +37,27 @@ HC.Animation.prototype.initKeyboard = function () {
  *
  */
 HC.Animation.prototype.prepareMonitor = function () {
-    for (var i in statics.ControlSettings.initial) {
-        if (i.match(/sample|sequence|display|border|shuffle|mapping|zoom|fps/)) {
-            delete statics.ControlSettings.initial[i];
+    for (var i in statics.DisplaySettings.initial) {
+
+        if (i.match(/^display\d+_/)) {
+            // reset all mapping related values to initial
+            statics.DisplaySettings[i] = statics.DisplaySettings.initial[i];
+
+        }
+        if (i.match(/sample|sequence|display|border|shuffle|mapping|mask|zoom|fps/)) {
+            // DisplaySettings without initial value cannot be updated
+            delete statics.DisplaySettings.initial[i];
         }
     }
 
     statics.ControlSettings.play = false;
     statics.ControlSettings.monitor = false;
-    statics.ControlSettings.mapping = false;
     statics.ControlSettings.shuffle = false;
     statics.DisplaySettings.fps = 30;
     statics.DisplaySettings.display0_visible = true;
     displayman.updateDisplay(0);
 
-    var onResize = function () {
-        var w = window.innerWidth;
-        var resolution = renderer.getResolution();
-
-        statics.DisplaySettings.resolution = w + 'x' + (w / resolution.aspect);
-        renderer.fullReset(true);
-        sourceman.resize(renderer.getResolution());
-        displayman.resize(renderer.getResolution());
-    };
-
-    window.addEventListener('resize', onResize);
-    onResize(true);
+    this.prepareAnimation();
 };
 
 /**

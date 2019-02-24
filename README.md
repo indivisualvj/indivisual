@@ -105,7 +105,7 @@ Try the tutorials from presets/_tutorials
 indivisual comes with a set of funny plugins. Nevertheless you might want to extend it with some of your own ideas.
 In this case you can add your own plugins for the most settings available.
 
-- ... more explanation here ...
+To find out more read plugins [tutorial](docs/plugins.md).
 
 
 ## Questions & Answers

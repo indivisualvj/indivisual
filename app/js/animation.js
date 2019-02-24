@@ -143,29 +143,27 @@ document.addEventListener('DOMContentLoaded', function () {
              */
             var speed = beatkeeper.getDefaultSpeed();
 
-            if (speed.prc == 0) {
-                if (IS_ANIMATION) {
+            if (IS_ANIMATION && speed.prc == 0) {
 
-                    var detectedSpeed = false;
+                var detectedSpeed = false;
 
-                    if (audioman.isActive()) {
+                if (audioman.isActive()) {
 
-                        if (statics.ControlSettings.peak_bpm_detect && audio.peakReliable) {
+                    if (statics.ControlSettings.peak_bpm_detect && audio.peakReliable) {
 
-                            detectedSpeed = beatkeeper.speedByPeakBpm(audio.firstPeak, audio.peakBPM, statics.ControlSettings.tempo);
+                        detectedSpeed = beatkeeper.speedByPeakBpm(audio.firstPeak, audio.peakBPM, statics.ControlSettings.tempo);
 
-                            if (detectedSpeed) {
-                                audio.peakReliable = false;
-                                messaging.emitLog('peakBPM', detectedSpeed);
-                                animation.updateControl('tempo', detectedSpeed, true, true);
-                            }
+                        if (detectedSpeed) {
+                            audio.peakReliable = false;
+                            messaging.emitLog('peakBPM', detectedSpeed);
+                            animation.updateControl('tempo', detectedSpeed, true, true);
                         }
-
-                        this.autoVolume();
                     }
 
-                    this.postStatus(detectedSpeed);
+                    this.autoVolume();
                 }
+
+                this.postStatus(detectedSpeed);
             }
 
             if (audioman.isActive()) {
@@ -652,7 +650,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             break;
 
                         case 'audio':
-                            if (IS_ANIMATION || IS_MONITOR) {
+                            if (IS_ANIMATION || IS_MONITOR) { // todo makesense?
                                 audio.reset();
                                 if (value) {
                                     audioman.stop();
@@ -708,8 +706,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         this.updateSource(item, false, false, true, false);
 
                     } else if (item.match(/^sample\d+_load/) && value) {
-                        if (display || IS_MONITOR) {
-                            //var sample =
+                        if (IS_MONITOR || display) {
                             sourceman.loadSample(number_extract(item, 'sample'), value);
                         }
                         this.updateSource(item, false, false, true, false);
@@ -811,7 +808,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         case 'display_visibility':
                         case 'border_mode':
-                            if (IS_ANIMATION) {
+                            if (IS_ANIMATION) { // todo kommt das hier überhaupt an?
                                 statics.display.visibility.random = false;
                                 statics.display.border.random = false;
                             }

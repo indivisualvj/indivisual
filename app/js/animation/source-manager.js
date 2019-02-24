@@ -313,7 +313,7 @@
          */
         storeSample: function (i, name, resolution, load) {
             var sample = this.getSample(i);
-            if (IS_ANIMATION && sample) {
+            if (IS_ANIMATION && sample) { // todo kommt das überhaupt an?
 
                 var dir = SAMPLE_DIR + '/' + name;
                 var callback = function () {
@@ -551,7 +551,7 @@
         renderSamples: function () {
             var progress = beatkeeper.getDefaultSpeed();
             for (var i = 0; i < this.samples.length; i++) {
-                var sample = this.samples[i];
+                var sample = this.samples[i]; // todo renderSamples im montior garnicht aufrufen
                 if (IS_ANIMATION && sample && sample.record && sample.enabled && sample.initialized && !sample.complete) {
                     sample.render(renderer.current(), progress, renderer.currentColor());
                 }

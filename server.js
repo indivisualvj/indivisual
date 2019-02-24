@@ -55,7 +55,7 @@ let targetsGroups = {
     controller: ['controls', 'displays', 'sources', 'settings', 'log', 'attr', 'midi', 'data'],
     client: ['controls', 'displays', 'sources', 'settings', 'log'],
     setup: ['displays', 'data', 'settings'],
-    monitor: ['controls', 'settings', 'sources'],
+    monitor: ['displays', 'controls', 'settings', 'sources'], // displays added to have updates on resolution. animation.prepareMonitor takes care of the other settings.
     log: ['log']
 };
 

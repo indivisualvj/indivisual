@@ -588,7 +588,7 @@ var Shapetastic = function(inst) {
 
         vertices = vertices.slice(1, vertices.length - 1);
 
-        animation.updateSetting(statics.ControlSettings.layer, 'shape_vertices', vertices, jo, jo, jo);
+        animation.updateSetting(statics.ControlSettings.layer, 'shape_vertices', vertices, jo, jo);
     };
 
     /**

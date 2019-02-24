@@ -28,10 +28,12 @@ To get an idea of what can be done with it, visit my [YouTube channel](https://w
     ```
 - To use as single page application open http://localhost:8081
     - Learn how to use in seperated windows or even multiple machines [here](docs/setup-options.md)
-- Try some of the setups from presets (controller->lowerleft)
-- Play around
-- Try to learn something in this Quick and Dirty Video Tutorial
-    [![](http://img.youtube.com/vi/aPwviMbDYH8/0.jpg)](http://www.youtube.com/watch?v=aPwviMbDYH8 "")
+- Try the tutorials from presets/_tutorials
+
+    ![](docs/images/TutorialOverview.png)
+    
+    
+
 
 ## For Developers
 There is no clean code in there. There also is no explicit design pattern 
@@ -57,6 +59,7 @@ Server options can be found [here](docs/server-options.md)
 ## How To
 
 ### Tutorials
+
 - Getting started
 - Displays, Video, Mapping & Masking
 - Source, Sequences & Samples

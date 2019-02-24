@@ -80,6 +80,9 @@
         }
 
         log() {
+
+            HC.clearLog();
+
             for (var i in this.desc) {
                 var d = this.desc[i];
                 var key = '<span class="red">' + this.key + ' (' + i + ')</span>';
@@ -88,7 +91,7 @@
                 HC.log(key, value, false, false, true);
 
                 if (d.action) {
-                    HC.logAction('let\'s do it!', d.action);
+                    HC.logAction('>>let\'s do it!<<', d.action);
                 }
             }
         }

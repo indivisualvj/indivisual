@@ -79,5 +79,12 @@
                 }
             }
         });
-    }
+    };
+
+    HC.clearLog = function () {
+        var co = document.getElementById('log');
+        if (co) {
+            co.innerHTML = '';
+        }
+    };
 }

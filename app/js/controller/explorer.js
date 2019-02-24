@@ -126,6 +126,9 @@
                                 controller.shaders(data.dir + '/' + data.name, JSON.parse(data.contents));
 
                             } else { // load the preset
+
+                                HC.clearLog();
+
                                 var key = data.dir + '/' + data.name;
                                 var contents = JSON.parse(data.contents);
                                 if (contents.tutorial) {
@@ -156,6 +159,8 @@
 
                 var di = 0;
 
+                HC.clearLog();
+
                 for (var i = 0; i < layers.length; i++) {
                     if (statics.shiftKey) { // shift means add presets. no overwrite.
                         if ((i in layers)
@@ -185,7 +190,6 @@
 
                                     if (di == dflt.length - 1) {
                                         controller.updateControl('layer', 0, true, true);
-                                        //controller.updateControl('brightness', ob, true, true, true);
                                     }
                                 });
                             });

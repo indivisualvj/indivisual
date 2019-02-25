@@ -13,6 +13,12 @@
             if (co) {
                 var a = HC.logGetAnchor(key);
                 a.onclick = function (e) {
+                    var co;
+                    if (co = e.target.closest('.expandable')) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        co.onclick(e, true);
+                    }
                     func();
                 };
                 co.appendChild(a);

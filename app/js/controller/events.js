@@ -6,8 +6,8 @@ HC.Controller.prototype.initLogEvents = function () {
 
     for (var c = 0; c < expandables.length; c++) {
         var co = expandables[c];
-        co.onclick = function (evt) {
-            if (co.getAttribute('fixed')) {
+        co.onclick = function (evt, close) {
+            if (close || co.getAttribute('fixed')) {
                 co.removeAttribute('fixed');
 
             } else {

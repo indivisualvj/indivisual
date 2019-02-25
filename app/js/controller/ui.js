@@ -387,13 +387,75 @@ HC.Controller.prototype.nextOpenFolder = function (control) {
 
 /**
  *
+ * @param name
+ */
+HC.Controller.prototype.toggleByName = function (name) {
+    // todo für tutorials und öffnen von shaders
+};
+
+/**
+ *
+ * @param property
+ */
+HC.Controller.prototype.toggleByProperty = function (property) {
+    var control = this.getControlParentByProperty(property);
+    control.open();
+    this.scrollToControl(control);
+};
+
+/**
+ *
+ * @param property
+ * @param [control]
+ * @returns {*}
+ */
+HC.Controller.prototype.getControlParentByProperty = function (property, control) {
+
+    control = control || this.gui;
+
+    for (var c in control.__controllers) {
+        var co = control.__controllers[c];
+        if (co.property == property) {
+            // found
+            return control;
+        }
+    }
+    for (var k in control.__folders) {
+        var v = control.__folders[k];
+
+        var c = this.getControlParentByProperty(property, v);
+        if (c) {
+            return c;
+        }
+    }
+    return false;
+};
+
+/**
+ *
+ * @param item
+ * @param value
+ */
+HC.Controller.prototype.explainPlugin = function (item, value) {
+    if (item in HC.plugins) {
+        if (value in HC.plugins[item]) {
+            var proto = HC.plugins[item][value].prototype;
+            var desc = proto.tutorial || proto.constructor.tutorial;
+            if (desc) {
+                var key = item + '.' + value;
+                new HC.ScriptProcessor(key, desc).log();
+            }
+        }
+    }
+};
+
+/**
+ *
  * @param control
  */
 HC.Controller.prototype.closeAll = function (control) {
 
-    if (!control) {
-        control = this.gui;
-    }
+    control = control || this.gui;
 
     if (control.__folders) {
         for (var k in control.__folders) {
@@ -430,18 +492,7 @@ HC.Controller.prototype.toggleByKey = function (ci, shiftKey) {
     if (folderKeys && folderKeys.length > ci) { // open folder
         var control = open.__folders[folderKeys[ci]];
         control.open();
-        setTimeout(function () {
-            var container = control.__ul.parentNode.parentNode;
-            var coot = container.offsetTop;
-            var ctrl = container.offsetParent;
-            var ctot = ctrl.offsetTop;
-            if (ctrl.id != 'controller') {
-                coot += ctrl.offsetTop;
-                ctrl = ctrl.offsetParent;
-            }
-            var ot = coot - ctot;
-            ctrl.scrollTop = ot;
-        }, 125);
+        this.scrollToControl(control);
 
     } else if (!shiftKey
         && controllerKeys
@@ -473,10 +524,72 @@ HC.Controller.prototype.toggleByKey = function (ci, shiftKey) {
                 control.domElement.getElementsByTagName('select')[0].focus();
 
             } else {
-                _log(control);
+                HC.log(control);
             }
         }
     }
+};
+
+/**
+ *
+ * @param control
+ */
+HC.Controller.prototype.scrollToControl = function (control) {
+    setTimeout(function () {
+        var container = control.__ul.parentNode.parentNode; // todo funkt nicht im iframe
+        var coot = container.offsetTop;
+        var ctrl = container.offsetParent;
+        var ctot = ctrl.offsetTop;
+        if (ctrl.id != 'controller') {
+            coot += ctrl.offsetTop;
+            ctrl = ctrl.offsetParent;
+        }
+        var ot = coot - ctot;
+        ctrl.scrollTop = ot;
+    }, 125);
+};
+
+/**
+ *
+ * @param item
+ * @param control
+ * @param show
+ */
+HC.Controller.prototype.updateUi = function (item, control, show) {
+
+    if (!control) {
+        control = this.gui;
+        this.refreshLayerInfo();
+    }
+
+    var flds = control.__folders || [];
+
+    for (var key in flds) {
+        var fld = flds[key];
+
+        this.updateUi(item, fld, false);
+    }
+
+    var ctrls = control.__controllers || [];
+
+    for (var key in ctrls) {
+        var ctrl = ctrls[key];
+        if (!item || ctrl.__li.getAttribute('data-id') == item) {
+            ctrl.updateDisplay();
+        }
+    }
+
+    if (show) {
+        for (var i = 0; i < statics.DisplayValues.display.length; i++) {
+            var n = 'display' + i;
+            var v = statics.DisplaySettings[n + '_visible'];
+            this.showControls(n, 'g_sources', v);
+
+            n = '_display' + i;
+            this.showControls(n, 'g_displays', v);
+        }
+    }
+
 };
 
 /**
@@ -534,7 +647,6 @@ HC.Controller.prototype.showControls = function (item, parent, enabled) {
  * @param name
  */
 HC.Controller.prototype.loadClip = function (i) {
-    var inst = this;
     var smp = new HC.Sample(i);
     smp.clip(function (sample) {
         var data = {data: {DataSettings: {}}};

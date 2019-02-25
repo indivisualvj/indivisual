@@ -1,5 +1,8 @@
 (function () {
+    var inst;
+
     HC.Explorer = function () {
+        inst = this;
         this.gui = false;
         this.data = false;
     };
@@ -7,8 +10,6 @@
     HC.Explorer.prototype = {
 
         init: function () {
-
-            var inst = this;
 
             this.data = {
                 name: 'presets',
@@ -126,7 +127,15 @@
                                 controller.shaders(data.dir + '/' + data.name, JSON.parse(data.contents));
 
                             } else { // load the preset
-                                controller.preset(data.dir + '/' + data.name, JSON.parse(data.contents));
+
+                                HC.clearLog();
+
+                                var key = data.dir + '/' + data.name;
+                                var contents = JSON.parse(data.contents);
+                                if (contents.tutorial) {
+                                    new HC.ScriptProcessor(key, contents.tutorial).log();
+                                }
+                                controller.preset(key, contents);
                                 explorer.setLoaded(statics.ControlSettings.layer, true);
                             }
                         });
@@ -150,6 +159,8 @@
                 }
 
                 var di = 0;
+
+                HC.clearLog();
 
                 for (var i = 0; i < layers.length; i++) {
                     if (statics.shiftKey) { // shift means add presets. no overwrite.
@@ -180,7 +191,6 @@
 
                                     if (di == dflt.length - 1) {
                                         controller.updateControl('layer', 0, true, true);
-                                        //controller.updateControl('brightness', ob, true, true, true);
                                     }
                                 });
                             });
@@ -208,7 +218,7 @@
                             var settings = layers[layer].settings.prepare();
                             statics.AnimationSettings.clean(settings, statics.AnimationSettings.initial);
                             messaging.save(STORAGE_DIR, child.dir, child.name, settings, function (result) {
-                                _log(result);
+                                HC.log(result);
                                 explorer.setChanged(layer, false);
                             }, '');
                         };
@@ -225,7 +235,7 @@
                 var settings = statics.AnimationSettings.prepare();
                 statics.AnimationSettings.clean(settings, statics.AnimationSettings.initial);
                 messaging.save(STORAGE_DIR, this.model.dir, this.model.name, settings, function (result) {
-                    _log(result);
+                    HC.log(result);
                     explorer.setPreset(statics.ControlSettings.layer, false);
                     explorer.setPreset(statics.ControlSettings.layer, model);
                     explorer.setLoaded(statics.ControlSettings.layer, true);
@@ -238,7 +248,7 @@
                 var parent = current.$parent;
 
                 messaging.delete(STORAGE_DIR, this.model.dir, this.model.name, function (result) {
-                    _log(result);
+                    HC.log(result);
                     parent.model.children.splice(current.$index, 1);
                 });
             },
@@ -265,7 +275,7 @@
                 }
 
                 messaging.rename(STORAGE_DIR, this.model.dir, this.model.name, name, function (result) {
-                    _log(result);
+                    HC.log(result);
                     var children = current.model.children;
                     var odir = current.model.name;
                     for (var i = 0; i < children.length; i++) {
@@ -303,7 +313,7 @@
                 };
 
                 messaging.save(STORAGE_DIR, nu.dir, nu.name, nu.settings, function (result) {
-                    _log(result);
+                    HC.log(result);
                     model.children.unshift(nu);
                     explorer.setPreset(statics.ControlSettings.layer, false);
                     explorer.setPreset(statics.ControlSettings.layer, nu);
@@ -331,7 +341,7 @@
                     children: []
                 };
                 messaging.mkdir(STORAGE_DIR, name, false, function (result) {
-                    _log(result);
+                    HC.log(result);
                     model.children.unshift(nu);
                 });
             }
@@ -365,7 +375,6 @@
         },
 
         load: function () {
-            var inst = this;
             messaging.files(STORAGE_DIR, function (data) {
                 var dflt = inst.data.children[0];
                 var tree = [dflt];

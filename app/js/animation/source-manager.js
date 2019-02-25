@@ -313,12 +313,14 @@
          */
         storeSample: function (i, name, resolution, load) {
             var sample = this.getSample(i);
-            if (IS_ANIMATION && sample) {
+            if (IS_ANIMATION && sample) { // this is 1 ugly workaround
 
                 var dir = SAMPLE_DIR + '/' + name;
                 var callback = function () {
 
-                    messaging._emit({action: 'unlinkall', dir: dir}, function () {
+                    messaging._emit({action: 'unlinkall', dir: dir}, function (files) {
+                        console.log('unlinkall', dir, files.length + ' files deleted');
+
                         listener.register('sample.store.progress', sample.id, function (target) {
                             var key = getSampleStoreKey(target.index);
                             messaging.emitAttr('[data-id="' + key + '"]', 'data-label', target.pointer + '/' + target.frames.length);
@@ -526,7 +528,9 @@
             if (this.animationInUse()) {
                 renderer.render();
             }
-            this.renderSamples();
+            if (IS_ANIMATION) {
+                this.renderSamples();
+            }
             if (!doNotDisplay) {
                 this.renderSequences();
             }
@@ -552,7 +556,7 @@
             var progress = beatkeeper.getDefaultSpeed();
             for (var i = 0; i < this.samples.length; i++) {
                 var sample = this.samples[i];
-                if (IS_ANIMATION && sample && sample.record && sample.enabled && sample.initialized && !sample.complete) {
+                if (sample && sample.record && sample.enabled && sample.initialized && !sample.complete) {
                     sample.render(renderer.current(), progress, renderer.currentColor());
                 }
             }

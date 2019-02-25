@@ -3,21 +3,25 @@
  */
 
 var HC = HC || {};
-{ // Hidden class to be added to HC namespace at [end of file]
+{ // Hidden class to be added to HC via ... = class ...
+
+    var inst;
     /**
      *
      */
-    class AssetManager {
+    HC.AssetManager = class AssetManager {
 
         /**
          *
          * @param files
          */
         constructor() {
+            inst = this;
             this.files = {};
             this.images = {};
             this.videos = {};
             this.fonts = {};
+            this.textures = {};
         }
 
         /**
@@ -123,7 +127,7 @@ var HC = HC || {};
          */
         loadFonts() {
             new THREE.FontLoader().load(filePath(FONT_DIR, 'coolvetica.json'), function (font) {
-                statics.three.fonts.coolvetica = font;
+                inst.fonts.coolvetica = font;
             });
         }
 
@@ -132,12 +136,9 @@ var HC = HC || {};
          */
         loadTextures() {
             new THREE.TextureLoader().load(filePath(TEXTURE_DIR, 'rgb-noise.png'), function (texture) {
-                statics.three.textures.rgbnoise = texture;
+                inst.textures.rgbnoise = texture;
             });
         }
 
     }
-
-    // add hidden class to HC namespace
-    HC.AssetManager = AssetManager;
 }

@@ -4,7 +4,7 @@ audio & timing:
   audio_usewaveform:
   rhythm:
 
-osci:
+oscillator:
   osci1_period:
   osci1_amp:
   osci2_period:
@@ -109,6 +109,8 @@ pattern:
 shape:
   shape_geometry:
   shape_variant:
+  shape_segmentsa:
+  shape_segmentsb:
   shape_size:
   shape_limit:
   shape_sync:

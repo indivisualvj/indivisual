@@ -55,7 +55,7 @@ let targetsGroups = {
     controller: ['controls', 'displays', 'sources', 'settings', 'log', 'attr', 'midi', 'data'],
     client: ['controls', 'displays', 'sources', 'settings', 'log'],
     setup: ['displays', 'data', 'settings'],
-    monitor: ['controls', 'settings', 'sources'],
+    monitor: ['displays', 'controls', 'settings', 'sources'], // displays added to have updates on resolution. animation.prepareMonitor takes care of the other settings.
     log: ['log']
 };
 
@@ -251,7 +251,7 @@ io.sockets.on('connection', function (socket) {
      *
      */
     socket.on('unlinkall', function (data, callback) {
-        let dir = filePath(_APP, data.dir);
+        let dir = filePath(_ROOT, data.dir);
         _unlinkAll(dir, callback);
     });
 
@@ -702,17 +702,22 @@ function _concat(files, file) {
  */
 function _unlinkAll(dir, callback) {
     let exists = false;
+    let files = [];
     try {
         exists = fs.existsSync(dir);
     } catch (e) {
-
+        console.log(e);
     }
-    let files = exists ? fs.readdirSync(dir) : [];
-    files.forEach(function(file) {
-        fs.unlinkSync(dir + '/' + file);
-    });
+    if (exists) {
+        files = exists ? fs.readdirSync(dir) : [];
+        files.forEach(function (file) {
+            fs.unlinkSync(dir + '/' + file);
+        });
+    } else {
+        console.log(dir + ' does not exist');
+    }
 
-    callback();
+    callback(files);
 }
 
 /**

@@ -3,12 +3,14 @@
  */
 
 (function () {
+    var inst;
     /**
      *
      * @param program
      * @constructor
      */
     HC.Messaging = function (program) {
+        inst = this;
         this.program = program;
         this.socket = false;
         this.sid = false;
@@ -75,12 +77,11 @@
          * @param callback
          */
         connect: function (callback) {
-            _log(this.program.name, 'connecting...', true);
+            HC.log(this.program.name, 'connecting...', true);
             this.socket = io.connect(null, {'secure': true, 'forceNew': true});
 
             this.initEvents();
 
-            var inst = this;
             this.socket.once('connect', function () {
                 inst._join();
                 callback(false);
@@ -149,7 +150,6 @@
          * @param data
          */
         onAttr: function (data) {
-            var inst = this;
             var key = data.query.replace(/[^a-z0-9]+/gi, '') + data.key;
 
             requestAnimationFrame(function () {
@@ -219,7 +219,7 @@
          */
         onLog: function (data) {
 
-            _log(data.key, data.value);
+            HC.log(data.key, data.value);
         },
 
         /**
@@ -412,7 +412,7 @@
          */
         sync: function (callback) {
 
-            _log(this.program.name, 'syncing...', true);
+            HC.log(this.program.name, 'syncing...', true);
 
             var data = {
                 sid: this.sid,

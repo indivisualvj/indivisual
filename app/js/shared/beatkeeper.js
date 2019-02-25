@@ -3,11 +3,13 @@
  */
 
 (function () {
+    var inst;
     /**
      *
      * @constructor
      */
     HC.Beatkeeper = function () {
+        inst = this;
         this.beatStartTime = 0;
         this.firstTrigger = false;
         this.triggerCounter = 0;
@@ -107,7 +109,6 @@
          * @private
          */
         _tween: function (speed) {
-            var inst = this;
             var next = {prc: 1, progress: speed.duration};
 
             var tween = new TWEEN.Tween(speed, this.tween);
@@ -162,8 +163,6 @@
          * @returns {boolean|*|statics.ControlSettings.beat}
          */
         trigger: function (value, override, speed, forward) {
-
-            var inst = this;
 
             if (this.timeout) { // following trigger
                 clearTimeout(this.timeout);
@@ -316,7 +315,7 @@
             var elapsed = HC.now() - this.beatStartTime;
             var ebeats = Math.floor((elapsed / duration) / 4);
 
-            // _log('resetCounters', {ebeats:ebeats}, false, DEBUG);
+            // HC.log('resetCounters', {ebeats:ebeats}, false, DEBUG);
 
             for (var s in this.speeds) {
                 s = this.speeds[s];

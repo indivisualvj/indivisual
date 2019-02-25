@@ -32,3 +32,21 @@ HC.plugins.camera_mode.manualcenter = _class(false, HC.plugins.camera_mode.manua
         HC.plugins.camera_mode.manual.prototype.apply.call(this, new THREE.Vector3(0, 0, 0));
     }
 });
+
+HC.plugins.camera_mode.lightingpatternxyz = _class(false, HC.plugins.camera_mode.manual, {
+    name: 'look at lighting_patternxyz',
+    index: 99999,
+    apply: function () {
+        var plugin = this.layer.getLightingPatternPlugin();
+        HC.plugins.camera_mode.manual.prototype.apply.call(this, plugin.centerVector());
+    }
+});
+
+HC.plugins.camera_mode.lightinglookatxyz = _class(false, HC.plugins.camera_mode.manual, {
+    name: 'look at lighting_lookatxyz',
+    index: 99999,
+    apply: function () {
+        var plugin = this.layer.getLightingLookatPlugin();
+        HC.plugins.camera_mode.manual.prototype.apply.call(this, plugin.centerVector());
+    }
+});

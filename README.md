@@ -11,6 +11,7 @@ Those sequences can be flipped, sliced, accelerated, slowed down, ... and also c
 
 To get an idea of what can be done with it, visit my [YouTube channel](https://www.youtube.com/channel/UC2QczAUG69575hFIRg2JDcQ)  
 
+
 ## Getting Started
 - To get the best performance you should install [Google Chrome](https://www.google.com/chrome/) 
 - Install [Node.js](https://nodejs.org/en/download/)
@@ -28,10 +29,8 @@ To get an idea of what can be done with it, visit my [YouTube channel](https://w
     ```
 - To use as single page application open http://localhost:8081
     - Learn how to use in seperated windows or even multiple machines [here](docs/setup-options.md)
-- Try some of the setups from presets (controller->lowerleft)
-- Play around
-- Try to learn something in this Quick and Dirty Video Tutorial
-    [![](http://img.youtube.com/vi/aPwviMbDYH8/0.jpg)](http://www.youtube.com/watch?v=aPwviMbDYH8 "")
+- Scroll down to the Tutorials section and have a look
+    
 
 ## For Developers
 There is no clean code in there. There also is no explicit design pattern 
@@ -46,6 +45,7 @@ Therefore things do not work together perfectly sometimes.
 
 But still it's pretty much fun to play with!
 
+
 ### Deprecated Powerful Features on Insecure (non SSL) Origins
 When not running on localhost, it is not possible to use microphone or audio input without SSL.
 - You can either run chrome with the --unsafely-treat-insecure-origin-as-secure="http://example.com" flag (replacing "example.com" with the origin you actually want to test)
@@ -54,11 +54,12 @@ When not running on localhost, it is not possible to use microphone or audio inp
 
 Server options can be found [here](docs/server-options.md)
 
+
 ## How To
 
 ### Tutorials
 - Getting started
-- Displays, Video, Mapping & Masking
+- [Displays, Video, Mapping & Masking](docs/mapping.md)
 - Source, Sequences & Samples
 - Audio, Timing & Osci
 - Lighting & Background
@@ -70,17 +71,20 @@ Server options can be found [here](docs/server-options.md)
 - Sizing & Offset
 - Shaders (Postprocessing)
 
-[Complete Playlist](https://www.youtube.com/playlist?list=PLQn3ZXgzn8P3BI43-pDmU4rVFzVmQh5DQ)
+Have a look at my [Tutorials playlist](https://www.youtube.com/playlist?list=PLQn3ZXgzn8P3BI43-pDmU4rVFzVmQh5DQ)
+
+Try the tutorials from presets/_tutorials
+    ![](docs/images/TutorialOverview.png)
+
 
 ### Understand
 - A lot of settings are based on three.js settings. To understand these, you have to dig into three.js [docs](https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene)  
 
-### Mapping
-Click [here](docs/mapping.md)
 
 ### Samples & Sequences
 - ... awesome ...
 - Slow on GPUs but fast on INTEL's internal graphics cards
+
 
 ### Shape-Editor
 - ... more explanation here ...
@@ -90,27 +94,29 @@ Click [here](docs/mapping.md)
 - Press S to enable shape controls
 - ... more explanation here ...
 
+
 ### MIDI Controllers
 - If you own a [Arturia Beatstep](https://www.arturia.com/beatstep/overview), simply connect it. If the device uses factory settings, it will work immediately and the layout will just work fine.
 - Otherwise you have to build up your own layout. Have a look at [MidiController.yml](app/structure/MidiController.yml) 
 - ... more explanation here ...  
 
+
 ### Plugins
 indivisual comes with a set of funny plugins. Nevertheless you might want to extend it with some of your own ideas.
 In this case you can add your own plugins for the most settings available.
 
-- ... more explanation here ...
+To find out more read plugins [tutorial](docs/plugins.md).
+
 
 ## Questions & Answers
 - Create an issue for your question
+
 
 ## Contributing
 If you have any suggestion or features or you found some bugs,
 feel free to contribute to this project.
 Just open a pull request or an issue.
 
-## Pending
-- Some serious glContext lost issues
 
 ## Used Libraries and Credits
 Many thanks to:

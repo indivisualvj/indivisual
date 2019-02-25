@@ -116,7 +116,7 @@
             var m = this.lighting_type;
 
             if (redo && i == 0 && statics.SourceSettings.lighting_type == 'randomall'
-                && statics.shuffle.beats.counter >= statics.ControlSettings.shuffle_switch_every - 1) {
+                && statics.shuffle.counter >= statics.ControlSettings.shuffle_switch_every - 1) {
 
                 var k = Object.keys(statics.SourceValues.lighting_type);
                 var c = randomInt(1, k.length - 2);
@@ -184,7 +184,7 @@
          *
          * @param fallback
          * @param index
-         * @returns {_color|*|THREE.SpotLight._color|HC.Renderer._renderer.view._color|HC.Sequence._canvas._color|map.image._color}
+         * @returns {*}
          */
         getFillColor: function (fallback, index) {
             var color = fallback && fallback._color ? fallback._color : '#ff0000';

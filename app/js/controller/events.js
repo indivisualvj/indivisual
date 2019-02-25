@@ -1,6 +1,25 @@
 /**
  *
  */
+HC.Controller.prototype.initLogEvents = function () {
+    var expandables = document.getElementsByClassName('expandable');
+
+    for (var c = 0; c < expandables.length; c++) {
+        var co = expandables[c];
+        co.onclick = function (evt, close) {
+            if (close || co.getAttribute('fixed')) {
+                co.removeAttribute('fixed');
+
+            } else {
+                co.setAttribute('fixed', true);
+            }
+        }
+    };
+};
+
+/**
+ *
+ */
 HC.Controller.prototype.initKeyboard = function () {
     var keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     var setMnemonics = function (control) {
@@ -155,7 +174,7 @@ HC.Controller.prototype.initKeyboard = function () {
         }
 
         var char = String.fromCharCode(e.keyCode);
-        var ci = -1;
+        var ci;
 
         if ((ci = keys.indexOf(char)) > -1) {
             e.preventDefault();

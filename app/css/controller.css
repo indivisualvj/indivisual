@@ -39,6 +39,10 @@ body {
     box-shadow: 0 0 1px 2px #44abda;
 }
 
+.fh {
+    overflow: visible;
+}
+
 .control {
     border-top: 1px solid #444748;
     border-right: 1px solid #373a3b;
@@ -93,6 +97,7 @@ body {
 
 #blockfocus {
     position: absolute;
+    z-index: 999;
     box-sizing: border-box;
     overflow: hidden;
     top: 0;
@@ -100,13 +105,42 @@ body {
     width: 100%;
     height: 25vw;
     margin: 0 0 4px 0;
-
+    padding: 3px;
     max-height: 328px;
 
     border: 1px solid transparent;
     border-radius: 3px;
+}
 
-    padding: 3px;
+.expandable {
+    background-color: rgba(0, 0, 0, 0.0) !important;
+    border: 1px solid transparent !important;
+    cursor: zoom-in !important;
+    transition: all 125ms;
+}
+
+.expandable[fixed] {
+    width: 200% !important;
+    height: 125% !important;
+    cursor: zoom-out !important;
+}
+
+.expandable:hover, .expandable[fixed] {
+    border: 1px solid #2fa1d6 !important;
+    background-color: rgba(0, 0, 0, 0.8) !important;
+}
+
+.expandable:hover::after, .expandable[fixed]::after {
+    content: ' click to expand/reduce';
+    font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
+    font-size: 10px;
+    font-weight: bold;
+    color: #2fa1d6;
+
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    z-index: 1;
 }
 
 #controller .close-button {
@@ -223,31 +257,6 @@ pre#log {
     overflow-y: auto;
 }
 
-pre#warn ~ pre#log {
-    height: 50%;
-    margin: 4px 0 0 0;
-}
-
-pre#warn {
-    visibility: hidden;
-    display: block;
-    width: 100%;
-    height: 50%;
-    padding: 2px;
-    margin: 0;
-    box-sizing: border-box;
-    background-color: rgba(0, 0, 0, 0.6);
-    color: rgba(255, 220, 10, 1);
-    font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
-    font-size: 12px;
-    overflow-y: scroll;
-}
-
-pre#err {
-    display: none;
-    margin: 0;
-}
-
 pre#osd {
     position: fixed;
     top: 50%;
@@ -281,7 +290,19 @@ pre div {
 }
 
 pre a {
-    color: rgba(10, 255, 10, 1);
+    cursor: pointer;
+    color: rgba(10, 190, 255, 1);
+    font-weight: bold;
+}
+
+pre .yellow {
+    color: rgba(255, 210, 10, 1);
+    font-weight: bold;
+}
+
+pre .red {
+    color: rgba(255, 10, 10, 1);
+    font-weight: bold;
 }
 
 

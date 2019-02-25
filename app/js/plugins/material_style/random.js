@@ -4,14 +4,13 @@ HC.plugins.material_style.random = _class(false, HC.MaterialStylePlugin, {
         state: undefined
     },
     apply: function (shape) {
-        var layer = this.layer;
         var pa = this.params(shape);
         if (pa.state === undefined) {
             pa.state = randomBool();
         }
 
         var params = this.params(shape);
-        params.stroke = (pa.state);
+        params.stroke = pa.state;
     }
 });
 
@@ -21,13 +20,12 @@ HC.plugins.material_style.randompeak = _class(false, HC.MaterialStylePlugin, {
         state: undefined
     },
     apply: function (shape) {
-        var layer = this.layer;
         var pa = this.params(shape);
         if (pa.state === undefined || (audio.peak && randomBool())) {
             pa.state = randomBool();
         }
 
         var params = this.params(shape);
-        params.stroke = (pa.state);
+        params.stroke = pa.state;
     }
 });

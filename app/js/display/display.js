@@ -189,9 +189,7 @@
             this.noborder = settings[this.id + '_noborder'];
             this.keepbounds = settings[this.id + '_keepbounds'];
             this.smearing = settings[this.id + '_smearing'];
-
             this.transparent = settings[this.id + '_transparent'];
-            //this.canvas.style.background = this.getSetBackground() ? '#000000' : 'none';
 
             this.ctx.globalAlpha = displayman.brightness();
         },

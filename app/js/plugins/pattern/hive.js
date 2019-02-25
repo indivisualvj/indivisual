@@ -3,8 +3,8 @@ HC.plugins.pattern.hive = _class(false, HC.PatternPlugin, {
 
     apply: function (shape, mover) {
         var layer = this.layer;
-        var gapx = layer.shapeSize(1) * 0.75 * this.settings.pattern_paddingx;
-        var nh = layer.shapeSize(1) * 0.87 * this.settings.pattern_paddingy;
+        var gapx = layer.shapeSize(1) * 0.745 * this.settings.pattern_paddingx;
+        var nh = layer.shapeSize(1) * 0.86 * this.settings.pattern_paddingy;
         var gapy = nh;
         var matrix = layer.getPatternPlugin('matrix');
         var gridPosition = matrix.gridPosition(shape);
@@ -17,12 +17,12 @@ HC.plugins.pattern.hive = _class(false, HC.PatternPlugin, {
 
         if (gridPosition.y % 2 == 0) {
             if (shape.index % 2 == 0) {
-                oy -= nh / 2;
+                oy -= nh / 2 * this.settings.pattern_padding * this.settings.pattern_paddingx;
             }
 
         } else {
             if (shape.index % 2 == 1) {
-                oy -= nh / 2;
+                oy -= nh / 2 * this.settings.pattern_padding * this.settings.pattern_paddingy;
             }
         }
 
@@ -44,9 +44,9 @@ HC.plugins.pattern.trihive = _class(false, HC.PatternPlugin, {
 
         var matrix = layer.getPatternPlugin('matrix');
         var gridPosition = matrix.gridPosition(shape);
-        var gapx = layer.shapeSize(1) * 0.43 * this.settings.pattern_paddingx;
-        var nh = layer.shapeSize(1) * 0.75 * this.settings.pattern_paddingy;
-        var gapy = nh;
+        var size = layer.shapeSize(1);
+        var gapx = size * 0.43 * this.settings.pattern_paddingx;
+        var gapy = size * 0.748 * this.settings.pattern_paddingy;
 
         gapx *= this.settings.pattern_padding;
         gapy *= this.settings.pattern_padding;
@@ -55,7 +55,7 @@ HC.plugins.pattern.trihive = _class(false, HC.PatternPlugin, {
         var oy = (-gapy * matrix.rowCount(layer)) / 2;
 
         if (shape.index % 2 == 1) {
-            oy -= layer.shapeSize(.5) * 0.5;
+            oy -= layer.shapeSize(.5) * 0.5 * this.settings.pattern_padding * this.settings.pattern_paddingx;
         }
 
         var x = ox + gridPosition.x * gapx - gapx / 2;
@@ -75,8 +75,9 @@ HC.plugins.pattern.hexhive = _class(false, HC.PatternPlugin, {
         var layer = this.layer;
         var matrix = layer.getPatternPlugin('matrix');
         var gridPosition = matrix.gridPosition(shape);
-        var gapx = 0.86 * layer.shapeSize(1) * this.settings.pattern_paddingx;
-        var gapy = 0.75 * layer.shapeSize(1) * this.settings.pattern_paddingy;
+        var size = layer.shapeSize(1);
+        var gapx = 0.86 * size * this.settings.pattern_paddingx;
+        var gapy = 0.745 * size * this.settings.pattern_paddingy;
 
         gapx *= this.settings.pattern_padding;
         gapy *= this.settings.pattern_padding;
@@ -85,7 +86,7 @@ HC.plugins.pattern.hexhive = _class(false, HC.PatternPlugin, {
         var oy = (-gapy * matrix.rowCount(layer)) / 2;
 
         if (gridPosition.y % 2 == 0) {
-            ox -= layer.shapeSize(.5) * 0.87;
+            ox -= layer.shapeSize(.5) * 0.86 * this.settings.pattern_padding * this.settings.pattern_paddingx;
         }
 
         var x = ox + gridPosition.x * gapx - gapx / 2;

@@ -64,16 +64,16 @@ HC.Animation.prototype.shuffleLayer = function (recursions) {
 /**
  *
  */
-HC.Animation.prototype.doShuffle = function () {
+HC.Animation.prototype.doShuffle = function () { // todo plugins
     var beats = beatkeeper.getDefaultSpeed().beats;
-    var diff = Math.abs(beats - statics.shuffle.beats.last);
-    statics.shuffle.beats.last = beats;
-    statics.shuffle.beats.counter += diff;
+    var diff = Math.abs(beats - statics.shuffle.last);
+    statics.shuffle.last = beats;
+    statics.shuffle.counter += diff;
 
     if (statics.ControlSettings.shuffle) {
         if (!statics.ControlSettings.shuffle_usepeak) { // shuffle by beatcount
 
-            if (statics.shuffle.beats.counter >= statics.ControlSettings.shuffle_switch_every) {
+            if (statics.shuffle.counter >= statics.ControlSettings.shuffle_switch_every) {
                 this.shuffleLayer(0);
             }
 
@@ -86,7 +86,7 @@ HC.Animation.prototype.doShuffle = function () {
         }
     }
 
-    if (statics.shuffle.beats.counter >= statics.ControlSettings.shuffle_switch_every) {
+    if (statics.shuffle.counter >= statics.ControlSettings.shuffle_switch_every) {
 
         if (statics.DisplaySettings.display_visibility == 'randomall') {
             var k = Object.keys(statics.DisplayValues.display_visibility);
@@ -107,7 +107,7 @@ HC.Animation.prototype.doShuffle = function () {
         }
     }
 
-    if (statics.shuffle.beats.counter >= statics.ControlSettings.shuffle_switch_every) {
-        statics.shuffle.beats.counter = 0;
+    if (statics.shuffle.counter >= statics.ControlSettings.shuffle_switch_every) {
+        statics.shuffle.counter = 0;
     }
 };

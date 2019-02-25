@@ -16,18 +16,22 @@ HC.plugins.shaders = HC.plugins.shaders || {};
             if (this.pass) {
                 if (this.pass.dispose) {
                     this.pass.dispose();
-                    _log(this.key, 'pass.dispose', false, DEBUG);
+                    // HC.log(this._id(), 'pass.dispose', false, DEBUG);
                 }
                 if (this.pass.material) {
-                    _log(this.key, 'pass.material.dispose', false, DEBUG);
+                    // HC.log(this._id(), 'pass.material.dispose', false, DEBUG);
                     this.pass.material.dispose();
                 }
+                if (this.pass.material.map) {
+                    // HC.log(this._id(), 'pass.material.map.dispose', false, DEBUG);
+                    this.pass.material.map.dispose();
+                }
                 if (this.pass.quad) {
-                    _log(this.key, 'pass.quad.geometry.dispose', false, DEBUG);
+                    // HC.log(this._id(), 'pass.quad.geometry.dispose', false, DEBUG);
                     this.pass.quad.geometry.dispose();
                 }
                 if (this.pass.overrideMaterial) {
-                    _log(this.key, 'pass.overrideMaterial.dispose', false, DEBUG);
+                    // HC.log(this._id(), 'pass.overrideMaterial.dispose', false, DEBUG);
                     this.pass.overrideMaterial.dispose();
                 }
             }

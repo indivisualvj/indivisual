@@ -44,3 +44,10 @@ HC.plugins.shape_modifier.depth = _class(false, HC.ShapeModifierPlugin, {
         return geometry;
     }
 });
+
+HC.plugins.shape_modifier.depthzigzag = _class(false, HC.plugins.shape_modifier.depth, {
+    name: 'depth zigzag',
+    create: function (geometry) {
+        return HC.plugins.shape_modifier.depth.prototype.create.call(this, geometry, 'zigzag');
+    }
+});

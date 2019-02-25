@@ -1,5 +1,38 @@
 # # # # # # # # # # # # # # # # # # # #
 #
+# UI feedback & timing
+#
+# # # # # # # # # # # # # # # # # # # #
+
+# todo this is not constants. it is MidiController.yml
+constants:
+  MIDI_CLOCK_NEXT: [248, 251]
+  MIDI_ROW_ONE:
+    "0": [176, 16]
+    "1": [176, 17]
+    "2": [176, 18]
+    "3": [176, 19]
+    "4": [176, 20]
+    "5": [176, 21]
+    "6": [176, 22]
+    "7": [176, 23]
+  MIDI_ROW_TWO:
+    "0": [176, 24]
+    "1": [176, 25]
+    "2": [176, 26]
+    "3": [176, 27]
+    "4": [176, 28]
+    "5": [176, 29]
+    "6": [176, 30]
+    "7": [176, 31]
+  MIDI_SAMPLE_FEEDBACK: [176, 22]
+  MIDI_PEAKBPM_FEEDBACK: [176, 23]
+  MIDI_BEAT_FEEDBACK: [176, 30]
+  MIDI_PEAK_FEEDBACK: [176, 31]
+  MIDI_DMX_CHANNEL: 174
+
+# # # # # # # # # # # # # # # # # # # #
+#
 # sequencer
 #
 # # # # # # # # # # # # # # # # # # # #

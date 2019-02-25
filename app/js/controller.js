@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.getElementById(_MONITOR).setAttribute('src', 'monitor.html#' + messaging.sid);
 
-        _log(controller.name, 'connected', true, true);
+        HC.log(controller.name, 'connected', true, true);
 
         if (!reconnect) {
 
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     controller.updateSetting(statics.ControlSettings.layer, 'shaders',
                         statics.AnimationSettings.shaders, true, true, false
                     );
-                    _log(this.parent + '/' + this.label, v);
+                    HC.log(this.parent + '/' + this.label, v);
                 });
 
                 explorer = new HC.Explorer();
@@ -114,6 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
                 controller.initKeyboard();
+                controller.initLogEvents();
                 midi = controller.initMidi(controller);
 
                 onResize();
@@ -123,15 +124,19 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 (function () {
+    
+    var inst;
     /**
      *
      * @param name
      * @constructor
      */
     HC.Controller = function (name) {
+        inst = this;
         this.name = name;
         this.gui = false;
         this.synced = {};
+        this.thumbTimeouts = [];
     };
 
     HC.Controller.prototype = {
@@ -151,29 +156,29 @@ document.addEventListener('DOMContentLoaded', function () {
         loadSession: function (session) {
 
             if ('controls' in session) {
-                _log('controls', 'synced');
+                HC.log('controls', 'synced');
                 var controls = session.controls;
                 this.updateControls(controls, true, false, true);
             }
             if ('displays' in session) {
-                _log('displays', 'synced');
+                HC.log('displays', 'synced');
                 var displays = session.displays;
                 this.updateDisplays(displays, true, false, true);
             }
             if ('sources' in session) {
-                _log('sources', 'synced');
+                HC.log('sources', 'synced');
                 var sources = session.sources;
                 this.updateSources(sources, true, false, true);
             }
             if ('settings' in session) {
-                _log('settings', 'synced');
+                HC.log('settings', 'synced');
                 var settings = session.settings;
                 for (var k in settings) {
                     this.updateSettings(k, settings[k], true, false, true);
                 }
             }
             if ('data' in session) {
-                _log('data', 'synced');
+                HC.log('data', 'synced');
                 this.updateData();
             }
 
@@ -362,12 +367,13 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param value
          * @param display
          * @param forward
-         * @param force
+         * @param silent
          */
-        updateSetting: function (layer, item, value, display, forward, force) {
+        updateSetting: function (layer, item, value, display, forward, silent) {
 
-            if (typeof value != 'object') {
-                _log(item, value);
+            if (!silent && typeof value != 'object') {
+                HC.log(item, value);
+                this.explainPlugin(item, value);
             }
 
             if (statics.AnimationSettings.contains(item)) {
@@ -381,7 +387,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (forward) {
                     var data = {};
                     data[item] = value;
-                    messaging.emitSettings(layer, data, display, false, force)
+                    messaging.emitSettings(layer, data, display, false, false);
                 }
 
                 if (display !== false) {
@@ -402,7 +408,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateControl: function (item, value, display, forward, force) {
 
             if (typeof value != 'object') {
-                _log(item, value);
+                HC.log(item, value);
             }
 
             if (statics.ControlSettings && statics.ControlSettings.contains(item)) {
@@ -470,7 +476,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateDisplay: function (item, value, display, forward, force) {
 
             if (typeof value != 'object') {
-                _log(item, value);
+                HC.log(item, value);
             }
 
             if (statics.DisplaySettings.contains(item)) {
@@ -505,7 +511,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateSource: function (item, value, display, forward, force) {
 
             if (typeof value != 'object') {
-                _log(item, value);
+                HC.log(item, value);
             }
 
             if (statics.SourceSettings.contains(item)) {
@@ -559,17 +565,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 controller.updateUi();
             }
 
-            var inst = this;
             if (statics.SourceValues && statics.SourceValues.sequence) {
                 for (var seq = 0; seq < statics.SourceValues.sequence.length; seq++) {
 
                     var _trigger = function (_seq) {
 
-                        if (statics.timeouts.thumbs[_seq]) {
-                            clearTimeout(statics.timeouts.thumbs[_seq]);
-                        }
+                        clearTimeout(inst.thumbTimeouts[_seq]);
 
-                        statics.timeouts.thumbs[_seq] = setTimeout(function () {
+                        inst.thumbTimeouts[_seq] = setTimeout(function () {
                             requestAnimationFrame(function () {
                                 inst.updateClip(_seq);
                             });
@@ -586,11 +589,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            if (statics.timeouts.thumbs.samples) {
-                clearTimeout(statics.timeouts.thumbs.samples);
-            }
+            clearTimeout(inst.thumbTimeouts.samples);
 
-            statics.timeouts.thumbs.samples = setTimeout(function () {
+            inst.thumbTimeouts.samples = setTimeout(function () {
                 requestAnimationFrame(function () {
                     inst.updateThumbs();
                 });
@@ -709,7 +710,6 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         syncLayers: function () {
-            var inst = this;
             for (var layer in layers) {
                 var to = parseInt(layer) * 150;
 
@@ -754,7 +754,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         preset: function (name, data, layer) {
 
-            _log('preset', name);
+            HC.log('preset', name);
 
             var dflt = statics.AnimationSettings.defaults();
             dflt.clean(data, dflt);
@@ -775,7 +775,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         shaders: function (name, data, reset) {
 
-            _log('shaders', name);
+            HC.log('shaders', name);
 
             var shaders = data.shaders;
             var nu = {};
@@ -841,49 +841,6 @@ document.addEventListener('DOMContentLoaded', function () {
             };
 
             messaging.onAttr(config);
-        },
-
-        /**
-         *
-         * @param item
-         * @param control
-         * @param show
-         */
-        updateUi: function (item, control, show) {
-
-            if (!control) {
-                control = this.gui;
-                this.refreshLayerInfo();
-            }
-
-            var flds = control.__folders || [];
-
-            for (var key in flds) {
-                var fld = flds[key];
-
-                this.updateUi(item, fld, false);
-            }
-
-            var ctrls = control.__controllers || [];
-
-            for (var key in ctrls) {
-                var ctrl = ctrls[key];
-                if (!item || ctrl.__li.getAttribute('data-id') == item) {
-                    ctrl.updateDisplay();
-                }
-            }
-
-            if (show) {
-                for (var i = 0; i < statics.DisplayValues.display.length; i++) {
-                    var n = 'display' + i;
-                    var v = statics.DisplaySettings[n + '_visible'];
-                    this.showControls(n, 'g_sources', v);
-
-                    n = '_display' + i;
-                    this.showControls(n, 'g_displays', v);
-                }
-            }
-
         },
 
         /**

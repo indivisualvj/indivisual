@@ -5,7 +5,7 @@ HC.plugins.shaders.mpeg = _class(false, HC.ShaderPlugin, {
             this.pass = new THREE.ShaderPass(THREE.MpegShader);
             this.pass.uniforms.nSampler.texture
                 = this.pass.uniforms.nSampler.value
-                = statics.three.textures.rgbnoise;
+                = assetman.textures.rgbnoise;
         }
 
         return this.pass;

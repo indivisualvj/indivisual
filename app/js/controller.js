@@ -124,15 +124,19 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 (function () {
+    
+    var inst;
     /**
      *
      * @param name
      * @constructor
      */
     HC.Controller = function (name) {
+        inst = this;
         this.name = name;
         this.gui = false;
         this.synced = {};
+        this.thumbTimeouts = [];
     };
 
     HC.Controller.prototype = {
@@ -561,17 +565,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 controller.updateUi();
             }
 
-            var inst = this;
             if (statics.SourceValues && statics.SourceValues.sequence) {
                 for (var seq = 0; seq < statics.SourceValues.sequence.length; seq++) {
 
                     var _trigger = function (_seq) {
 
-                        if (statics.timeouts.thumbs[_seq]) {
-                            clearTimeout(statics.timeouts.thumbs[_seq]);
-                        }
+                        clearTimeout(inst.thumbTimeouts[_seq]);
 
-                        statics.timeouts.thumbs[_seq] = setTimeout(function () {
+                        inst.thumbTimeouts[_seq] = setTimeout(function () {
                             requestAnimationFrame(function () {
                                 inst.updateClip(_seq);
                             });
@@ -588,11 +589,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            if (statics.timeouts.thumbs.samples) {
-                clearTimeout(statics.timeouts.thumbs.samples);
-            }
+            clearTimeout(inst.thumbTimeouts.samples);
 
-            statics.timeouts.thumbs.samples = setTimeout(function () {
+            inst.thumbTimeouts.samples = setTimeout(function () {
                 requestAnimationFrame(function () {
                     inst.updateThumbs();
                 });
@@ -711,7 +710,6 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         syncLayers: function () {
-            var inst = this;
             for (var layer in layers) {
                 var to = parseInt(layer) * 150;
 

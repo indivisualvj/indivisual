@@ -2,7 +2,7 @@ HC.plugins.shape_geometry.text = _class(false, HC.ShapeGeometryPlugin, {
     name: 'text (coolvetica)',
     create: function () {
         var geometry = new THREE.TextGeometry(this.settings.shape_vertices || 'indivisual', {
-            font: statics.three.fonts.coolvetica,
+            font: assetman.fonts.coolvetica,
             size: this.layer.shapeSize(.19),
             height: this.settings.shape_variant * 10,
             curveSegments: 12,

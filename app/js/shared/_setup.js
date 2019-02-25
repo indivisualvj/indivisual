@@ -23,34 +23,6 @@ IS_SETUP = G_INSTANCE == _SETUP;
 IS_ANIMATION = G_INSTANCE == _ANIMATION;
 IS_MONITOR = G_INSTANCE == _MONITOR;
 
-// todo this is not constants. it is MidiController.yml
-MIDI_CLOCK_NEXT = [248, 251];
-MIDI_ROW_ONE = {
-    "0": [176, 16],
-    "1": [176, 17],
-    "2": [176, 18],
-    "3": [176, 19],
-    "4": [176, 20],
-    "5": [176, 21],
-    "6": [176, 22],
-    "7": [176, 23]
-};
-MIDI_ROW_TWO = {
-    "0": [176, 24],
-    "1": [176, 25],
-    "2": [176, 26],
-    "3": [176, 27],
-    "4": [176, 28],
-    "5": [176, 29],
-    "6": [176, 30],
-    "7": [176, 31]
-};
-MIDI_SAMPLE_FEEDBACK = MIDI_ROW_ONE[6];
-MIDI_PEAKBPM_FEEDBACK = MIDI_ROW_ONE[7];
-MIDI_BEAT_FEEDBACK = MIDI_ROW_TWO[6];
-MIDI_PEAK_FEEDBACK = MIDI_ROW_TWO[7];
-MIDI_DMX_CHANNEL = 174;
-
 LAYER_KEYCODES = {
     "49": 0,
     "50": 1,
@@ -280,7 +252,16 @@ function setupResources() {
         {
             file: 'structure/MidiController.yml',
             callback: function (data, finished) {
-                statics.MidiController = new HC.Settings(jsyaml.load(data.contents));
+
+                var settings = jsyaml.load(data.contents);
+                var constants = settings.constants;
+                for (var c in constants) {
+                    var co = constants[c];
+                    window[c] = co;
+                }
+                delete settings.constants;
+
+                statics.MidiController = new HC.Settings(settings);
                 finished();
             }
         },

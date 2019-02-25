@@ -116,7 +116,7 @@
             var m = this.lighting_type;
 
             if (redo && i == 0 && statics.SourceSettings.lighting_type == 'randomall'
-                && statics.shuffle.beats.counter >= statics.ControlSettings.shuffle_switch_every - 1) {
+                && statics.shuffle.counter >= statics.ControlSettings.shuffle_switch_every - 1) {
 
                 var k = Object.keys(statics.SourceValues.lighting_type);
                 var c = randomInt(1, k.length - 2);

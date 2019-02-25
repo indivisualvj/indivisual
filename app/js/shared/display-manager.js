@@ -3,6 +3,7 @@
  */
 
 (function () {
+    var inst;
     HC.DisplayManager = function (config) {
         this.displays = config.display;
         this.width = 1280;
@@ -10,6 +11,9 @@
         this.displayMap = [];
         this.maptastic = this.initMaptastic();
         this.cliptastic = this.initCliptastic();
+        this.mappingTimeouts = [];
+        this.maskTimeouts = [];
+        inst = this;
     };
 
     HC.DisplayManager.prototype = {
@@ -18,7 +22,6 @@
          *
          */
         initMaptastic: function () {
-            var inst = this;
             return Maptastic({
                 crosshairs: true,
                 autoSave: false,
@@ -44,14 +47,14 @@
          * @param mapping
          */
         onMapping: function (id, mapping) {
-            if (statics.timeouts.mapping[id]) { // todo replace with local timeouts?
-                clearTimeout(statics.timeouts.mapping[id]);
+            if (inst.mappingTimeouts[id]) { // todo replace with local timeouts?
+                clearTimeout(inst.mappingTimeouts[id]);
             }
             if (animation) {
                 var f = function (id, mapping) {
-                    statics.timeouts.mapping[id] = setTimeout(function () {
+                    inst.mappingTimeouts[id] = setTimeout(function () {
                         animation.updateDisplay(id + '_mapping', JSON.stringify(mapping), false, true, false);
-                        statics.timeouts.mapping[id] = false;
+                        inst.mappingTimeouts[id] = false;
                     }, 125);
                 };
                 f(id, mapping);
@@ -63,14 +66,14 @@
          */
         initCliptastic: function () {
             var onMask = function (id, mask) {
-                if (statics.timeouts.mask[id]) {
-                    clearTimeout(statics.timeouts.mask[id]);
+                if (inst.maskTimeouts[id]) {
+                    clearTimeout(inst.maskTimeouts[id]);
                 }
                 if (animation) {
                     var f = function (id, mask) {
-                        statics.timeouts.mask[id] = setTimeout(function () {
+                        inst.maskTimeouts[id] = setTimeout(function () {
                             animation.updateDisplay(id, JSON.stringify(mask), true, true, false);
-                            statics.timeouts.mask[id] = false;
+                            inst.maskTimeouts[id] = false;
                         }, 125);
                     };
                     f(id, mask);

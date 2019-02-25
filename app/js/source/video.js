@@ -173,11 +173,6 @@
          */
         render: function (image, progress, color) {
 
-            //var inst = this;
-            //renderSample(this, this.canvas, progress, color, function () {
-            //    inst.canvas.play();
-            //});
-
             if (this.enabled && this.initialized && !this.complete) {
                 if (image && this.frames) {
                     if (!this.started) {

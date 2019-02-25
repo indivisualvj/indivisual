@@ -3,12 +3,14 @@
  */
 
 (function () {
+    var inst;
     /**
      *
      * @param program
      * @constructor
      */
     HC.Messaging = function (program) {
+        inst = this;
         this.program = program;
         this.socket = false;
         this.sid = false;
@@ -80,7 +82,6 @@
 
             this.initEvents();
 
-            var inst = this;
             this.socket.once('connect', function () {
                 inst._join();
                 callback(false);
@@ -149,7 +150,6 @@
          * @param data
          */
         onAttr: function (data) {
-            var inst = this;
             var key = data.query.replace(/[^a-z0-9]+/gi, '') + data.key;
 
             requestAnimationFrame(function () {

@@ -101,12 +101,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
 (function () {
 
+    var inst;
     /**
      *
      * @param name
      * @constructor
      */
     HC.Animation = function (name) {
+        inst = this;
         this.name = name;
         this.now = HC.now();
         this.last = this.now;
@@ -251,8 +253,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             beatkeeper.play();
             renderer.resumeLayers();
-
-            var inst = this;
 
             var render = function () {
                 if (inst.running) {
@@ -466,7 +466,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             var sh = statics.ControlSettings.shuffle;
             var count = statics.ControlSettings.shuffle_usepeak ? audio.peakCount :
-                (statics.shuffle.beats.counter % Math.abs(statics.ControlSettings.shuffle_switch_every));
+                (statics.shuffle.counter % Math.abs(statics.ControlSettings.shuffle_switch_every));
             messaging.emitAttr('#layer', 'data-label', count + (sh ? 's' : ''));
 
             var layerDisplayValue = (statics.ControlSettings.layer + 1);

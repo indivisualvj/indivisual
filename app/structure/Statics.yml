@@ -13,16 +13,5 @@ tmp:
 oscillator: [] # necessary for managing _oscillate values
 
 shuffle:
-  beats:
     counter: 0
     last: 0
-
-timeouts:
-  resize: false
-  mapping: []
-  mask: []
-  thumbs: []
-
-three:
-  textures: {}
-  fonts: {}

@@ -2,8 +2,10 @@
  *
  */
 HC.Controller.prototype.initLogEvents = function () {
-    var co = document.getElementById('blockfocus');
-    if (co) {
+    var expandables = document.getElementsByClassName('expandable');
+
+    for (var c = 0; c < expandables.length; c++) {
+        var co = expandables[c];
         co.onclick = function (evt) {
             if (co.getAttribute('fixed')) {
                 co.removeAttribute('fixed');
@@ -12,7 +14,7 @@ HC.Controller.prototype.initLogEvents = function () {
                 co.setAttribute('fixed', true);
             }
         }
-    }
+    };
 };
 
 /**

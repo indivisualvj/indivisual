@@ -1,5 +1,8 @@
 (function () {
+    var inst;
+
     HC.Explorer = function () {
+        inst = this;
         this.gui = false;
         this.data = false;
     };
@@ -7,8 +10,6 @@
     HC.Explorer.prototype = {
 
         init: function () {
-
-            var inst = this;
 
             this.data = {
                 name: 'presets',
@@ -374,7 +375,6 @@
         },
 
         load: function () {
-            var inst = this;
             messaging.files(STORAGE_DIR, function (data) {
                 var dflt = inst.data.children[0];
                 var tree = [dflt];

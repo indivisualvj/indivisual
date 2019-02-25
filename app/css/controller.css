@@ -95,7 +95,7 @@ body {
     max-height: 328px;
 }
 
-#blockfocus { /* todo blockfocus/pinnable trennen */
+#blockfocus {
     position: absolute;
     z-index: 999;
     box-sizing: border-box;
@@ -105,30 +105,32 @@ body {
     width: 100%;
     height: 25vw;
     margin: 0 0 4px 0;
-
+    padding: 3px;
     max-height: 328px;
 
     border: 1px solid transparent;
     border-radius: 3px;
-    background-color: rgba(0, 0, 0, 0.0);
+}
 
-    padding: 3px;
-    cursor: zoom-in;
+.expandable {
+    background-color: rgba(0, 0, 0, 0.0) !important;
+    border: 1px solid transparent !important;
+    cursor: zoom-in !important;
     transition: all 125ms;
 }
 
-#blockfocus[fixed] {
-    width: 200%;
-    height: 125%;
-    cursor: zoom-out;
+.expandable[fixed] {
+    width: 200% !important;
+    height: 125% !important;
+    cursor: zoom-out !important;
 }
 
-#blockfocus:hover, #blockfocus[fixed] {
-    border: 1px solid #2fa1d6;
-    background-color: rgba(0, 0, 0, 0.8);
+.expandable:hover, .expandable[fixed] {
+    border: 1px solid #2fa1d6 !important;
+    background-color: rgba(0, 0, 0, 0.8) !important;
 }
 
-#blockfocus:hover::after, #blockfocus[fixed]::after {
+.expandable:hover::after, .expandable[fixed]::after {
     content: ' click to expand/reduce';
     font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
     font-size: 10px;

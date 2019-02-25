@@ -95,7 +95,7 @@ body {
     max-height: 328px;
 }
 
-#blockfocus {
+#blockfocus { /* todo blockfocus/pinnable trennen */
     position: absolute;
     z-index: 999;
     box-sizing: border-box;
@@ -118,7 +118,6 @@ body {
 }
 
 #blockfocus[fixed] {
-    background-color: rgba(0, 0, 0, 0.8);
     width: 200%;
     height: 125%;
     cursor: zoom-out;
@@ -126,6 +125,7 @@ body {
 
 #blockfocus:hover, #blockfocus[fixed] {
     border: 1px solid #2fa1d6;
+    background-color: rgba(0, 0, 0, 0.8);
 }
 
 #blockfocus:hover::after, #blockfocus[fixed]::after {

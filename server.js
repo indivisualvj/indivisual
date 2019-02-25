@@ -251,7 +251,7 @@ io.sockets.on('connection', function (socket) {
      *
      */
     socket.on('unlinkall', function (data, callback) {
-        let dir = filePath(_APP, data.dir);
+        let dir = filePath(_ROOT, data.dir);
         _unlinkAll(dir, callback);
     });
 
@@ -702,17 +702,22 @@ function _concat(files, file) {
  */
 function _unlinkAll(dir, callback) {
     let exists = false;
+    let files = [];
     try {
         exists = fs.existsSync(dir);
     } catch (e) {
-
+        console.log(e);
     }
-    let files = exists ? fs.readdirSync(dir) : [];
-    files.forEach(function(file) {
-        fs.unlinkSync(dir + '/' + file);
-    });
+    if (exists) {
+        files = exists ? fs.readdirSync(dir) : [];
+        files.forEach(function (file) {
+            fs.unlinkSync(dir + '/' + file);
+        });
+    } else {
+        console.log(dir + ' does not exist');
+    }
 
-    callback();
+    callback(files);
 }
 
 /**

@@ -3,7 +3,7 @@
  */
 
 var messaging = false;
-var audio = false; // todo ->audioman.analyser? oder nur noch audioman.volumes etc?
+var audio = false;
 var audioman = false;
 var beatkeeper = false;
 var animation = false;
@@ -344,6 +344,22 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         },
 
+        updateAudio: function () {
+            audio.reset();
+            var value = statics.ControlSettings.audio;
+            if (value) {
+                audioman.stop();
+                audioman.initPlugin(value, function (source) {
+                    var analyser = audio.createAnalyser(audioman.context);
+                    source.connect(analyser);
+                    audioman.start();
+                });
+
+            } else {
+                audioman.stop();
+            }
+        },
+
         /**
          *
          */
@@ -633,7 +649,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             break;
 
                         case 'layer':
-                            audio.peakCount = 0;
+                            audio.peakCount = 0; // disable shuffle for [shuffle every] count of peaks
                             renderer.nextLayer = renderer.layers[value];
                             break;
 
@@ -650,20 +666,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             break;
 
                         case 'audio':
-                            if (IS_ANIMATION || IS_MONITOR) { // todo makesense?
-                                audio.reset();
-                                if (value) {
-                                    audioman.stop();
-                                    audioman.initPlugin(value, function (source) {
-                                        var analyser = audio.createAnalyser(audioman.context);
-                                        source.connect(analyser);
-                                        audioman.start();
-                                    });
-
-                                } else {
-                                    audioman.stop();
-                                }
-                            }
+                            this.updateAudio();
                             break;
 
                         case 'shuffle':
@@ -808,10 +811,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         case 'display_visibility':
                         case 'border_mode':
-                            if (IS_ANIMATION) { // todo kommt das hier überhaupt an?
-                                statics.display.visibility.random = false;
-                                statics.display.border.random = false;
-                            }
+                            statics.display.visibility.random = false;
+                            statics.display.border.random = false;
                             break;
                     }
                 }

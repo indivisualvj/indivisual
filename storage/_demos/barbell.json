@@ -98,7 +98,7 @@
 "pattern_overlay_volume":0,
 "pattern_overlay_volume_oscillate":"off",
 "shape_geometry":"barbell",
-"shape_size":14,
+"shape_sizedivider":14,
 "shape_audio":false,
 "shape_variant":1,
 "shape_limit":false,

@@ -98,7 +98,7 @@
 "pattern_overlay_volume":0,
 "pattern_overlay_volume_oscillate":"off",
 "shape_geometry":"rect",
-"shape_size":2,
+"shape_sizedivider":2,
 "shape_audio":false,
 "shape_variant":1,
 "shape_limit":false,

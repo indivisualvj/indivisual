@@ -111,7 +111,7 @@ shape:
   shape_variant:
   shape_segmentsa:
   shape_segmentsb:
-  shape_size:
+  shape_sizedivider:
   shape_limit:
   shape_sync:
   shape_vertices:

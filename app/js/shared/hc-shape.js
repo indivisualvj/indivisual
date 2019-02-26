@@ -312,23 +312,8 @@
                     }
                 }
 
-                var repeat = mat.map.repeat;
-                var center = mat.map.center;
-
-                // todo .transformUv evtl beim zoom1 und verschieben.
-
-                if (repeat.x != settings.material_uvx) {
-                    repeat.x = 1 / settings.material_uvx;
-                }
-                if (repeat.y != settings.material_uvy) {
-                    repeat.y = 1 / settings.material_uvy;
-                }
-                if (center.x != settings.material_uvofx) {
-                    center.x = settings.material_uvofx;
-                }
-                if (center.y != settings.material_uvofy) {
-                    center.y = settings.material_uvofy;
-                }
+                this._updateMaterialMap();
+                
 
             } else if (mat.map) {
                 mat.map = false;
@@ -336,6 +321,36 @@
                 mat.needsUpdate = true;
             }
 
+            this._updateMaterialBlending();
+
+            if (mat.flatShading == settings.material_softshading) { // reversed logic!
+                mat.flatShading = !settings.material_softshading; // reversed logic!
+                mat.needsUpdate = true;
+            }
+
+            if (mat.side != settings.material_side) {
+                mat.side = settings.material_side;
+                mat.needsUpdate = true;
+            }
+
+            if (mat.shadowSide != settings.material_shadowside) {
+                mat.shadowSide = settings.material_shadowside;
+                mat.needsUpdate = true;
+            }
+
+            if (this.mesh.castShadow != settings.lighting_shadows) {
+                this.mesh.castShadow = settings.lighting_shadows;
+                this.mesh.receiveShadow = settings.lighting_shadows;
+            }
+        },
+
+        /**
+         *
+         * @private
+         */
+        _updateMaterialBlending: function () {
+            var settings = this._layer.settings;
+            var mat = this.material;
 
             var b = settings.material_blending;
             if (b !== undefined) {
@@ -376,25 +391,49 @@
                     mat.needsUpdate = true;
                 }
             }
+        },
 
-            if (mat.flatShading == settings.material_softshading) {
-                mat.flatShading = !settings.material_softshading;
-                mat.needsUpdate = true;
+        /**
+         *
+         * @private
+         */
+        _updateMaterialMap: function () {
+            var settings = this._layer.settings;
+            var mat = this.material;
+            var repeat = mat.map.repeat;
+            var offset = mat.map.offset;
+            var center = mat.map.center;
+
+            if (repeat.x != settings.material_uvx) {
+                repeat.x = 1 / settings.material_uvx;
             }
-
-            if (mat.side != settings.material_side) {
-                mat.side = settings.material_side;
-                mat.needsUpdate = true;
+            if (repeat.y != settings.material_uvy) {
+                repeat.y = 1 / settings.material_uvy;
             }
+            if (settings.material_uvx <= 1) {
+                center.x = .5;
+                var uvofx;
+                if (offset.x != -(uvofx = settings.material_uvofx - .5)) {
+                    offset.x = -uvofx;
+                }
 
-            if (mat.shadowSide != settings.material_shadowside) {
-                mat.shadowSide = settings.material_shadowside;
-                mat.needsUpdate = true;
+            } else {
+                offset.x = 0;
+                if (center.x != settings.material_uvofx) {
+                    center.x = 1 - settings.material_uvofx;
+                }
             }
-
-            if (this.mesh.castShadow != settings.lighting_shadows) {
-                this.mesh.castShadow = settings.lighting_shadows;
-                this.mesh.receiveShadow = settings.lighting_shadows;
+            if (settings.material_uvy <= 1) {
+                center.y = .5;
+                var uvofy;
+                if (offset.y != (uvofy = settings.material_uvofy - .5)) {
+                    offset.y = uvofy;
+                }
+            } else {
+                offset.y = 0;
+                if (center.y != settings.material_uvofy) {
+                    center.y = settings.material_uvofy;
+                }
             }
         },
 

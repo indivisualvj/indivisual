@@ -293,7 +293,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
                 } else {
-                    renderer.pauseLayers();
+                    renderer.pauseLayers(); // todo nicht nötig wenn mit animation.now gearbeitet wird.
                     beatkeeper.stop();
                 }
             };

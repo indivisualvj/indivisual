@@ -4,7 +4,6 @@
 #
 # # # # # # # # # # # # # # # # # # # #
 
-# todo this is not constants. it is MidiController.yml
 constants:
   MIDI_CLOCK_NEXT: [248, 251]
   MIDI_ROW_ONE:

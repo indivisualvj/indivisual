@@ -110,7 +110,7 @@
 "shape_transform":"wavexybz",
 "shape_transform_volume":0.03,
 "shape_modifier":"depth",
-"shape_modifier_volume":5,
+"shape_modifier_volume":0.1,
 "shape_pairing":"off",
 "sizing_mode":"off",
 "sizing_scale":1,

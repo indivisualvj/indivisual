@@ -21,7 +21,7 @@
 "camera_y_oscillate":"off",
 "camera_z":1,
 "camera_z_oscillate":"off",
-"coloring_mode":"off",
+"coloring_mode":"grow4step",
 "coloring_volume":1,
 "coloring_volume_oscillate":"off",
 "coloring_hue":0,

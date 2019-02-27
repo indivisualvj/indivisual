@@ -71,9 +71,9 @@ shape_geometry: [half]
 shape_sizedivider: [1, 64, 1, half]
 shape_limit: [quarter]
 shape_sync: [quarter]
-shape_variant: [1, 12, 1, half] # todo nach segmentsa/b funktion klären und dementsprechend benennen
-shape_segmentsa: [1, 128, 1, half]
-shape_segmentsb: [1, 128, 1, half]
+shape_moda: [0, 128, 1, half] # todo nach segmentsa/b funktion klären und dementsprechend benennen
+shape_modb: [0, 128, 1, half]
+shape_modc: [0, 128, 1, half]
 shape_transform: [half]
 shape_transform_volume: [-5, 5, 0.01, half]
 shape_modifier: [half]

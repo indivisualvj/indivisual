@@ -1,17 +1,19 @@
 (function () {
     /**
      *
-     * @param width
-     * @param height
+     * @param edgeSize
+     * @param cornerRadius
+     * @param curveSegments
      * @constructor
      */
-    HC.RoundedRect = function (width, height) {
-        width *= .95;
-        height *= .95;
-        this.radius = new THREE.Vector2(width, height).length() * 0.1;
-        this.hw = width / 2;
-        this.hh = height / 2;
+    HC.RoundedRect = function (edgeSize, cornerRadius, curveSegments) {
+        edgeSize *= .95;
+        this.radius = new THREE.Vector2(edgeSize, edgeSize).length() * cornerRadius * 0.0025;
+        this.hw = edgeSize / 2;
+        this.hh = edgeSize / 2;
+        this.radius = Math.min(this.hw, this.radius);
         this.corner = new THREE.Vector2(this.radius, this.radius).length();
+        this.curveSegments = curveSegments;
     };
 
     HC.RoundedRect.prototype = {
@@ -39,7 +41,7 @@
             shape.absarc(-hw + radius, -hh - radius, radius, 90 * RAD, 180 * RAD);
             // shape.lineTo(-hw, hh-radius);
 
-            var geo = new THREE.ShapeGeometry(shape);
+            var geo = new THREE.ShapeGeometry(shape, this.curveSegments);
             return geo;
         }
     }
@@ -48,7 +50,7 @@
 (function () {
     HC.DirectionalCircle = function (config) {
 
-        this._sides = config.sides;
+        this._edges = config.edges;
         this._radius = config.radius;
         this._direction = config.direction;
     };
@@ -56,21 +58,46 @@
     HC.DirectionalCircle.prototype = {
         create: function () {
 
-            var sides = this._sides;
+            var edges = this._edges;
             var radius = this._radius;
             var dir = this._direction;
             var div = Math.PI * 0.5;
-            var hseg = -div + (div / sides) * (dir - 1);
+            var hseg = -div + (div / edges) * dir;
 
-            var geo = new THREE.CircleGeometry(radius, sides, hseg);
+            var geo = new THREE.CircleGeometry(radius, edges, hseg);
             return geo;
         }
     };
 })();
 
+
+(function () {
+    HC.DirectionalRing = function (config) {
+
+        this.edges = config.edges;
+        this.innerRadius = config.innerRadius;
+        this.outerRadius = config.outerRadius;
+        this.direction = config.direction;
+    };
+
+    HC.DirectionalRing.prototype = {
+        create: function () {
+
+            var edges = this.edges;
+            var dir = this.direction;
+            var div = Math.PI * 0.5;
+            var hseg = -div + (div / edges) * dir;
+
+            var geo = new THREE.RingGeometry(this.innerRadius, this.outerRadius, edges, 1, hseg);
+            return geo;
+        }
+    };
+})();
+
+
 (function () {
     HC.DirectionalShape = function (config) {
-        this._sides = config.sides;
+        this._edges = config.edges;
         this._radius = config.radius;
         this._direction = config.direction;
     };
@@ -80,16 +107,16 @@
             var shape = new THREE.Shape();
             var radius = this._radius;
             var dir = this._direction;
-            var sides = this._sides;
+            var edges = this._edges;
             var div = Math.PI * 0.5;
-            var hseg = (div / sides) * (dir - 1);
-            var step = Math.PI * 2 / sides;
+            var hseg = (div / edges) * dir;
+            var step = Math.PI * 2 / edges;
 
             var x = Math.sin(hseg) * radius;
             var y = Math.cos(hseg) * radius;
             shape.moveTo(x, -y);
 
-            for (var i = 0; i < sides; i++) {
+            for (var i = 0; i < edges; i++) {
                 x = Math.sin(step * i + hseg) * radius;
                 var y = Math.cos(step * i + hseg) * radius;
                 shape.lineTo(x, -y);

@@ -13,7 +13,7 @@ HC.plugins.shape_geometry.bacillush = _class(false, HC.ShapeGeometryPlugin, {
         shape.lineTo(-hw, -hh);
         shape.absarc(-hw, 0, r, 1.5 * Math.PI, 2.5 * Math.PI, true);
 
-        return new THREE.ShapeGeometry(shape);
+        return new THREE.ShapeGeometry(shape); // todo curveSegments
     }
 });
 
@@ -32,6 +32,6 @@ HC.plugins.shape_geometry.bacillusv = _class(false, HC.ShapeGeometryPlugin, {
         shape.lineTo(hw, hh);
         shape.absarc(0, -hh, r, 0 * Math.PI, 1 * Math.PI, true);
 
-        return new THREE.ShapeGeometry(shape);
+        return new THREE.ShapeGeometry(shape); // todo curveSegments
     }
 });

@@ -207,6 +207,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.updateSetting(layer, k, value, display, false, false);
                 }
             }
+
+            if (forward) {
+                /**
+                 * we don't want forwarding here because:
+                 * - it could be enabled when coming from messaging.onSettings
+                 * - there are several calls of updateSetting(....forward=true and then messaging.emitSettings that disallow
+                 * calling messaging.emitSettings here
+                 *
+                 */
+            }
         },
 
         /**
@@ -236,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     && !layers[i].settings.isDefault()
                     && layerShuffleable(i) == layerShuffleable(statics.ControlSettings.layer)
                 ) {
-                    this.updateSettings(i, settings, true, true, true);
+                    this.updateSettings(i, settings, true, false, true);
 
                     if (layers[i]._preset) {
                         explorer.setChanged(i, true);
@@ -264,7 +274,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     && layerShuffleable(i) == layerShuffleable(statics.ControlSettings.layer)
                 ) {
 
-                    this.updateSettings(i, data, true, true, true);
+                    this.updateSettings(i, data, true, false, true);
 
                     if (layers[i]._preset) {
                         explorer.setChanged(i, true);
@@ -368,6 +378,9 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param display
          * @param forward
          * @param silent
+         *
+         * todo add force again. add silent at the end or find a way to avoid explainPlugin on automated settings (maybe after updateSettings(forward) issue is fixed)
+         *
          */
         updateSetting: function (layer, item, value, display, forward, silent) {
 
@@ -764,7 +777,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 layer = statics.ControlSettings.layer;
             }
 
-            this.updateSettings(layer, dflt, true, true, true);
+            this.updateSettings(layer, dflt, true, false, true);
             messaging.emitSettings(layer, statics.AnimationSettings.prepare(), false, false, true);
         },
 
@@ -802,7 +815,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     && layerShuffleable(i) == layerShuffleable(statics.ControlSettings.layer)
                 ) {
                     var settings = {shaders: shaders};
-                    this.updateSettings(i, settings, true, true, true);
+                    this.updateSettings(i, settings, true, false, true);
 
                     if (layers[i]._preset) {
                         explorer.setChanged(i, true);
@@ -870,7 +883,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 controller.updateControls(rst, true, false);
                 messaging.emitControls(rst, true, false, false);
             } else {
-                controller.updateSettings(statics.ControlSettings.layer, rst, true, false);
+                controller.updateSettings(statics.ControlSettings.layer, rst, true, false, false);
                 messaging.emitSettings(statics.ControlSettings.layer, rst, true, false, false);
             }
         }

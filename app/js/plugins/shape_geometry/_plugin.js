@@ -29,5 +29,29 @@ HC.plugins.shape_geometry = HC.plugins.shape_geometry || {};
         assignUVs(geometry) {
             assignUVs(geometry)
         }
+
+        getModA(min, fallback) {
+            if (this.settings.shape_moda < min) {
+                return fallback;
+            }
+
+            return this.settings.shape_moda;
+        }
+
+        getModB(min, fallback) {
+            if (this.settings.shape_modb < min) {
+                return fallback;
+            }
+
+            return this.settings.shape_modb;
+        }
+
+        getModC(min, fallback) {
+            if (this.settings.shape_modc < min) {
+                return fallback;
+            }
+
+            return this.settings.shape_modc;
+        }
     }
 }

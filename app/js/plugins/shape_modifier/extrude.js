@@ -47,10 +47,10 @@ HC.plugins.shape_modifier.extrude = _class(false, HC.ShapeModifierPlugin, {
             var conf = {
                 steps: 1,
                 depth: layer.shapeSize(this.settings.shape_modifier_volume),
-                bevelEnabled: this.settings.shape_variant - 1,
-                bevelThickness: this.settings.shape_variant,
-                bevelSize: this.settings.shape_variant,
-                bevelSegments: this.settings.shape_variant,
+                bevelEnabled: this.settings.shape_moda - 1,
+                bevelThickness: this.settings.shape_moda,
+                bevelSize: this.settings.shape_moda,
+                bevelSegments: this.settings.shape_moda,
             };
 
             geometry = new THREE.ExtrudeGeometry(shape, conf);

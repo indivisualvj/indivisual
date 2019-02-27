@@ -575,12 +575,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     case 'shape_transform':
                     case 'mesh_material':
                     case 'material_mapping':
-                    // case 'material_uvx':
-                    // case 'material_uvy':
-                    // case 'material_uvofx':
-                    // case 'material_uvofy':
-                    // case 'material_map':
-                    case 'shape_variant':
+                    case 'shape_moda':
+                    case 'shape_modb':
+                    case 'shape_modc':
                         layer.resetShapes();
                         break;
                 }

@@ -1,5 +1,6 @@
 {
     HC.plugins.shape_geometry.tetrahedron = class Plugin extends HC.ShapeGeometryPlugin {
+        static index = 40;
         create() {
             var layer = this.layer;
 
@@ -10,6 +11,7 @@
 }
 {
     HC.plugins.shape_geometry.octahedron = class Plugin extends HC.ShapeGeometryPlugin {
+        static index = 40;
         create() {
             var layer = this.layer;
 
@@ -20,6 +22,7 @@
 }
 {
     HC.plugins.shape_geometry.icosahedron = class Plugin extends HC.ShapeGeometryPlugin {
+        static index = 40;
         static tutorial = {
             shape_moda: {
                 text: 'set number of detail'

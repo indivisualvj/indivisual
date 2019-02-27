@@ -135,7 +135,7 @@ var HC = HC || {};
          *
          */
         loadTextures() {
-            new THREE.TextureLoader().load(filePath(TEXTURE_DIR, 'rgb-noise.png'), function (texture) {
+            new THREE.TextureLoader().load(filePath(TEXTURE_DIR, 'rgb-noise.png'), function (texture) { // todo rgb-noise to be explicit part of referencing plugins
                 inst.textures.rgbnoise = texture;
             });
         }

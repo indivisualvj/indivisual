@@ -1,65 +1,67 @@
-HC.plugins.shape_modifier.extrude = _class(false, HC.ShapeModifierPlugin, {
-    name: 'extrude',
-
-    create: function (geometry) {
-        var layer = this.layer;
-
-        var shape;
-        var moved = false;
-
-        if (geometry.parameters && geometry.parameters.shapes) {
-            shape = geometry.parameters.shapes;
-
-        } else {
-            shape = new THREE.Shape();
-            geometry.center();
-
-            var vertices = geometry.vertices;
-
-            for (var i in vertices) {
-                var v = vertices[i];
-
-                if (v.z != 0) {
-                    console.warn('No extrusion for 3D geometries');
-                    return;
-                }
-
-                if (v.x != 0 || v.y != 0) {
-                    if (moved === false) {
-                        shape.moveTo(v.x, v.y);
-                        moved = i;
-
-                    } else {
-                        shape.lineTo(v.x, v.y);
-                    }
-                }
+{
+    HC.plugins.shape_modifier.extrude = class Plugin extends HC.ShapeModifierPlugin {
+        static name = 'extrude';
+        static tutorial = {
+            shape_modc: {
+                text: 'set bevel\'s size, thickness and roundness'
             }
-            if (moved !== false) {
-                var v = vertices[moved];
-                shape.lineTo(v.x, v.y);
+        };
+
+        create(geometry) {
+            var layer = this.layer;
+
+            var shape;
+            var moved = false;
+
+            if (geometry.parameters && geometry.parameters.shapes) {
+                shape = geometry.parameters.shapes;
 
             } else {
-                shape = false;
+                shape = new THREE.Shape();
+                geometry.center();
+
+                var vertices = geometry.vertices;
+
+                for (var i in vertices) {
+                    var v = vertices[i];
+
+                    if (v.x != 0 || v.y != 0) {
+                        if (moved === false) {
+                            shape.moveTo(v.x, v.y);
+                            moved = i;
+
+                        } else {
+                            shape.lineTo(v.x, v.y);
+                        }
+                    }
+                }
+                if (moved !== false) {
+                    var v = vertices[moved];
+                    shape.lineTo(v.x, v.y);
+
+                } else {
+                    shape = false;
+                }
             }
+
+            if (shape) {
+                var conf = {
+                    steps: 1,
+                    depth: layer.shapeSize(this.settings.shape_modifier_volume),
+                    bevelEnabled: this.settings.shape_modc,
+                    bevelThickness: this.settings.shape_modc,
+                    bevelSize: this.settings.shape_modc,
+                    bevelSegments: Math.ceil(this.settings.shape_modc / 2),
+                };
+
+                geometry = new THREE.ExtrudeGeometry(shape, conf);
+                geometry.center();
+                geometry.verticesNeedUpdate = true;
+
+                this.assignUVs(geometry);
+            }
+
+            return geometry;
         }
-
-        if (shape) {
-            var conf = {
-                steps: 1,
-                depth: layer.shapeSize(this.settings.shape_modifier_volume),
-                bevelEnabled: this.settings.shape_moda - 1,
-                bevelThickness: this.settings.shape_moda,
-                bevelSize: this.settings.shape_moda,
-                bevelSegments: this.settings.shape_moda,
-            };
-
-            geometry = new THREE.ExtrudeGeometry(shape, conf);
-            geometry.center();
-            geometry.verticesNeedUpdate = true;
-
-            this.assignUVs(geometry);
-        }
-
-        return geometry;
     }
-});
+}

@@ -1,5 +1,6 @@
 {
     HC.plugins.shape_geometry.pipe = class Plugin extends HC.ShapeGeometryPlugin {
+        static index = 50;
         create() {
             let layer = this.layer;
 
@@ -13,6 +14,7 @@
 }
 {
     HC.plugins.shape_geometry.cylinder = class Plugin extends HC.ShapeGeometryPlugin {
+        static index = 50;
         create() {
             let layer = this.layer;
 

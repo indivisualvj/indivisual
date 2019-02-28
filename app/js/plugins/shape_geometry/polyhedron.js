@@ -4,7 +4,7 @@
         create() {
             var layer = this.layer;
 
-            var geometry = new THREE.TetrahedronGeometry(layer.shapeSize(.5), this.getModA(0, 0));
+            var geometry = new THREE.TetrahedronGeometry(layer.shapeSize(.5), this.getModA(0, 0, 5));
             return geometry;
         }
     }
@@ -15,7 +15,7 @@
         create() {
             var layer = this.layer;
 
-            var geometry = new THREE.OctahedronGeometry(layer.shapeSize(.5), this.getModA(0, 0));
+            var geometry = new THREE.OctahedronGeometry(layer.shapeSize(.5), this.getModA(0, 0, 5));
             return geometry;
         }
     }
@@ -38,7 +38,7 @@
         create() {
             var layer = this.layer;
 
-            var geometry = new THREE.IcosahedronGeometry(layer.shapeSize(.5), this.getModA(0, 0));
+            var geometry = new THREE.IcosahedronGeometry(layer.shapeSize(.5), this.getModA(0, 0, 5));
             return geometry;
         }
     }

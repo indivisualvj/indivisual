@@ -1,5 +1,5 @@
 HC.plugins.shape_transform.audio = _class(false, HC.ShapeTransformPlugin, {
-    name: 'audio',
+    name: 'audio xyz',
 
     apply: function (shape, axis) {
 

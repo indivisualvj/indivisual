@@ -387,7 +387,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (gain !== 0) {
                 //console.log('gain', [audio.volume, audio.avgVolume, gain]);
                 var vo = Math.min(2, Math.max(0.5, statics.ControlSettings.volume + gain));
-                animation.updateControl('volume', vo, false, true, false);
+                animation.updateControl('volume', vo, false, false, false);
             }
         },
 

@@ -30,28 +30,33 @@ HC.plugins.shape_geometry = HC.plugins.shape_geometry || {};
             assignUVs(geometry)
         }
 
-        getModA(min, fallback) {
+        getModA(min, fallback, max) {
             if (this.settings.shape_moda < min) {
                 return fallback;
             }
+            max = max || this.settings.shape_moda;
 
-            return this.settings.shape_moda;
+            return Math.min(max, this.settings.shape_moda);
         }
 
-        getModB(min, fallback) {
+        getModB(min, fallback, max) {
             if (this.settings.shape_modb < min) {
                 return fallback;
             }
 
-            return this.settings.shape_modb;
+            max = max || this.settings.shape_modb;
+
+            return Math.min(max, this.settings.shape_modb);
         }
 
-        getModC(min, fallback) {
+        getModC(min, fallback, max) {
             if (this.settings.shape_modc < min) {
                 return fallback;
             }
 
-            return this.settings.shape_modc;
+            max = max || this.settings.shape_modc;
+
+            return Math.min(max, this.settings.shape_modc);
         }
     }
 }

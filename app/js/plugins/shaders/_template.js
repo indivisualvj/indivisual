@@ -1,15 +1,19 @@
-HC.plugins.shaders._template = _class(false, HC.ShaderPlugin, {
-    index: -1,
-    create: function () {
-        if (!this.pass) {
-            this.pass = new THREE.ShaderPass(THREE.RepeatShader);
+{
+    HC.plugins.shaders._template = class Plugin extends HC.ShaderPlugin {
+        static index = -1;
+
+        create() {
+            if (!this.pass) {
+                this.pass = new THREE.ShaderPass(THREE.RepeatShader);
+            }
+
+            return this.pass;
         }
 
-        return this.pass;
-    },
-    settings: {
-        apply: false,
-        random: false,
-        index: 0
-    }
-});
+        static settings = {
+            apply: false,
+            random: false,
+            index: 0
+        }
+    };
+}

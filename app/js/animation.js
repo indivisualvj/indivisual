@@ -29,9 +29,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!reconnect) {
             loadResources(setupResources(), function () {
 
-                assetman.loadTextures();
-                assetman.loadFonts();
-
                 HC.DisplayController.createAllControls();
                 HC.SourceController.createAllControls();
 

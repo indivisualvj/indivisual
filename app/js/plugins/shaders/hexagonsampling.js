@@ -1,10 +1,10 @@
 {
-    HC.plugins.shaders.mirror = class Plugin extends HC.ShaderPlugin {
-        static index = 50;
+    HC.plugins.shaders.hexagonsampling = class Plugin extends HC.ShaderPlugin {
+        static index = 230;
 
         create() {
             if (!this.pass) {
-                this.pass = new THREE.ShaderPass(THREE.MirrorShader);
+                this.pass = new THREE.ShaderPass(THREE.HexagonsamplingShader);
             }
 
             return this.pass;
@@ -14,9 +14,9 @@
             apply: false,
             random: false,
             index: 0,
-            side: {
-                value: 1,
-                _type: [0, 3, 1],
+            divisor: {
+                value: 80,
+                _type: [1, 500, 0.5],
                 audio: false,
                 stepwise: false,
                 oscillate: "off"

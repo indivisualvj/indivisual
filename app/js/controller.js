@@ -377,14 +377,13 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param value
          * @param display
          * @param forward
-         * @param force ugly: 'silent' means do not explain
-         *
-         *
+         * @param force
          *
          */
         updateSetting: function (layer, item, value, display, forward, force) {
 
-            if (force === 'silent' && typeof value != 'object') {
+            // todo disable explain when updating from tutorial
+            if (typeof value != 'object') {
                 HC.log(item, value);
                 this.explainPlugin(item, value);
             }

@@ -637,6 +637,7 @@ select option {
 
     #blockfocus {
         height: 35vw;
+        max-width: 100%;
     }
 
     .left {

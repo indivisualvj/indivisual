@@ -217,7 +217,7 @@
                 if (!(k in source)) {
                     delete target[k];
 
-                } else if (typeof v == 'object') { // todo also cleanses tutorial but has to be {} initially hugh!?
+                } else if (typeof v == 'object') { // fixme also cleanses tutorial but has to be {} initially hugh!?
                     this.clean(v, source[k]);
 
                 } else {

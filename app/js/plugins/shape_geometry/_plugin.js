@@ -12,6 +12,10 @@ HC.plugins.shape_geometry = HC.plugins.shape_geometry || {};
                     }
                 }
 
+                if (!this.ready()) { // return (fallback) geometry
+                    return geometry;
+                }
+
                 this.geometry = geometry;
             }
 

@@ -1,10 +1,10 @@
 {
-    HC.plugins.shaders.noise = class Plugin extends HC.ShaderPlugin {
-        static index = 110;
+    HC.plugins.shaders.rgbsplit = class Plugin extends HC.ShaderPlugin {
+        static index = 190;
 
         create() {
             if (!this.pass) {
-                this.pass = new THREE.ShaderPass(THREE.NoiseShader);
+                this.pass = new THREE.ShaderPass(THREE.RGBShiftShader);
             }
 
             return this.pass;
@@ -14,16 +14,16 @@
             apply: false,
             random: false,
             index: 0,
-            smoothness: {
-                value: 0.02,
-                _type: [0, 32, 0.01],
+            amount: {
+                value: 0.005,
+                _type: [0, 3, 0.001],
                 audio: false,
                 stepwise: false,
                 oscillate: "off"
             },
-            threshold: {
-                value: 1,
-                _type: [0.5, 2, 0.01],
+            angle: {
+                value: 0,
+                _type: [-5, 5, 0.001],
                 audio: false,
                 stepwise: false,
                 oscillate: "off"

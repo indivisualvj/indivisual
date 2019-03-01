@@ -435,7 +435,8 @@ function setupResources() {
         var keys = Object.keys(values);
         for (var i = 0; i < keys.length; i++) {
             var key = keys[i];
-            settings[key] = HC.plugins.shaders[key].prototype.settings;
+            var plug = HC.plugins.shaders[key];
+            settings[key] = plug.prototype.settings || plug.prototype.constructor.settings;
         }
 
         return settings;

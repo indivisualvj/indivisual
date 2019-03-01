@@ -1,30 +1,22 @@
 {
-    let rgbnoise;
-    if (IS_ANIMATION) {
-        assetman.loadTexture(filePath(TEXTURE_DIR, 'rgb-noise.png'), function (texture) {
-            rgbnoise = texture;
-        });
-    }
+    HC.plugins.shaders.crawler = class Plugin extends HC.ShaderPlugin {
+        static index = 170;
 
-    HC.plugins.shaders.mpeg = class Plugin extends HC.ShaderPlugin {
-        static index = 80;
         create() {
             if (!this.pass) {
-                this.pass = new THREE.ShaderPass(THREE.MpegShader);
-                this.pass.uniforms.nSampler.texture
-                    = this.pass.uniforms.nSampler.value
-                    = rgbnoise;
+                this.pass = new THREE.ShaderPass(THREE.CrawlerShader);
             }
 
             return this.pass;
         }
+
         static settings = {
             apply: false,
             random: false,
             index: 0,
             time: {
                 value: 1,
-                _type: [0, 10, 0.001],
+                _type: [-3, 3, 0.001],
                 audio: false,
                 stepwise: false,
                 oscillate: "off"
@@ -35,7 +27,8 @@
                 audio: false,
                 stepwise: false,
                 oscillate: "off"
-            }
+            },
+            displace: {value: true}
         }
     }
 }

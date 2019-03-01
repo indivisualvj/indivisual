@@ -1,10 +1,10 @@
 {
-    HC.plugins.shaders.mirror = class Plugin extends HC.ShaderPlugin {
-        static index = 50;
+    HC.plugins.shaders.crosshatch = class Plugin extends HC.ShaderPlugin {
+        static index = 240;
 
         create() {
             if (!this.pass) {
-                this.pass = new THREE.ShaderPass(THREE.MirrorShader);
+                this.pass = new THREE.ShaderPass(THREE.CrossHatchShader);
             }
 
             return this.pass;
@@ -14,9 +14,9 @@
             apply: false,
             random: false,
             index: 0,
-            side: {
-                value: 1,
-                _type: [0, 3, 1],
+            spacing: {
+                value: 10,
+                _type: [0.1, 24, 0.1],
                 audio: false,
                 stepwise: false,
                 oscillate: "off"

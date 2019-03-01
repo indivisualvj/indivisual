@@ -124,5 +124,13 @@ HC.Shape.prototype.initPlugins = function () {
         isFirstShape(shape) {
             return shape.index == 0;
         }
+
+        /**
+         *
+         * @returns {boolean}
+         */
+        ready() {
+            return true;
+        }
     }
 }

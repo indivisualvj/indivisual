@@ -1,10 +1,10 @@
 {
-    HC.plugins.shaders.kaleidoscope = class Plugin extends HC.ShaderPlugin {
-        static index = 60;
+    HC.plugins.shaders.twist = class Plugin extends HC.ShaderPlugin {
+        static index = 180;
 
         create() {
             if (!this.pass) {
-                this.pass = new THREE.ShaderPass(THREE.KaleidoShader);
+                this.pass = new THREE.ShaderPass(THREE.TwistShader);
             }
 
             return this.pass;
@@ -14,23 +14,16 @@
             apply: false,
             random: false,
             index: 0,
-            sides: {
-                value: 6,
-                _type: [2, 16, 1],
+            radius: {
+                value: 0.5,
+                _type: [0, 1, 0.001],
                 audio: false,
                 stepwise: false,
                 oscillate: "off"
             },
             angle: {
-                value: 0,
-                _type: [-5, 5, 0.001],
-                audio: false,
-                stepwise: false,
-                oscillate: "off"
-            },
-            radius: {
-                value: 0.5,
-                _type: [-5, 5, 0.01],
+                value: 5,
+                _type: [-10, 10, 0.001],
                 audio: false,
                 stepwise: false,
                 oscillate: "off"

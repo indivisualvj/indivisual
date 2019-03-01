@@ -108,7 +108,6 @@ pattern_overlay_volume_oscillate: 'off'
 
 shape_geometry: tile
 shape_sizedivider: 14
-shape_audio: false
 shape_moda: 0
 shape_modb: 0
 shape_modc: 0

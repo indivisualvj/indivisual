@@ -115,7 +115,6 @@
 "pattern_overlay_volume_oscillate":"off",
 "shape_geometry":"text",
 "shape_sizedivider":2,
-"shape_audio":false,
 "shape_moda":8,
 "shape_modb":0,
 "shape_modc":0,

@@ -377,14 +377,14 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param value
          * @param display
          * @param forward
-         * @param silent
+         * @param force ugly: 'silent' means do not explain
          *
-         * todo add force again. add silent at the end or find a way to avoid explainPlugin on automated settings (maybe after updateSettings(forward) issue is fixed)
+         *
          *
          */
-        updateSetting: function (layer, item, value, display, forward, silent) {
+        updateSetting: function (layer, item, value, display, forward, force) {
 
-            if (!silent && typeof value != 'object') {
+            if (force === 'silent' && typeof value != 'object') {
                 HC.log(item, value);
                 this.explainPlugin(item, value);
             }

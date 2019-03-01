@@ -98,7 +98,6 @@
 "pattern_overlay_volume_oscillate":"off",
 "shape_geometry":"icosahedron",
 "shape_sizedivider":28,
-"shape_audio":false,
 "shape_moda":2,
 "shape_modb":0,
 "shape_modc":0,

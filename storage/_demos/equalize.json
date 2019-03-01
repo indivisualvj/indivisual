@@ -2,7 +2,6 @@
 "uuid":"",
 "oscillate":"off",
 "audio_smoothing":0.75,
-"audio_frequency":0,
 "audio_thickness":0.8,
 "audio_usewaveform":false,
 "camera_mode":"manual",

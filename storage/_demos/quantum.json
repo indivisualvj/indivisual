@@ -2,8 +2,6 @@
 "uuid":"",
 "tutorial":"",
 "oscillate":"off",
-"audio_smoothing":0.6,
-"audio_frequency":0,
 "audio_thickness":0,
 "audio_usewaveform":false,
 "camera_mode":"manual",

@@ -1,11 +1,9 @@
 name: 0
 uuid: ''
-tutorial: ''
+tutorial: {}
 
 oscillate: 'off' # placeholder for automated _oscillate functions
 
-audio_smoothing: 0.6
-audio_frequency: 0
 audio_thickness: 0
 audio_usewaveform: false
 

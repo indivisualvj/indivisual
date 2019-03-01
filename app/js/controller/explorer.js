@@ -132,7 +132,7 @@
 
                                 var key = data.dir + '/' + data.name;
                                 var contents = JSON.parse(data.contents);
-                                if (contents.tutorial) { // todo mit tutorial läadt das setup nicht!
+                                if (contents.tutorial) {
                                     new HC.ScriptProcessor(key, Object.create(contents.tutorial)).log();
                                 }
                                 controller.preset(key, contents);

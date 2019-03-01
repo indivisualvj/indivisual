@@ -8,7 +8,7 @@ HC.plugins.filter_mode = HC.plugins.filter_mode || {};
             // }
         }
 
-        // shapeFilterModeLocked: function (shape, enabled) {
+        // shapeFilterModeLocked(shape, enabled) {
         //     if (shape) {
         //         var plugin = this.layer.getFilterModePlugin();
         //         var params = plugin.params(shape);

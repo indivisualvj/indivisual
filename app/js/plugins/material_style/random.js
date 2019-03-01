@@ -3,7 +3,7 @@ HC.plugins.material_style.random = _class(false, HC.MaterialStylePlugin, {
     injections: {
         state: undefined
     },
-    apply: function (shape) {
+    apply(shape) {
         var pa = this.params(shape);
         if (pa.state === undefined) {
             pa.state = randomBool();
@@ -19,7 +19,7 @@ HC.plugins.material_style.randompeak = _class(false, HC.MaterialStylePlugin, {
     injections: {
         state: undefined
     },
-    apply: function (shape) {
+    apply(shape) {
         var pa = this.params(shape);
         if (pa.state === undefined || (audio.peak && randomBool())) {
             pa.state = randomBool();

@@ -1,6 +1,6 @@
 HC.plugins.camera_mode.thirdperson = _class(false, HC.CameraModePlugin, {
     name: 'third person view',
-    apply: function () {
+    apply() {
         var layer = this.layer;
 
         if (layer.shapes.length == 0) return;

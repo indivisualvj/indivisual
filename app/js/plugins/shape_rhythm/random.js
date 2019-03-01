@@ -1,5 +1,5 @@
 HC.plugins.shape_rhythm.random = _class(false, HC.ShapeRhythmPlugin, {
-    apply: function (shape, overwrite) {
+    apply(shape, overwrite) {
         var params = this.params(shape);
         if (!params.speed || overwrite) {
             var keys = Object.keys(beatkeeper.speeds);

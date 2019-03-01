@@ -1,5 +1,5 @@
 HC.plugins.lighting_lookat.randomshape = _class(false, HC.LightingLookatPlugin, {
-    apply: function (light, peak) {
+    apply(light, peak) {
         if (this.isFirstShape(light)) {
             var speed = this.layer.getCurrentSpeed();
             if (!this.shape || (!peak && speed.prc == 0) || (peak && audio.peak && randomBool())) {
@@ -14,13 +14,13 @@ HC.plugins.lighting_lookat.randomshape = _class(false, HC.LightingLookatPlugin, 
 });
 
 HC.plugins.lighting_lookat.randomshapepeak = _class(false, HC.LightingLookatPlugin, {
-    apply: function (light) {
+    apply(light) {
         this.layer.getLightingLookatPlugin('randomshape').apply(light, true);
     }
 });
 
 HC.plugins.lighting_lookat.randomshapes = _class(false, HC.LightingLookatPlugin, {
-    apply: function (light, peak) {
+    apply(light, peak) {
         var params = this.params(light);
         var speed = params.speed || this.layer.getCurrentSpeed();
         if (!params.shape || (!peak && speed.prc == 0) || (peak && audio.peak && randomBool())) {
@@ -35,7 +35,7 @@ HC.plugins.lighting_lookat.randomshapes = _class(false, HC.LightingLookatPlugin,
 });
 
 HC.plugins.lighting_lookat.randomshapespeak = _class(false, HC.LightingLookatPlugin, {
-    apply: function (light) {
+    apply(light) {
         this.layer.getLightingLookatPlugin('randomshapes').apply(light, true);
     }
 });

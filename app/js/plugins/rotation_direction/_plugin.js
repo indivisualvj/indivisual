@@ -6,7 +6,7 @@ HC.plugins.rotation_direction = HC.plugins.rotation_direction || {};
         }
     };
 
-    HC.RotationDirectionPlugin.prototype.injections = {
+    HC.RotationDirectionPlugin.prototype.injections = { // todo move into class after all is "classified"
         dir: 0,
         directions: {
             x: 0,

@@ -12,7 +12,7 @@
 // mesh = new THREE.Mesh( geometry, materials );
 
 HC.plugins.mesh_material.monjori = _class(false, HC.MeshMaterialPlugin, {
-    apply: function (geometry) {
+    apply(geometry) {
         var material = new THREE.ShaderMaterial(this.shader);
         material.color = new THREE.Color();
         listener.register('animation.updateRuntime', 'material.uniforms.uTime.value', function (now) {

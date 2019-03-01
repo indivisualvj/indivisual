@@ -1,7 +1,7 @@
 HC.plugins.lighting_pattern.ring = _class(false, HC.LightingPatternPlugin, {
     name: 'ring',
 
-    apply: function (light, sides) {
+    apply(light, sides) {
         var layer = this.layer;
 
         if (!sides) {

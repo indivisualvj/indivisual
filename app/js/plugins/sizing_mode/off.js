@@ -2,7 +2,7 @@ HC.plugins.sizing_mode.off = _class(false, HC.SizingModePlugin, {
     index: 1,
     name: 'off',
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         var s = 1;
         s *= this.settings.sizing_scale;

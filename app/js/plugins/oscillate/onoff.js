@@ -1,7 +1,7 @@
 HC.plugins.oscillate.onoffpeak = _class(false, HC.OscillatePlugin, {
     name: 'on & off (peak)',
     index: 80,
-    apply: function (key) {
+    apply(key) {
         var layer = this.layer;
         var pa = this.params(key);
 
@@ -17,7 +17,7 @@ HC.plugins.oscillate.onoffpeak = _class(false, HC.OscillatePlugin, {
 HC.plugins.oscillate.onoffhalf = _class(false, HC.OscillatePlugin, {
     name: 'on & off (half)',
     index: 80,
-    apply: function (key) {
+    apply(key) {
         var layer = this.layer;
         var pa = this.params(key);
 
@@ -34,7 +34,7 @@ HC.plugins.oscillate.onoffhalf = _class(false, HC.OscillatePlugin, {
 HC.plugins.oscillate.onofffull = _class(false, HC.OscillatePlugin, {
     name: 'on & off (full)',
     index: 80,
-    apply: function (key) {
+    apply(key) {
         var layer = this.layer;
         var pa = this.params(key);
 
@@ -51,7 +51,7 @@ HC.plugins.oscillate.onofffull = _class(false, HC.OscillatePlugin, {
 HC.plugins.oscillate.onoffdouble = _class(false, HC.OscillatePlugin, {
     name: 'on & off (double)',
     index: 80,
-    apply: function (key) {
+    apply(key) {
         var layer = this.layer;
         var pa = this.params(key);
 
@@ -68,7 +68,7 @@ HC.plugins.oscillate.onoffdouble = _class(false, HC.OscillatePlugin, {
 HC.plugins.oscillate.onoffquarter = _class(false, HC.OscillatePlugin, {
     name: 'on & off (quarter)',
     index: 80,
-    apply: function (key) {
+    apply(key) {
         var layer = this.layer;
         var pa = this.params(key);
 

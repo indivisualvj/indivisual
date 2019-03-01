@@ -2,7 +2,7 @@ HC.plugins.pattern.disc = _class(false, HC.PatternPlugin, {
     name: 'disc',
     injections: {shellIndex: false},
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         var params = this.params(shape);
 
@@ -53,7 +53,7 @@ HC.plugins.pattern.disc = _class(false, HC.PatternPlugin, {
 HC.plugins.pattern.gear = _class(false, HC.PatternPlugin, {
     name: 'gear',
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getPatternPlugin('disc').apply(shape);
     }

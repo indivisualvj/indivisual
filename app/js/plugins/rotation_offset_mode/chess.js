@@ -1,7 +1,7 @@
 HC.plugins.rotation_offset_mode.chess45 = _class(false, HC.RotationOffsetModePlugin, {
     name: 'chess45',
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
         if (shape.index % 2 == 0) {
@@ -19,7 +19,7 @@ HC.plugins.rotation_offset_mode.chess45 = _class(false, HC.RotationOffsetModePlu
 HC.plugins.rotation_offset_mode.chess90 = _class(false, HC.RotationOffsetModePlugin, {
     name: 'chess90',
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
         if (shape.index % 2 == 0) {
@@ -37,7 +37,7 @@ HC.plugins.rotation_offset_mode.chess90 = _class(false, HC.RotationOffsetModePlu
 HC.plugins.rotation_offset_mode.chessrows90 = _class(false, HC.RotationOffsetModePlugin, {
     name: 'chessrows90',
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
         var gridPosition = layer.getPatternPlugin('matrix').gridPosition(shape);
@@ -56,7 +56,7 @@ HC.plugins.rotation_offset_mode.chessrows90 = _class(false, HC.RotationOffsetMod
 HC.plugins.rotation_offset_mode.chesscolumns90 = _class(false, HC.RotationOffsetModePlugin, {
     name: 'chesscolumns90',
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         var gridPosition = layer.getPatternPlugin('matrix').gridPosition(shape);
         if (gridPosition.x % 2 == 0) {

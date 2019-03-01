@@ -15,7 +15,7 @@ HC.plugins.pattern.swarm = _class(
             timeout: false
         },
 
-        before: function (shape) {
+        before(shape) {
             var layer = this.layer;
             var params = this.params(shape);
             if (!params.targetLook) {
@@ -32,13 +32,13 @@ HC.plugins.pattern.swarm = _class(
             }
         },
 
-        apply: function (shape) {
+        apply(shape) {
             this.lookAt(shape, true);
             this.move(shape);
 
         },
 
-        randPosition: function (params, shape) {
+        randPosition(params, shape) {
             var rand = this.layer.random3dPosition(.5, 0);
             params.targetLook.copy(rand);
             if (shape) {
@@ -46,7 +46,7 @@ HC.plugins.pattern.swarm = _class(
             }
         },
 
-        move: function (shape) {
+        move(shape) {
             var layer = this.layer;
             var params = this.params(shape);
             var speed = params.speed;
@@ -70,7 +70,7 @@ HC.plugins.pattern.swarm = _class(
 
         },
 
-        lookAt: function (shape, peak) {
+        lookAt(shape, peak) {
             var params = this.params(shape);
             var speed = params.speed;
             params.timeout = (speed.prc == 0 && speed.speed.beats % 4 == 0);
@@ -84,7 +84,7 @@ HC.plugins.pattern.swarm = _class(
             this.lookTween(shape);
         },
 
-        nextTarget: function (shape, peak) {
+        nextTarget(shape, peak) {
             var layer = this.layer;
             var params = this.params(shape);
             var cam = shape.sceneObject();
@@ -117,7 +117,7 @@ HC.plugins.pattern.swarm = _class(
             }
         },
 
-        lookTween: function (shape) {
+        lookTween(shape) {
             var params = this.params(shape);
             var speed = params.speed;
             var cam = shape.sceneObject();
@@ -143,7 +143,7 @@ HC.plugins.pattern.swarm = _class(
             }
         },
 
-        randshapes: function (shapecount) {
+        randshapes(shapecount) {
             this.shapecount = shapecount;
             this.shapes = {};
 
@@ -190,10 +190,10 @@ HC.plugins.pattern.swarm = _class(
 //
 // HC.plugins.pattern.swarmpeak = _class(false, HC.PatternPlugin, {
 //     name: 'swarm on peak',
-//     before: function (shape) {
+//     before(shape) {
 //         return this.layer.getPatternPlugin('swarm').before(shape);
 //     },
-//     apply: function (shape) {
+//     apply(shape) {
 //         this.layer.getPatternPlugin('swarm').apply(shape, true);
 //     }
 // });

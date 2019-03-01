@@ -2,7 +2,7 @@ HC.plugins.pattern.sphere = _class(false, HC.PatternPlugin, {
     name: 'sphere',
     points: {},
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
 
@@ -32,7 +32,7 @@ HC.plugins.pattern.sphere = _class(false, HC.PatternPlugin, {
         layer.positionIn3dSpace(shape, x, y, z);
     },
 
-    getDistributionOnSphere: function (n) {
+    getDistributionOnSphere(n) {
         var rnd = 1;
         var offset = 2 / n;
         var increment = Math.PI * (3 - Math.sqrt(5));
@@ -51,7 +51,7 @@ HC.plugins.pattern.sphere = _class(false, HC.PatternPlugin, {
         });
     },
 
-    spherePosition: function (shape) {
+    spherePosition(shape) {
         var layer = this.layer;
         if (!this.points || this.points.length != layer.shapeCount()) {
             this.points = this.getDistributionOnSphere(layer.shapeCount());
@@ -65,7 +65,7 @@ HC.plugins.pattern.spray = _class(false, HC.PatternPlugin, {
     name: 'spray',
     injections: {initial: false, velocity: false},
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
 
@@ -115,7 +115,7 @@ HC.plugins.pattern.pulse = _class(false, HC.PatternPlugin, {
         velocity: false,
         volume: false
     },
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
 
@@ -168,7 +168,7 @@ HC.plugins.pattern.pulse = _class(false, HC.PatternPlugin, {
 HC.plugins.pattern.drift = _class(false, HC.PatternPlugin, {
     name: 'drift',
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getPatternPlugin('spray').apply(shape);
     }

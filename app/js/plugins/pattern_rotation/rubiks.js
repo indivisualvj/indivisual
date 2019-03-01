@@ -14,7 +14,7 @@ HC.plugins.pattern_rotation.rubiks = _class(
         }
 
     }, HC.PatternRotationPlugin, {
-        apply: function () {
+        apply() {
             if (!this.rubiks) {
                 var plugin = this.layer.getPatternPlugin('cube');
                 var spd = plugin.shapesPerDimension();
@@ -30,14 +30,14 @@ HC.plugins.pattern_rotation.rubiks = _class(
             }
         },
 
-        positionIn3dSpace: function (shape, cp) {
+        positionIn3dSpace(shape, cp) {
             var eu = this.getShapeEuler(shape);
             cp.applyEuler(eu);
             cp.add(this.layer.patternCenterVector(true));
             shape.position().copy(cp);
         },
 
-        getShapeEuler: function (shape) {
+        getShapeEuler(shape) {
             var plugin = this.layer.getPatternPlugin('cube');
             var grid = plugin.cubePosition(shape);
             var eu = new THREE.Euler();

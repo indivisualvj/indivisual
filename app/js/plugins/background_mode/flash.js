@@ -1,7 +1,7 @@
 HC.plugins.background_mode.flash = _class(false, HC.BackgroundModePlugin, {
     name: 'flash background color',
     index: 30,
-    apply: function (color) {
+    apply(color) {
         var layer = this.layer;
 
         var speed = layer.getCurrentSpeed();
@@ -34,7 +34,7 @@ HC.plugins.background_mode.flash = _class(false, HC.BackgroundModePlugin, {
 HC.plugins.background_mode.flashcomplementary = _class(false, HC.plugins.background_mode.flash, {
     name: 'flash random shape\'s complementary',
     index: 30,
-    apply: function () {
+    apply() {
         var layer = this.layer;
         HC.plugins.background_mode.flash.prototype.apply.call(this, layer.shapeColor(true, true));
     }

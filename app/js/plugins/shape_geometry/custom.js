@@ -1,5 +1,5 @@
 HC.plugins.shape_geometry.cring = _class(false, HC.ShapeGeometryPlugin, {
-    create: function () {
+    create() {
         var layer = this.layer;
 
 
@@ -17,7 +17,7 @@ HC.plugins.shape_geometry.cring = _class(false, HC.ShapeGeometryPlugin, {
 });
 
 HC.plugins.shape_geometry.crect = _class(false, HC.ShapeGeometryPlugin, {
-    create: function () {
+    create() {
         var layer = this.layer;
 
 
@@ -31,7 +31,7 @@ HC.plugins.shape_geometry.crect = _class(false, HC.ShapeGeometryPlugin, {
 });
 
 HC.plugins.shape_geometry.ckandis = _class(false, HC.ShapeGeometryPlugin, {
-    create: function () {
+    create() {
         var layer = this.layer;
 
 
@@ -44,7 +44,7 @@ HC.plugins.shape_geometry.ckandis = _class(false, HC.ShapeGeometryPlugin, {
 });
 
 HC.plugins.shape_geometry.cleaf = _class(false, HC.ShapeGeometryPlugin, {
-    create: function () {
+    create() {
         var layer = this.layer;
 
 
@@ -57,7 +57,7 @@ HC.plugins.shape_geometry.cleaf = _class(false, HC.ShapeGeometryPlugin, {
 });
 
 HC.plugins.shape_geometry.custom = _class(false, HC.ShapeGeometryPlugin, {
-    create: function () {
+    create() {
         var layer = this.layer;
 
 
@@ -69,7 +69,7 @@ HC.plugins.shape_geometry.custom = _class(false, HC.ShapeGeometryPlugin, {
 });
 
 HC.plugins.shape_geometry.cframe = _class(false, HC.ShapeGeometryPlugin, {
-    create: function () {
+    create() {
         var layer = this.layer;
 
         var vertices = '[-0.9949,0.9963,0],[-0.5524,0.548,0],[-0.2313,0.9934,0],[-0.2313,0.9934,0],[-0.5524,0.548,0],[0.0607,0.5422,0],[0.0607,0.5422,0],[-0.2313,0.9934,0],[0.347,0.9963,0],[0.0607,0.5422,0],[0.347,0.9963,0],[0.5466,0.5422,0],[0.347,0.9963,0],[0.5466,0.5422,0],[0.992,0.9934,0],[0.5466,0.5422,0],[0.992,0.9934,0],[0.9978,0.2443,0],[0.9978,0.2443,0],[0.5466,0.5422,0],[0.5524,0.0072,0],[0.5524,0.0072,0],[0.9978,0.2443,0],[0.9978,-0.3658,0],[0.5524,0.0072,0],[0.9978,-0.3658,0],[0.5553,-0.5451,0],[0.9978,-0.3658,0],[0.5553,-0.5451,0],[0.9978,-1.0021,0],[0.5553,-0.5451,0],[0.9978,-1.0021,0],[0.2198,-0.9963,0],[0.2198,-0.9963,0],[0.5553,-0.5451,0],[-0.052,-0.5393,0],[-0.052,-0.5393,0],[0.2198,-0.9963,0],[-0.4743,-0.9934,0],[-0.4743,-0.9934,0],[-0.052,-0.5393,0],[-0.5466,-0.5393,0],[-0.4743,-0.9934,0],[-0.5466,-0.5393,0],[-1.0064,-1.005,0],[-0.5466,-0.5393,0],[-1.0064,-1.005,0],[-1.0064,-0.3456,0],[-0.5466,-0.5393,0],[-1.0064,-0.3456,0],[-0.5495,-0.0563,0],[-0.5524,0.548,0],[-0.5495,-0.0563,0],[-1.0035,0.2010,0],[-1.0035,0.2010,0],[-1.0064,-0.3456,0],[-0.5495,-0.0563,0],[-0.5524,0.548,0],[-1.0035,0.2010,0],[-0.9949,0.9963,0]';

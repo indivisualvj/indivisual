@@ -1,6 +1,6 @@
 HC.plugins.background_mode.texture = _class(false, HC.BackgroundModePlugin, {
     index: 40,
-    apply: function () {
+    apply() {
         var i = this.settings.background_input;
         var id = this._id() + i;
         var file;
@@ -31,7 +31,7 @@ HC.plugins.background_mode.texture = _class(false, HC.BackgroundModePlugin, {
         }
     },
 
-    dispose: function () {
+    dispose() {
         if (this.img && this.img.dispose) {
             this.img.dispose();
         }

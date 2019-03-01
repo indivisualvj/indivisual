@@ -4,7 +4,7 @@ HC.plugins.pattern.frame = _class(
         this.shapeCountQuarter = false;
     }, HC.PatternPlugin, {
         name: 'frame',
-        apply: function (shape) {
+        apply(shape) {
             var layer = this.layer;
 
             if (!this.shapeCountHalf || !this.shapeCountQuarter) {

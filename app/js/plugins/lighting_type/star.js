@@ -1,5 +1,5 @@
 HC.plugins.lighting_type.star = _class(false, HC.LightingTypePlugin, {
-    create: function () {
+    create() {
         var light = new THREE.PointLight(0xffffff);
         light.shadow.mapSize.width = 2048;
         light.shadow.mapSize.height = 2048;
@@ -14,7 +14,7 @@ HC.plugins.lighting_type.star = _class(false, HC.LightingTypePlugin, {
         return light;
     },
 
-    update: function (light) {
+    update(light) {
         HC.LightingTypePlugin.prototype.update.call(this, light);
 
         for (var c in light.children) {

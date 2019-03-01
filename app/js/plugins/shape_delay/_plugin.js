@@ -37,7 +37,7 @@ HC.plugins.shape_delay = HC.plugins.shape_delay || {};
         }
     };
 
-    HC.ShapeDelayPlugin.prototype.injections = {
+    HC.ShapeDelayPlugin.prototype.injections = {// todo move into class after all is "classified"
         delay: 0
     }
 }

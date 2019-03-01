@@ -7,7 +7,7 @@ HC.plugins.pattern.pass = _class(
             velocity: false
         },
 
-        before: function (shape) {
+        before(shape) {
             var params = this.params(shape);
             if (!params.velocity) {
                 var matrix = this.layer.getPatternPlugin('matrix');
@@ -15,7 +15,7 @@ HC.plugins.pattern.pass = _class(
             }
         },
 
-        apply: function (shape, peak) {
+        apply(shape, peak) {
             var layer = this.layer;
             var matrix = layer.getPatternPlugin('matrix');
             var gridPosition = matrix.gridPosition(shape);

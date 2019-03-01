@@ -1,5 +1,5 @@
 HC.plugins.sizing_mode.center = _class(false, HC.SizingModePlugin, {
-    apply: function (shape, revert) {
+    apply(shape, revert) {
         var layer = this.layer;
         var s = 1;
         var x = shape.x();
@@ -31,7 +31,7 @@ HC.plugins.sizing_mode.center = _class(false, HC.SizingModePlugin, {
 });
 
 HC.plugins.sizing_mode.decenter = _class(false, HC.SizingModePlugin, {
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getSizingModePlugin('center').apply(shape, true);
     }

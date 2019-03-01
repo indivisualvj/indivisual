@@ -1,6 +1,6 @@
 HC.plugins.rotation_direction.random = _class(false, HC.RotationDirectionPlugin, {
     index: 1, // place at the start for random
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         var params = this.params(shape);
 
@@ -16,7 +16,7 @@ HC.plugins.rotation_direction.random = _class(false, HC.RotationDirectionPlugin,
 
 HC.plugins.rotation_direction.left = _class(false, HC.RotationDirectionPlugin, {
     index: 2,
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         this.params(shape).dir = -1;
     }
@@ -24,7 +24,7 @@ HC.plugins.rotation_direction.left = _class(false, HC.RotationDirectionPlugin, {
 
 HC.plugins.rotation_direction.right = _class(false, HC.RotationDirectionPlugin, {
     index: 3,
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         this.params(shape).dir = 1;
     }
@@ -38,7 +38,7 @@ HC.plugins.rotation_direction.leftorright = _class(
     },
     HC.RotationDirectionPlugin, {
         name: 'left | right',
-        apply: function (shape) {
+        apply(shape) {
             if (this.isFirstShape(shape)) {
                 this.shared.dir = randomBool() ? -1 : 1;
             }
@@ -50,7 +50,7 @@ HC.plugins.rotation_direction.leftorright = _class(
 
 HC.plugins.rotation_direction.leftandright = _class(false, HC.RotationDirectionPlugin, {
     name: 'left & right',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         this.params(shape).dir = (shape.index % 2 == 0) ? -1 : 1;
     }

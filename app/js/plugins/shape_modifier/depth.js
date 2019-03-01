@@ -1,7 +1,7 @@
 HC.plugins.shape_modifier.depth = _class(false, HC.ShapeModifierPlugin, {
     name: 'depth center',
 
-    create: function (geometry, mode) {
+    create(geometry, mode) {
         var layer = this.layer;
         var z = 0;
 
@@ -47,7 +47,7 @@ HC.plugins.shape_modifier.depth = _class(false, HC.ShapeModifierPlugin, {
 
 HC.plugins.shape_modifier.depthzigzag = _class(false, HC.plugins.shape_modifier.depth, {
     name: 'depth zigzag',
-    create: function (geometry) {
+    create(geometry) {
         return HC.plugins.shape_modifier.depth.prototype.create.call(this, geometry, 'zigzag');
     }
 });

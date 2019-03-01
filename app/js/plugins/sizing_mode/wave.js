@@ -3,7 +3,7 @@ HC.plugins.sizing_mode.wave = _class(
         this.angle = 0;
     }, HC.SizingModePlugin, {
         name: 'wave',
-        apply: function (shape) {
+        apply(shape) {
             var layer = this.layer;
             if (this.isFirstShape(shape)) {
                 var dur = beatkeeper.getDefaultSpeed().duration;

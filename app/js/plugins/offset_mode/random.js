@@ -4,7 +4,7 @@ HC.plugins.offset_mode.random = _class(false, HC.OffsetModePlugin, {
         value: false
     },
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
         var params = this.params(shape);

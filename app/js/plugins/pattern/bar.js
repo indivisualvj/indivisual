@@ -18,7 +18,7 @@ HC.plugins.pattern.bar = _class(
             tween: false
         },
 
-        apply: function (shape) {
+        apply(shape) {
             var layer = this.layer;
 
             var params = this.params(shape);

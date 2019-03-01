@@ -3,7 +3,7 @@ HC.plugins.oscillate.bounce = _class(
         this.preset = 1;
     }, HC.OscillatePlugin, {
         name: 'bounce 0 to 1 (current)',
-        apply: function (key) {
+        apply(key) {
             var layer = this.layer;
             var speed = layer.getCurrentSpeed();
             var prc = (speed.prc - 0.5);
@@ -17,7 +17,7 @@ HC.plugins.oscillate.bounceminusfulls = _class(
         this.preset = 1;
     }, HC.OscillatePlugin, {
         name: 'bounce -1 to 1 on fulls',
-        apply: function (key) {
+        apply(key) {
             var layer = this.layer;
             var pa = this.params(key);
             var speed = layer.getCurrentSpeed();

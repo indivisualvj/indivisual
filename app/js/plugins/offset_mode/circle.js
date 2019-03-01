@@ -2,7 +2,7 @@ HC.plugins.offset_mode.circle = _class(function () {
         this.angle = 0;
     }, HC.OffsetModePlugin, {
         name: 'circle',
-        apply: function (shape, chess) {
+        apply(shape, chess) {
             var layer = this.layer;
             var speed = layer.getShapeSpeed(shape);
             if (this.isFirstShape(shape)) {
@@ -30,7 +30,7 @@ HC.plugins.offset_mode.circle = _class(function () {
 
 HC.plugins.offset_mode.circle2 = _class(false, HC.OffsetModePlugin, {
     name: 'circle chess',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getOffsetModePlugin('circle').apply(shape, true);
     }
@@ -48,7 +48,7 @@ HC.plugins.offset_mode.rumble = _class(false, HC.OffsetModePlugin, {
         },
 
     },
-    apply: function (shape, onpeak) {
+    apply(shape, onpeak) {
         var layer = this.layer;
 
         var speed = layer.getShapeSpeed(shape);
@@ -122,7 +122,7 @@ HC.plugins.offset_mode.rumble = _class(false, HC.OffsetModePlugin, {
 
 HC.plugins.offset_mode.rumblepeak = _class(false, HC.OffsetModePlugin, {
     name: 'rumble on peak',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getOffsetModePlugin('rumble').apply(shape, true);
     }

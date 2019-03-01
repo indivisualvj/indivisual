@@ -1,7 +1,7 @@
 HC.plugins.rotation_offset_mode.grow = _class(false, HC.RotationOffsetModePlugin, {
     name: 'grow',
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         var part = 360 / layer.shapeCount();
         var a = part * (shape.index + 1);
@@ -17,7 +17,7 @@ HC.plugins.rotation_offset_mode.grow = _class(false, HC.RotationOffsetModePlugin
 HC.plugins.rotation_offset_mode.growingfour45 = _class(false, HC.RotationOffsetModePlugin, {
     name: 'growingfour45',
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
         var a = 45;

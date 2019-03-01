@@ -1,7 +1,7 @@
 HC.plugins.coloring_mode.growprc = _class(false, HC.ColoringModePlugin, {
     name: 'grow by progress',
 
-    apply: function (shape, grow, step, times) {
+    apply(shape, grow, step, times) {
         var layer = this.layer;
         var color = shape.color;
         var speed = layer.getShapeSpeed(shape);
@@ -47,7 +47,7 @@ HC.plugins.coloring_mode.growprc = _class(false, HC.ColoringModePlugin, {
 
 HC.plugins.coloring_mode.shrinkprc = _class(false, HC.ColoringModePlugin, {
     name: 'shrink by progress',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getColoringModePlugin('growprc').apply(shape, false, false, false);
     }
@@ -55,7 +55,7 @@ HC.plugins.coloring_mode.shrinkprc = _class(false, HC.ColoringModePlugin, {
 
 HC.plugins.coloring_mode.grow2step = _class(false, HC.ColoringModePlugin, {
     name: 'grow 2 steps by progress',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getColoringModePlugin('growprc').apply(shape, true, true, 2);
     }
@@ -63,7 +63,7 @@ HC.plugins.coloring_mode.grow2step = _class(false, HC.ColoringModePlugin, {
 
 HC.plugins.coloring_mode.shrink2step = _class(false, HC.ColoringModePlugin, {
     name: 'shrink 2 steps by progress',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getColoringModePlugin('growprc').apply(shape, false, true, 2);
     }
@@ -71,7 +71,7 @@ HC.plugins.coloring_mode.shrink2step = _class(false, HC.ColoringModePlugin, {
 
 HC.plugins.coloring_mode.grow4step = _class(false, HC.ColoringModePlugin, {
     name: 'grow 4 steps by progress',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getColoringModePlugin('growprc').apply(shape, true, true, 4);
     }
@@ -79,7 +79,7 @@ HC.plugins.coloring_mode.grow4step = _class(false, HC.ColoringModePlugin, {
 
 HC.plugins.coloring_mode.shrink4step = _class(false, HC.ColoringModePlugin, {
     name: 'shrink 4 steps by progress',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getColoringModePlugin('growprc').apply(shape, false, true, 4);
     }

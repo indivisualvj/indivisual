@@ -3,7 +3,7 @@ HC.plugins.camera_mode.mirror = _class(
         this.mirror = new THREE.Vector3(1, 1, 1);
     }, HC.CameraModePlugin, {
         name: 'mirror XYZ position (current)',
-        apply: function (peak) {
+        apply(peak) {
 
             var speed = this.layer.getCurrentSpeed();
             if ((peak && audio.peak && randomBool()) || (!peak && speed.prc == 0)) {
@@ -25,7 +25,7 @@ HC.plugins.camera_mode.mirror = _class(
 
 HC.plugins.camera_mode.mirrorpeak = _class(false, HC.CameraModePlugin, {
     name: 'mirror XYZ position (peak)',
-    apply: function () {
+    apply() {
         this.layer.getCameraModePlugin('mirror').apply(true);
     }
 });

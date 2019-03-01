@@ -1,6 +1,6 @@
 HC.plugins.offset_mode.grow = _class(false, HC.OffsetModePlugin, {
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
         var m = (shape.index + 1) / -2;
@@ -14,7 +14,7 @@ HC.plugins.offset_mode.grow = _class(false, HC.OffsetModePlugin, {
 
 HC.plugins.offset_mode.shrink = _class(false, HC.OffsetModePlugin, {
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
         var m = (layer.shapeCount() - shape.index) / 2;

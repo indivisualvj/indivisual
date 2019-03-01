@@ -4,7 +4,7 @@ HC.plugins.filter_mode.flash = _class(
     },
     HC.FilterModePlugin, {
 
-        apply: function (shape, overwrite) {
+        apply(shape, overwrite) {
             var layer = this.layer;
 
             if (!this.color) {
@@ -66,7 +66,7 @@ HC.plugins.filter_mode.strobe = _class(
     },
     HC.FilterModePlugin, {
 
-        apply: function (shape, overwrite) {
+        apply(shape, overwrite) {
             var layer = this.layer;
 
             if (!this.color) {

@@ -2,7 +2,7 @@ HC.plugins.pattern.bacillus = _class(false, HC.PatternPlugin, {
     name: 'bacillus',
     injections: {velocity: false},
 
-    apply: function (shape, move) {
+    apply(shape, move) {
         var layer = this.layer;
 
 
@@ -101,7 +101,7 @@ HC.plugins.pattern.bacillus = _class(false, HC.PatternPlugin, {
 HC.plugins.pattern.rocket = _class(false, HC.PatternPlugin, {
     name: 'rocket',
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getPatternPlugin('bacillus').apply(shape, true);
     }

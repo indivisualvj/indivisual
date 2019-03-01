@@ -10,7 +10,7 @@ HC.plugins.camera_mode.rumble = _class(
         };
     }, HC.CameraModePlugin, {
         name: 'static rumble',
-        apply: function (peak) {
+        apply(peak) {
             var layer = this.layer;
             var speed = beatkeeper.getDefaultSpeed();
             var params = this.params;
@@ -75,7 +75,7 @@ HC.plugins.camera_mode.rumble = _class(
 
 HC.plugins.camera_mode.rumblepeak = _class(false, HC.CameraModePlugin, {
     name: 'static rumble on peak',
-    apply: function () {
+    apply() {
         var layer = this.layer;
 
         layer.getCameraModePlugin('rumble').apply(true);

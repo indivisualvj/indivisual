@@ -4,7 +4,7 @@ HC.plugins.pattern_rotation.off = _class(
         this.vector = new THREE.Vector3(0, 0, 0);
     }, HC.PatternRotationPlugin, {
         index: 1,
-        apply: function () {
+        apply() {
 
         }
     }

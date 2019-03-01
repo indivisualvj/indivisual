@@ -8,7 +8,7 @@ HC.plugins.pattern.flow = _class(false, HC.PatternPlugin, {
         }
     },
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
 

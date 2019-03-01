@@ -23,7 +23,7 @@ HC.plugins.pattern.slime = _class(
                 radius: 50
             }
         },
-        apply: function (shape) {
+        apply(shape) {
             var layer = this.layer;
 
             var params = this.params(shape);

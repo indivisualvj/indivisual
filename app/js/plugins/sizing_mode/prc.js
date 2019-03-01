@@ -1,6 +1,6 @@
 HC.plugins.sizing_mode.prc = _class(false, HC.SizingModePlugin, {
     name: 'prcgrow',
-    apply: function (shape, grow, step, times) {
+    apply(shape, grow, step, times) {
         var layer = this.layer;
 
         var s = this.calculate(shape, grow, step, times);
@@ -13,7 +13,7 @@ HC.plugins.sizing_mode.prc = _class(false, HC.SizingModePlugin, {
         shape.scale(x, y, z);
 
     },
-    calculate: function (shape, grow, step, times) {
+    calculate(shape, grow, step, times) {
         var layer = this.layer;
         var speed = layer.getShapeSpeed(shape);
 
@@ -57,35 +57,35 @@ HC.plugins.sizing_mode.prc = _class(false, HC.SizingModePlugin, {
 });
 
 HC.plugins.sizing_mode.prcshrink = _class(false, HC.SizingModePlugin, {
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getSizingModePlugin('prc').apply(shape, false);
     }
 });
 
 HC.plugins.sizing_mode.grow2step = _class(false, HC.SizingModePlugin, {
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getSizingModePlugin('prc').apply(shape, true, true, 2);
     }
 });
 
 HC.plugins.sizing_mode.grow4step = _class(false, HC.SizingModePlugin, {
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getSizingModePlugin('prc').apply(shape, true, true, 4);
     }
 });
 
 HC.plugins.sizing_mode.shrink2step = _class(false, HC.SizingModePlugin, {
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getSizingModePlugin('prc').apply(shape, false, true, 2);
     }
 });
 
 HC.plugins.sizing_mode.shrink4step = _class(false, HC.SizingModePlugin, {
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getSizingModePlugin('prc').apply(shape, false, true, 4);
     }

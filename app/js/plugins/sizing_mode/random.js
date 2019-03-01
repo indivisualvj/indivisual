@@ -2,7 +2,7 @@ HC.plugins.sizing_mode.random = _class(false, HC.SizingModePlugin, {
     name: 'random',
     injections: {size: false},
 
-    apply: function (shape, onpeak) {
+    apply(shape, onpeak) {
         var layer = this.layer;
 
         var params = this.params(shape);
@@ -27,7 +27,7 @@ HC.plugins.sizing_mode.random = _class(false, HC.SizingModePlugin, {
 HC.plugins.sizing_mode.randompeak = _class(false, HC.SizingModePlugin, {
     name: 'random on peak',
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getSizingModePlugin('random').apply(shape, true);
     }

@@ -1,7 +1,7 @@
 HC.plugins.rotation_offset_mode.plus90 = _class(false, HC.RotationOffsetModePlugin, {
     name: 'plus90',
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
         var a = 90;

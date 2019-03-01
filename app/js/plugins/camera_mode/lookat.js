@@ -15,7 +15,7 @@ HC.plugins.camera_mode.lookatshape = _class(
 
     }, HC.CameraModePlugin, {
         name: 'look at a shape',
-        apply: function (peak, setPosition) {
+        apply(peak, setPosition) {
             var layer = this.layer;
             var speed = beatkeeper.getSpeed('double');
             var cam = layer.getCamera();
@@ -73,7 +73,7 @@ HC.plugins.camera_mode.lookatshape = _class(
 
 HC.plugins.camera_mode.lookatshapepeak = _class(false, HC.CameraModePlugin, {
     name: 'look at a shape on peak',
-    apply: function () {
+    apply() {
         this.layer.getCameraModePlugin('lookatshape').apply(true);
     }
 });

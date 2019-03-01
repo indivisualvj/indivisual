@@ -1,7 +1,7 @@
 HC.plugins.pattern.cube = _class(false, HC.PatternPlugin, {
     name: 'cube',
     injections: {position: false},
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
         var edge = layer.resolution().y * this.settings.pattern_padding;
@@ -36,7 +36,7 @@ HC.plugins.pattern.cube = _class(false, HC.PatternPlugin, {
         layer.positionIn3dSpace(shape, x, y, z);
     },
 
-    getDistributionOnCube: function (shapeCount, shapeIndex, vector) {
+    getDistributionOnCube(shapeCount, shapeIndex, vector) {
         var shapesPerDimension = Math.ceil(Math.pow(shapeCount, 1 / 3));
 
         var shapesPerLayer = Math.pow(shapesPerDimension, 2);
@@ -52,7 +52,7 @@ HC.plugins.pattern.cube = _class(false, HC.PatternPlugin, {
         vector.set(shapeColumnIndex, shapeRowIndex, shapeLayerIndex);
     },
 
-    cubePosition: function (shape) {
+    cubePosition(shape) {
         var params = this.params(shape);
         if (params.position === false) {
 
@@ -64,7 +64,7 @@ HC.plugins.pattern.cube = _class(false, HC.PatternPlugin, {
         return params.position;
     },
 
-    shapesPerDimension: function () {
+    shapesPerDimension() {
         return Math.ceil(Math.pow(this.layer.shapeCount(), 1 / 3));
     }
 });

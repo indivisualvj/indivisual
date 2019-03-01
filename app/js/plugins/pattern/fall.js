@@ -8,7 +8,7 @@ HC.plugins.pattern.fall = _class(false, HC.PatternPlugin, {
         threshold: false
     },
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
         var params = this.params(shape);
@@ -53,7 +53,7 @@ HC.plugins.pattern.fall = _class(false, HC.PatternPlugin, {
 HC.plugins.pattern.stairs = _class(false, HC.PatternPlugin, {
     name: 'stairs',
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getPatternPlugin('fall').apply(shape, true);
     }

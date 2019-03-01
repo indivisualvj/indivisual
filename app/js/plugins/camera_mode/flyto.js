@@ -1,10 +1,10 @@
 HC.plugins.camera_mode.flytoshape = _class(false, HC.CameraModePlugin, {
     name: 'fly to shape',
-    before: function () {
+    before() {
         // dispable parent.before
         this.layer.updateCameraFov();
     },
-    apply: function (peak) {
+    apply(peak) {
         var layer = this.layer;
 
         var lookatshape = layer.getCameraModePlugin('lookatshape');
@@ -27,7 +27,7 @@ HC.plugins.camera_mode.flytoshape = _class(false, HC.CameraModePlugin, {
 
 HC.plugins.camera_mode.flytoshapepeak = _class(false, HC.CameraModePlugin, {
     name: 'fly to shape on peak',
-    apply: function () {
+    apply() {
         var layer = this.layer;
 
         layer.getCameraModePlugin('flytoshape').apply(true);

@@ -14,7 +14,7 @@ HC.plugins.pattern_mover.stack = _class(false, HC.PatternMoverPlugin, {
         xf: false
     },
 
-    init: function (random) {
+    init(random) {
         var layer = this.layer;
         var reset = randomInt(0, 6) == 0;
         var inx = [];
@@ -49,14 +49,14 @@ HC.plugins.pattern_mover.stack = _class(false, HC.PatternMoverPlugin, {
         }
     },
 
-    before: function (shape) {
+    before(shape) {
         var params = this.params(shape);
         params.lx = shape.x();
         params.ly = shape.y();
         params.lz = shape.z();
     },
 
-    apply: function (shape, shuffle, random) {
+    apply(shape, shuffle, random) {
         var layer = this.layer;
         var params = this.params(shape);
         var index = shape.index;
@@ -177,7 +177,7 @@ HC.plugins.pattern_mover.shuffle = _class(false, HC.PatternMoverPlugin, {
         xf: false
     },
 
-    init: function () {
+    init() {
         var layer = this.layer;
         var reset = randomInt(0, 6) == 0;
         var inx = [];
@@ -201,7 +201,7 @@ HC.plugins.pattern_mover.shuffle = _class(false, HC.PatternMoverPlugin, {
         }
     },
 
-    before: function (shape) {
+    before(shape) {
 
         var params = this.params(shape);
         params.lx = shape.x();
@@ -209,7 +209,7 @@ HC.plugins.pattern_mover.shuffle = _class(false, HC.PatternMoverPlugin, {
         params.lz = shape.z();
     },
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         var params = this.params(shape);
         var index = shape.index;
@@ -311,7 +311,7 @@ HC.plugins.pattern_mover.xchange = _class(false, HC.PatternMoverPlugin, {
         xf: false
     },
 
-    init: function () {
+    init() {
         var layer = this.layer;
         var reset = randomInt(0, 6) == 0;
         var inx = [];
@@ -336,7 +336,7 @@ HC.plugins.pattern_mover.xchange = _class(false, HC.PatternMoverPlugin, {
         }
     },
 
-    before: function (shape) {
+    before(shape) {
 
         var params = this.params(shape);
         params.lx = shape.x();
@@ -344,7 +344,7 @@ HC.plugins.pattern_mover.xchange = _class(false, HC.PatternMoverPlugin, {
         params.lz = shape.z();
     },
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         var params = this.params(shape);
         var index = shape.index;

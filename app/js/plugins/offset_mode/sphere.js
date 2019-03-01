@@ -1,7 +1,7 @@
 HC.plugins.offset_mode.sphere = _class(false, HC.OffsetModePlugin, {
     name: 'sphere',
 
-    apply: function (shape, revert) {
+    apply(shape, revert) {
         var layer = this.layer;
 
         var m = 1;
@@ -34,7 +34,7 @@ HC.plugins.offset_mode.sphere = _class(false, HC.OffsetModePlugin, {
 
 HC.plugins.offset_mode.desphere = _class(false, HC.OffsetModePlugin, {
     name: 'desphere',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getOffsetModePlugin('sphere').apply(shape, true);
     }

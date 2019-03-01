@@ -5,7 +5,7 @@ HC.plugins.pattern.move = _class(false, HC.PatternPlugin, {
         euler: false
     },
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
 

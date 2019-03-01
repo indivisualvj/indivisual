@@ -8,20 +8,35 @@ HC.plugins.rotation_mode = HC.plugins.rotation_mode || {};
         isFirstShape(shape) {
             return shape.index == -1;
         }
+
+        injections = {
+            current: {
+                x: 0,
+                y: 0,
+                z: 0
+            },
+            next: {
+                x: 0,
+                y: 0,
+                z: 0
+            },
+            tween: false,
+            iterations: 0
+        };
     };
 
-    HC.RotationModePlugin.prototype.injections = {
-        current: {
-            x: 0,
-            y: 0,
-            z: 0
-        },
-        next: {
-            x: 0,
-            y: 0,
-            z: 0
-        },
-        tween: false,
-        iterations: 0
-    }
+    // HC.RotationModePlugin.prototype.injections = {
+    //     current: {
+    //         x: 0,
+    //         y: 0,
+    //         z: 0
+    //     },
+    //     next: {
+    //         x: 0,
+    //         y: 0,
+    //         z: 0
+    //     },
+    //     tween: false,
+    //     iterations: 0
+    // }
 }

@@ -1,5 +1,5 @@
 HC.plugins.background_mode.cube = _class(false, HC.BackgroundModePlugin, {
-    apply: function () {
+    apply() {
         if (this.current() !== this._settingID()) {
             this.current(this._settingID());
 

@@ -1,6 +1,6 @@
 HC.plugins.shape_rhythm.doublequad = _class(false, HC.ShapeRhythmPlugin, {
     name: 'double/quad',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         var params = this.params(shape);
         if (shape.index % 2 == 0) {
@@ -14,7 +14,7 @@ HC.plugins.shape_rhythm.doublequad = _class(false, HC.ShapeRhythmPlugin, {
 
 HC.plugins.shape_rhythm.quaddouble = _class(false, HC.ShapeRhythmPlugin, {
     name: 'quad/double',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         var params = this.params(shape);
         if (shape.index % 2 == 0) {
@@ -28,7 +28,7 @@ HC.plugins.shape_rhythm.quaddouble = _class(false, HC.ShapeRhythmPlugin, {
 
 HC.plugins.shape_rhythm.doublefull = _class(false, HC.ShapeRhythmPlugin, {
     name: 'double/full',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         var params = this.params(shape);
         if (shape.index % 2 == 0) {
@@ -42,7 +42,7 @@ HC.plugins.shape_rhythm.doublefull = _class(false, HC.ShapeRhythmPlugin, {
 
 HC.plugins.shape_rhythm.fulldouble = _class(false, HC.ShapeRhythmPlugin, {
     name: 'full/double',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         var params = this.params(shape);
         if (shape.index % 2 == 0) {
@@ -56,7 +56,7 @@ HC.plugins.shape_rhythm.fulldouble = _class(false, HC.ShapeRhythmPlugin, {
 
 HC.plugins.shape_rhythm.fullhalf = _class(false, HC.ShapeRhythmPlugin, {
     name: 'full/half',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         var params = this.params(shape);
         if (shape.index % 2 == 0) {
@@ -70,7 +70,7 @@ HC.plugins.shape_rhythm.fullhalf = _class(false, HC.ShapeRhythmPlugin, {
 
 HC.plugins.shape_rhythm.halffull = _class(false, HC.ShapeRhythmPlugin, {
     name: 'half/full',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         var params = this.params(shape);
         if (shape.index % 2 == 1) {
@@ -84,7 +84,7 @@ HC.plugins.shape_rhythm.halffull = _class(false, HC.ShapeRhythmPlugin, {
 
 HC.plugins.shape_rhythm.halfquarter = _class(false, HC.ShapeRhythmPlugin, {
     name: 'half/quarter',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         var params = this.params(shape);
         if (shape.index % 2 == 0) {
@@ -98,7 +98,7 @@ HC.plugins.shape_rhythm.halfquarter = _class(false, HC.ShapeRhythmPlugin, {
 
 HC.plugins.shape_rhythm.quarterhalf = _class(false, HC.ShapeRhythmPlugin, {
     name: 'quarter/half',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         var params = this.params(shape);
         if (shape.index % 2 == 0) {
@@ -112,7 +112,7 @@ HC.plugins.shape_rhythm.quarterhalf = _class(false, HC.ShapeRhythmPlugin, {
 
 HC.plugins.shape_rhythm.fullhalfquarter = _class(false, HC.ShapeRhythmPlugin, {
     name: 'full/half/quarter',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         var params = this.params(shape);
         var mod = shape.index % 3;
@@ -134,7 +134,7 @@ HC.plugins.shape_rhythm.fullhalfquarter = _class(false, HC.ShapeRhythmPlugin, {
 
 HC.plugins.shape_rhythm.fullhalfquartereight = _class(false, HC.ShapeRhythmPlugin, {
     name: 'full/half/quarter/eight',
-    apply: function (shape, reverse) {
+    apply(shape, reverse) {
         var layer = this.layer;
         var params = this.params(shape);
         var mod = shape.index % 4;
@@ -162,7 +162,7 @@ HC.plugins.shape_rhythm.fullhalfquartereight = _class(false, HC.ShapeRhythmPlugi
 
 HC.plugins.shape_rhythm.eightquarterhalffull = _class(false, HC.ShapeRhythmPlugin, {
     name: 'eight/quarter/half/full',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         var plugin = layer.getShapeRhythmPlugin('fullhalfquartereight');
         plugin.apply(shape, true);

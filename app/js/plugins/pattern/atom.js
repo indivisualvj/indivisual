@@ -7,7 +7,7 @@ HC.plugins.pattern.atom = _class(
             current: {x: 0, y: 0, z: 0}
         },
 
-        apply: function (shape) {
+        apply(shape) {
             var layer = this.layer;
 
             var speed = layer.getShapeSpeed(shape);

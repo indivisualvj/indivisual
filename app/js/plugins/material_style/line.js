@@ -3,7 +3,7 @@ HC.plugins.material_style.chessline = _class(false, HC.MaterialStylePlugin, {
         injections: {
             mesh: false,
         },
-        apply: function (shape) {
+        apply(shape) {
             var layer = this.layer;
             var pa = this.params(shape);
 
@@ -21,7 +21,7 @@ HC.plugins.material_style.randompeakline = _class(false, HC.MaterialStylePlugin,
         injections: {
             states: [],
         },
-        apply: function (shape) {
+        apply(shape) {
             var layer = this.layer;
 
             var pa = this.params(shape);

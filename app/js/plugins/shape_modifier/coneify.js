@@ -1,7 +1,7 @@
 HC.plugins.shape_modifier.coneify = _class(false, HC.ShapeModifierPlugin, {
     name: 'coneify xyz by y',
 
-    create: function (geometry, source, axes) {
+    create(geometry, source, axes) {
 
         source = source || 'y';
         axes = axes || new THREE.Vector3(1, 1, 1);
@@ -47,7 +47,7 @@ HC.plugins.shape_modifier.coneify = _class(false, HC.ShapeModifierPlugin, {
 HC.plugins.shape_modifier.coneifyxzby = _class(false, HC.plugins.shape_modifier.coneify, {
     name: 'coneify xz by y',
 
-    create: function (shape) {
+    create(shape) {
         return HC.plugins.shape_modifier.coneify.prototype.create.call(this, shape, 'y', new THREE.Vector3(1, 0, 1));
     }
 });
@@ -55,7 +55,7 @@ HC.plugins.shape_modifier.coneifyxzby = _class(false, HC.plugins.shape_modifier.
 HC.plugins.shape_modifier.coneifyxby = _class(false, HC.plugins.shape_modifier.coneify, {
     name: 'coneify x by y',
 
-    create: function (shape) {
+    create(shape) {
         return HC.plugins.shape_modifier.coneify.prototype.create.call(this, shape, 'y', new THREE.Vector3(1, 0, 0));
     }
 });
@@ -63,7 +63,7 @@ HC.plugins.shape_modifier.coneifyxby = _class(false, HC.plugins.shape_modifier.c
 HC.plugins.shape_modifier.coneifyxybz = _class(false, HC.plugins.shape_modifier.coneify, {
     name: 'coneify xy by z',
 
-    create: function (shape) {
+    create(shape) {
         return HC.plugins.shape_modifier.coneify.prototype.create.call(this, shape, 'z', new THREE.Vector3(1, 1, 0));
     }
 });

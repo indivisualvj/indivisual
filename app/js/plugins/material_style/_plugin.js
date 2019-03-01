@@ -11,7 +11,7 @@ HC.plugins.material_style = HC.plugins.material_style || {};
         }
     };
 
-    HC.MaterialStylePlugin.prototype.injections = {
+    HC.MaterialStylePlugin.prototype.injections = {// todo move into class after all is "classified"
         stroke: false
     };
 }

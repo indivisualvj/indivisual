@@ -13,7 +13,7 @@ HC.plugins.pattern_mover.bounce = _class(
             panhoy: 0
         },
 
-        apply: function (shape, vertical) {
+        apply(shape, vertical) {
             var layer = this.layer;
 
             var patternPlugin = layer.getPatternPlugin();
@@ -78,7 +78,7 @@ HC.plugins.pattern_mover.bounce = _class(
 
 HC.plugins.pattern_mover.bouncev = _class(false, HC.PatternMoverPlugin, {
     name: 'bounce v',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getPatternMoverPlugin('bounce').apply(shape, true);
     }
@@ -89,7 +89,7 @@ HC.plugins.pattern_mover.bouncer = _class(
         this.dir = false;
     }, HC.PatternMoverPlugin, {
         name: 'bounce h|v',
-        apply: function (shape) {
+        apply(shape) {
             var layer = this.layer;
             var speed = this.layer.getShapeSpeed(shape);
             if (this.isFirstShape(shape) && speed.prc == 0) {

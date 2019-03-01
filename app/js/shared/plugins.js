@@ -45,8 +45,9 @@ HC.Shape.prototype.initPlugins = function () {
         }
 
         inject() {
+            let inst = this;
             HC.Shape.prototype.injected.plugins[this.tree][this.key] = {
-                values: this.injections || {}
+                values: inst.injections || {}
             };
         }
 

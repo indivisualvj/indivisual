@@ -1,10 +1,10 @@
 HC.plugins.lighting_lookat.center = _class(false, HC.LightingLookatPlugin, {
 
-    before: function (light) {
+    before(light) {
         return light.target ? true : false;
     },
 
-    apply: function (light) {
+    apply(light) {
 
         if (!this.target || this.isFirstShape(light)) {
             this.target = new THREE.Object3D();
@@ -22,7 +22,7 @@ HC.plugins.lighting_lookat.center = _class(false, HC.LightingLookatPlugin, {
 
 HC.plugins.lighting_lookat.straight = _class(false, HC.LightingLookatPlugin, {
 
-    before: function (light) {
+    before(light) {
         var i = light.userData.index;
         if (!this.targets || !(i in this.targets)) {
             this.targets = [];
@@ -36,7 +36,7 @@ HC.plugins.lighting_lookat.straight = _class(false, HC.LightingLookatPlugin, {
         }
     },
 
-    apply: function (light) {
+    apply(light) {
 
         light.target.position.copy(light.position);
         var cv = this.centerVector();

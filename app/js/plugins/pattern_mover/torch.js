@@ -14,7 +14,7 @@ HC.plugins.pattern_mover.torch = _class(
             panhoy: 0
         },
 
-        apply: function (shape) {
+        apply(shape) {
             var layer = this.layer;
 
             var patternPlugin = layer.getPatternPlugin();

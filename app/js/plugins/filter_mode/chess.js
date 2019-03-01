@@ -4,7 +4,7 @@ HC.plugins.filter_mode.chess2 = _class(
     },
     HC.FilterModePlugin, {
         name: 'chess ²',
-        apply: function (shape, plugin) {
+        apply(shape, plugin) {
             var layer = this.layer;
 
             if (this.isFirstShape(shape)) {
@@ -37,7 +37,7 @@ HC.plugins.filter_mode.chess2 = _class(
             }
         },
 
-        chess: function (src, target) {
+        chess(src, target) {
             target.h = src.h + 180;
             if (target.h > 360) {
                 target.h -= 360;
@@ -57,7 +57,7 @@ HC.plugins.filter_mode.chess2 = _class(
 
 HC.plugins.filter_mode.chess2flash = _class(false, HC.FilterModePlugin, {
     name: 'chess ² flash',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getFilterModePlugin('chess2').apply(shape, 'flash');
     }
@@ -65,7 +65,7 @@ HC.plugins.filter_mode.chess2flash = _class(false, HC.FilterModePlugin, {
 
 HC.plugins.filter_mode.chess2strobe = _class(false, HC.FilterModePlugin, {
     name: 'chess ² strobe',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getFilterModePlugin('chess2').apply(shape, 'strobe');
     }

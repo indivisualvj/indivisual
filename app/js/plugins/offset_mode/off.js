@@ -1,7 +1,7 @@
 HC.plugins.offset_mode.off = _class(false, HC.OffsetModePlugin, {
     name: 'off',
     index: 1,
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         var m = layer.shapeSize(.5);
         var x = this.settings.offset_x * m;

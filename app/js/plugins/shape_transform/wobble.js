@@ -14,7 +14,7 @@ HC.plugins.shape_transform.wobble = _class(false, HC.ShapeTransformPlugin, {
         }
     },
 
-    apply: function (shape, axes) {
+    apply(shape, axes) {
 
         if (!shape.getVertices()) {
             shape.setGeometry(shape.geometry.userData.geometry);
@@ -85,7 +85,7 @@ HC.plugins.shape_transform.wobble = _class(false, HC.ShapeTransformPlugin, {
 HC.plugins.shape_transform.wobblex = _class(false, HC.plugins.shape_transform.wobble, {
     name: 'wobble x',
 
-    apply: function (shape) {
+    apply(shape) {
         HC.plugins.shape_transform.wobble.prototype.apply.call(this, shape, new THREE.Vector3(1, 0, 0));
     }
 });
@@ -93,7 +93,7 @@ HC.plugins.shape_transform.wobblex = _class(false, HC.plugins.shape_transform.wo
 HC.plugins.shape_transform.wobbley = _class(false, HC.plugins.shape_transform.wobble, {
     name: 'wobble y',
 
-    apply: function (shape) {
+    apply(shape) {
         HC.plugins.shape_transform.wobble.prototype.apply.call(this, shape, new THREE.Vector3(0, 1, 0));
     }
 });
@@ -101,7 +101,7 @@ HC.plugins.shape_transform.wobbley = _class(false, HC.plugins.shape_transform.wo
 HC.plugins.shape_transform.wobblez = _class(false, HC.plugins.shape_transform.wobble, {
     name: 'wobble z',
 
-    apply: function (shape) {
+    apply(shape) {
         HC.plugins.shape_transform.wobble.prototype.apply.call(this, shape, new THREE.Vector3(0, 0, 1));
     }
 });

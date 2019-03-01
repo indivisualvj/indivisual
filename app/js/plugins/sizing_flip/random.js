@@ -1,6 +1,6 @@
 HC.plugins.sizing_flip.randompeak = _class(false, HC.SizingFlipPlugin, {
     index: 3,
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
         layer.getSizingFlipPlugin('random').apply(shape, audio.peak && randomBool());
@@ -10,7 +10,7 @@ HC.plugins.sizing_flip.randompeak = _class(false, HC.SizingFlipPlugin, {
 HC.plugins.sizing_flip.random = _class(false, HC.SizingFlipPlugin, {
     index: 2,
     injections: {mode: false},
-    apply: function (shape, overwrite) {
+    apply(shape, overwrite) {
         var layer = this.layer;
 
         var params = this.params(shape);

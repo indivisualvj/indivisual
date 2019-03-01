@@ -4,7 +4,7 @@ HC.plugins.coloring_mode.motley = _class(false, HC.ColoringModePlugin, {
     injections: {
         velocity: false
     },
-    apply: function (shape, minL, maxL) {
+    apply(shape, minL, maxL) {
 
         var params = this.params(shape);
         if (!params.velocity) {
@@ -48,7 +48,7 @@ HC.plugins.coloring_mode.motley = _class(false, HC.ColoringModePlugin, {
 HC.plugins.coloring_mode.one = _class(false, HC.ColoringModePlugin, {
     name: 'one',
     index: 10,
-    apply: function (shape) {
+    apply(shape) {
 
         if (this.isFirstShape(shape)) {
             this.color = shape.color;
@@ -62,7 +62,7 @@ HC.plugins.coloring_mode.one = _class(false, HC.ColoringModePlugin, {
         }
     },
 
-    after: function (shape) {
+    after(shape) {
         var l = shape.color.l;
         HC.ColoringModePlugin.prototype.after.call(this, shape);
         if (!this.isFirstShape(shape)) {

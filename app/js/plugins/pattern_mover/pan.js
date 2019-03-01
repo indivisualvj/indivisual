@@ -13,7 +13,7 @@ HC.plugins.pattern_mover.pan = _class(
             panhoy: 0
         },
 
-        apply: function (shape, vertical) {
+        apply(shape, vertical) {
             var layer = this.layer;
 
             var patternPlugin = layer.getPatternPlugin();
@@ -78,7 +78,7 @@ HC.plugins.pattern_mover.pan = _class(
 
 HC.plugins.pattern_mover.panv = _class(false, HC.PatternMoverPlugin, {
     name: 'pan v',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getPatternMoverPlugin('pan').apply(shape, true);
     }
@@ -89,7 +89,7 @@ HC.plugins.pattern_mover.panr = _class(
         this.dir = false;
     }, HC.PatternMoverPlugin, {
         name: 'pan h|v',
-        apply: function (shape) {
+        apply(shape) {
             var layer = this.layer;
             var speed = this.layer.getShapeSpeed(shape);
             if (this.isFirstShape(shape) && speed.prc == 0) {

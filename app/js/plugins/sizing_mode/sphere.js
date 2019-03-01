@@ -1,6 +1,6 @@
 HC.plugins.sizing_mode.sphere = _class(false, HC.SizingModePlugin, {
     name: 'sphere',
-    apply: function (shape, revert) {
+    apply(shape, revert) {
         var layer = this.layer;
 
 
@@ -9,7 +9,7 @@ HC.plugins.sizing_mode.sphere = _class(false, HC.SizingModePlugin, {
         shape.scale(size.x, size.y, size.z);
     },
 
-    calculate: function (shape, revert, center) {
+    calculate(shape, revert, center) {
         var s = 1;
         var layer = this.layer;
         var pos = shape.position();
@@ -40,7 +40,7 @@ HC.plugins.sizing_mode.sphere = _class(false, HC.SizingModePlugin, {
 
 HC.plugins.sizing_mode.desphere = _class(false, HC.SizingModePlugin, {
     name: 'desphere',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getSizingModePlugin('sphere').apply(shape, true);
     }

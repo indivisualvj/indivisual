@@ -1,10 +1,10 @@
 HC.plugins.camera_mode.switch = _class(false, HC.CameraModePlugin, {
     name: 'switch position (current)',
-    before: function () {
+    before() {
         this.layer.updateCameraFov();
     },
 
-    apply: function (peak) {
+    apply(peak) {
         var speed = this.layer.getCurrentSpeed();
         var cam = this.layer.getCamera();
 
@@ -23,10 +23,10 @@ HC.plugins.camera_mode.switch = _class(false, HC.CameraModePlugin, {
 
 HC.plugins.camera_mode.switchpeak = _class(false, HC.CameraModePlugin, {
     name: 'switch position (peak)',
-    before: function () {
+    before() {
         this.layer.getCameraModePlugin('switch').before();
     },
-    apply: function () {
+    apply() {
         this.layer.getCameraModePlugin('switch').apply(true);
     }
 });
@@ -37,10 +37,10 @@ HC.plugins.camera_mode.switchlookat = _class(
         this.lookAtVector = false;
     }, HC.CameraModePlugin, {
         name: 'switch position lookat shape (current)',
-        before: function () {
+        before() {
             this.layer.getCameraModePlugin('switch').before();
         },
-        apply: function (peak) {
+        apply(peak) {
 
             var change = this.layer.getCameraModePlugin('switch').apply(peak);
 
@@ -67,10 +67,10 @@ HC.plugins.camera_mode.switchlookatpeak = _class(
         this.lookAtVector = false;
     }, HC.CameraModePlugin, {
         name: 'switch position lookat shape (peak)',
-        before: function () {
+        before() {
             this.layer.getCameraModePlugin('switch').before();
         },
-        apply: function () {
+        apply() {
             this.layer.getCameraModePlugin('switchlookat').apply(true);
         }
     }

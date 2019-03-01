@@ -1,5 +1,5 @@
 HC.plugins.filter_mode.pulse = _class(false, HC.FilterModePlugin, {
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
         var speed = layer.getShapeSpeed(shape);

@@ -2,7 +2,7 @@ HC.plugins.pattern.dropletsv = _class(false, HC.PatternPlugin, {
     name: 'dropletsv',
     injections: {velocity: false},
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
 
@@ -36,7 +36,7 @@ HC.plugins.pattern.dropletsh = _class(false, HC.PatternPlugin, {
     name: 'dropletsh',
     injections: {velocity: false},
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         var params = this.params(shape);
 

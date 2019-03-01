@@ -1,5 +1,5 @@
 HC.plugins.sizing_flip.flipx2 = _class(false, HC.SizingFlipPlugin, {
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
         if (shape.index % 2 == 0) {
@@ -9,7 +9,7 @@ HC.plugins.sizing_flip.flipx2 = _class(false, HC.SizingFlipPlugin, {
 });
 
 HC.plugins.sizing_flip.flipy2 = _class(false, HC.SizingFlipPlugin, {
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
         if (shape.index % 2 == 0) {
@@ -19,7 +19,7 @@ HC.plugins.sizing_flip.flipy2 = _class(false, HC.SizingFlipPlugin, {
 });
 
 HC.plugins.sizing_flip.flipxy2 = _class(false, HC.SizingFlipPlugin, {
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
         if (shape.index % 2 == 0) {
@@ -29,7 +29,7 @@ HC.plugins.sizing_flip.flipxy2 = _class(false, HC.SizingFlipPlugin, {
 });
 
 HC.plugins.sizing_flip.flipxy3 = _class(false, HC.SizingFlipPlugin, {
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
         if (shape.index % 3 == 0) {

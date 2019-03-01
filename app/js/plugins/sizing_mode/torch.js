@@ -7,7 +7,7 @@ HC.plugins.sizing_mode.torch = _class(
             z: 0
         };
     }, HC.SizingModePlugin, {
-        apply: function (shape) {
+        apply(shape) {
             var layer = this.layer;
 
             if (this.isFirstShape(shape)) {

@@ -1,7 +1,7 @@
 HC.plugins.shape_transform.audio = _class(false, HC.ShapeTransformPlugin, {
     name: 'audio xyz',
 
-    apply: function (shape, axis) {
+    apply(shape, axis) {
 
         if (!shape.getVertices()) {
             shape.setGeometry(shape.geometry.userData.geometry);
@@ -68,7 +68,7 @@ HC.plugins.shape_transform.audio = _class(false, HC.ShapeTransformPlugin, {
 HC.plugins.shape_transform.audiox = _class(false, HC.plugins.shape_transform.audio, {
     name: 'audio x',
 
-    apply: function (shape) {
+    apply(shape) {
         HC.plugins.shape_transform.audio.prototype.apply.call(this, shape, 'x');
     }
 });
@@ -76,7 +76,7 @@ HC.plugins.shape_transform.audiox = _class(false, HC.plugins.shape_transform.aud
 HC.plugins.shape_transform.audioy = _class(false, HC.plugins.shape_transform.audio, {
     name: 'audio y',
 
-    apply: function (shape) {
+    apply(shape) {
         HC.plugins.shape_transform.audio.prototype.apply.call(this, shape, 'y');
     }
 });
@@ -84,7 +84,7 @@ HC.plugins.shape_transform.audioy = _class(false, HC.plugins.shape_transform.aud
 HC.plugins.shape_transform.audioz = _class(false, HC.plugins.shape_transform.audio, {
     name: 'audio z',
 
-    apply: function (shape) {
+    apply(shape) {
         HC.plugins.shape_transform.audio.prototype.apply.call(this, shape, 'z');
     }
 });
@@ -92,7 +92,7 @@ HC.plugins.shape_transform.audioz = _class(false, HC.plugins.shape_transform.aud
 HC.plugins.shape_transform.audioxy = _class(false, HC.plugins.shape_transform.audio, {
     name: 'audio xy',
 
-    apply: function (shape) {
+    apply(shape) {
         HC.plugins.shape_transform.audio.prototype.apply.call(this, shape, 'xy');
     }
 });

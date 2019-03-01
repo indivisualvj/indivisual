@@ -4,7 +4,7 @@
 //     }, HC.OscillatePlugin, {
 //         name: 'twostep 0/1 on peak',
 //         index: 30,
-//         apply: function (key) {
+//         apply(key) {
 //             var pa = this.params(key);
 //
 //             HC.Osci.step(pa, 2, beatkeeper.getSpeed('full'), true);
@@ -19,7 +19,7 @@
 //     }, HC.OscillatePlugin, {
 //         name: 'twostep -1/1 on peak',
 //         index: 30,
-//         apply: function (key) {
+//         apply(key) {
 //             var pa = this.params(key);
 //             HC.Osci.step(pa, 2, beatkeeper.getSpeed('full'), true, true);
 //             this.activate(key, pa.value);
@@ -33,7 +33,7 @@
 //     }, HC.OscillatePlugin, {
 //         name: 'twostep -1/1 on halfs',
 //         index: 30,
-//         apply: function (key) {
+//         apply(key) {
 //             var pa = this.params(key);
 //             HC.Osci.step(pa, 2, beatkeeper.getSpeed('half'), false, true);
 //             this.activate(key, pa.value);
@@ -47,7 +47,7 @@
 //     }, HC.OscillatePlugin, {
 //         name: 'twostep -1/1 on fulls',
 //         index: 30,
-//         apply: function (key) {
+//         apply(key) {
 //             var pa = this.params(key);
 //             HC.Osci.step(pa, 2, beatkeeper.getSpeed('full'), false, true);
 //             this.activate(key, pa.value);
@@ -61,7 +61,7 @@
 //     }, HC.OscillatePlugin, {
 //         name: 'threestep 0/1 on peak',
 //         index: 30,
-//         apply: function (key) {
+//         apply(key) {
 //             var pa = this.params(key);
 //             HC.Osci.step(pa, 3, beatkeeper.getSpeed('full'), true);
 //             this.activate(key, pa.value);
@@ -75,7 +75,7 @@
 //     }, HC.OscillatePlugin, {
 //         name: 'threestep -1/1 on peak',
 //         index: 30,
-//         apply: function (key) {
+//         apply(key) {
 //             var pa = this.params(key);
 //             HC.Osci.step(pa, 3, beatkeeper.getSpeed('full'), true, true);
 //             this.activate(key, pa.value);
@@ -89,7 +89,7 @@
 //     }, HC.OscillatePlugin, {
 //         name: 'threestep -1/1 on halfs',
 //         index: 30,
-//         apply: function (key) {
+//         apply(key) {
 //             var pa = this.params(key);
 //             HC.Osci.step(pa, 3, beatkeeper.getSpeed('half'), false, true);
 //             this.activate(key, pa.value);
@@ -103,7 +103,7 @@
 //     }, HC.OscillatePlugin, {
 //         name: 'threestep -1/1 on fulls',
 //         index: 30,
-//         apply: function (key) {
+//         apply(key) {
 //             var pa = this.params(key);
 //             HC.Osci.step(pa, 3, beatkeeper.getSpeed('full'), false, true);
 //             this.activate(key, pa.value);
@@ -117,7 +117,7 @@ HC.plugins.oscillate.fourstep = _class(
     }, HC.OscillatePlugin, {
         name: 'fourstep 0/1 on peak',
         index: 30,
-        apply: function (key) {
+        apply(key) {
             var pa = this.params(key);
             HC.Osci.step(pa, 4, beatkeeper.getSpeed('full'), true);
             this.activate(key, pa.value);
@@ -131,7 +131,7 @@ HC.plugins.oscillate.fourstepfulls = _class(
     }, HC.OscillatePlugin, {
         name: 'fourstep 0/1 on fulls',
         index: 30,
-        apply: function (key) {
+        apply(key) {
             var pa = this.params(key);
             HC.Osci.step(pa, 4, beatkeeper.getSpeed('full'), false, false);
             this.activate(key, pa.value);
@@ -145,7 +145,7 @@ HC.plugins.oscillate.fourstepminus = _class(
     }, HC.OscillatePlugin, {
         name: 'fourstep -1/1 on peak',
         index: 30,
-        apply: function (key) {
+        apply(key) {
 
             var pa = this.params(key);
             HC.Osci.step(pa, 4, beatkeeper.getSpeed('full'), true, true);
@@ -160,7 +160,7 @@ HC.plugins.oscillate.fourstephalfsminus = _class(
     }, HC.OscillatePlugin, {
         name: 'fourstep -1/1 on halfs',
         index: 30,
-        apply: function (key) {
+        apply(key) {
             var pa = this.params(key);
             HC.Osci.step(pa, 4, beatkeeper.getSpeed('half'), false, true);
             this.activate(key, pa.value);
@@ -174,7 +174,7 @@ HC.plugins.oscillate.fourstepfullsminus = _class(
     }, HC.OscillatePlugin, {
         name: 'fourstep -1/1 on fulls',
         index: 30,
-        apply: function (key) {
+        apply(key) {
             var pa = this.params(key);
             HC.Osci.step(pa, 4, beatkeeper.getSpeed('full'), false, true);
             this.activate(key, pa.value);

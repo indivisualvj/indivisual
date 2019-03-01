@@ -1,6 +1,6 @@
 HC.plugins.offset_mode.chess = _class(false, HC.OffsetModePlugin, {
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
         var m = layer.shapeSize(.5);
@@ -20,7 +20,7 @@ HC.plugins.offset_mode.chess = _class(false, HC.OffsetModePlugin, {
 HC.plugins.offset_mode.chessxyz = _class(false, HC.OffsetModePlugin, {
     name: 'chess XYZ',
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
         var mx = layer.shapeSize(.5);

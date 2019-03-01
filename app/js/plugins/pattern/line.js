@@ -1,13 +1,13 @@
 HC.plugins.pattern.lineh = _class(false, HC.PatternPlugin, {
     name: 'lineh',
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         var pos = this.calculate(shape);
         layer.positionIn3dSpace(shape, pos.x, pos.y, pos.z);
     },
 
-    calculate: function (shape) {
+    calculate(shape) {
         var layer = this.layer;
         var step = layer.resolution().x / layer.shapeCount();
         var cx = layer.resolution('half').x;
@@ -28,13 +28,13 @@ HC.plugins.pattern.lineh = _class(false, HC.PatternPlugin, {
 HC.plugins.pattern.linev = _class(false, HC.PatternPlugin, {
     name: 'linev',
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         var pos = this.calculate(shape);
         layer.positionIn3dSpace(shape, pos.x, pos.y, pos.z);
     },
 
-    calculate: function (shape) {
+    calculate(shape) {
         var layer = this.layer;
         var step = layer.resolution().y / layer.shapeCount();
         var cy = layer.resolution('half').y;

@@ -1,7 +1,7 @@
 HC.plugins.shape_modifier.sphereify = _class(false, HC.ShapeModifierPlugin, {
     name: 'sphereify',
 
-    create: function (geometry) {
+    create(geometry) {
 
         var vertices = geometry.vertices;
         geometry.center();

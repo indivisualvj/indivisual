@@ -6,7 +6,7 @@ HC.plugins.pattern.matrix = _class(
         name: 'matrix',
         index: 2,
         injections: {position: false},
-        apply: function (shape) {
+        apply(shape) {
             var layer = this.layer;
 
             var gridPosition = this.gridPosition(shape);
@@ -29,7 +29,7 @@ HC.plugins.pattern.matrix = _class(
             this.sharedMoverParams(ox, oy, gapx, gapy);
         },
 
-        getDistributionOnMatrix: function (columns, rows, index, vector) {
+        getDistributionOnMatrix(columns, rows, index, vector) {
             // find out the number of filled rows
             var row = Math.floor(index / columns);
 
@@ -43,7 +43,7 @@ HC.plugins.pattern.matrix = _class(
             vector.y = ++row;
         },
 
-        gridPosition: function (shape) {
+        gridPosition(shape) {
             var layer = this.layer;
             var params = this.params(shape);
 
@@ -55,7 +55,7 @@ HC.plugins.pattern.matrix = _class(
             return params.position;
         },
 
-        columnCount: function () {
+        columnCount() {
             var layer = this.layer;
             if (this.columns === false) {
                 this.columns = Math.floor(layer.resolution().x / layer.shapeSize(1));
@@ -63,7 +63,7 @@ HC.plugins.pattern.matrix = _class(
             return this.columns;
         },
 
-        rowCount: function () {
+        rowCount() {
             var layer = this.layer;
             if (this.rows === false) {
                 this.rows = Math.ceil(layer.shapeCount() / this.columnCount(layer));

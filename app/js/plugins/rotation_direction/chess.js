@@ -4,7 +4,7 @@ HC.plugins.rotation_direction.chess = _class( // 5
     },
     HC.RotationDirectionPlugin, {
         name: 'chess',
-        apply: function (shape) {
+        apply(shape) {
             var layer = this.layer;
             if (this.isFirstShape(shape)) {
                 this.switcher = !this.switcher;
@@ -29,7 +29,7 @@ HC.plugins.rotation_direction.chesscolumns = _class( // 6
     },
     HC.RotationDirectionPlugin, {
         name: 'chess columns',
-        apply: function (shape) {
+        apply(shape) {
             var layer = this.layer;
             if (this.isFirstShape(shape)) {
                 this.switcher = !this.switcher;
@@ -54,7 +54,7 @@ HC.plugins.rotation_direction.chessrows = _class( // 7
     },
     HC.RotationDirectionPlugin, {
         name: 'chess rows',
-        apply: function (shape) {
+        apply(shape) {
             var layer = this.layer;
             if (this.isFirstShape(shape)) {
                 this.switcher = !this.switcher;

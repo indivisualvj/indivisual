@@ -2,7 +2,7 @@ HC.plugins.pattern.orbits = _class(false, HC.PatternPlugin, {
     name: 'orbits',
     injections: {},
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
 

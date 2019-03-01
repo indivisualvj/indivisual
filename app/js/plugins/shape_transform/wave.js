@@ -1,7 +1,7 @@
 HC.plugins.shape_transform.wave = _class(false, HC.ShapeTransformPlugin, {
     name: 'wave xyz by y',
 
-    apply: function (shape, source, axes) {
+    apply(shape, source, axes) {
 
         if (!shape.getVertices()) {
             shape.setGeometry(shape.geometry.userData.geometry);
@@ -56,7 +56,7 @@ HC.plugins.shape_transform.wave = _class(false, HC.ShapeTransformPlugin, {
 HC.plugins.shape_transform.wavexzby = _class(false, HC.plugins.shape_transform.wave, {
     name: 'wave xz by y',
 
-    apply: function (shape) {
+    apply(shape) {
         HC.plugins.shape_transform.wave.prototype.apply.call(this, shape, 'y', new THREE.Vector3(1, 0, 1));
     }
 });
@@ -64,7 +64,7 @@ HC.plugins.shape_transform.wavexzby = _class(false, HC.plugins.shape_transform.w
 HC.plugins.shape_transform.wavexby = _class(false, HC.plugins.shape_transform.wave, {
     name: 'wave x by y',
 
-    apply: function (shape) {
+    apply(shape) {
         HC.plugins.shape_transform.wave.prototype.apply.call(this, shape, 'y', new THREE.Vector3(1, 0, 0));
     }
 });
@@ -72,7 +72,7 @@ HC.plugins.shape_transform.wavexby = _class(false, HC.plugins.shape_transform.wa
 HC.plugins.shape_transform.wavexybz = _class(false, HC.plugins.shape_transform.wave, {
     name: 'wave xy by z',
 
-    apply: function (shape) {
+    apply(shape) {
         HC.plugins.shape_transform.wave.prototype.apply.call(this, shape, 'z', new THREE.Vector3(1, 1, 0));
     }
 });

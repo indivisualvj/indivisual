@@ -1,7 +1,7 @@
 HC.plugins.pattern.cross = _class(false, HC.PatternPlugin, {
     name: 'cross',
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
 
 

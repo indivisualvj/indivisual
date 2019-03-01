@@ -7,7 +7,7 @@ HC.plugins.offset_mode.xing = _class(
             direction: 0
         },
 
-        apply: function (shape) {
+        apply(shape) {
             var layer = this.layer;
 
             var speed = layer.getShapeSpeed(shape);

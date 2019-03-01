@@ -1,6 +1,6 @@
 HC.plugins.coloring_mode.reactivergb = _class(false, HC.ColoringModePlugin, {
     name: 'reactive RGB',
-    apply: function (shape, reactive, radial) {
+    apply(shape, reactive, radial) {
         var layer = this.layer;
 
         var color = shape.color;
@@ -51,7 +51,7 @@ HC.plugins.coloring_mode.reactivergb = _class(false, HC.ColoringModePlugin, {
 
 HC.plugins.coloring_mode.reactivergbc = _class(false, HC.ColoringModePlugin, {
     name: 'reactive RGB center',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getColoringModePlugin('reactivergb').apply(shape, true, true);
     }
@@ -59,7 +59,7 @@ HC.plugins.coloring_mode.reactivergbc = _class(false, HC.ColoringModePlugin, {
 
 HC.plugins.coloring_mode.floatrgb = _class(false, HC.ColoringModePlugin, {
     name: 'float RGB',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getColoringModePlugin('reactivergb').apply(shape, false, false);
     }
@@ -67,7 +67,7 @@ HC.plugins.coloring_mode.floatrgb = _class(false, HC.ColoringModePlugin, {
 
 HC.plugins.coloring_mode.floatrgbc = _class(false, HC.ColoringModePlugin, {
     name: 'float RGB center',
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         layer.getColoringModePlugin('reactivergb').apply(shape, false, true);
     }

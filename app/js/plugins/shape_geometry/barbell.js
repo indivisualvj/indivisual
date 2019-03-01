@@ -1,6 +1,6 @@
 HC.plugins.shape_geometry.barbell = _class(false, HC.ShapeGeometryPlugin, {
     name: 'barbell',
-    create: function () {
+    create() {
         var layer = this.layer;
 
         var geo = new THREE.Geometry();

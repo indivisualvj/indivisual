@@ -1,5 +1,4 @@
 HC.plugins.shape_rhythm = HC.plugins.shape_rhythm || {};
-
 {
     HC.ShapeRhythmPlugin = class Plugin extends HC.AnimationPlugin {
 
@@ -46,7 +45,7 @@ HC.plugins.shape_rhythm = HC.plugins.shape_rhythm || {};
         }
     };
 
-    HC.ShapeRhythmPlugin.prototype.injections = {
+    HC.ShapeRhythmPlugin.prototype.injections = {// todo move into class after all is "classified"
         speed: false,
         duration: 0,
         progress: 0,

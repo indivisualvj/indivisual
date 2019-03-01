@@ -2,7 +2,7 @@ HC.plugins.sizing_mode.growbeat = _class(false, HC.SizingModePlugin, {
 
     injections: {active: false, since: 0},
 
-    apply: function (shape) {
+    apply(shape) {
         var layer = this.layer;
         var speed = layer.getShapeSpeed(shape);
 

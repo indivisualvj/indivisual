@@ -20,7 +20,7 @@
         });
     }
 
-    class Plugin extends HC.AudioPlugin {
+    HC.audio.mediafile = class Plugin extends HC.AudioPlugin {
 
         static dropEvent = false;
 
@@ -81,6 +81,4 @@
             }
         }
     }
-
-    HC.audio.mediafile = Plugin;
 }

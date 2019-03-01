@@ -1,11 +1,8 @@
-HC.plugins.rotation_direction.chess = _class( // 5
-    function () {
-        this.switcher = false;
-    },
-    HC.RotationDirectionPlugin, {
-        name: 'chess',
+{
+    HC.plugins.rotation_direction.chess = class Plugin extends HC.RotationDirectionPlugin {
+        static name = 'chess';
+
         apply(shape) {
-            var layer = this.layer;
             if (this.isFirstShape(shape)) {
                 this.switcher = !this.switcher;
             }
@@ -21,14 +18,11 @@ HC.plugins.rotation_direction.chess = _class( // 5
             }
         }
     }
-);
+}
+{
+    HC.plugins.rotation_direction.chesscolumns = class Plugin extends HC.RotationDirectionPlugin {
+        static name = 'chess columns';
 
-HC.plugins.rotation_direction.chesscolumns = _class( // 6
-    function () {
-        this.switcher = false;
-    },
-    HC.RotationDirectionPlugin, {
-        name: 'chess columns',
         apply(shape) {
             var layer = this.layer;
             if (this.isFirstShape(shape)) {
@@ -46,14 +40,11 @@ HC.plugins.rotation_direction.chesscolumns = _class( // 6
             }
         }
     }
-);
+}
+{
+    HC.plugins.rotation_direction.chessrows = class Plugin extends HC.RotationDirectionPlugin {
+        static name = 'chess rows';
 
-HC.plugins.rotation_direction.chessrows = _class( // 7
-    function () {
-        this.switcher = false;
-    },
-    HC.RotationDirectionPlugin, {
-        name: 'chess rows',
         apply(shape) {
             var layer = this.layer;
             if (this.isFirstShape(shape)) {
@@ -71,4 +62,4 @@ HC.plugins.rotation_direction.chessrows = _class( // 7
             }
         }
     }
-);
+}

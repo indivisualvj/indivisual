@@ -1,19 +1,15 @@
-HC.plugins.pattern_rotation.rubiks = _class(
-    function () {
-        this.rubiks = false;
-        this.dirmap = false;
-        this.slice = false;
-        this.axes = ['x', 'y', 'z'];
-        this.euler = new THREE.Euler();
-        this.vector = new THREE.Vector3(1, 1, 1);
-        var inst = this;
-        this.shared = {
+{
+    HC.plugins.pattern_rotation.rubiks = class Plugin extends HC.PatternRotationPlugin {
+        rubiks = false;
+        slice = false;
+        axes = ['x', 'y', 'z'];
+        vector = new THREE.Vector3(1, 1, 1);
+        shared = {
             locking: {
                 disabled: true
             }
-        }
+        };
 
-    }, HC.PatternRotationPlugin, {
         apply() {
             if (!this.rubiks) {
                 var plugin = this.layer.getPatternPlugin('cube');
@@ -28,14 +24,14 @@ HC.plugins.pattern_rotation.rubiks = _class(
                     axis: this.axes[randomInt(0, this.axes.length - 1)]
                 };
             }
-        },
+        }
 
         positionIn3dSpace(shape, cp) {
             var eu = this.getShapeEuler(shape);
             cp.applyEuler(eu);
             cp.add(this.layer.patternCenterVector(true));
             shape.position().copy(cp);
-        },
+        }
 
         getShapeEuler(shape) {
             var plugin = this.layer.getPatternPlugin('cube');
@@ -65,4 +61,4 @@ HC.plugins.pattern_rotation.rubiks = _class(
             return eu;
         }
     }
-);
+}

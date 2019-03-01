@@ -1,5 +1,5 @@
 { // todo tutorial + explain auch für setControl setDisplay
-    class Plugin extends HC.AudioPlugin {
+    HC.audio.microphone = class Plugin extends HC.AudioPlugin {
 
         init(callback) {
 
@@ -30,6 +30,4 @@
         }
 
     }
-
-    HC.audio.microphone = Plugin;
 }

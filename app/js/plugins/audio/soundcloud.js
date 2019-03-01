@@ -37,7 +37,7 @@
         });
     }
 
-    class Plugin extends HC.AudioPlugin {
+    HC.audio.soundcloud = class Plugin extends HC.AudioPlugin {
 
         static dropEvent = false;
 
@@ -103,6 +103,4 @@
             }
         }
     }
-
-    HC.audio.soundcloud = Plugin;
 }

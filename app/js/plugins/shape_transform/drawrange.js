@@ -1,5 +1,5 @@
-HC.plugins.shape_transform.drawranger = _class(false, HC.ShapeTransformPlugin, {
-    name: 'drawrange random',
+HC.plugins.shape_transform.drawranger = class Plugin extends HC.ShapeTransformPlugin {
+    static name = 'drawrange random';
 
     apply(shape) {
         if (this.layer.getCurrentSpeed().prc == 0) {
@@ -10,4 +10,4 @@ HC.plugins.shape_transform.drawranger = _class(false, HC.ShapeTransformPlugin, {
             shape.geometry.attributes.position.needsUpdate = true;
         }
     }
-});
+}

@@ -1,25 +1,29 @@
-HC.plugins.material_style.fill = _class(false, HC.MaterialStylePlugin, {
-    index: 1,
-    name: 'fill',
-    apply(shape) {
-        var params = this.params(shape);
-        params.stroke = false;
-    }
-});
+{
+    HC.plugins.material_style.fill = class Plugin extends HC.MaterialStylePlugin {
+        static index = 1;
+        static name = 'fill';
 
-HC.plugins.material_style.stroke = _class(false, HC.MaterialStylePlugin, {
-    name: 'stroke',
-    apply(shape) {
-        var params = this.params(shape);
-        params.stroke = true;
+        apply(shape) {
+            let params = this.params(shape);
+            params.stroke = false;
+        }
     }
-});
+}
+{
+    HC.plugins.material_style.stroke = class Plugin extends HC.MaterialStylePlugin {
+        static name = 'stroke';
 
-HC.plugins.material_style.peak = _class(
-    function () {
-        this.state = false;
-    }, HC.MaterialStylePlugin, {
-        name: 'switch on peak',
+        apply(shape) {
+            let params = this.params(shape);
+            params.stroke = true;
+        }
+    }
+}
+{
+    HC.plugins.material_style.peak = class Plugin extends HC.MaterialStylePlugin {
+        static name = 'switch on peak';
+        state = false;
+
         apply(shape) {
             if (this.isFirstShape(shape)) {
                 if (audio.peak && randomBool()) {
@@ -27,8 +31,8 @@ HC.plugins.material_style.peak = _class(
                 }
             }
 
-            var params = this.params(shape);
+            let params = this.params(shape);
             params.stroke = this.state;
         }
     }
-);
+}

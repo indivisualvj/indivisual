@@ -1,6 +1,9 @@
 HC.plugins.material_style = HC.plugins.material_style || {};
 {
     HC.MaterialStylePlugin = class Plugin extends HC.AnimationPlugin {
+        injections = {
+            stroke: false
+        };
 
         after(shape) {
             let params = this.params(shape);
@@ -9,9 +12,5 @@ HC.plugins.material_style = HC.plugins.material_style || {};
                 shape.mesh.material.needsUpdate = true;
             }
         }
-    };
-
-    HC.MaterialStylePlugin.prototype.injections = {// todo move into class after all is "classified"
-        stroke: false
     };
 }

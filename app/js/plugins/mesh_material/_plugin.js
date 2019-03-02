@@ -1,6 +1,7 @@
 HC.plugins.mesh_material = HC.plugins.mesh_material || {};
 {
     HC.MeshMaterialPlugin = class Plugin extends HC.AnimationPlugin {
+
         before(geometry) {
 
             if (geometry.mergeVertices) {

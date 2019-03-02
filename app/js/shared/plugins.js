@@ -26,6 +26,11 @@ HC.Shape.prototype.initPlugins = function () {
 {
     HC.AnimationPlugin = class AnimationPlugin {
 
+        layer;
+        settings;
+        tree;
+        key;
+
         _id() {
             return this.tree + this.key;
         }

@@ -275,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     inst.ms = HC.now() - inst.lastUpdate - inst.last; // time spent on animating and rendering
 
-                    if (statics.DisplaySettings.fps < 60) {
+                    if (statics.DisplaySettings.fps < 60) { // fixme fps not after reload from session
                         setTimeout(function () {
                             requestAnimationFrame(render);
                         }, inst.duration - inst.ms); // substract spent time from timeout
@@ -566,9 +566,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     case 'shape_modifier_volume':
                     case 'shape_geometry':
                     case 'shape_transform':
-                    case 'mesh_material':
+                    case 'mesh_material': // todo can't we just reset materials?
                     case 'material_mapping':
-                    case 'shape_moda':
+                    case 'shape_moda': // todo can't we just reset geometries?
                     case 'shape_modb':
                     case 'shape_modc':
                         layer.resetShapes();

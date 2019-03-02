@@ -1,18 +1,15 @@
 {
     HC.plugins.material_style.chessline = class Plugin extends HC.MaterialStylePlugin {
         static name = 'chess (fill | line)';
-        injections = {
-            mesh: false
-        };
 
         apply(shape) {
             let layer = this.layer;
-            let pa = this.params(shape);
+            let params = this.params(shape);
 
-            if (shape.index % 2 == 1 && !pa.mesh) {
+            if (shape.index % 2 == 1 && !params.mesh) {
                 let mesh = layer.getMeshMaterialPlugin('line').apply(shape.getGeometry());
-                pa.mesh = mesh;
-                shape.setMesh(mesh);
+                params.mesh = mesh;
+                shape.setMesh(mesh); // fixme does not get reset after plugin change. either resetShapes or setMesh after material_style change
             }
         }
     }
@@ -20,23 +17,22 @@
 {
     HC.plugins.material_style.randompeakline = class Plugin extends HC.MaterialStylePlugin {
         static name = 'random on peak (line)';
-        injections = {
-            states: []
-        };
 
         apply(shape) {
             let layer = this.layer;
-            let pa = this.params(shape);
+            let params = this.params(shape);
 
-            if (!pa.states.length) {
+            if (!params.states) {
+                params.states = [];
+                params.mesh = shape.mesh;
                 let mesh = layer.getMeshMaterialPlugin('line').apply(shape.getGeometry());
-                pa.states.push(mesh);
-                pa.states.push(shape.mesh);
+                params.states.push(shape.mesh);
+                params.states.push(mesh);
             }
 
             if ((audio.peak && randomBool())) {
                 let state = randomInt(0, 1);
-                shape.setMesh(pa.states[state]);
+                shape.setMesh(params.states[state]);
             }
         }
     }

@@ -68,6 +68,15 @@
             return this.mesh;
         },
 
+        setMaterial: function (material) {
+            this.material = material;
+            this.mesh.material = material;
+        },
+
+        getMaterial: function () {
+            return this.mesh.material;
+        },
+
         shapeVolume: function () {
             var i = this.index % audio.volumes.length;
             return audio.volumes[i];

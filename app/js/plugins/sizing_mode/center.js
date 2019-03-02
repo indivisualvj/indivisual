@@ -23,8 +23,8 @@
             }
 
             s *= this.settings.sizing_scale;
-            let x = this.settings.sizing_x * s;
-            let y = this.settings.sizing_y * s;
+            x = this.settings.sizing_x * s;
+            y = this.settings.sizing_y * s;
             let z = this.settings.sizing_z * s;
 
             shape.scale(x, y, z);

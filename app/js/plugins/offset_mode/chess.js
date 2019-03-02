@@ -1,51 +1,53 @@
-HC.plugins.offset_mode.chess = _class(false, HC.OffsetModePlugin, {
+{
+    HC.plugins.offset_mode.chess = class Plugin extends HC.OffsetModePlugin {
 
-    apply(shape) {
-        var layer = this.layer;
+        apply(shape) {
+            let layer = this.layer;
 
-        var m = layer.shapeSize(.5);
+            let m = layer.shapeSize(.5);
 
-        if (shape.index % 2 == 0) {
-            m = -layer.shapeSize(.5);
+            if (shape.index % 2 == 0) {
+                m = -layer.shapeSize(.5);
+            }
+
+            let x = this.settings.offset_x * m;
+            let y = this.settings.offset_y * m;
+            let z = this.settings.offset_z * m;
+
+            shape.offset(x, y, z);
         }
-
-        var x = this.settings.offset_x * m;
-        var y = this.settings.offset_y * m;
-        var z = this.settings.offset_z * m;
-
-        shape.offset(x, y, z);
     }
-});
+}
+{
+    HC.plugins.offset_mode.chessxyz = class Plugin extends HC.OffsetModePlugin {
+        static name = 'chess XYZ';
 
-HC.plugins.offset_mode.chessxyz = _class(false, HC.OffsetModePlugin, {
-    name: 'chess XYZ',
+        apply(shape) {
+            let layer = this.layer;
 
-    apply(shape) {
-        var layer = this.layer;
+            let mx = layer.shapeSize(.5);
+            let my = mx;
+            let mz = mx;
 
-        var mx = layer.shapeSize(.5);
-        var my = mx;
-        var mz = mx;
+            switch (shape.index % 3) {
+                case 0:
+                    mx = -mx;
+                    break;
 
-        switch (shape.index % 3) {
-            case 0:
-                mx = -mx;
-                break;
+                case 1:
+                    my = -my;
+                    break;
 
-            case 1:
-                my = -my;
-                break;
+                case 2:
+                    mz = -mz;
+                    break;
+            }
 
-            case 2:
-                mz = -mz;
-                break;
+            let x = this.settings.offset_x * mx;
+            let y = this.settings.offset_y * my;
+            let z = this.settings.offset_z * mz;
+
+            shape.offset(x, y, z);
         }
-
-        var x = this.settings.offset_x * mx;
-        var y = this.settings.offset_y * my;
-        var z = this.settings.offset_z * mz;
-
-        shape.offset(x, y, z);
     }
-});
-
+}

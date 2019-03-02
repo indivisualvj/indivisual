@@ -1,41 +1,45 @@
-HC.plugins.offset_mode.sphere = _class(false, HC.OffsetModePlugin, {
-    name: 'sphere',
+{
+    HC.plugins.offset_mode.sphere = class Plugin extends HC.OffsetModePlugin {
+        static name = 'sphere';
 
-    apply(shape, revert) {
-        var layer = this.layer;
+        apply(shape, revert) {
+            let layer = this.layer;
 
-        var m = 1;
-        var pos = shape.position();
-        var dist = Math.max(pos.distanceTo(layer.patternCenterVector(true)), 1);
-        var _dist = layer.resolution().length();
+            let m = 1;
+            let pos = shape.position();
+            let dist = Math.max(pos.distanceTo(layer.patternCenterVector(true)), 1);
+            let _dist = layer.resolution().length();
 
-        if (revert) {
-            var diff = (dist - _dist);
-            var f = diff / _dist;
-            m = 1 - f;
+            if (revert) {
+                let diff = (dist - _dist);
+                let f = diff / _dist;
+                m = 1 - f;
 
-        } else {
-            m = dist / _dist;
+            } else {
+                m = dist / _dist;
+            }
+
+            if (isNaN(m)) {
+                m = 1;
+            }
+
+            m *= -layer.shapeSize(.5);
+
+            let x = this.settings.offset_x * m;
+            let y = this.settings.offset_y * m;
+            let z = this.settings.offset_z * m;
+
+            shape.offset(x, y, z);
         }
+    }
+}
+{
+    HC.plugins.offset_mode.desphere = class Plugin extends HC.OffsetModePlugin {
+        static name = 'desphere';
 
-        if (isNaN(m)) {
-            m = 1;
+        apply(shape) {
+            let layer = this.layer;
+            layer.getOffsetModePlugin('sphere').apply(shape, true);
         }
-
-        m *= -layer.shapeSize(.5);
-
-        var x = this.settings.offset_x * m;
-        var y = this.settings.offset_y * m;
-        var z = this.settings.offset_z * m;
-
-        shape.offset(x, y, z);
     }
-});
-
-HC.plugins.offset_mode.desphere = _class(false, HC.OffsetModePlugin, {
-    name: 'desphere',
-    apply(shape) {
-        var layer = this.layer;
-        layer.getOffsetModePlugin('sphere').apply(shape, true);
-    }
-});
+}

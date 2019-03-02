@@ -23,7 +23,6 @@ HC.plugins.shape_geometry.barbell = _class(false, HC.ShapeGeometryPlugin, {
         cmesh.updateMatrix();
         geo.merge(cmesh.geometry, cmesh.matrix);
 
-        var geometry = geo;
-        return geometry;
+        return geo;
     }
 });

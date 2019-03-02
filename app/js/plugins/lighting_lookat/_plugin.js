@@ -11,7 +11,7 @@ HC.plugins.lighting_lookat = HC.plugins.lighting_lookat || {};
         }
 
         centerVector() {
-            var v = this.layer.cameraDefaultDistance(.25);
+            let v = this.layer.cameraDefaultDistance(.25);
             return new THREE.Vector3(
                 v * this.settings.lighting_lookat_centerx,
                 v * this.settings.lighting_lookat_centery,

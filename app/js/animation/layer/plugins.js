@@ -2,10 +2,10 @@ HC.Layer.prototype.getPlugin = function (plugin, name) {
 
     if (DEBUG) {
         if (!(plugin in this.plugins)) {
-            throw 'plugin not found: ' + plugin;
+            console.error('plugin not found: ' + plugin);
         }
         if (!(plugin in this.settings)) {
-            throw 'setting not found: ' + plugin;
+            console.error('setting not found: ' + plugin);
         }
     }
 
@@ -13,7 +13,7 @@ HC.Layer.prototype.getPlugin = function (plugin, name) {
 
     if (DEBUG) {
         if (!(name in this.plugins[plugin])) {
-            throw 'plugin not found: ' + plugin + '.' + name;
+            console.error('plugin not found: ' + plugin + '.' + name);
         }
     }
 

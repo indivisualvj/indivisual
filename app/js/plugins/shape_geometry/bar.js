@@ -3,8 +3,7 @@ HC.plugins.shape_geometry.barh = _class(false, HC.ShapeGeometryPlugin, {
     create() {
         var layer = this.layer;
 
-        var geometry = new THREE.PlaneGeometry(layer.shapeSize(1), layer.shapeSize(1) / 10);
-        return geometry;
+        return new THREE.PlaneGeometry(layer.shapeSize(1), layer.shapeSize(1) / 10);
     }
 });
 
@@ -13,7 +12,6 @@ HC.plugins.shape_geometry.barv = _class(false, HC.ShapeGeometryPlugin, {
     create() {
         var layer = this.layer;
 
-        var geometry = new THREE.PlaneGeometry(layer.shapeSize(1) / 10, layer.shapeSize(1));
-        return geometry;
+        return new THREE.PlaneGeometry(layer.shapeSize(1) / 10, layer.shapeSize(1));
     }
 });

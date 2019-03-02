@@ -131,8 +131,10 @@
 
             this.initRotator();
             this.resetAnimation();
-            this.getShapeGeometryPlugin().reset();
-            this.getShapeModifierPlugin().reset();
+            var sgp = this.getShapeGeometryPlugin();
+            if (sgp)sgp.reset();
+            var smp = this.getShapeModifierPlugin();
+            if (smp)smp.reset();
 
             this.shapes = [];
             this.shapeCache = [];

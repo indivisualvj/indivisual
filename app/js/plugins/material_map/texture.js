@@ -1,6 +1,9 @@
 {
     class Plugin extends HC.MaterialMapPlugin {
 
+        texture;
+        loading;
+
         apply(file) {
 
             file = assetman.getImage(file);

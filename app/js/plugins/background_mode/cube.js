@@ -14,8 +14,8 @@
 
                 this.layer.setBackground(mesh);
 
-                var file;
-                if (file = assetman.getImage(this.settings.background_input)) {
+                var file = assetman.getImage(this.settings.background_input);
+                if (file) {
                     new THREE.TextureLoader().load(filePath(IMAGE_DIR, file), function (tex) {
                         tex.wrapS = THREE.RepeatWrapping;
                         tex.repeat.x = -1;

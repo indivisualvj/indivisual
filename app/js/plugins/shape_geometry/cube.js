@@ -18,8 +18,7 @@
 
             let size = layer.shapeSize(1);
 
-            let geometry = new THREE.BoxGeometry(size, size, size, this.getModA(1, 1), this.getModB(1, 1), this.getModC(1, 1));
-            return geometry;
+            return new THREE.BoxGeometry(size, size, size, this.getModA(1, 1), this.getModB(1, 1), this.getModC(1, 1));
         }
     }
 }

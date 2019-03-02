@@ -1,14 +1,15 @@
 {
     HC.plugins.background_mode.texture = class Plugin extends HC.BackgroundModePlugin {
         static index = 40;
+        img;
 
         apply() {
             let i = this.settings.background_input;
             let id = this._id() + i;
-            let file;
 
             if (this.current() != id) {
-                if (file = assetman.getImage(i)) {
+                let file = assetman.getImage(i);
+                if (file) {
                     this.current(id);
                     let inst = this;
                     let path = filePath(IMAGE_DIR, file);

@@ -1,5 +1,6 @@
 { // todo tutorial + explain auch für setControl setDisplay
     HC.audio.microphone = class Plugin extends HC.AudioPlugin {
+        stream;
 
         init(callback) {
 

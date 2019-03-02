@@ -19,7 +19,7 @@ HC.plugins.mesh_material = HC.plugins.mesh_material || {};
             geometry.elementsNeedUpdate = true;
             geometry.verticesNeedUpdate = true;
 
-            var geo;
+            let geo;
             if (geometry.isGeometry) {
                 geo = new THREE.BufferGeometry().fromGeometry(geometry);
 

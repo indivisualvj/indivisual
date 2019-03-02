@@ -5,9 +5,7 @@ HC.plugins.mesh_material.trigonometric = _class(false, HC.MeshMaterialPlugin, {
         listener.register('animation.updateRuntime', 'material.uniforms.uTime.value', function (now) {
             material.uniforms.uTime.value = now;
         });
-        var mesh = new THREE.Mesh(geometry, material);
-
-        return mesh;
+        return new THREE.Mesh(geometry, material);
     },
 
     shader: {

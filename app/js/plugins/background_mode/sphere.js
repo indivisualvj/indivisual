@@ -15,8 +15,8 @@
 
                 this.layer.setBackground(mesh);
 
-                let file;
-                if (file = assetman.getImage(this.settings.background_input)) {
+                let file = assetman.getImage(this.settings.background_input);
+                if (file) {
                     new THREE.TextureLoader().load(filePath(IMAGE_DIR, file), function (tex) {
 
                         // tex.wrapS = THREE.MirroredRepe atWrapping;

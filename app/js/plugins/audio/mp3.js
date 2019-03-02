@@ -23,6 +23,7 @@
     HC.audio.mediafile = class Plugin extends HC.AudioPlugin {
 
         static dropEvent = false;
+        buffer;
 
         init(callback) {
             if (!HC.audio.mediafile.dropEvent) {

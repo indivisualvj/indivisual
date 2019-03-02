@@ -7,7 +7,7 @@
             }
         };
         create() {
-            var layer = this.layer;
+            let layer = this.layer;
 
             return new THREE.OctahedronGeometry(layer.shapeSize(.5), this.getModA(0, 0, 5));
         }

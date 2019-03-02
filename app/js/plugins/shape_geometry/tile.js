@@ -11,9 +11,9 @@
         };
 
         create() {
-            var layer = this.layer;
+            let layer = this.layer;
 
-            var geometry = new HC.RoundedRect(layer.shapeSize(1), this.getModA(1, 1), this.getModB(1, 12)).create();
+            let geometry = new HC.RoundedRect(layer.shapeSize(1), this.getModA(1, 1), this.getModB(1, 12)).create();
             this.assignUVs(geometry);
             return geometry;
         }

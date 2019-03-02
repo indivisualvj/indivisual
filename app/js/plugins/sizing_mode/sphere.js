@@ -1,47 +1,52 @@
-HC.plugins.sizing_mode.sphere = _class(false, HC.SizingModePlugin, {
-    name: 'sphere',
-    apply(shape, revert) {
-        var layer = this.layer;
+{
+    HC.plugins.sizing_mode.sphere = class Plugin extends HC.SizingModePlugin {
+        static name = 'sphere';
+
+        apply(shape, revert) {
+            let layer = this.layer;
 
 
-        var size = this.calculate(shape, revert, layer.patternCenterVector(true));
+            let size = this.calculate(shape, revert, layer.patternCenterVector(true));
 
-        shape.scale(size.x, size.y, size.z);
-    },
-
-    calculate(shape, revert, center) {
-        var s = 1;
-        var layer = this.layer;
-        var pos = shape.position();
-        var dist = Math.max(pos.distanceTo(center), 1);
-        var _dist = layer.resolution().length();
-
-        if (revert) {
-            var diff = (dist - _dist);
-            var f = diff / _dist;
-            s = 1 - f;
-
-        } else {
-            s = dist / _dist;
+            shape.scale(size.x, size.y, size.z);
         }
 
-        if (isNaN(s)) {
-            s = 1;
+        calculate(shape, revert, center) {
+            let s = 1;
+            let layer = this.layer;
+            let pos = shape.position();
+            let dist = Math.max(pos.distanceTo(center), 1);
+            let _dist = layer.resolution().length();
+
+            if (revert) {
+                let diff = (dist - _dist);
+                let f = diff / _dist;
+                s = 1 - f;
+
+            } else {
+                s = dist / _dist;
+            }
+
+            if (isNaN(s)) {
+                s = 1;
+            }
+
+            s *= this.settings.sizing_scale;
+            let x = this.settings.sizing_x * s;
+            let y = this.settings.sizing_y * s;
+            let z = this.settings.sizing_z * s;
+
+            return new THREE.Vector3(x, y, z);
         }
-
-        s *= this.settings.sizing_scale;
-        var x = this.settings.sizing_x * s;
-        var y = this.settings.sizing_y * s;
-        var z = this.settings.sizing_z * s;
-
-        return new THREE.Vector3(x, y, z);
     }
-});
+}
+{
+    HC.plugins.sizing_mode.desphere = class Plugin extends HC.SizingModePlugin {
+        static name = 'desphere';
 
-HC.plugins.sizing_mode.desphere = _class(false, HC.SizingModePlugin, {
-    name: 'desphere',
-    apply(shape) {
-        var layer = this.layer;
-        layer.getSizingModePlugin('sphere').apply(shape, true);
+        apply(shape) {
+            let layer = this.layer;
+            layer.getSizingModePlugin('sphere').apply(shape, true);
+        }
     }
-});
+}

@@ -8,17 +8,17 @@
                 shape.setGeometry(shape.geometry.userData.geometry);
             }
 
-            var vbackup = shape.verticesCopy;
-            var vertices = shape.getVertices();
+            let vbackup = shape.verticesCopy;
+            let vertices = shape.getVertices();
 
             if (vertices && vbackup && this.isFirstShape(shape)) {
 
-                var ai = 0;
-                for (var i = 0; i < vertices.length; i++) {
+                let ai = 0;
+                for (let i = 0; i < vertices.length; i++) {
 
-                    var x = 1, y = 1, z = 1;
+                    let x = 1, y = 1, z = 1;
 
-                    var v = this.settings.shape_sync ? audio.volume : audio.volumes[ai++];
+                    let v = this.settings.shape_sync ? audio.volume : audio.volumes[ai++];
                     if (ai >= audio.volumes.length) { // cycle through frequency volumes until all vertices have data
                         ai = 0;
                     }
@@ -51,8 +51,8 @@
                         z *= v;
                     }
 
-                    var vtc = vertices[i];
-                    var vtcb = vbackup[i];
+                    let vtc = vertices[i];
+                    let vtcb = vbackup[i];
                     vtc.x = vtcb.x * x;
                     vtc.y = vtcb.y * y;
                     vtc.z = vtcb.z * z;

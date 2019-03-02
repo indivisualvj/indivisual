@@ -1,34 +1,35 @@
-HC.plugins.sizing_mode.random = _class(false, HC.SizingModePlugin, {
-    name: 'random',
-    injections: {size: false},
+{
+    HC.plugins.sizing_mode.random = class Plugin extends HC.SizingModePlugin {
+        static name = 'random';
+        injections = {size: false};
 
-    apply(shape, onpeak) {
-        var layer = this.layer;
+        apply(shape, onpeak) {
+            let params = this.params(shape);
+            let s = 1;
+            if (!params.size || (onpeak && audio.peak && randomInt(0, 3) === 0)) {
+                s = randomFloat(0.1, 2.0, 2, false);
+                params.size = s;
 
-        var params = this.params(shape);
-        var s = 1;
-        if (!params.size || (onpeak && audio.peak && randomInt(0, 3) === 0)) {
-            s = randomFloat(0.1, 2.0, 2, false);
-            params.size = s;
+            } else {
+                s = params.size;
+            }
 
-        } else {
-            s = params.size;
+            s *= this.settings.sizing_scale;
+            let x = this.settings.sizing_x * s;
+            let y = this.settings.sizing_y * s;
+            let z = this.settings.sizing_z * s;
+
+            shape.scale(x, y, z);
         }
-
-        s *= this.settings.sizing_scale;
-        var x = this.settings.sizing_x * s;
-        var y = this.settings.sizing_y * s;
-        var z = this.settings.sizing_z * s;
-
-        shape.scale(x, y, z);
     }
-});
+}
+{
+    HC.plugins.sizing_mode.randompeak = class Plugin extends HC.SizingModePlugin {
+        static name = 'random on peak';
 
-HC.plugins.sizing_mode.randompeak = _class(false, HC.SizingModePlugin, {
-    name: 'random on peak',
-
-    apply(shape) {
-        var layer = this.layer;
-        layer.getSizingModePlugin('random').apply(shape, true);
+        apply(shape) {
+            let layer = this.layer;
+            layer.getSizingModePlugin('random').apply(shape, true);
+        }
     }
-});
+}

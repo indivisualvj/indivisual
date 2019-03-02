@@ -3,8 +3,8 @@ HC.plugins.sizing_mode = HC.plugins.sizing_mode || {};
     HC.SizingModePlugin = class Plugin extends HC.AnimationPlugin {
         after(shape) {
             if (this.settings.sizing_audio) {
-                var of = shape.scale();
-                var vo = audio.volume;
+                let of = shape.scale();
+                let vo = audio.volume;
                 if (!this.settings.sizing_sync) {
                     vo = shape.shapeVolume();
                 }

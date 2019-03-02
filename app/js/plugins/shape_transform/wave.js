@@ -19,24 +19,24 @@
                     this.max = 0;
                 }
 
-                var dir = this.settings.shape_transform_volume > 0 ? 1 : -1;
+                let dir = this.settings.shape_transform_volume > 0 ? 1 : -1;
                 this.angle += dir * animation.getFrameDurationPercent(this.layer.getCurrentSpeed().duration, .005);
 
-                var vertices = shape.getVertices();
-                var vbackup = shape.verticesCopy;
+                let vertices = shape.getVertices();
+                let vbackup = shape.verticesCopy;
 
                 if (vertices) {
 
-                    for (var i = 0; i < vertices.length; i++) {
+                    for (let i = 0; i < vertices.length; i++) {
 
-                        var vtc = vertices[i];
-                        var vtcb = vbackup[i];
+                        let vtc = vertices[i];
+                        let vtcb = vbackup[i];
 
-                        var v = vtcb[source];
+                        let v = vtcb[source];
 
                         this.min = Math.min(v, this.min);
                         this.max = Math.max(v, this.max);
-                        var div = Math.abs(this.min - this.max) / 20;
+                        let div = Math.abs(this.min - this.max) / 20;
 
                         v = Math.sin(this.angle * RAD + ((v + .5 * div) / div)) / 2 * Math.abs(this.settings.shape_transform_volume);
 

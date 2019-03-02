@@ -1,17 +1,17 @@
-HC.plugins.pattern_mover.pan = _class(
-    function () {
-        this.mover = {
-            x: 0,
-            y: 0
-        };
-    }, HC.PatternMoverPlugin, {
-        name: 'pan h',
-        injections: {
+{
+    HC.plugins.pattern_mover.pan = class Plugin extends HC.PatternMoverPlugin {
+        static name = 'pan h';
+        injections = {
             panmox: 0,
             panmoy: 0,
             panhox: 0,
             panhoy: 0
-        },
+        };
+
+        mover = {
+            x: 0,
+            y: 0
+        };
 
         apply(shape, vertical) {
             var layer = this.layer;
@@ -74,21 +74,22 @@ HC.plugins.pattern_mover.pan = _class(
 
         }
     }
-);
+}
+{
+    HC.plugins.pattern_mover.panv = class Plugin extends HC.PatternMoverPlugin {
+        static name = 'pan v';
 
-HC.plugins.pattern_mover.panv = _class(false, HC.PatternMoverPlugin, {
-    name: 'pan v',
-    apply(shape) {
-        var layer = this.layer;
-        layer.getPatternMoverPlugin('pan').apply(shape, true);
+        apply(shape) {
+            var layer = this.layer;
+            layer.getPatternMoverPlugin('pan').apply(shape, true);
+        }
     }
-});
+}
+{
+    HC.plugins.pattern_mover.panr = class Plugin extends HC.PatternMoverPlugin {
+        static name = 'pan h|v';
+        dir = false;
 
-HC.plugins.pattern_mover.panr = _class(
-    function () {
-        this.dir = false;
-    }, HC.PatternMoverPlugin, {
-        name: 'pan h|v',
         apply(shape) {
             var layer = this.layer;
             var speed = this.layer.getShapeSpeed(shape);
@@ -102,4 +103,4 @@ HC.plugins.pattern_mover.panr = _class(
             }
         }
     }
-);
+}

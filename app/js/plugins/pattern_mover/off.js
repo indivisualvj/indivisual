@@ -1,6 +1,9 @@
-HC.plugins.pattern_mover.off = _class(false, HC.PatternMoverPlugin, {
-    name: 'off',
-    index: 1,
-    apply() {
+{
+    HC.plugins.pattern_mover.off = class Plugin extends HC.PatternMoverPlugin {
+        static name = 'off';
+        static index = 1;
+
+        apply() {
+        }
     }
-});
+}

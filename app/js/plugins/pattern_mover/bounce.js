@@ -1,34 +1,33 @@
-HC.plugins.pattern_mover.bounce = _class(
-    function () {
-        this.mover = {
+{
+    HC.plugins.pattern_mover.bounce = class Plugin extends HC.PatternMoverPlugin {
+        static name = 'bounce h';
+        mover = {
             x: 0,
             y: 0
         };
-    }, HC.PatternMoverPlugin, {
-        name: 'bounce h',
-        injections: {
+        injections = {
             panmox: 0,
             panmoy: 0,
             panhox: 0,
             panhoy: 0
-        },
+        };
 
         apply(shape, vertical) {
-            var layer = this.layer;
+            let layer = this.layer;
 
-            var patternPlugin = layer.getPatternPlugin();
-            var shared = patternPlugin.sharedMoverParams();
+            let patternPlugin = layer.getPatternPlugin();
+            let shared = patternPlugin.sharedMoverParams();
 
-            var gapx = shared.gap.x;
-            var gapy = shared.gap.y;
-            var ox = shared.offset.x;
-            var oy = shared.offset.y;
+            let gapx = shared.gap.x;
+            let gapy = shared.gap.y;
+            let ox = shared.offset.x;
+            let oy = shared.offset.y;
 
             if (this.isFirstShape(shape)) {
-                var shapeDir = layer.getShapeDirection(shape);
-                var jump = this.settings.pattern_padding * shapeDir;
+                let shapeDir = layer.getShapeDirection(shape);
+                let jump = this.settings.pattern_padding * shapeDir;
 
-                var speed = layer.getCurrentSpeed();
+                let speed = layer.getCurrentSpeed();
                 jump *= animation.diffPrc * (layer.shapeSize(1) * shape.size() * speed.prc) / 4;
 
                 if (vertical) {
@@ -39,17 +38,17 @@ HC.plugins.pattern_mover.bounce = _class(
                 }
             }
 
-            var pos = shape.position().clone();
+            let pos = shape.position().clone();
             pos.sub(layer.patternCenterVector());
-            var x = pos.x;
-            var y = pos.y;
-            var z = pos.z;
-            var px = this.mover.x;
-            var py = this.mover.y;
+            let x = pos.x;
+            let y = pos.y;
+            let z = pos.z;
+            let px = this.mover.x;
+            let py = this.mover.y;
 
-            var params = this.params(shape);
-            var matrix = layer.getPatternPlugin('matrix');
-            var spanx = matrix.columnCount(layer) * gapx;
+            let params = this.params(shape);
+            let matrix = layer.getPatternPlugin('matrix');
+            let spanx = matrix.columnCount(layer) * gapx;
 
             if (px + x + params.panmox > ox + spanx) {
                 params.panmox -= spanx;
@@ -60,7 +59,7 @@ HC.plugins.pattern_mover.bounce = _class(
 
             x += px + params.panmox;
 
-            var spany = matrix.rowCount(layer) * gapy;
+            let spany = matrix.rowCount(layer) * gapy;
 
             if (py + y + params.panmoy > oy + spany) {
                 params.panmoy -= spany;
@@ -74,24 +73,25 @@ HC.plugins.pattern_mover.bounce = _class(
             layer.positionIn3dSpace(shape, x, y, z);
         }
     }
-);
+}
+{
+    HC.plugins.pattern_mover.bouncev = class Plugin extends HC.PatternMoverPlugin {
+        static name = 'bounce v';
 
-HC.plugins.pattern_mover.bouncev = _class(false, HC.PatternMoverPlugin, {
-    name: 'bounce v',
-    apply(shape) {
-        var layer = this.layer;
-        layer.getPatternMoverPlugin('bounce').apply(shape, true);
-    }
-});
-
-HC.plugins.pattern_mover.bouncer = _class(
-    function () {
-        this.dir = false;
-    }, HC.PatternMoverPlugin, {
-        name: 'bounce h|v',
         apply(shape) {
-            var layer = this.layer;
-            var speed = this.layer.getShapeSpeed(shape);
+            let layer = this.layer;
+            layer.getPatternMoverPlugin('bounce').apply(shape, true);
+        }
+    }
+}
+{
+    HC.plugins.pattern_mover.bouncer = class Plugin extends HC.PatternMoverPlugin {
+        static name = 'bounce h|v';
+        dir = false;
+
+        apply(shape) {
+            let layer = this.layer;
+            let speed = this.layer.getShapeSpeed(shape);
             if (this.isFirstShape(shape) && speed.prc == 0) {
                 this.dir = randomBool();
             }
@@ -102,4 +102,4 @@ HC.plugins.pattern_mover.bouncer = _class(
             }
         }
     }
-);
+}

@@ -1,5 +1,11 @@
 {
     HC.plugins.shape_geometry.bacillus = class Plugin extends HC.ShapeGeometryPlugin {
+        static tutorial = {
+            shape_moda: {
+                text: 'set the initial direction of the shape'
+            }
+        };
+
         create() {
             let layer = this.layer;
 

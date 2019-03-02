@@ -53,6 +53,12 @@
 }
 {
     HC.plugins.shape_geometry.cframe = class Plugin extends HC.ShapeGeometryPlugin {
+        static tutorial = {
+            shape_moda: {
+                text: 'set shape variant'
+            }
+        };
+
         create() {
             let layer = this.layer;
 
@@ -71,6 +77,12 @@
 }
 {
     HC.plugins.shape_geometry.cring = class Plugin extends HC.ShapeGeometryPlugin {
+        static tutorial = {
+            shape_moda: {
+                text: 'set shape variant'
+            }
+        };
+
         create() {
             let layer = this.layer;
 

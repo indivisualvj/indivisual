@@ -1,6 +1,11 @@
 {
     HC.plugins.shape_geometry.barbell = class Plugin extends HC.ShapeGeometryPlugin {
         static name = 'barbell';
+        static tutorial = {
+            shape_moda: {
+                text: 'set the initial direction of the shape'
+            }
+        };
 
         create() {
             let layer = this.layer;
@@ -24,6 +29,8 @@
             cmesh.position.set(-layer.shapeSize(.5), layer.shapeSize(.5), 0);
             cmesh.updateMatrix();
             geo.merge(cmesh.geometry, cmesh.matrix);
+
+            geo.rotateZ(45 * RAD * this.getModA(0, 0));
 
             return geo;
         }

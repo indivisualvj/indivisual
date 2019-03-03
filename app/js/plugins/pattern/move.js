@@ -7,14 +7,14 @@ HC.plugins.pattern.move = class Plugin extends HC.PatternPlugin {
     },
 
     apply(shape) {
-        var layer = this.layer;
+        let layer = this.layer;
 
 
-        var params = this.params(shape);
+        let params = this.params(shape);
 
-        var x = shape.x();
-        var y = shape.y();
-        var z = shape.z();
+        let x = shape.x();
+        let y = shape.y();
+        let z = shape.z();
 
         if (!params.velocity) {
 
@@ -27,11 +27,11 @@ HC.plugins.pattern.move = class Plugin extends HC.PatternPlugin {
 
         }
 
-        var roto = shape.rotation();
-        var dir = new THREE.Vector3(0, 0, 1);
+        let roto = shape.rotation();
+        let dir = new THREE.Vector3(0, 0, 1);
         dir.applyEuler(roto);
 
-        var m = params.velocity * animation.diffPrc * this.settings.pattern_padding;
+        let m = params.velocity * animation.diffPrc * this.settings.pattern_padding;
         dir.multiplyScalar(m);
 
         shape.position().add(dir);

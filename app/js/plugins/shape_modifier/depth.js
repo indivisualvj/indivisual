@@ -3,14 +3,14 @@
         static name = 'depth center';
 
         create(geometry, mode) {
-            var layer = this.layer;
-            var z = 0;
+            let layer = this.layer;
+            let z = 0;
 
-            var vertices = geometry.vertices;
+            let vertices = geometry.vertices;
             geometry.center();
 
-            for (var i = 0; i < vertices.length; i++) {
-                var vtc = vertices[i];
+            for (let i = 0; i < vertices.length; i++) {
+                let vtc = vertices[i];
 
                 switch (mode) {
 

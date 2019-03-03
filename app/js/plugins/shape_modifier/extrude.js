@@ -8,10 +8,10 @@
         };
 
         create(geometry) {
-            var layer = this.layer;
+            let layer = this.layer;
 
-            var shape;
-            var moved = false;
+            let shape;
+            let moved = false;
 
             if (geometry.parameters && geometry.parameters.shapes) {
                 shape = geometry.parameters.shapes;
@@ -20,10 +20,10 @@
                 shape = new THREE.Shape();
                 geometry.center();
 
-                var vertices = geometry.vertices;
+                let vertices = geometry.vertices;
 
-                for (var i in vertices) {
-                    var v = vertices[i];
+                for (let i in vertices) {
+                    let v = vertices[i];
 
                     if (v.x != 0 || v.y != 0) {
                         if (moved === false) {
@@ -36,7 +36,7 @@
                     }
                 }
                 if (moved !== false) {
-                    var v = vertices[moved];
+                    let v = vertices[moved];
                     shape.lineTo(v.x, v.y);
 
                 } else {
@@ -45,7 +45,7 @@
             }
 
             if (shape) {
-                var conf = {
+                let conf = {
                     steps: 1,
                     depth: layer.shapeSize(this.settings.shape_modifier_volume),
                     bevelEnabled: this.settings.shape_modc,

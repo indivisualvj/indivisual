@@ -7,10 +7,10 @@
         };
 
         apply(shape) {
-            var layer = this.layer;
+            let layer = this.layer;
 
-            var speed = layer.getShapeSpeed(shape);
-            var params = this.params(shape);
+            let speed = layer.getShapeSpeed(shape);
+            let params = this.params(shape);
 
             if (!params.tween && speed.prc == 0) {
 
@@ -18,7 +18,7 @@
                     this.next = layer.random3dPosition(.5, layer.shapeSize(1));
                 }
 
-                var tween = this.tweenShape(shape, params.current, this.next);
+                let tween = this.tweenShape(shape, params.current, this.next);
                 tween.easing(TWEEN.Easing.Quadratic.InOut);
                 tween.onUpdate(function () {
                     layer.positionIn3dSpace(shape, params.current.x, params.current.y, params.current.z);

@@ -7,7 +7,7 @@
                 e.preventDefault();
             }, false);
 
-            var onDocumentDrop = function (e) {
+            let onDocumentDrop = function (e) {
                 e.preventDefault();
 
                 if (e.dataTransfer.files.length) {
@@ -45,18 +45,18 @@
         }
 
         onDrop(evt, callback) {
-            var inst = this;
-            var droppedFiles = evt.dataTransfer.files;
-            var reader = new FileReader();
+            let inst = this;
+            let droppedFiles = evt.dataTransfer.files;
+            let reader = new FileReader();
             reader.onload = function (fileEvent) {
-                var data = fileEvent.target.result;
+                let data = fileEvent.target.result;
                 inst.onLoaded(data, callback);
             };
             reader.readAsArrayBuffer(droppedFiles[0]);
         }
 
         onLoaded(data, callback) {
-            var inst = this;
+            let inst = this;
 
             if (this.context.decodeAudioData) {
                 this.context.decodeAudioData(

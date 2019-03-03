@@ -10,15 +10,15 @@
         };
 
         apply(shape) {
-            var layer = this.layer;
+            let layer = this.layer;
 
 
-            var params = this.params(shape);
-            var matrix = layer.getPatternPlugin('matrix');
-            var gridPosition = matrix.gridPosition(shape);
-            var gap = layer.shapeSize(1) * this.settings.pattern_padding;
-            var ox = (layer.patternCenterX() * 2 - gap * matrix.columnCount(layer)) / 2 - layer.shapeSize(.5);
-            var x = 0, y = 0, z = 0;
+            let params = this.params(shape);
+            let matrix = layer.getPatternPlugin('matrix');
+            let gridPosition = matrix.gridPosition(shape);
+            let gap = layer.shapeSize(1) * this.settings.pattern_padding;
+            let ox = (layer.patternCenterX() * 2 - gap * matrix.columnCount(layer)) / 2 - layer.shapeSize(.5);
+            let x = 0, y = 0, z = 0;
 
             if (!params.velocity.y) {
                 x = ox + gridPosition.x * gap;
@@ -48,9 +48,9 @@
                 params.velocity.z = randomFloat(0.03, 0.4, 3, true);
             }
 
-            var vx = params.velocity.x * animation.diff * this.settings.pattern_paddingx;
-            var vy = params.velocity.y * animation.diff * this.settings.pattern_paddingy;
-            var vz = params.velocity.z * animation.diff * this.settings.pattern_paddingz;
+            let vx = params.velocity.x * animation.diff * this.settings.pattern_paddingx;
+            let vy = params.velocity.y * animation.diff * this.settings.pattern_paddingy;
+            let vz = params.velocity.z * animation.diff * this.settings.pattern_paddingz;
 
             shape.move(vx, vy, vz);
         }

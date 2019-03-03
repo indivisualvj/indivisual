@@ -3,13 +3,13 @@
         static name = 'plus90';
 
         apply(shape) {
-            var layer = this.layer;
+            let layer = this.layer;
 
-            var a = 90;
+            let a = 90;
 
-            var x = a * this.settings.rotation_offsetx;
-            var y = a * this.settings.rotation_offsety;
-            var z = a * this.settings.rotation_offsetz;
+            let x = a * this.settings.rotation_offsetx;
+            let y = a * this.settings.rotation_offsety;
+            let z = a * this.settings.rotation_offsetz;
 
             shape.rotationOffset(x, y, z);
         }

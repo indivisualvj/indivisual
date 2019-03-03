@@ -7,26 +7,26 @@
             source = source || 'y';
             axes = axes || new THREE.Vector3(1, 1, 1);
 
-            var vertices = geometry.vertices;
+            let vertices = geometry.vertices;
 
             if (vertices) {
 
                 this.min = this.max = 0;
 
-                for (var i = 0; i < vertices.length; i++) {
+                for (let i = 0; i < vertices.length; i++) {
 
-                    var vtc = vertices[i];
-                    var v = vtc[source];
+                    let vtc = vertices[i];
+                    let v = vtc[source];
 
                     this.min = Math.min(v, this.min);
                     this.max = Math.max(v, this.max);
                 }
 
-                for (var i = 0; i < vertices.length; i++) {
+                for (let i = 0; i < vertices.length; i++) {
 
-                    var vtc = vertices[i];
-                    var v = vtc[source] * this.settings.shape_modifier_volume;
-                    var div = Math.abs(this.min - this.max);
+                    let vtc = vertices[i];
+                    let v = vtc[source] * this.settings.shape_modifier_volume;
+                    let div = Math.abs(this.min - this.max);
                     v /= div;
 
                     vtc.x += vtc.x * v * axes.x;

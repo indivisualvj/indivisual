@@ -6,7 +6,7 @@
 
         apply(shape) {
 
-            var params = this.params(shape);
+            let params = this.params(shape);
 
             if (params.tween) {
                 // apply is only called if duration is over.
@@ -18,13 +18,13 @@
                 this.degrees(shape);
             }
 
-            var easing = this.easing();
+            let easing = this.easing();
 
-            var _onUpdate = function () {
+            let _onUpdate = function () {
                 // console.log('update');
                 shape.rotation(params.current.x, params.current.y, params.current.z);
             };
-            var _onComplete = function () {
+            let _onComplete = function () {
                 // console.log('complete');
                 params.next.x = params.current.x %= 360;
                 params.next.y = params.current.y %= 360;
@@ -34,7 +34,7 @@
 
                 params.tween = false;
             };
-            var _onStop = function () {
+            let _onStop = function () {
                 // console.log('stop');
                 params.current.x = params.next.x;
                 params.current.y = params.next.y;
@@ -43,7 +43,7 @@
                 _onComplete();
             };
 
-            var tween = this.tweenShape(shape, params.current, params.next);
+            let tween = this.tweenShape(shape, params.current, params.next);
             tween.easing(easing);
             tween.onUpdate(_onUpdate);
             tween.onComplete(_onComplete);
@@ -54,7 +54,7 @@
         }
 
         easing() {
-            var easing = this.settings.rotation_easing;
+            let easing = this.settings.rotation_easing;
             switch (easing) {
                 case 'quint':
                     return TWEEN.Easing.Quintic.InOut;
@@ -77,22 +77,22 @@
 
         degrees(shape) {
 
-            var layer = this.layer;
-            var params = this.params(shape);
+            let layer = this.layer;
+            let params = this.params(shape);
 
-            var degrees = 90;
-            var sync = this.settings.rotation_sync;
+            let degrees = 90;
+            let sync = this.settings.rotation_sync;
 
             if (!sync) {
                 degrees = randomInt(Math.round(degrees / 2), degrees);
             }
 
-            var dir = layer.getShapeDirection(shape);
+            let dir = layer.getShapeDirection(shape);
             degrees *= dir;
 
-            var dx = this.settings.rotation_x_volume * degrees;
-            var dy = this.settings.rotation_y_volume * degrees;
-            var dz = this.settings.rotation_z_volume * degrees;
+            let dx = this.settings.rotation_x_volume * degrees;
+            let dy = this.settings.rotation_y_volume * degrees;
+            let dz = this.settings.rotation_z_volume * degrees;
 
             if (this.settings.rotation_x && (!this.settings.rotation_x_random || randomBool())) {
                 params.next.x += dx;

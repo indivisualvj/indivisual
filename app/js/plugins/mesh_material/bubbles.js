@@ -1,7 +1,7 @@
 {
     HC.plugins.mesh_material.bubbles = class Plugin extends HC.MeshMaterialPlugin {
         apply(geometry) {
-            var material = new THREE.ShaderMaterial(this.shader);
+            let material = new THREE.ShaderMaterial(this.shader);
             material.color = new THREE.Color();
             listener.register('animation.updateRuntime', 'material.uniforms.uTime.value', function (now) {
                 material.uniforms.uTime.value = now;

@@ -3,7 +3,7 @@
         static index = 1;
 
         apply(geometry) {
-            var material = new THREE.MeshPhongMaterial();
+            let material = new THREE.MeshPhongMaterial();
             return new THREE.Mesh(geometry, material);
         }
     }

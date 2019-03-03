@@ -3,15 +3,15 @@
         static name = 'chess45lr';
 
         apply(shape) {
-            var a = 45;
+            let a = 45;
             if (shape.index % 2 == 0) {
             } else {
                 a *= -1;
             }
 
-            var x = a * this.settings.rotation_offsetx;
-            var y = a * this.settings.rotation_offsety;
-            var z = a * this.settings.rotation_offsetz;
+            let x = a * this.settings.rotation_offsetx;
+            let y = a * this.settings.rotation_offsety;
+            let z = a * this.settings.rotation_offsetz;
 
             shape.rotationOffset(x, y, z);
         }
@@ -22,15 +22,15 @@
         static name = 'chess90lr';
 
         apply(shape) {
-            var a = 90;
+            let a = 90;
             if (shape.index % 2 == 0) {
             } else {
                 a *= -1;
             }
 
-            var x = a * this.settings.rotation_offsetx;
-            var y = a * this.settings.rotation_offsety;
-            var z = a * this.settings.rotation_offsetz;
+            let x = a * this.settings.rotation_offsetx;
+            let y = a * this.settings.rotation_offsety;
+            let z = a * this.settings.rotation_offsetz;
 
             shape.rotationOffset(x, y, z);
         }
@@ -41,18 +41,18 @@
         static name = 'chessrowslr';
 
         apply(shape) {
-            var layer = this.layer;
+            let layer = this.layer;
 
-            var a = 90;
-            var gridPosition = layer.getPatternPlugin('matrix').gridPosition(shape);
+            let a = 90;
+            let gridPosition = layer.getPatternPlugin('matrix').gridPosition(shape);
             if (gridPosition.y % 2 == 0) {
             } else {
                 a *= -1;
             }
 
-            var x = a * this.settings.rotation_offsetx;
-            var y = a * this.settings.rotation_offsety;
-            var z = a * this.settings.rotation_offsetz;
+            let x = a * this.settings.rotation_offsetx;
+            let y = a * this.settings.rotation_offsety;
+            let z = a * this.settings.rotation_offsetz;
 
             shape.rotationOffset(x, y, z);
         }
@@ -63,17 +63,17 @@
         static name = 'chesscolumnslr';
 
         apply(shape) {
-            var layer = this.layer;
-            var gridPosition = layer.getPatternPlugin('matrix').gridPosition(shape);
-            var a = 90;
+            let layer = this.layer;
+            let gridPosition = layer.getPatternPlugin('matrix').gridPosition(shape);
+            let a = 90;
             if (gridPosition.x % 2 == 0) {
             } else {
                 a *= -1;
             }
 
-            var x = a * this.settings.rotation_offsetx;
-            var y = a * this.settings.rotation_offsety;
-            var z = a * this.settings.rotation_offsetz;
+            let x = a * this.settings.rotation_offsetx;
+            let y = a * this.settings.rotation_offsety;
+            let z = a * this.settings.rotation_offsetz;
 
             shape.rotationOffset(x, y, z);
         }

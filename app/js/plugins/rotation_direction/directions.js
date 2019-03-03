@@ -4,13 +4,13 @@
 
         // place at the start for random
         apply(shape) {
-            var layer = this.layer;
-            var params = this.params(shape);
+            let layer = this.layer;
+            let params = this.params(shape);
 
-            var keys = Object.keys(statics.AnimationValues.rotation_direction);
+            let keys = Object.keys(statics.AnimationValues.rotation_direction);
             params.mode = keys[randomInt(1, keys.length - 1)];
 
-            var plugin = layer.getRotationDirectionPlugin(params.mode);
+            let plugin = layer.getRotationDirectionPlugin(params.mode);
             plugin.apply(shape);
 
             params.dir = plugin.params(shape).dir;

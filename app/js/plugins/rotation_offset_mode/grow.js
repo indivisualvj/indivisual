@@ -3,13 +3,13 @@
         static name = 'grow';
 
         apply(shape) {
-            var layer = this.layer;
-            var part = 360 / layer.shapeCount();
-            var a = part * (shape.index + 1);
+            let layer = this.layer;
+            let part = 360 / layer.shapeCount();
+            let a = part * (shape.index + 1);
 
-            var x = a * this.settings.rotation_offsetx;
-            var y = a * this.settings.rotation_offsety;
-            var z = a * this.settings.rotation_offsetz;
+            let x = a * this.settings.rotation_offsetx;
+            let y = a * this.settings.rotation_offsety;
+            let z = a * this.settings.rotation_offsetz;
 
             shape.rotationOffset(x, y, z);
         }
@@ -20,13 +20,13 @@
         static name = 'growingfour45';
 
         apply(shape) {
-            var a = 45;
-            var mod = shape.index % 4;
+            let a = 45;
+            let mod = shape.index % 4;
             a *= (mod + 1);
 
-            var x = a * this.settings.rotation_offsetx;
-            var y = a * this.settings.rotation_offsety;
-            var z = a * this.settings.rotation_offsetz;
+            let x = a * this.settings.rotation_offsetx;
+            let y = a * this.settings.rotation_offsety;
+            let z = a * this.settings.rotation_offsetz;
 
             shape.rotationOffset(x, y, z);
         }

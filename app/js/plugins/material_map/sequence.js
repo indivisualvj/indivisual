@@ -2,15 +2,15 @@
     class Plugin extends HC.MaterialMapPlugin {
 
         apply(i) {
-            var seq = sourceman.getSequence(i);
-            var image = seq.current(renderer.current(), true);
+            let seq = sourceman.getSequence(i);
+            let image = seq.current(renderer.current(), true);
 
             if (image) {
                 if (!this.texture) {
                     this.initTexture(image);
                 }
 
-                var map = this.texture;
+                let map = this.texture;
                 this.updateTexture(map, image);
 
                 return image._color;
@@ -23,10 +23,10 @@
         }
 
         updateTexture(map, image) {
-            var img = map.image;
+            let img = map.image;
             if (img) {
-                var width = map.image.width;
-                var height = map.image.height;
+                let width = map.image.width;
+                let height = map.image.height;
                 if (img._ctx) {
                     img._ctx.clearRect(0, 0, width, height);
                     img._ctx.drawImage(image, img._clipX, img._clipY, width, height, 0, 0, width, height);
@@ -37,22 +37,22 @@
         }
 
         initTexture(image) {
-            var edge = Math.min(image.width, image.height);
-            var nearest = THREE.Math.floorPowerOfTwo(edge);
+            let edge = Math.min(image.width, image.height);
+            let nearest = THREE.Math.floorPowerOfTwo(edge);
             while (nearest > edge) {
                 nearest /= 2;
                 nearest = THREE.Math.floorPowerOfTwo(nearest);
             }
             edge = nearest;
 
-            var canvas = document.createElement('canvas');
+            let canvas = document.createElement('canvas');
             canvas.width = edge;
             canvas.height = edge;
             canvas._ctx = canvas.getContext('2d');
             canvas._clipX = (image.width - edge) / 2;
             canvas._clipY = (image.height - edge) / 2;
 
-            var tex = new THREE.CanvasTexture(canvas);
+            let tex = new THREE.CanvasTexture(canvas);
             this.texture = tex;
         }
     }

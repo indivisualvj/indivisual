@@ -1,12 +1,12 @@
 // todo shadows for shaderMaterials?
-// var geometry = new THREE.BoxBufferGeometry( 10, 10, 10 );
+// let geometry = new THREE.BoxBufferGeometry( 10, 10, 10 );
 // geometry.clearGroups();
 // geometry.addGroup( 0, Infinity, 0 );
 // geometry.addGroup( 0, Infinity, 1 );
 // geometry.addGroup( 0, Infinity, 2 );
 // geometry.addGroup( 0, Infinity, 3 );
 //
-// var materials = [ material0, material1, material2, material3 ];
+// let materials = [ material0, material1, material2, material3 ];
 //
 //
 // mesh = new THREE.Mesh( geometry, materials );
@@ -14,7 +14,7 @@
 {
     HC.plugins.mesh_material.monjori = class Plugin extends HC.MeshMaterialPlugin {
         apply(geometry) {
-            var material = new THREE.ShaderMaterial(this.shader);
+            let material = new THREE.ShaderMaterial(this.shader);
             material.color = new THREE.Color();
             listener.register('animation.updateRuntime', 'material.uniforms.uTime.value', function (now) {
                 material.uniforms.uTime.value = now;

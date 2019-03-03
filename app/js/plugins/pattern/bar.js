@@ -18,10 +18,10 @@
         };
 
         apply(shape) {
-            var layer = this.layer;
+            let layer = this.layer;
 
-            var params = this.params(shape);
-            var speed = layer.getShapeSpeed(shape);
+            let params = this.params(shape);
+            let speed = layer.getShapeSpeed(shape);
 
             if (!params.tween && speed.prc == 0) {
 
@@ -30,8 +30,8 @@
                     this.position = randomInt(0, this.orientation ? layer.resolution('half').y : layer.resolution('half').x, true);
                 }
 
-                var from = params.current;
-                var to = {
+                let from = params.current;
+                let to = {
                     x: 0,
                     y: 0,
                 };
@@ -44,7 +44,7 @@
                     to.y = -layer.resolution('half').y + layer.resolution().y / layer.shapeCount() * randomInt(0, layer.shapeCount());
                 }
 
-                var tween = this.tweenShape(shape, from, to);
+                let tween = this.tweenShape(shape, from, to);
                 tween.easing(TWEEN.Easing.Quadratic.InOut);
                 tween.onUpdate(function () {
                     layer.positionIn3dSpace(shape, from.x, from.y, from.z);

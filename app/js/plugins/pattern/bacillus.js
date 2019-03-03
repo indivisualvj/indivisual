@@ -4,17 +4,17 @@
         injections = {velocity: false};
 
         apply(shape, move) {
-            var layer = this.layer;
+            let layer = this.layer;
 
-            var speed = layer.getShapeSpeed(shape);
-            var params = this.params(shape);
+            let speed = layer.getShapeSpeed(shape);
+            let params = this.params(shape);
 
-            var prcp = layer.resolution().x / 600;
-            var prcn = prcp * -1;
+            let prcp = layer.resolution().x / 600;
+            let prcn = prcp * -1;
 
-            var avx = randomInt(prcn, prcp) / shape.size() * this.settings.pattern_padding * this.settings.pattern_paddingx;
-            var avy = randomInt(move === true ? 0 : prcn, prcp) / shape.size() * this.settings.pattern_padding * this.settings.pattern_paddingy;
-            var avz = randomInt(prcn, prcp) / shape.size() * this.settings.pattern_padding * this.settings.pattern_paddingz;
+            let avx = randomInt(prcn, prcp) / shape.size() * this.settings.pattern_padding * this.settings.pattern_paddingx;
+            let avy = randomInt(move === true ? 0 : prcn, prcp) / shape.size() * this.settings.pattern_padding * this.settings.pattern_paddingy;
+            let avz = randomInt(prcn, prcp) / shape.size() * this.settings.pattern_padding * this.settings.pattern_paddingz;
 
             if (!params.velocity) {
                 params.velocity = new THREE.Vector3(avx, avy, avz);
@@ -22,8 +22,8 @@
                 shape.position().copy(layer.random2dPosition(0), layer.shapeSize(1));
             }
 
-            var mpc = animation.diffPrc * 0.3;
-            var accelerator = audio.peak ? 3.5 : 2.5;
+            let mpc = animation.diffPrc * 0.3;
+            let accelerator = audio.peak ? 3.5 : 2.5;
 
             params.velocity.x += mpc * avx;
             params.velocity.x *= (audio.peak || speed.progress <= 0) ? accelerator * this.settings.pattern_padding : 0.90;
@@ -72,7 +72,7 @@
 
             if (move === true) {
 
-                var dir = this.boundsCheck(shape, layer.shapeSize(shape.size()));
+                let dir = this.boundsCheck(shape, layer.shapeSize(shape.size()));
                 if (dir.x < 0) {
                     shape.x(-layer.shapeSize(shape.size()));
                 } else if (dir.x > 0) {
@@ -84,7 +84,7 @@
                     shape.y(layer.resolution().y + layer.shapeSize(shape.size()));
                 }
 
-                var a = shape.rotation().z;
+                let a = shape.rotation().z;
                 shape.move(
                     params.velocity.y * Math.sin(a),
                     -params.velocity.y * Math.cos(a),

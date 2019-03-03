@@ -4,7 +4,7 @@
 
         init(callback) {
 
-            var inst = this;
+            let inst = this;
             if (navigator.mediaDevices.getUserMedia) {
 
                 try {

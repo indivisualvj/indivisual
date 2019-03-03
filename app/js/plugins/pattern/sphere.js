@@ -4,14 +4,14 @@ HC.plugins.pattern.sphere = class Plugin extends HC.PatternPlugin {
     points: {},
 
     apply(shape) {
-        var layer = this.layer;
+        let layer = this.layer;
 
 
-        var point = this.spherePosition(shape);
-        var radius = layer.resolution('half').y * this.settings.pattern_padding;
+        let point = this.spherePosition(shape);
+        let radius = layer.resolution('half').y * this.settings.pattern_padding;
 
         if (this.settings.pattern_audio) {
-            var or = radius;
+            let or = radius;
             if (this.settings.pattern_sync) {
                 radius *= audio.volume;
             } else {
@@ -23,25 +23,25 @@ HC.plugins.pattern.sphere = class Plugin extends HC.PatternPlugin {
             }
         }
 
-        var px = this.settings.pattern_paddingx;
-        var py = this.settings.pattern_paddingy;
-        var pz = this.settings.pattern_paddingz;
-        var x = point.x * radius * px;
-        var y = point.y * radius * py;
-        var z = point.z * radius * pz;
+        let px = this.settings.pattern_paddingx;
+        let py = this.settings.pattern_paddingy;
+        let pz = this.settings.pattern_paddingz;
+        let x = point.x * radius * px;
+        let y = point.y * radius * py;
+        let z = point.z * radius * pz;
 
         layer.positionIn3dSpace(shape, x, y, z);
     },
 
     getDistributionOnSphere(n) {
-        var rnd = 1;
-        var offset = 2 / n;
-        var increment = Math.PI * (3 - Math.sqrt(5));
+        let rnd = 1;
+        let offset = 2 / n;
+        let increment = Math.PI * (3 - Math.sqrt(5));
 
         return Array(n).fill(null).map(function (_, i) {
-            var y = i * offset - 1 + offset / 2;
-            var r = Math.sqrt(1 - Math.pow(y, 2));
-            var phi = (i + rnd) % n * increment;
+            let y = i * offset - 1 + offset / 2;
+            let r = Math.sqrt(1 - Math.pow(y, 2));
+            let phi = (i + rnd) % n * increment;
 
             return {
                 x: Math.cos(phi) * r,
@@ -53,7 +53,7 @@ HC.plugins.pattern.sphere = class Plugin extends HC.PatternPlugin {
     },
 
     spherePosition(shape) {
-        var layer = this.layer;
+        let layer = this.layer;
         if (!this.points || this.points.length != layer.shapeCount()) {
             this.points = this.getDistributionOnSphere(layer.shapeCount());
         }
@@ -68,10 +68,10 @@ HC.plugins.pattern.spray = class Plugin extends HC.PatternPlugin {
     injections = {initial: false, velocity: false},
 
     apply(shape) {
-        var layer = this.layer;
+        let layer = this.layer;
 
 
-        var params = this.params(shape);
+        let params = this.params(shape);
 
         if (!params.initial
             || shape.y() < 0 - layer.shapeSize(1)
@@ -80,8 +80,8 @@ HC.plugins.pattern.spray = class Plugin extends HC.PatternPlugin {
             || shape.x() > layer.resolution().x + layer.shapeSize(1)
         ) {
             layer.getPatternPlugin('sphere').apply(shape);
-            var sp = shape.position().clone();
-            var cv = layer.patternCenterVector(true);
+            let sp = shape.position().clone();
+            let cv = layer.patternCenterVector(true);
             sp.sub(cv);
             params.initial = sp;
             shape.position().copy(cv);
@@ -89,7 +89,7 @@ HC.plugins.pattern.spray = class Plugin extends HC.PatternPlugin {
             params.velocity = randomFloat(0.1, 1, 2, false);
         }
 
-        var v = this.settings.pattern_audio == true
+        let v = this.settings.pattern_audio == true
             ? ((this.settings.pattern_sync == false
                 ? shape.shapeVolume() : audio.volume) * this.settings.pattern_padding) : 1;
 
@@ -100,7 +100,7 @@ HC.plugins.pattern.spray = class Plugin extends HC.PatternPlugin {
             params.velocity *= 0.9;
         }
 
-        var frame = params.velocity * animation.diff / 350;
+        let frame = params.velocity * animation.diff / 350;
 
         shape.move(
             params.initial.x * frame,
@@ -119,10 +119,10 @@ HC.plugins.pattern.pulse = class Plugin extends HC.PatternPlugin {
         volume: false
     },
     apply(shape) {
-        var layer = this.layer;
+        let layer = this.layer;
 
 
-        var params = this.params(shape);
+        let params = this.params(shape);
 
         if (!params.initial // wenn man immer da rein fällt gibts ein tolles gerumble!
             || shape.y() < 0 - layer.shapeSize(1)
@@ -133,8 +133,8 @@ HC.plugins.pattern.pulse = class Plugin extends HC.PatternPlugin {
             || shape.z() < -layer.cameraDefaultDistance()
         ) {
             layer.getPatternPlugin('sphere').apply(shape);
-            var sp = shape.position().clone();
-            var cv = layer.patternCenterVector(true);
+            let sp = shape.position().clone();
+            let cv = layer.patternCenterVector(true);
             sp.sub(cv);
             params.initial = sp;
             shape.position().copy(cv);
@@ -143,7 +143,7 @@ HC.plugins.pattern.pulse = class Plugin extends HC.PatternPlugin {
 
         }
 
-        var speed = layer.getShapeSpeed(shape);
+        let speed = layer.getShapeSpeed(shape);
         if (speed.progress < 1) { //
             params.velocity *= -1;
 
@@ -158,7 +158,7 @@ HC.plugins.pattern.pulse = class Plugin extends HC.PatternPlugin {
             }
         }
 
-        var frame = params.velocity * animation.diff / 250;
+        let frame = params.velocity * animation.diff / 250;
 
         shape.move(
             params.initial.x * frame,
@@ -173,7 +173,7 @@ HC.plugins.pattern.drift = class Plugin extends HC.PatternPlugin {
     static name = 'drift';
 
     apply(shape) {
-        var layer = this.layer;
+        let layer = this.layer;
         layer.getPatternPlugin('spray').apply(shape);
     }
 });

@@ -1,4 +1,4 @@
-var TWEEN = TWEEN || {
+let TWEEN = TWEEN || {
     Easing: {}
 };
 

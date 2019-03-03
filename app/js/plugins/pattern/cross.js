@@ -3,18 +3,18 @@
         static name = 'cross';
 
         apply(shape) {
-            var layer = this.layer;
+            let layer = this.layer;
 
 
-            var index = shape.index;
-            var mod = index % 4;
-            var x = 0;
-            var y = 0;
-            var z = 0;
+            let index = shape.index;
+            let mod = index % 4;
+            let x = 0;
+            let y = 0;
+            let z = 0;
 
             if (index != 0) {
-                var rad = Math.floor(index / 4) * layer.shapeSize(1) * this.settings.pattern_padding;
-                var deg = 90 * mod;
+                let rad = Math.floor(index / 4) * layer.shapeSize(1) * this.settings.pattern_padding;
+                let deg = 90 * mod;
 
                 x = Math.sin(deg * RAD) * rad;
                 y = Math.cos(deg * RAD) * rad;

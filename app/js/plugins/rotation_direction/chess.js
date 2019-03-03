@@ -7,8 +7,8 @@
                 this.switcher = !this.switcher;
             }
 
-            var params = this.params(shape);
-            var mod = this.switcher ? 0 : 1;
+            let params = this.params(shape);
+            let mod = this.switcher ? 0 : 1;
 
             if (shape.index % 2 == mod) {
                 params.dir = 1;
@@ -24,13 +24,13 @@
         static name = 'chess columns';
 
         apply(shape) {
-            var layer = this.layer;
+            let layer = this.layer;
             if (this.isFirstShape(shape)) {
                 this.switcher = !this.switcher;
             }
-            var grid = layer.getPatternPlugin('matrix').gridPosition(shape);
-            var params = this.params(shape);
-            var mod = this.switcher ? 0 : 1;
+            let grid = layer.getPatternPlugin('matrix').gridPosition(shape);
+            let params = this.params(shape);
+            let mod = this.switcher ? 0 : 1;
 
             if (grid.x % 2 == mod) {
                 params.dir = 1;
@@ -46,13 +46,13 @@
         static name = 'chess rows';
 
         apply(shape) {
-            var layer = this.layer;
+            let layer = this.layer;
             if (this.isFirstShape(shape)) {
                 this.switcher = !this.switcher;
             }
-            var grid = layer.getPatternPlugin('matrix').gridPosition(shape);
-            var params = this.params(shape);
-            var mod = this.switcher ? 0 : 1;
+            let grid = layer.getPatternPlugin('matrix').gridPosition(shape);
+            let params = this.params(shape);
+            let mod = this.switcher ? 0 : 1;
 
             if (grid.y % 2 == mod) {
                 params.dir = 1;

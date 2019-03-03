@@ -10,16 +10,16 @@
         };
 
         apply(shape) {
-            var layer = this.layer;
+            let layer = this.layer;
 
-            var params = this.params(shape);
+            let params = this.params(shape);
 
             if (!params.threshold || shape.y() > layer.resolution().y + layer.shapeSize(1)) {
-                var matrix = layer.getPatternPlugin('matrix');
-                var gridPosition = matrix.gridPosition(shape);
-                var gap = layer.shapeSize(1) * this.settings.pattern_paddingy;
-                var ox = (layer.patternCenterX() * 2 - gap * matrix.columnCount(layer)) / 2 - layer.shapeSize(.5);
-                var x = ox + gridPosition.x * gap;
+                let matrix = layer.getPatternPlugin('matrix');
+                let gridPosition = matrix.gridPosition(shape);
+                let gap = layer.shapeSize(1) * this.settings.pattern_paddingy;
+                let ox = (layer.patternCenterX() * 2 - gap * matrix.columnCount(layer)) / 2 - layer.shapeSize(.5);
+                let x = ox + gridPosition.x * gap;
                 shape.x(x);
                 shape.y(layer.shapeSize(.5));
 
@@ -36,7 +36,7 @@
             ) {
                 params.threshold = shape.y();
                 params.velocity.y *= -0.1;
-                var shapeDir = layer.getShapeDirection(shape);
+                let shapeDir = layer.getShapeDirection(shape);
                 params.velocity.x += shapeDir * this.settings.pattern_paddingx * animation.diff / 50;
 
             } else {

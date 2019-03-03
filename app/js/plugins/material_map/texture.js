@@ -14,8 +14,8 @@
 
             if (!this.loading && !this.texture) {
                 if (file) {
-                    var inst = this;
-                    var path = filePath(IMAGE_DIR, file);
+                    let inst = this;
+                    let path = filePath(IMAGE_DIR, file);
                     this.loading = true;
                     new THREE.TextureLoader().load(path, function (tex) {
                         tex.name = file;

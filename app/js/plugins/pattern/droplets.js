@@ -4,8 +4,8 @@
         injections = {velocity: false};
 
         apply(shape) {
-            var layer = this.layer;
-            var params = this.params(shape);
+            let layer = this.layer;
+            let params = this.params(shape);
 
             if (shape.y() < 0 - layer.shapeSize(1) || shape.y() > layer.resolution().y + layer.shapeSize(1)) {
                 params.velocity = 0;
@@ -22,8 +22,8 @@
                 }
             }
 
-            var speed = params.velocity;
-            var acc = 1.05;// * animation.diff / 20;
+            let speed = params.velocity;
+            let acc = 1.05;// * animation.diff / 20;
             speed *= acc * this.settings.pattern_paddingy * this.settings.pattern_padding;
             params.velocity = speed;
 
@@ -37,8 +37,8 @@
         injections = {velocity: false};
 
         apply(shape) {
-            var layer = this.layer;
-            var params = this.params(shape);
+            let layer = this.layer;
+            let params = this.params(shape);
 
             if (shape.x() < 0 - layer.shapeSize(1) || shape.x() > layer.resolution().x + layer.shapeSize(1)) {
                 params.velocity = 0;
@@ -55,8 +55,8 @@
                 }
             }
 
-            var speed = params.velocity;
-            var acc = 1.05;// * animation.diff / 20;
+            let speed = params.velocity;
+            let acc = 1.05;// * animation.diff / 20;
             speed *= acc * this.settings.pattern_paddingx * this.settings.pattern_padding;
             params.velocity = speed;
 

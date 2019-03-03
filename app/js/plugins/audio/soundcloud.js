@@ -1,12 +1,12 @@
 {
-    var SOUNDCLOUD_CLIENT_ID = '118f93afdbb12c9d2f2ed3551478feab'; // todo stolen client_id (https://codepen.io/jadiego/pen/ONwwJB)
+    let SOUNDCLOUD_CLIENT_ID = '118f93afdbb12c9d2f2ed3551478feab'; // todo stolen client_id (https://codepen.io/jadiego/pen/ONwwJB)
 
     if (IS_ANIMATION) {
 
         document.addEventListener('DOMContentLoaded', function () {
             console.log('HC.audio.soundcloud: adding events for playback on soundcloud url drop');
 
-            var script = document.createElement('script');
+            let script = document.createElement('script');
             script.setAttribute('src', 'https://connect.soundcloud.com/sdk/sdk-3.3.1.js');
 
             script.onload = function () {
@@ -19,10 +19,10 @@
                     e.preventDefault();
                 }, false);
 
-                var onDocumentDrop = function (e) {
+                let onDocumentDrop = function (e) {
                     e.preventDefault();
 
-                    var url = e.dataTransfer.getData('URL');
+                    let url = e.dataTransfer.getData('URL');
                     if (url && url.match(/https:\/\/soundcloud.com.+/)) {
                         HC.audio.soundcloud.dropEvent = e;
                         animation.updateControl('audio', 'soundcloud', true, true, false);
@@ -44,12 +44,12 @@
         init(callback) {
             if (HC.audio.soundcloud.dropEvent) {
                 if (!this.audioTag) {
-                    var audio = document.createElement('audio');
+                    let audio = document.createElement('audio');
                     audio.crossOrigin = "anonymous";
                     audio.setAttribute('controls', '');
                     document.body.append(audio);
 
-                    var to;
+                    let to;
                     document.addEventListener('mousemove', function () {
                         audio.style.visibility = 'visible';
                         clearTimeout(to);
@@ -70,11 +70,11 @@
         }
 
         onDrop(e, callback) {
-            var inst = this;
-            var url = e.dataTransfer.getData('URL');
+            let inst = this;
+            let url = e.dataTransfer.getData('URL');
             SC.resolve(url).then(function (sound) {
 
-                var onCanPlay = function () {
+                let onCanPlay = function () {
                     inst.audioTag.removeEventListener('canplay', onCanPlay);
                     inst.audioTag.play();
                     inst.source = inst.context.createMediaElementSource(inst.audioTag);

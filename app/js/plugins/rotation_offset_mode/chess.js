@@ -4,11 +4,11 @@
 
         apply(shape) {
             if (shape.index % 2 == 0) {
-                var a = 45;
+                let a = 45;
 
-                var x = a * this.settings.rotation_offsetx;
-                var y = a * this.settings.rotation_offsety;
-                var z = a * this.settings.rotation_offsetz;
+                let x = a * this.settings.rotation_offsetx;
+                let y = a * this.settings.rotation_offsety;
+                let z = a * this.settings.rotation_offsetz;
 
                 shape.rotationOffset(x, y, z);
             }
@@ -21,11 +21,11 @@
 
         apply(shape) {
             if (shape.index % 2 == 0) {
-                var a = 90;
+                let a = 90;
 
-                var x = a * this.settings.rotation_offsetx;
-                var y = a * this.settings.rotation_offsety;
-                var z = a * this.settings.rotation_offsetz;
+                let x = a * this.settings.rotation_offsetx;
+                let y = a * this.settings.rotation_offsety;
+                let z = a * this.settings.rotation_offsetz;
 
                 shape.rotationOffset(x, y, z);
             }
@@ -37,15 +37,15 @@
         static name = 'chessrows90';
 
         apply(shape) {
-            var layer = this.layer;
+            let layer = this.layer;
 
-            var gridPosition = layer.getPatternPlugin('matrix').gridPosition(shape);
+            let gridPosition = layer.getPatternPlugin('matrix').gridPosition(shape);
             if (gridPosition.y % 2 == 0) {
-                var a = 90;
+                let a = 90;
 
-                var x = a * this.settings.rotation_offsetx;
-                var y = a * this.settings.rotation_offsety;
-                var z = a * this.settings.rotation_offsetz;
+                let x = a * this.settings.rotation_offsetx;
+                let y = a * this.settings.rotation_offsety;
+                let z = a * this.settings.rotation_offsetz;
 
                 shape.rotationOffset(x, y, z);
             }
@@ -57,14 +57,14 @@
         static name = 'chesscolumns90';
 
         apply(shape) {
-            var layer = this.layer;
-            var gridPosition = layer.getPatternPlugin('matrix').gridPosition(shape);
+            let layer = this.layer;
+            let gridPosition = layer.getPatternPlugin('matrix').gridPosition(shape);
             if (gridPosition.x % 2 == 0) {
-                var a = 90;
+                let a = 90;
 
-                var x = a * this.settings.rotation_offsetx;
-                var y = a * this.settings.rotation_offsety;
-                var z = a * this.settings.rotation_offsetz;
+                let x = a * this.settings.rotation_offsetx;
+                let y = a * this.settings.rotation_offsety;
+                let z = a * this.settings.rotation_offsetz;
 
                 shape.rotationOffset(x, y, z);
             }

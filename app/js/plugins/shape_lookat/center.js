@@ -3,7 +3,7 @@
         static index = 2;
 
         apply(shape) {
-            var vector = this.layer.lookAtVector();
+            let vector = this.layer.lookAtVector();
             shape.lookAt(vector);
         }
     }
@@ -13,7 +13,7 @@
         static index = 2;
 
         apply(shape) {
-            var vector = this.layer.lookAtVector();
+            let vector = this.layer.lookAtVector();
             shape.forceLookAt(vector);
         }
     }
@@ -24,14 +24,14 @@
         static index = 3;
 
         apply(shape) {
-            var x = shape.x();
-            var y = shape.y();
-            var vec = new THREE.Vector2(x, y);
-            var cvec = this.layer.lookAtVector().add(this.layer.resolution('half'));
+            let x = shape.x();
+            let y = shape.y();
+            let vec = new THREE.Vector2(x, y);
+            let cvec = this.layer.lookAtVector().add(this.layer.resolution('half'));
 
-            var x = vec.x - cvec.x;
-            var y = vec.y - cvec.y;
-            var angle = Math.atan2(y, x);
+            let x = vec.x - cvec.x;
+            let y = vec.y - cvec.y;
+            let angle = Math.atan2(y, x);
             shape.sceneObject().rotation.set(0, 0, -angle);
             shape.rotationZ(0);
         }

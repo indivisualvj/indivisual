@@ -12,8 +12,8 @@
 
         apply() {
             if (!this.rubiks) {
-                var plugin = this.layer.getPatternPlugin('cube');
-                var spd = plugin.shapesPerDimension();
+                let plugin = this.layer.getPatternPlugin('cube');
+                let spd = plugin.shapesPerDimension();
                 this.rubiks = spd;
 
             }
@@ -27,19 +27,19 @@
         }
 
         positionIn3dSpace(shape, cp) {
-            var eu = this.getShapeEuler(shape);
+            let eu = this.getShapeEuler(shape);
             cp.applyEuler(eu);
             cp.add(this.layer.patternCenterVector(true));
             shape.position().copy(cp);
         }
 
         getShapeEuler(shape) {
-            var plugin = this.layer.getPatternPlugin('cube');
-            var grid = plugin.cubePosition(shape);
-            var eu = new THREE.Euler();
+            let plugin = this.layer.getPatternPlugin('cube');
+            let grid = plugin.cubePosition(shape);
+            let eu = new THREE.Euler();
 
-            var slice = this.slice.index;
-            var axis = this.slice.axis;
+            let slice = this.slice.index;
+            let axis = this.slice.axis;
             switch (axis) {
                 case 'x':
                     if (grid.x == slice) {

@@ -1,11 +1,10 @@
-HC.plugins.filter_mode.chess2 = _class(
-    function () {
-        this.invert = false;
-    },
-    HC.FilterModePlugin, {
-        name: 'chess ²',
+{
+    HC.plugins.filter_mode.chess2 = class Plugin extends HC.FilterModePlugin {
+        static name = 'chess ²';
+        invert = false;
+
         apply(shape, plugin) {
-            var layer = this.layer;
+            let layer = this.layer;
 
             if (this.isFirstShape(shape)) {
                 if (audioman.isActive() && audio.peak) {
@@ -15,27 +14,27 @@ HC.plugins.filter_mode.chess2 = _class(
 
             layer.getFilterModePlugin(plugin || 'pulse').apply(shape);
 
-            var color = shape.color;
+            let color = shape.color;
 
             if (this.invert) {
                 if (shape.index % 2 == 1) {
-                    var pi = shape.index - 1;
+                    let pi = shape.index - 1;
                     if (pi >= 0 && pi < layer.shapes.length) {
-                        var src = layer.shapes[pi].color;
+                        let src = layer.shapes[pi].color;
                         this.chess(src, color);
                     }
                 }
 
             } else {
                 if (shape.index % 2 == 0) {
-                    var ni = shape.index + 1;
+                    let ni = shape.index + 1;
                     if (ni >= 0 && ni < layer.shapes.length) {
-                        var src = layer.shapes[ni].color;
+                        let src = layer.shapes[ni].color;
                         this.chess(src, color);
                     }
                 }
             }
-        },
+        }
 
         chess(src, target) {
             target.h = src.h + 180;
@@ -53,20 +52,24 @@ HC.plugins.filter_mode.chess2 = _class(
             }
         }
     }
-);
+}
+{
+    HC.plugins.filter_mode.chess2flash = class Plugin extends HC.FilterModePlugin {
+        static name = 'chess ² flash';
 
-HC.plugins.filter_mode.chess2flash = _class(false, HC.FilterModePlugin, {
-    name: 'chess ² flash',
-    apply(shape) {
-        var layer = this.layer;
-        layer.getFilterModePlugin('chess2').apply(shape, 'flash');
+        apply(shape) {
+            let layer = this.layer;
+            layer.getFilterModePlugin('chess2').apply(shape, 'flash');
+        }
     }
-});
+}
+{
+    HC.plugins.filter_mode.chess2strobe = class Plugin extends HC.FilterModePlugin {
+        static name = 'chess ² strobe';
 
-HC.plugins.filter_mode.chess2strobe = _class(false, HC.FilterModePlugin, {
-    name: 'chess ² strobe',
-    apply(shape) {
-        var layer = this.layer;
-        layer.getFilterModePlugin('chess2').apply(shape, 'strobe');
+        apply(shape) {
+            let layer = this.layer;
+            layer.getFilterModePlugin('chess2').apply(shape, 'strobe');
+        }
     }
-});
+}

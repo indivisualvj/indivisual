@@ -1,83 +1,94 @@
-HC.plugins.oscillate.onoffpeak = _class(false, HC.OscillatePlugin, {
-    name: 'on & off (peak)',
-    index: 80,
-    apply(key) {
-        var layer = this.layer;
-        var pa = this.params(key);
+{
+    HC.plugins.oscillate.onoffpeak = class Plugin extends HC.OscillatePlugin {
+        static name = 'on & off (peak)';
+        static index = 80;
 
-        if (audio.peak) {
-            pa = (pa ? 0 : 1);
+        apply(key) {
+            let layer = this.layer;
+            let pa = this.params(key);
+
+            if (audio.peak) {
+                pa = (pa ? 0 : 1);
+            }
+
+            this.params(key, pa);
+            this.activate(key, pa);
         }
-
-        this.params(key, pa);
-        this.activate(key, pa);
     }
-});
+}
+{
+    HC.plugins.oscillate.onoffhalf = class Plugin extends HC.OscillatePlugin {
+        static name = 'on & off (half)';
+        static index = 80;
 
-HC.plugins.oscillate.onoffhalf = _class(false, HC.OscillatePlugin, {
-    name: 'on & off (half)',
-    index: 80,
-    apply(key) {
-        var layer = this.layer;
-        var pa = this.params(key);
+        apply(key) {
+            let layer = this.layer;
+            let pa = this.params(key);
 
-        var speed = beatkeeper.getSpeed('half');
-        if (speed.prc == 0) {
-            pa = (pa ? 0 : 1);
+            let speed = beatkeeper.getSpeed('half');
+            if (speed.prc == 0) {
+                pa = (pa ? 0 : 1);
+            }
+
+            this.params(key, pa);
+            this.activate(key, pa);
         }
-
-        this.params(key, pa);
-        this.activate(key, pa);
     }
-});
+}
+{
+    HC.plugins.oscillate.onofffull = class Plugin extends HC.OscillatePlugin {
+        static name = 'on & off (full)';
+        static index = 80;
 
-HC.plugins.oscillate.onofffull = _class(false, HC.OscillatePlugin, {
-    name: 'on & off (full)',
-    index: 80,
-    apply(key) {
-        var layer = this.layer;
-        var pa = this.params(key);
+        apply(key) {
+            let layer = this.layer;
+            let pa = this.params(key);
 
-        var speed = beatkeeper.getSpeed('full');
-        if (speed.prc == 0) {
-            pa = (pa ? 0 : 1);
+            let speed = beatkeeper.getSpeed('full');
+            if (speed.prc == 0) {
+                pa = (pa ? 0 : 1);
+            }
+
+            this.params(key, pa);
+            this.activate(key, pa);
         }
-
-        this.params(key, pa);
-        this.activate(key, pa);
     }
-});
+}
+{
+    HC.plugins.oscillate.onoffdouble = class Plugin extends HC.OscillatePlugin {
+        static name = 'on & off (double)';
+        static index = 80;
 
-HC.plugins.oscillate.onoffdouble = _class(false, HC.OscillatePlugin, {
-    name: 'on & off (double)',
-    index: 80,
-    apply(key) {
-        var layer = this.layer;
-        var pa = this.params(key);
+        apply(key) {
+            let layer = this.layer;
+            let pa = this.params(key);
 
-        var speed = beatkeeper.getSpeed('double');
-        if (speed.prc == 0) {
-            pa = (pa ? 0 : 1);
+            let speed = beatkeeper.getSpeed('double');
+            if (speed.prc == 0) {
+                pa = (pa ? 0 : 1);
+            }
+
+            this.params(key, pa);
+            this.activate(key, pa);
         }
-
-        this.params(key, pa);
-        this.activate(key, pa);
     }
-});
+}
+{
+    HC.plugins.oscillate.onoffquarter = class Plugin extends HC.OscillatePlugin {
+        static name = 'on & off (quarter)';
+        static index = 80;
 
-HC.plugins.oscillate.onoffquarter = _class(false, HC.OscillatePlugin, {
-    name: 'on & off (quarter)',
-    index: 80,
-    apply(key) {
-        var layer = this.layer;
-        var pa = this.params(key);
+        apply(key) {
+            let layer = this.layer;
+            let pa = this.params(key);
 
-        var speed = beatkeeper.getSpeed('quarter');
-        if (speed.prc == 0) {
-            pa = (pa ? 0 : 1);
+            let speed = beatkeeper.getSpeed('quarter');
+            if (speed.prc == 0) {
+                pa = (pa ? 0 : 1);
+            }
+
+            this.params(key, pa);
+            this.activate(key, pa);
         }
-
-        this.params(key, pa);
-        this.activate(key, pa);
     }
-});
+}

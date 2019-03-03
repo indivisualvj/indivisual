@@ -1,25 +1,23 @@
-HC.plugins.filter_mode.flash = _class(
-    function () {
-        this.color = false;
-    },
-    HC.FilterModePlugin, {
+{
+    HC.plugins.filter_mode.flash = class Plugin extends HC.FilterModePlugin {
+        color = false;
 
         apply(shape, overwrite) {
-            var layer = this.layer;
+            let layer = this.layer;
 
             if (!this.color) {
                 this.color = randomColor();
             }
-            var color = this.color;
+            let color = this.color;
 
             if (this.isFirstShape(shape) || overwrite === true) {
-                var speed = layer.getShapeSpeed(shape);
+                let speed = layer.getShapeSpeed(shape);
 
                 // color.s = shape.color.s;
                 // color.l = shape.color.l;
 
                 if (speed.progress > speed.duration - 50) {
-                    var diff = Math.abs(speed.duration - speed.progress);
+                    let diff = Math.abs(speed.duration - speed.progress);
 
                     color.s += (diff * 2) * this.settings.filter_volume;
                     if (color.s > 100) {
@@ -58,27 +56,24 @@ HC.plugins.filter_mode.flash = _class(
             shape.color.l = color.l;
         }
     }
-);
-
-HC.plugins.filter_mode.strobe = _class(
-    function () {
-        this.color = false;
-    },
-    HC.FilterModePlugin, {
+}
+{
+    HC.plugins.filter_mode.strobe = class Plugin extends HC.FilterModePlugin {
+        color = false;
 
         apply(shape, overwrite) {
-            var layer = this.layer;
+            let layer = this.layer;
 
             if (!this.color) {
                 this.color = randomColor();
             }
 
-            var color = this.color;
+            let color = this.color;
 
             if (this.isFirstShape(shape) || overwrite === true) {
-                var speed = layer.getShapeSpeed(shape);
+                let speed = layer.getShapeSpeed(shape);
 
-                var pm = randomInt(80, 110);
+                let pm = randomInt(80, 110);
                 if (speed.progress > speed.duration - pm
                     || (beatkeeper.rhythmSlow(this.settings.rhythm) // todo rhythmSlow WOOT
                         && speed.progress > speed.duration / 2 - pm
@@ -111,4 +106,4 @@ HC.plugins.filter_mode.strobe = _class(
             shape.color.l = color.l;
         }
     }
-);
+}

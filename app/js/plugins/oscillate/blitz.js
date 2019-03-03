@@ -1,120 +1,128 @@
-HC.plugins.oscillate.blitzpeak = _class(false, HC.OscillatePlugin, {
-    name: 'blitz (peak)',
-    index: 70,
-    apply(key) {
-        var pa = this.params(key);
+{
+    HC.plugins.oscillate.blitzpeak = class Plugin extends HC.OscillatePlugin {
+        static name = 'blitz (peak)';
+        static index = 70;
 
-        if (pa > 0) {
-            pa = Math.max(0, pa - (1 / animation.diff) * 2.6);
+        apply(key) {
+            let pa = this.params(key);
 
-        } else if (audio.peak) {
-            pa = (pa ? 0 : 1);
+            if (pa > 0) {
+                pa = Math.max(0, pa - (1 / animation.diff) * 2.6);
+
+            } else if (audio.peak) {
+                pa = (pa ? 0 : 1);
+            }
+
+            this.params(key, pa);
+            this.activate(key, pa);
         }
-
-        this.params(key, pa);
-        this.activate(key, pa);
     }
-});
+}
+{
+    HC.plugins.oscillate.blitzpeakslow = class Plugin extends HC.OscillatePlugin {
+        static name = 'blitz (peak/slow)';
+        static index = 70;
 
-HC.plugins.oscillate.blitzpeakslow = _class(false, HC.OscillatePlugin, {
-    name: 'blitz (peak/slow)',
-    index: 70,
-    apply(key) {
-        var layer = this.layer;
-        var pa = this.params(key);
+        apply(key) {
+            let pa = this.params(key);
 
-        if (pa > 0) {
-            pa = Math.max(0, pa - (1 / animation.diff) * 1.1);
+            if (pa > 0) {
+                pa = Math.max(0, pa - (1 / animation.diff) * 1.1);
 
-        } else if (audio.peak) {
-            pa = (pa ? 0 : 1);
+            } else if (audio.peak) {
+                pa = (pa ? 0 : 1);
+            }
+
+            this.params(key, pa);
+            this.activate(key, pa);
         }
-
-        this.params(key, pa);
-        this.activate(key, pa);
     }
-});
+}
+{
+    HC.plugins.oscillate.blitzfull = class Plugin extends HC.OscillatePlugin {
+        static name = 'blitz (full)';
+        static index = 70;
 
-HC.plugins.oscillate.blitzfull = _class(false, HC.OscillatePlugin, {
-    name: 'blitz (full)',
-    index: 70,
-    apply(key) {
-        var layer = this.layer;
-        var pa = this.params(key);
+        apply(key) {
+            let pa = this.params(key);
 
-        var speed = beatkeeper.getSpeed('full');
+            let speed = beatkeeper.getSpeed('full');
 
-        if (pa > 0) {
-            pa = Math.max(0, pa - (1 / animation.diff) * 0.65);
+            if (pa > 0) {
+                pa = Math.max(0, pa - (1 / animation.diff) * 0.65);
 
-        } else if (speed.prc == 0) {
-            pa = (pa ? 0 : 1);
+            } else if (speed.prc == 0) {
+                pa = (pa ? 0 : 1);
+            }
+
+            this.params(key, pa);
+            this.activate(key, pa);
         }
-
-        this.params(key, pa);
-        this.activate(key, pa);
     }
-});
+}
+{
+    HC.plugins.oscillate.blitzhalf = class Plugin extends HC.OscillatePlugin {
+        static name = 'blitz (half)';
+        static index = 70;
 
-HC.plugins.oscillate.blitzhalf = _class(false, HC.OscillatePlugin, {
-    name: 'blitz (half)',
-    index: 70,
-    apply(key) {
-        var layer = this.layer;
-        var pa = this.params(key);
+        apply(key) {
+            let pa = this.params(key);
 
-        var speed = beatkeeper.getSpeed('half');
+            let speed = beatkeeper.getSpeed('half');
 
-        if (pa > 0) {
-            pa = Math.max(0, pa - (1 / animation.diff) * 0.65);
+            if (pa > 0) {
+                pa = Math.max(0, pa - (1 / animation.diff) * 0.65);
 
-        } else if (speed.prc == 0) {
-            pa = (pa ? 0 : 1);
+            } else if (speed.prc == 0) {
+                pa = (pa ? 0 : 1);
+            }
+
+            this.params(key, pa);
+            this.activate(key, pa);
         }
-
-        this.params(key, pa);
-        this.activate(key, pa);
     }
-});
+}
+{
+    HC.plugins.oscillate.blitzquarter = class Plugin extends HC.OscillatePlugin {
+        static name = 'blitz (quarter)';
+        static index = 70;
 
-HC.plugins.oscillate.blitzquarter = _class(false, HC.OscillatePlugin, {
-    name: 'blitz (quarter)',
-    index: 70,
-    apply(key) {
-        var layer = this.layer;
-        var pa = this.params(key);
+        apply(key) {
+            let pa = this.params(key);
 
-        var speed = beatkeeper.getSpeed('quarter');
+            let speed = beatkeeper.getSpeed('quarter');
 
-        if (pa > 0) {
-            pa = Math.max(0, pa - (1 / animation.diff) * 1.3);
+            if (pa > 0) {
+                pa = Math.max(0, pa - (1 / animation.diff) * 1.3);
 
-        } else if (speed.prc == 0) {
-            pa = (pa ? 0 : 1);
+            } else if (speed.prc == 0) {
+                pa = (pa ? 0 : 1);
+            }
+
+            this.params(key, pa);
+            this.activate(key, pa);
         }
-
-        this.params(key, pa);
-        this.activate(key, pa);
     }
-});
+}
+{
+    HC.plugins.oscillate.blitzeight = class Plugin extends HC.OscillatePlugin {
+        static name = 'blitz (eight)';
+        static index = 70;
 
-HC.plugins.oscillate.blitzeight = _class(false, HC.OscillatePlugin, {
-    name: 'blitz (eight)',
-    index: 70,
-    apply(key) {
-        var layer = this.layer;
-        var pa = this.params(key);
+        apply(key) {
+            let pa = this.params(key);
 
-        var speed = beatkeeper.getSpeed('eight');
+            let speed = beatkeeper.getSpeed('eight');
 
-        if (pa > 0) {
-            pa = Math.max(0, pa - (1 / animation.diff) * 2.6);
+            if (pa > 0) {
+                pa = Math.max(0, pa - (1 / animation.diff) * 2.6);
 
-        } else if (speed.prc == 0) {
-            pa = (pa ? 0 : 1);
+            } else if (speed.prc == 0) {
+                pa = (pa ? 0 : 1);
+            }
+
+            this.params(key, pa);
+            this.activate(key, pa);
         }
-
-        this.params(key, pa);
-        this.activate(key, pa);
     }
-});
+}

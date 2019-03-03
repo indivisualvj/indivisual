@@ -21,8 +21,8 @@
         };
 
         apply (shape) {
-            var params = this.params(shape);
-            var duration = this.layer.getShapeDuration(shape);
+            let params = this.params(shape);
+            let duration = this.layer.getShapeDuration(shape);
 
             if (!params.velocity) {
                 params.delay = duration / randomInt(1, 8);
@@ -36,14 +36,14 @@
             if (params.delay <= 0) {
 
                 // go backwards by rotating the layer
-                var acc = Math.abs(this.settings.pattern_paddingz);
+                let acc = Math.abs(this.settings.pattern_paddingz);
                 params.velocity = Math.max(1, params.velocity);
                 params.velocity *= (1.05 * animation.diffPrc * acc);
 
-                var so = shape.sceneObject();
+                let so = shape.sceneObject();
                 so.translateZ(params.velocity);
 
-                var cam = this.layer.getCamera();
+                let cam = this.layer.getCamera();
                 if (so.position.z > cam.position.z * 1.1) {
                     params.velocity = 0;
                 }

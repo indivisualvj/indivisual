@@ -1,13 +1,15 @@
-HC.plugins.rotation_offset_mode.off = _class(false, HC.RotationOffsetModePlugin, {
-    index: 1,
-    name: 'off',
+{
+    HC.plugins.rotation_offset_mode.off = class Plugin extends HC.RotationOffsetModePlugin {
+        static index = 1;
+        static name = 'off';
 
-    apply: function (shape) {
-        var layer = this.layer;
-        var x = 90 * this.settings.rotation_offsetx;
-        var y = 90 * this.settings.rotation_offsety;
-        var z = 90 * this.settings.rotation_offsetz;
+        apply(shape) {
+            let layer = this.layer;
+            let x = 90 * this.settings.rotation_offsetx;
+            let y = 90 * this.settings.rotation_offsety;
+            let z = 90 * this.settings.rotation_offsetz;
 
-        shape.rotationOffset(x, y, z);
+            shape.rotationOffset(x, y, z);
+        }
     }
-});
+}

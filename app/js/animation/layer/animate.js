@@ -4,12 +4,6 @@
  */
 HC.Layer.prototype.animateShape = function (shape) {
 
-    // if (!shape.dummy) {
-    //     this.doPattern(shape);
-    //     this.doOffsetMode(shape);
-    //     this.doShapeTransform(shape);
-    // }
-
     var duration = this.getShapeRhythmPlugin();
     var delay = this.getShapeDelayPlugin();
 

@@ -1,9 +1,10 @@
-HC.plugins.mesh_material.phong = _class(false, HC.MeshMaterialPlugin, {
-    index: 1,
-    apply: function (geometry) {
-        var material = new THREE.MeshPhongMaterial();
-        var mesh = new THREE.Mesh(geometry, material);
+{
+    HC.plugins.mesh_material.phong = class Plugin extends HC.MeshMaterialPlugin {
+        static index = 1;
 
-        return mesh;
+        apply(geometry) {
+            let material = new THREE.MeshPhongMaterial();
+            return new THREE.Mesh(geometry, material);
+        }
     }
-});
+}

@@ -1,38 +1,40 @@
-HC.plugins.shape_modifier.sphereify = _class(false, HC.ShapeModifierPlugin, {
-    name: 'sphereify',
+{
+    HC.plugins.shape_modifier.sphereify = class Plugin extends HC.ShapeModifierPlugin {
+        static name = 'sphereify';
 
-    create: function (geometry) {
+        create(geometry) {
 
-        var vertices = geometry.vertices;
-        geometry.center();
+            let vertices = geometry.vertices;
+            geometry.center();
 
-        if (vertices) {
+            if (vertices) {
 
-            this.radius = 0;
+                this.radius = 0;
 
-            for (var i = 0; i < vertices.length; i++) {
+                for (let i = 0; i < vertices.length; i++) {
 
-                var vtc = vertices[i];
-                this.radius = Math.max(vtc.length(), this.radius);
+                    let vtc = vertices[i];
+                    this.radius = Math.max(vtc.length(), this.radius);
+                }
+
+                for (let i = 0; i < vertices.length; i++) {
+
+                    let vtc = vertices[i];
+                    let l = vtc.length();
+                    let m = Math.max(0.001, Math.abs(this.settings.shape_modifier_volume));
+
+                    vtc.multiplyScalar(m);
+                    vtc.clampLength(l, this.radius);
+
+                    geometry.verticesNeedUpdate = true;
+
+                }
+
+            } else if (!vertices) {
+                console.warn('No transform for ' + geometry.type);
             }
 
-            for (var i = 0; i < vertices.length; i++) {
-
-                var vtc = vertices[i];
-                var l = vtc.length();
-                var m = Math.max(0.001, Math.abs(this.settings.shape_modifier_volume));
-
-                vtc.multiplyScalar(m);
-                vtc.clampLength(l, this.radius);
-
-                geometry.verticesNeedUpdate = true;
-
-            }
-
-        } else if (!vertices) {
-            console.warn('No transform for ' + geometry.type);
+            return geometry
         }
-
-        return geometry
     }
-});
+}

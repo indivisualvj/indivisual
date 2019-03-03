@@ -21,7 +21,7 @@
         this.shape = false;
         this.plugins = {};
 
-        this.tween = new TWEEN.Group();
+        this.tween = new TWEEN.Group(); // todo evtl group pro shape und dann pro shape update aufrufen... aber mit animation.now nicht mit HC.now()!
         this.lastUpdate = 0;
         this._rotation = false;
         this._shapes = false;
@@ -131,8 +131,10 @@
 
             this.initRotator();
             this.resetAnimation();
-            this.getShapeGeometryPlugin().reset();
-            this.getShapeModifierPlugin().reset();
+            var sgp = this.getShapeGeometryPlugin();
+            if (sgp)sgp.reset();
+            var smp = this.getShapeModifierPlugin();
+            if (smp)smp.reset();
 
             this.shapes = [];
             this.shapeCache = [];

@@ -26,6 +26,11 @@ HC.Shape.prototype.initPlugins = function () {
 {
     HC.AnimationPlugin = class AnimationPlugin {
 
+        layer;
+        settings;
+        tree;
+        key;
+
         _id() {
             return this.tree + this.key;
         }
@@ -45,8 +50,9 @@ HC.Shape.prototype.initPlugins = function () {
         }
 
         inject() {
+            let inst = this;
             HC.Shape.prototype.injected.plugins[this.tree][this.key] = {
-                values: this.injections || {}
+                values: inst.injections || {}
             };
         }
 
@@ -123,6 +129,14 @@ HC.Shape.prototype.initPlugins = function () {
          */
         isFirstShape(shape) {
             return shape.index == 0;
+        }
+
+        /**
+         *
+         * @returns {boolean}
+         */
+        ready() {
+            return true;
         }
     }
 }

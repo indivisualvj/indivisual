@@ -1,41 +1,39 @@
-HC.plugins.material_style.chessline = _class(false, HC.MaterialStylePlugin, {
-        name: 'chess (fill | line)',
-        injections: {
-            mesh: false,
-        },
-        apply: function (shape) {
-            var layer = this.layer;
-            var pa = this.params(shape);
+{
+    HC.plugins.material_style.chessline = class Plugin extends HC.MaterialStylePlugin {
+        static name = 'chess (fill | line)';
 
-            if (shape.index % 2 == 1 && !pa.mesh) {
-                var mesh = layer.getMeshMaterialPlugin('line').apply(shape.getGeometry());
-                pa.mesh = mesh;
-                shape.setMesh(mesh);
+        apply(shape) {
+            let layer = this.layer;
+            let params = this.params(shape);
+
+            if (shape.index % 2 == 1 && !params.mesh) {
+                let mesh = layer.getMeshMaterialPlugin('line').apply(shape.getGeometry());
+                params.mesh = mesh;
+                shape.setMesh(mesh); // fixme does not get reset after plugin change. either resetShapes or setMesh after material_style change
             }
         }
     }
-);
+}
+{
+    HC.plugins.material_style.randompeakline = class Plugin extends HC.MaterialStylePlugin {
+        static name = 'random on peak (line)';
 
-HC.plugins.material_style.randompeakline = _class(false, HC.MaterialStylePlugin, {
-        name: 'random on peak (line)',
-        injections: {
-            states: [],
-        },
-        apply: function (shape) {
-            var layer = this.layer;
+        apply(shape) {
+            let layer = this.layer;
+            let params = this.params(shape);
 
-            var pa = this.params(shape);
-
-            if (!pa.states.length) {
-                var mesh = layer.getMeshMaterialPlugin('line').apply(shape.getGeometry());
-                pa.states.push(mesh);
-                pa.states.push(shape.mesh);
+            if (!params.states) {
+                params.states = [];
+                params.mesh = shape.mesh;
+                let mesh = layer.getMeshMaterialPlugin('line').apply(shape.getGeometry());
+                params.states.push(shape.mesh);
+                params.states.push(mesh);
             }
 
             if ((audio.peak && randomBool())) {
-                var state = randomInt(0, 1);
-                shape.setMesh(pa.states[state]);
+                let state = randomInt(0, 1);
+                shape.setMesh(params.states[state]);
             }
         }
     }
-);
+}

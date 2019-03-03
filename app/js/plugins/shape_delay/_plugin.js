@@ -3,7 +3,7 @@ HC.plugins.shape_delay = HC.plugins.shape_delay || {};
     HC.ShapeDelayPlugin = class Plugin extends HC.AnimationPlugin {
 
         before(shape) {
-            var params = this.params(shape);
+            let params = this.params(shape);
             params.delay = 0;
 
             // no special speed for pattern rotation
@@ -13,9 +13,9 @@ HC.plugins.shape_delay = HC.plugins.shape_delay || {};
         }
 
         after(shape) {
-            var layer = this.layer;
-            var params = this.params(shape);
-            var rp = layer.getShapeSpeed(shape);
+            let layer = this.layer;
+            let params = this.params(shape);
+            let rp = layer.getShapeSpeed(shape);
 
             params.delay -= params.delay * rp.speed.prc;
             params.delay = clamp(params.delay, 0, rp.duration); // bondage to 0 or duration ...
@@ -28,7 +28,7 @@ HC.plugins.shape_delay = HC.plugins.shape_delay || {};
         }
 
         finished(shape) {
-            var params = this.params(shape);
+            let params = this.params(shape);
             return !(params.delay > 0);
         }
 
@@ -37,7 +37,7 @@ HC.plugins.shape_delay = HC.plugins.shape_delay || {};
         }
     };
 
-    HC.ShapeDelayPlugin.prototype.injections = {
+    HC.ShapeDelayPlugin.prototype.injections = {// todo move into class after all is "classified"
         delay: 0
     }
 }

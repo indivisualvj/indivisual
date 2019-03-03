@@ -1,31 +1,35 @@
-HC.plugins.oscillate.timestamp = _class(false, HC.OscillatePlugin, {
-    name: 'timestamp',
-    index: 10,
-    apply: function (key) {
-        this.activate(key, (animation.now - beatkeeper.beatStartTime) / (60000 / statics.ControlSettings.tempo));
+{
+    HC.plugins.oscillate.timestamp = class Plugin extends HC.OscillatePlugin {
+        static name = 'timestamp';
+        static index = 10;
+
+        apply(key) {
+            this.activate(key, (animation.now - beatkeeper.beatStartTime) / (60000 / statics.ControlSettings.tempo));
+        }
     }
-});
+}
+{
+    HC.plugins.oscillate.incremental = class Plugin extends HC.OscillatePlugin {
+        static name = 'incremental';
+        static index = 10;
 
-HC.plugins.oscillate.incremental = _class(false, HC.OscillatePlugin, {
-    name: 'incremental',
-    index: 10,
-    apply: function (key) {
-        var v = this.params(key);
+        apply(key) {
+            let v = this.params(key);
 
-        v += 0.02;
-        this.params(key, v);
-        this.activate(key, v);
+            v += 0.02;
+            this.params(key, v);
+            this.activate(key, v);
+        }
     }
-});
+}
+{
+    HC.plugins.oscillate.incrementalpeak = class Plugin extends HC.OscillatePlugin {
+        static name = 'incremental (race on peak)';
+        static index = 10;
+        preset = {velocity: 1, progress: 0};
 
-HC.plugins.oscillate.incrementalpeak = _class(
-    function () {
-        this.preset = {velocity: 1, progress: 0};
-    }, HC.OscillatePlugin, {
-        name: 'incremental (race on peak)',
-        index: 10,
-        apply: function (key) {
-            var pa = this.params(key);
+        apply(key) {
+            let pa = this.params(key);
             if (audio.peak && pa.velocity < 3) {
                 pa.velocity = 4;
 
@@ -37,12 +41,14 @@ HC.plugins.oscillate.incrementalpeak = _class(
             this.activate(key, pa.progress);
         }
     }
-);
+}
+{
+    HC.plugins.oscillate.audio = class Plugin extends HC.OscillatePlugin {
+        static name = 'audio';
+        static index = 10;
 
-HC.plugins.oscillate.audio = _class(false, HC.OscillatePlugin, {
-    name: 'audio',
-    index: 10,
-    apply: function (key) {
-        this.activate(key, Math.min(1, 2.5 * audio.volume));
+        apply(key) {
+            this.activate(key, Math.min(1, 2.5 * audio.volume));
+        }
     }
-});
+}

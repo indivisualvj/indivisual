@@ -39,6 +39,10 @@ body {
     box-shadow: 0 0 1px 2px #44abda;
 }
 
+.fixed {
+    position: fixed;
+}
+
 .fh {
     overflow: visible;
 }
@@ -637,6 +641,7 @@ select option {
 
     #blockfocus {
         height: 35vw;
+        max-width: 100%;
     }
 
     .left {

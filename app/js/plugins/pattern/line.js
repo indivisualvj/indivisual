@@ -1,53 +1,56 @@
-HC.plugins.pattern.lineh = _class(false, HC.PatternPlugin, {
-    name: 'lineh',
+{
+    HC.plugins.pattern.lineh = class Plugin extends HC.PatternPlugin {
+        static name = 'lineh';
 
-    apply: function (shape) {
-        var layer = this.layer;
-        var pos = this.calculate(shape);
-        layer.positionIn3dSpace(shape, pos.x, pos.y, pos.z);
-    },
+        apply(shape) {
+            let layer = this.layer;
+            let pos = this.calculate(shape);
+            layer.positionIn3dSpace(shape, pos.x, pos.y, pos.z);
+        }
 
-    calculate: function (shape) {
-        var layer = this.layer;
-        var step = layer.resolution().x / layer.shapeCount();
-        var cx = layer.resolution('half').x;
-        var pos = shape.index * step;
-        var dist = cx - pos;
-        var padding = this.settings.pattern_padding * this.settings.pattern_paddingx;
+        calculate(shape) {
+            let layer = this.layer;
+            let step = layer.resolution().x / layer.shapeCount();
+            let cx = layer.resolution('half').x;
+            let pos = shape.index * step;
+            let dist = cx - pos;
+            let padding = this.settings.pattern_padding * this.settings.pattern_paddingx;
 
-        pos = -dist * padding + step * padding / 2;
+            pos = -dist * padding + step * padding / 2;
 
-        var x = pos;
-        var y = 0;
-        var z = 0;
+            let x = pos;
+            let y = 0;
+            let z = 0;
 
-        return {x: x, y: y, z: z};
+            return {x: x, y: y, z: z};
+        }
     }
-});
+}
+{
+    HC.plugins.pattern.linev = class Plugin extends HC.PatternPlugin {
+        static name = 'linev';
 
-HC.plugins.pattern.linev = _class(false, HC.PatternPlugin, {
-    name: 'linev',
+        apply(shape) {
+            let layer = this.layer;
+            let pos = this.calculate(shape);
+            layer.positionIn3dSpace(shape, pos.x, pos.y, pos.z);
+        }
 
-    apply: function (shape) {
-        var layer = this.layer;
-        var pos = this.calculate(shape);
-        layer.positionIn3dSpace(shape, pos.x, pos.y, pos.z);
-    },
+        calculate(shape) {
+            let layer = this.layer;
+            let step = layer.resolution().y / layer.shapeCount();
+            let cy = layer.resolution('half').y;
+            let pos = shape.index * step;
+            let dist = cy - pos;
+            let padding = this.settings.pattern_padding * this.settings.pattern_paddingy;
 
-    calculate: function (shape) {
-        var layer = this.layer;
-        var step = layer.resolution().y / layer.shapeCount();
-        var cy = layer.resolution('half').y;
-        var pos = shape.index * step;
-        var dist = cy - pos;
-        var padding = this.settings.pattern_padding * this.settings.pattern_paddingy;
+            pos = -dist * padding + step * padding / 2;
 
-        pos = -dist * padding + step * padding / 2;
+            let x = 0;
+            let y = pos;
+            let z = 0;
 
-        var x = 0;
-        var y = pos;
-        var z = 0;
-
-        return {x: x, y: y, z: z};
+            return {x: x, y: y, z: z};
+        }
     }
-});
+}

@@ -47,7 +47,7 @@
          * @param mapping
          */
         onMapping: function (id, mapping) {
-            if (inst.mappingTimeouts[id]) { // todo replace with local timeouts?
+            if (inst.mappingTimeouts[id]) {
                 clearTimeout(inst.mappingTimeouts[id]);
             }
             if (animation) {

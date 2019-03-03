@@ -2,22 +2,28 @@ node_modules
 bin
 sessions
 samples
-storage
-!storage/_demos/*
-!storage/_tutorials/*
+storage/*
+!storage/_demos
+!storage/_tutorials
 storage/*/\.*
 
 .idea
 .settings
 .project
 
-assets
+assets/fonts/*
 !assets/fonts/coolvetica.json
+
+assets/images/*
 !assets/images/green-apple-leaf,120,1280x720,30.png
 !assets/images/herrsching-forest,120,1920x1080,30.png
 !assets/images/indivisual-logo,120,1280x720,30.png
 !assets/images/kopf-120,512x512,30.png
 !assets/images/pennywise,120,1280x720,30.png
+
+assets/textures/*
 !assets/textures/rgb-noise.png
+
+assets/videos/*
 !assets/videos/dance,120,1280x720,30.mp4
 !assets/videos/walk,120,1280x720,30.mp4

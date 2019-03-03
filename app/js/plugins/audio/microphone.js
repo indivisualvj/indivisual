@@ -1,9 +1,10 @@
 { // todo tutorial + explain auch für setControl setDisplay
-    class Plugin extends HC.AudioPlugin {
+    HC.audio.microphone = class Plugin extends HC.AudioPlugin {
+        stream;
 
         init(callback) {
 
-            var inst = this;
+            let inst = this;
             if (navigator.mediaDevices.getUserMedia) {
 
                 try {
@@ -30,6 +31,4 @@
         }
 
     }
-
-    HC.audio.microphone = Plugin;
 }

@@ -1,15 +1,16 @@
-HC.plugins.sizing_mode.off = _class(false, HC.SizingModePlugin, {
-    index: 1,
-    name: 'off',
+{
+    HC.plugins.sizing_mode.off = class Plugin extends HC.SizingModePlugin {
+        static index = 1;
+        static name = 'off';
 
-    apply: function (shape) {
-        var layer = this.layer;
-        var s = 1;
-        s *= this.settings.sizing_scale;
-        var x = this.settings.sizing_x * s;
-        var y = this.settings.sizing_y * s;
-        var z = this.settings.sizing_z * s;
+        apply(shape) {
+            let s = 1;
+            s *= this.settings.sizing_scale;
+            let x = this.settings.sizing_x * s;
+            let y = this.settings.sizing_y * s;
+            let z = this.settings.sizing_z * s;
 
-        shape.scale(x, y, z);
+            shape.scale(x, y, z);
+        }
     }
-});
+}

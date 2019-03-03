@@ -1,5 +1,4 @@
 HC.plugins.shape_rhythm = HC.plugins.shape_rhythm || {};
-
 {
     HC.ShapeRhythmPlugin = class Plugin extends HC.AnimationPlugin {
 
@@ -12,7 +11,7 @@ HC.plugins.shape_rhythm = HC.plugins.shape_rhythm || {};
         }
 
         after(shape) {
-            var params = this.params(shape);
+            let params = this.params(shape);
             params.duration = params.speed.duration;
             params.progress = 0;
             params.prc = 0;
@@ -22,7 +21,7 @@ HC.plugins.shape_rhythm = HC.plugins.shape_rhythm || {};
         }
 
         update(shape, diff) {
-            var params = this.params(shape);
+            let params = this.params(shape);
             params.progress += diff;
             if (params.progress > params.duration) {
                 params.progress = params.duration;
@@ -32,12 +31,12 @@ HC.plugins.shape_rhythm = HC.plugins.shape_rhythm || {};
         }
 
         starting(shape) {
-            var params = this.params(shape);
+            let params = this.params(shape);
             return params.prc == 0;
         }
 
         finished(shape) {
-            var params = this.params(shape);
+            let params = this.params(shape);
             return params.progress >= params.duration
         }
 
@@ -46,7 +45,7 @@ HC.plugins.shape_rhythm = HC.plugins.shape_rhythm || {};
         }
     };
 
-    HC.ShapeRhythmPlugin.prototype.injections = {
+    HC.ShapeRhythmPlugin.prototype.injections = {// todo move into class after all is "classified"
         speed: false,
         duration: 0,
         progress: 0,

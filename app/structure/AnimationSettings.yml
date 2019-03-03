@@ -4,8 +4,6 @@ tutorial: {}
 
 oscillate: 'off' # placeholder for automated _oscillate functions
 
-audio_smoothing: 0.6
-audio_frequency: 0
 audio_thickness: 0
 audio_usewaveform: false
 
@@ -109,11 +107,10 @@ pattern_overlay_volume: 0.0
 pattern_overlay_volume_oscillate: 'off'
 
 shape_geometry: tile
-shape_size: 14
-shape_audio: false
-shape_variant: 1
-shape_segmentsa: 1
-shape_segmentsb: 1
+shape_sizedivider: 14
+shape_moda: 0
+shape_modb: 0
+shape_modc: 0
 shape_limit: false
 shape_sync: true
 shape_vertices: ''

@@ -3,7 +3,7 @@ HC.plugins.lighting_type = HC.plugins.lighting_type || {};
     HC.LightingTypePlugin = class Plugin extends HC.AnimationPlugin {
 
         apply(index) {
-            var light = this.create();
+            let light = this.create();
 
             if (light) {
                 light.userData.index = index;

@@ -1,74 +1,83 @@
-HC.plugins.coloring_mode.reactivergb = _class(false, HC.ColoringModePlugin, {
-    name: 'reactive RGB',
-    apply: function (shape, reactive, radial) {
-        var layer = this.layer;
+{
+    HC.plugins.coloring_mode.reactivergb = class Plugin extends HC.ColoringModePlugin {
+        static name = 'reactive RGB';
 
-        var color = shape.color;
-        color = hslToRgb(color);
-        var matrix = layer.getPatternPlugin('matrix');
-        var gridPosition = matrix.gridPosition(shape);
+        apply(shape, reactive, radial) {
+            let layer = this.layer;
 
-        var v = 0.75 * this.settings.coloring_volume;
-        var m1 = 2;
-        if (reactive !== false) {
-            var sync = this.settings.coloring_sync;
-            var fbdv = shape.shapeVolume();
+            let color = shape.color;
+            color = hslToRgb(color);
+            let matrix = layer.getPatternPlugin('matrix');
+            let gridPosition = matrix.gridPosition(shape);
 
-            if (!sync && gridPosition.y > 1) {
-                var i = gridPosition.x - 1;
-                if (layer.shapes[i]) {
-                    var c2 = layer.shapes[i];
-                    fbdv = c2.shapeVolume() * 0.6;
+            let v = 0.75 * this.settings.coloring_volume;
+            let m1 = 2;
+            if (reactive !== false) {
+                let sync = this.settings.coloring_sync;
+                let fbdv = shape.shapeVolume();
+
+                if (!sync && gridPosition.y > 1) {
+                    let i = gridPosition.x - 1;
+                    if (layer.shapes[i]) {
+                        let c2 = layer.shapes[i];
+                        fbdv = c2.shapeVolume() * 0.6;
+                    }
                 }
+
+                v = (!sync ? fbdv : audio.volume);
+                m1 = (audioman.isActive() ? 8 : 2);
             }
 
-            v = (!sync ? fbdv : audio.volume);
-            m1 = (audioman.isActive() ? 8 : 2);
+            let prc;
+            if (radial) {
+                let ps = new THREE.Vector2(shape.x(), shape.y());
+                let dv = layer.resolution('half');
+                ps.sub(dv);
+
+                prc = (reactive ? 6 : 3) * (layer.resolution('half').length() - ps.length()) / layer.resolution('half').length();
+
+            } else {
+                prc = m1 * (1 + gridPosition.y) / matrix.rowCount(layer); // original KEEP!
+            }
+
+            prc *= RAD * 180 * v * this.settings.coloring_volume;
+
+            color.r = (Math.sin(prc) / 2 + 0.5) * 255;
+            color.g = (Math.sin(prc + 60 * RAD) / 2 + 0.5) * 255;
+            color.b = (Math.sin(prc + 120 * RAD) / 2 + 0.5) * 255;
+
+            color = rgbToHsl(color);
+            copyHsl(color, shape.color);
         }
+    }
+}
+{
+    HC.plugins.coloring_mode.reactivergbc = class Plugin extends HC.ColoringModePlugin {
+        static name = 'reactive RGB center';
 
-        var prc;
-        if (radial) {
-            var ps = new THREE.Vector2(shape.x(), shape.y());
-            var dv = layer.resolution('half');
-            ps.sub(dv);
-
-            prc = (reactive ? 6 : 3) * (layer.resolution('half').length() - ps.length()) / layer.resolution('half').length();
-
-        } else {
-            prc = m1 * (1 + gridPosition.y) / matrix.rowCount(layer); // original KEEP!
+        apply(shape) {
+            let layer = this.layer;
+            layer.getColoringModePlugin('reactivergb').apply(shape, true, true);
         }
-
-        prc *= RAD * 180 * v * this.settings.coloring_volume;
-
-        color.r = (Math.sin(prc) / 2 + 0.5) * 255;
-        color.g = (Math.sin(prc + 60 * RAD) / 2 + 0.5) * 255;
-        color.b = (Math.sin(prc + 120 * RAD) / 2 + 0.5) * 255;
-
-        color = rgbToHsl(color);
-        copyHsl(color, shape.color);
     }
-});
+}
+{
+    HC.plugins.coloring_mode.floatrgb = class Plugin extends HC.ColoringModePlugin {
+        static name = 'float RGB';
 
-HC.plugins.coloring_mode.reactivergbc = _class(false, HC.ColoringModePlugin, {
-    name: 'reactive RGB center',
-    apply: function (shape) {
-        var layer = this.layer;
-        layer.getColoringModePlugin('reactivergb').apply(shape, true, true);
+        apply(shape) {
+            let layer = this.layer;
+            layer.getColoringModePlugin('reactivergb').apply(shape, false, false);
+        }
     }
-});
+}
+{
+    HC.plugins.coloring_mode.floatrgbc = class Plugin extends HC.ColoringModePlugin {
+        static name = 'float RGB center';
 
-HC.plugins.coloring_mode.floatrgb = _class(false, HC.ColoringModePlugin, {
-    name: 'float RGB',
-    apply: function (shape) {
-        var layer = this.layer;
-        layer.getColoringModePlugin('reactivergb').apply(shape, false, false);
+        apply(shape) {
+            let layer = this.layer;
+            layer.getColoringModePlugin('reactivergb').apply(shape, false, true);
+        }
     }
-});
-
-HC.plugins.coloring_mode.floatrgbc = _class(false, HC.ColoringModePlugin, {
-    name: 'float RGB center',
-    apply: function (shape) {
-        var layer = this.layer;
-        layer.getColoringModePlugin('reactivergb').apply(shape, false, true);
-    }
-});
+}

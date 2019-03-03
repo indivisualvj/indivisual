@@ -12,10 +12,10 @@ HC.plugins.background_mode = HC.plugins.background_mode || {};
         current(background) {
             if (background !== undefined) {
                 // manipulate prototype instead of direct to avoid having to call HC.BackgroundModePlugin.current on the other hand.
-                HC.BackgroundModePlugin.prototype.constructor.background = background;
+                HC.BackgroundModePlugin.background = background;
             }
 
-            return HC.BackgroundModePlugin.prototype.constructor.background;
+            return HC.BackgroundModePlugin.background;
         }
 
         _settingID() {

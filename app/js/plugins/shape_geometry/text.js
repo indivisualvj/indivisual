@@ -1,17 +1,38 @@
-HC.plugins.shape_geometry.text = _class(false, HC.ShapeGeometryPlugin, {
-    name: 'text (coolvetica)',
-    create: function () {
-        var geometry = new THREE.TextGeometry(this.settings.shape_vertices || 'indivisual', {
-            font: assetman.fonts.coolvetica,
-            size: this.layer.shapeSize(.19),
-            height: this.settings.shape_variant * 10,
-            curveSegments: 12,
-            bevelEnabled: true,
-            bevelThickness: 1,
-            bevelSize: .1,
-            bevelSegments: 3
+{
+    let coolvetica = false;
+    if (IS_ANIMATION) {
+        assetman.loadFont(filePath(FONT_DIR, 'coolvetica.json'), function (font) {
+            coolvetica = font;
         });
-        geometry.center();
-        return geometry;
     }
-});
+    HC.plugins.shape_geometry.text = class Plugin extends HC.ShapeGeometryPlugin {
+        static name = 'text (coolvetica)';
+
+        create() {
+            let geometry;
+
+            if (this.ready()) {
+                geometry = new THREE.TextGeometry(this.settings.shape_vertices || 'indivisual', {
+                    font: coolvetica,
+                    size: this.layer.shapeSize(.19),
+                    // height: this.settings.shape_moda * 10,
+                    curveSegments: this.getModA(1, 1, 12),
+                    bevelEnabled: this.settings.shape_modb,
+                    bevelThickness: this.getModB(1, 1),
+                    bevelSize: this.getModC(1, 1) / 8,
+                    bevelSegments: this.getModA(1, 1, 12)
+                });
+                geometry.center();
+
+            } else {
+                geometry = this.layer.getShapeGeometryPlugin('tile').create();
+
+            }
+            return geometry;
+        }
+
+        ready() {
+            return coolvetica;
+        }
+    }
+}

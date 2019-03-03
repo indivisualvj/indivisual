@@ -1,9 +1,10 @@
-HC.plugins.mesh_material.lambert = _class(false, HC.MeshMaterialPlugin, {
-    index: 1,
-    apply: function (geometry) {
-        var material = new THREE.MeshLambertMaterial();
-        var mesh = new THREE.Mesh(geometry, material);
+{
+    HC.plugins.mesh_material.lambert = class Plugin extends HC.MeshMaterialPlugin {
+        static index = 1;
 
-        return mesh;
+        apply(geometry) {
+            let material = new THREE.MeshLambertMaterial();
+            return new THREE.Mesh(geometry, material);
+        }
     }
-});
+}

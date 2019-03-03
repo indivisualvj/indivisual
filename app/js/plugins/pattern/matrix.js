@@ -1,51 +1,50 @@
-HC.plugins.pattern.matrix = _class(
-    function () {
-        this.columns = false;
-        this.rows = false;
-    }, HC.PatternPlugin, {
-        name: 'matrix',
-        index: 2,
-        injections: {position: false},
-        apply: function (shape) {
-            var layer = this.layer;
+{
+    HC.plugins.pattern.matrix = class Plugin extends HC.PatternPlugin {
+        static name = 'matrix';
+        static index = 2;
+        columns = false;
+        rows = false;
+        injections = {position: false};
 
-            var gridPosition = this.gridPosition(shape);
+        apply(shape) {
+            let layer = this.layer;
 
-            var gapx = layer.shapeSize(1) * this.settings.pattern_paddingx;
-            var gapy = layer.shapeSize(1) * this.settings.pattern_paddingy;
+            let gridPosition = this.gridPosition(shape);
+
+            let gapx = layer.shapeSize(1) * this.settings.pattern_paddingx;
+            let gapy = layer.shapeSize(1) * this.settings.pattern_paddingy;
 
             gapx *= this.settings.pattern_padding;
             gapy *= this.settings.pattern_padding;
 
-            var ox = (-gapx * this.columnCount(layer)) / 2;
-            var oy = (-gapy * this.rowCount(layer)) / 2;
+            let ox = (-gapx * this.columnCount(layer)) / 2;
+            let oy = (-gapy * this.rowCount(layer)) / 2;
 
-            var x = ox + gridPosition.x * gapx - gapx / 2;
-            var y = oy + gridPosition.y * gapy - gapy / 2;
-            var z = 0;
+            let x = ox + gridPosition.x * gapx - gapx / 2;
+            let y = oy + gridPosition.y * gapy - gapy / 2;
+            let z = 0;
 
             layer.positionIn3dSpace(shape, x, -y, z);
 
             this.sharedMoverParams(ox, oy, gapx, gapy);
-        },
+        }
 
-        getDistributionOnMatrix: function (columns, rows, index, vector) {
+        getDistributionOnMatrix(columns, rows, index, vector) {
             // find out the number of filled rows
-            var row = Math.floor(index / columns);
+            let row = Math.floor(index / columns);
 
             // find out the column index
-            var column = index - row * columns;
+            let column = index - row * columns;
             // revert column index on every odd row
             if (row % 2 == 1) {
                 column = columns - column - 1;
             }
             vector.x = ++column;
             vector.y = ++row;
-        },
+        }
 
-        gridPosition: function (shape) {
-            var layer = this.layer;
-            var params = this.params(shape);
+        gridPosition(shape) {
+            let params = this.params(shape);
 
             if (params.position === false) {
                 params.position = new THREE.Vector2();
@@ -53,18 +52,18 @@ HC.plugins.pattern.matrix = _class(
             }
 
             return params.position;
-        },
+        }
 
-        columnCount: function () {
-            var layer = this.layer;
+        columnCount() {
+            let layer = this.layer;
             if (this.columns === false) {
                 this.columns = Math.floor(layer.resolution().x / layer.shapeSize(1));
             }
             return this.columns;
-        },
+        }
 
-        rowCount: function () {
-            var layer = this.layer;
+        rowCount() {
+            let layer = this.layer;
             if (this.rows === false) {
                 this.rows = Math.ceil(layer.shapeCount() / this.columnCount(layer));
             }
@@ -72,4 +71,4 @@ HC.plugins.pattern.matrix = _class(
             return this.rows;
         }
     }
-);
+}

@@ -1,22 +1,22 @@
-HC.plugins.mesh_material.bubbles = _class(false, HC.MeshMaterialPlugin, {
-    apply: function (geometry) {
-        var material = new THREE.ShaderMaterial(this.shader);
-        material.color = new THREE.Color();
-        listener.register('animation.updateRuntime', 'material.uniforms.uTime.value', function (now) {
-            material.uniforms.uTime.value = now;
-        });
-        var mesh = new THREE.Mesh(geometry, material);
+{
+    HC.plugins.mesh_material.bubbles = class Plugin extends HC.MeshMaterialPlugin {
+        apply(geometry) {
+            let material = new THREE.ShaderMaterial(this.shader);
+            material.color = new THREE.Color();
+            listener.register('animation.updateRuntime', 'material.uniforms.uTime.value', function (now) {
+                material.uniforms.uTime.value = now;
+            });
 
-        return mesh;
-    },
+            return new THREE.Mesh(geometry, material);
+        }
 
-    shader: {
-        uniforms: {
-            uTime: {type: 'f', value: 1.0}
-        },
-        // Created by inigo quilez - iq/2013
-        // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
-        fragmentShader: `
+        shader = {
+            uniforms: {
+                uTime: {type: 'f', value: 1.0}
+            },
+            // Created by inigo quilez - iq/2013
+            // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+            fragmentShader: `
             varying vec2 vUv;
             uniform float uTime;
             void main () {
@@ -48,11 +48,9 @@ HC.plugins.mesh_material.bubbles = _class(false, HC.MeshMaterialPlugin, {
 
 
                 gl_FragColor = vec4(color,1.0);
-            }
-
-
-        `,
-
-        vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
+            }`
+            ,
+            vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
+        }
     }
-});
+}

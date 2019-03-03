@@ -133,7 +133,7 @@
                                 var key = data.dir + '/' + data.name;
                                 var contents = JSON.parse(data.contents);
                                 if (contents.tutorial) {
-                                    new HC.ScriptProcessor(key, contents.tutorial).log();
+                                    new HC.ScriptProcessor(key, Object.create(contents.tutorial)).log();
                                 }
                                 controller.preset(key, contents);
                                 explorer.setLoaded(statics.ControlSettings.layer, true);

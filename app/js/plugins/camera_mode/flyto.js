@@ -1,35 +1,41 @@
-HC.plugins.camera_mode.flytoshape = _class(false, HC.CameraModePlugin, {
-    name: 'fly to shape',
-    before: function () {
-        // dispable parent.before
-        this.layer.updateCameraFov();
-    },
-    apply: function (peak) {
-        var layer = this.layer;
+{
+    HC.plugins.camera_mode.flytoshape = class Plugin extends HC.CameraModePlugin {
+        static name = 'fly to shape';
 
-        var lookatshape = layer.getCameraModePlugin('lookatshape');
-        lookatshape.apply(peak, false);
+        before() {
+            // disable super.before
+            this.layer.updateCameraFov();
+        }
 
-        var cam = layer.getCamera();
-        var shared = lookatshape.shared;
+        apply(peak) {
+            let layer = this.layer;
 
-        var pos = cam.position;
-        var distance = pos.distanceTo(shared.targetLook);
+            let lookatshape = layer.getCameraModePlugin('lookatshape');
+            lookatshape.apply(peak, false);
 
-        if (distance > layer.shapeSize(shared.shape.size()) * 3) {
-            var speed = beatkeeper.getSpeed('full');
-            var prog = animation.getFrameDurationPercent(speed.duration, .75);
+            let cam = layer.getCamera();
+            let shared = lookatshape.shared;
 
-            cam.translateZ(-prog * distance / 2);
+            let pos = cam.position;
+            let distance = pos.distanceTo(shared.targetLook);
+
+            if (distance > layer.shapeSize(shared.shape.size()) * 3) {
+                let speed = beatkeeper.getSpeed('full');
+                let prog = animation.getFrameDurationPercent(speed.duration, .75);
+
+                cam.translateZ(-prog * distance / 2);
+            }
         }
     }
-});
+}
+{
+    HC.plugins.camera_mode.flytoshapepeak = class Plugin extends HC.CameraModePlugin {
+        static name = 'fly to shape on peak';
 
-HC.plugins.camera_mode.flytoshapepeak = _class(false, HC.CameraModePlugin, {
-    name: 'fly to shape on peak',
-    apply: function () {
-        var layer = this.layer;
+        apply() {
+            let layer = this.layer;
 
-        layer.getCameraModePlugin('flytoshape').apply(true);
+            layer.getCameraModePlugin('flytoshape').apply(true);
+        }
     }
-});
+}

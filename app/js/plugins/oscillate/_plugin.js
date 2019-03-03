@@ -12,7 +12,7 @@ HC.plugins.oscillate = HC.plugins.oscillate || {};
         params(key, value) {
 
             // create a unique key to cache progress etc.
-            var ckey = '_' + (isObject(key) ? '_object_' : key);
+            let ckey = '_' + (isObject(key) ? '_object_' : key);
 
             if (ckey in this.cache) {
                 // key already exists
@@ -32,7 +32,7 @@ HC.plugins.oscillate = HC.plugins.oscillate || {};
 
             // store original value
             if (isObject(key)) {
-                var ckey = (isObject(key) ? '_object_' : key);
+                let ckey = (isObject(key) ? '_object_' : key);
                 this.cache[ckey] = key.value;
 
             } else {
@@ -44,7 +44,7 @@ HC.plugins.oscillate = HC.plugins.oscillate || {};
         restore(key) {
             // restore original value
             if (isObject(key)) {
-                var ckey = (isObject(key) ? '_object_' : key);
+                let ckey = (isObject(key) ? '_object_' : key);
                 key.value = this.cache[ckey];
 
             } else {

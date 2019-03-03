@@ -88,9 +88,10 @@ HC.Layer.prototype.nextGeometry = function () {
         }
 
         return geometry;
+
     }
 
-    return false;
+    return new THREE.PlaneGeometry(this.shapeSize(.1), this.shapeSize(1));
 };
 
 /**

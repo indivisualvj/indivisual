@@ -1,10 +1,9 @@
-HC.plugins.pattern.bar = _class(
-    function () {
-        this.orientation = 0;
-        this.position = 0;
-    }, HC.PatternPlugin, {
-        name: 'bar',
-        injections: {
+{
+    HC.plugins.pattern.bar = class Plugin extends HC.PatternPlugin {
+        static name = 'bar';
+        orientation = 0;
+        position = 0;
+        injections = {
             next: {
                 x: false,
                 y: false,
@@ -16,13 +15,13 @@ HC.plugins.pattern.bar = _class(
                 z: 0
             },
             tween: false
-        },
+        };
 
-        apply: function (shape) {
-            var layer = this.layer;
+        apply(shape) {
+            let layer = this.layer;
 
-            var params = this.params(shape);
-            var speed = layer.getShapeSpeed(shape);
+            let params = this.params(shape);
+            let speed = layer.getShapeSpeed(shape);
 
             if (!params.tween && speed.prc == 0) {
 
@@ -31,8 +30,8 @@ HC.plugins.pattern.bar = _class(
                     this.position = randomInt(0, this.orientation ? layer.resolution('half').y : layer.resolution('half').x, true);
                 }
 
-                var from = params.current;
-                var to = {
+                let from = params.current;
+                let to = {
                     x: 0,
                     y: 0,
                 };
@@ -45,7 +44,7 @@ HC.plugins.pattern.bar = _class(
                     to.y = -layer.resolution('half').y + layer.resolution().y / layer.shapeCount() * randomInt(0, layer.shapeCount());
                 }
 
-                var tween = this.tweenShape(shape, from, to);
+                let tween = this.tweenShape(shape, from, to);
                 tween.easing(TWEEN.Easing.Quadratic.InOut);
                 tween.onUpdate(function () {
                     layer.positionIn3dSpace(shape, from.x, from.y, from.z);
@@ -59,4 +58,4 @@ HC.plugins.pattern.bar = _class(
             }
         }
     }
-);
+}

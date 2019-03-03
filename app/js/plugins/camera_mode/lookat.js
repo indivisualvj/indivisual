@@ -1,26 +1,25 @@
-HC.plugins.camera_mode.lookatshape = _class(
-    function () {
-        this.targetLook = new THREE.Vector3(0, 0, 0);
-        this.currentLook = new THREE.Vector3(0, 0, 0);
-        this.shape = false;
-        this.entry = 0;
-        this._tween = false;
-        this.quatFrom = false;
-        this.quatTo = false;
-        this.shared = {
+{
+    HC.plugins.camera_mode.lookatshape = class Plugin extends HC.CameraModePlugin {
+        static name = 'look at a shape';
+        targetLook = new THREE.Vector3(0, 0, 0);
+        currentLook = new THREE.Vector3(0, 0, 0);
+        shape = false;
+        entry = 0;
+        _tween = false;
+        quatFrom = false;
+        quatTo = false;
+        shared = {
             shape: false,
             targetLook: new THREE.Vector3(),
             currentLook: new THREE.Vector3()
         };
 
-    }, HC.CameraModePlugin, {
-        name: 'look at a shape',
-        apply: function (peak, setPosition) {
-            var layer = this.layer;
-            var speed = beatkeeper.getSpeed('double');
-            var cam = layer.getCamera();
+        apply(peak, setPosition) {
+            let layer = this.layer;
+            let speed = beatkeeper.getSpeed('double');
+            let cam = layer.getCamera();
 
-            var dd = layer.cameraDefaultDistance();
+            let dd = layer.cameraDefaultDistance();
             cam.zoom = this.settings.camera_mode_volume;
             if (setPosition !== false) {
                 cam.position.set(
@@ -32,7 +31,7 @@ HC.plugins.camera_mode.lookatshape = _class(
 
             if (!this.shape || (!peak && speed.prc == 0) || (peak && audio.peak && randomBool())) {
 
-                var shape = layer.getRandomShape();
+                let shape = layer.getRandomShape();
                 if (shape != this.shape) {
                     this.shape = shape;
                     this._tween = true;
@@ -47,10 +46,10 @@ HC.plugins.camera_mode.lookatshape = _class(
                 this.quatTo = new THREE.Quaternion().copy(cam.quaternion);
                 cam.quaternion.copy(this.quatFrom);
 
-                var distance = cam.position.distanceTo(this.targetLook);
-                var step = animation.getFrameDurationPercent(speed.duration, .25);
-                var angle = cam.quaternion.angleTo(this.quatTo);
-                var m = Math.sqrt(angle + step);
+                let distance = cam.position.distanceTo(this.targetLook);
+                let step = animation.getFrameDurationPercent(speed.duration, .25);
+                let angle = cam.quaternion.angleTo(this.quatTo);
+                let m = Math.sqrt(angle + step);
 
                 if (angle < 2 / distance) {
                     this._tween = false;
@@ -69,11 +68,13 @@ HC.plugins.camera_mode.lookatshape = _class(
             this.shared.currentLook = this.currentLook;
         }
     }
-);
+}
+{
+    HC.plugins.camera_mode.lookatshapepeak = class Plugin extends HC.CameraModePlugin {
+        static name = 'look at a shape on peak';
 
-HC.plugins.camera_mode.lookatshapepeak = _class(false, HC.CameraModePlugin, {
-    name: 'look at a shape on peak',
-    apply: function () {
-        this.layer.getCameraModePlugin('lookatshape').apply(true);
+        apply() {
+            this.layer.getCameraModePlugin('lookatshape').apply(true);
+        }
     }
-});
+}

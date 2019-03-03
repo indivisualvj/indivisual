@@ -124,20 +124,36 @@ var HC = HC || {};
 
         /**
          *
+         * @param file
+         * @param onload
          */
-        loadFonts() {
-            new THREE.FontLoader().load(filePath(FONT_DIR, 'coolvetica.json'), function (font) {
-                inst.fonts.coolvetica = font;
-            });
+        loadFont(file, onload) {
+            if (this.fonts[file]) {
+                onload(this.fonts[file]);
+
+            } else {
+                new THREE.FontLoader().load(file, function (font) {
+                    inst.fonts[file] = font;
+                    onload(font);
+                });
+            }
         }
 
         /**
          *
+         * @param file
+         * @param onload
          */
-        loadTextures() {
-            new THREE.TextureLoader().load(filePath(TEXTURE_DIR, 'rgb-noise.png'), function (texture) {
-                inst.textures.rgbnoise = texture;
-            });
+        loadTexture(file, onload) {
+            if (this.textures[file]) {
+                onload(this.textures[file]);
+
+            } else {
+                new THREE.TextureLoader().load(file, function (texture) {
+                    inst.textures[file] = texture;
+                    onload(texture);
+                });
+            }
         }
 
     }

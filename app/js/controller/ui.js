@@ -440,7 +440,7 @@ HC.Controller.prototype.explainPlugin = function (item, value) {
     if (item in HC.plugins) {
         if (value in HC.plugins[item]) {
             var proto = HC.plugins[item][value].prototype;
-            var desc = proto.tutorial || proto.constructor.tutorial;
+            var desc = proto.tutorial || proto.constructor.tutorial; // todo after classifying all remove
             if (desc) {
                 var key = item + '.' + value;
                 new HC.ScriptProcessor(key, desc).log();
@@ -536,7 +536,7 @@ HC.Controller.prototype.toggleByKey = function (ci, shiftKey) {
  */
 HC.Controller.prototype.scrollToControl = function (control) {
     setTimeout(function () {
-        var container = control.__ul.parentNode.parentNode; // todo funkt nicht im iframe
+        var container = control.__ul.parentNode.parentNode; // todo funkt nicht bei single column layout
         var coot = container.offsetTop;
         var ctrl = container.offsetParent;
         var ctot = ctrl.offsetTop;

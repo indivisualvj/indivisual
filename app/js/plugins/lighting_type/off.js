@@ -1,6 +1,9 @@
-HC.plugins.lighting_type.off = _class(false, HC.LightingTypePlugin, {
-    index: 1,
-    create: function () {
-        return false;
+{
+    HC.plugins.lighting_type.off = class Plugin extends HC.LightingTypePlugin {
+        static index = 1;
+
+        create() {
+            return false;
+        }
     }
-});
+}

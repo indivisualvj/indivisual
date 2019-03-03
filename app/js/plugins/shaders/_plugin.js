@@ -38,9 +38,9 @@ HC.plugins.shaders = HC.plugins.shaders || {};
         }
 
         apply(key, sh) {
-            var dependencies = this.dependencies;
-            var glsh = this.pass;
-            var name = this.key;
+            let dependencies = this.dependencies;
+            let glsh = this.pass;
+            let name = this.key;
             sh = sh || this.settings.shaders[name];
 
             if (sh.random) {
@@ -55,16 +55,16 @@ HC.plugins.shaders = HC.plugins.shaders || {};
                 return false;
             }
 
-            for (var skey in sh) {
-                var shs = sh[skey];
+            for (let skey in sh) {
+                let shs = sh[skey];
 
                 if (typeof shs != 'boolean' && typeof shs != 'number') {
 
                     if ('value' in shs) {
-                        var v = shs.value;
+                        let v = shs.value;
 
                         if (shs.type == 'sampler2D') {
-                            var img = statics.overlay_one ? statics.overlay_one.target : false;
+                            let img = statics.overlay_one ? statics.overlay_one.target : false;
                             if (img) {
                                 v = statics.overlay_one.target;
                                 glsh.uniforms[skey + '_ready'].value = 1;
@@ -75,9 +75,9 @@ HC.plugins.shaders = HC.plugins.shaders || {};
                         } else {
                             if (shs.oscillate && shs.oscillate != 'off') {
 
-                                var plugin = this.layer.getOscillatePlugin(shs.oscillate);
+                                let plugin = this.layer.getOscillatePlugin(shs.oscillate);
                                 if (plugin) {
-                                    var allown = shs._type[0] < 0;
+                                    let allown = shs._type[0] < 0;
 
                                     plugin.store(shs);
 
@@ -101,15 +101,15 @@ HC.plugins.shaders = HC.plugins.shaders || {};
 
                                     if (audio.peak && randomBool()) {
                                         if (dependencies && dependencies[skey]) { // is in dependency
-                                            var dpc = dependencies[skey];
+                                            let dpc = dependencies[skey];
 
                                             if (dependencies[dpc]) { // is linked to dep
-                                                var dpck = dpc;
+                                                let dpck = dpc;
                                                 dpc = dependencies[dpck]; // get linked dep
-                                                var rv = glsh.uniforms[dpck].value; // get current value from dep
+                                                let rv = glsh.uniforms[dpck].value; // get current value from dep
                                                 if (dpc[rv]) { // check if linked dep contains current dep
                                                     dpc = dpc[rv]; // get valid values for skey from dep
-                                                    var dky = Object.keys(dpc);
+                                                    let dky = Object.keys(dpc);
                                                     v = dky[randomInt(0, dky.length - 1)]; // random from valid values
 
                                                 } else { // fallback
@@ -117,7 +117,7 @@ HC.plugins.shaders = HC.plugins.shaders || {};
                                                 }
 
                                             } else {
-                                                var dky = Object.keys(dpc);
+                                                let dky = Object.keys(dpc);
                                                 v = dky[randomInt(0, dky.length - 1)]; // random from valid values
 
                                             }
@@ -145,8 +145,7 @@ HC.plugins.shaders = HC.plugins.shaders || {};
                                     v = shs._type[0] + v;
                                 }
 
-                                var nv = this[shs._func](v);
-                                v = nv;
+                                v = this[shs._func](v);
                             }
 
                             if (glsh.uniforms) {

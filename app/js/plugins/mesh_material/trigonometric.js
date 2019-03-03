@@ -1,36 +1,35 @@
-HC.plugins.mesh_material.trigonometric = _class(false, HC.MeshMaterialPlugin, {
-    apply: function (geometry) {
-        var material = new THREE.ShaderMaterial(this.shader);
-        material.color = new THREE.Color();
-        listener.register('animation.updateRuntime', 'material.uniforms.uTime.value', function (now) {
-            material.uniforms.uTime.value = now;
-        });
-        var mesh = new THREE.Mesh(geometry, material);
+{
+    HC.plugins.mesh_material.trigonometric = class Plugin extends HC.MeshMaterialPlugin {
+        apply(geometry) {
+            let material = new THREE.ShaderMaterial(this.shader);
+            material.color = new THREE.Color();
+            listener.register('animation.updateRuntime', 'material.uniforms.uTime.value', function (now) {
+                material.uniforms.uTime.value = now;
+            });
+            return new THREE.Mesh(geometry, material);
+        }
 
-        return mesh;
-    },
+        shader = {
+            uniforms: {
+                uTime: {type: 'f', value: 1.0}
+            },
 
-    shader: {
-        uniforms: {
-            uTime: {type: 'f', value: 1.0}
-        },
-
-        // Created by inigo quilez - iq/2013
-        // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+            // Created by inigo quilez - iq/2013
+            // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
 
 
-        // Other "Iterations" shaders:
-        //
-        // "trigonometric"   : https://www.shadertoy.com/view/Mdl3RH
-        // "trigonometric 2" : https://www.shadertoy.com/view/Wss3zB
-        // "circles"         : https://www.shadertoy.com/view/MdVGWR
-        // "coral"           : https://www.shadertoy.com/view/4sXGDN
-        // "guts"            : https://www.shadertoy.com/view/MssGW4
-        // "inversion"       : https://www.shadertoy.com/view/XdXGDS
-        // "inversion 2"     : https://www.shadertoy.com/view/4t3SzN
-        // "shiny"           : https://www.shadertoy.com/view/MslXz8
-        // "worms"           : https://www.shadertoy.com/view/ldl3W4
-        fragmentShader: `
+            // Other "Iterations" shaders:
+            //
+            // "trigonometric"   : https://www.shadertoy.com/view/Mdl3RH
+            // "trigonometric 2" : https://www.shadertoy.com/view/Wss3zB
+            // "circles"         : https://www.shadertoy.com/view/MdVGWR
+            // "coral"           : https://www.shadertoy.com/view/4sXGDN
+            // "guts"            : https://www.shadertoy.com/view/MssGW4
+            // "inversion"       : https://www.shadertoy.com/view/XdXGDS
+            // "inversion 2"     : https://www.shadertoy.com/view/4t3SzN
+            // "shiny"           : https://www.shadertoy.com/view/MslXz8
+            // "worms"           : https://www.shadertoy.com/view/ldl3W4
+            fragmentShader: `
             varying vec2 vUv;
             uniform float uTime;
             vec2 iterate (in vec2 p, in vec4 t) {
@@ -70,10 +69,9 @@ HC.plugins.mesh_material.trigonometric = _class(false, HC.MeshMaterialPlugin, {
                 col *= 0.3 + 0.7*pow( 16.0*q.x*q.y*(1.0-q.x)*(1.0-q.y), 0.2 );
 
                 gl_FragColor = vec4( col, 1.0 );
-            }
-        `,
-
-        vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
+            }`
+            ,
+            vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
+        }
     }
-});
-
+}

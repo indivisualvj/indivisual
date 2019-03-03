@@ -1,24 +1,26 @@
-HC.plugins.offset_mode.random = _class(false, HC.OffsetModePlugin, {
-    name: 'random',
-    injections: {
-        value: false
-    },
+{
+    HC.plugins.offset_mode.random = class Plugin extends HC.OffsetModePlugin {
+        static name = 'random';
+        injections = {
+            value: false
+        };
 
-    apply: function (shape) {
-        var layer = this.layer;
+        apply(shape) {
+            let layer = this.layer;
 
-        var params = this.params(shape);
+            let params = this.params(shape);
 
-        if (!params.value) {
-            params.value = (layer.shapeSize(1) / randomFloat(0.1, 1, 2, true));
+            if (!params.value) {
+                params.value = (layer.shapeSize(1) / randomFloat(0.1, 1, 2, true));
+            }
+
+            let m = params.value;
+            let x = this.settings.offset_x * m;
+            let y = this.settings.offset_y * m;
+            let z = this.settings.offset_z * m;
+
+            shape.offset(x, y, z);
+
         }
-
-        var m = params.value;
-        var x = this.settings.offset_x * m;
-        var y = this.settings.offset_y * m;
-        var z = this.settings.offset_z * m;
-
-        shape.offset(x, y, z);
-
     }
-});
+}

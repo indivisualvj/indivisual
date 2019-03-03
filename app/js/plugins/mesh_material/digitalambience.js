@@ -1,22 +1,21 @@
-HC.plugins.mesh_material.digitalambience = _class(false, HC.MeshMaterialPlugin, {
-    apply: function (geometry) {
-        var material = new THREE.ShaderMaterial(this.shader);
-        material.color = new THREE.Color();
-        listener.register('animation.updateRuntime', 'material.uniforms.uTime.value', function (now) {
-            material.uniforms.uTime.value = now;
-        });
-        var mesh = new THREE.Mesh(geometry, material);
+{
+    HC.plugins.mesh_material.digitalambience = class Plugin extends HC.MeshMaterialPlugin {
+        apply(geometry) {
+            let material = new THREE.ShaderMaterial(this.shader);
+            material.color = new THREE.Color();
+            listener.register('animation.updateRuntime', 'material.uniforms.uTime.value', function (now) {
+                material.uniforms.uTime.value = now;
+            });
 
-        return mesh;
-    },
+            return new THREE.Mesh(geometry, material);
+        }
 
-    shader: {
-        uniforms: {
-            uTime: {type: 'f', value: 1.0}
-        },
-
-        // srtuss 2014 / https://www.shadertoy.com/view/MdXXW2
-        fragmentShader: `
+        shader = {
+            uniforms: {
+                uTime: {type: 'f', value: 1.0}
+            },
+            // srtuss 2014 / https://www.shadertoy.com/view/MdXXW2
+            fragmentShader: `
             uniform float uTime;
             varying vec2 vUv;
             
@@ -107,9 +106,9 @@ HC.plugins.mesh_material.digitalambience = _class(false, HC.MeshMaterialPlugin, 
                 col = pow(col, vec3(1.0 / 2.2));
                 //col = clamp(col, vec3(0.0), vec3(1.0));
                 gl_FragColor = vec4(col, 1.0);
-            }
-        `,
-
-        vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
+            }`
+            ,
+            vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
+        }
     }
-});
+}

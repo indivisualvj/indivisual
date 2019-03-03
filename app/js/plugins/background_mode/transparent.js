@@ -1,8 +1,11 @@
-HC.plugins.background_mode.transparent = _class(false, HC.BackgroundModePlugin, {
-    index: 1,
-    apply: function () {
-        if (this.current() !== false) {
-            this.layer.setBackground(this.current(false));
+{
+    HC.plugins.background_mode.transparent = class Plugin extends HC.BackgroundModePlugin {
+        static index = 1;
+
+        apply() {
+            if (this.current() !== false) {
+                this.layer.setBackground(this.current(false));
+            }
         }
     }
-});
+}

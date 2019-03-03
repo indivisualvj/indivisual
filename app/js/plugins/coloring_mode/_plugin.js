@@ -3,20 +3,20 @@ HC.plugins.coloring_mode = HC.plugins.coloring_mode || {};
     HC.ColoringModePlugin = class Plugin extends HC.AnimationPlugin {
 
         before(shape) {
-            // var locked = this.shapeColoringModeLocked(shape);
+            // let locked = this.shapeColoringModeLocked(shape);
             // if (locked) {
             //     return false;
             // }
         }
 
         after(shape) {
-            var c = shape.color;
+            let c = shape.color;
             c.h += this.settings.coloring_hue;
             c.s *= this.settings.coloring_sat;
             c.l *= this.settings.coloring_lum * 2;
 
             if (this.settings.coloring_audio && audioman.isActive()) {
-                var v = audio.volume;
+                let v = audio.volume;
                 if (!this.settings.coloring_sync) {
                     v = shape.shapeVolume();
                 }
@@ -29,8 +29,8 @@ HC.plugins.coloring_mode = HC.plugins.coloring_mode || {};
 
         // shapeColoringModeLocked (shape, enabled) {
         //     if (shape) {
-        //         var plugin = this.layer.getColoringModePlugin();
-        //         var params = plugin.params(shape);
+        //         let plugin = this.layer.getColoringModePlugin();
+        //         let params = plugin.params(shape);
         //         if (enabled !== undefined) {
         //             params.__locked = enabled;
         //         }

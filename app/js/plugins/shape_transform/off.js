@@ -1,8 +1,10 @@
-HC.plugins.shape_transform.off = _class(false, HC.ShapeTransformPlugin, {
-    index: 1,
-    name: 'off',
+{
+    HC.plugins.shape_transform.off = class Plugin extends HC.ShapeTransformPlugin {
+        static index = 1;
+        static name = 'off';
 
-    apply: function (shape) {
+        apply(shape) {
 
+        }
     }
-});
+}

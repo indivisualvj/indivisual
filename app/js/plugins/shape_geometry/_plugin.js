@@ -4,12 +4,16 @@ HC.plugins.shape_geometry = HC.plugins.shape_geometry || {};
 
         apply() {
             if (!this.geometry) { // all meshes use the same geometry
-                var geometry = this.create();
+                let geometry = this.create();
 
                 if (!geometry._uvsAssigned) {
                     if (this.settings.material_mapping == 'f2b') {
                         this.assignUVs(geometry);
                     }
+                }
+
+                if (!this.ready()) { // return (fallback) geometry
+                    return geometry;
                 }
 
                 this.geometry = geometry;
@@ -28,6 +32,35 @@ HC.plugins.shape_geometry = HC.plugins.shape_geometry || {};
 
         assignUVs(geometry) {
             assignUVs(geometry)
+        }
+
+        getModA(min, fallback, max) {
+            if (this.settings.shape_moda < min) {
+                return fallback;
+            }
+            max = max || this.settings.shape_moda;
+
+            return Math.min(max, this.settings.shape_moda);
+        }
+
+        getModB(min, fallback, max) {
+            if (this.settings.shape_modb < min) {
+                return fallback;
+            }
+
+            max = max || this.settings.shape_modb;
+
+            return Math.min(max, this.settings.shape_modb);
+        }
+
+        getModC(min, fallback, max) {
+            if (this.settings.shape_modc < min) {
+                return fallback;
+            }
+
+            max = max || this.settings.shape_modc;
+
+            return Math.min(max, this.settings.shape_modc);
         }
     }
 }

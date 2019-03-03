@@ -1,11 +1,11 @@
-HC.plugins.camera_mode.mirror = _class(
-    function () {
-        this.mirror = new THREE.Vector3(1, 1, 1);
-    }, HC.CameraModePlugin, {
-        name: 'mirror XYZ position (current)',
-        apply: function (peak) {
+{
+    HC.plugins.camera_mode.mirror = class Plugin extends HC.CameraModePlugin {
+        static name = 'mirror XYZ position (current)';
+        mirror = new THREE.Vector3(1, 1, 1);
 
-            var speed = this.layer.getCurrentSpeed();
+        apply(peak) {
+
+            let speed = this.layer.getCurrentSpeed();
             if ((peak && audio.peak && randomBool()) || (!peak && speed.prc == 0)) {
                 this.mirror.x = randomBool() ? -1 : 1;
                 this.mirror.y = randomBool() ? -1 : 1;
@@ -13,7 +13,7 @@ HC.plugins.camera_mode.mirror = _class(
             }
 
             this.layer.getCameraModePlugin('manual').apply();
-            var cam = this.layer.getCamera();
+            let cam = this.layer.getCamera();
             cam.position.x *= this.mirror.x;
             cam.position.y *= this.mirror.y;
             cam.position.z *= this.mirror.z;
@@ -21,11 +21,13 @@ HC.plugins.camera_mode.mirror = _class(
             cam.lookAt(new THREE.Vector3(0, 0, 0));
         }
     }
-);
+}
+{
+    HC.plugins.camera_mode.mirrorpeak = class Plugin extends HC.CameraModePlugin {
+        static name = 'mirror XYZ position (peak)';
 
-HC.plugins.camera_mode.mirrorpeak = _class(false, HC.CameraModePlugin, {
-    name: 'mirror XYZ position (peak)',
-    apply: function () {
-        this.layer.getCameraModePlugin('mirror').apply(true);
+        apply() {
+            this.layer.getCameraModePlugin('mirror').apply(true);
+        }
     }
-});
+}

@@ -8,7 +8,7 @@ function randomColor() {
     var vs = randomInt(50, 100);
     var vl = randomInt(25, 55);
 
-    var no = randomFloat(0.5, 0.9, 2, false);
+    var no = randomFloat(0.6, 0.9, 2, false);
 
     return {h: vh, s: vs, l: vl, o: no};
 }

@@ -1,25 +1,33 @@
-HC.plugins.oscillate.expindisappear = _class(false, HC.OscillatePlugin, {
-    name: 'expin & disappear',
-    apply: function (key) {
-        var layer = this.layer;
-        var speed = layer.getCurrentSpeed();
-        this.activate(key, Math.pow(speed.prc, 2));
-    }
-});
-HC.plugins.oscillate.logindisappear = _class(false, HC.OscillatePlugin, {
-    name: 'login & disappear',
-    apply: function (key) {
-        var layer = this.layer;
-        var speed = layer.getCurrentSpeed();
-        this.activate(key, Math.sqrt(speed.prc));
-    }
-});
+{
+    HC.plugins.oscillate.expindisappear = class Plugin extends HC.OscillatePlugin {
+        static name = 'expin & disappear';
 
-HC.plugins.oscillate.linindisappear = _class(false, HC.OscillatePlugin, {
-    name: 'linin & disappear',
-    apply: function (key) {
-        var layer = this.layer;
-        var speed = layer.getCurrentSpeed();
-        this.activate(key, speed.prc);
+        apply(key) {
+            let layer = this.layer;
+            let speed = layer.getCurrentSpeed();
+            this.activate(key, Math.pow(speed.prc, 2));
+        }
     }
-});
+}
+{
+    HC.plugins.oscillate.logindisappear = class Plugin extends HC.OscillatePlugin {
+        static name = 'login & disappear';
+
+        apply(key) {
+            let layer = this.layer;
+            let speed = layer.getCurrentSpeed();
+            this.activate(key, Math.sqrt(speed.prc));
+        }
+    }
+}
+{
+    HC.plugins.oscillate.linindisappear = class Plugin extends HC.OscillatePlugin {
+        static name = 'linin & disappear';
+
+        apply(key) {
+            let layer = this.layer;
+            let speed = layer.getCurrentSpeed();
+            this.activate(key, speed.prc);
+        }
+    }
+}

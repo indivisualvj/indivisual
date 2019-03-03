@@ -1,12 +1,10 @@
-HC.plugins.pattern.slime = _class(
-    function () {
-        this.next = {x: 0, y: 0, z: 0};
-        this.direction = 1;
-        this.angle = 0;
-    }, HC.PatternPlugin, {
-        name: 'slime',
-
-        injections: {
+{
+    HC.plugins.pattern.slime = class Plugin extends HC.PatternPlugin {
+        static name = 'slime';
+        next = {x: 0, y: 0, z: 0};
+        direction = 1;
+        angle = 0;
+        injections = {
             tween: false,
             next: {
                 x: 0,
@@ -22,12 +20,13 @@ HC.plugins.pattern.slime = _class(
                 angle: 0,
                 radius: 50
             }
-        },
-        apply: function (shape) {
-            var layer = this.layer;
+        };
 
-            var params = this.params(shape);
-            var speed = layer.getShapeSpeed(shape);
+        apply(shape) {
+            let layer = this.layer;
+
+            let params = this.params(shape);
+            let speed = layer.getShapeSpeed(shape);
 
             if (!params.tween && speed.prc == 0) {
 
@@ -42,16 +41,16 @@ HC.plugins.pattern.slime = _class(
                 params.next.angle = this.angle + (Math.PI / layer.shapeCount() * shape.index) * randomFloat(1 / Math.PI, 2 / Math.PI, 2);
                 params.next.radius = randomInt(layer.shapeSize(1.5), layer.shapeSize(2) * this.settings.pattern_padding);
 
-                var inst = this;
-                var tween = this.tweenShape(shape, params.current, params.next);
+                let inst = this;
+                let tween = this.tweenShape(shape, params.current, params.next);
                 tween.easing(TWEEN.Easing.Quadratic.InOut);
                 tween.onUpdate(function () {
-                    var x = params.current.x + Math.sin(params.current.angle) * params.current.radius;
-                    var y = params.current.y + Math.cos(params.current.angle) * params.current.radius;
+                    let x = params.current.x + Math.sin(params.current.angle) * params.current.radius;
+                    let y = params.current.y + Math.cos(params.current.angle) * params.current.radius;
 
                     inst.layer.positionIn2dSpace(shape, x, y, 0);
 
-                    var pos = shape.position();
+                    let pos = shape.position();
                     if (pos.x > layer.resolution().x) {
                         pos.x = layer.resolution().x;
                     }
@@ -75,4 +74,4 @@ HC.plugins.pattern.slime = _class(
             }
         }
     }
-);
+}

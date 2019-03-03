@@ -73,8 +73,9 @@ Server options can be found [here](docs/server-options.md)
 
 Have a look at my [Tutorials playlist](https://www.youtube.com/playlist?list=PLQn3ZXgzn8P3BI43-pDmU4rVFzVmQh5DQ)
 
-Try the tutorials from presets/_tutorials
-    ![](docs/images/TutorialOverview.png)
+Try the tutorials from presets/_tutorials 
+
+![](docs/images/TutorialOverview.png)
 
 
 ### Understand

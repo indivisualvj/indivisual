@@ -1,26 +1,25 @@
-HC.plugins.pattern.pass = _class(
-    function () {
-        this.dir = 1;
-    }, HC.PatternPlugin, {
-        name: 'pass horizontal',
-        injections: {
+{
+    HC.plugins.pattern.pass = class Plugin extends HC.PatternPlugin {
+        static name = 'pass horizontal';
+        dir = 1;
+        injections = {
             velocity: false
-        },
+        };
 
-        before: function (shape) {
-            var params = this.params(shape);
+        before(shape) {
+            let params = this.params(shape);
             if (!params.velocity) {
-                var matrix = this.layer.getPatternPlugin('matrix');
+                let matrix = this.layer.getPatternPlugin('matrix');
                 matrix.apply(shape);
             }
-        },
+        }
 
-        apply: function (shape, peak) {
-            var layer = this.layer;
-            var matrix = layer.getPatternPlugin('matrix');
-            var gridPosition = matrix.gridPosition(shape);
-            var params = this.params(shape);
-            var shapeSpeed = layer.getShapeRhythmPlugin(this.settings.shape_rhythm).params(shape);
+        apply(shape, peak) {
+            let layer = this.layer;
+            let matrix = layer.getPatternPlugin('matrix');
+            let gridPosition = matrix.gridPosition(shape);
+            let params = this.params(shape);
+            let shapeSpeed = layer.getShapeRhythmPlugin(this.settings.shape_rhythm).params(shape);
 
             if (this.isFirstShape(shape) && randomBool()) {
                 if ((!peak && layer.getCurrentSpeed().prc == 0) || (peak && audio.peak)) {
@@ -31,12 +30,12 @@ HC.plugins.pattern.pass = _class(
                 params.velocity = randomFloat(2, 3, 3);
             }
 
-            var dir = (gridPosition.y % 2 ? -1 : 1) * this.dir;
-            var step = animation.diffPrc * dir * params.velocity * layer.resolution('relative').x;
+            let dir = (gridPosition.y % 2 ? -1 : 1) * this.dir;
+            let step = animation.diffPrc * dir * params.velocity * layer.resolution('relative').x;
             step *= this.settings.pattern_paddingx;
             shape.sceneObject().translateX(step);
 
-            var shapeSize = layer.shapeSize(shape.size());
+            let shapeSize = layer.shapeSize(shape.size());
             if (dir < 0 && shape.position().x < -shapeSize) {
                 shape.position().x = layer.resolution().x + shapeSize;
             } else if (dir > 0 && shape.position().x > layer.resolution().x + shapeSize) {
@@ -44,4 +43,4 @@ HC.plugins.pattern.pass = _class(
             }
         }
     }
-);
+}

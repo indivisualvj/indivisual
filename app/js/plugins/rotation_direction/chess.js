@@ -1,17 +1,14 @@
-HC.plugins.rotation_direction.chess = _class( // 5
-    function () {
-        this.switcher = false;
-    },
-    HC.RotationDirectionPlugin, {
-        name: 'chess',
-        apply: function (shape) {
-            var layer = this.layer;
+{
+    HC.plugins.rotation_direction.chess = class Plugin extends HC.RotationDirectionPlugin {
+        static name = 'chess';
+
+        apply(shape) {
             if (this.isFirstShape(shape)) {
                 this.switcher = !this.switcher;
             }
 
-            var params = this.params(shape);
-            var mod = this.switcher ? 0 : 1;
+            let params = this.params(shape);
+            let mod = this.switcher ? 0 : 1;
 
             if (shape.index % 2 == mod) {
                 params.dir = 1;
@@ -21,22 +18,19 @@ HC.plugins.rotation_direction.chess = _class( // 5
             }
         }
     }
-);
+}
+{
+    HC.plugins.rotation_direction.chesscolumns = class Plugin extends HC.RotationDirectionPlugin {
+        static name = 'chess columns';
 
-HC.plugins.rotation_direction.chesscolumns = _class( // 6
-    function () {
-        this.switcher = false;
-    },
-    HC.RotationDirectionPlugin, {
-        name: 'chess columns',
-        apply: function (shape) {
-            var layer = this.layer;
+        apply(shape) {
+            let layer = this.layer;
             if (this.isFirstShape(shape)) {
                 this.switcher = !this.switcher;
             }
-            var grid = layer.getPatternPlugin('matrix').gridPosition(shape);
-            var params = this.params(shape);
-            var mod = this.switcher ? 0 : 1;
+            let grid = layer.getPatternPlugin('matrix').gridPosition(shape);
+            let params = this.params(shape);
+            let mod = this.switcher ? 0 : 1;
 
             if (grid.x % 2 == mod) {
                 params.dir = 1;
@@ -46,22 +40,19 @@ HC.plugins.rotation_direction.chesscolumns = _class( // 6
             }
         }
     }
-);
+}
+{
+    HC.plugins.rotation_direction.chessrows = class Plugin extends HC.RotationDirectionPlugin {
+        static name = 'chess rows';
 
-HC.plugins.rotation_direction.chessrows = _class( // 7
-    function () {
-        this.switcher = false;
-    },
-    HC.RotationDirectionPlugin, {
-        name: 'chess rows',
-        apply: function (shape) {
-            var layer = this.layer;
+        apply(shape) {
+            let layer = this.layer;
             if (this.isFirstShape(shape)) {
                 this.switcher = !this.switcher;
             }
-            var grid = layer.getPatternPlugin('matrix').gridPosition(shape);
-            var params = this.params(shape);
-            var mod = this.switcher ? 0 : 1;
+            let grid = layer.getPatternPlugin('matrix').gridPosition(shape);
+            let params = this.params(shape);
+            let mod = this.switcher ? 0 : 1;
 
             if (grid.y % 2 == mod) {
                 params.dir = 1;
@@ -71,4 +62,4 @@ HC.plugins.rotation_direction.chessrows = _class( // 7
             }
         }
     }
-);
+}

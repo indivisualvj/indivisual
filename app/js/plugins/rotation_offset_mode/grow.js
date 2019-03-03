@@ -1,33 +1,34 @@
-HC.plugins.rotation_offset_mode.grow = _class(false, HC.RotationOffsetModePlugin, {
-    name: 'grow',
+{
+    HC.plugins.rotation_offset_mode.grow = class Plugin extends HC.RotationOffsetModePlugin {
+        static name = 'grow';
 
-    apply: function (shape) {
-        var layer = this.layer;
-        var part = 360 / layer.shapeCount();
-        var a = part * (shape.index + 1);
+        apply(shape) {
+            let layer = this.layer;
+            let part = 360 / layer.shapeCount();
+            let a = part * (shape.index + 1);
 
-        var x = a * this.settings.rotation_offsetx;
-        var y = a * this.settings.rotation_offsety;
-        var z = a * this.settings.rotation_offsetz;
+            let x = a * this.settings.rotation_offsetx;
+            let y = a * this.settings.rotation_offsety;
+            let z = a * this.settings.rotation_offsetz;
 
-        shape.rotationOffset(x, y, z);
+            shape.rotationOffset(x, y, z);
+        }
     }
-});
+}
+{
+    HC.plugins.rotation_offset_mode.growingfour45 = class Plugin extends HC.RotationOffsetModePlugin {
+        static name = 'growingfour45';
 
-HC.plugins.rotation_offset_mode.growingfour45 = _class(false, HC.RotationOffsetModePlugin, {
-    name: 'growingfour45',
+        apply(shape) {
+            let a = 45;
+            let mod = shape.index % 4;
+            a *= (mod + 1);
 
-    apply: function (shape) {
-        var layer = this.layer;
+            let x = a * this.settings.rotation_offsetx;
+            let y = a * this.settings.rotation_offsety;
+            let z = a * this.settings.rotation_offsetz;
 
-        var a = 45;
-        var mod = shape.index % 4;
-        a *= (mod + 1);
-
-        var x = a * this.settings.rotation_offsetx;
-        var y = a * this.settings.rotation_offsety;
-        var z = a * this.settings.rotation_offsetz;
-
-        shape.rotationOffset(x, y, z);
+            shape.rotationOffset(x, y, z);
+        }
     }
-});
+}

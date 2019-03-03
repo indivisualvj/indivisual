@@ -1,40 +1,51 @@
-HC.plugins.shape_rhythm.nochange = _class(false, HC.ShapeRhythmPlugin, {
-    index: 1,
-    name: 'no change',
-    apply: function (shape) {
-        var layer = this.layer;
-        this.params(shape).speed = layer.getCurrentSpeed();
-    }
-});
+{
+    HC.plugins.shape_rhythm.nochange = class Plugin extends HC.ShapeRhythmPlugin {
+        static index = 1;
+        static name = 'no change';
 
-HC.plugins.shape_rhythm.double = _class(false, HC.ShapeRhythmPlugin, {
-    index: 2,
-    name: 'double',
-    apply: function (shape) {
-        this.params(shape).speed = beatkeeper.getSpeed('double');
+        apply(shape) {
+            let layer = this.layer;
+            this.params(shape).speed = layer.getCurrentSpeed();
+        }
     }
-});
+}
+{
+    HC.plugins.shape_rhythm.double = class Plugin extends HC.ShapeRhythmPlugin {
+        static index = 2;
+        static name = 'double';
 
-HC.plugins.shape_rhythm.full = _class(false, HC.ShapeRhythmPlugin, {
-    index: 3,
-    name: 'full',
-    apply: function (shape) {
-        this.params(shape).speed = beatkeeper.getSpeed('full');
+        apply(shape) {
+            this.params(shape).speed = beatkeeper.getSpeed('double');
+        }
     }
-});
+}
+{
+    HC.plugins.shape_rhythm.full = class Plugin extends HC.ShapeRhythmPlugin {
+        static index = 3;
+        static name = 'full';
 
-HC.plugins.shape_rhythm.half = _class(false, HC.ShapeRhythmPlugin, {
-    index: 4,
-    name: 'half',
-    apply: function (shape) {
-        this.params(shape).speed = beatkeeper.getSpeed('half');
+        apply(shape) {
+            this.params(shape).speed = beatkeeper.getSpeed('full');
+        }
     }
-});
+}
+{
+    HC.plugins.shape_rhythm.half = class Plugin extends HC.ShapeRhythmPlugin {
+        static index = 4;
+        static name = 'half';
 
-HC.plugins.shape_rhythm.quarter = _class(false, HC.ShapeRhythmPlugin, {
-    index: 5,
-    name: 'quarter',
-    apply: function (shape) {
-        this.params(shape).speed = beatkeeper.getSpeed('quarter');
+        apply(shape) {
+            this.params(shape).speed = beatkeeper.getSpeed('half');
+        }
     }
-});
+}
+{
+    HC.plugins.shape_rhythm.quarter = class Plugin extends HC.ShapeRhythmPlugin {
+        static index = 5;
+        static name = 'quarter';
+
+        apply(shape) {
+            this.params(shape).speed = beatkeeper.getSpeed('quarter');
+        }
+    }
+}

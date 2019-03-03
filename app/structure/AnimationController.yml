@@ -1,5 +1,4 @@
 audio & timing:
-#  audio_smoothing:
   audio_thickness:
   audio_usewaveform:
   rhythm:
@@ -108,10 +107,11 @@ pattern:
 
 shape:
   shape_geometry:
-  shape_variant:
-  shape_segmentsa:
-  shape_segmentsb:
-  shape_size:
+  shape_sizedivider: # todo fick die henne.
+  shape_moda:
+  shape_modb:
+  shape_modc:
+
   shape_limit:
   shape_sync:
   shape_vertices:

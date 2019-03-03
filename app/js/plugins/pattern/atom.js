@@ -1,17 +1,16 @@
-HC.plugins.pattern.atom = _class(
-    function () {
-        this.next = {x: 0, y: 0, z: 0};
-    }, HC.PatternPlugin, {
-        name: 'atom',
-        injections: {
+{
+    HC.plugins.pattern.atom = class Plugin extends HC.PatternPlugin {
+        static name = 'atom';
+        next = {x: 0, y: 0, z: 0};
+        injections = {
             current: {x: 0, y: 0, z: 0}
-        },
+        };
 
-        apply: function (shape) {
-            var layer = this.layer;
+        apply(shape) {
+            let layer = this.layer;
 
-            var speed = layer.getShapeSpeed(shape);
-            var params = this.params(shape);
+            let speed = layer.getShapeSpeed(shape);
+            let params = this.params(shape);
 
             if (!params.tween && speed.prc == 0) {
 
@@ -19,7 +18,7 @@ HC.plugins.pattern.atom = _class(
                     this.next = layer.random3dPosition(.5, layer.shapeSize(1));
                 }
 
-                var tween = this.tweenShape(shape, params.current, this.next);
+                let tween = this.tweenShape(shape, params.current, this.next);
                 tween.easing(TWEEN.Easing.Quadratic.InOut);
                 tween.onUpdate(function () {
                     layer.positionIn3dSpace(shape, params.current.x, params.current.y, params.current.z);
@@ -33,4 +32,4 @@ HC.plugins.pattern.atom = _class(
             }
         }
     }
-);
+}

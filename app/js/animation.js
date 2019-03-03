@@ -29,9 +29,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!reconnect) {
             loadResources(setupResources(), function () {
 
-                assetman.loadTextures();
-                assetman.loadFonts();
-
                 HC.DisplayController.createAllControls();
                 HC.SourceController.createAllControls();
 
@@ -278,7 +275,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     inst.ms = HC.now() - inst.lastUpdate - inst.last; // time spent on animating and rendering
 
-                    if (statics.DisplaySettings.fps < 60) {
+                    if (statics.DisplaySettings.fps < 60) { // fixme fps not after reload from session
                         setTimeout(function () {
                             requestAnimationFrame(render);
                         }, inst.duration - inst.ms); // substract spent time from timeout
@@ -293,7 +290,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
                 } else {
-                    renderer.pauseLayers();
+                    renderer.pauseLayers(); // todo nicht nötig wenn mit animation.now gearbeitet wird.
                     beatkeeper.stop();
                 }
             };
@@ -387,7 +384,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (gain !== 0) {
                 //console.log('gain', [audio.volume, audio.avgVolume, gain]);
                 var vo = Math.min(2, Math.max(0.5, statics.ControlSettings.volume + gain));
-                animation.updateControl('volume', vo, false, true, false);
+                animation.updateControl('volume', vo, false, false, false);
             }
         },
 
@@ -539,7 +536,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 switch (item) {
 
                     // complete layer reset:
-                    case 'shape_size':
+                    case 'shape_sizedivider':
                     case 'pattern_shapes':
                         renderer.resetLayer(layer);
                         break;
@@ -548,10 +545,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     case 'shaders':
                         layer.updateShaders();
                         break;
-
-                    // case 'audio_smoothing':
-                    //     audio.smoothingTimeConstant(layer.settings.audio_smoothing);
-                    //     break;
 
                     case 'lighting_ambient':
                         layer.resetAmbientLight();
@@ -573,14 +566,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     case 'shape_modifier_volume':
                     case 'shape_geometry':
                     case 'shape_transform':
-                    case 'mesh_material':
+                    case 'mesh_material': // todo can't we just reset materials?
                     case 'material_mapping':
-                    // case 'material_uvx':
-                    // case 'material_uvy':
-                    // case 'material_uvofx':
-                    // case 'material_uvofy':
-                    // case 'material_map':
-                    case 'shape_variant':
+                    case 'shape_moda': // todo can't we just reset geometries?
+                    case 'shape_modb':
+                    case 'shape_modc':
                         layer.resetShapes();
                         break;
                 }

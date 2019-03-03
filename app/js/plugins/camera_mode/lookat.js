@@ -1,20 +1,19 @@
-HC.plugins.camera_mode.lookatshape = _class(
-    function () {
-        this.targetLook = new THREE.Vector3(0, 0, 0);
-        this.currentLook = new THREE.Vector3(0, 0, 0);
-        this.shape = false;
-        this.entry = 0;
-        this._tween = false;
-        this.quatFrom = false;
-        this.quatTo = false;
-        this.shared = {
+{
+    HC.plugins.camera_mode.lookatshape = class Plugin extends HC.CameraModePlugin {
+        static name = 'look at a shape';
+        targetLook = new THREE.Vector3(0, 0, 0);
+        currentLook = new THREE.Vector3(0, 0, 0);
+        shape = false;
+        entry = 0;
+        _tween = false;
+        quatFrom = false;
+        quatTo = false;
+        shared = {
             shape: false,
             targetLook: new THREE.Vector3(),
             currentLook: new THREE.Vector3()
         };
 
-    }, HC.CameraModePlugin, {
-        name: 'look at a shape',
         apply(peak, setPosition) {
             var layer = this.layer;
             var speed = beatkeeper.getSpeed('double');
@@ -69,11 +68,13 @@ HC.plugins.camera_mode.lookatshape = _class(
             this.shared.currentLook = this.currentLook;
         }
     }
-);
+}
+{
+    HC.plugins.camera_mode.lookatshapepeak = class Plugin extends HC.CameraModePlugin {
+        static name = 'look at a shape on peak';
 
-HC.plugins.camera_mode.lookatshapepeak = _class(false, HC.CameraModePlugin, {
-    name: 'look at a shape on peak',
-    apply() {
-        this.layer.getCameraModePlugin('lookatshape').apply(true);
+        apply() {
+            this.layer.getCameraModePlugin('lookatshape').apply(true);
+        }
     }
-});
+}

@@ -1,45 +1,51 @@
-HC.plugins.camera_mode.switch = _class(false, HC.CameraModePlugin, {
-    name: 'switch position (current)',
-    before() {
-        this.layer.updateCameraFov();
-    },
+{
+    HC.plugins.camera_mode.switch = class Plugin extends HC.CameraModePlugin {
+        static name = 'switch position (current)';
 
-    apply(peak) {
-        var speed = this.layer.getCurrentSpeed();
-        var cam = this.layer.getCamera();
+        before() {
+            this.layer.updateCameraFov();
+        }
 
-        cam.zoom = this.settings.camera_mode_volume;
+        apply(peak) {
+            var speed = this.layer.getCurrentSpeed();
+            var cam = this.layer.getCamera();
 
-        if ((!peak && speed.prc == 0) || (peak && audio.peak && randomBool())) {
-            var pos = cam.position;
+            cam.zoom = this.settings.camera_mode_volume;
 
-            pos.copy(this.layer.random3dPosition());
-            cam.lookAt(new THREE.Vector3(0, 0, 0));
+            if ((!peak && speed.prc == 0) || (peak && audio.peak && randomBool())) {
+                var pos = cam.position;
 
-            return true;
+                pos.copy(this.layer.random3dPosition());
+                cam.lookAt(new THREE.Vector3(0, 0, 0));
+
+                return true;
+            }
         }
     }
-});
+}
+{
+    HC.plugins.camera_mode.switchpeak = class Plugin extends HC.CameraModePlugin {
+        static name = 'switch position (peak)';
 
-HC.plugins.camera_mode.switchpeak = _class(false, HC.CameraModePlugin, {
-    name: 'switch position (peak)',
-    before() {
-        this.layer.getCameraModePlugin('switch').before();
-    },
-    apply() {
-        this.layer.getCameraModePlugin('switch').apply(true);
-    }
-});
-
-HC.plugins.camera_mode.switchlookat = _class(
-    function () {
-        this.shape = false;
-        this.lookAtVector = false;
-    }, HC.CameraModePlugin, {
-        name: 'switch position lookat shape (current)',
         before() {
             this.layer.getCameraModePlugin('switch').before();
-        },
+        }
+
+        apply() {
+            this.layer.getCameraModePlugin('switch').apply(true);
+        }
+    }
+}
+{
+    HC.plugins.camera_mode.switchlookat = class Plugin extends HC.CameraModePlugin {
+        static name = 'switch position lookat shape (current)';
+        shape = false;
+        lookAtVector = false;
+
+        before() {
+            this.layer.getCameraModePlugin('switch').before();
+        }
+
         apply(peak) {
 
             var change = this.layer.getCameraModePlugin('switch').apply(peak);
@@ -58,20 +64,19 @@ HC.plugins.camera_mode.switchlookat = _class(
             }
         }
     }
-);
+}
+{
+    HC.plugins.camera_mode.switchlookatpeak = class Plugin extends HC.CameraModePlugin {
+        static name = 'switch position lookat shape (peak)';
+        shape = false;
+        lookAtVector = false;
 
-
-HC.plugins.camera_mode.switchlookatpeak = _class(
-    function () {
-        this.shape = false;
-        this.lookAtVector = false;
-    }, HC.CameraModePlugin, {
-        name: 'switch position lookat shape (peak)',
         before() {
             this.layer.getCameraModePlugin('switch').before();
-        },
+        }
+
         apply() {
             this.layer.getCameraModePlugin('switchlookat').apply(true);
         }
     }
-);
+}

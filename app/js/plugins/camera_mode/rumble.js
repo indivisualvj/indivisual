@@ -1,6 +1,7 @@
-HC.plugins.camera_mode.rumble = _class(
-    function () {
-        this.params = {
+{
+    HC.plugins.camera_mode.rumble = class Plugin extends HC.CameraModePlugin {
+        static name = 'static rumble';
+        params = {
             multiplier: false,
             rumble: {
                 x: false,
@@ -8,8 +9,7 @@ HC.plugins.camera_mode.rumble = _class(
                 z: false
             }
         };
-    }, HC.CameraModePlugin, {
-        name: 'static rumble',
+
         apply(peak) {
             var layer = this.layer;
             var speed = beatkeeper.getDefaultSpeed();
@@ -71,13 +71,15 @@ HC.plugins.camera_mode.rumble = _class(
             cam.position.add(new THREE.Vector3(x, y, z));
         }
     }
-);
+}
+{
+    HC.plugins.camera_mode.rumblepeak = class Plugin extends HC.CameraModePlugin {
+        static name = 'static rumble on peak';
 
-HC.plugins.camera_mode.rumblepeak = _class(false, HC.CameraModePlugin, {
-    name: 'static rumble on peak',
-    apply() {
-        var layer = this.layer;
+        apply() {
+            var layer = this.layer;
 
-        layer.getCameraModePlugin('rumble').apply(true);
+            layer.getCameraModePlugin('rumble').apply(true);
+        }
     }
-});
+}

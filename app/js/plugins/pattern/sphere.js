@@ -1,5 +1,6 @@
-HC.plugins.pattern.sphere = _class(false, HC.PatternPlugin, {
-    name: 'sphere',
+{
+HC.plugins.pattern.sphere = class Plugin extends HC.PatternPlugin {
+    static name = 'sphere';
     points: {},
 
     apply(shape) {
@@ -61,9 +62,10 @@ HC.plugins.pattern.sphere = _class(false, HC.PatternPlugin, {
     }
 });
 
-HC.plugins.pattern.spray = _class(false, HC.PatternPlugin, {
-    name: 'spray',
-    injections: {initial: false, velocity: false},
+{
+HC.plugins.pattern.spray = class Plugin extends HC.PatternPlugin {
+    static name = 'spray';
+    injections = {initial: false, velocity: false},
 
     apply(shape) {
         var layer = this.layer;
@@ -108,9 +110,10 @@ HC.plugins.pattern.spray = _class(false, HC.PatternPlugin, {
     }
 });
 
-HC.plugins.pattern.pulse = _class(false, HC.PatternPlugin, {
-    name: 'pulse',
-    injections: {
+{
+HC.plugins.pattern.pulse = class Plugin extends HC.PatternPlugin {
+    static name = 'pulse';
+    injections = {
         initial: false,
         velocity: false,
         volume: false
@@ -165,8 +168,9 @@ HC.plugins.pattern.pulse = _class(false, HC.PatternPlugin, {
     }
 });
 
-HC.plugins.pattern.drift = _class(false, HC.PatternPlugin, {
-    name: 'drift',
+{
+HC.plugins.pattern.drift = class Plugin extends HC.PatternPlugin {
+    static name = 'drift';
 
     apply(shape) {
         var layer = this.layer;

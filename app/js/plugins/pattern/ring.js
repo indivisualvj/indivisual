@@ -1,5 +1,6 @@
-HC.plugins.pattern.ring = _class(false, HC.PatternPlugin, {
-    name: 'ring',
+{
+HC.plugins.pattern.ring = class Plugin extends HC.PatternPlugin {
+    static name = 'ring';
 
     apply(shape, sides) {
         var layer = this.layer;
@@ -30,8 +31,9 @@ HC.plugins.pattern.ring = _class(false, HC.PatternPlugin, {
     }
 });
 
-HC.plugins.pattern.triangle = _class(false, HC.PatternPlugin, {
-    name: 'triangle',
+{
+HC.plugins.pattern.triangle = class Plugin extends HC.PatternPlugin {
+    static name = 'triangle';
 
     apply(shape) {
         var layer = this.layer;
@@ -39,8 +41,9 @@ HC.plugins.pattern.triangle = _class(false, HC.PatternPlugin, {
     }
 });
 
-HC.plugins.pattern.lightspeed = _class(false, HC.PatternPlugin, {
-    name: 'lightspeed',
+{
+HC.plugins.pattern.lightspeed = class Plugin extends HC.PatternPlugin {
+    static name = 'lightspeed';
 
     apply(shape) {
         var layer = this.layer;

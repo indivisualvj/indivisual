@@ -1,6 +1,7 @@
-HC.plugins.pattern.orbits = _class(false, HC.PatternPlugin, {
-    name: 'orbits',
-    injections: {},
+{
+HC.plugins.pattern.orbits = class Plugin extends HC.PatternPlugin {
+    static name = 'orbits';
+    injections = {},
 
     apply(shape) {
         var layer = this.layer;

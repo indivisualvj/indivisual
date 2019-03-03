@@ -2,8 +2,8 @@ HC.plugins.pattern.pass = _class(
     function () {
         this.dir = 1;
     }, HC.PatternPlugin, {
-        name: 'pass horizontal',
-        injections: {
+        static name = 'pass horizontal';
+        injections = {
             velocity: false
         },
 

@@ -1,70 +1,73 @@
-HC.plugins.pattern.cube = _class(false, HC.PatternPlugin, {
-    name: 'cube',
-    injections: {position: false},
-    apply(shape) {
-        var layer = this.layer;
+{
+    HC.plugins.pattern.cube = class Plugin extends HC.PatternPlugin {
+        static name = 'cube';
+        injections = {position: false};
 
-        var edge = layer.resolution().y * this.settings.pattern_padding;
-        var w = edge * this.settings.pattern_paddingx;
-        var h = edge * this.settings.pattern_paddingy;
-        var d = edge * this.settings.pattern_paddingz;
-        var radius = 1;
+        apply(shape) {
+            var layer = this.layer;
 
-        var shapesPerDimension = this.shapesPerDimension(layer);
-        var position = this.cubePosition(shape);
+            var edge = layer.resolution().y * this.settings.pattern_padding;
+            var w = edge * this.settings.pattern_paddingx;
+            var h = edge * this.settings.pattern_paddingy;
+            var d = edge * this.settings.pattern_paddingz;
+            var radius = 1;
 
-        if (this.settings.pattern_audio) {
-            var or = radius;
-            if (this.settings.pattern_sync) {
-                radius *= audio.volume;
-            } else {
-                radius *= shape.shapeVolume();
+            var shapesPerDimension = this.shapesPerDimension(layer);
+            var position = this.cubePosition(shape);
+
+            if (this.settings.pattern_audio) {
+                var or = radius;
+                if (this.settings.pattern_sync) {
+                    radius *= audio.volume;
+                } else {
+                    radius *= shape.shapeVolume();
+                }
+                if (this.settings.pattern_limit) {
+                    radius = or + radius;
+                }
             }
-            if (this.settings.pattern_limit) {
-                radius = or + radius;
-            }
+
+            var stepx = w / shapesPerDimension * radius;
+            var stepy = h / shapesPerDimension * radius;
+            var stepz = d / shapesPerDimension * radius;
+
+            var x = (shapesPerDimension - 1) / -2 * stepx + position.x * stepx;
+            var y = (shapesPerDimension - 1) / -2 * stepy + position.y * stepy;
+            var z = (shapesPerDimension - 1) / -2 * stepz + position.z * stepz;
+
+            layer.positionIn3dSpace(shape, x, y, z);
         }
 
-        var stepx = w / shapesPerDimension * radius;
-        var stepy = h / shapesPerDimension * radius;
-        var stepz = d / shapesPerDimension * radius;
+        getDistributionOnCube(shapeCount, shapeIndex, vector) {
+            var shapesPerDimension = Math.ceil(Math.pow(shapeCount, 1 / 3));
 
-        var x = (shapesPerDimension - 1) / -2 * stepx + position.x * stepx;
-        var y = (shapesPerDimension - 1) / -2 * stepy + position.y * stepy;
-        var z = (shapesPerDimension - 1) / -2 * stepz + position.z * stepz;
+            var shapesPerLayer = Math.pow(shapesPerDimension, 2);
 
-        layer.positionIn3dSpace(shape, x, y, z);
-    },
+            var shapeLayerIndex = Math.floor(shapeIndex / shapesPerLayer);
+            var shapesOnLayers = shapeLayerIndex * shapesPerLayer;
+            var shapeIndexOnLayer = shapeIndex - shapesOnLayers;
 
-    getDistributionOnCube(shapeCount, shapeIndex, vector) {
-        var shapesPerDimension = Math.ceil(Math.pow(shapeCount, 1 / 3));
+            var shapeRowIndex = Math.floor(shapeIndexOnLayer / shapesPerDimension);
+            var shapesOnRows = shapeRowIndex * shapesPerDimension;
+            var shapeColumnIndex = shapeIndexOnLayer - shapesOnRows;
 
-        var shapesPerLayer = Math.pow(shapesPerDimension, 2);
-
-        var shapeLayerIndex = Math.floor(shapeIndex / shapesPerLayer);
-        var shapesOnLayers = shapeLayerIndex * shapesPerLayer;
-        var shapeIndexOnLayer = shapeIndex - shapesOnLayers;
-
-        var shapeRowIndex = Math.floor(shapeIndexOnLayer / shapesPerDimension);
-        var shapesOnRows = shapeRowIndex * shapesPerDimension;
-        var shapeColumnIndex = shapeIndexOnLayer - shapesOnRows;
-
-        vector.set(shapeColumnIndex, shapeRowIndex, shapeLayerIndex);
-    },
-
-    cubePosition(shape) {
-        var params = this.params(shape);
-        if (params.position === false) {
-
-            params.position = new THREE.Vector3();
-            this.getDistributionOnCube(this.layer.shapeCount(), shape.index, params.position);
-
+            vector.set(shapeColumnIndex, shapeRowIndex, shapeLayerIndex);
         }
 
-        return params.position;
-    },
+        cubePosition(shape) {
+            var params = this.params(shape);
+            if (params.position === false) {
 
-    shapesPerDimension() {
-        return Math.ceil(Math.pow(this.layer.shapeCount(), 1 / 3));
+                params.position = new THREE.Vector3();
+                this.getDistributionOnCube(this.layer.shapeCount(), shape.index, params.position);
+
+            }
+
+            return params.position;
+        }
+
+        shapesPerDimension() {
+            return Math.ceil(Math.pow(this.layer.shapeCount(), 1 / 3));
+        }
     }
-});
+}

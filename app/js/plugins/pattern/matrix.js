@@ -3,9 +3,9 @@ HC.plugins.pattern.matrix = _class(
         this.columns = false;
         this.rows = false;
     }, HC.PatternPlugin, {
-        name: 'matrix',
-        index: 2,
-        injections: {position: false},
+        static name = 'matrix';
+        static index = 2;
+        injections = {position: false},
         apply(shape) {
             var layer = this.layer;
 

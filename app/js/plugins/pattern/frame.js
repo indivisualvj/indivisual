@@ -1,9 +1,9 @@
-HC.plugins.pattern.frame = _class(
-    function () {
-        this.shapeCountHalf = false;
-        this.shapeCountQuarter = false;
-    }, HC.PatternPlugin, {
-        name: 'frame',
+{
+    HC.plugins.pattern.frame = class Plugin extends HC.PatternPlugin {
+        static name = 'frame';
+        shapeCountHalf = false;
+        shapeCountQuarter = false;
+
         apply(shape) {
             var layer = this.layer;
 
@@ -66,4 +66,4 @@ HC.plugins.pattern.frame = _class(
             layer.positionIn3dSpace(shape, x, y, z);
         }
     }
-);
+}

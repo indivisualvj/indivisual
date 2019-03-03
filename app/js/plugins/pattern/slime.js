@@ -4,9 +4,9 @@ HC.plugins.pattern.slime = _class(
         this.direction = 1;
         this.angle = 0;
     }, HC.PatternPlugin, {
-        name: 'slime',
+        static name = 'slime';
 
-        injections: {
+        injections = {
             tween: false,
             next: {
                 x: 0,

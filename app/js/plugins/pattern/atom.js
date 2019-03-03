@@ -1,11 +1,10 @@
-HC.plugins.pattern.atom = _class(
-    function () {
-        this.next = {x: 0, y: 0, z: 0};
-    }, HC.PatternPlugin, {
-        name: 'atom',
-        injections: {
+{
+    HC.plugins.pattern.atom = class Plugin extends HC.PatternPlugin {
+        static name = 'atom';
+        next = {x: 0, y: 0, z: 0};
+        injections = {
             current: {x: 0, y: 0, z: 0}
-        },
+        };
 
         apply(shape) {
             var layer = this.layer;
@@ -33,4 +32,4 @@ HC.plugins.pattern.atom = _class(
             }
         }
     }
-);
+}

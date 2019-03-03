@@ -7,8 +7,8 @@ HC.plugins.pattern.swarm = _class(
             }
         };
     }, HC.PatternPlugin, {
-        name: 'swarm',
-        injections: {
+        static name = 'swarm';
+        injections = {
             targetLook: false,
             shape: false,
             tween: false,
@@ -188,8 +188,9 @@ HC.plugins.pattern.swarm = _class(
     }
 );
 //
-// HC.plugins.pattern.swarmpeak = _class(false, HC.PatternPlugin, {
-//     name: 'swarm on peak',
+{
+// HC.plugins.pattern.swarmpeak = class Plugin extends HC.PatternPlugin {
+//     static name = 'swarm on peak';
 //     before(shape) {
 //         return this.layer.getPatternPlugin('swarm').before(shape);
 //     },

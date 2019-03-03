@@ -1,6 +1,7 @@
-HC.plugins.pattern.move = _class(false, HC.PatternPlugin, {
-    name: 'move',
-    injections: {
+{
+HC.plugins.pattern.move = class Plugin extends HC.PatternPlugin {
+    static name = 'move';
+    injections = {
         velocity: false,
         euler: false
     },

@@ -1,10 +1,9 @@
-HC.plugins.pattern.bar = _class(
-    function () {
-        this.orientation = 0;
-        this.position = 0;
-    }, HC.PatternPlugin, {
-        name: 'bar',
-        injections: {
+{
+    HC.plugins.pattern.bar = class Plugin extends HC.PatternPlugin {
+        static name = 'bar';
+        orientation = 0;
+        position = 0;
+        injections = {
             next: {
                 x: false,
                 y: false,
@@ -16,7 +15,7 @@ HC.plugins.pattern.bar = _class(
                 z: 0
             },
             tween: false
-        },
+        };
 
         apply(shape) {
             var layer = this.layer;
@@ -59,4 +58,4 @@ HC.plugins.pattern.bar = _class(
             }
         }
     }
-);
+}

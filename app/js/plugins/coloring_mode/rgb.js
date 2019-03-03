@@ -2,7 +2,6 @@
     HC.plugins.coloring_mode.onergb = class Plugin extends HC.ColoringModePlugin {
 
         apply (shape) {
-
             if (this.isFirstShape(shape)) {
 
                 let prc = (animation.now - beatkeeper.beatStartTime) / (60000 / statics.ControlSettings.tempo) / 100 * this.settings.coloring_volume;

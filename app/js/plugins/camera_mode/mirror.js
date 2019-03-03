@@ -1,8 +1,8 @@
-HC.plugins.camera_mode.mirror = _class(
-    function () {
-        this.mirror = new THREE.Vector3(1, 1, 1);
-    }, HC.CameraModePlugin, {
+{
+    HC.plugins.camera_mode.mirror = class Plugin extends HC.CameraModePlugin {
         static name = 'mirror XYZ position (current)';
+        mirror = new THREE.Vector3(1, 1, 1);
+
         apply(peak) {
 
             let speed = this.layer.getCurrentSpeed();
@@ -21,12 +21,13 @@ HC.plugins.camera_mode.mirror = _class(
             cam.lookAt(new THREE.Vector3(0, 0, 0));
         }
     }
-);
-
+}
 {
-HC.plugins.camera_mode.mirrorpeak = class Plugin extends HC.CameraModePlugin {
-    static name = 'mirror XYZ position (peak)';
-    apply() {
-        this.layer.getCameraModePlugin('mirror').apply(true);
+    HC.plugins.camera_mode.mirrorpeak = class Plugin extends HC.CameraModePlugin {
+        static name = 'mirror XYZ position (peak)';
+
+        apply() {
+            this.layer.getCameraModePlugin('mirror').apply(true);
+        }
     }
-});
+}

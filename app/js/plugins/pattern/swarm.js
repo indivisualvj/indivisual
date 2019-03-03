@@ -1,7 +1,6 @@
 {
     HC.plugins.pattern.swarm = class Plugin extends HC.PatternPlugin {
         static name = 'swarm';
-        randshapes = this.randshapes(layer.shapeCount());
         shared = {
             locking: {
                 disabled: true// @see plugins/shape_lookat
@@ -13,6 +12,11 @@
             tween: false,
             timeout: false
         };
+
+        constructor(layer) {
+            super();
+            this.randshapes = this.randshapes(layer.shapeCount());
+        }
 
         before(shape) {
             let layer = this.layer;

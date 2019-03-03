@@ -17,7 +17,7 @@
 "camera_x_oscillate":"sinusfulls",
 "camera_y":0.05,
 "camera_y_oscillate":"fourstepminus",
-"camera_z":1,
+"camera_z":0.6,
 "camera_z_oscillate":"off",
 "coloring_mode":"off",
 "coloring_volume":1,

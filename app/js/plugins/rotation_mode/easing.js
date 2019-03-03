@@ -1,4 +1,4 @@
-let TWEEN = TWEEN || {
+var TWEEN = TWEEN || { // no let for fallback assignments
     Easing: {}
 };
 

@@ -1,18 +1,17 @@
-HC.plugins.pattern_mover.torch = _class(
-    function () {
-        this.mover = {
+{
+    HC.plugins.pattern_mover.torch = class Plugin extends HC.PatternMoverPlugin {
+        static name = 'torch';
+        mover = {
             x: 0,
             y: 0,
             a: 0
         };
-    }, HC.PatternMoverPlugin, {
-        static name = 'torch';
-        injections: {
+        injections = {
             panmox: 0,
             panmoy: 0,
             panhox: 0,
             panhoy: 0
-        },
+        };
 
         apply(shape) {
             let layer = this.layer;
@@ -71,4 +70,4 @@ HC.plugins.pattern_mover.torch = _class(
             layer.positionIn3dSpace(shape, x, y, z);
         }
     }
-);
+}

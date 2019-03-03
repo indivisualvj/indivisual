@@ -15,11 +15,11 @@
         };
 
         apply(peak, setPosition) {
-            var layer = this.layer;
-            var speed = beatkeeper.getSpeed('double');
-            var cam = layer.getCamera();
+            let layer = this.layer;
+            let speed = beatkeeper.getSpeed('double');
+            let cam = layer.getCamera();
 
-            var dd = layer.cameraDefaultDistance();
+            let dd = layer.cameraDefaultDistance();
             cam.zoom = this.settings.camera_mode_volume;
             if (setPosition !== false) {
                 cam.position.set(
@@ -31,7 +31,7 @@
 
             if (!this.shape || (!peak && speed.prc == 0) || (peak && audio.peak && randomBool())) {
 
-                var shape = layer.getRandomShape();
+                let shape = layer.getRandomShape();
                 if (shape != this.shape) {
                     this.shape = shape;
                     this._tween = true;
@@ -46,10 +46,10 @@
                 this.quatTo = new THREE.Quaternion().copy(cam.quaternion);
                 cam.quaternion.copy(this.quatFrom);
 
-                var distance = cam.position.distanceTo(this.targetLook);
-                var step = animation.getFrameDurationPercent(speed.duration, .25);
-                var angle = cam.quaternion.angleTo(this.quatTo);
-                var m = Math.sqrt(angle + step);
+                let distance = cam.position.distanceTo(this.targetLook);
+                let step = animation.getFrameDurationPercent(speed.duration, .25);
+                let angle = cam.quaternion.angleTo(this.quatTo);
+                let m = Math.sqrt(angle + step);
 
                 if (angle < 2 / distance) {
                     this._tween = false;

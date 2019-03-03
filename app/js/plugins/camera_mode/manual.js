@@ -4,10 +4,10 @@
         static name = 'static look forward';
 
         apply(lookAtVector) {
-            var layer = this.layer;
+            let layer = this.layer;
 
-            var cam = layer.getCamera();
-            var dd = layer.cameraDefaultDistance();
+            let cam = layer.getCamera();
+            let dd = layer.cameraDefaultDistance();
 
             cam.zoom = this.settings.camera_mode_volume;
             cam.lookAt(new THREE.Vector3(0, 0, 0));
@@ -44,7 +44,7 @@
         static index = 99999;
 
         apply() {
-            var plugin = this.layer.getLightingPatternPlugin();
+            let plugin = this.layer.getLightingPatternPlugin();
             HC.plugins.camera_mode.manual.prototype.apply.call(this, plugin.centerVector());
         }
     }
@@ -55,7 +55,7 @@
         static index = 99999;
 
         apply() {
-            var plugin = this.layer.getLightingLookatPlugin();
+            let plugin = this.layer.getLightingLookatPlugin();
             HC.plugins.camera_mode.manual.prototype.apply.call(this, plugin.centerVector());
         }
     }

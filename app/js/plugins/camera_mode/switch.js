@@ -7,13 +7,13 @@
         }
 
         apply(peak) {
-            var speed = this.layer.getCurrentSpeed();
-            var cam = this.layer.getCamera();
+            let speed = this.layer.getCurrentSpeed();
+            let cam = this.layer.getCamera();
 
             cam.zoom = this.settings.camera_mode_volume;
 
             if ((!peak && speed.prc == 0) || (peak && audio.peak && randomBool())) {
-                var pos = cam.position;
+                let pos = cam.position;
 
                 pos.copy(this.layer.random3dPosition());
                 cam.lookAt(new THREE.Vector3(0, 0, 0));
@@ -48,10 +48,10 @@
 
         apply(peak) {
 
-            var change = this.layer.getCameraModePlugin('switch').apply(peak);
+            let change = this.layer.getCameraModePlugin('switch').apply(peak);
 
             if (change) {
-                var shape = this.layer.getRandomShape();
+                let shape = this.layer.getRandomShape();
                 this.shape = shape;
                 if (!this.lookAtVector) {
                     this.lookAtVector = new THREE.Vector3();

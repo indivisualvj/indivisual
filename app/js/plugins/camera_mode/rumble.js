@@ -11,9 +11,9 @@
         };
 
         apply(peak) {
-            var layer = this.layer;
-            var speed = beatkeeper.getDefaultSpeed();
-            var params = this.params;
+            let layer = this.layer;
+            let speed = beatkeeper.getDefaultSpeed();
+            let params = this.params;
 
             if (params.multiplier === false) {
                 params.rumble.x = 0;
@@ -25,7 +25,7 @@
             params.rumble.y += animation.diffPrc * randomInt(-45, 45);
             params.rumble.z += animation.diffPrc * randomInt(-45, 45);
 
-            var sttngs = {
+            let sttngs = {
                 osci1_period: 0.005,
                 osci1_amp: 1,
                 osci2_period: 0.05,
@@ -35,7 +35,7 @@
                 rhythm: 'half'
             };
 
-            var reduce = params.multiplier > 0;
+            let reduce = params.multiplier > 0;
 
             if ((peak && audio.peak) || (!peak && speed.prc == 0)) {
                 reduce = true;
@@ -53,19 +53,19 @@
                 }
             }
 
-            var multiplier = params.multiplier;
+            let multiplier = params.multiplier;
 
-            var w1 = multiplier * HC.Osci.wobble(params.rumble.x, sttngs);
-            var w2 = multiplier * HC.Osci.wobble(params.rumble.y, sttngs);
-            var w3 = multiplier * HC.Osci.wobble(params.rumble.z, sttngs);
+            let w1 = multiplier * HC.Osci.wobble(params.rumble.x, sttngs);
+            let w2 = multiplier * HC.Osci.wobble(params.rumble.y, sttngs);
+            let w3 = multiplier * HC.Osci.wobble(params.rumble.z, sttngs);
 
-            var m = layer.shapeSize(4);
+            let m = layer.shapeSize(4);
 
-            var x = this.settings.camera_mode_volume * Math.sin(RAD * w1) * m;
-            var y = this.settings.camera_mode_volume * Math.sin(RAD * w2) * m;
-            var z = this.settings.camera_mode_volume * Math.sin(RAD * w3) * m;
+            let x = this.settings.camera_mode_volume * Math.sin(RAD * w1) * m;
+            let y = this.settings.camera_mode_volume * Math.sin(RAD * w2) * m;
+            let z = this.settings.camera_mode_volume * Math.sin(RAD * w3) * m;
 
-            var cam = layer.getCamera();
+            let cam = layer.getCamera();
             layer.getCameraModePlugin('manual').apply();
             cam.zoom = 1;
             cam.position.add(new THREE.Vector3(x, y, z));
@@ -77,7 +77,7 @@
         static name = 'static rumble on peak';
 
         apply() {
-            var layer = this.layer;
+            let layer = this.layer;
 
             layer.getCameraModePlugin('rumble').apply(true);
         }

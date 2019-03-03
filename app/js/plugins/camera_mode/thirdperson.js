@@ -3,19 +3,19 @@
         static name = 'third person view';
 
         apply() {
-            var layer = this.layer;
+            let layer = this.layer;
 
             if (layer.shapes.length == 0) return;
-            var camera = layer.getCamera();
-            var shape = layer.shapes[0];
-            var lookAt = new THREE.Vector3();
+            let camera = layer.getCamera();
+            let shape = layer.shapes[0];
+            let lookAt = new THREE.Vector3();
             shape.getWorldPosition(lookAt);
-            var relativeCameraOffset = new THREE.Vector3(
+            let relativeCameraOffset = new THREE.Vector3(
                 layer.shapeSize(1) * this.settings.camera_x,
                 layer.shapeSize(1) * this.settings.camera_y,
                 layer.shapeSize(-1) - layer.shapeSize(1) * this.settings.camera_z,
             );
-            var cameraOffset = relativeCameraOffset.applyMatrix4(shape.sceneRotation().matrixWorld);
+            let cameraOffset = relativeCameraOffset.applyMatrix4(shape.sceneRotation().matrixWorld);
             camera.position.x = cameraOffset.x;
             camera.position.y = cameraOffset.y;
             camera.position.z = cameraOffset.z;

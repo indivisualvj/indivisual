@@ -11,24 +11,25 @@
 //
 // mesh = new THREE.Mesh( geometry, materials );
 
-HC.plugins.mesh_material.monjori = _class(false, HC.MeshMaterialPlugin, {
-    apply(geometry) {
-        var material = new THREE.ShaderMaterial(this.shader);
-        material.color = new THREE.Color();
-        listener.register('animation.updateRuntime', 'material.uniforms.uTime.value', function (now) {
-            material.uniforms.uTime.value = now;
-        });
-        return new THREE.Mesh(geometry, material);
-    },
+{
+    HC.plugins.mesh_material.monjori = class Plugin extends HC.MeshMaterialPlugin {
+        apply(geometry) {
+            var material = new THREE.ShaderMaterial(this.shader);
+            material.color = new THREE.Color();
+            listener.register('animation.updateRuntime', 'material.uniforms.uTime.value', function (now) {
+                material.uniforms.uTime.value = now;
+            });
+            return new THREE.Mesh(geometry, material);
+        }
 
-    shader: {
+        shader = {
 
-        uniforms: {
-            uTime: {type: 'f', value: 1.0}
-        },
-        // 'Monjori' by Mic (2009) modified by tesuji
-        // Code for the 1k intro Monjori from the demoscene (http://www.pouet.net/prod.php?which=52761)
-        fragmentShader: `
+            uniforms: {
+                uTime: {type: 'f', value: 1.0}
+            },
+            // 'Monjori' by Mic (2009) modified by tesuji
+            // Code for the 1k intro Monjori from the demoscene (http://www.pouet.net/prod.php?which=52761)
+            fragmentShader: `
             uniform float uTime;
             varying vec2 vUv;
             void main(void)
@@ -56,10 +57,10 @@ HC.plugins.mesh_material.monjori = _class(false, HC.MeshMaterialPlugin, {
                 d+=sin(d*d*8.0)*0.52;
                 f=(sin(a*g)+1.0)/2.0;
                 gl_FragColor=vec4(vec3(f*i/1.6,i/2.0+d/13.0,i)*d*p.x+vec3(i/1.3+d/8.0,i/2.0+d/18.0,i)*d*(1.0-p.x),1.0);
-            }
-        `,
-
-        vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
+            }`
+            ,
+            vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
+        }
     }
-});
+}
 

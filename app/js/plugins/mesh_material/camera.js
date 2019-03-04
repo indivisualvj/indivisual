@@ -1,5 +1,6 @@
 {
     HC.plugins.mesh_material.camera = class Plugin extends HC.MeshMaterialPlugin {
+        static index = 2;
         camera;
         mesh;
 

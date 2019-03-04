@@ -115,7 +115,7 @@
          */
         fireEvent(event, target) {
             if (event in this.events) {
-                for (id in this.events[event]) {
+                for (let id in this.events[event]) {
                     this.fireEventId(event, id, target);
                 }
             }

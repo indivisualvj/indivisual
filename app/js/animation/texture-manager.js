@@ -1,5 +1,8 @@
 /**
  * @author Benjamin Lutze
+ *
+ * This was used in a prototype for rendering sequences via Shaders in the GPU and not via 2d contexts and globalCompositeOperation
+ *
  */
 
 (function () {

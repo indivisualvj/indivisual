@@ -693,12 +693,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (display) {
                     var action = false;
-                    if (item.match(/^sample\d+_store/) && value) {
-                        //var sample =
-                        sourceman.storeSample(number_extract(item, 'sample'), value, 1, false);
-                        this.updateSource(item, false, false, true, false);
-
-                    } else if (item.match(/^sample\d+_load/) && value) {
+                    // if (item.match(/^sample\d+_store/) && value) {
+                    //     //var sample =
+                    //     sourceman.storeSample(number_extract(item, 'sample'), value, 1, false);
+                    //     this.updateSource(item, false, false, true, false);
+                    //
+                    // } else
+                    if (item.match(/^sample\d+_load/) && value) {
                         if (IS_MONITOR || display) {
                             sourceman.loadSample(number_extract(item, 'sample'), value);
                         }

@@ -3,7 +3,7 @@
         apply(geometry) {
             let material = new THREE.ShaderMaterial(this.shader);
             material.color = new THREE.Color();
-            listener.register('animation.updateRuntime', 'material.uniforms.uTime.value', function (now) {
+            listener.register('animation.updateRuntime', 'HC.plugins.mesh_material', function (now) {
                 material.uniforms.uTime.value = now;
             });
 

@@ -648,6 +648,8 @@ HC.Controller.prototype.showControls = function (item, parent, enabled) {
  */
 HC.Controller.prototype.loadClip = function (i) {
     var smp = new HC.Sample(i);
+    var inst = this;
+
     smp.clip(function (sample) {
         var data = {data: {DataSettings: {}}};
         data.data.DataSettings[getSampleKey(sample.index)] = sample._clip;

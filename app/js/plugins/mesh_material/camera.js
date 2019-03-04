@@ -21,8 +21,6 @@
         }
 
         dispose() {
-            super.dispose();
-
             if (this.camera) {
                 renderer.three.scene.remove(this.camera);
             }

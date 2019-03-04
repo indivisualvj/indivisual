@@ -1,14 +1,5 @@
 {
-    HC.plugins.mesh_material.clouds = class Plugin extends HC.MeshMaterialPlugin {
-        apply(geometry) {
-            let material = new THREE.ShaderMaterial(this.shader);
-            material.color = new THREE.Color();
-            listener.register('animation.updateRuntime', this, function (now) {
-                material.uniforms.uTime.value = now;
-            });
-
-            return new THREE.Mesh(geometry, material);
-        }
+    HC.plugins.mesh_material.clouds = class Plugin extends HC.MeshShaderMaterialPlugin {
 
         shader = {
             uniforms: {

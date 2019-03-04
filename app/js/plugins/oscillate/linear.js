@@ -6,7 +6,7 @@
         apply(key, speed, add) {
             speed = speed || this.layer.getCurrentSpeed();
             let prc = HC.Osci.linInOut(speed.prc, add);
-            this.activate(key, prc);
+            return this.activate(key, prc);
         }
     }
 }
@@ -17,7 +17,7 @@
 
         apply(key, speed) {
             speed = speed || this.layer.getCurrentSpeed();
-            this.layer.getOscillatePlugin('lininout').apply(key, speed, .5);
+            return this.layer.getOscillatePlugin('lininout').apply(key, speed, .5);
         }
     }
 }
@@ -28,7 +28,7 @@
 
         apply(key, speed) {
             speed = speed || beatkeeper.getSpeed('double');
-            this.layer.getOscillatePlugin('lininout').apply(key, speed, .5);
+            return this.layer.getOscillatePlugin('lininout').apply(key, speed, .5);
         }
     }
 }
@@ -39,7 +39,7 @@
 
         apply(key, speed) {
             speed = speed || beatkeeper.getSpeed('quad');
-            this.layer.getOscillatePlugin('lininout').apply(key, speed, .5);
+            return this.layer.getOscillatePlugin('lininout').apply(key, speed, .5);
         }
     }
 }
@@ -50,7 +50,7 @@
 
         apply(key, speed) {
             speed = speed || beatkeeper.getSpeed('octa');
-            this.layer.getOscillatePlugin('lininout').apply(key, speed, .5);
+            return this.layer.getOscillatePlugin('lininout').apply(key, speed, .5);
         }
     }
 }
@@ -61,7 +61,7 @@
 
         apply(key, speed) {
             speed = speed || beatkeeper.getSpeed('hexa');
-            this.layer.getOscillatePlugin('lininout').apply(key, speed, .5);
+            return this.layer.getOscillatePlugin('lininout').apply(key, speed, .5);
         }
     }
 }

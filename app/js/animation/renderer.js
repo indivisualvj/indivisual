@@ -287,7 +287,7 @@
          */
         render: function () {
 
-            listener.fireEvent('renderer.render');
+            listener.fireEvent('renderer.render', this);
 
             if (this.currentLayer.shaders()) {
                 this.currentLayer.doShaders();

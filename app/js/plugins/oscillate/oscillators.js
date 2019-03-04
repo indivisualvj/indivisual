@@ -4,7 +4,7 @@
         static index = 10;
 
         apply(key) {
-            this.activate(key, (animation.now - beatkeeper.beatStartTime) / (60000 / statics.ControlSettings.tempo));
+            return this.activate(key, (animation.now - beatkeeper.beatStartTime) / (60000 / statics.ControlSettings.tempo));
         }
     }
 }
@@ -18,7 +18,7 @@
 
             v += 0.02;
             this.params(key, v);
-            this.activate(key, v);
+            return this.activate(key, v);
         }
     }
 }
@@ -38,7 +38,7 @@
             }
 
             pa.progress += 0.02 * pa.velocity;
-            this.activate(key, pa.progress);
+            return this.activate(key, pa.progress);
         }
     }
 }
@@ -48,7 +48,7 @@
         static index = 10;
 
         apply(key) {
-            this.activate(key, Math.min(1, 2.5 * audio.volume));
+            return this.activate(key, Math.min(1, 2.5 * audio.volume));
         }
     }
 }

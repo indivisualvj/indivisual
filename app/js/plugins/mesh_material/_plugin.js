@@ -37,7 +37,7 @@ HC.plugins.mesh_material = HC.plugins.mesh_material || {};
         }
 
         dispose() {
-            listener.removeId(this);
+            listener.removeId(this.id());
         }
     }
 }

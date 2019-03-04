@@ -31,8 +31,8 @@ HC.Shape.prototype.initPlugins = function () {
         tree;
         key;
 
-        _id() {
-            return this.tree + this.key;
+        id() {
+            return this.tree + '.' + this.key;
         }
 
         getDefinitions() {

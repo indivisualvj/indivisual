@@ -3,8 +3,10 @@
         apply(geometry) {
             let material = new THREE.ShaderMaterial(this.shader);
             material.color = new THREE.Color();
-            listener.register('animation.updateRuntime', this, function (now) {
-                material.uniforms.uTime.value = now;
+
+            let inst = this;
+            listener.register('renderer.render', this.id(), function (target) {
+                material.uniforms.uTime.value = inst.layer.getOscillatePlugin('timestamp').apply({value: 1});
             });
 
             return new THREE.Mesh(geometry, material);

@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (audio.peak) {
                     messaging.emitMidi('glow', MIDI_PEAK_FEEDBACK, {timeout: 125});
 
-                    listener.fireEvent('AudioAnalyser.peak');
+                    listener.fireEvent('audio.peak', audio);
                 }
 
             } else {
@@ -318,7 +318,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this._rmss += this.rms;
             this.last = this.now;
 
-            listener.fireEvent('animation.updateRuntime', (animation.now - beatkeeper.beatStartTime) / (60000 / statics.ControlSettings.tempo));
+            listener.fireEvent('animation.updateRuntime', this);
         },
 
         /**

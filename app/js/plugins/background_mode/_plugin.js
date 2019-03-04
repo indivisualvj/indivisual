@@ -19,7 +19,7 @@ HC.plugins.background_mode = HC.plugins.background_mode || {};
         }
 
         _settingID() {
-            return this._id() + this.settings.background_volume + this.settings.background_color + this.settings.background_input;
+            return this.id() + this.settings.background_volume + this.settings.background_color + this.settings.background_input;
         }
 
         dispose() {

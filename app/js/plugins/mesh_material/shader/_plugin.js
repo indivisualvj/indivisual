@@ -8,7 +8,7 @@
             material.color = new THREE.Color();
 
             let inst = this;
-            listener.register('renderer.render', this.id(), function (target) {
+            listener.register('renderer.render', this.id(), function (renderer) {
                 if (material.uniforms && material.uniforms.uTime) {
                     material.uniforms.uTime.value = inst.layer.getOscillatePlugin('timestamp').apply({value: 1});
                 }

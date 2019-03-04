@@ -31,8 +31,8 @@ HC.Shape.prototype.initPlugins = function () {
         tree;
         key;
 
-        id() {
-            return this.tree + '.' + this.key;
+        id(suffix) {
+            return this.tree + '.' + this.key + (suffix!==undefined?'.' + suffix:'');
         }
 
         getDefinitions() {

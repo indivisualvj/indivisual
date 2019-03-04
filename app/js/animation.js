@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (audio.peak) {
                     messaging.emitMidi('glow', MIDI_PEAK_FEEDBACK, {timeout: 125});
 
-                    listener.fireAll('AudioAnalyser.peak');
+                    listener.fireEvent('AudioAnalyser.peak');
                 }
 
             } else {
@@ -318,7 +318,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this._rmss += this.rms;
             this.last = this.now;
 
-            listener.fireAll('animation.updateRuntime', (animation.now - beatkeeper.beatStartTime) / (60000 / statics.ControlSettings.tempo));
+            listener.fireEvent('animation.updateRuntime', (animation.now - beatkeeper.beatStartTime) / (60000 / statics.ControlSettings.tempo));
         },
 
         /**
@@ -785,7 +785,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             break;
 
                         case 'resolution':
-                            renderer.fullReset(true);
+                            renderer.fullReset(true); // todo window.location.reload für weniger contextloss?
                             sourceman.resize(renderer.getResolution());
                             displayman.resize(renderer.getResolution());
                             break;

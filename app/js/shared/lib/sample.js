@@ -9,7 +9,7 @@ function renderSample(sample, image, progress, color, hook) {
     if (image && sample.frames) {
         if (!sample.started) {
             if (progress.prc == 0) {
-                listener.fire('sample.render.start', sample.id, sample);
+                listener.fireEventId('sample.render.start', sample.id, sample);
                 sample.started = true;
                 if (hook) {
                     hook();
@@ -24,7 +24,7 @@ function renderSample(sample, image, progress, color, hook) {
 
                 } else {
                     sample.counter++;
-                    listener.fire('sample.render.progress', sample.id, sample);
+                    listener.fireEventId('sample.render.progress', sample.id, sample);
                 }
 
             }
@@ -41,7 +41,7 @@ function renderSample(sample, image, progress, color, hook) {
             }
         }
     } else {
-        listener.fire('sample.render.error', sample.id, sample);
+        listener.fireEventId('sample.render.error', sample.id, sample);
     }
 }
 
@@ -82,7 +82,7 @@ function storeSample(sample, name, resolution) {
             sample.pointer++;
 
             if (sample.pointer % 5 == 0) {
-                listener.fire('sample.store.progress', sample.id, sample);
+                listener.fireEventId('sample.store.progress', sample.id, sample);
             }
 
             if (sample.pointer < sample.frames.length) {
@@ -93,7 +93,7 @@ function storeSample(sample, name, resolution) {
 
             } else {
                 animation.powersave = false;
-                listener.fire('sample.store.end', sample.id, sample);
+                listener.fireEventId('sample.store.end', sample.id, sample);
             }
         }
     };

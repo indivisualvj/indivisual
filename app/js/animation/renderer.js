@@ -53,7 +53,7 @@
                 this.three.renderer.view.id = 'threeWebGL';
 
                 this.three.renderer.view.addEventListener('webglcontextlost', function () {
-                    listener.fireAll('webglcontextlost');
+                    listener.fireEvent('webglcontextlost');
                 });
 
                 this.three.scene = new THREE.Scene();
@@ -286,6 +286,9 @@
          *
          */
         render: function () {
+
+            listener.fireEvent('renderer.render');
+
             if (this.currentLayer.shaders()) {
                 this.currentLayer.doShaders();
                 this.currentLayer._composer.render();

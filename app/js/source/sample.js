@@ -53,7 +53,7 @@
 
             } else if (!enabled) {
                 this._init(speed, true);
-                listener.fire('sample.init.reset', this.id, this);
+                listener.fireEventId('sample.init.reset', this.id, this);
             }
 
         },
@@ -135,7 +135,7 @@
                     cv.ctx.fillRect(0, 0, cv.width, cv.height);
                     if (i % 10 == 0) {
                         inst.pointer = i;
-                        listener.fire('sample.init.progress', inst.id, inst);
+                        listener.fireEventId('sample.init.progress', inst.id, inst);
                         animation.powersave = true;
                     }
 
@@ -151,13 +151,13 @@
                         inst.initialized = true;
                         inst.pointer = 0;
                         animation.powersave = false;
-                        listener.fire('sample.init.end', inst.id, inst);
+                        listener.fireEventId('sample.init.end', inst.id, inst);
                     }
                 }
             };
 
             requestAnimationFrame(function () {
-                listener.fire('sample.init.start', inst.id, inst);
+                listener.fireEventId('sample.init.start', inst.id, inst);
                 inst.initializing = true;
                 _init(0);
             });
@@ -173,7 +173,7 @@
                 this.pointer = 0;
                 this.counter = 0;
 
-                listener.fire('sample.render.error', this.id, this);
+                listener.fireEventId('sample.render.error', this.id, this);
 
             } else {
                 this.frames.splice(this.pointer, this.frames.length - this.pointer);
@@ -183,7 +183,7 @@
                 this.length = this.frames.length / 60 * 1000;
                 this.counter = 0;
 
-                listener.fire('sample.render.end', this.id, this);
+                listener.fireEventId('sample.render.end', this.id, this);
 
             }
         },
@@ -290,11 +290,11 @@
                         loaded++;
                         inst.pointer = loaded;
                         if (loaded % 10 == 0) {
-                            listener.fire('sample.load.progress', inst.id, inst);
+                            listener.fireEventId('sample.load.progress', inst.id, inst);
                         }
                         if (loaded == frameCount) {
                             inst.finish();
-                            listener.fire('sample.load.end', inst.id, inst);
+                            listener.fireEventId('sample.load.end', inst.id, inst);
                         }
                     };
                 }

@@ -184,7 +184,6 @@
                 if (IS_ANIMATION) {
                     this.initSample(sample);
                 }
-
             }
 
             return this.samples[i];

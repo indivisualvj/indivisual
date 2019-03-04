@@ -1,22 +1,13 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-
-
-(function () {
+{
     /**
      *
      * @constructor
      */
-    HC.Listener = function () {
-        this.events = {};
-    };
-
-    /**
-     *
-     * @type {{register: Function, fire: Function}}
-     */
-    HC.Listener.prototype = {
+    HC.Listener = class Listener {
+        events = {};
 
         /**
          *
@@ -24,7 +15,7 @@
          * @param id
          * @param callback
          */
-        register: function (event, id, callback) {
+        register(event, id, callback) {
 
             var _func = function (target) {
                 if (callback) {
@@ -35,30 +26,54 @@
                 this.events[event] = {};
             }
             this.events[event][id] = _func;
-        },
+        }
 
         /**
          *
          * @param event
          * @param id
          */
-        remove: function (event, id) {
+        remove(event, id) {
             if (event in this.events) {
                 if (id && id in this.events[event]) {
                     delete this.events[event][id];
 
-                } else if (id === undefined) {
-                    delete this.events[event];
                 }
             }
-        },
+        }
+
+        /**
+         *
+         * @param event
+         */
+        removeEvent(event) {
+            if (event in this.events) {
+                delete this.events[event];
+            }
+        }
+
+        /**
+         *
+         * @param id
+         */
+        removeId(id) {
+            for (let e in this.events) {
+                var event = this.events[e];
+
+                for (let i in event) {
+                    if (i === id) {
+                        delete event[i];
+                    }
+                }
+            }
+        }
 
         /**
          *
          */
-        reset: function () {
+        reset() {
             this.events = {};
-        },
+        }
 
         /**
          *
@@ -66,7 +81,7 @@
          * @param id
          * @param target
          */
-        fire: function (event, id, target) {
+        fireEventId(event, id, target) {
             if (event in this.events && id in this.events[event]) {
                 var _call = this.events[event][id];
                 if (_call) {
@@ -74,19 +89,36 @@
                     _call(target);
                 }
             }
-        },
+        }
+
+        /**
+         *
+         * @param id
+         * @param target
+         */
+        fireId(id, target) {
+            for (let e in this.events) {
+                var event = this.events[e];
+
+                for (let i in event) {
+                    if (i === id) {
+                        this.fireEventId(e, i, target);
+                    }
+                }
+            }
+        }
 
         /**
          *
          * @param event
          * @param target
          */
-        fireAll: function (event, target) {
+        fireEvent(event, target) {
             if (event in this.events) {
                 for (id in this.events[event]) {
-                    this.fire(event, id, target);
+                    this.fireEventId(event, id, target);
                 }
             }
         }
     }
-})();
+}

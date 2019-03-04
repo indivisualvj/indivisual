@@ -100,7 +100,7 @@
             };
             tag.onabort = tag.onerror = function (err) {
                 console.error(err);
-                listener.fire('sample.render.error', this.id, this);
+                listener.fireEventId('sample.render.error', this.id, this);
             }
         },
 
@@ -147,7 +147,7 @@
                 }
             };
 
-            listener.fire('sample.init.start', inst.id, inst);
+            listener.fireEventId('sample.init.start', inst.id, inst);
             requestAnimationFrame(function () {
                 inst.initializing = true;
                 _loop(0);
@@ -162,7 +162,7 @@
             this.complete = true;
             this.pointer = 0;
 
-            listener.fire('sample.render.end', this.id, this);
+            listener.fireEventId('sample.render.end', this.id, this);
         },
 
         /**
@@ -177,7 +177,7 @@
                 if (image && this.frames) {
                     if (!this.started) {
                         if (progress.prc == 0) {
-                            //listener.fire('sample.render.start', this.id, this);
+                            //listener.fireEventId('sample.render.start', this.id, this);
                             this.started = true;
                             this.canvas.play();
                         }
@@ -189,7 +189,7 @@
 
                         } else {
                             this.counter++;
-                            //listener.fire('sample.render.progress', this.id, this);
+                            //listener.fireEventId('sample.render.progress', this.id, this);
                         }
 
                         if (!this.complete) {
@@ -226,7 +226,7 @@
                         }
                     }
                 } else {
-                    //listener.fire('sample.render.error', this.id, this);
+                    //listener.fireEventId('sample.render.error', this.id, this);
                 }
             }
         },

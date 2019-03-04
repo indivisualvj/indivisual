@@ -1,3 +1,4 @@
+// 2D clouds by drift (https://www.shadertoy.com/view/4tdSWr)
 {
     HC.plugins.mesh_material.clouds = class Plugin extends HC.MeshShaderMaterialPlugin {
 

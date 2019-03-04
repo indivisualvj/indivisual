@@ -1,3 +1,4 @@
+// srtuss 2014 / https://www.shadertoy.com/view/MdXXW2
 {
     HC.plugins.mesh_material.digitalambience = class Plugin extends HC.MeshShaderMaterialPlugin {
 
@@ -5,7 +6,6 @@
             uniforms: {
                 uTime: {type: 'f', value: 1.0}
             },
-            // srtuss 2014 / https://www.shadertoy.com/view/MdXXW2
             fragmentShader: `
             uniform float uTime;
             varying vec2 vUv;

@@ -1,3 +1,18 @@
+// Created by inigo quilez - iq/2013
+// License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
+
+
+// Other "Iterations" shaders:
+//
+// "trigonometric"   : https://www.shadertoy.com/view/Mdl3RH
+// "trigonometric 2" : https://www.shadertoy.com/view/Wss3zB
+// "circles"         : https://www.shadertoy.com/view/MdVGWR
+// "coral"           : https://www.shadertoy.com/view/4sXGDN
+// "guts"            : https://www.shadertoy.com/view/MssGW4
+// "inversion"       : https://www.shadertoy.com/view/XdXGDS
+// "inversion 2"     : https://www.shadertoy.com/view/4t3SzN
+// "shiny"           : https://www.shadertoy.com/view/MslXz8
+// "worms"           : https://www.shadertoy.com/view/ldl3W4
 {
     HC.plugins.mesh_material.trigonometric = class Plugin extends HC.MeshShaderMaterialPlugin {
 
@@ -5,22 +20,6 @@
             uniforms: {
                 uTime: {type: 'f', value: 1.0}
             },
-
-            // Created by inigo quilez - iq/2013
-            // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
-
-
-            // Other "Iterations" shaders:
-            //
-            // "trigonometric"   : https://www.shadertoy.com/view/Mdl3RH
-            // "trigonometric 2" : https://www.shadertoy.com/view/Wss3zB
-            // "circles"         : https://www.shadertoy.com/view/MdVGWR
-            // "coral"           : https://www.shadertoy.com/view/4sXGDN
-            // "guts"            : https://www.shadertoy.com/view/MssGW4
-            // "inversion"       : https://www.shadertoy.com/view/XdXGDS
-            // "inversion 2"     : https://www.shadertoy.com/view/4t3SzN
-            // "shiny"           : https://www.shadertoy.com/view/MslXz8
-            // "worms"           : https://www.shadertoy.com/view/ldl3W4
             fragmentShader: `
             varying vec2 vUv;
             uniform float uTime;

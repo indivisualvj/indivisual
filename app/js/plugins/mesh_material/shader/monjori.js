@@ -1,3 +1,7 @@
+// 'Monjori' by Mic (2009) modified by tesuji
+// Code for the 1k intro Monjori from the demoscene (http://www.pouet.net/prod.php?which=52761)
+
+
 // todo shadows for shaderMaterials?
 // let geometry = new THREE.BoxBufferGeometry( 10, 10, 10 );
 // geometry.clearGroups();
@@ -11,6 +15,7 @@
 //
 // mesh = new THREE.Mesh( geometry, materials );
 
+
 {
     HC.plugins.mesh_material.monjori = class Plugin extends HC.MeshShaderMaterialPlugin {
 
@@ -19,8 +24,6 @@
             uniforms: {
                 uTime: {type: 'f', value: 1.0}
             },
-            // 'Monjori' by Mic (2009) modified by tesuji
-            // Code for the 1k intro Monjori from the demoscene (http://www.pouet.net/prod.php?which=52761)
             fragmentShader: `
             uniform float uTime;
             varying vec2 vUv;

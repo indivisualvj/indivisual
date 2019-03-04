@@ -1,3 +1,5 @@
+// Created by inigo quilez - iq/2013
+// License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
 {
     HC.plugins.mesh_material.bubbles = class Plugin extends HC.MeshShaderMaterialPlugin {
 
@@ -5,8 +7,6 @@
             uniforms: {
                 uTime: {type: 'f', value: 1.0}
             },
-            // Created by inigo quilez - iq/2013
-            // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
             fragmentShader: `
             varying vec2 vUv;
             uniform float uTime;

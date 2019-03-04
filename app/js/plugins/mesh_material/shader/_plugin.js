@@ -1,3 +1,6 @@
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
 {
     HC.MeshShaderMaterialPlugin = class MeshShaderMaterialPlugin extends HC.MeshMaterialPlugin {
         apply(geometry) {

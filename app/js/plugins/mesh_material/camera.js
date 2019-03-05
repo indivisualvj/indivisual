@@ -1,3 +1,7 @@
+/**
+ * todo var material = new THREE.MeshBasicMaterial( { color: 0xffffff, envMap: scene.background, refractionRatio: 0.95 } ); material.envMap.mapping = THREE.CubeRefractionMapping;
+ */
+
 {
     HC.plugins.mesh_material.camera = class Plugin extends HC.MeshMaterialPlugin {
         static index = 2;

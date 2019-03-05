@@ -2,6 +2,10 @@ HC.plugins.shape_delay = HC.plugins.shape_delay || {};
 {
     HC.ShapeDelayPlugin = class Plugin extends HC.AnimationPlugin {
 
+        injections = {
+            delay: 0
+        };
+
         before(shape) {
             let params = this.params(shape);
             params.delay = 0;
@@ -35,9 +39,5 @@ HC.plugins.shape_delay = HC.plugins.shape_delay || {};
         isFirstShape(shape) {
             return shape.index == -1;
         }
-    };
-
-    HC.ShapeDelayPlugin.prototype.injections = {// todo move into class after all is "classified"
-        delay: 0
     }
 }

@@ -1,5 +1,5 @@
 {
-    class Plugin extends HC.MaterialMapPlugin {
+    HC.plugins.material_map.sequence = class Plugin extends HC.MaterialMapPlugin {
 
         apply(i) {
             let seq = sourceman.getSequence(i);
@@ -56,6 +56,4 @@
             this.texture = tex;
         }
     }
-
-    HC.plugins.material_map.sequence = Plugin;
 }

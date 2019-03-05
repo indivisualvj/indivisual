@@ -1,7 +1,7 @@
 HC.plugins.rotation_direction = HC.plugins.rotation_direction || {};
 {
     HC.RotationDirectionPlugin = class Plugin extends HC.AnimationPlugin {
-        injections = { // todo move into class after all is "classified"
+        injections = {
             dir: 0,
             directions: {
                 x: 0,

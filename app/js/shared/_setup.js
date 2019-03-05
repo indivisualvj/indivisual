@@ -334,10 +334,10 @@ function setupResources() {
 
         pluginKeys.sort(function (a, b) {
 
-            var ai = plugins[a].prototype.index || plugins[a].prototype.constructor.index || 99999;
-            var bi = plugins[b].prototype.index || plugins[b].prototype.constructor.index || 99999;
-            var an = plugins[a].prototype.name || plugins[a].prototype.constructor.name || a;
-            var bn = plugins[b].prototype.name || plugins[b].prototype.constructor.name || b;
+            var ai = plugins[a].index || 99999;
+            var bi = plugins[b].index || 99999;
+            var an = plugins[a].name || a;
+            var bn = plugins[b].name || b;
 
             if (an === 'Plugin') {
                 an = a;
@@ -357,7 +357,7 @@ function setupResources() {
 
             var pluginKey = pluginKeys[i];
             var plugin = tree[section][pluginKey];
-            var name = plugin.prototype.name || plugin.prototype.constructor.name || pluginKey;
+            var name = plugin.name || pluginKey;
 
             if (name == 'Plugin') {
                 name = pluginKey;
@@ -436,7 +436,7 @@ function setupResources() {
         for (var i = 0; i < keys.length; i++) {
             var key = keys[i];
             var plug = HC.plugins.shaders[key];
-            settings[key] = plug.prototype.settings || plug.prototype.constructor.settings;
+            settings[key] = plug.settings || {};
         }
 
         return settings;

@@ -439,8 +439,8 @@ HC.Controller.prototype.getControlParentByProperty = function (property, control
 HC.Controller.prototype.explainPlugin = function (item, value) {
     if (item in HC.plugins) {
         if (value in HC.plugins[item]) {
-            var proto = HC.plugins[item][value].prototype;
-            var desc = proto.tutorial || proto.constructor.tutorial; // todo after classifying all remove
+            var proto = HC.plugins[item][value];
+            var desc = proto.tutorial;
             if (desc) {
                 var key = item + '.' + value;
                 new HC.ScriptProcessor(key, desc).log();

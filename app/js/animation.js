@@ -273,9 +273,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     inst.animate();
                     inst.render();
 
-                    inst.ms = HC.now() - inst.lastUpdate - inst.last; // time spent on animating and rendering
+                    if (inst.stats) {
+                        inst.stats.end();
+                        inst.fps = inst.stats.values().fps;
+                        inst.ms = inst.stats.values().ms;
+                    }
 
-                    if (statics.DisplaySettings.fps < 60) { // fixme fps not after reload from session
+                    if (statics.DisplaySettings.fps < 60) {
                         setTimeout(function () {
                             requestAnimationFrame(render);
                         }, inst.duration - inst.ms); // substract spent time from timeout
@@ -284,13 +288,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         requestAnimationFrame(render);
                     }
 
-                    if (inst.stats) {
-                        inst.stats.end();
-                        inst.fps = inst.stats.values().fps;
-                    }
-
                 } else {
-                    renderer.pauseLayers(); // todo nicht nötig wenn mit animation.now gearbeitet wird.
+                    renderer.pauseLayers();
                     beatkeeper.stop();
                 }
             };
@@ -312,6 +311,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateRuntime: function () {
             this.now = HC.now() - this.lastUpdate;
             this.diff = this.now - this.last;
+            this.duration = 1000 / statics.DisplaySettings.fps;
             this.diffPrc = this.diff / (1000 / 60);
             this.rms = this.duration - this.ms;
             this._rmsc++;
@@ -489,6 +489,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 HC.log('displays', 'synced');
                 var displays = session.displays;
                 this.updateDisplays(displays, true, false, true);
+
+            } else {
+                this.fullReset(true);
             }
 
             if ('sources' in session) {
@@ -514,6 +517,16 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             sourceman.updateSequences();
+        },
+
+        /**
+         *
+         * @param keepsettings
+         */
+        fullReset: function (keepsettings) {
+            renderer.fullReset(keepsettings);
+            sourceman.resize(renderer.getResolution());
+            displayman.resize(renderer.getResolution());
         },
 
         /**
@@ -567,9 +580,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     case 'shape_modifier_volume':
                     case 'shape_geometry':
                     case 'shape_transform':
-                    case 'mesh_material': // todo can't we just reset materials?
+                    case 'mesh_material':
                     case 'material_mapping':
-                    case 'shape_moda': // todo can't we just reset geometries?
+                    case 'shape_moda':
                     case 'shape_modb':
                     case 'shape_modc':
                         layer.resetShapes();
@@ -629,9 +642,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             if (renderer) {
                                 if (force) {
                                     beatkeeper.reset();
-                                    renderer.fullReset(false);
-                                    sourceman.resize(renderer.getResolution());
-                                    displayman.resize(renderer.getResolution());
+                                    this.fullReset(false);
 
                                 } else {
                                     renderer.resetLayer(renderer.currentLayer);
@@ -781,14 +792,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (display) {
                     switch (item) {
-                        case 'fps':
-                            this.duration = Math.round(1000 / value);
-                            break;
-
                         case 'resolution':
-                            renderer.fullReset(true); // todo window.location.reload für weniger contextloss?
-                            sourceman.resize(renderer.getResolution());
-                            displayman.resize(renderer.getResolution());
+                            this.fullReset(true);
                             break;
 
                         case 'mapping':
@@ -878,9 +883,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 for (var k in data) {
                     statics.DisplaySettings.update(k, data[k]);
                 }
-                renderer.fullReset(true);
-                sourceman.resize(renderer.getResolution());
-                displayman.resize(renderer.getResolution());
+                this.fullReset(true);
 
             } else {
                 for (var k in data) {

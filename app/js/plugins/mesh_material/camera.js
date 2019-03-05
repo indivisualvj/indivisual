@@ -26,7 +26,7 @@
             let mesh = new THREE.Mesh(geometry, material);
 
             let inst = this;
-            listener.register('renderer.render', this.id(index), function (renderer) {
+            listener.register('renderer.render', this, function (renderer) {
 
                 mesh.visible = false;
 
@@ -57,7 +57,7 @@
 
         dispose() {
 
-            listener.removeId(this.id(this.index));
+            listener.removeId(this);
 
             if (this.camera1) {
                 renderer.three.scene.remove(this.camera1);

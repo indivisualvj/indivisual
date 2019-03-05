@@ -8,7 +8,7 @@
             material.color = new THREE.Color();
 
             let inst = this;
-            listener.register('renderer.render', this.id(), function (renderer) {
+            listener.register('renderer.render', this, function (renderer) {
                 if (material.uniforms && material.uniforms.uTime) {
                     material.uniforms.uTime.value = inst.layer.getOscillatePlugin('timestamp').apply({value: 1});
                 }
@@ -18,7 +18,7 @@
         }
 
         dispose() {
-            listener.removeId(this.id()); // fixme stops uTime update when fullreset called after reload when meshshadermatplugin loaded
+            listener.removeId(this);
         }
     }
 }

@@ -246,14 +246,14 @@
          *
          */
         pause: function () {
-            this.lastUpdate = HC.now();
+            this.lastUpdate = animation.now;
         },
 
         /**
          *
          */
         resume: function () {
-            this.lastUpdate = HC.now() - this.lastUpdate;
+            this.lastUpdate = animation.now - this.lastUpdate;
         }
     }
 })();

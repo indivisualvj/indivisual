@@ -99,7 +99,7 @@
                 }
             }
 
-            this.volume = values / binCount * config.volume;
+            this.volume = (values / binCount) * config.volume;
 
             this._beatRecognition(config);
 

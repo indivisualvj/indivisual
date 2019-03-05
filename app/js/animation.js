@@ -246,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.running = true;
 
             if (this.lastUpdate) {
-                this.lastUpdate = HC.now() - this.lastUpdate;
+                this.lastUpdate = animation.now - this.lastUpdate;
             }
             beatkeeper.play();
             renderer.resumeLayers();
@@ -303,7 +303,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         pause: function () {
             this.running = false;
-            this.lastUpdate = HC.now();
+            this.lastUpdate = this.now;
         },
 
         /**
@@ -384,6 +384,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (gain !== 0) {
                 //console.log('gain', [audio.volume, audio.avgVolume, gain]);
                 var vo = Math.min(2, Math.max(0.5, statics.ControlSettings.volume + gain));
+                // statics.ControlSettings.volume = vo;
                 animation.updateControl('volume', vo, false, false, false);
             }
         },

@@ -1,21 +1,5 @@
 // 'Monjori' by Mic (2009) modified by tesuji
 // Code for the 1k intro Monjori from the demoscene (http://www.pouet.net/prod.php?which=52761)
-
-
-// todo shadows for shaderMaterials?
-// let geometry = new THREE.BoxBufferGeometry( 10, 10, 10 );
-// geometry.clearGroups();
-// geometry.addGroup( 0, Infinity, 0 );
-// geometry.addGroup( 0, Infinity, 1 );
-// geometry.addGroup( 0, Infinity, 2 );
-// geometry.addGroup( 0, Infinity, 3 );
-//
-// let materials = [ material0, material1, material2, material3 ];
-//
-//
-// mesh = new THREE.Mesh( geometry, materials );
-
-
 {
     HC.plugins.mesh_material.monjori = class Plugin extends HC.MeshShaderMaterialPlugin {
 

@@ -47,7 +47,7 @@ HC.Layer.prototype.animate = function (hook) {
         this.resetShapes();
     }
 
-    this.tween.update(HC.now() - this.lastUpdate, false);
+    this.tween.update(animation.now - this.lastUpdate, false);
 
     this.doOscillate(true);
 

@@ -24,7 +24,7 @@ HC.plugins.pattern = HC.plugins.pattern || {};
         boundsCheck(shape, extend, depthMultiplier, velocity) {
 
             let direction = new THREE.Vector3(0, 0, 0);
-            // fixme greedy?
+            // todo greedy?
 
             // bounds check
             let mx = this.layer.resolution('half').x + (extend || 0);
@@ -36,16 +36,19 @@ HC.plugins.pattern = HC.plugins.pattern || {};
 
             if (world.x > mx) {
                 direction.x = -1;
+
             } else if (world.x < -mx) {
                 direction.x = 1;
             }
             if (world.y > my) {
                 direction.y = -1;
+
             } else if (world.y < -my) {
                 direction.y = 1;
             }
             if (world.z > mz) {
                 direction.z = -1;
+
             } else if (world.z < -mz) {
                 direction.z = 1;
             }
@@ -57,7 +60,6 @@ HC.plugins.pattern = HC.plugins.pattern || {};
 
                 velocity.multiply(direction);
             }
-
 
             return direction;
         }

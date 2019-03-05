@@ -11,22 +11,24 @@
         index = 0;
 
         apply(geometry, index) {
-            this.index = index;
+            this._index = index;
             this.camera1 = new THREE.CubeCamera(1, 100000, 256);
             this.camera1.renderTarget.texture.generateMipmaps = true;
             this.camera1.renderTarget.texture.minFilter = THREE.LinearMipMapLinearFilter;
+            // this.camera1.renderTarget.texture.mapping = THREE.EquirectangularReflectionMapping;
             renderer.three.scene.add(this.camera1);
 
             this.camera2 = new THREE.CubeCamera(1, 100000, 256);
             this.camera2.renderTarget.texture.generateMipmaps = true;
             this.camera2.renderTarget.texture.minFilter = THREE.LinearMipMapLinearFilter;
+            // this.camera2.renderTarget.texture.mapping = THREE.EquirectangularReflectionMapping;
             renderer.three.scene.add(this.camera2);
 
             let material = new THREE.MeshBasicMaterial({envMap: this.camera1.renderTarget.texture});
             let mesh = new THREE.Mesh(geometry, material);
 
             let inst = this;
-            listener.register('renderer.render', this, function (renderer) {
+            listener.register('renderer.render', this.id(index), function (renderer) {
 
                 mesh.visible = false;
 
@@ -55,9 +57,9 @@
             return mesh;
         }
 
-        dispose() {
+        dispose() { // fixme does not work if e.g. changed number of shapes
 
-            listener.removeId(this);
+            listener.removeId(this.id(this._index));
 
             if (this.camera1) {
                 renderer.three.scene.remove(this.camera1);

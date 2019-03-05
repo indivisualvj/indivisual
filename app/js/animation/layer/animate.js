@@ -24,7 +24,7 @@ HC.Layer.prototype.animateShape = function (shape) {
 
     }
 
-    if (!shape.dummy) {
+    if (!shape.dummy) { // todo dummy->visible
         this.doPattern(shape);
         this.doOffsetMode(shape);
         this.doShapeTransform(shape);

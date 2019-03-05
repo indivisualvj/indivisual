@@ -35,6 +35,7 @@
          * @param keepsettings
          */
         fullReset: function (keepsettings) {
+            listener.removeEvent('renderer.render');
             this.resize();
             this.initLayers(keepsettings);
             this.setLayer(0);
@@ -143,7 +144,7 @@
 
             for (var i in this.layers) {
                 i = parseInt(i);
-                var l = this.layers[i]._layer;
+                var l = this.layers[i]._layer; // todo WOT?
 
                 if (i == index) {
                     this.three.scene.add(l);

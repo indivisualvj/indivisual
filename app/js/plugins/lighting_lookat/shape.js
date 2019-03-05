@@ -26,6 +26,11 @@
         apply(light, peak) {
             let params = this.params(light);
             let speed = params.speed || this.layer.getCurrentSpeed();
+
+            if (params.shape && params.shape._layer != this.layer) { // todo _layer->parent
+                params.shape = false;
+            }
+
             if (!params.shape || (!peak && speed.prc == 0) || (peak && audio.peak && randomBool())) {
                 params.shape = this.layer.getRandomShape();
                 params.speed = this.layer.getShapeSpeed(params.shape).speed;

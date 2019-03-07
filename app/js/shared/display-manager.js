@@ -333,6 +333,10 @@
             this.updateDisplays();
         },
 
+        reset: function () {
+            this.updateDisplays();
+        },
+
         /**
          *
          */

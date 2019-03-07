@@ -144,7 +144,7 @@
 
             for (var i in this.layers) {
                 i = parseInt(i);
-                var l = this.layers[i]._layer; // todo WOT?
+                var l = this.layers[i]._layer;
 
                 if (i == index) {
                     this.three.scene.add(l);

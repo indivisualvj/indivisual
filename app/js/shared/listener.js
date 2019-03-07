@@ -68,6 +68,24 @@
             }
         }
 
+
+        /**
+         *
+         * @param prefix
+         */
+        removeLike(prefix) {
+            for (let e in this.events) {
+                var event = this.events[e];
+
+                for (let i in event) {
+                    let regx = new RegExp('^' + prefix + '');
+                    if (i.match(regx)) {
+                        delete event[i];
+                    }
+                }
+            }
+        }
+
         /**
          *
          */

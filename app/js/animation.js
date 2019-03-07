@@ -489,9 +489,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 HC.log('displays', 'synced');
                 var displays = session.displays;
                 this.updateDisplays(displays, true, false, true);
-
-            } else {
-                this.fullReset(true);
             }
 
             if ('sources' in session) {
@@ -506,8 +503,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 for (var k in settings) {
                     this.updateSettings(k, settings[k], true, false, true);
                 }
-            } else {
-                renderer.fullReset(false);
             }
 
             if ('controls' in session) {
@@ -517,6 +512,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             sourceman.updateSequences();
+            this.fullReset(true);
         },
 
         /**
@@ -883,7 +879,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 for (var k in data) {
                     statics.DisplaySettings.update(k, data[k]);
                 }
-                this.fullReset(true);
+                displayman.reset();
+                // this.fullReset(true);
 
             } else {
                 for (var k in data) {

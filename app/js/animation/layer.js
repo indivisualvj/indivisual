@@ -104,7 +104,7 @@
          *
          */
         fullReset: function () {
-            this.resetPlugins();
+            this.reloadPlugins();
             this.resetShapes();
             this.resetLighting();
             this.resetBackground();
@@ -129,6 +129,7 @@
          */
         resetShapes: function () {
 
+            this.resetPlugins();
             this.initRotator();
             this.resetAnimation();
             var sgp = this.getShapeGeometryPlugin();

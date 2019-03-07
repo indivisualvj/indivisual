@@ -28,7 +28,7 @@
             camera2.renderTarget.texture.minFilter = THREE.LinearMipMapLinearFilter;
             this.cameras.add(camera2);
 
-            let material = new THREE.MeshBasicMaterial({envMap: camera1.renderTarget.texture});
+            let material = new THREE.MeshStandardMaterial({envMap: camera1.renderTarget.texture});
             let mesh = new THREE.Mesh(geometry, material);
             mesh.name = this.id(index);
 

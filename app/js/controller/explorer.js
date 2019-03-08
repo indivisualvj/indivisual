@@ -147,7 +147,7 @@
                 var children = this.model.children;
                 var dflt = [];
 
-                for (var i = 0; i < children.length; i++) {
+                for (var i = 0; dflt.length < layers.length && i < children.length; i++) {
                     var child = children[i];
                     if (!child.name.match(/^_.+/)) {
                         dflt.push(child);

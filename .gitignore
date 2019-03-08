@@ -20,6 +20,7 @@ assets/images/*
 !assets/images/indivisual-logo,120,1280x720,30.png
 !assets/images/kopf-120,512x512,30.png
 !assets/images/pennywise,120,1280x720,30.png
+!assets/images/blue-marble,120,1920x960,30.png
 
 assets/textures/*
 !assets/textures/rgb-noise.png

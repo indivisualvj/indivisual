@@ -434,7 +434,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (item == 'layer') {
                     var l = sm.get(value);
 
-                    this.updateSettings(value, l.settings, true, false, true);
+                    this.updateSettings(value, l.settings.prepare(), true, false, true);
 
                     explorer.resetLoaded();
                     explorer.setLoaded(value, true);
@@ -776,7 +776,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 layer = statics.ControlSettings.layer;
             }
 
-            this.updateSettings(layer, dflt, true, false, true);
+            this.updateSettings(layer, dflt.prepare(), true, false, true);
             messaging.emitSettings(layer, statics.AnimationSettings.prepare(), false, false, true);
         },
 

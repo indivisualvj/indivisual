@@ -114,6 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
         this.powersave = false;
         this.doNotDisplay = false; // render displays only every second frame if FPS is set to 60
         this.diff = 0;
+        this.diffPrc = 1;
         this.duration = 1000 / 60;
         this.lastUpdate = 0;
         this.ms = 0;
@@ -637,7 +638,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         case 'reset':
                             if (renderer) {
                                 if (force) {
-                                    beatkeeper.reset();
+                                    beatkeeper.reset(); // todo add to fullReset?
                                     this.fullReset(false);
 
                                 } else {

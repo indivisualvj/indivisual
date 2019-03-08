@@ -144,13 +144,13 @@
 
             for (var i in this.layers) {
                 i = parseInt(i);
-                var l = this.layers[i]._layer;
+                var layer = this.layers[i]._layer;
 
                 if (i == index) {
-                    this.three.scene.add(l);
+                    this.three.scene.add(layer);
 
                 } else {
-                    this.three.scene.remove(l);
+                    this.three.scene.remove(layer);
                 }
             }
 

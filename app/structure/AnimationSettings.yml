@@ -1,6 +1,6 @@
 name: 0
 uuid: ''
-tutorial: {}
+tutorial: {} # fixme this ends up in "" via code anywhere. WHY??? validate?
 
 oscillate: 'off' # placeholder for automated _oscillate functions
 

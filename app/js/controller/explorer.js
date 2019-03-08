@@ -114,7 +114,7 @@
                 explorer.setPreset(statics.ControlSettings.layer, this.model);
 
                 if (this.model.type == 'preset') { // load default
-                    var dflt = statics.AnimationSettings.defaults();
+                    var dflt = statics.AnimationSettings.defaults().prepare();
                     requestAnimationFrame(function () {
                         controller.preset(false, dflt);
                     });
@@ -163,7 +163,7 @@
                 HC.clearLog();
 
                 for (var i = 0; i < layers.length; i++) {
-                    if (statics.shiftKey) { // shift means add presets. no overwrite.
+                    if (statics.shiftKey) { // shift means append presets to free layers. no overwrite.
                         if ((i in layers)
                             && layers[i].settings
                             && !layers[i].settings.isDefault()

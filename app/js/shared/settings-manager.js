@@ -133,14 +133,14 @@
 
                 if (key) {
                     if (key in this) {
-                        this.merge(this[key], value);
+                        this.merge(this[key], value, this.initial[key]);
 
                     } else {
                         this[key] = this.copy(value);
                     }
 
                 } else {
-                    this.merge(this, value);
+                    this.merge(this, value, this.initial);
                 }
 
             } else if (key) {
@@ -154,8 +154,9 @@
          *
          * @param target
          * @param source
+         * @param initial
          */
-        merge: function (target, source) {
+        merge: function (target, source, initial) {
 
             if (target) {
                 for (var k in source) {
@@ -170,11 +171,11 @@
                             target[k] = this.copy(source);
 
                         } else {
-                            this.merge(target[k], source[k]);
+                            this.merge(target[k], source[k], initial[k]);
                         }
 
                     } else {
-                        target[k] = this.validate(k, source[k]);
+                        target[k] = this.validate(k, source[k], initial);
                     }
                 }
             }
@@ -193,7 +194,6 @@
             delete data.reset;
             delete data.layers;
             delete data.settings;
-            //delete data.audio;
             delete data.monitor;
 
             return data;
@@ -259,14 +259,28 @@
          *
          * @param item
          * @param value
+         * @param initial
          * @returns {*}
          */
-        validate: function (item, value) {
+        validate: function (item, value, initial) {
 
-            if (typeof value == 'string') {
+            var type = typeof value;
+            // check if string contains float and then convert
+            if (type == 'string') {
                 var f = parseFloat(value);
                 if (f && f.toString().length == value.length) {
                     value = f;
+                }
+            }
+
+            // avoid values to be overwritten by wrong type
+            if (initial && item in initial) {
+                var org = initial[item];
+                var otype = typeof org;
+
+                if (otype !== type) {
+                    console.log(item, type, value, otype, org);
+                    value = org;
                 }
             }
 

@@ -57,10 +57,10 @@
             shape.getWorldPosition(wp);
             let dist = wp.distanceTo(params.targetLook);
 
-            let s = 10 * this.settings.pattern_padding * animation.getFrameDurationPercent(speed.duration, .125 / 4);
+            let s = 20 * this.settings.pattern_padding * animation.getFrameDurationPercent(speed.duration, .125 / 4);
             let m = this.settings.pattern_limit ? 1 : Math.min(1, dist / layer.shapeSize(2));
             let v = s * m;
-            if (this.settings.pattern_audio) {
+            if (audioman.isActive() && this.settings.pattern_audio) {
                 if (this.settings.pattern_sync) {
                     v *= audio.volume;
                 } else {

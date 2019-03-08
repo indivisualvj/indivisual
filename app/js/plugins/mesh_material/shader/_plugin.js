@@ -14,7 +14,7 @@
 
             let inst = this;
             listener.register('renderer.render', this.id(index), function (renderer) {
-                if (material.uniforms && material.uniforms.uTime) {
+                if (inst.layer.isVisible() && material.uniforms && material.uniforms.uTime) {
                     material.uniforms.uTime.value = inst.layer.getOscillatePlugin('timestamp').apply({value: 1});
                 }
             });

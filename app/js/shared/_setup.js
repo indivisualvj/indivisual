@@ -149,7 +149,7 @@ function setupResources() {
                 data = jsyaml.load(data.contents);
                 data.shaders = statics.ShaderSettings;
                 // console.log(data.shaders);
-                statics.AnimationSettings = new HC.Settings(data, finished);
+                statics.AnimationSettings = new HC.Settings(data);
                 finished();
             }
         },

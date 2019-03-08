@@ -184,6 +184,14 @@
 
         /**
          *
+         * @returns {boolean}
+         */
+        isVisible: function () {
+            return !!this._layer.parent;
+        },
+
+        /**
+         *
          */
         resetAnimation: function () {
             if (this.tween) {

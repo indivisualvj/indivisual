@@ -32,24 +32,27 @@
             let mesh = new THREE.Mesh(geometry, material);
             mesh.name = this.id(index);
 
+            let inst = this;
             listener.register('renderer.render', this.id(index), function (renderer) {
 
-                mesh.visible = false;
+                if (inst.layer.isVisible()) {
+                    mesh.visible = false;
 
-                if (counter % 2) {
-                    material.envMap = camera2.renderTarget.texture;
-                    mesh.getWorldPosition(camera1.position);
-                    camera1.update(renderer.three.renderer, renderer.three.scene);
+                    if (counter % 2) {
+                        material.envMap = camera2.renderTarget.texture;
+                        mesh.getWorldPosition(camera1.position);
+                        camera1.update(renderer.three.renderer, renderer.three.scene);
 
-                } else {
-                    material.envMap = camera1.renderTarget.texture;
-                    mesh.getWorldPosition(camera2.position);
-                    camera2.update(renderer.three.renderer, renderer.three.scene);
+                    } else {
+                        material.envMap = camera1.renderTarget.texture;
+                        mesh.getWorldPosition(camera2.position);
+                        camera2.update(renderer.three.renderer, renderer.three.scene);
+                    }
+
+                    mesh.visible = true;
+
+                    counter++;
                 }
-
-                mesh.visible = true;
-
-                counter++;
             });
 
             return mesh;

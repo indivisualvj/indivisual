@@ -3,8 +3,8 @@
         static name = 'timestamp';
         static index = 10;
 
-        apply(key) {
-            return this.activate(key, (animation.now - beatkeeper.beatStartTime) / (60000 / statics.ControlSettings.tempo));
+        apply(key) { // fixme wrong speed on judder
+            return this.activate(key, animation.diffPrc * (animation.now - beatkeeper.beatStartTime) / (60000 / statics.ControlSettings.tempo));
         }
     }
 }

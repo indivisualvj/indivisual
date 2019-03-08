@@ -598,6 +598,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     data[item] = value;
                     messaging.emitSettings(layerIndex, data, true, false, force);
                 }
+
+                listener.fireEvent('animation.updateSetting', {layer: layer, item: item, value: value});
             }
         },
 

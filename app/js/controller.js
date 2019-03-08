@@ -864,12 +864,14 @@ document.addEventListener('DOMContentLoaded', function () {
             var controls = false;
             for (var i = 0; i < open.__controllers.length; i++) {
                 var ctl = open.__controllers[i];
+
                 if ('play' in ctl.object) {
                     controls = true;
                     if (statics.ControlSettings.contains(ctl.property)) {
                         var val = statics.ControlSettings.initial[ctl.property];
                         rst[ctl.property] = val;
                     }
+
                 } else {
                     if (statics.AnimationSettings.contains(ctl.property)) {
                         var val = statics.AnimationSettings.initial[ctl.property];
@@ -881,6 +883,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (controls) {
                 controller.updateControls(rst, true, false);
                 messaging.emitControls(rst, true, false, false);
+
             } else {
                 controller.updateSettings(statics.ControlSettings.layer, rst, true, false, false);
                 messaging.emitSettings(statics.ControlSettings.layer, rst, true, false, false);

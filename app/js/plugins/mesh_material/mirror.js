@@ -1,10 +1,19 @@
-/**
- * todo var material = new THREE.MeshBasicMaterial( { color: 0xffffff, envMap: scene.background, refractionRatio: 0.95 } ); material.envMap.mapping = THREE.CubeRefractionMapping;
- */
-
 {
-    HC.plugins.mesh_material.camera = class Plugin extends HC.MeshMaterialPlugin {
+    HC.plugins.mesh_material.mirror = class Plugin extends HC.MeshMaterialPlugin {
         static index = 90;
+        static tutorial = {
+            shiny_balls: {
+                text: 'set shape_geomtry to icosahedron and level of detail (shape_moda) to 3.',
+                action: function () {
+                    let data = {
+                        shape_geometry: 'icosahedron',
+                        shape_moda: 3
+                    };
+                    controller.updateSettings(statics.ControlSettings.layer, data, true, false, true);
+                    messaging.emitSettings(statics.ControlSettings.layer, data, true, true, true);
+                }
+            }
+        };
         cameras;
 
         apply(geometry, index) {

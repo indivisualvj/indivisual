@@ -21,7 +21,7 @@
         this.shape = false;
         this.plugins = {};
 
-        this.tween = new TWEEN.Group(); // todo evtl group pro shape und dann pro shape update aufrufen... aber mit animation.now nicht mit HC.now()!
+        this.tween = new TWEEN.Group();
         this.lastUpdate = 0;
         this._rotation = false;
         this._shapes = false;

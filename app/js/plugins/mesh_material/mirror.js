@@ -3,7 +3,7 @@
         static index = 90;
         static tutorial = {
             shiny_balls: {
-                text: 'set shape_geomtry to icosahedron and level of detail (shape_moda) to 3.',
+                text: 'set shape_geometry to icosahedron and level of detail (shape_moda) to 3.',
                 action: function () {
                     let data = {
                         shape_geometry: 'icosahedron',

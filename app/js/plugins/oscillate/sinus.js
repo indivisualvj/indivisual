@@ -23,6 +23,18 @@
     }
 }
 {
+    HC.plugins.oscillate.sininoutdotfive = class Plugin extends HC.OscillatePlugin {
+        static name = 'sinus 0.5/1.5 (current)';
+        static index = 40;
+
+        apply(key) {
+            let layer = this.layer;
+            let speed = layer.getCurrentSpeed();
+            return this.activate(key, HC.Osci.sinInOut(speed.prc, .5));
+        }
+    }
+}
+{
     HC.plugins.oscillate.sininouthexa = class Plugin extends HC.OscillatePlugin {
         static name = 'sinus 0/1 (hexa)';
         static index = 40;

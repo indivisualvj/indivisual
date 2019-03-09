@@ -31,7 +31,7 @@
         this.index = index;
         this.color = color;
         this.mesh = mesh;
-        this.material = mesh.material;
+        // this.material = mesh.material;
         this.setGeometry(mesh.geometry);
         this.normalScale = new THREE.Vector3(1, 1, 1).length();
 
@@ -58,7 +58,7 @@
 
         setMesh: function (mesh) {
             this.geometry = mesh.geometry;
-            this.material = mesh.material;
+            // this.material = mesh.material;
             this._scale.remove(this.mesh);
             this._scale.add(mesh);
             this.mesh = mesh;
@@ -298,8 +298,11 @@
                 }
             }
 
-            if (mat.shininess != settings.material_shininess) {
+            if ('shininess' in mat && mat.shininess != settings.material_shininess) {
                 mat.shininess = settings.material_shininess;
+
+            } else if (mat.refractionRatio != settings.material_shininess) {
+                mat.refractionRatio = settings.material_shininess / 100;
             }
             if (mat.roughness != settings.material_roughness) {
                 mat.roughness = settings.material_roughness;
@@ -359,7 +362,7 @@
          */
         _updateMaterialBlending: function () {
             var settings = this._layer.settings;
-            var mat = this.material;
+            var mat = this.mesh.material;
 
             var b = settings.material_blending;
             if (b !== undefined) {

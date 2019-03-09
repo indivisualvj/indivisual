@@ -23,6 +23,18 @@
     }
 }
 {
+    HC.plugins.oscillate.cosinoutdotfive = class Plugin extends HC.OscillatePlugin {
+        static name = 'cosinus 0.5/1.5 (current)';
+        static index = 50;
+
+        apply(key) {
+            let layer = this.layer;
+            let speed = layer.getCurrentSpeed();
+            return this.activate(key, HC.Osci.cosInOut(speed.prc, .5));
+        }
+    }
+}
+{
     HC.plugins.oscillate.cosinouthexa = class Plugin extends HC.OscillatePlugin {
         static name = 'cosinus 0/1 (hexa)';
         static index = 50;

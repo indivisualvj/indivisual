@@ -312,6 +312,11 @@ pre .red {
     font-weight: bold;
 }
 
+pre .orange {
+    color: rgba(255, 175, 10, 1);
+    font-weight: bold;
+}
+
 
 /**
  *

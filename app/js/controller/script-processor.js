@@ -85,7 +85,7 @@
         log() {
 
             HC.clearLog();
-            HC.log('tutorial', this.key);
+            HC.log(HC.logGetRed('tutorial'), this.key);
 
             for (var i in this.desc) {
                 var d = this.desc[i];

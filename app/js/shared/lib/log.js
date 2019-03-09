@@ -112,6 +112,16 @@
      * @param value
      * @returns {string}
      */
+    HC.logGetOrange = function (value) {
+        return '<span class="orange">' + value + '</span>';
+
+    }
+
+    /**
+     *
+     * @param value
+     * @returns {string}
+     */
     HC.logGetYellow = function (value) {
         return '<span class="yellow">' + value + '</span>';
     };

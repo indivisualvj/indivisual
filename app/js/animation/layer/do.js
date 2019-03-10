@@ -48,7 +48,7 @@ HC.Layer.prototype.doPairing = function (shape) {
  */
 HC.Layer.prototype.doOverlay = function (shape) {
 
-    if (shape.dummy) {
+    if (!shape.isVisible()) {
         return;
     }
 

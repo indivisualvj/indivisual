@@ -10,7 +10,7 @@ HC.plugins.shape_rhythm = HC.plugins.shape_rhythm || {};
         };
 
         before(shape) {
-            if (shape.dummy) { // no special speed for pattern rotation
+            if (!shape.isVisible()) { // no special speed for pattern rotation
                 this.params(shape).speed = beatkeeper.getSpeed(this.settings.rhythm);
                 this.after(shape);
                 return false;

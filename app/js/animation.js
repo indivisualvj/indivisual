@@ -640,7 +640,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         case 'reset':
                             if (renderer) {
                                 if (force) {
-                                    beatkeeper.reset(); // todo add to fullReset?
+                                    beatkeeper.reset();
                                     this.fullReset(false);
 
                                 } else {

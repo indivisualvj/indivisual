@@ -769,6 +769,7 @@ document.addEventListener('DOMContentLoaded', function () {
             HC.log('preset', name);
 
             var dflt = statics.AnimationSettings.defaults();
+            // todo preserve tutorial from being wiped here?
             dflt.clean(data, dflt);
             dflt.update(false, data);
 

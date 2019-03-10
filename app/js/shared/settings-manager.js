@@ -200,7 +200,7 @@
         },
 
         /**
-         *
+         * cleanses from removed settings
          * @param target
          * @param source
          */
@@ -217,7 +217,7 @@
                 if (!(k in source)) {
                     delete target[k];
 
-                } else if (typeof v == 'object') { // fixme also cleanses tutorial but has to be {} initially hugh!?
+                } else if (typeof v == 'object') {
                     this.clean(v, source[k]);
 
                 } else {

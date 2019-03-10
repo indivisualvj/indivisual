@@ -131,9 +131,11 @@ HC.Controller.prototype.initKeyboard = function () {
             var open = controller.nextOpenFolder();
             if (open != controller.gui) {
                 controller.closeAll(open.parent);
+                controller.scrollToControl(open.parent);
 
             } else {
                 controller.closeAll(controller.gui);
+                controller.scrollToControl(controller.gui);
             }
             e.preventDefault();
             e.stopPropagation();

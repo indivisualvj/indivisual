@@ -14,7 +14,7 @@
      */
     HC.Shape = function (mesh, index, color) {
 
-        // this.hc = this;
+        this.visible = true;
         this._scale = new THREE.Object3D();
         this._scale.name = '_scale' + index;
         this._scale.add(mesh);
@@ -40,6 +40,16 @@
     };
 
     HC.Shape.prototype = {
+
+        setVisible: function (state) {
+            if (state !== undefined) {
+                this.visible = state;
+            }
+        },
+
+        isVisible: function () {
+            return this.visible;
+        },
 
         setGeometry: function (geo) {
 

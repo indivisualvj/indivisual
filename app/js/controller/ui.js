@@ -535,17 +535,10 @@ HC.Controller.prototype.toggleByKey = function (ci, shiftKey) {
  * @param control
  */
 HC.Controller.prototype.scrollToControl = function (control) {
+
     setTimeout(function () {
-        var container = control.__ul.parentNode.parentNode; // todo funkt nicht bei single column layout
-        var coot = container.offsetTop;
-        var ctrl = container.offsetParent;
-        var ctot = ctrl.offsetTop;
-        if (ctrl.id != 'controller') {
-            coot += ctrl.offsetTop;
-            ctrl = ctrl.offsetParent;
-        }
-        var ot = coot - ctot;
-        ctrl.scrollTop = ot;
+        var container = control.__ul;
+        container.scrollIntoView();
     }, 125);
 };
 

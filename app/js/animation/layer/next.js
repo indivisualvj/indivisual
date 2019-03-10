@@ -10,14 +10,16 @@ HC.Layer.prototype.nextShape = function (index, dummy) {
         : this.nextMesh(index);
 
     var shape = new HC.Shape(mesh, index, randomColor());
-    shape.dummy = dummy;
+    if (dummy) {
+        shape.setVisible(false);
+    }
 
     this.nextShapeDirection(shape);
     this.nextShapeRhythm(shape);
     // this.nextDelay(shape); // no delay for new shapes
     this.nextShapeRotation(shape);
 
-    if (!shape.dummy) {
+    if (shape.isVisible()) {
         // new shapes need coordinates for other plugins to use them especially pattern_mover
         this.doPlugin(this.getPatternPlugin(), shape);
     }

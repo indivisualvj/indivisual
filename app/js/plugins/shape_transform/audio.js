@@ -23,11 +23,11 @@
                         ai = 0;
                     }
 
+                    v *= this.settings.shape_transform_volume;
+
                     if (this.settings.shape_limit) {
                         v += 1.0;
                     }
-
-                    v *= this.settings.shape_transform_volume;
 
                     if (axis) {
                         switch (axis) {

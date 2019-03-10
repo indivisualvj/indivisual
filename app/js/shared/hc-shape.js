@@ -421,7 +421,7 @@
          */
         _updateMaterialMap: function () {
             var settings = this._layer.settings;
-            var mat = this.material;
+            var mat = this.mesh.material;
             var repeat = mat.map.repeat;
             var offset = mat.map.offset;
             var center = mat.map.center;

@@ -421,6 +421,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (typeof value != 'object') {
                 HC.log(item, value);
+                this.explainPlugin(item, value, HC);
             }
 
             if (statics.ControlSettings && statics.ControlSettings.contains(item)) {
@@ -489,6 +490,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (typeof value != 'object') {
                 HC.log(item, value);
+                // this.explainPlugin(item, value);
             }
 
             if (statics.DisplaySettings.contains(item)) {
@@ -524,6 +526,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (typeof value != 'object') {
                 HC.log(item, value);
+                // this.explainPlugin(item, value);
             }
 
             if (statics.SourceSettings.contains(item)) {

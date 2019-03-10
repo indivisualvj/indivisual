@@ -436,10 +436,13 @@ HC.Controller.prototype.getControlParentByProperty = function (property, control
  * @param item
  * @param value
  */
-HC.Controller.prototype.explainPlugin = function (item, value) {
-    if (item in HC.plugins) {
-        if (value in HC.plugins[item]) {
-            var proto = HC.plugins[item][value];
+HC.Controller.prototype.explainPlugin = function (item, value, tree) {
+
+    tree = tree || HC.plugins
+
+    if (item in tree) {
+        if (value in tree[item]) {
+            var proto = tree[item][value];
             var desc = proto.tutorial;
             if (desc) {
                 var key = item + '.' + value;

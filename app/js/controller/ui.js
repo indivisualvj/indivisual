@@ -438,7 +438,7 @@ HC.Controller.prototype.getControlParentByProperty = function (property, control
  */
 HC.Controller.prototype.explainPlugin = function (item, value, tree) {
 
-    tree = tree || HC.plugins
+    tree = tree || HC.plugins;
 
     if (item in tree) {
         if (value in tree[item]) {

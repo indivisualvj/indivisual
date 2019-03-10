@@ -2,12 +2,16 @@
     HC.plugins.mesh_material.refraction = class Plugin extends HC.MeshMaterialPlugin {
         static index = 90;
         static tutorial = {
-            shiny_balls: {
-                text: 'set shape_geometry to icosahedron and level of detail (shape_moda) to 3.',
+            refraction_ratio: {
+                text: 'use material_shininess to change the materials refraction ratio'
+            },
+            marbles: {
+                text: 'set refraction ratio to 50, shape_geometry to icosahedron and level of detail (shape_moda) to 3',
                 action: function () {
                     let data = {
                         shape_geometry: 'icosahedron',
-                        shape_moda: 3
+                        shape_moda: 3,
+                        material_shininess: 50
                     };
                     controller.updateSettings(statics.ControlSettings.layer, data, true, false, true);
                     messaging.emitSettings(statics.ControlSettings.layer, data, true, true, true);

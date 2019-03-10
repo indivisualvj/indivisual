@@ -132,7 +132,7 @@
 
                                 var key = data.dir + '/' + data.name;
                                 var contents = JSON.parse(data.contents);
-                                if (contents.tutorial) {
+                                if (contents.tutorial && Object.keys(contents.tutorial).length) {
                                     new HC.ScriptProcessor(key, Object.create(contents.tutorial)).log();
                                 }
                                 controller.preset(key, contents);

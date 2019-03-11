@@ -1,5 +1,5 @@
 {
-    HC.plugins.background_mode.scenecube = class Plugin extends HC.BackgroundModePlugin {
+    HC.plugins.background_mode.scenesphere = class Plugin extends HC.BackgroundModePlugin {
         static index = 50;
         material;
         counter = 0;

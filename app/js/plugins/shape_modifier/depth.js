@@ -41,6 +41,7 @@
             }
 
             geometry.center();
+            geometry.verticesNeedUpdate = true;
 
             return geometry;
         }

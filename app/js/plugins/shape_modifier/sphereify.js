@@ -25,10 +25,9 @@
 
                     vtc.multiplyScalar(m);
                     vtc.clampLength(l, this.radius);
-
-                    geometry.verticesNeedUpdate = true;
-
                 }
+
+                geometry.verticesNeedUpdate = true;
 
             } else if (!vertices) {
                 console.warn('No transform for ' + geometry.type);

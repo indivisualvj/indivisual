@@ -59,6 +59,7 @@
 
                 }
                 shape.geometry.verticesNeedUpdate = true;
+                shape.geometry.lineDistancesNeedUpdate = true;
 
             } else if (!vertices) {
                 console.warn('No transform for ' + shape.geometry.type);

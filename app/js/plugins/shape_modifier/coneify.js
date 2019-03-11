@@ -32,10 +32,9 @@
                     vtc.x += vtc.x * v * axes.x;
                     vtc.y += vtc.y * v * axes.y;
                     vtc.z += vtc.z * v * axes.z;
-
-                    geometry.verticesNeedUpdate = true;
-
                 }
+
+                geometry.verticesNeedUpdate = true;
 
             } else if (!vertices) {
                 console.warn('No transform for ' + geometry.type);

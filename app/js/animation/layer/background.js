@@ -6,7 +6,7 @@ HC.Layer.prototype.setBackground = function (value) {
 
     this.resetBackground(false);
 
-    if (value instanceof THREE.Mesh) {
+    if (value instanceof THREE.Object3D) {
         this.resetBackground(true);
 
         this._background.add(value);

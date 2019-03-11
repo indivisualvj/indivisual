@@ -3,7 +3,7 @@
 
         apply(i) {
             let seq = sourceman.getSequence(i);
-            let image = seq.current(renderer.current(), true);
+            let image = seq.current(this.layer.renderer.current(), true);
 
             if (image) {
                 if (!this.texture) {

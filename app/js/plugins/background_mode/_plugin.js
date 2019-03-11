@@ -18,8 +18,8 @@ HC.plugins.background_mode = HC.plugins.background_mode || {};
             return HC.BackgroundModePlugin.background;
         }
 
-        _settingID() {
-            return this.id() + this.settings.background_volume + this.settings.background_color + this.settings.background_input;
+        id(suffix) {
+            return super.id(suffix) + this.settings.background_volume + this.settings.background_color + this.settings.background_input;
         }
 
         dispose() {

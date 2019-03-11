@@ -6,12 +6,12 @@
 
     /**
      *
-     * @param resolution
+     * @param renderer
      * @param index
-     * @param three
      * @constructor
      */
-    HC.Layer = function (resolution, index, three) {
+    HC.Layer = function (renderer, index) {
+        this.renderer = renderer;
         this.index = index;
         this.preset = false;
         this.settings = false;
@@ -30,6 +30,8 @@
         this._layer = new THREE.Group();
         this._layer.name = '_layer' + index;
 
+        var three = renderer.three;
+
         this.three = {
             renderer: three.renderer,
             target: three.target,
@@ -39,7 +41,7 @@
         this._composer = new THREE.EffectComposer(this.three.renderer, this.three.target);
         this._composer.addPass(new THREE.RenderPass(this.three.scene, this.three.camera));
 
-        this.resetSizes(resolution);
+        this.resetSizes(renderer.resolution);
     };
 
     HC.Layer.prototype = {

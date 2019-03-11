@@ -87,7 +87,7 @@
                     ol.dispose();
                 }
 
-                var l = new HC.Layer(this.resolution, i, this.three);
+                var l = new HC.Layer(this, i);
 
                 l.preset = op;
                 l.settings = os || statics.AnimationSettings.defaults();
@@ -219,6 +219,10 @@
 
             if (this.three.renderer) {
                 this.three.renderer.setSize(res.x, res.y);
+            }
+
+            if (this.three.target) {
+                this.three.target.setSize(res.x, res.y);
             }
 
             if (this.three.perspective0) {

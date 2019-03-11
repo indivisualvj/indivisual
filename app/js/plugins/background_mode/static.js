@@ -3,8 +3,8 @@
         static index = 20;
 
         apply() {
-            if (this.current() != this._settingID()) {
-                this.current(this._settingID());
+            if (this.current() != this.id()) {
+                this.current(this.id());
                 this.layer.setBackground(new THREE.Color(this.settings.background_color));
             }
         }

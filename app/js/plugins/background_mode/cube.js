@@ -1,8 +1,8 @@
 {
     HC.plugins.background_mode.cube = class Plugin extends HC.BackgroundModePlugin {
         apply() {
-            if (this.current() !== this._settingID()) {
-                this.current(this._settingID());
+            if (this.current() !== this.id()) {
+                this.current(this.id());
 
                 let color = new THREE.Color(this.settings.background_color);
                 let res = this.layer.resolution().clone();

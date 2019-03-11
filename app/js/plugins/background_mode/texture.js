@@ -5,7 +5,7 @@
 
         apply() {
             let i = this.settings.background_input;
-            let id = this.id() + i;
+            let id = this.id(i);
 
             if (this.current() != id) {
                 let file = assetman.getImage(i);

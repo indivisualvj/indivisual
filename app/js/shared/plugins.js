@@ -32,7 +32,7 @@ HC.Shape.prototype.initPlugins = function () {
         key;
 
         id(suffix) {
-            return this.tree + '.' + this.key + (suffix!==undefined?'.' + suffix:'');
+            return this.layer.index + '.' + this.tree + '.' + this.key + (suffix!==undefined?'.' + suffix:'');
         }
 
         construct(layer, settings, tree, key) {

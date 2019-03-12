@@ -1,6 +1,6 @@
 {
-    HC.plugins.mesh_material.refraction = class Plugin extends HC.MeshMaterialPlugin {
-        static index = 90;
+    HC.plugins.mesh_material.refraction = class Plugin extends HC.MeshCameraMaterialPlugin {
+
         static tutorial = {
             refraction_ratio: {
                 text: 'use material_shininess to change the materials refraction ratio'
@@ -18,16 +18,8 @@
                 }
             }
         };
-        cameras;
 
         apply(geometry, index) {
-
-            if (!this.cameras) {
-                this.cameras = new THREE.Group();
-                this.cameras.name = this.id('cameras');
-                this.layer.three.scene.add(this.cameras);
-                this.cameras.position.copy(this.layer._rotation.position);
-            }
 
             let cubecam = new THREE.CubeCamera(1, 100000, 256);
             cubecam.renderTarget.texture.generateMipmaps = true;
@@ -52,15 +44,6 @@
             });
 
             return mesh;
-        }
-
-        reset() {
-            if (this.cameras) {
-                this.layer.three.scene.remove(this.cameras);
-                this.cameras = undefined;
-
-                listener.removeLike(this.id());
-            }
         }
     }
 }

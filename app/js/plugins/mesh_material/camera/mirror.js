@@ -1,6 +1,6 @@
 {
-    HC.plugins.mesh_material.mirror = class Plugin extends HC.MeshMaterialPlugin {
-        static index = 90;
+    HC.plugins.mesh_material.mirror = class Plugin extends HC.MeshCameraMaterialPlugin {
+
         static tutorial = {
             shiny_balls: {
                 text: 'set shape_geometry to icosahedron and level of detail (shape_moda) to 3',
@@ -14,16 +14,8 @@
                 }
             }
         };
-        cameras;
 
         apply(geometry, index) {
-
-            if (!this.cameras) {
-                this.cameras = new THREE.Group();
-                this.cameras.name = this.id('cameras');
-                this.layer.three.scene.add(this.cameras);
-                this.cameras.position.copy(this.layer._rotation.position);
-            }
 
             let cubecam = new THREE.CubeCamera(1, 100000, 256);
             cubecam.renderTarget.texture.generateMipmaps = true;
@@ -48,15 +40,6 @@
             });
 
             return mesh;
-        }
-
-        reset() {
-            if (this.cameras) {
-                this.layer.three.scene.remove(this.cameras);
-                this.cameras = undefined;
-
-                listener.removeLike(this.id());
-            }
         }
     }
 }

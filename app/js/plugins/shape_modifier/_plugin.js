@@ -19,9 +19,5 @@ HC.plugins.shape_modifier = HC.plugins.shape_modifier || {};
         create(geometry) {
             console.error('HC.ShapeModifierPlugin: .create() must be implemented in derived plugin.');
         }
-
-        assignUVs(geometry) {
-            assignUVs(geometry);
-        }
     }
 }

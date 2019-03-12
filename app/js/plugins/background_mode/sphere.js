@@ -18,16 +18,10 @@
                 let file = assetman.getImage(this.settings.background_input);
                 if (file) {
                     new THREE.TextureLoader().load(filePath(IMAGE_DIR, file), function (tex) {
-
-                        // tex.wrapS = THREE.MirroredRepe atWrapping;
-                        // tex.repeat.x = - 2;
                         tex.wrapS = THREE.RepeatWrapping;
                         tex.repeat.x = -1;
                         mat.map = tex;
-                        // mat.color.setHSL(0, 0, 1);
                         mat.emissiveMap = tex;
-                        // tex.mapping = THREE.SphericalReflectionMapping;
-                        // tex.wrapS = THREE.MirroredRepeatWrapping;
                         mat.needsUpdate = true;
                     });
                 }

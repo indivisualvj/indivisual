@@ -6,7 +6,6 @@ SAMPLE_DIR = 'samples';
 SESSION_DIR = 'sessions';
 ASSET_DIR = 'assets';
 FONT_DIR = ASSET_DIR + '/fonts';
-TEXTURE_DIR = ASSET_DIR + '/textures';
 IMAGE_DIR = ASSET_DIR + '/images';
 VIDEO_DIR = ASSET_DIR + '/videos';
 

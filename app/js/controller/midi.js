@@ -571,26 +571,11 @@ HC.Controller.prototype.initMidi = function (instance) {
         }
     }
 
-    /**
-     *
-     * @param channel
-     * @param fixture
-     * @param port
-     * @param color
-     * @param brightness
-     * @private
-     */
-    function _dmx(channel, fixture, port, color, brightness) {
-        _send([channel, fixture + port, 127]);
-    }
 
     /**
      *
      */
     return {
-        dmx: function (channel, fixture, port, color, brightness) {
-            _dmx(channel, fixture, port, color, brightness);
-        },
 
         glow: function (id, conf) {
             _glow(id, conf);

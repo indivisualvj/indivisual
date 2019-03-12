@@ -171,7 +171,7 @@
                             target[k] = this.copy(source);
 
                         } else {
-                            this.merge(target[k], source[k], initial[k]);
+                            this.merge(target[k], source[k], initial ? initial[k] : false);
                         }
 
                     } else {
@@ -195,6 +195,12 @@
             delete data.layers;
             delete data.settings;
             delete data.monitor;
+
+            for (let k in data) {
+                if (data[k].prepare) {
+                    data[k] = data[k].prepare();
+                }
+            }
 
             return data;
         },
@@ -279,7 +285,7 @@
                 var otype = typeof org;
 
                 if (otype !== type) {
-                    console.log(item, type, value, otype, org);
+                    // console.log(item, type, value, otype, org);
                     value = org;
                 }
             }

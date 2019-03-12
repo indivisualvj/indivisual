@@ -187,7 +187,9 @@
                                 requestAnimationFrame(function () {
 
                                     controller.updateControl('layer', i, true, true);
-                                    controller.preset(data.dir + '/' + data.name, JSON.parse(data.contents));
+                                    var key = data.dir + '/' + data.name;
+                                    var contents = JSON.parse(data.contents);
+                                    controller.preset(key, contents);
 
                                     if (di == dflt.length - 1) {
                                         controller.updateControl('layer', 0, true, true);

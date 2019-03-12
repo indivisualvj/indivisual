@@ -16,19 +16,19 @@
                 this.target1 = new THREE.WebGLRenderTarget(res.x, res.y);
                 this.target2 = new THREE.WebGLRenderTarget(res.x, res.y);
 
-                res.multiplyScalar(this.settings.background_volume * 2.5);
+                res.multiplyScalar(2.5);
                 let geo = new THREE.BoxBufferGeometry(res.x, res.y, res.x);
 
 
                 this.material = new THREE.MeshBasicMaterial({
                     color: color,
-                    // emissive: color,
                     side: THREE.DoubleSide,
-                    map: this.target1.texture,
-                    // emissiveMap: this.target.texture
+                    map: this.target1.texture
                 });
 
                 let mesh = new THREE.Mesh(geo, this.material);
+                mesh.scale.multiplyScalar(this.settings.background_volume);
+                mesh.scale.x *= -1;
                 mesh.name = this.id(index);
                 mesh.receiveShadow = true;
 

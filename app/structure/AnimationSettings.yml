@@ -184,6 +184,8 @@ background_mode: 'transparent'
 background_color: '#000000'
 background_input: 'none'
 background_volume: 1
+background_repeatx: 1 # todo background_repeat
+background_repeaty: 1 # todo background_repeat
 background_volume_oscillate: 'off'
 
 shape_lookat: 'off'

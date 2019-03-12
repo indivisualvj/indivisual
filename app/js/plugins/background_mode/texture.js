@@ -1,7 +1,7 @@
 {
     HC.plugins.background_mode.texture = class Plugin extends HC.BackgroundModePlugin {
         static index = 40;
-        img;
+        texture;
 
         apply() {
             let i = this.settings.background_input;
@@ -16,7 +16,7 @@
 
                     new THREE.TextureLoader().load(path, function (texture) {
                         texture.center.set(.5, .5);
-                        inst.img = texture;
+                        inst.texture = texture;
 
                         inst.layer.setBackground(texture);
                     });
@@ -26,17 +26,17 @@
                 }
             }
 
-            if (this.img) {
+            if (this.texture) {
                 let v = 1 / this.settings.background_volume;
-                if (this.img.repeat.x != v) {
-                    this.img.repeat.set(v, v);
+                if (this.texture.repeat.x != v) {
+                    this.texture.repeat.set(v, v);
                 }
             }
         }
 
         dispose() {
-            if (this.img && this.img.dispose) {
-                this.img.dispose();
+            if (this.texture && this.texture.dispose) {
+                this.texture.dispose();
             }
         }
     }

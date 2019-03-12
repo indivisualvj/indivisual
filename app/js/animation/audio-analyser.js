@@ -238,7 +238,7 @@
             this.peakBPM = 0;
             this.peakReliable = false;
             this.firstPeak = 0;
-            this.volumes = new Array(binCount).fill(Math.random);
+            this.volumes = new Array(binCount).fill(0).map(Math.random);
             lastVolume = 0;
             peakData = [];
             peakThreshold = 1.2;

@@ -3,7 +3,7 @@
 # UI feedback & timing
 #
 # # # # # # # # # # # # # # # # # # # #
-
+# todo MIDI config for each connected controller
 constants:
   MIDI_CLOCK_NEXT: [248, 251]
   MIDI_ROW_ONE:
@@ -28,7 +28,6 @@ constants:
   MIDI_PEAKBPM_FEEDBACK: [176, 23]
   MIDI_BEAT_FEEDBACK: [176, 30]
   MIDI_PEAK_FEEDBACK: [176, 31]
-  MIDI_DMX_CHANNEL: 174
 
 # # # # # # # # # # # # # # # # # # # #
 #

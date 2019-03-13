@@ -19,6 +19,7 @@ var HC = HC || {};
             inst = this;
             this.files = {};
             this.images = {};
+            this.cubes = {};
             this.videos = {};
             this.fonts = {};
             this.textures = {};
@@ -53,6 +54,37 @@ var HC = HC || {};
          */
         getImage(name) {
             return this.images[name];
+        }
+
+        /**
+         *
+         * @param nu
+         * @returns {*}
+         */
+        addCubes(nu, key) {
+            return this._add(this.cubes, nu, key);
+        }
+
+        /**
+         *
+         * @param regexp
+         * @returns {{}|*}
+         */
+        getCubes(regexp) {
+
+            if (regexp) {
+                return this._filter(this.cubes, regexp);
+            }
+            return this.cubes;
+        }
+
+        /**
+         *
+         * @param name
+         * @returns {*}
+         */
+        getCube(name) {
+            return this.cubes[name];
         }
 
         /**

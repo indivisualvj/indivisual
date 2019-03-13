@@ -40,6 +40,14 @@ rotation_easing:
 background_input: #background_mode inputs
   none: none
 
+background_wraps: &wraps
+  RepeatWrapping: Repeat
+  ClampToEdgeWrapping: ClampToEdge
+  MirroredRepeatWrapping: Mirrored
+
+background_wrapt:
+  *wraps
+
 material_input: #material_map inputs
   none: none
 

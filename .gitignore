@@ -22,6 +22,10 @@ assets/images/*
 !assets/images/pennywise,120,1280x720,30.png
 !assets/images/blue-marble,120,1920x960,30.png
 
+assets/cubes/*
+!assets/cubes/storforsen4/*
+!assets/cubes/yokohama3/*
+
 assets/textures/*
 !assets/textures/rgb-noise.png
 

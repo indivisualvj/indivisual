@@ -7,6 +7,7 @@ SESSION_DIR = 'sessions';
 ASSET_DIR = 'assets';
 FONT_DIR = ASSET_DIR + '/fonts';
 IMAGE_DIR = ASSET_DIR + '/images';
+CUBE_DIR = ASSET_DIR + '/cubes';
 VIDEO_DIR = ASSET_DIR + '/videos';
 
 _HASH = document.location.hash ? document.location.hash.substr(1) : '';
@@ -312,6 +313,21 @@ function setupResources() {
                 var index = keys.length;
                 for (var i in images) {
                     statics.SourceValues.input[index++] = i;
+                }
+
+                finished();
+            }
+        },
+        {
+            action: 'files',
+            base: '.',
+            file: CUBE_DIR,
+            callback: function (files, finished) {
+                var cubes = assetman.addCubes(files, 'name');
+                // add cubes into AnimationValues by name
+                for (var i in cubes) {
+                    var name = i + '.cube';
+                    statics.AnimationValues.background_input[i] = name;
                 }
 
                 finished();

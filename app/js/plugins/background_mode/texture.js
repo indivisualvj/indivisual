@@ -1,11 +1,10 @@
 {
     HC.plugins.background_mode.texture = class Plugin extends HC.BackgroundModePlugin {
         static index = 40;
-        texture;
 
         apply() {
             let i = this.settings.background_input;
-            let id = this.id(i);
+            let id = this.id();
 
             if (this.current() != id) {
                 let file = assetman.getImage(i);
@@ -26,18 +25,12 @@
                 }
             }
 
-            if (this.texture) {
-                let v = 1 / this.settings.background_volume;
-                if (this.texture.repeat.x != v) {
-                    this.texture.repeat.set(v, v);
-                }
-            }
-        }
-
-        dispose() {
-            if (this.texture && this.texture.dispose) {
-                this.texture.dispose();
-            }
+            // if (this.texture) {
+            //     let v = 1 / this.settings.background_volume;
+            //     if (this.texture.repeat.x != v) {
+            //         this.texture.repeat.set(v, v);
+            //     }
+            // }
         }
     }
 }

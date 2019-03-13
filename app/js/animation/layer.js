@@ -189,7 +189,7 @@
          * @returns {boolean}
          */
         isVisible: function () {
-            return !!this._layer.parent;
+            return !!this.parent.parent;
         },
 
         /**

@@ -61,7 +61,7 @@ HC.Layer.prototype.shapeCount = function () {
  * @param child
  */
 HC.Layer.prototype.addShape = function (child) {
-    child._layer = this;
+    child.parent = this;
     this._shapes.add(child.sceneObject());
 };
 

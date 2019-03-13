@@ -27,7 +27,7 @@
             let params = this.params(light);
             let speed = params.speed || this.layer.getCurrentSpeed();
 
-            if (params.shape && params.shape._layer != this.layer) { // todo _layer->parent
+            if (params.shape && params.shape.parent != this.layer) {
                 params.shape = false;
             }
 

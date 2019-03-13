@@ -1,10 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-
-
-(function () {
-
+{
     /**
      *
      * @param mesh
@@ -12,46 +9,45 @@
      * @param color
      * @constructor
      */
-    HC.Shape = function (mesh, index, color) {
+    HC.Shape = class Shape {
 
-        this.visible = true;
-        this._scale = new THREE.Object3D();
-        this._scale.name = '_scale' + index;
-        this._scale.add(mesh);
-        this._rotationOffset = new THREE.Object3D();
-        this._rotationOffset.add(this._scale);
-        this._rotationOffset.name = '_rotationOffset' + index;
-        this._rotation = new THREE.Object3D();
-        this._rotation.add(this._rotationOffset);
-        this._rotation.name = '_rotation' + index;
-        this._position = new THREE.Object3D();
-        this._position.add(this._rotation);
-        this._position.name = '_position' + index;
+        constructor(mesh, index, color) {
+            this.visible = true;
+            this._scale = new THREE.Object3D();
+            this._scale.name = '_scale' + index;
+            this._scale.add(mesh);
+            this._rotationOffset = new THREE.Object3D();
+            this._rotationOffset.add(this._scale);
+            this._rotationOffset.name = '_rotationOffset' + index;
+            this._rotation = new THREE.Object3D();
+            this._rotation.add(this._rotationOffset);
+            this._rotation.name = '_rotation' + index;
+            this._position = new THREE.Object3D();
+            this._position.add(this._rotation);
+            this._position.name = '_position' + index;
 
-        this.index = index;
-        this.color = color;
-        this.mesh = mesh;
-        // this.material = mesh.material;
-        this.setGeometry(mesh.geometry);
-        this.normalScale = new THREE.Vector3(1, 1, 1).length();
+            this.index = index;
+            this.color = color;
+            this.mesh = mesh;
+            // this.material = mesh.material;
+            this.setGeometry(mesh.geometry);
+            this.normalScale = new THREE.Vector3(1, 1, 1).length();
 
-        this.initPlugins();
+            this.initPlugins();
 
-    };
+        }
 
-    HC.Shape.prototype = {
-
-        setVisible: function (state) {
+        setVisible(state) {
             if (state !== undefined) {
                 this.visible = state;
             }
-        },
+        }
 
-        isVisible: function () {
+        isVisible() {
             return this.visible;
-        },
+        }
 
-        setGeometry: function (geo) {
+        setGeometry(geo) {
 
             if (this.geometry) {
                 this.geometry.dispose();
@@ -60,139 +56,139 @@
             this.geometry = geo;
             this.mesh.geometry = geo;
             this.verticesCopy = this.copyVertices();
-        },
+        }
 
-        getGeometry: function () {
+        getGeometry() {
             return this.geometry;
-        },
+        }
 
-        setMesh: function (mesh) {
+        setMesh(mesh) {
             this.geometry = mesh.geometry;
             // this.material = mesh.material;
             this._scale.remove(this.mesh);
             this._scale.add(mesh);
             this.mesh = mesh;
-        },
+        }
 
-        getMesh: function () {
+        getMesh() {
             return this.mesh;
-        },
+        }
 
-        setMaterial: function (material) {
+        setMaterial(material) {
             this.material = material;
             this.mesh.material = material;
-        },
+        }
 
-        getMaterial: function () {
+        getMaterial() {
             return this.mesh.material;
-        },
+        }
 
-        shapeVolume: function () {
-            var i = this.index % audio.volumes.length;
+        shapeVolume() {
+            let i = this.index % audio.volumes.length;
             return audio.volumes[i];
-        },
+        }
 
-        sceneObject: function () {
+        sceneObject() {
             return this._position;
-        },
+        }
 
-        position: function (x, y, z) {
+        position(x, y, z) {
             this.x(x);
             this.y(y);
             this.z(z);
             return this.sceneObject().position;
-        },
+        }
 
-        getWorldPosition: function (target) {
+        getWorldPosition(target) {
             this.mesh.getWorldPosition(target);
-        },
+        }
 
-        x: function (v) {
+        x(v) {
             if (v !== undefined) {
                 v = isNaN(v) ? 0 : v;
                 this.sceneObject().position.x = v;
             }
 
             return this.sceneObject().position.x;
-        },
+        }
 
-        y: function (v) {
+        y(v) {
             if (v !== undefined) {
                 v = isNaN(v) ? 0 : v;
                 this.sceneObject().position.y = v * -1;
             }
 
             return this.sceneObject().position.y * -1;
-        },
+        }
 
-        z: function (v) {
+        z(v) {
             if (v !== undefined) {
                 v = isNaN(v) ? 0 : v;
                 this.sceneObject().position.z = v;
             }
 
             return this.sceneObject().position.z;
-        },
+        }
 
-        lookAt: function (vector) {
+        lookAt(vector) {
             this.sceneObject().lookAt(vector);
             this.getMesh().rotation.set(0, 0, 0);
-        },
+        }
 
-        forceLookAt: function (vector) {
+        forceLookAt(vector) {
             this.sceneObject().lookAt(vector);
             this.getMesh().lookAt(vector);
-        },
+        }
 
-        sceneRotation: function () {
+        sceneRotation() {
             return this._rotation;
-        },
+        }
 
-        rotationX: function (x) {
+        rotationX(x) {
             if (x !== undefined) {
                 this.sceneRotation().rotation.x = x * RAD;
             }
 
             return this.sceneRotation().rotation.x;
-        },
+        }
 
-        rotationY: function (y) {
+        rotationY(y) {
             if (y !== undefined) {
                 this.sceneRotation().rotation.y = y * -RAD;
             }
 
             return this.sceneRotation().rotation.y;
-        },
+        }
 
-        rotationZ: function (z) {
+        rotationZ(z) {
             if (z !== undefined) {
                 this.sceneRotation().rotation.z = z * -RAD;
             }
 
             return this.sceneRotation().rotation.z;
-        },
+        }
 
-        rotation: function (x, y, z) {
+        rotation(x, y, z) {
             this.rotationX(x);
             this.rotationY(y);
             this.rotationZ(z);
 
             return this.sceneRotation().rotation;
-        },
+        }
 
-        sceneRotationOffset: function () {
+        sceneRotationOffset() {
             return this._rotationOffset;
-        },
+        }
 
-        rotationOffset: function (x, y, z) {
+        rotationOffset(x, y, z) {
             this.sceneRotationOffset().rotation.set(x * RAD, y * -RAD, z * -RAD);
-        },
+        }
 
-        sceneScale: function () {
+        sceneScale() {
             return this._scale;
-        },
+        }
 
-        scaleX: function (v) {
+        scaleX(v) {
             if (v !== undefined) {
 
                 if (v == 0) {
@@ -203,9 +199,9 @@
             }
 
             return this.sceneScale().scale.x;
-        },
+        }
 
-        scaleY: function (v) {
+        scaleY(v) {
             if (v !== undefined) {
 
                 if (v == 0) {
@@ -216,9 +212,9 @@
             }
 
             return this.sceneScale().scale.y;
-        },
+        }
 
-        scaleZ: function (v) {
+        scaleZ(v) {
             if (v !== undefined) {
 
                 if (v == 0) {
@@ -229,30 +225,30 @@
             }
 
             return this.sceneScale().scale.z;
-        },
+        }
 
-        scale: function (x, y, z) {
+        scale(x, y, z) {
             this.scaleX(x);
             this.scaleY(y);
             this.scaleZ(z);
 
             return this.sceneScale().scale;
-        },
+        }
 
-        size: function () {
+        size() {
             return this.sceneScale().scale.length() / this.normalScale;
-        },
+        }
 
-        flip: function (x, y, z) {
+        flip(x, y, z) {
 
             this.sceneScale().scale.x *= x;
             this.sceneScale().scale.y *= y;
             this.sceneScale().scale.z *= z;
 
             return this.sceneScale().scale;
-        },
+        }
 
-        offset: function (x, y, z) {
+        offset(x, y, z) {
             if (x !== undefined) {
                 this.mesh.position.set(
                     x || 0,
@@ -262,9 +258,9 @@
             }
 
             return this.mesh.position;
-        },
+        }
 
-        opacity: function (v) {
+        opacity(v) {
             if (v !== undefined) {
                 if (v < 1) {
                     this.mesh.material.transparent = true;
@@ -275,9 +271,9 @@
             }
 
             return this.mesh.material.opacity;
-        },
+        }
 
-        strokeWidth: function (v) {
+        strokeWidth(v) {
             if (v !== undefined) {
                 this.mesh.material.linewidth = Math.abs(v);
                 this.mesh.material.wireframeLinewidth = Math.abs(2 * v);
@@ -285,19 +281,19 @@
             }
 
             return this.mesh.material.wireframeLinewidth;
-        },
+        }
 
-        move: function (x, y, z) {
+        move(x, y, z) {
             this.x(this.x() + x);
             this.y(this.y() + y);
             this.z(this.z() + z);
-        },
+        }
 
-        updateMaterial: function (map, emissive) {
+        updateMaterial(map, emissive) {
 
-            var settings = this._layer.settings;
-            var mat = this.mesh.material;
-            var c = this.color;
+            let settings = this.parent.settings;
+            let mat = this.mesh.material;
+            let c = this.color;
             mat.color.setHSL(c.h / 360, c.s / 100, c.l / 100);
 
             if (mat.emissive) {
@@ -335,7 +331,7 @@
                 }
 
                 this._updateMaterialMap();
-                
+
 
             } else if (mat.map) {
                 mat.map = false;
@@ -364,17 +360,17 @@
                 this.mesh.castShadow = settings.lighting_shadows;
                 this.mesh.receiveShadow = settings.lighting_shadows;
             }
-        },
+        }
 
         /**
          *
          * @private
          */
-        _updateMaterialBlending: function () {
-            var settings = this._layer.settings;
-            var mat = this.mesh.material;
+        _updateMaterialBlending() {
+            let settings = this.parent.settings;
+            let mat = this.mesh.material;
 
-            var b = settings.material_blending;
+            let b = settings.material_blending;
             if (b !== undefined) {
                 b = THREE[b];
 
@@ -413,18 +409,18 @@
                     mat.needsUpdate = true;
                 }
             }
-        },
+        }
 
         /**
          *
          * @private
          */
-        _updateMaterialMap: function () {
-            var settings = this._layer.settings;
-            var mat = this.mesh.material;
-            var repeat = mat.map.repeat;
-            var offset = mat.map.offset;
-            var center = mat.map.center;
+        _updateMaterialMap() {
+            let settings = this.parent.settings;
+            let mat = this.mesh.material;
+            let repeat = mat.map.repeat;
+            let offset = mat.map.offset;
+            let center = mat.map.center;
 
             if (repeat.x != settings.material_uvx) {
                 repeat.x = 1 / settings.material_uvx;
@@ -434,7 +430,7 @@
             }
             if (settings.material_uvx <= 1) {
                 center.x = .5;
-                var uvofx;
+                let uvofx;
                 if (offset.x != -(uvofx = settings.material_uvofx - .5)) {
                     offset.x = -uvofx;
                 }
@@ -447,7 +443,7 @@
             }
             if (settings.material_uvy <= 1) {
                 center.y = .5;
-                var uvofy;
+                let uvofy;
                 if (offset.y != (uvofy = settings.material_uvofy - .5)) {
                     offset.y = uvofy;
                 }
@@ -457,26 +453,27 @@
                     center.y = settings.material_uvofy;
                 }
             }
-        },
+        }
 
-        getVertices: function () {
+        getVertices() {
             return this.geometry.vertices;
-        },
+        }
 
-        copyVertices: function () {
-            var geometry = this.geometry;
-            var vertices = [];
+        copyVertices() {
+            let geometry = this.geometry;
+            let vertices = [];
             if (geometry.vertices) {
-                for (var i = 0; i < geometry.vertices.length; i++) {
+                for (let i = 0; i < geometry.vertices.length; i++) {
                     vertices.push(geometry.vertices[i].clone());
                 }
             }
 
             return vertices;
-        },
+        }
+
         //
-        // dispose: function () {
+        // dispose() {
         //     this.sceneObject().traverse(threeDispose);
         // }
     }
-})();
+}

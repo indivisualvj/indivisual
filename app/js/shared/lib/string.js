@@ -1,5 +1,5 @@
 /**
- *
+ * todo HC.splitToIntArray
  * @param value
  * @returns {*}
  */
@@ -20,7 +20,7 @@ function splitToIntArray(value) {
 }
 
 /**
- *
+ * todo HC.filePath
  * @returns {string}
  */
 function filePath() {
@@ -29,7 +29,7 @@ function filePath() {
 }
 
 /**
- *
+ * todo HC.parseFileMeta
  * @param file
  * @returns {{fps: number, resolution: {x: number, y: number}, speed: number}}
  */
@@ -67,7 +67,7 @@ function parseFileMeta(file) {
 }
 
 /**
- *
+ * todo HC.numberExtract
  * @param item
  * @param prefix
  * @returns {*}

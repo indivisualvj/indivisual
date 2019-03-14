@@ -1,5 +1,5 @@
 /**
- *
+ * todo HC.
  * @returns {{s: *, h: *, l: *, o: number}}
  */
 function randomColor() {
@@ -14,7 +14,7 @@ function randomColor() {
 }
 
 /**
- *
+ * todo HC.
  * @param hex
  * @returns {{s, h, l}}
  */
@@ -43,7 +43,7 @@ function hexToHsl(hex) {
 }
 
 /**
- *
+ * todo HC.
  * @param color
  * @returns {*}
  */
@@ -86,7 +86,7 @@ function rgbToHsl(color) {
 }
 
 /**
- *
+ * todo HC.
  * @param color
  * @returns {{r: number, b: number, g: number}}
  */
@@ -123,7 +123,7 @@ function hslToRgb(color) {
 }
 
 /**
- *
+ * todo HC.
  * @param color
  * @returns {string}
  */
@@ -134,7 +134,7 @@ function hslToHex(color) {
 }
 
 /**
- *
+ * todo HC.
  * @param r
  * @param g
  * @param b
@@ -152,7 +152,7 @@ function rgbToHex(r, g, b) {
 }
 
 /**
- *
+ * todo HC.
  * @param c
  * @returns {string}
  */
@@ -161,7 +161,7 @@ function pad2(c) {
 }
 
 /**
- *
+ * todo HC.
  * @param hsl
  * @returns {*}
  */
@@ -175,7 +175,7 @@ function hslComplementary(hsl) {
 }
 
 /**
- *
+ * todo HC.
  * @param from
  * @param to
  */
@@ -186,7 +186,7 @@ function copyHsl(from, to) {
 }
 
 /**
- *
+ * todo HC.
  * @param p
  * @param q
  * @param t
@@ -202,7 +202,7 @@ function hue2rgb(p, q, t) {
 }
 
 /**
- *
+ * todo HC.
  * @param n
  * @param max
  * @returns {number}

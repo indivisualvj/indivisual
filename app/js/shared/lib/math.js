@@ -1,5 +1,5 @@
 /**
- *
+ * todo HC.
  * @param min
  * @param max
  * @param negative
@@ -15,7 +15,7 @@ function randomInt(min, max, negative) {
 }
 
 /**
- *
+ * todo HC.
  * @param distraction
  * @returns {boolean}
  */
@@ -28,7 +28,7 @@ function randomBool(distraction) {
 }
 
 /**
- *
+ * todo HC.
  * @param min
  * @param max
  * @param digits
@@ -45,7 +45,7 @@ function randomFloat(min, max, digits, negative) {
 }
 
 /**
- *
+ * todo HC.
  * @param v
  * @param digits
  * @returns {number}
@@ -59,7 +59,7 @@ function round(v, digits) {
 }
 
 /**
- *
+ * todo HC.
  * @param value
  * @param max
  * @returns {number}
@@ -69,7 +69,7 @@ function cutoff(value, max) {
 }
 
 /**
- *
+ * todo HC.
  * @param value
  * @param min
  * @param max

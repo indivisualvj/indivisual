@@ -1,5 +1,5 @@
 /**
- *
+ * todo HC.
  * @param i
  * @returns {*}
  */
@@ -11,7 +11,7 @@ function getSampleBySequence(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {*}
  */
@@ -27,7 +27,7 @@ function getSequenceBySample(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {*}
  */
@@ -39,7 +39,7 @@ function getSampleEnabledBySequence(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {*}
  */
@@ -51,7 +51,7 @@ function getSampleEnabledBySample(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {string}
  */
@@ -60,7 +60,7 @@ function getSequenceKey(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {string}
  */
@@ -70,7 +70,7 @@ function getSampleKey(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {string}
  */
@@ -79,7 +79,7 @@ function getSequenceSampleKey(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {string}
  */
@@ -88,7 +88,7 @@ function getSequenceOverlayKey(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {*}
  */
@@ -99,7 +99,7 @@ function getSequenceOverlay(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {string}
  */
@@ -108,7 +108,7 @@ function getSampleEnabledKey(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {string}
  */
@@ -117,7 +117,7 @@ function getSampleRecordKey(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {string}
  */
@@ -126,7 +126,7 @@ function getSampleBeatKey(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {string}
  */
@@ -135,7 +135,7 @@ function getSampleResetKey(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {string}
  */
@@ -144,7 +144,7 @@ function getSampleStoreKey(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {string}
  */
@@ -153,7 +153,7 @@ function getSampleLoadKey(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {boolean}
  */
@@ -168,7 +168,7 @@ function getSequenceInUse(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {boolean}
  */
@@ -211,7 +211,7 @@ function getSequenceHasParent(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {boolean}
  */
@@ -227,7 +227,7 @@ function getSampleHasParent(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {string}
  */
@@ -236,7 +236,7 @@ function getDisplayVisibleKey(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {string}
  */
@@ -245,7 +245,7 @@ function getDisplaySourceKey(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {string}
  */
@@ -254,7 +254,7 @@ function getDisplaySequenceKey(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {*}
  */
@@ -265,7 +265,7 @@ function getDisplaySequence(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {*}
  */
@@ -276,7 +276,7 @@ function getDisplaySource(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {string}
  */
@@ -285,7 +285,7 @@ function getDisplayKey(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {*}
  */
@@ -296,7 +296,7 @@ function getDisplayVisible(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {string}
  */
@@ -305,7 +305,7 @@ function getSequenceStartKey(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {string}
  */
@@ -314,7 +314,7 @@ function getSequenceEndKey(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {*}
  */
@@ -325,7 +325,7 @@ function getSequenceStart(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param i
  * @returns {*}
  */

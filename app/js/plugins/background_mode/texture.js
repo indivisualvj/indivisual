@@ -13,7 +13,7 @@
                     let inst = this;
                     let path = filePath(IMAGE_DIR, file);
 
-                    new THREE.TextureLoader().load(path, function (texture) {
+                    assetman.loadTexture(path, function (texture) {
                         texture.center.set(.5, .5);
                         inst.texture = texture;
 

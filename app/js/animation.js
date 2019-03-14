@@ -10,7 +10,6 @@ var animation = false;
 var renderer = false;
 var displayman = false;
 var sourceman = false;
-var textureman = false;
 var listener = false;
 var sm = false;
 
@@ -71,8 +70,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     video: new Array(statics.DisplayValues.video.length)
                 });
                 sourceman.resize(renderer.getResolution());
-
-                textureman = new HC.TextureManager();
 
                 animation.initKeyboard();
                 animation.initEvents();

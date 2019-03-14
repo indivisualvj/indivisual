@@ -102,7 +102,7 @@
                 var color = '#00ffbb';
                 if (image && image._color) {
                     color = image._color;
-                    color = hslToHex(hslComplementary(hexTohsl(color)));
+                    color = hslToHex(hslComplementary(hexToHsl(color)));
                 }
 
                 ctx.fillStyle = color;

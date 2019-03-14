@@ -12,18 +12,9 @@
                     this.current(id);
                     let inst = this;
                     let path = filePath(CUBE_DIR, file);
-                    messaging.files(path, function (data) {
-
-                        let images = [];
-                        for (let k in data) {
-                            images.push(data[k].name);
-                        }
-                        images.sort();
-
-                        new THREE.CubeTextureLoader().setPath(filePath(path, '')).load(images, function (texture) {
-                            inst.texture = texture;
-                            inst.layer.setBackground(texture);
-                        });
+                    assetman.loadCubeTexture(path, function (texture) {
+                        inst.texture = texture;
+                        inst.layer.setBackground(texture);
                     });
 
                 } else {

@@ -23,7 +23,7 @@
                 let file = assetman.getImage(this.settings.background_input);
                 if (file) {
                     let inst = this;
-                    new THREE.TextureLoader().load(filePath(IMAGE_DIR, file), function (tex) {
+                    assetman.loadTexture(filePath(IMAGE_DIR, file), function (tex) {
                         tex.wrapS = THREE.RepeatWrapping;
                         tex.repeat.x = -1;
                         mat.map = tex;

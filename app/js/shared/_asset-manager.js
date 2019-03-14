@@ -1,9 +1,8 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-
 var HC = HC || {};
-{ // Hidden class to be added to HC via ... = class ...
+{
 
     var inst;
     /**
@@ -156,37 +155,86 @@ var HC = HC || {};
 
         /**
          *
-         * @param file
-         * @param onload
+         * @param url
+         * @param callback
          */
-        loadFont(file, onload) {
-            if (this.fonts[file]) {
-                onload(this.fonts[file]);
+        loadFont(url, callback) {
+            if (this.fonts[url]) {
+                callback(this.fonts[url]);
 
             } else {
-                new THREE.FontLoader().load(file, function (font) {
-                    inst.fonts[file] = font;
-                    onload(font);
+                new THREE.FontLoader().load(url, function (font) {
+                    inst.fonts[url] = font;
+                    callback(font);
                 });
             }
         }
 
         /**
          *
-         * @param file
-         * @param onload
+         * @param url
+         * @param callback
          */
-        loadTexture(file, onload) {
-            if (this.textures[file]) {
-                onload(this.textures[file]);
+        loadTexture(url, callback) {
+            if (this.textures[url]) {
+                callback(this.textures[url]);
 
             } else {
-                new THREE.TextureLoader().load(file, function (texture) {
-                    inst.textures[file] = texture;
-                    onload(texture);
+                new THREE.TextureLoader().load(url, function (tex) {
+                    inst.textures[url] = tex;
+                    callback(tex);
                 });
             }
         }
 
+        /**
+         *
+         * @param url
+         * @param callback
+         */
+        loadCubeTexture(url, callback) {
+            if (this.textures[url]) {
+                callback(this.textures[url]);
+
+            } else {
+                this._files(url, function (data) {
+
+                    let images = [];
+                    for (let k in data) {
+                        images.push(data[k].name);
+                    }
+
+                    let order = ['posx', 'px', 'negx', 'nx', 'posy', 'py', 'negy', 'ny', 'posz', 'pz', 'negz', 'nz'];
+                    images.sort(function (a, b) {
+                        var na = a.replace(/\.[^/.]+$/, "");
+                        var nb = b.replace(/\.[^/.]+$/, "");
+
+                        let ia = order.indexOf(na);
+                        let ib = order.indexOf(nb);
+
+                        if (ia > -1 && ib > -1) {
+                            return ia - ib;
+                        }
+
+                        return a.localeCompare(b);
+                    });
+
+                    new THREE.CubeTextureLoader().setPath(filePath(url, '')).load(images, function (tex) {
+                        inst.textures[url] = tex;
+                        callback(tex);
+                    });
+                });
+            }
+        }
+
+        /**
+         * todo local reference instead of "messaging" global var?
+         * @param path
+         * @param callback
+         * @private
+         */
+        _files(path, callback) {
+            messaging.files(path, callback);
+        }
     }
 }

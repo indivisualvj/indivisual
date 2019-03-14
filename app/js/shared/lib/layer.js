@@ -1,5 +1,5 @@
 /**
- *
+ * todo HC.
  * @param i
  * @returns {boolean}
  */
@@ -16,7 +16,7 @@ function layerShuffleable(i) {
 }
 
 /**
- *
+ * todo HC.
  * @param value
  * @returns {*}
  */
@@ -37,7 +37,7 @@ function splitToShuffleable(value) {
 }
 
 /**
- *
+ * todo HC.
  * @param obj
  */
 function threeDispose(obj) {

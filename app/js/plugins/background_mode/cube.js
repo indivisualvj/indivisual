@@ -16,6 +16,7 @@
                 });
                 let mesh = new THREE.Mesh(geo, mat);
                 mesh.scale.multiplyScalar(this.settings.background_volume);
+                mesh.scale.x *= -1;
                 mesh.receiveShadow = true;
 
                 this.layer.setBackground(mesh);

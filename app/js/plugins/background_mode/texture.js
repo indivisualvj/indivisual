@@ -24,13 +24,6 @@
                     this.layer.setBackground(this.current(false));
                 }
             }
-
-            // if (this.texture) {
-            //     let v = 1 / this.settings.background_volume;
-            //     if (this.texture.repeat.x != v) {
-            //         this.texture.repeat.set(v, v);
-            //     }
-            // }
         }
     }
 }

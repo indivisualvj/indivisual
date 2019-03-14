@@ -21,6 +21,7 @@
                         images.sort();
 
                         new THREE.CubeTextureLoader().setPath(filePath(path, '')).load(images, function (texture) {
+                            inst.texture = texture;
                             inst.layer.setBackground(texture);
                         });
                     });
@@ -29,13 +30,6 @@
                     this.layer.setBackground(this.current(false));
                 }
             }
-
-            // if (this.texture) {
-            //     let v = 1 / this.settings.background_volume;
-            //     if (this.texture.repeat.x != v) {
-            //         this.texture.repeat.set(v, v);
-            //     }
-            // }
         }
     }
 }

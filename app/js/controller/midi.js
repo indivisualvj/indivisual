@@ -109,6 +109,7 @@ HC.Controller.prototype.initMidi = function (instance) {
         if (data[2] == 127) {
             midi_pressed[dataId] = data[2];
             clearTimeout(midi_timeouts[dataId]);
+
         } else if (midi_pressed[dataId]) {
             delete midi_pressed[dataId];
         }
@@ -137,6 +138,8 @@ HC.Controller.prototype.initMidi = function (instance) {
 
         if (data.length < 2) return;
         // console.log('', data); // MIDI data [144, 63, 73]
+
+        listener.fireEvent('midi.onMessage', data);
 
         var cmd = data[0];
         var id = data[1];

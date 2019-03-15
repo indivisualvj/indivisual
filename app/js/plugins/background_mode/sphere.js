@@ -16,7 +16,7 @@
                 let mat = new THREE.MeshStandardMaterial({
                     color: color,
                     side: THREE.DoubleSide,
-                    transparent: true
+                    // transparent: true
                 });
                 let mesh = new THREE.Mesh(geo, mat);
                 mesh.receiveShadow = true;

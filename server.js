@@ -279,7 +279,7 @@ function cron() {
                 let config = {
                     dir: path,
                     file: 'controls.json',
-                    contents: (session.controls ? JSON.stringify(session.controls) : '')
+                    contents: (session.controls ? JSON.stringify(session.controls, null, 4) : '')
                 };
 
                 _save(config);
@@ -287,7 +287,7 @@ function cron() {
                 config = {
                     dir: path,
                     file: 'displays.json',
-                    contents: (session.displays ? JSON.stringify(session.displays) : '')
+                    contents: (session.displays ? JSON.stringify(session.displays, null, 4) : '')
                 };
 
                 _save(config);
@@ -295,7 +295,7 @@ function cron() {
                 config = {
                     dir: path,
                     file: 'sources.json',
-                    contents: (session.sources ? JSON.stringify(session.sources) : '')
+                    contents: (session.sources ? JSON.stringify(session.sources, null, 4) : '')
                 };
 
                 _save(config);
@@ -303,7 +303,7 @@ function cron() {
                 config = {
                     dir: path,
                     file: 'settings.json',
-                    contents: (session.settings ? JSON.stringify(session.settings) : '')
+                    contents: (session.settings ? JSON.stringify(session.settings, null, 4) : '')
                 };
 
                 _save(config);
@@ -472,7 +472,7 @@ function _save(data, callback) {
     _existCreate(dir);
 
     if (data.file) {
-        let contents = data.contents.replace(/,"/g, ",\n\"");
+        let contents = data.contents;//.replace(/,"/g, ",\n\"");
         fs.writeFile(file, contents, function (err) {
             if (err) {
                 console.log(err);
@@ -578,7 +578,7 @@ function _store(data) {
         session.blocked = false;
     };
 
-    data = JSON.parse(JSON.stringify(data));
+    data = JSON.parse(JSON.stringify(data, null, 4));
 
     if (!(data.sid in sessions)) {
         _restore(data, proceed);
@@ -855,10 +855,6 @@ function initGet() {
      *
      */
     app.get('/img/*.png', function (req, res) {
-        res.sendFile(_APP + req.originalUrl);
-    });
-
-    app.get('/img/textures/*.png', function (req, res) {
         res.sendFile(_APP + req.originalUrl);
     });
 

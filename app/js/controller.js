@@ -421,6 +421,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (typeof value != 'object') {
                 HC.log(item, value);
+                this.explainPlugin(item, value, HC);
             }
 
             if (statics.ControlSettings && statics.ControlSettings.contains(item)) {
@@ -434,7 +435,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (item == 'layer') {
                     var l = sm.get(value);
 
-                    this.updateSettings(value, l.settings, true, false, true);
+                    this.updateSettings(value, l.settings.prepare(), true, false, true);
 
                     explorer.resetLoaded();
                     explorer.setLoaded(value, true);
@@ -489,6 +490,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (typeof value != 'object') {
                 HC.log(item, value);
+                // this.explainPlugin(item, value);
             }
 
             if (statics.DisplaySettings.contains(item)) {
@@ -524,6 +526,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (typeof value != 'object') {
                 HC.log(item, value);
+                // this.explainPlugin(item, value);
             }
 
             if (statics.SourceSettings.contains(item)) {
@@ -543,12 +546,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     } else if (item.match(/_(enabled)/)) {
                         if (!value) { // set record to false if enabled == false
-                            var smp = number_extract(item, 'sample');
+                            var smp = numberExtract(item, 'sample');
                             this.updateSource(getSampleRecordKey(smp), false, true, true, false);
                         }
 
                     } else if (item.match(/_(load)/)) {
-                        this.loadClip(number_extract(item, 'sample'));
+                        this.loadClip(numberExtract(item, 'sample'));
                     }
 
                     this.updateUi(item, false, false);
@@ -769,6 +772,7 @@ document.addEventListener('DOMContentLoaded', function () {
             HC.log('preset', name);
 
             var dflt = statics.AnimationSettings.defaults();
+            // todo preserve tutorial from being wiped here?
             dflt.clean(data, dflt);
             dflt.update(false, data);
 
@@ -776,7 +780,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 layer = statics.ControlSettings.layer;
             }
 
-            this.updateSettings(layer, dflt, true, false, true);
+            this.updateSettings(layer, dflt.prepare(), true, false, true);
             messaging.emitSettings(layer, statics.AnimationSettings.prepare(), false, false, true);
         },
 
@@ -864,12 +868,14 @@ document.addEventListener('DOMContentLoaded', function () {
             var controls = false;
             for (var i = 0; i < open.__controllers.length; i++) {
                 var ctl = open.__controllers[i];
+
                 if ('play' in ctl.object) {
                     controls = true;
                     if (statics.ControlSettings.contains(ctl.property)) {
                         var val = statics.ControlSettings.initial[ctl.property];
                         rst[ctl.property] = val;
                     }
+
                 } else {
                     if (statics.AnimationSettings.contains(ctl.property)) {
                         var val = statics.AnimationSettings.initial[ctl.property];
@@ -881,6 +887,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (controls) {
                 controller.updateControls(rst, true, false);
                 messaging.emitControls(rst, true, false, false);
+
             } else {
                 controller.updateSettings(statics.ControlSettings.layer, rst, true, false, false);
                 messaging.emitSettings(statics.ControlSettings.layer, rst, true, false, false);

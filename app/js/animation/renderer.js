@@ -35,6 +35,7 @@
          * @param keepsettings
          */
         fullReset: function (keepsettings) {
+            listener.removeEvent('renderer.render');
             this.resize();
             this.initLayers(keepsettings);
             this.setLayer(0);
@@ -53,7 +54,7 @@
                 this.three.renderer.view.id = 'threeWebGL';
 
                 this.three.renderer.view.addEventListener('webglcontextlost', function () {
-                    listener.fireAll('webglcontextlost');
+                    listener.fireEvent('webglcontextlost');
                 });
 
                 this.three.scene = new THREE.Scene();
@@ -86,7 +87,7 @@
                     ol.dispose();
                 }
 
-                var l = new HC.Layer(this.resolution, i, this.three);
+                var l = new HC.Layer(this, i);
 
                 l.preset = op;
                 l.settings = os || statics.AnimationSettings.defaults();
@@ -143,13 +144,13 @@
 
             for (var i in this.layers) {
                 i = parseInt(i);
-                var l = this.layers[i]._layer;
+                var layer = this.layers[i]._layer;
 
                 if (i == index) {
-                    this.three.scene.add(l);
+                    this.three.scene.add(layer);
 
                 } else {
-                    this.three.scene.remove(l);
+                    this.three.scene.remove(layer);
                 }
             }
 
@@ -220,6 +221,10 @@
                 this.three.renderer.setSize(res.x, res.y);
             }
 
+            if (this.three.target) {
+                this.three.target.setSize(res.x, res.y);
+            }
+
             if (this.three.perspective0) {
                 var aspect = res.aspect;
                 this.three.perspective0.aspect = aspect;
@@ -286,6 +291,9 @@
          *
          */
         render: function () {
+
+            listener.fireEvent('renderer.render', this);
+
             if (this.currentLayer.shaders()) {
                 this.currentLayer.doShaders();
                 this.currentLayer._composer.render();

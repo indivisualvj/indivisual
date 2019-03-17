@@ -1,6 +1,6 @@
 {
     HC.plugins.mesh_material.line = class Plugin extends HC.MeshMaterialPlugin {
-        static index = 2;
+        static index = 10;
         static name = 'line (no transform)';
 
         apply(geometry) {

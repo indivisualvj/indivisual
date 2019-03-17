@@ -6,7 +6,7 @@
         apply(key) {
             let layer = this.layer;
             let speed = layer.getCurrentSpeed();
-            this.activate(key, HC.Osci.sinus(speed.prc));
+            return this.activate(key, HC.Osci.sinus(speed.prc));
         }
     }
 }
@@ -18,7 +18,19 @@
         apply(key) {
             let layer = this.layer;
             let speed = layer.getCurrentSpeed();
-            this.activate(key, HC.Osci.sinInOut(speed.prc));
+            return this.activate(key, HC.Osci.sinInOut(speed.prc));
+        }
+    }
+}
+{
+    HC.plugins.oscillate.sininoutdotfive = class Plugin extends HC.OscillatePlugin {
+        static name = 'sinus 0.5/1.5 (current)';
+        static index = 40;
+
+        apply(key) {
+            let layer = this.layer;
+            let speed = layer.getCurrentSpeed();
+            return this.activate(key, HC.Osci.sinInOut(speed.prc, .5));
         }
     }
 }
@@ -29,7 +41,7 @@
 
         apply(key) {
             let speed = beatkeeper.getSpeed('hexa');
-            this.activate(key, HC.Osci.sinInOut(speed.prc));
+            return this.activate(key, HC.Osci.sinInOut(speed.prc));
         }
     }
 }
@@ -40,7 +52,7 @@
 
         apply(key) {
             let speed = beatkeeper.getSpeed('hexa');
-            this.activate(key, HC.Osci.sinInOut(speed.prc, .5));
+            return this.activate(key, HC.Osci.sinInOut(speed.prc, .5));
         }
     }
 }
@@ -51,7 +63,7 @@
 
         apply(key) {
             let speed = beatkeeper.getSpeed('32');
-            this.activate(key, HC.Osci.sinInOut(speed.prc, .5));
+            return this.activate(key, HC.Osci.sinInOut(speed.prc, .5));
         }
     }
 }
@@ -62,7 +74,7 @@
 
         apply(key) {
             let speed = beatkeeper.getSpeed('full');
-            this.activate(key, HC.Osci.sinus(speed.prc));
+            return this.activate(key, HC.Osci.sinus(speed.prc));
         }
     }
 }
@@ -72,7 +84,7 @@
         static index = 40;
 
         apply(key) {
-            this.activate(key, HC.Osci.wobble(0, this.settings));
+            return this.activate(key, HC.Osci.wobble(0, this.settings));
         }
     }
 }
@@ -93,7 +105,7 @@
         apply(key) {
             this.osci.osci1_period = this.settings.osci1_period;
             this.osci.rhythm = this.settings.rhythm;
-            this.activate(key, HC.Osci.wobble(0, this.osci));
+            return this.activate(key, HC.Osci.wobble(0, this.osci));
 
         }
     }
@@ -115,7 +127,7 @@
         apply(key) {
             this.osci.osci2_period = this.settings.osci2_period;
             this.osci.rhythm = this.settings.rhythm;
-            this.activate(key, HC.Osci.wobble(0, this.osci));
+            return this.activate(key, HC.Osci.wobble(0, this.osci));
 
         }
     }
@@ -137,7 +149,7 @@
             apply(key) {
                 this.osci.osci3_period = this.settings.osci3_period;
                 this.osci.rhythm = this.settings.rhythm;
-                this.activate(key, HC.Osci.wobble(0, this.osci));
+                return this.activate(key, HC.Osci.wobble(0, this.osci));
 
             }
         }

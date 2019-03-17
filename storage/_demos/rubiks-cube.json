@@ -49,7 +49,7 @@
 "material_shininess":100,
 "material_roughness":0.5,
 "material_metalness":0.5,
-"material_side":"0",
+"material_side":0,
 "material_softshading":false,
 "material_shadowside":1,
 "material_map":"none",

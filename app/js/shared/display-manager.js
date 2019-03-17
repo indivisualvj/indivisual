@@ -333,6 +333,10 @@
             this.updateDisplays();
         },
 
+        reset: function () {
+            this.updateDisplays();
+        },
+
         /**
          *
          */
@@ -693,10 +697,10 @@
          * @returns {number}
          */
         flashTimeoutInFrames: function (speed) {
-            var timeout = this.getSpeed(speed).duration / 2;
+            var timeout = beatkeeper.getSpeed(speed).duration / 2;
             var count = Math.round((timeout / animation.duration) / 2);
             return count;
-        },
+        }
 
     };
 })();

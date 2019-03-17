@@ -121,22 +121,22 @@
                 var full = 60000 / inst.tempo * 4;
                 var duration = full / speed.divider;
                 var beats = speed.beats;
-                var elapsed = HC.now() - (inst.beatStartTime);
+                var elapsed = animation.now - inst.beatStartTime;
                 var estimated = duration * beats;
                 var offset = elapsed - estimated;
 
                 speed.pitch = offset;
                 speed.duration = clamp(duration - offset, duration * .85, duration * 1.15);
 
-                if (DEBUG && Math.abs(offset) > duration && speed.divider == 4) {
-                    console.log(
-                        inst.speeds.eight.pitch.toFixed(2),
-                        inst.speeds.quarter.pitch.toFixed(2),
-                        inst.speeds.half.pitch.toFixed(2),
-                        inst.speeds.full.pitch.toFixed(2),
-                        inst.speeds.double.pitch.toFixed(2)
-                    );
-                }
+                // if (DEBUG && Math.abs(offset) > duration && speed.divider == 4) {
+                //     console.log(
+                //         inst.speeds.eight.pitch.toFixed(2),
+                //         inst.speeds.quarter.pitch.toFixed(2),
+                //         inst.speeds.half.pitch.toFixed(2),
+                //         inst.speeds.full.pitch.toFixed(2),
+                //         inst.speeds.double.pitch.toFixed(2)
+                //     );
+                // }
 
                 inst._tween(speed);
             });
@@ -186,8 +186,7 @@
                 }
 
             } else { // first trigger
-                var bst = HC.now();
-                this.firstTrigger = bst;
+                this.firstTrigger = HC.now();
                 this.triggerCounter++;
 
                 clearTimeout(this.timeout);
@@ -275,7 +274,7 @@
             }
 
             this.tempo = tempo;
-            this.tween.update(HC.now(), false);
+            this.tween.update(animation.now, false);
 
         },
 
@@ -288,7 +287,7 @@
             var unit = this.getDefaultSpeed();
             var duration = 60000 / speed;
             var beats = unit.beats;
-            var elapsed = HC.now() - (this.beatStartTime);
+            var elapsed = animation.now - (this.beatStartTime);
             var estimated = duration * beats;
             var offset = elapsed - estimated;
             var offbeat = Math.abs(offset) > duration;
@@ -328,7 +327,7 @@
          *
          */
         reset: function () {
-            this.resetCounters(HC.now());
+            this.resetCounters(animation.now);
             this.resetTrigger();
         },
 

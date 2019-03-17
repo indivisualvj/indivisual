@@ -16,9 +16,15 @@ HC.plugins.mesh_material = HC.plugins.mesh_material || {};
             if (geometry.computeVertexNormals) {
                 geometry.computeVertexNormals();
             }
+            if (geometry.computeMorphNormals) {
+                geometry.computeMorphNormals();
+            }
 
             geometry.elementsNeedUpdate = true;
             geometry.verticesNeedUpdate = true;
+            geometry.uvsNeedUpdate = true;
+            geometry.normalsNeedUpdate = true;
+            geometry.colorsNeedUpdate = true;
 
             let geo;
             if (geometry.isGeometry) {

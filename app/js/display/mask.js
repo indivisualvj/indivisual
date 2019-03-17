@@ -12,7 +12,7 @@
      * @constructor
      */
     HC.Mask = function (prefix, canvas, type, config) {
-        this.index = number_extract(prefix, 'display');
+        this.index = numberExtract(prefix, 'display');
         this.id = prefix + '_mask';
         this.ctx = canvas.ctx;
         this.canvas = canvas;

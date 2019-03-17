@@ -109,6 +109,7 @@ HC.Controller.prototype.initMidi = function (instance) {
         if (data[2] == 127) {
             midi_pressed[dataId] = data[2];
             clearTimeout(midi_timeouts[dataId]);
+
         } else if (midi_pressed[dataId]) {
             delete midi_pressed[dataId];
         }
@@ -137,6 +138,8 @@ HC.Controller.prototype.initMidi = function (instance) {
 
         if (data.length < 2) return;
         // console.log('', data); // MIDI data [144, 63, 73]
+
+        listener.fireEvent('midi.onMessage', data);
 
         var cmd = data[0];
         var id = data[1];
@@ -571,26 +574,11 @@ HC.Controller.prototype.initMidi = function (instance) {
         }
     }
 
-    /**
-     *
-     * @param channel
-     * @param fixture
-     * @param port
-     * @param color
-     * @param brightness
-     * @private
-     */
-    function _dmx(channel, fixture, port, color, brightness) {
-        _send([channel, fixture + port, 127]);
-    }
 
     /**
      *
      */
     return {
-        dmx: function (channel, fixture, port, color, brightness) {
-            _dmx(channel, fixture, port, color, brightness);
-        },
 
         glow: function (id, conf) {
             _glow(id, conf);

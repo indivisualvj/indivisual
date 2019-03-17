@@ -1,6 +1,6 @@
 {
     HC.plugins.mesh_material.point = class Plugin extends HC.MeshMaterialPlugin {
-        static index = 2;
+        static index = 10;
         static name = 'points (no transform -> edges only)';
 
         apply(geometry, index) {
@@ -15,7 +15,7 @@
 }
 {
     HC.plugins.mesh_material.transformablepoints = class Plugin extends HC.MeshMaterialPlugin {
-        static index = 2;
+        static index = 10;
         static name = 'points (transform)';
 
         apply(geometry, index) {

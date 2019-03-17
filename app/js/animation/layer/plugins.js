@@ -314,6 +314,33 @@ HC.Layer.prototype.getShapeDirection = function (shape) {
  *
  */
 HC.Layer.prototype.resetPlugins = function () {
+    var pluginKeys = Object.keys(HC.plugins);
+
+    for (var pi = 0; pi < pluginKeys.length; pi++) {
+
+        var plugin = pluginKeys[pi];
+        var items = HC.plugins[plugin];
+
+        this.plugins[plugin] = this.plugins[plugin] || {};
+
+        var keys = Object.keys(items);
+        for (var i = 0; i < keys.length; i++) {
+            var key = keys[i];
+
+            if (plugin in this.plugins && key in this.plugins[plugin]) {
+                var plug = this.getPlugin(plugin, key);
+                if (plug.reset) {
+                    plug.reset();
+                }
+            }
+        }
+    }
+};
+
+/**
+ *
+ */
+HC.Layer.prototype.reloadPlugins = function () {
 
     var pluginKeys = Object.keys(HC.plugins);
 
@@ -330,6 +357,11 @@ HC.Layer.prototype.resetPlugins = function () {
 
             if (plugin in this.plugins && key in this.plugins[plugin]) {
                 var plug = this.getPlugin(plugin, key);
+
+                if (plug.reset) {
+                    plug.reset();
+                }
+
                 if (plug instanceof HC.ShaderPlugin) {
                     // no reset of ShaderPlugins
                     continue;

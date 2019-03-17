@@ -59,6 +59,15 @@ background:
   background_input:
   background_volume:
   background_volume_oscillate:
+  background_wraps:
+  background_wrapt:
+  background_repeatx:
+  background_repeaty:
+  background_offsetx:
+  background_offsety:
+  background_centerx:
+  background_centery:
+  background_rotation:
 
 camera:
   camera_mode:

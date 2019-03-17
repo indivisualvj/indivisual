@@ -7,7 +7,7 @@
         apply(key) {
             let pa = this.params(key);
             HC.Osci.step(pa, 4, beatkeeper.getSpeed('full'), true);
-            this.activate(key, pa.value);
+            return this.activate(key, pa.value);
         }
     }
 }
@@ -20,7 +20,7 @@
         apply(key) {
             let pa = this.params(key);
             HC.Osci.step(pa, 4, beatkeeper.getSpeed('full'), false, false);
-            this.activate(key, pa.value);
+            return this.activate(key, pa.value);
         }
     }
 }
@@ -33,7 +33,7 @@
         apply(key) {
             let pa = this.params(key);
             HC.Osci.step(pa, 4, beatkeeper.getSpeed('full'), true, true);
-            this.activate(key, pa.value);
+            return this.activate(key, pa.value);
         }
     }
 }
@@ -46,7 +46,7 @@
         apply(key) {
             let pa = this.params(key);
             HC.Osci.step(pa, 4, beatkeeper.getSpeed('half'), false, true);
-            this.activate(key, pa.value);
+            return this.activate(key, pa.value);
         }
     }
 }
@@ -59,7 +59,7 @@
         apply(key) {
             let pa = this.params(key);
             HC.Osci.step(pa, 4, beatkeeper.getSpeed('full'), false, true);
-            this.activate(key, pa.value);
+            return this.activate(key, pa.value);
         }
     }
 }

@@ -455,7 +455,7 @@
                 action: 'save',
                 dir: path,
                 file: file,
-                contents: JSON.stringify(data)
+                contents: JSON.stringify(data, null, 4)
             };
 
             this._emit(conf, callback);

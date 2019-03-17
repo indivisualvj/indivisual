@@ -24,7 +24,7 @@ HC.Layer.prototype.animateShape = function (shape) {
 
     }
 
-    if (!shape.dummy) {
+    if (shape.isVisible()) {
         this.doPattern(shape);
         this.doOffsetMode(shape);
         this.doShapeTransform(shape);
@@ -47,7 +47,7 @@ HC.Layer.prototype.animate = function (hook) {
         this.resetShapes();
     }
 
-    this.tween.update(HC.now() - this.lastUpdate, false);
+    this.tween.update(animation.now - this.lastUpdate, false);
 
     this.doOscillate(true);
 

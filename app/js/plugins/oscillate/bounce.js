@@ -7,7 +7,7 @@
             let layer = this.layer;
             let speed = layer.getCurrentSpeed();
             let prc = (speed.prc - 0.5);
-            this.activate(key, Math.pow(prc, 2) * 4);
+            return this.activate(key, Math.pow(prc, 2) * 4);
         }
     }
 }
@@ -25,11 +25,11 @@
             // let progress = speed.prc - .5;
             // progress = Math.pow(progress, 2) * 4;
             // progress = Math.max(0, 1 - progress) * pa;
-            // this.activate(key, progress);
+            // return this.activate(key, progress);
 
             let prc = (speed.prc - 0.5);
             let v = Math.pow(prc, 2) * 4 * pa;
-            this.activate(key, v);
+            return this.activate(key, v);
 
             if (round(v, 1) == 0) {
                 pa *= -1;

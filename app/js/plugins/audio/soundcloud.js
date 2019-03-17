@@ -38,7 +38,11 @@
     }
 
     HC.audio.soundcloud = class Plugin extends HC.AudioPlugin {
-
+        static tutorial = {
+            howto: {
+                text: 'You now can drag/drop a soundcloud url into the animation window'
+            }
+        };
         static dropEvent = false;
 
         init(callback) {
@@ -65,7 +69,7 @@
                 HC.audio.soundcloud.dropEvent = false;
 
             } else {
-                alert('You can now drag/drop a soundcloud url into the animation window');
+                // now in tutorial
             }
         }
 

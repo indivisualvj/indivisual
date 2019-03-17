@@ -436,11 +436,14 @@ HC.Controller.prototype.getControlParentByProperty = function (property, control
  * @param item
  * @param value
  */
-HC.Controller.prototype.explainPlugin = function (item, value) {
-    if (item in HC.plugins) {
-        if (value in HC.plugins[item]) {
-            var proto = HC.plugins[item][value].prototype;
-            var desc = proto.tutorial || proto.constructor.tutorial; // todo after classifying all remove
+HC.Controller.prototype.explainPlugin = function (item, value, tree) {
+
+    tree = tree || HC.plugins;
+
+    if (item in tree) {
+        if (value in tree[item]) {
+            var proto = tree[item][value];
+            var desc = proto.tutorial;
             if (desc) {
                 var key = item + '.' + value;
                 new HC.ScriptProcessor(key, desc).log();
@@ -535,17 +538,10 @@ HC.Controller.prototype.toggleByKey = function (ci, shiftKey) {
  * @param control
  */
 HC.Controller.prototype.scrollToControl = function (control) {
+
     setTimeout(function () {
-        var container = control.__ul.parentNode.parentNode; // todo funkt nicht bei single column layout
-        var coot = container.offsetTop;
-        var ctrl = container.offsetParent;
-        var ctot = ctrl.offsetTop;
-        if (ctrl.id != 'controller') {
-            coot += ctrl.offsetTop;
-            ctrl = ctrl.offsetParent;
-        }
-        var ot = coot - ctot;
-        ctrl.scrollTop = ot;
+        var container = control.__ul;
+        container.scrollIntoView();
     }, 125);
 };
 
@@ -648,6 +644,8 @@ HC.Controller.prototype.showControls = function (item, parent, enabled) {
  */
 HC.Controller.prototype.loadClip = function (i) {
     var smp = new HC.Sample(i);
+    var inst = this;
+
     smp.clip(function (sample) {
         var data = {data: {DataSettings: {}}};
         data.data.DataSettings[getSampleKey(sample.index)] = sample._clip;

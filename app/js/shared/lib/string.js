@@ -1,5 +1,5 @@
 /**
- *
+ * todo HC.splitToIntArray
  * @param value
  * @returns {*}
  */
@@ -20,7 +20,7 @@ function splitToIntArray(value) {
 }
 
 /**
- *
+ * todo HC.filePath
  * @returns {string}
  */
 function filePath() {
@@ -29,7 +29,7 @@ function filePath() {
 }
 
 /**
- *
+ * todo HC.parseFileMeta
  * @param file
  * @returns {{fps: number, resolution: {x: number, y: number}, speed: number}}
  */
@@ -72,7 +72,7 @@ function parseFileMeta(file) {
  * @param prefix
  * @returns {*}
  */
-function number_extract(item, prefix) {
+function numberExtract(item, prefix) {
     var regex = new RegExp(prefix + '(\\d+)');
     var i = item.replace(regex, '$1');
     i = parseInt(i);
@@ -85,7 +85,7 @@ function number_extract(item, prefix) {
 }
 
 /**
- *
+ * todo HC.
  * @param value
  * @returns {*}
  */
@@ -107,7 +107,7 @@ function parse(value) {
 }
 
 /**
- *
+ * todo HC.
  * @param args
  * @returns {*}
  */

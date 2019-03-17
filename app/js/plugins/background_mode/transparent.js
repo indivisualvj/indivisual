@@ -3,8 +3,8 @@
         static index = 1;
 
         apply() {
-            if (this.current() !== false) {
-                this.layer.setBackground(this.current(false));
+            if (this.current() !== this.id()) {
+                this.layer.setBackground(this.current(this.id()));
             }
         }
     }

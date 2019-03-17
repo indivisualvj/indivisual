@@ -30,7 +30,7 @@
             cmesh.updateMatrix();
             geo.merge(cmesh.geometry, cmesh.matrix);
 
-            geo.rotateZ(45 * RAD + 45 * RAD * this.getModA(0, 0));
+            geo.rotateZ(45 * RAD * this.getModA(0, 0));
 
             return geo;
         }

@@ -1,5 +1,5 @@
 /**
- *
+ * todo HC.
  * @param aw
  * @param ah
  * @param bw
@@ -21,7 +21,7 @@ function cropAtoB(aw, ah, bw, bh) {
 
 
 /**
- *
+ * todo HC.
  * @param a
  * @param b
  * @returns {number}
@@ -34,6 +34,7 @@ function sinAlpha(a, b) {
 }
 
 /**
+ *  todo HC.
  * arccos( (b² + c² - a²) / 2bc )
  * b * sin( α )
  * @param a
@@ -50,6 +51,7 @@ function heightFromThreeSides(a, b, c) {
 }
 
 /**
+ *  todo HC.
  * arccos( (a² + b² - c²) / 2ab )
  * @param a
  * @param b
@@ -65,7 +67,7 @@ function gammaFromThreeSides(a, b, c) {
 }
 
 /**
- *
+ * todo HC.
  * @param vectorGamma
  * @param vectorBeta
  * @param vectorAlpha

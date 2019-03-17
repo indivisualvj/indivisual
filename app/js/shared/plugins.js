@@ -31,13 +31,8 @@ HC.Shape.prototype.initPlugins = function () {
         tree;
         key;
 
-        _id() {
-            return this.tree + this.key;
-        }
-
-        getDefinitions() {
-            var proto = Object.getPrototypeOf(this);
-            return proto.constructor || proto;
+        id(suffix) {
+            return this.layer.index + '.' + this.tree + '.' + this.key + (suffix!==undefined?'.' + suffix:'');
         }
 
         construct(layer, settings, tree, key) {
@@ -99,7 +94,7 @@ HC.Shape.prototype.initPlugins = function () {
          * @param tween
          */
         tweenStart(tween) {
-            tween.start(HC.now() - this.layer.lastUpdate);
+            tween.start(animation.now - this.layer.lastUpdate);
         }
 
         /**

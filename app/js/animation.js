@@ -10,7 +10,6 @@ var animation = false;
 var renderer = false;
 var displayman = false;
 var sourceman = false;
-var textureman = false;
 var listener = false;
 var sm = false;
 
@@ -72,8 +71,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
                 sourceman.resize(renderer.getResolution());
 
-                textureman = new HC.TextureManager();
-
                 animation.initKeyboard();
                 animation.initEvents();
 
@@ -114,6 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
         this.powersave = false;
         this.doNotDisplay = false; // render displays only every second frame if FPS is set to 60
         this.diff = 0;
+        this.diffPrc = 1;
         this.duration = 1000 / 60;
         this.lastUpdate = 0;
         this.ms = 0;
@@ -180,7 +178,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (audio.peak) {
                     messaging.emitMidi('glow', MIDI_PEAK_FEEDBACK, {timeout: 125});
 
-                    listener.fireAll('AudioAnalyser.peak');
+                    listener.fireEvent('audio.peak', audio);
                 }
 
             } else {
@@ -246,7 +244,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.running = true;
 
             if (this.lastUpdate) {
-                this.lastUpdate = HC.now() - this.lastUpdate;
+                this.lastUpdate = animation.now - this.lastUpdate;
             }
             beatkeeper.play();
             renderer.resumeLayers();
@@ -273,9 +271,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     inst.animate();
                     inst.render();
 
-                    inst.ms = HC.now() - inst.lastUpdate - inst.last; // time spent on animating and rendering
+                    if (inst.stats) {
+                        inst.stats.end();
+                        inst.fps = inst.stats.values().fps;
+                        inst.ms = inst.stats.values().ms;
+                    }
 
-                    if (statics.DisplaySettings.fps < 60) { // fixme fps not after reload from session
+                    if (statics.DisplaySettings.fps < 60) {
                         setTimeout(function () {
                             requestAnimationFrame(render);
                         }, inst.duration - inst.ms); // substract spent time from timeout
@@ -284,13 +286,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         requestAnimationFrame(render);
                     }
 
-                    if (inst.stats) {
-                        inst.stats.end();
-                        inst.fps = inst.stats.values().fps;
-                    }
-
                 } else {
-                    renderer.pauseLayers(); // todo nicht nötig wenn mit animation.now gearbeitet wird.
+                    renderer.pauseLayers();
                     beatkeeper.stop();
                 }
             };
@@ -303,7 +300,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         pause: function () {
             this.running = false;
-            this.lastUpdate = HC.now();
+            this.lastUpdate = this.now;
         },
 
         /**
@@ -312,13 +309,14 @@ document.addEventListener('DOMContentLoaded', function () {
         updateRuntime: function () {
             this.now = HC.now() - this.lastUpdate;
             this.diff = this.now - this.last;
+            this.duration = 1000 / statics.DisplaySettings.fps;
             this.diffPrc = this.diff / (1000 / 60);
             this.rms = this.duration - this.ms;
             this._rmsc++;
             this._rmss += this.rms;
             this.last = this.now;
 
-            listener.fireAll('animation.updateRuntime', (animation.now - beatkeeper.beatStartTime) / (60000 / statics.ControlSettings.tempo));
+            listener.fireEvent('animation.updateRuntime', this);
         },
 
         /**
@@ -384,6 +382,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (gain !== 0) {
                 //console.log('gain', [audio.volume, audio.avgVolume, gain]);
                 var vo = Math.min(2, Math.max(0.5, statics.ControlSettings.volume + gain));
+                // statics.ControlSettings.volume = vo;
                 animation.updateControl('volume', vo, false, false, false);
             }
         },
@@ -502,8 +501,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 for (var k in settings) {
                     this.updateSettings(k, settings[k], true, false, true);
                 }
-            } else {
-                renderer.fullReset(false);
             }
 
             if ('controls' in session) {
@@ -513,6 +510,17 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             sourceman.updateSequences();
+            this.fullReset(true);
+        },
+
+        /**
+         *
+         * @param keepsettings
+         */
+        fullReset: function (keepsettings) {
+            renderer.fullReset(keepsettings);
+            sourceman.resize(renderer.getResolution());
+            displayman.resize(renderer.getResolution());
         },
 
         /**
@@ -566,9 +574,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     case 'shape_modifier_volume':
                     case 'shape_geometry':
                     case 'shape_transform':
-                    case 'mesh_material': // todo can't we just reset materials?
+                    case 'mesh_material':
                     case 'material_mapping':
-                    case 'shape_moda': // todo can't we just reset geometries?
+                    case 'shape_moda':
                     case 'shape_modb':
                     case 'shape_modc':
                         layer.resetShapes();
@@ -587,6 +595,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     data[item] = value;
                     messaging.emitSettings(layerIndex, data, true, false, force);
                 }
+
+                listener.fireEvent('animation.updateSetting', {layer: layer, item: item, value: value});
             }
         },
 
@@ -628,9 +638,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             if (renderer) {
                                 if (force) {
                                     beatkeeper.reset();
-                                    renderer.fullReset(false);
-                                    sourceman.resize(renderer.getResolution());
-                                    displayman.resize(renderer.getResolution());
+                                    this.fullReset(false);
 
                                 } else {
                                     renderer.resetLayer(renderer.currentLayer);
@@ -693,27 +701,28 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (display) {
                     var action = false;
-                    if (item.match(/^sample\d+_store/) && value) {
-                        //var sample =
-                        sourceman.storeSample(number_extract(item, 'sample'), value, 1, false);
-                        this.updateSource(item, false, false, true, false);
-
-                    } else if (item.match(/^sample\d+_load/) && value) {
+                    // if (item.match(/^sample\d+_store/) && value) {
+                    //     //var sample =
+                    //     sourceman.storeSample(number_extract(item, 'sample'), value, 1, false);
+                    //     this.updateSource(item, false, false, true, false);
+                    //
+                    // } else
+                    if (item.match(/^sample\d+_load/) && value) {
                         if (IS_MONITOR || display) {
-                            sourceman.loadSample(number_extract(item, 'sample'), value);
+                            sourceman.loadSample(numberExtract(item, 'sample'), value);
                         }
                         this.updateSource(item, false, false, true, false);
 
                     } else if (item.match(/^sample\d+_/)) {
-                        sourceman.updateSample(number_extract(item, 'sample'));
+                        sourceman.updateSample(numberExtract(item, 'sample'));
                         action = true;
 
                     } else if (item.match(/^sequence\d+_/)) {
-                        sourceman.updateSequence(number_extract(item, 'sequence'));
+                        sourceman.updateSequence(numberExtract(item, 'sequence'));
                         action = true;
 
                     } else if (item.match(/display\d+_source/)) {
-                        var display = displayman.getDisplay(number_extract(item, 'display'));
+                        var display = displayman.getDisplay(numberExtract(item, 'display'));
                         sourceman.updateSource(display);
 
                         if (display && display.isFixedSize()) {
@@ -723,7 +732,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         action = true;
 
                     } else if (item.match(/display\d+_sequence/)) {
-                        sourceman.updateSource(displayman.getDisplay(number_extract(item, 'display')));
+                        sourceman.updateSource(displayman.getDisplay(numberExtract(item, 'display')));
                         action = true;
 
                     } else if (item.match(/^lighting_(lights|scale)/)) {
@@ -762,7 +771,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (item.match(/^display\d+_\d/)) { // resize
                 if (value) {
-                    displayman.centerDisplay(number_extract(item, 'display'), value);
+                    displayman.centerDisplay(numberExtract(item, 'display'), value);
                     this.updateDisplay(item, false, display, true);
                 }
                 statics.DisplaySettings.update(item, value);
@@ -779,14 +788,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (display) {
                     switch (item) {
-                        case 'fps':
-                            this.duration = Math.round(1000 / value);
-                            break;
-
                         case 'resolution':
-                            renderer.fullReset(true);
-                            sourceman.resize(renderer.getResolution());
-                            displayman.resize(renderer.getResolution());
+                            this.fullReset(true);
                             break;
 
                         case 'mapping':
@@ -809,7 +812,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (item.match(/^display\d+_/)) {
 
-                    var i = number_extract(item, 'display');
+                    var i = numberExtract(item, 'display');
 
                     if (item.match(/_mask$/)) { // mask
                         displayman.updateDisplay(i, 'mask');
@@ -876,9 +879,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 for (var k in data) {
                     statics.DisplaySettings.update(k, data[k]);
                 }
-                renderer.fullReset(true);
-                sourceman.resize(renderer.getResolution());
-                displayman.resize(renderer.getResolution());
+                displayman.reset();
+                // this.fullReset(true);
 
             } else {
                 for (var k in data) {

@@ -54,7 +54,7 @@
             this.analyser = context.createAnalyser();
             this.analyser.smoothingTimeConstant = .6;
             this.analyser.fftSize = 1024;
-            binCount = this.analyser.frequencyBinCount;
+            binCount = this.analyser.frequencyBinCount - 64; // fixes: last volumes are always zero bug
             this.volumes = new Array(binCount).fill(0);
 
             freqData = new Uint8Array(binCount);
@@ -99,7 +99,7 @@
                 }
             }
 
-            this.volume = values / binCount * config.volume;
+            this.volume = (values / binCount) * config.volume;
 
             this._beatRecognition(config);
 
@@ -238,7 +238,7 @@
             this.peakBPM = 0;
             this.peakReliable = false;
             this.firstPeak = 0;
-            this.volumes = new Array(binCount).fill(Math.random);
+            this.volumes = new Array(binCount).fill(0).map(Math.random);
             lastVolume = 0;
             peakData = [];
             peakThreshold = 1.2;

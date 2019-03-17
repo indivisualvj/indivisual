@@ -1,3 +1,4 @@
+// todo HC.Log
 {
     var logHistory = {};
 
@@ -106,6 +107,16 @@
         return '<span class="red">' + value + '</span>';
 
     };
+
+    /**
+     *
+     * @param value
+     * @returns {string}
+     */
+    HC.logGetOrange = function (value) {
+        return '<span class="orange">' + value + '</span>';
+
+    }
 
     /**
      *

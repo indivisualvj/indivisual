@@ -1,5 +1,5 @@
 {
-    class Plugin extends HC.MaterialMapPlugin {
+    HC.plugins.material_map.texture = class Plugin extends HC.MaterialMapPlugin {
 
         texture;
         loading;
@@ -31,6 +31,4 @@
             return false;
         }
     }
-
-    HC.plugins.material_map.texture = Plugin;
 }

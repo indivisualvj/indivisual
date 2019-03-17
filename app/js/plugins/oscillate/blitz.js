@@ -14,7 +14,7 @@
             }
 
             this.params(key, pa);
-            this.activate(key, pa);
+            return this.activate(key, pa);
         }
     }
 }
@@ -34,7 +34,7 @@
             }
 
             this.params(key, pa);
-            this.activate(key, pa);
+            return this.activate(key, pa);
         }
     }
 }
@@ -56,7 +56,7 @@
             }
 
             this.params(key, pa);
-            this.activate(key, pa);
+            return this.activate(key, pa);
         }
     }
 }
@@ -78,7 +78,7 @@
             }
 
             this.params(key, pa);
-            this.activate(key, pa);
+            return this.activate(key, pa);
         }
     }
 }
@@ -100,7 +100,7 @@
             }
 
             this.params(key, pa);
-            this.activate(key, pa);
+            return this.activate(key, pa);
         }
     }
 }
@@ -122,7 +122,7 @@
             }
 
             this.params(key, pa);
-            this.activate(key, pa);
+            return this.activate(key, pa);
         }
     }
 }

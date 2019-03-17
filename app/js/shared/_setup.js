@@ -6,8 +6,8 @@ SAMPLE_DIR = 'samples';
 SESSION_DIR = 'sessions';
 ASSET_DIR = 'assets';
 FONT_DIR = ASSET_DIR + '/fonts';
-TEXTURE_DIR = ASSET_DIR + '/textures';
 IMAGE_DIR = ASSET_DIR + '/images';
+CUBE_DIR = ASSET_DIR + '/cubes';
 VIDEO_DIR = ASSET_DIR + '/videos';
 
 _HASH = document.location.hash ? document.location.hash.substr(1) : '';
@@ -149,7 +149,7 @@ function setupResources() {
                 data = jsyaml.load(data.contents);
                 data.shaders = statics.ShaderSettings;
                 // console.log(data.shaders);
-                statics.AnimationSettings = new HC.Settings(data, finished);
+                statics.AnimationSettings = new HC.Settings(data);
                 finished();
             }
         },
@@ -317,6 +317,21 @@ function setupResources() {
 
                 finished();
             }
+        },
+        {
+            action: 'files',
+            base: '.',
+            file: CUBE_DIR,
+            callback: function (files, finished) {
+                var cubes = assetman.addCubes(files, 'name');
+                // add cubes into AnimationValues by name
+                for (var i in cubes) {
+                    var name = i + '.cube';
+                    statics.AnimationValues.background_input[i] = name;
+                }
+
+                finished();
+            }
         }
     ];
 
@@ -334,10 +349,10 @@ function setupResources() {
 
         pluginKeys.sort(function (a, b) {
 
-            var ai = plugins[a].prototype.index || plugins[a].prototype.constructor.index || 99999;
-            var bi = plugins[b].prototype.index || plugins[b].prototype.constructor.index || 99999;
-            var an = plugins[a].prototype.name || plugins[a].prototype.constructor.name || a;
-            var bn = plugins[b].prototype.name || plugins[b].prototype.constructor.name || b;
+            var ai = plugins[a].index || 99999;
+            var bi = plugins[b].index || 99999;
+            var an = plugins[a].name || a;
+            var bn = plugins[b].name || b;
 
             if (an === 'Plugin') {
                 an = a;
@@ -357,7 +372,7 @@ function setupResources() {
 
             var pluginKey = pluginKeys[i];
             var plugin = tree[section][pluginKey];
-            var name = plugin.prototype.name || plugin.prototype.constructor.name || pluginKey;
+            var name = plugin.name || pluginKey;
 
             if (name == 'Plugin') {
                 name = pluginKey;
@@ -436,7 +451,7 @@ function setupResources() {
         for (var i = 0; i < keys.length; i++) {
             var key = keys[i];
             var plug = HC.plugins.shaders[key];
-            settings[key] = plug.prototype.settings || plug.prototype.constructor.settings;
+            settings[key] = plug.settings || {};
         }
 
         return settings;

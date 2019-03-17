@@ -6,7 +6,7 @@ HC.Layer.prototype.setBackground = function (value) {
 
     this.resetBackground(false);
 
-    if (value instanceof THREE.Mesh) {
+    if (value instanceof THREE.Object3D) {
         this.resetBackground(true);
 
         this._background.add(value);
@@ -32,7 +32,6 @@ HC.Layer.prototype.resetBackground = function (recreate) {
     this.three.scene.background = null;
 
     if (recreate !== false) {
-
         this._background = new THREE.Group();
         this._background.position.x = this.resolution('half').x;
         this._background.position.y = -this.resolution('half').y;

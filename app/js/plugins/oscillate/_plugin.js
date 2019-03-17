@@ -63,12 +63,16 @@ HC.plugins.oscillate = HC.plugins.oscillate || {};
                     key.value *= value;
                 }
 
+                return key.value;
+
             } else {
                 if (overwrite) {
                     this.settings[key] = value;
                 } else {
                     this.settings[key] *= value;
                 }
+
+                this.settings[key];
             }
         }
     }

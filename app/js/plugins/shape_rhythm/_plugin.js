@@ -2,8 +2,15 @@ HC.plugins.shape_rhythm = HC.plugins.shape_rhythm || {};
 {
     HC.ShapeRhythmPlugin = class Plugin extends HC.AnimationPlugin {
 
+        injections = {
+            speed: false,
+            duration: 0,
+            progress: 0,
+            prc: 0
+        };
+
         before(shape) {
-            if (shape.dummy) { // no special speed for pattern rotation
+            if (!shape.isVisible()) { // no special speed for pattern rotation
                 this.params(shape).speed = beatkeeper.getSpeed(this.settings.rhythm);
                 this.after(shape);
                 return false;
@@ -43,12 +50,5 @@ HC.plugins.shape_rhythm = HC.plugins.shape_rhythm || {};
         isFirstShape(shape) {
             return shape.index == -1;
         }
-    };
-
-    HC.ShapeRhythmPlugin.prototype.injections = {// todo move into class after all is "classified"
-        speed: false,
-        duration: 0,
-        progress: 0,
-        prc: 0
     }
 }

@@ -303,7 +303,7 @@
             dur /= sample.beats;
             var beats = Math.max(0.25, Math.round(ms / dur));
             //if (beat.prc == 0) {
-            //    listener.fire('sequence.next.progress', this.id, this);
+            //    listener.fireEventId('sequence.next.progress', this.id, this);
             //}
 
             var prcb = beat;

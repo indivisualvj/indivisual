@@ -1,6 +1,6 @@
 {
     HC.plugins.mesh_material.standard = class Plugin extends HC.MeshMaterialPlugin {
-        static index = 1;
+        static index = 4;
 
         apply(geometry) {
             let material = new THREE.MeshStandardMaterial();

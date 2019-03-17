@@ -114,7 +114,7 @@
                 explorer.setPreset(statics.ControlSettings.layer, this.model);
 
                 if (this.model.type == 'preset') { // load default
-                    var dflt = statics.AnimationSettings.defaults();
+                    var dflt = statics.AnimationSettings.defaults().prepare();
                     requestAnimationFrame(function () {
                         controller.preset(false, dflt);
                     });
@@ -132,7 +132,7 @@
 
                                 var key = data.dir + '/' + data.name;
                                 var contents = JSON.parse(data.contents);
-                                if (contents.tutorial) {
+                                if (contents.tutorial && Object.keys(contents.tutorial).length) {
                                     new HC.ScriptProcessor(key, Object.create(contents.tutorial)).log();
                                 }
                                 controller.preset(key, contents);
@@ -147,7 +147,7 @@
                 var children = this.model.children;
                 var dflt = [];
 
-                for (var i = 0; i < children.length; i++) {
+                for (var i = 0; dflt.length < layers.length && i < children.length; i++) {
                     var child = children[i];
                     if (!child.name.match(/^_.+/)) {
                         dflt.push(child);
@@ -163,7 +163,7 @@
                 HC.clearLog();
 
                 for (var i = 0; i < layers.length; i++) {
-                    if (statics.shiftKey) { // shift means add presets. no overwrite.
+                    if (statics.shiftKey) { // shift means append presets to free layers. no overwrite.
                         if ((i in layers)
                             && layers[i].settings
                             && !layers[i].settings.isDefault()
@@ -187,7 +187,9 @@
                                 requestAnimationFrame(function () {
 
                                     controller.updateControl('layer', i, true, true);
-                                    controller.preset(data.dir + '/' + data.name, JSON.parse(data.contents));
+                                    var key = data.dir + '/' + data.name;
+                                    var contents = JSON.parse(data.contents);
+                                    controller.preset(key, contents);
 
                                     if (di == dflt.length - 1) {
                                         controller.updateControl('layer', 0, true, true);

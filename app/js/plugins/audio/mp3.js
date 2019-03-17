@@ -21,17 +21,21 @@
     }
 
     HC.audio.mediafile = class Plugin extends HC.AudioPlugin {
-
+        static tutorial = {
+            howto: {
+                text: 'You now can drag/drop a media file into the animation window'
+            }
+        };
         static dropEvent = false;
         buffer;
 
         init(callback) {
-            if (!HC.audio.mediafile.dropEvent) {
-                alert('You can now drag/drop a media file into the animation window');
-
-            } else {
+            if (HC.audio.mediafile.dropEvent) {
                 this.onDrop(HC.audio.mediafile.dropEvent, callback);
                 HC.audio.mediafile.dropEvent = false;
+
+            } else {
+                // now in tutorial
             }
         }
 

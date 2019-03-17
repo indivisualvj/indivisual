@@ -67,12 +67,12 @@ function parseFileMeta(file) {
 }
 
 /**
- * todo HC.numberExtract
+ *
  * @param item
  * @param prefix
  * @returns {*}
  */
-function number_extract(item, prefix) {
+function numberExtract(item, prefix) {
     var regex = new RegExp(prefix + '(\\d+)');
     var i = item.replace(regex, '$1');
     i = parseInt(i);
@@ -85,7 +85,7 @@ function number_extract(item, prefix) {
 }
 
 /**
- *
+ * todo HC.
  * @param value
  * @returns {*}
  */
@@ -107,7 +107,7 @@ function parse(value) {
 }
 
 /**
- *
+ * todo HC.
  * @param args
  * @returns {*}
  */

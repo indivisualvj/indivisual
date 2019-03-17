@@ -56,6 +56,13 @@ HC.Layer.prototype.positionIn2dSpace = function (shape, x, y, z) {
     shape.position().copy(cp);
 };
 
+/**
+ *
+ * @param x
+ * @param y
+ * @param z
+ * @returns {*|HC.Shape.rotation|number|UniformsLib.sprite.rotation|{value}|rotation}
+ */
 HC.Layer.prototype.rotation = function (x, y, z) {
     if (x !== undefined) {
 

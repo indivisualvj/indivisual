@@ -709,20 +709,20 @@ document.addEventListener('DOMContentLoaded', function () {
                     // } else
                     if (item.match(/^sample\d+_load/) && value) {
                         if (IS_MONITOR || display) {
-                            sourceman.loadSample(number_extract(item, 'sample'), value);
+                            sourceman.loadSample(numberExtract(item, 'sample'), value);
                         }
                         this.updateSource(item, false, false, true, false);
 
                     } else if (item.match(/^sample\d+_/)) {
-                        sourceman.updateSample(number_extract(item, 'sample'));
+                        sourceman.updateSample(numberExtract(item, 'sample'));
                         action = true;
 
                     } else if (item.match(/^sequence\d+_/)) {
-                        sourceman.updateSequence(number_extract(item, 'sequence'));
+                        sourceman.updateSequence(numberExtract(item, 'sequence'));
                         action = true;
 
                     } else if (item.match(/display\d+_source/)) {
-                        var display = displayman.getDisplay(number_extract(item, 'display'));
+                        var display = displayman.getDisplay(numberExtract(item, 'display'));
                         sourceman.updateSource(display);
 
                         if (display && display.isFixedSize()) {
@@ -732,7 +732,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         action = true;
 
                     } else if (item.match(/display\d+_sequence/)) {
-                        sourceman.updateSource(displayman.getDisplay(number_extract(item, 'display')));
+                        sourceman.updateSource(displayman.getDisplay(numberExtract(item, 'display')));
                         action = true;
 
                     } else if (item.match(/^lighting_(lights|scale)/)) {
@@ -771,7 +771,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (item.match(/^display\d+_\d/)) { // resize
                 if (value) {
-                    displayman.centerDisplay(number_extract(item, 'display'), value);
+                    displayman.centerDisplay(numberExtract(item, 'display'), value);
                     this.updateDisplay(item, false, display, true);
                 }
                 statics.DisplaySettings.update(item, value);
@@ -812,7 +812,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (item.match(/^display\d+_/)) {
 
-                    var i = number_extract(item, 'display');
+                    var i = numberExtract(item, 'display');
 
                     if (item.match(/_mask$/)) { // mask
                         displayman.updateDisplay(i, 'mask');

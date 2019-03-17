@@ -45,5 +45,48 @@
 
             return mesh;
         }
+    };
+
+    HC.plugins.mesh_material.refractivebackground = class Plugin extends HC.MeshCameraMaterialPlugin {
+        static name = 'refractive (cubetexture background)';
+        static tutorial = {
+            refraction_ratio: {
+                text: 'use material_shininess to change the materials refraction ratio'
+            }
+        };
+
+        apply(geometry, index) {
+
+            // todo change tex on animation.updateSetting
+
+            let material = new THREE.MeshStandardMaterial({envMap: null});
+            let mesh = new THREE.Mesh(geometry, material);
+            mesh.name = this.id(index);
+
+            let id = this.id(index);
+            let inst = this;
+            listener.register('renderer.render', id, function (renderer) {
+                if (inst.layer.isVisible()) {
+                    let plugin = inst.layer.getBackgroundModePlugin();
+                    if (plugin.texture && plugin.texture instanceof THREE.CubeTexture) {
+                        let texture = plugin.texture;
+                        texture.generateMipmaps = true;
+                        texture.minFilter = THREE.LinearMipMapLinearFilter;
+                        texture.mapping = THREE.CubeRefractionMapping;
+                        // texture.needsUpdate = true;
+                        material.envMap = texture;
+                        material.needsUpdate = true;
+
+                        listener.remove('renderer.render', id);
+                    }
+                }
+            });
+
+            return mesh;
+        }
+
+        dispose() {
+            listener.removeLike(this.id());
+        }
     }
 }

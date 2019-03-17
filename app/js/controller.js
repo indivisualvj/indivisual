@@ -546,12 +546,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     } else if (item.match(/_(enabled)/)) {
                         if (!value) { // set record to false if enabled == false
-                            var smp = number_extract(item, 'sample');
+                            var smp = numberExtract(item, 'sample');
                             this.updateSource(getSampleRecordKey(smp), false, true, true, false);
                         }
 
                     } else if (item.match(/_(load)/)) {
-                        this.loadClip(number_extract(item, 'sample'));
+                        this.loadClip(numberExtract(item, 'sample'));
                     }
 
                     this.updateUi(item, false, false);

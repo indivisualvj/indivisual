@@ -15,21 +15,21 @@
             random: false,
             index: 0,
             spacing: {
-                value: 10,
+                value: 16,
                 _type: [1, 500, 1],
                 audio: false,
                 stepwise: false,
                 oscillate: "off"
             },
             size: {
-                value: 4,
+                value: 3,
                 _type: [0.5, 250, 1],
                 audio: false,
                 stepwise: false,
                 oscillate: "off"
             },
             blur: {
-                value: 4,
+                value: 2,
                 _type: [0, 250, 0.01],
                 audio: false,
                 stepwise: false,

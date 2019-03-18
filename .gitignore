@@ -15,6 +15,8 @@ assets/fonts/*
 !assets/fonts/coolvetica.json
 
 assets/images/*
+!assets/images/polished-black-marble-slab.map
+!assets/images/space-blanket-folds.map
 !assets/images/green-apple-leaf,120,1280x720,30.png
 !assets/images/herrsching-forest,120,5036x2636,30.jpg
 !assets/images/indivisual-logo,120,1280x720,30.png

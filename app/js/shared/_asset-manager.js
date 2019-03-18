@@ -174,8 +174,9 @@ var HC = HC || {};
          *
          * @param url
          * @param callback
+         * @param error
          */
-        loadTexture(url, callback) {
+        loadTexture(url, callback, error) {
             if (this.textures[url]) {
                 callback(this.textures[url]);
 
@@ -183,7 +184,7 @@ var HC = HC || {};
                 new THREE.TextureLoader().load(url, function (tex) {
                     inst.textures[url] = tex;
                     callback(tex);
-                });
+                }, false, error);
             }
         }
 
@@ -191,8 +192,9 @@ var HC = HC || {};
          *
          * @param url
          * @param callback
+         * @param error
          */
-        loadCubeTexture(url, callback) {
+        loadCubeTexture(url, callback, error) {
             if (this.textures[url]) {
                 callback(this.textures[url]);
 
@@ -222,9 +224,63 @@ var HC = HC || {};
                     new THREE.CubeTextureLoader().setPath(filePath(url, '')).load(images, function (tex) {
                         inst.textures[url] = tex;
                         callback(tex);
-                    });
+                    }, false, error);
                 });
             }
+        }
+
+        /**
+         *
+         * @param url
+         * @param callback
+         * @param error
+         */
+        loadMaterial(url, callback, error) {
+            let inst = this;
+            this._files(url, function (data) {
+
+                let files = [];
+                for (let k in data) {
+                    files[data[k].name] = data[k].name;
+                }
+
+                let config = files['config.json'];
+                if (config) {
+                    config = filePath(url, config);
+                    inst._load(config, function (data) {
+                        let json = JSON.parse(data.contents);
+                        let keys = Object.keys(json);
+                        let material = {};
+                        let i = 0;
+
+                        let _load = function (key) {
+
+                            if (!key) {
+                                callback(material);
+
+                            } else {
+                                let val = json[key];
+                                if (isString(val)) {
+                                    inst.loadTexture(filePath(url, val), function (tex) {
+                                        material[key] = tex;
+                                        _load(keys[i++]);
+
+                                    }, function (err) {
+                                        material[key] = new THREE.Texture();
+                                        _load(keys[i++]);
+                                    });
+
+                                } else {
+                                    material[key] = val;
+                                    _load(keys[i++]);
+                                }
+                            }
+                        };
+
+                        _load(keys[i++]);
+                    });
+                }
+            });
         }
 
         /**
@@ -235,6 +291,18 @@ var HC = HC || {};
          */
         _files(path, callback) {
             messaging.files(path, callback);
+        }
+
+        /**
+         * todo local reference instead of "messaging" global var?
+         * @param file
+         * @param callback
+         * @private
+         */
+        _load(file, callback) {
+            messaging._emit({action: 'get', file: file, name: file}, function (data) {
+                callback(data);
+            });
         }
     }
 }

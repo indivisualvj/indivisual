@@ -8,9 +8,9 @@ HC.Layer.prototype.shapeColor = function (random, complementary) {
 
     var hex = '';
     var index = Math.floor(this.shapes.length / 2);
-    var map = this.getMaterialMap();
-    if (map && map.image && map.image._color) {
-        hex = map.image._color;
+    var plugin = this.getMaterialMap();
+    if (plugin.map && plugin.map.image && plugin.map.image._color) {
+        hex = plugin.map.image._color;
 
     } else if (this.shapes.length) {
 

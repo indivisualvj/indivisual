@@ -1,0 +1,10 @@
+{
+  "aoMap": "ao.jpg",
+  "bumpMap": "height.jpg",
+  "bumpScale": 50,
+  "emissiveMap": null,
+  "map": "map.jpg",
+  "metalnessMap": "metallic.jpg",
+  "normalMap": "normal.jpg",
+  "roughnessMap": "roughness.jpg"
+}

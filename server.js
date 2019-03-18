@@ -869,7 +869,12 @@ function initGet() {
      *
      */
     app.get('/assets/*', function (req, res) {
-        res.sendFile(_ROOT + req.originalUrl);
+        let url = _ROOT + req.originalUrl;
+        res.sendFile(url, {}, function (err) {
+            if (err) {
+                console.log(url, err);
+            }
+        });
     });
 
     /**

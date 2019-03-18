@@ -23,7 +23,7 @@
 
             this.cameras.add(cubecam);
 
-            let material = new THREE.MeshStandardMaterial({envMap: cubecam.renderTarget.texture});
+            let material = new THREE.MeshPhysicalMaterial({envMap: cubecam.renderTarget.texture});
             let mesh = new THREE.Mesh(geometry, material);
             mesh.name = this.id(index);
 
@@ -55,7 +55,7 @@
 
             // todo change tex on animation.updateSetting
 
-            let material = new THREE.MeshStandardMaterial({envMap: null});
+            let material = new THREE.MeshPhysicalMaterial({envMap: null});
             let mesh = new THREE.Mesh(geometry, material);
             mesh.name = this.id(index);
 

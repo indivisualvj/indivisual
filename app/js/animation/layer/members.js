@@ -12,7 +12,7 @@ HC.Layer.prototype.getMaterialMap = function () {
     } else {
         var plugin = this.getMaterialMapPlugin('texture');
 
-        return plugin.texture;
+        return plugin;
     }
 };
 

@@ -213,6 +213,7 @@ HC.Controller.prototype._addShareListener = function (key, dir, datasource) {
 /**
  *
  * @param submit
+ * @returns {*|dat.gui.GUI}
  */
 HC.Controller.prototype.addShaderControllers = function (submit) {
 
@@ -227,6 +228,8 @@ HC.Controller.prototype.addShaderControllers = function (submit) {
             this.addShaderController(shd, false, sh, key, submit);
         }
     }
+
+    return dir;
 };
 
 /**
@@ -355,7 +358,6 @@ HC.Controller.prototype.addShaderController = function (shd, key, sh, parent, su
 
         if (ctl) {
             ctl._parent = shd;
-            ctl._label = label;
         }
     }
 };

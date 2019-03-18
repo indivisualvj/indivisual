@@ -289,7 +289,7 @@
             this.z(this.z() + z);
         }
 
-        updateMaterial(map, emissive) {
+        updateMaterial(plugin, emissive) {
 
             let settings = this.parent.settings;
             let mat = this.mesh.material;
@@ -317,10 +317,15 @@
                 mat.metalness = settings.material_metalness;
             }
 
-            if (map) {
-                if (mat.map != map) {
-                    mat.map = map;
-                    mat.emissiveMap = map;
+            if (plugin.map) {
+                if (mat.map != plugin.map) {
+                    var keys = Object.getOwnPropertyNames(plugin);
+                    for (let k in keys) {
+                        let key = keys[k];
+                        if (key in mat) {
+                            mat[key] = plugin[key];
+                        }
+                    }
                     mat.needsUpdate = true;
 
                 } else {
@@ -418,39 +423,41 @@
         _updateMaterialMap() {
             let settings = this.parent.settings;
             let mat = this.mesh.material;
-            let repeat = mat.map.repeat;
-            let offset = mat.map.offset;
-            let center = mat.map.center;
+            if (mat.map) {
+                let repeat = mat.map.repeat;
+                let offset = mat.map.offset;
+                let center = mat.map.center;
 
-            if (repeat.x != settings.material_uvx) {
-                repeat.x = 1 / settings.material_uvx;
-            }
-            if (repeat.y != settings.material_uvy) {
-                repeat.y = 1 / settings.material_uvy;
-            }
-            if (settings.material_uvx <= 1) {
-                center.x = .5;
-                let uvofx;
-                if (offset.x != -(uvofx = settings.material_uvofx - .5)) {
-                    offset.x = -uvofx;
+                if (repeat.x != settings.material_uvx) {
+                    repeat.x = 1 / settings.material_uvx;
                 }
+                if (repeat.y != settings.material_uvy) {
+                    repeat.y = 1 / settings.material_uvy;
+                }
+                if (settings.material_uvx <= 1) {
+                    center.x = .5;
+                    let uvofx;
+                    if (offset.x != -(uvofx = settings.material_uvofx - .5)) {
+                        offset.x = -uvofx;
+                    }
 
-            } else {
-                offset.x = 0;
-                if (center.x != settings.material_uvofx) {
-                    center.x = 1 - settings.material_uvofx;
+                } else {
+                    offset.x = 0;
+                    if (center.x != settings.material_uvofx) {
+                        center.x = 1 - settings.material_uvofx;
+                    }
                 }
-            }
-            if (settings.material_uvy <= 1) {
-                center.y = .5;
-                let uvofy;
-                if (offset.y != (uvofy = settings.material_uvofy - .5)) {
-                    offset.y = uvofy;
-                }
-            } else {
-                offset.y = 0;
-                if (center.y != settings.material_uvofy) {
-                    center.y = settings.material_uvofy;
+                if (settings.material_uvy <= 1) {
+                    center.y = .5;
+                    let uvofy;
+                    if (offset.y != (uvofy = settings.material_uvofy - .5)) {
+                        offset.y = uvofy;
+                    }
+                } else {
+                    offset.y = 0;
+                    if (center.y != settings.material_uvofy) {
+                        center.y = settings.material_uvofy;
+                    }
                 }
             }
         }

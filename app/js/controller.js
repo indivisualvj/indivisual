@@ -94,16 +94,19 @@ document.addEventListener('DOMContentLoaded', function () {
                     statics.AnimationTypes,
                     function (value) {
                         controller.updateSetting(statics.ControlSettings.layer, this.property, value, true, true, false);
-                        controller.updateValuesChanged(this.__gui);
                     }, true
                 );
                 controller.addShaderControllers(function (v) {
-                    controller.updateSetting(statics.ControlSettings.layer, 'shaders',
-                        statics.AnimationSettings.shaders, true, true, false
+                    controller.updateSetting(
+                        statics.ControlSettings.layer,
+                        'shaders',
+                        statics.AnimationSettings.shaders,
+                        true,
+                        true,
+                        false
                     );
 
-                    controller.updateValuesChanged(this.__gui);
-                    HC.log(this.__gui.name + '/' + this.property, v);
+                    // HC.log(this.__gui.name + '/' + this.property, v); fixme
                 });
 
                 explorer = new HC.Explorer();

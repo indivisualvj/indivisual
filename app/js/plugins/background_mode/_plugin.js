@@ -6,27 +6,22 @@ HC.plugins.background_mode = HC.plugins.background_mode || {};
 
         after() {
             if (this.texture) {
+                let texture = this.texture.texture || this.texture;
                 let wraps = THREE[this.settings.background_wraps];
-                if (this.texture.wrapS != wraps) {
-                    this.texture.wrapS = wraps;
-                    this.texture.needsUpdate = true;
+                if (texture.wrapS != wraps) {
+                    texture.wrapS = wraps;
+                    texture.needsUpdate = true;
                 }
                 let wrapt = THREE[this.settings.background_wrapt];
-                if (this.texture.wrapT != wrapt) {
-                    this.texture.wrapT = wrapt;
-                    this.texture.needsUpdate = true;
+                if (texture.wrapT != wrapt) {
+                    texture.wrapT = wrapt;
+                    texture.needsUpdate = true;
                 }
 
-                this.texture.repeat.set(this.settings.background_repeatx, this.settings.background_repeaty);
-                this.texture.offset.set(-this.settings.background_offsetx, this.settings.background_offsety);
-                this.texture.rotation = RAD * this.settings.background_rotation;
-
-                if (this.texture.center) {
-                    this.texture.center.set(this.settings.background_centerx, this.settings.background_centery);
-
-                } else if (this.texture.texture) {
-                    this.texture.texture.center.set(this.settings.background_centerx, this.settings.background_centery);
-                }
+                texture.repeat.set(this.settings.background_repeatx, this.settings.background_repeaty);
+                texture.offset.set(-this.settings.background_offsetx, this.settings.background_offsety);
+                texture.rotation = RAD * this.settings.background_rotation;
+                texture.center.set(this.settings.background_centerx, this.settings.background_centery);
             }
         }
 

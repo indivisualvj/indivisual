@@ -68,39 +68,42 @@ document.addEventListener('DOMContentLoaded', function () {
                     statics.ControlSettings,
                     statics.ControlValues,
                     statics.ControlTypes,
-                    function (ksub, value) {
-                        controller.updateControl(ksub, value, true, true, false);
+                    function (value) {
+                        controller.updateControl(this.property, value, true, true, false);
                     }
                 );
                 controller.addControllers(statics.DisplayController,
                     statics.DisplaySettings,
                     statics.DisplayValues,
                     statics.DisplayTypes,
-                    function (ksub, value) {
-                        controller.updateDisplay(ksub, value, true, true, false);
+                    function (value) {
+                        controller.updateDisplay(this.property, value, true, true, false);
                     }
                 );
                 controller.addControllers(statics.SourceController,
                     statics.SourceSettings,
                     statics.SourceValues,
                     statics.SourceTypes,
-                    function (ksub, value) {
-                        controller.updateSource(ksub, value, true, true, false);
+                    function (value) {
+                        controller.updateSource(this.property, value, true, true, false);
                     }
                 );
                 controller.addControllers(statics.AnimationController,
                     statics.AnimationSettings,
                     statics.AnimationValues,
                     statics.AnimationTypes,
-                    function (ksub, value) {
-                        controller.updateSetting(statics.ControlSettings.layer, ksub, value, true, true, false);
+                    function (value) {
+                        controller.updateSetting(statics.ControlSettings.layer, this.property, value, true, true, false);
+                        controller.updateValuesChanged(this.__gui);
                     }, true
                 );
                 controller.addShaderControllers(function (v) {
                     controller.updateSetting(statics.ControlSettings.layer, 'shaders',
                         statics.AnimationSettings.shaders, true, true, false
                     );
-                    HC.log(this.parent + '/' + this.label, v);
+
+                    controller.updateValuesChanged(this.__gui);
+                    HC.log(this.__gui.name + '/' + this.property, v);
                 });
 
                 explorer = new HC.Explorer();

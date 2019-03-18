@@ -434,6 +434,26 @@ pre .orange {
     color: #2fa1d6;
 }
 
+.folder ul[data-changed] > .title {
+    color: #e61d5f !important;
+}
+
+[data-changed] > div > .c .slider .slider-fg {
+    background: #e61d5f !important;
+}
+[data-changed] > div > .c .slider:hover .slider-fg {
+    background: #e61d5f !important;
+}
+[data-changed] > div > .c input[type=text] {
+    color: #e61d5f !important;
+}
+[data-changed] > div > .c > select {
+    color: #e61d5f !important;
+}
+[data-changed] > div > .property-name {
+    color: #e61d5f !important;
+}
+
 .dg.a {
     min-width: 435px;
 }

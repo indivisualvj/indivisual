@@ -223,7 +223,8 @@ HC.Controller.prototype.addShaderControllers = function (submit) {
     for (var key in statics.ShaderSettings.initial) {
         var sh = statics.ShaderSettings[key];
 
-        if (sh && key.indexOf('_') != 0) { // todo no adding of _... ? woot
+        // if (sh && key.indexOf('_') != 0) {
+        if (sh) {
             var shd = dir.addFolder(key);
             this.addShaderController(shd, false, sh, key, submit);
         }
@@ -551,7 +552,7 @@ HC.Controller.prototype.scrollToControl = function (control) {
  * @param control
  * @param show
  */
-HC.Controller.prototype.updateUi = function (item, control, show) {
+HC.Controller.prototype.updateUi = function (item, control) {
 
     if (!control) {
         control = this.gui;
@@ -563,7 +564,7 @@ HC.Controller.prototype.updateUi = function (item, control, show) {
     for (var key in flds) {
         var fld = flds[key];
 
-        this.updateUi(item, fld, false);
+        this.updateUi(item, fld);
         this.updateValuesChanged(fld);
     }
 
@@ -577,18 +578,20 @@ HC.Controller.prototype.updateUi = function (item, control, show) {
             ctrl.updateDisplay();
         }
     }
+};
 
-    if (show) { // todo showControl? / updateDisplayControls?
-        for (var i = 0; i < statics.DisplayValues.display.length; i++) {
-            var n = 'display' + i;
-            var v = statics.DisplaySettings[n + '_visible'];
-            this.showControls(n, 'g_sources', v);
+/**
+ *
+ */
+HC.Controller.prototype.showDisplayControls = function () {
+    for (var i = 0; i < statics.DisplayValues.display.length; i++) {
+        var n = 'display' + i;
+        var v = statics.DisplaySettings[n + '_visible'];
+        this.showControls(n, 'g_sources', v);
 
-            n = '_display' + i;
-            this.showControls(n, 'g_displays', v);
-        }
+        n = '_display' + i;
+        this.showControls(n, 'g_displays', v);
     }
-
 };
 
 

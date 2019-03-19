@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     var value = data[k];
                     sm.update(layer, k, value);
                 }
-                this.updateUi(false, false, false);
+                this.updateUi();
 
             } else {
                 for (var k in data) {
@@ -318,7 +318,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     var value = data[k];
                     statics.ControlSettings.update(k, value);
                 }
-                this.updateUi(false, false, true);
+                this.updateUi();
+                this.showDisplayControls();
 
             } else {
                 for (var k in data) {
@@ -342,7 +343,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     var value = data[k];
                     statics.DisplaySettings.update(k, value);
                 }
-                this.updateUi(false, false, true);
+                this.updateUi();
+                this.showDisplayControls();
 
             } else {
                 for (var k in data) {
@@ -366,7 +368,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     var value = data[k];
                     statics.SourceSettings.update(k, value);
                 }
-                this.updateUi(false, false, true);
+                this.updateUi();
+                this.showDisplayControls();
 
             } else {
                 for (var k in data) {
@@ -388,7 +391,6 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateSetting: function (layer, item, value, display, forward, force) {
 
-            // todo disable explain when updating from tutorial
             if (typeof value != 'object') {
                 HC.log(item, value);
                 this.explainPlugin(item, value);
@@ -409,7 +411,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 if (display !== false) {
-                    this.updateUi(item, false, false);
+                    this.updateUi(item);
                     explorer.setChanged(statics.ControlSettings.layer, true);
                 }
             }
@@ -473,7 +475,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         this.updateData();
                     }
 
-                    this.updateUi(item, false, false);
+                    this.updateUi(item);
                 }
 
                 if (item == 'session' && value != _HASH) {
@@ -504,7 +506,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 value = statics.DisplaySettings.update(item, value);
 
                 if (item.match(/display\d+_visible/)) {
-                    var show = true;
+                    this.showDisplayControls();
                 }
 
                 if (forward) {
@@ -514,7 +516,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 if (display !== false) {
-                    this.updateUi(item, false, show);
+                    this.updateUi(item);
                 }
 
             }
@@ -560,7 +562,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         this.loadClip(numberExtract(item, 'sample'));
                     }
 
-                    this.updateUi(item, false, false);
+                    this.updateUi(item);
                 }
 
             }

@@ -1,6 +1,6 @@
 {"name":0,
 "uuid":"",
-"tutorial":"",
+"tutorial":{},
 "oscillate":"off",
 "audio_thickness":0.8,
 "audio_usewaveform":false,

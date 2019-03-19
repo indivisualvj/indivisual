@@ -20,7 +20,6 @@
                 this.target1 = new THREE.WebGLRenderTarget(edge, edge);
                 this.target2 = this.target1.clone();
 
-
                 let geo = new THREE.SphereBufferGeometry(res.length() * 2, 16, 16);
                 geo.rotateY(Math.PI / 2);
 

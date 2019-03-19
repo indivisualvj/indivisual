@@ -14,12 +14,15 @@
                 let geo = new THREE.SphereBufferGeometry(res.length() * 2, 16, 16);
                 geo.rotateY(Math.PI / 2);
                 let mat = new THREE.MeshStandardMaterial({
+                    // todo unconfigurable materials suck.
+                    // todo simple and complex materials for background materials too
                     color: color,
-                    side: THREE.DoubleSide,
-                    // transparent: true
+                    side: THREE.DoubleSide
                 });
                 let mesh = new THREE.Mesh(geo, mat);
                 mesh.receiveShadow = true;
+
+
 
                 this.layer.setBackground(mesh);
 

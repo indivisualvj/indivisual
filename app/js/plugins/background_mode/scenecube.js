@@ -23,7 +23,6 @@
                 res.multiplyScalar(2.5);
                 let geo = new THREE.BoxBufferGeometry(res.x, res.y, res.x);
 
-
                 this.material = new THREE.MeshBasicMaterial({
                     color: color,
                     side: THREE.DoubleSide,

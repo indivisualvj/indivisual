@@ -30,12 +30,13 @@ HC.plugins.background_mode = HC.plugins.background_mode || {};
         }
 
         /**
+         * todo geht das nicht mit listener.reg(anim.updateSetting)??
          * Manipulate the static background property to have a BackgroundMode wide status
          *
          * @param background
          * @returns {boolean}
          */
-        current(background) { // fixme switchlayer and the background_modes ...
+        current(background) {
             if (background !== undefined) {
                 // manipulate prototype instead of direct to avoid having to call HC.BackgroundModePlugin.current on the other hand.
                 HC.BackgroundModePlugin.background = background;

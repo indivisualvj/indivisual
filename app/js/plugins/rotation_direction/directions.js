@@ -38,13 +38,9 @@
 {
     HC.plugins.rotation_direction.leftorright = class Plugin extends HC.RotationDirectionPlugin {
         static name = 'left | right';
-
-        constructor() {
-            super();
-            this.shared = {
-                dir: 0
-            };
-        }
+        shared = {
+            dir: 0
+        };
 
         apply(shape) {
             if (this.isFirstShape(shape)) {

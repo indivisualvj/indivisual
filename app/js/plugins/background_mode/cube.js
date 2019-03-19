@@ -1,3 +1,6 @@
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
 {
     HC.plugins.background_mode.cube = class Plugin extends HC.BackgroundModePlugin {
 
@@ -9,10 +12,12 @@
                 let res = this.layer.resolution().clone();
                 res.multiplyScalar(2.5);
                 let geo = new THREE.BoxBufferGeometry(res.x, res.y, res.x);
-                let mat = new THREE.MeshStandardMaterial({ // todo unconfigurable materials suck.
+
+                let mat = new THREE.MeshStandardMaterial({
+                    // todo unconfigurable materials suck.
+                    // todo simple and complex materials for background materials too
                     color: color,
-                    side: THREE.DoubleSide,
-                    // transparent: true
+                    side: THREE.DoubleSide
                 });
                 let mesh = new THREE.Mesh(geo, mat);
                 mesh.scale.multiplyScalar(this.settings.background_volume);
@@ -22,7 +27,7 @@
                 this.layer.setBackground(mesh);
 
                 let file = assetman.getImage(this.settings.background_input);
-                if (file) { // todo simple and complex materials for background materials too
+                if (file) {
                     let inst = this;
                     assetman.loadTexture(filePath(IMAGE_DIR, file), function (tex) {
                         tex.wrapS = THREE.RepeatWrapping;
@@ -30,6 +35,7 @@
                         mat.map = tex;
                         mat.emissiveMap = tex;
                         mat.needsUpdate = true;
+
                         inst.texture = tex;
                     });
                 }

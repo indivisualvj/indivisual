@@ -54,7 +54,7 @@
             this.analyser = context.createAnalyser();
             this.analyser.smoothingTimeConstant = .6;
             this.analyser.fftSize = 1024;
-            binCount = this.analyser.frequencyBinCount - 64; // fixes: last volumes are always zero bug
+            binCount = this.analyser.frequencyBinCount / 2; // (... / 2) fixes: last volumes are always zero bug
             this.volumes = new Array(binCount).fill(0);
 
             freqData = new Uint8Array(binCount);

@@ -37,18 +37,6 @@
 
         /**
          *
-         * @param v
-         */
-        // this.smoothingTimeConstant = function (v) {
-        //     if (v !== undefined && this.analyser && v) {
-        //         this.analyser.smoothingTimeConstant = v;
-        //     }
-        //
-        //     return this.analyser ? this.analyser.smoothingTimeConstant : false;
-        // };
-
-        /**
-         *
          */
         this.createAnalyser = function (context) {
             this.analyser = context.createAnalyser();

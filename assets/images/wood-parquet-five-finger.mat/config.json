@@ -2,9 +2,8 @@
   "map": "map.jpg",
   "aoMap": "ao.jpg",
   "displacementMap": "height.jpg",
-  "displacementScale": 10,
+  "displacementScale": 1,
   "displacementBias": 1,
-  "metalnessMap": "metallic.jpg",
   "normalMap": "normal.jpg",
   "roughnessMap": "roughness.jpg"
 }

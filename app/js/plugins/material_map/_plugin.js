@@ -8,6 +8,8 @@ HC.plugins.material_map = HC.plugins.material_map || {};
         bumpMap;
         bumpScale;
         displacementMap;
+        displacementScale;
+        displacementBias;
         emissiveMap;
         lightMap;
         metalnessMap;

@@ -32,6 +32,7 @@
                             if (!inst.emissiveMap) {
                                 inst.emissiveMap = inst.map;
                             }
+
                             inst.file = file;
                             inst.loading = false;
 

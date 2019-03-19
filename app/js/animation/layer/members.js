@@ -18,20 +18,6 @@ HC.Layer.prototype.getMaterialMap = function () {
 
 /**
  *
- * @returns {Vector3}
- */
-HC.Layer.prototype.lookAtVector = function () {
-
-    var v = this.cameraDefaultDistance();
-    return new THREE.Vector3(
-        v * this.settings.shape_lookat_centerx,
-        v * this.settings.shape_lookat_centery,
-        v * this.settings.shape_lookat_centerz
-    );
-};
-
-/**
- *
  * @param shape
  * @param x
  * @param y

@@ -20,7 +20,7 @@
                     this.loading = true;
 
                     // complex
-                    if (file.match(/.+\.map/i)) {
+                    if (file.match(/.+\.mat/i)) {
                         assetman.loadMaterial(path, function (mat) {
                             var keys = Object.getOwnPropertyNames(inst);
                             for (let k in keys) {
@@ -28,6 +28,9 @@
                                 if (key in mat) {
                                     inst[key] = mat[key];
                                 }
+                            }
+                            if (!inst.emissiveMap) {
+                                inst.emissiveMap = inst.map;
                             }
                             inst.file = file;
                             inst.loading = false;
@@ -39,6 +42,7 @@
                         assetman.loadTexture(path, function (tex) {
                             inst.file = file;
                             inst.map = tex;
+                            inst.emissiveMap = tex;
                             inst.loading = false;
 
                         }, this.reset);

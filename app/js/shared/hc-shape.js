@@ -322,8 +322,9 @@
                     var keys = Object.getOwnPropertyNames(plugin);
                     for (let k in keys) {
                         let key = keys[k];
-                        if (key in mat) {
-                            mat[key] = plugin[key];
+                        let val = plugin[key];
+                        if (key in mat && val !== undefined) {
+                            mat[key] = val;
                         }
                     }
                     mat.needsUpdate = true;

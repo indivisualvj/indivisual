@@ -6,16 +6,20 @@ HC.plugins.background_mode = HC.plugins.background_mode || {};
 
         after() {
             if (this.texture) {
-                let texture = this.texture.texture || this.texture;
+                let texture = this.texture;
                 let wraps = THREE[this.settings.background_wraps];
                 if (texture.wrapS != wraps) {
                     texture.wrapS = wraps;
-                    texture.needsUpdate = true;
+                    if (texture.image) {
+                        texture.needsUpdate = true;
+                    }
                 }
                 let wrapt = THREE[this.settings.background_wrapt];
                 if (texture.wrapT != wrapt) {
                     texture.wrapT = wrapt;
-                    texture.needsUpdate = true;
+                    if (texture.image) {
+                        texture.needsUpdate = true;
+                    }
                 }
 
                 texture.repeat.set(this.settings.background_repeatx, this.settings.background_repeaty);

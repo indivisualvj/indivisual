@@ -9,7 +9,7 @@
                 let res = this.layer.resolution().clone();
                 res.multiplyScalar(2.5);
                 let geo = new THREE.BoxBufferGeometry(res.x, res.y, res.x);
-                let mat = new THREE.MeshStandardMaterial({
+                let mat = new THREE.MeshStandardMaterial({ // todo unconfigurable materials suck.
                     color: color,
                     side: THREE.DoubleSide,
                     // transparent: true
@@ -22,7 +22,7 @@
                 this.layer.setBackground(mesh);
 
                 let file = assetman.getImage(this.settings.background_input);
-                if (file) {
+                if (file) { // todo simple and complex materials for background materials too
                     let inst = this;
                     assetman.loadTexture(filePath(IMAGE_DIR, file), function (tex) {
                         tex.wrapS = THREE.RepeatWrapping;

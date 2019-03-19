@@ -263,10 +263,11 @@ var HC = HC || {};
                                 if (isString(val)) {
                                     inst.loadTexture(filePath(url, val), function (tex) {
                                         material[key] = tex;
+                                        tex.name = val;
                                         _load(keys[i++]);
 
                                     }, function (err) {
-                                        material[key] = new THREE.Texture();
+                                        material[key] = undefined;
                                         _load(keys[i++]);
                                     });
 

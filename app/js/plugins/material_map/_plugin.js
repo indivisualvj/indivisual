@@ -6,6 +6,7 @@ HC.plugins.material_map = HC.plugins.material_map || {};
         alphaMap;
         aoMap;
         bumpMap;
+        bumpScale;
         displacementMap;
         emissiveMap;
         lightMap;
@@ -17,7 +18,7 @@ HC.plugins.material_map = HC.plugins.material_map || {};
             this.dispose();
             var keys = Object.getOwnPropertyNames(this);
             for (let k in keys) {
-                this[keys[k]] = false;
+                this[keys[k]] = undefined;
             }
         }
 

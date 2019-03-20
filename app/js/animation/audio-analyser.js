@@ -11,7 +11,7 @@
     HC.AudioAnalyser = function () {
         this.peakBPM = 0;
         this.peakReliable = false;
-        this.peakCount = 0;
+        // this.peakCount = 0;
         this.peak = false;
         this.firstPeak = 0;
         this.volumes = false;
@@ -31,21 +31,9 @@
 
         var freqData;
         var domainData;
-        var binCount; //1024
 
+        this.binCount; //1024
         this.analyser;
-
-        /**
-         *
-         * @param v
-         */
-        // this.smoothingTimeConstant = function (v) {
-        //     if (v !== undefined && this.analyser && v) {
-        //         this.analyser.smoothingTimeConstant = v;
-        //     }
-        //
-        //     return this.analyser ? this.analyser.smoothingTimeConstant : false;
-        // };
 
         /**
          *
@@ -54,11 +42,11 @@
             this.analyser = context.createAnalyser();
             this.analyser.smoothingTimeConstant = .6;
             this.analyser.fftSize = 1024;
-            binCount = this.analyser.frequencyBinCount - 64; // fixes: last volumes are always zero bug
-            this.volumes = new Array(binCount).fill(0);
+            this.binCount = this.analyser.frequencyBinCount / 2; // (... / 2) fixes: last volumes are always zero bug
+            this.volumes = new Array(this.binCount).fill(0);
 
-            freqData = new Uint8Array(binCount);
-            domainData = new Uint8Array(binCount);
+            freqData = new Uint8Array(this.binCount);
+            domainData = new Uint8Array(this.binCount);
 
             return this.analyser;
         };
@@ -81,7 +69,7 @@
             var values = 0;
 
             // get all the frequency amplitudes
-            for (var i = 0; i < binCount; i++) {
+            for (var i = 0; i < this.binCount; i++) {
 
                 var val = freqData[i] / 256;
                 var fbdv = useWaveform ? (domainData[i] / 256) : val;
@@ -99,7 +87,7 @@
                 }
             }
 
-            this.volume = (values / binCount) * config.volume;
+            this.volume = (values / this.binCount) * config.volume;
 
             this._beatRecognition(config);
 
@@ -137,11 +125,11 @@
 
             if (stepNow > peakThreshold && this.volume > 0.1 && diff > config.minDiff) {
                 this.peak = true;
-                this.peakCount++;
+                // this.peakCount++;
 
-                if (this.peakCount > config.resetPeakCountAfter) {
-                    this.peakCount = 0;
-                }
+                // if (this.peakCount > config.resetPeakCountAfter) {
+                //     this.peakCount = 0;
+                // }
 
                 // add peakData
                 var i = peakData.length;
@@ -238,7 +226,7 @@
             this.peakBPM = 0;
             this.peakReliable = false;
             this.firstPeak = 0;
-            this.volumes = new Array(binCount).fill(0).map(Math.random);
+            this.volumes = new Array(this.binCount).fill(0).map(Math.random);
             lastVolume = 0;
             peakData = [];
             peakThreshold = 1.2;

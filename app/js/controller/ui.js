@@ -153,14 +153,12 @@ HC.Controller.prototype._addControl = function (options, settings, values, types
         if (ctl instanceof dat.controllers.NumberControllerBox
             || ctl instanceof dat.controllers.NumberControllerSlider
         ) {
-            ctl.onChange(function (value) {
-                submit(this.property, value);
-            });
+            ctl.onChange(submit);
         } else {
-            ctl.onFinishChange(function (value) {
-                submit(this.property, value);
-            });
+            ctl.onFinishChange(submit);
         }
+
+        ctl._parent = dir;
     }
 
     return ctl;
@@ -215,6 +213,7 @@ HC.Controller.prototype._addShareListener = function (key, dir, datasource) {
 /**
  *
  * @param submit
+ * @returns {*|dat.gui.GUI}
  */
 HC.Controller.prototype.addShaderControllers = function (submit) {
 
@@ -224,11 +223,14 @@ HC.Controller.prototype.addShaderControllers = function (submit) {
     for (var key in statics.ShaderSettings.initial) {
         var sh = statics.ShaderSettings[key];
 
-        if (sh && key.indexOf('_') != 0) {
+        // if (sh && key.indexOf('_') != 0) {
+        if (sh) {
             var shd = dir.addFolder(key);
             this.addShaderController(shd, false, sh, key, submit);
         }
     }
+
+    return dir;
 };
 
 /**
@@ -301,51 +303,51 @@ HC.Controller.prototype.addShaderController = function (shd, key, sh, parent, su
 
                 if (a !== null) {
                     var _label = skey + '_audio';
-                    var _ctl = shd.add(shs, 'audio')
+                    ctl = shd.add(shs, 'audio')
                         .name(_label)
                         .onFinishChange(submit);
-                    _ctl.parent = parent;
-                    _ctl.label = _label;
+                    ctl.parent = parent;
+                    ctl.label = _label;
 
                     if (_label) {
                         var suffix = _label.replace(/^.+_/, '_');
                         if (suffix in statics.ShaderTypes) {
                             var bnd = statics.ShaderTypes[suffix];
-                            _ctl.__li.setAttribute('data-class', bnd[0]);
+                            ctl.__li.setAttribute('data-class', bnd[0]);
                         }
                     }
                 }
 
                 if (s !== null) {
                     var _label = skey + '_stepwise';
-                    var _ctl = shd.add(shs, 'stepwise')
+                    ctl = shd.add(shs, 'stepwise')
                         .name(_label)
                         .onFinishChange(submit);
-                    _ctl.parent = parent;
-                    _ctl.label = _label;
+                    ctl.parent = parent;
+                    ctl.label = _label;
 
                     if (_label) {
                         var suffix = _label.replace(/^.+_/, '_');
                         if (suffix in statics.ShaderTypes) {
                             var bnd = statics.ShaderTypes[suffix];
-                            _ctl.__li.setAttribute('data-class', bnd[0]);
+                            ctl.__li.setAttribute('data-class', bnd[0]);
                         }
                     }
                 }
 
                 if (o !== null) {
                     var _label = skey + '_oscillate';
-                    var _ctl = shd.add(shs, 'oscillate', statics.ShaderValues.oscillate)
+                    ctl = shd.add(shs, 'oscillate', statics.ShaderValues.oscillate)
                         .name(_label)
                         .onFinishChange(submit);
-                    _ctl.parent = parent;
-                    _ctl.label = _label;
+                    ctl.parent = parent;
+                    ctl.label = _label;
 
                     if (_label) {
                         var suffix = _label.replace(/^.+_/, '_');
                         if (suffix in statics.ShaderTypes) {
                             var bnd = statics.ShaderTypes[suffix];
-                            _ctl.__li.setAttribute('data-class', bnd[0]);
+                            ctl.__li.setAttribute('data-class', bnd[0]);
                         }
                     }
                 }
@@ -356,8 +358,7 @@ HC.Controller.prototype.addShaderController = function (shd, key, sh, parent, su
         }
 
         if (ctl) {
-            ctl.parent = parent;
-            ctl.label = label;
+            ctl._parent = shd;
         }
     }
 };
@@ -551,7 +552,7 @@ HC.Controller.prototype.scrollToControl = function (control) {
  * @param control
  * @param show
  */
-HC.Controller.prototype.updateUi = function (item, control, show) {
+HC.Controller.prototype.updateUi = function (item, control) {
 
     if (!control) {
         control = this.gui;
@@ -563,29 +564,78 @@ HC.Controller.prototype.updateUi = function (item, control, show) {
     for (var key in flds) {
         var fld = flds[key];
 
-        this.updateUi(item, fld, false);
+        this.updateUi(item, fld);
+        this.updateValuesChanged(fld);
     }
 
     var ctrls = control.__controllers || [];
 
     for (var key in ctrls) {
         var ctrl = ctrls[key];
-        if (!item || ctrl.__li.getAttribute('data-id') == item) {
+        var property = ctrl.property;
+
+        if (!item || property == item) {
             ctrl.updateDisplay();
         }
     }
+};
 
-    if (show) {
-        for (var i = 0; i < statics.DisplayValues.display.length; i++) {
-            var n = 'display' + i;
-            var v = statics.DisplaySettings[n + '_visible'];
-            this.showControls(n, 'g_sources', v);
+/**
+ *
+ */
+HC.Controller.prototype.showDisplayControls = function () {
+    for (var i = 0; i < statics.DisplayValues.display.length; i++) {
+        var n = 'display' + i;
+        var v = statics.DisplaySettings[n + '_visible'];
+        this.showControls(n, 'g_sources', v);
 
-            n = '_display' + i;
-            this.showControls(n, 'g_displays', v);
+        n = '_display' + i;
+        this.showControls(n, 'g_displays', v);
+    }
+};
+
+
+/**
+ *
+ * @param folder
+ */
+HC.Controller.prototype.updateValuesChanged = function (folder) {
+
+    if (!folder) {
+        folder = this.gui;
+    }
+
+    var flds = folder.__folders || [];
+
+    for (var key in flds) {
+        var fld = flds[key];
+
+        this.updateValuesChanged(fld);
+    }
+
+    var ctrls = folder.__controllers || [];
+    var changed = false;
+
+    for (var key in ctrls) {
+        var ctrl = ctrls[key];
+        var li = ctrl.__li;
+
+        if (ctrl.isModified()) {
+            li.setAttribute('data-changed', true);
+            changed = true;
+
+        } else {
+            li.removeAttribute('data-changed');
         }
     }
 
+    var ul = folder.__ul || folder.__gui.__ul;
+    if (ul && changed) {
+        ul.setAttribute('data-changed', true);
+
+    } else {
+        ul.removeAttribute('data-changed');
+    }
 };
 
 /**

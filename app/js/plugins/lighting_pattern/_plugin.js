@@ -2,7 +2,7 @@ HC.plugins.lighting_pattern = HC.plugins.lighting_pattern || {};
 {
     HC.LightingPatternPlugin = class Plugin extends HC.AnimationPlugin {
         centerVector() {
-            let v = this.layer.cameraDefaultDistance(.25);
+            let v = this.layer.cameraDefaultDistance();
             return new THREE.Vector3(
                 v * this.settings.lighting_pattern_centerx,
                 v * this.settings.lighting_pattern_centery,

@@ -17,13 +17,13 @@
 
         apply(geometry, index) {
 
-            let cubecam = new THREE.CubeCamera(1, 100000, 256);
+            let cubecam = new THREE.CubeCamera(1, 100000, 256); // todo dispose cam and texture
             cubecam.renderTarget.texture.generateMipmaps = true;
             cubecam.renderTarget.texture.minFilter = THREE.LinearMipMapLinearFilter;
 
             this.cameras.add(cubecam);
 
-            let material = new THREE.MeshStandardMaterial({envMap: cubecam.renderTarget.texture});
+            let material = new THREE.MeshPhysicalMaterial({envMap: cubecam.renderTarget.texture});
             let mesh = new THREE.Mesh(geometry, material);
             mesh.name = this.id(index);
 
@@ -42,47 +42,4 @@
             return mesh;
         }
     };
-
-    HC.plugins.mesh_material.reflectivebackground = class Plugin extends HC.MeshCameraMaterialPlugin {
-        static name = 'reflective (cubetexture background)';
-        static tutorial = {
-            refraction_ratio: {
-                text: 'use material_shininess to change the materials refraction ratio'
-            }
-        };
-
-        apply(geometry, index) {
-
-            // todo change tex on animation.updateSetting
-
-            let material = new THREE.MeshStandardMaterial({envMap: null});
-            let mesh = new THREE.Mesh(geometry, material);
-            mesh.name = this.id(index);
-
-            let id = this.id(index);
-            let inst = this;
-            listener.register('renderer.render', id, function (renderer) {
-                if (inst.layer.isVisible()) {
-                    let plugin = inst.layer.getBackgroundModePlugin();
-                    if (plugin.texture && plugin.texture instanceof THREE.CubeTexture) {
-                        let texture = plugin.texture; // todo what about the shared principle like in these other plugins
-                        texture.generateMipmaps = true;
-                        texture.minFilter = THREE.LinearMipMapLinearFilter;
-                        texture.mapping = THREE.CubeReflectionMapping;
-                        // texture.needsUpdate = true;
-                        material.envMap = texture;
-                        material.needsUpdate = true;
-
-                        listener.remove('renderer.render', id);
-                    }
-                }
-            });
-
-            return mesh;
-        }
-
-        dispose() {
-            listener.removeLike(this.id());
-        }
-    }
 }

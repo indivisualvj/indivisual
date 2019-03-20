@@ -1,5 +1,5 @@
 /**
- * todo HC.
+ *
  * @param sample
  * @param image
  * @param progress
@@ -46,7 +46,7 @@ function renderSample(sample, image, progress, color, hook) {
 }
 
 /**
- * todo HC.
+ *
  * @param sample
  * @param name
  * @param resolution

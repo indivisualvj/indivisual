@@ -25,16 +25,7 @@ layer:
   - 19
   - 20
 
-shuffle_mode:
-  - layers (forward)
-  - layers (reversed)
-  - layers (random)
-
-#filter_type:
-#  off: off
-#  lowpass: lowpass
-#  highpass: highpass
-#  bandpass: bandpass
+shuffle_mode: {}
 
 _keys:
   g_controls:

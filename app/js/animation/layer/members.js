@@ -12,22 +12,8 @@ HC.Layer.prototype.getMaterialMap = function () {
     } else {
         var plugin = this.getMaterialMapPlugin('texture');
 
-        return plugin.texture;
+        return plugin;
     }
-};
-
-/**
- *
- * @returns {Vector3}
- */
-HC.Layer.prototype.lookAtVector = function () {
-
-    var v = this.cameraDefaultDistance();
-    return new THREE.Vector3(
-        v * this.settings.shape_lookat_centerx,
-        v * this.settings.shape_lookat_centery,
-        v * this.settings.shape_lookat_centerz
-    );
 };
 
 /**

@@ -6,11 +6,11 @@
             let image = seq.current(this.layer.renderer.current(), true);
 
             if (image) {
-                if (!this.texture) {
+                if (!this.map) {
                     this.initTexture(image);
                 }
 
-                let map = this.texture;
+                let map = this.map;
                 this.updateTexture(map, image);
 
                 return image._color;
@@ -53,7 +53,8 @@
             canvas._clipY = (image.height - edge) / 2;
 
             let tex = new THREE.CanvasTexture(canvas);
-            this.texture = tex;
+            this.map = tex;
+            this.emissiveMap = tex;
         }
     }
 }

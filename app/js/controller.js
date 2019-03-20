@@ -68,39 +68,45 @@ document.addEventListener('DOMContentLoaded', function () {
                     statics.ControlSettings,
                     statics.ControlValues,
                     statics.ControlTypes,
-                    function (ksub, value) {
-                        controller.updateControl(ksub, value, true, true, false);
+                    function (value) {
+                        controller.updateControl(this.property, value, true, true, false);
                     }
                 );
                 controller.addControllers(statics.DisplayController,
                     statics.DisplaySettings,
                     statics.DisplayValues,
                     statics.DisplayTypes,
-                    function (ksub, value) {
-                        controller.updateDisplay(ksub, value, true, true, false);
+                    function (value) {
+                        controller.updateDisplay(this.property, value, true, true, false);
                     }
                 );
                 controller.addControllers(statics.SourceController,
                     statics.SourceSettings,
                     statics.SourceValues,
                     statics.SourceTypes,
-                    function (ksub, value) {
-                        controller.updateSource(ksub, value, true, true, false);
+                    function (value) {
+                        controller.updateSource(this.property, value, true, true, false);
                     }
                 );
                 controller.addControllers(statics.AnimationController,
                     statics.AnimationSettings,
                     statics.AnimationValues,
                     statics.AnimationTypes,
-                    function (ksub, value) {
-                        controller.updateSetting(statics.ControlSettings.layer, ksub, value, true, true, false);
+                    function (value) {
+                        controller.updateSetting(statics.ControlSettings.layer, this.property, value, true, true, false);
                     }, true
                 );
                 controller.addShaderControllers(function (v) {
-                    controller.updateSetting(statics.ControlSettings.layer, 'shaders',
-                        statics.AnimationSettings.shaders, true, true, false
+                    controller.updateSetting(
+                        statics.ControlSettings.layer,
+                        'shaders',
+                        statics.AnimationSettings.shaders,
+                        true,
+                        true,
+                        false
                     );
-                    HC.log(this.parent + '/' + this.label, v);
+
+                    // HC.log(this.__gui.name + '/' + this.property, v); fixme
                 });
 
                 explorer = new HC.Explorer();
@@ -199,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     var value = data[k];
                     sm.update(layer, k, value);
                 }
-                this.updateUi(false, false, false);
+                this.updateUi();
 
             } else {
                 for (var k in data) {
@@ -312,7 +318,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     var value = data[k];
                     statics.ControlSettings.update(k, value);
                 }
-                this.updateUi(false, false, true);
+                this.updateUi();
+                this.showDisplayControls();
 
             } else {
                 for (var k in data) {
@@ -336,7 +343,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     var value = data[k];
                     statics.DisplaySettings.update(k, value);
                 }
-                this.updateUi(false, false, true);
+                this.updateUi();
+                this.showDisplayControls();
 
             } else {
                 for (var k in data) {
@@ -360,7 +368,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     var value = data[k];
                     statics.SourceSettings.update(k, value);
                 }
-                this.updateUi(false, false, true);
+                this.updateUi();
+                this.showDisplayControls();
 
             } else {
                 for (var k in data) {
@@ -382,7 +391,6 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateSetting: function (layer, item, value, display, forward, force) {
 
-            // todo disable explain when updating from tutorial
             if (typeof value != 'object') {
                 HC.log(item, value);
                 this.explainPlugin(item, value);
@@ -403,7 +411,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 if (display !== false) {
-                    this.updateUi(item, false, false);
+                    this.updateUi(item);
                     explorer.setChanged(statics.ControlSettings.layer, true);
                 }
             }
@@ -467,7 +475,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         this.updateData();
                     }
 
-                    this.updateUi(item, false, false);
+                    this.updateUi(item);
                 }
 
                 if (item == 'session' && value != _HASH) {
@@ -498,7 +506,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 value = statics.DisplaySettings.update(item, value);
 
                 if (item.match(/display\d+_visible/)) {
-                    var show = true;
+                    this.showDisplayControls();
                 }
 
                 if (forward) {
@@ -508,7 +516,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 if (display !== false) {
-                    this.updateUi(item, false, show);
+                    this.updateUi(item);
                 }
 
             }
@@ -554,7 +562,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         this.loadClip(numberExtract(item, 'sample'));
                     }
 
-                    this.updateUi(item, false, false);
+                    this.updateUi(item);
                 }
 
             }

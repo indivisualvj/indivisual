@@ -23,7 +23,7 @@
 
                 let inst = this;
                 listener.register('animation.updateSetting', this.id(shape.index), function (data) {
-                    switch(data.item) {
+                    switch(data.item) { // todo check current layer?
                         case inst.tree:
                             if (data.value != inst.key && params.original) {
                                 inst.active[shape.index] = false;
@@ -73,7 +73,7 @@
 
                 let inst = this;
                 listener.register('animation.updateSetting', this.id(shape.index), function (data) {
-                    switch(data.item) {
+                    switch(data.item) { // todo check current layer?
                         case inst.tree:
                             if (data.value != inst.key && params.states) {
                                 inst.active[shape.index] = false;

@@ -1,4 +1,4 @@
-// todo HC.Log
+// Log
 {
     var logHistory = {};
 

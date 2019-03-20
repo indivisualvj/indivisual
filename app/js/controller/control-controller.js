@@ -66,21 +66,10 @@
             layer: statics.ControlSettings.layer,
 
             shuffleable: statics.ControlSettings.shuffleable,
-            shuffle: statics.ControlSettings.shuffle,
             shuffle_mode: statics.ControlSettings.shuffle_mode,
-            shuffle_switch_every: statics.ControlSettings.shuffle_switch_every,
+            shuffle_every: statics.ControlSettings.shuffle_every,
 
-            shuffle_usepeak: statics.ControlSettings.shuffle_usepeak,
             open: true
         };
-
-        // this['g_audio'] = {
-        // audio: statics.ControlSettings.audio,
-        // volume: statics.ControlSettings.volume,
-        // latency: statics.ControlSettings.latency,
-        // filter_type: statics.ControlSettings.filter_type,
-        // filter_frequency: statics.ControlSettings.filter_frequency
-
-        // };
     }
 })();

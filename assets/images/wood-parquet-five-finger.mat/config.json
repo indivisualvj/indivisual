@@ -1,0 +1,9 @@
+{
+  "map": "map.jpg",
+  "aoMap": "ao.jpg",
+  "displacementMap": "height.jpg",
+  "displacementScale": 2,
+  "displacementBias": 1,
+  "normalMap": "normal.jpg",
+  "roughnessMap": "roughness.jpg"
+}

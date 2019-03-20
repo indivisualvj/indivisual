@@ -13,7 +13,7 @@
                     let inst = this;
                     let path = filePath(CUBE_DIR, file);
                     assetman.loadCubeTexture(path, function (texture) {
-                        inst.texture = texture;
+                        inst.texture = texture; // todo dispose texture
                         inst.layer.setBackground(texture);
                     });
 

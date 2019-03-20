@@ -23,7 +23,6 @@
                 res.multiplyScalar(2.5);
                 let geo = new THREE.BoxBufferGeometry(res.x, res.y, res.x);
 
-
                 this.material = new THREE.MeshBasicMaterial({
                     color: color,
                     side: THREE.DoubleSide,
@@ -42,14 +41,14 @@
             } else {
 
                 if (this.counter % 2) {
-                    this.texture = this.target2;
-                    this.material.map = this.texture.texture;
+                    this.texture = this.target2.texture;
+                    this.material.map = this.texture;
                     // this.material.needsUpdate = true;
                     this.layer.three.renderer.render(this.layer.three.scene, this.layer.three.camera, this.target1);
 
                 } else {
-                    this.texture = this.target1;
-                    this.material.map = this.texture.texture;
+                    this.texture = this.target1.texture;
+                    this.material.map = this.texture;
                     // this.material.needsUpdate = true;
                     this.layer.three.renderer.render(this.layer.three.scene, this.layer.three.camera, this.target2);
                 }

@@ -121,7 +121,7 @@
             let layer = this.layer;
             let params = this.params(shape);
 
-            if (!params.initial // todo wenn man immer da rein fällt gibts ein tolles gerumble!
+            if (!params.initial
                 || shape.y() < 0 - layer.shapeSize(1)
                 || shape.y() > layer.resolution().y + layer.shapeSize(1)
                 || shape.x() < 0 - layer.shapeSize(1)

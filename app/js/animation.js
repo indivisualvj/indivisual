@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 var config = {
                     useWaveform: renderer.currentLayer.settings.audio_usewaveform,
                     volume: statics.ControlSettings.volume,
-                    resetPeakCountAfter: statics.ControlSettings.shuffle_switch_every,
+                    // resetPeakCountAfter: statics.ControlSettings.shuffle_every,
                     tempo: statics.ControlSettings.tempo,
                     minDiff: beatkeeper.getSpeed('sixteen').duration,
                     now: this.now,
@@ -175,14 +175,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 };
                 audio.update(config);
 
-                if (audio.peak) {
-                    messaging.emitMidi('glow', MIDI_PEAK_FEEDBACK, {timeout: 125});
-
-                    listener.fireEvent('audio.peak', audio);
-                }
-
             } else {
-                this.updatePeakCount();
+                this.fakeAudio();
+            }
+
+            if (audio.peak) {
+                messaging.emitMidi('glow', MIDI_PEAK_FEEDBACK, {timeout: 125});
+
+                listener.fireEvent('audio.peak', audio);
             }
 
             /**
@@ -322,17 +322,17 @@ document.addEventListener('DOMContentLoaded', function () {
         /**
          *
          */
-        updatePeakCount: function () {
+        fakeAudio: function () {
             var speed = beatkeeper.getSpeed('half');
-            audio.volume = (HC.Osci.sinus(speed.prc) / 2 + 0.5) / 2;
-
+            audio.volume = Math.random();
+            audio.volumes = new Array(audio.binCount).fill(0).map(Math.random);
             if (speed.progress <= 0) {
                 audio.peak = true;
-                audio.peakCount += speed.beats;
-
-                if (audio.peakCount > statics.ControlSettings.shuffle_switch_every) { // doubled due to audio off
-                    audio.peakCount = 0;
-                }
+                // audio.peakCount += speed.beats;
+                //
+                // if (audio.peakCount > statics.ControlSettings.shuffle_every) { // doubled due to audio off
+                //     audio.peakCount = 0;
+                // }
 
             } else {
                 audio.peak = false;
@@ -460,10 +460,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            var sh = statics.ControlSettings.shuffle;
-            var count = statics.ControlSettings.shuffle_usepeak ? audio.peakCount :
-                (statics.shuffle.counter % Math.abs(statics.ControlSettings.shuffle_switch_every));
-            messaging.emitAttr('#layer', 'data-label', count + (sh ? 's' : ''));
+            // var sh = statics.ControlSettings.shuffle;
+            // var count = statics.ControlSettings.shuffle_usepeak ? audio.peakCount :
+            //     (statics.shuffle.counter % statics.ControlSettings.shuffle_every);
+            // messaging.emitAttr('#layer', 'data-label', count + (sh ? 's' : ''));
 
             var layerDisplayValue = (statics.ControlSettings.layer + 1);
             messaging.emitAttr('#layers', 'data-mnemonic', layerDisplayValue);
@@ -647,7 +647,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             break;
 
                         case 'layer':
-                            audio.peakCount = 0; // disable shuffle for [shuffle every] count of peaks
+                            // audio.peakCount = 0; // disable shuffle for [shuffle every] count of peaks
                             renderer.nextLayer = renderer.layers[value];
                             break;
 

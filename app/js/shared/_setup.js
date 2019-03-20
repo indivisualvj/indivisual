@@ -174,6 +174,7 @@ function setupResources() {
                 var settings = jsyaml.load(data.contents);
 
                 _loadAudioPlugins(settings);
+                _loadShufflePlugins(settings);
 
                 statics.ControlValues = new HC.Settings(settings);
                 finished();
@@ -390,6 +391,15 @@ function setupResources() {
      */
     function _loadAudioPlugins(settings) {
         _loadPlugins(settings, HC, 'audio', HC.audio);
+    }
+
+    /**
+     *
+     * @param settings
+     * @private
+     */
+    function _loadShufflePlugins(settings) {
+        _loadPlugins(settings, HC, 'shuffle_mode', HC.shuffle_mode);
     }
 
     /**

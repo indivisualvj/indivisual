@@ -204,7 +204,6 @@
          * @param firstPeak
          * @param peakBpm
          * @param speed
-         * @param latency
          * @returns {boolean}
          */
         speedByPeakBpm: function (firstPeak, peakBpm, speed) {

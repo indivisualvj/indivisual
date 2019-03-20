@@ -21,7 +21,7 @@
 
         apply(geometry, index) {
 
-            let cubecam = new THREE.CubeCamera(1, 100000, 256);
+            let cubecam = new THREE.CubeCamera(1, 100000, 256); // todo dispose cam and texture
             cubecam.renderTarget.texture.generateMipmaps = true;
             cubecam.renderTarget.texture.minFilter = THREE.LinearMipMapLinearFilter;
             cubecam.renderTarget.texture.mapping = THREE.CubeRefractionMapping;

@@ -537,7 +537,7 @@
          */
         render(doNotDisplay) {
             if (this.animationInUse()) {
-                renderer.render();
+                renderer.render(); // todo renderer.current sollte sich selbst rendern (1x pro animation.now). so bekommt man immer ein bild wenn nötig...
             }
             if (IS_ANIMATION) {
                 this.renderSamples();

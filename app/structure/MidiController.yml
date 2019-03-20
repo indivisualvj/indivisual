@@ -375,10 +375,14 @@ constants:
       name: lighting_speed
 
   12:
+#    default:
+#      type: boolean
+#      section: Control
+#      name: shuffle
     default:
-      type: boolean
+      type: select
       section: Control
-      name: shuffle
+      name: shuffle_mode
     sequence:
       type: boolean
       section: Source
@@ -392,7 +396,7 @@ constants:
     default:
       type: step
       section: Control
-      name: shuffle_switch_every
+      name: shuffle_every
     sequence:
       type: boolean
       section: Source
@@ -403,10 +407,10 @@ constants:
       name: sample5_reset
 
   14:
-    default:
-      type: select
-      section: Control
-      name: shuffle_mode
+#    default:
+#      type: select
+#      section: Control
+#      name: shuffle_mode
     sequence:
       type: boolean
       section: Source

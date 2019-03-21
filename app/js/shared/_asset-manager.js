@@ -285,7 +285,7 @@ var HC = HC || {};
         }
 
         /**
-         * todo local reference instead of "messaging" global var?
+         *
          * @param path
          * @param callback
          * @private
@@ -295,7 +295,7 @@ var HC = HC || {};
         }
 
         /**
-         * todo local reference instead of "messaging" global var?
+         *
          * @param file
          * @param callback
          * @private

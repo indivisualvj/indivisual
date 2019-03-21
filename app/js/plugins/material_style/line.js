@@ -23,16 +23,18 @@
 
                 let inst = this;
                 listener.register('animation.updateSetting', this.id(shape.index), function (data) {
-                    switch(data.item) { // todo check current layer?
-                        case inst.tree:
-                            if (data.value != inst.key && params.original) {
-                                inst.active[shape.index] = false;
-                                params.mesh = false;
-                                shape.setMesh(params.original);
+                    if (inst.layer == data.layer) {
+                        switch (data.item) {
+                            case inst.tree:
+                                if (data.value != inst.key && params.original) {
+                                    inst.active[shape.index] = false;
+                                    params.mesh = false;
+                                    shape.setMesh(params.original);
 
-                                listener.removeId(inst.id(shape.index));
-                            }
-                            break;
+                                    listener.removeId(inst.id(shape.index));
+                                }
+                                break;
+                        }
                     }
                 });
             }
@@ -73,16 +75,18 @@
 
                 let inst = this;
                 listener.register('animation.updateSetting', this.id(shape.index), function (data) {
-                    switch(data.item) { // todo check current layer?
-                        case inst.tree:
-                            if (data.value != inst.key && params.states) {
-                                inst.active[shape.index] = false;
-                                shape.setMesh(params.states[0]);
-                                params.states = false;
+                    if (inst.layer == data.layer) {
+                        switch (data.item) {
+                            case inst.tree:
+                                if (data.value != inst.key && params.states) {
+                                    inst.active[shape.index] = false;
+                                    shape.setMesh(params.states[0]);
+                                    params.states = false;
 
-                                listener.removeId(inst.id(shape.index));
-                            }
-                            break;
+                                    listener.removeId(inst.id(shape.index));
+                                }
+                                break;
+                        }
                     }
                 });
             }

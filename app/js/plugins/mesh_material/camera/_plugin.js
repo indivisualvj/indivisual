@@ -22,6 +22,7 @@
         reset() {
             if (this.cameras) {
                 this.layer.three.scene.remove(this.cameras);
+                this.cameras.traverse(threeDispose);
                 this.cameras = undefined;
 
                 listener.removeLike(this.id());

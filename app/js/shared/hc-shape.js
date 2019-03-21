@@ -64,7 +64,6 @@
 
         setMesh(mesh) {
             this.geometry = mesh.geometry;
-            // this.material = mesh.material;
             this._scale.remove(this.mesh);
             this._scale.add(mesh);
             this.mesh = mesh;
@@ -75,7 +74,6 @@
         }
 
         setMaterial(material) {
-            this.material = material;
             this.mesh.material = material;
         }
 
@@ -463,6 +461,18 @@
             }
         }
 
+        getRootGeometry() {
+            let _get = function (g) {
+                return g.userData ? g.userData.geometry : false;
+            };
+            let geometry = this.geometry;
+            while(_get(geometry)) {
+                geometry = _get(geometry);
+            }
+
+            return geometry
+        }
+
         getVertices() {
             return this.geometry.vertices;
         }
@@ -478,10 +488,5 @@
 
             return vertices;
         }
-
-        //
-        // dispose() {
-        //     this.sceneObject().traverse(threeDispose);
-        // }
     }
 }

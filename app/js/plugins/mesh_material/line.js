@@ -8,7 +8,7 @@
             let g = new THREE.EdgesGeometry(geometry);
             let mesh = new THREE.LineSegments(g, material);
             g.userData.geometry = geometry;
-            mesh.computeLineDistances(); // todo transform plugin.after?
+            mesh.computeLineDistances();
             return mesh;
         }
     }

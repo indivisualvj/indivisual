@@ -15,7 +15,7 @@
                 shape.mesh.name = 'original';
                 params.original = shape.mesh;
 
-                shape.setMesh(mesh);
+                shape.setMesh(mesh); // todo why does it work when first shape ist not a lined but the others?
             }
 
             if (!this.active[shape.index]) {

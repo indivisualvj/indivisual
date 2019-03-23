@@ -18,7 +18,7 @@
 }
 {
     HC.plugins.material_style.randompeak = class Plugin extends HC.MaterialStylePlugin {
-        static name = 'random on peak (wireframe)';
+        static name = 'random on peak';
         injections = {
             state: undefined
         };

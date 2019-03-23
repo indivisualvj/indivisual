@@ -1,19 +1,19 @@
 {
     HC.plugins.shape_transform.wave = class Plugin extends HC.ShapeTransformPlugin {
         static name = 'wave xyz by y';
+        angle;
 
         apply(shape, source, axes) {
 
             if (!shape.getVertices()) {
-                shape.setGeometry(shape.geometry.userData.geometry);
+                shape.setGeometry(shape.getRootGeometry());
             }
 
             if (this.isFirstShape(shape)) {
                 source = source || 'y';
                 axes = axes || new THREE.Vector3(1, 1, 1);
 
-                if (!this.angle || shape.geometry != this.geometry) {
-                    this.geometry = shape.geometry;
+                if (this.angle === undefined) {
                     this.angle = 0;
                     this.min = 0;
                     this.max = 0;

@@ -55,7 +55,7 @@
     "material_shadowside": 1,
     "material_map": "none",
     "material_input": "none",
-    "material_style": "randompeakline",
+    "material_style": "randompeakedges",
     "material_uvx": 1,
     "material_uvy": 1,
     "material_uvofx": 0.5,

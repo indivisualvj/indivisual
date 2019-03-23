@@ -5,7 +5,7 @@
         apply(shape, axis) {
 
             if (!shape.getVertices()) {
-                shape.setGeometry(shape.geometry.userData.geometry);
+                shape.setGeometry(shape.getRootGeometry());
             }
 
             let vbackup = shape.verticesCopy;

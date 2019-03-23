@@ -18,7 +18,7 @@
         apply(shape, axes) {
 
             if (!shape.getVertices()) {
-                shape.setGeometry(shape.geometry.userData.geometry);
+                shape.setGeometry(shape.getRootGeometry());
             }
 
             if (this.isFirstShape(shape)) {

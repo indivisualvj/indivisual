@@ -29,7 +29,6 @@
             this.index = index;
             this.color = color;
             this.mesh = mesh;
-            // this.material = mesh.material;
             this.setGeometry(mesh.geometry);
             this.normalScale = new THREE.Vector3(1, 1, 1).length();
 

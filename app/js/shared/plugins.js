@@ -13,7 +13,7 @@ HC.Shape.prototype.injected = {
  */
 HC.Shape.prototype.initPlugins = function () {
 
-    this.plugins = {};
+    this.plugins = {}; // todo create cache in setup then object.create/assign here
     var plugins = Object.keys(HC.Shape.prototype.injected.plugins);
     for (var p = 0; p < plugins.length; p++) {
         var key = plugins[p];

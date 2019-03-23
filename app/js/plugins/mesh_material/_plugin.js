@@ -41,23 +41,5 @@ HC.plugins.mesh_material = HC.plugins.mesh_material || {};
 
             return geometry;
         }
-
-        // after(mesh) {
-        //     let geometry = mesh.geometry;
-        //     let geo;
-        //     if (geometry.isGeometry) {
-        //         geo = new THREE.BufferGeometry().fromGeometry(geometry);
-        //
-        //     } else {
-        //         geo = new THREE.BufferGeometry().setFromObject(geometry);
-        //     }
-        //
-        //     if (geo) {
-        //         geo.userData.geometry = geometry;
-        //         geometry = geo;
-        //     }
-        //
-        //     mesh.geometry = geometry;
-        // }
     }
 }

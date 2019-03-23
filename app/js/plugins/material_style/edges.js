@@ -1,6 +1,6 @@
 {
-    HC.plugins.material_style.chessline = class Plugin extends HC.MaterialStylePlugin {
-        static name = 'chess (fill | line)';
+    HC.plugins.material_style.chessedges = class Plugin extends HC.MaterialStylePlugin {
+        static name = 'chess (fill | edges)';
         active = [];
 
         apply(shape) {
@@ -8,14 +8,14 @@
             let params = this.params(shape);
 
             if (shape.index % 2 == 1 && !params.mesh) {
-                let mesh = this.layer.getMeshMaterialPlugin('line').apply(shape.getGeometry());
-                mesh.name = 'line';
+                let mesh = this.layer.getMeshMaterialPlugin('edges').apply(shape.getGeometry());
+                mesh.name = 'edges';
                 params.mesh = mesh;
 
                 shape.mesh.name = 'original';
                 params.original = shape.mesh;
 
-                shape.setMesh(mesh); // todo why does it work when first shape ist not a lined but the others?
+                shape.setMesh(mesh); // todo why does transform work when first shape ist not a lined but the others?
             }
 
             if (!this.active[shape.index]) {
@@ -49,8 +49,8 @@
     }
 }
 {
-    HC.plugins.material_style.randompeakline = class Plugin extends HC.MaterialStylePlugin {
-        static name = 'random on peak (line)';
+    HC.plugins.material_style.randompeakedges = class Plugin extends HC.MaterialStylePlugin {
+        static name = 'random on peak (edges)';
         active = [];
 
         apply(shape) {
@@ -60,7 +60,7 @@
             if (!params.states) {
                 params.states = [];
                 params.mesh = shape.mesh;
-                let mesh = layer.getMeshMaterialPlugin('line').apply(shape.getGeometry());
+                let mesh = layer.getMeshMaterialPlugin('edges').apply(shape.getGeometry());
                 params.states.push(shape.mesh);
                 params.states.push(mesh);
             }

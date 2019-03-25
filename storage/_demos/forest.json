@@ -167,7 +167,7 @@
     "lighting_penumbra_oscillate": "off",
     "lighting_shadows": true,
     "background_mode": "cube",
-    "background_color": "#fff",
+    "background_config": "#fff",
     "background_input": "herrsching-forest,120,5036x2636,30.jpg",
     "background_volume": 2,
     "background_wraps": "ClampToEdgeWrapping",

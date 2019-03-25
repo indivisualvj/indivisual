@@ -89,7 +89,7 @@ function numberExtract(item, prefix) {
  * @param value
  * @returns {*}
  */
-function parse(value) {
+function parse(value, fallback) {
     if (value === 'true') {
         return true;
 
@@ -103,7 +103,7 @@ function parse(value) {
         return parseFloat(value);
     }
 
-    return value;
+    return fallback !== undefined ? fallback : value;
 }
 
 /**

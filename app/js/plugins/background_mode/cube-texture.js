@@ -1,6 +1,6 @@
 {
     HC.plugins.background_mode.cubetexture = class Plugin extends HC.BackgroundModePlugin {
-        static index = 40;
+        static index = 41;
 
         apply() {
             let i = this.settings.background_input;

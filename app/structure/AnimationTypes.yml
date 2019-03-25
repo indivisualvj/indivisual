@@ -208,7 +208,7 @@ audio_thickness: [0, 0.99, 0.01, half]
 audio_usewaveform: [half]
 
 background_mode: [half]
-background_color: [half]
+background_config: [half]
 background_volume: [-5, 5, 0.01, half]
 background_volume_oscillate: [half]
 background_wraps: [half]

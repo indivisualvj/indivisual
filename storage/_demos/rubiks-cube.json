@@ -167,7 +167,7 @@
     "lighting_penumbra_oscillate": "off",
     "lighting_shadows": true,
     "background_mode": "texture",
-    "background_color": "#000000",
+    "background_config": "#000000",
     "background_input": "indivisual-logo,120,1280x720,30.png",
     "background_volume": 1,
     "background_wraps": "ClampToEdgeWrapping",

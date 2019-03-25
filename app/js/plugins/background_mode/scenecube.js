@@ -3,7 +3,7 @@
  */
 {
     HC.plugins.background_mode.scenecube = class Plugin extends HC.BackgroundModePlugin {
-        static index = 50;
+        static index = 60;
         material;
         counter = 0;
         target1;
@@ -13,7 +13,7 @@
             if (this.current() !== this.id()) {
                 this.current(this.id());
 
-                let color = new THREE.Color(this.settings.background_color);
+                let color = new THREE.Color(this.settings.background_config);
                 let res = this.layer.resolution().clone();
                 let edge = Math.min(res.x, res.y);
 

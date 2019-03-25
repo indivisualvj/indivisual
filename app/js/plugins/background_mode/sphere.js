@@ -3,12 +3,18 @@
  */
 {
     HC.plugins.background_mode.sphere = class Plugin extends HC.BackgroundModePlugin {
+        static index = 51;
+        static tutorial = {
+            color: {
+                text: 'set background_config to any hex code (#ffaabb) to change color'
+            }
+        };
 
         apply() {
             if (this.current() !== this.id()) {
                 this.current(this.id());
 
-                let color = new THREE.Color(this.settings.background_color);
+                let color = new THREE.Color(this.settings.background_config);
                 let res = this.layer.resolution().clone();
                 res.multiplyScalar(this.settings.background_volume);
                 let geo = new THREE.SphereBufferGeometry(res.length() * 2, 16, 16);

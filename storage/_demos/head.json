@@ -167,7 +167,7 @@
     "lighting_penumbra_oscillate": "off",
     "lighting_shadows": false,
     "background_mode": "transparent",
-    "background_color": "#000000",
+    "background_config": "#000000",
     "background_input": "off",
     "background_volume": 1,
     "background_wraps": "ClampToEdgeWrapping",

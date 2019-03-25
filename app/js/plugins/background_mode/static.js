@@ -1,11 +1,16 @@
 {
     HC.plugins.background_mode.static = class Plugin extends HC.BackgroundModePlugin {
-        static index = 20;
+        static index = 10;
+        static tutorial = {
+            color: {
+                text: 'set background_config to any hex code (#ffaabb) to change color'
+            }
+        };
 
         apply() {
             if (this.current() != this.id()) {
                 this.current(this.id());
-                this.layer.setBackground(new THREE.Color(this.settings.background_color));
+                this.layer.setBackground(new THREE.Color(this.settings.background_config));
             }
         }
     }

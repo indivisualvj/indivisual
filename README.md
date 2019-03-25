@@ -1,8 +1,6 @@
 # indivisual - VJ-Synthesizer
 
 ## What is it?
-YEAH BABY!!! 
-
 indivisual - VJ-Synthesizer is a rhythm based animation tool giving you the ability to have shapes dancing and flickering to the music.
 The most settings can be "oscillated" so that different variations on how a shape is moved, rotatet, transformed, modified, colored, 
 lit, sized, postprocessed, ... can be mixed in.  

@@ -1,6 +1,6 @@
 HC.plugins.background_mode = HC.plugins.background_mode || {};
 {
-    HC.BackgroundModePlugin = class Plugin extends HC.AnimationPlugin {
+    HC.BackgroundModePlugin = class BackgroundModePlugin extends HC.AnimationPlugin {
         static background = false;
         texture;
 
@@ -46,7 +46,7 @@ HC.plugins.background_mode = HC.plugins.background_mode || {};
         }
 
         id(suffix) {
-            return super.id(suffix) + this.settings.background_volume + this.settings.background_color + this.settings.background_input;
+            return super.id(suffix) + this.settings.background_volume + this.settings.background_config + this.settings.background_input;
         }
 
         dispose() {

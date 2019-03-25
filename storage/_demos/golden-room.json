@@ -166,7 +166,7 @@
 "lighting_penumbra_oscillate":"off",
 "lighting_shadows":true,
 "background_mode":"cube",
-"background_color":"#111",
+"background_config":"#111",
 "background_input":"off",
 "background_volume":1,
 "background_volume_oscillate":"off",

@@ -166,7 +166,7 @@
 "lighting_penumbra_oscillate":"off",
 "lighting_shadows":true,
 "background_mode":"cube",
-"background_color":"#0f0f0f",
+"background_config":"#0f0f0f",
 "background_input":"indivisual-logo,120,1280x720,30.png",
 "background_volume":5,
 "background_volume_oscillate":"off",

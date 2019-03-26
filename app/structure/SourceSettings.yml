@@ -1,17 +1,17 @@
 group0: ''
 group1: ''
 
-sequence0_input: off
-sequence1_input: off
-sequence2_input: off
-sequence3_input: off
-sequence4_input: off
+sequence0_input: 'off'
+sequence1_input: 'off'
+sequence2_input: 'off'
+sequence3_input: 'off'
+sequence4_input: 'off'
 
-sequence0_overlay: off
-sequence1_overlay: off
-sequence2_overlay: off
-sequence3_overlay: off
-sequence4_overlay: off
+sequence0_overlay: 'off'
+sequence1_overlay: 'off'
+sequence2_overlay: 'off'
+sequence3_overlay: 'off'
+sequence4_overlay: 'off'
 
 sequence0_jump: false
 sequence1_jump: false
@@ -79,17 +79,17 @@ sequence2_brightness: 1.0
 sequence3_brightness: 1.0
 sequence4_brightness: 1.0
 
-sequence0_osci: off
-sequence1_osci: off
-sequence2_osci: off
-sequence3_osci: off
-sequence4_osci: off
+sequence0_osci: 'off'
+sequence1_osci: 'off'
+sequence2_osci: 'off'
+sequence3_osci: 'off'
+sequence4_osci: 'off'
 
-sequence0_blendmode: 0
-sequence1_blendmode: 0
-sequence2_blendmode: 0
-sequence3_blendmode: 0
-sequence4_blendmode: 0
+sequence0_blendmode: '0'
+sequence1_blendmode: '0'
+sequence2_blendmode: '0'
+sequence3_blendmode: '0'
+sequence4_blendmode: '0'
 
 sequence0_start: 0
 sequence1_start: 0

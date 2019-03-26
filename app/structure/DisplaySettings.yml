@@ -23,7 +23,7 @@ display_static: false
 display_transparent: false
 display_noborder: false
 display_zindex: 0
-display_mask_shape: off
+display_mask_shape: 'off'
 display_keepbounds: true
 display_mask: ''
 display_smearing: 0.0

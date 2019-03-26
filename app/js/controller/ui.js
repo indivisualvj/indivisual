@@ -601,6 +601,8 @@ HC.Controller.prototype.showDisplayControls = function () {
  */
 HC.Controller.prototype.updateValuesChanged = function (folder) {
 
+    var changed = false;
+
     if (!folder) {
         folder = this.gui;
     }
@@ -610,11 +612,12 @@ HC.Controller.prototype.updateValuesChanged = function (folder) {
     for (var key in flds) {
         var fld = flds[key];
 
-        this.updateValuesChanged(fld);
+        if (this.updateValuesChanged(fld)) {
+            changed = true;
+        }
     }
 
     var ctrls = folder.__controllers || [];
-    var changed = false;
 
     for (var key in ctrls) {
         var ctrl = ctrls[key];
@@ -636,6 +639,8 @@ HC.Controller.prototype.updateValuesChanged = function (folder) {
     } else {
         ul.removeAttribute('data-changed');
     }
+
+    return changed;
 };
 
 /**

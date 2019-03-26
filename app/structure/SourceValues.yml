@@ -124,7 +124,7 @@ lighting_color:
   yellow: yellow
 
 lighting_type:
-  off: off
+  off: 'off'
   randomblitzrgb: randomblitz RGB
   randomblitzamber: randomblitz AMBER
   randomblitzwhite: randomblitz WHITE

@@ -35,7 +35,7 @@ rotation_easing:
   circ: circ
   back: back
   judder: judder
-  off: off
+  off: 'off'
 
 background_input: #background_mode inputs
   none: none
@@ -66,7 +66,7 @@ material_mapping:
   f2b: front2back
 
 material_blending:
-  NoBlending: off
+  NoBlending: 'off'
   NormalBlending: normal
   AdditiveBlending: additive
   SubtractiveBlending: subtractive (background)

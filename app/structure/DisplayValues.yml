@@ -1,6 +1,6 @@
 
 masking_shape:
-  off: off
+  off: 'off'
 #  circle: circle
   triangle: triangle
 #  trianglesquare: triangle square

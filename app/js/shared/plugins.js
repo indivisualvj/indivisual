@@ -5,7 +5,7 @@
 HC.plugins = HC.plugins || {};
 
 HC.Shape.prototype.injected = {
-    plugins: {}
+    plugins: {},
 };
 
 /**
@@ -13,14 +13,18 @@ HC.Shape.prototype.injected = {
  */
 HC.Shape.prototype.initPlugins = function () {
 
-    this.plugins = {}; // todo create cache in setup then object.create/assign here
-    var plugins = Object.keys(HC.Shape.prototype.injected.plugins);
-    for (var p = 0; p < plugins.length; p++) {
-        var key = plugins[p];
-        var plugin = HC.Shape.prototype.injected.plugins[key];
-        var clone = JSON.parse(JSON.stringify(plugin));
-        this.plugins[key] = clone;
+    if (!HC.Shape.prototype._plugins) {
+        HC.Shape.prototype._plugins = {};
+        var plugins = Object.keys(HC.Shape.prototype.injected.plugins);
+        for (var p = 0; p < plugins.length; p++) {
+            var key = plugins[p];
+            var plugin = HC.Shape.prototype.injected.plugins[key];
+            var clone = JSON.parse(JSON.stringify(plugin));
+            HC.Shape.prototype._plugins[key] = clone;
+        }
     }
+
+    this.plugins = JSON.parse(JSON.stringify(HC.Shape.prototype._plugins));
 };
 
 {

@@ -58,7 +58,8 @@
 
             this._rotation = new THREE.Group();
             this._rotation.name = '_rotation' + this.index;
-            this._rotation.position.set(this.resolution('half').x, -this.resolution('half').y, 0);
+            this.position(0, 0, 0);
+            // this._rotation.position.set(this.resolution('half').x, -this.resolution('half').y, 0);
 
             this._shapes = new THREE.Group();
             this._shapes.name = '_shapes' + this.index;

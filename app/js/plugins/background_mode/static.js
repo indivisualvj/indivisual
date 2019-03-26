@@ -3,14 +3,14 @@
         static index = 10;
         static tutorial = {
             color: {
-                text: 'set background_config to any hex code (#ffaabb) to change color'
+                text: 'set background_color to any hex code (#ffaabb) to change color'
             }
         };
 
         apply() {
             if (this.current() != this.id()) {
                 this.current(this.id());
-                this.layer.setBackground(new THREE.Color(this.settings.background_config));
+                this.layer.setBackground(new THREE.Color(this.settings.background_color));
             }
         }
     }

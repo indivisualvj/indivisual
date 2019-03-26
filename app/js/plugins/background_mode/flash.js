@@ -4,7 +4,7 @@
         static index = 20;
         static tutorial = {
             color: {
-                text: 'set background_config to any hex code (#ffaabb) to change color'
+                text: 'set background_color to any hex code (#ffaabb) to change color'
             }
         };
 
@@ -30,7 +30,7 @@
 
             if ((audio.peak || speed.prc == 0 || randomInt(0, round(statics.DisplaySettings.fps * .75)) == 0)) {
                 if (randomBool(10)) {
-                    this.backflash = hexToHsl(color || this.settings.background_config);
+                    this.backflash = hexToHsl(color || this.settings.background_color);
                     this.backflash.l = this.settings.background_volume > 0 ? 75 : 5;
                     this.layer.setBackground(new THREE.Color(this.current(hslToHex(this.backflash))));
                 }

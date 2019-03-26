@@ -52,6 +52,7 @@ HC.Layer.prototype.animate = function (hook) {
     this.doOscillate(true);
 
     this.rotation(this.settings.layer_rotationx, this.settings.layer_rotationy, this.settings.layer_rotationz);
+    this.position(this.settings.layer_positionx, this.settings.layer_positiony, this.settings.layer_positionz);
 
     this.doCameraMode();
 

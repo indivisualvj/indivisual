@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function () {
             renderer.switchLayer(IS_MONITOR);
 
             var hook = this.doNotDisplay ? false : this._perspectiveHook;
-            renderer.animateLayer(renderer.currentLayer, hook);
+            renderer.animate(hook);
 
         },
 

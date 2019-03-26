@@ -1,3 +1,19 @@
+layer:
+  layer_transvisible:
+  layer_positionx:
+  layer_positionx_oscillate:
+  layer_positiony:
+  layer_positiony_oscillate:
+  layer_positionz:
+  layer_positionz_oscillate:
+  layer_rotationx:
+  layer_rotationx_oscillate:
+  layer_rotationy:
+  layer_rotationy_oscillate:
+  layer_rotationz:
+  layer_rotationz_oscillate:
+
+
 audio & timing:
   audio_thickness:
   audio_usewaveform:
@@ -55,7 +71,7 @@ lighting_lookat:
 
 background:
   background_mode:
-  background_config:
+  background_color:
   background_input:
   background_volume:
   background_volume_oscillate:
@@ -85,14 +101,6 @@ camera:
   camera_rotationy_oscillate:
   camera_rotationz:
   camera_rotationz_oscillate:
-
-layer:
-  layer_rotationx:
-  layer_rotationx_oscillate:
-  layer_rotationy:
-  layer_rotationy_oscillate:
-  layer_rotationz:
-  layer_rotationz_oscillate:
 
 pattern:
   pattern:

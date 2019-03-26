@@ -13,7 +13,7 @@
             if (this.current() !== this.id()) {
                 this.current(this.id());
 
-                let color = new THREE.Color(this.settings.background_config);
+                let color = new THREE.Color(this.settings.background_color);
                 let res = this.layer.resolution().clone();
                 let edge = Math.min(res.x, res.y);
 

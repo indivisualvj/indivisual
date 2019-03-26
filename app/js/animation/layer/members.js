@@ -64,6 +64,17 @@ HC.Layer.prototype.rotation = function (x, y, z) {
 
 /**
  *
+ * @param x
+ * @param y
+ * @param z
+ */
+HC.Layer.prototype.position = function (x, y, z) {
+    var cdd = this.cameraDefaultDistance(.25);
+    this._rotation.position.set(this.resolution('half').x + x * cdd, -this.resolution('half').y - y * cdd, z * cdd);
+};
+
+/**
+ *
  * @param sh
  * @param fx
  * @returns {*}

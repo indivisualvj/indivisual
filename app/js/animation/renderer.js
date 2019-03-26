@@ -70,6 +70,13 @@
 
         initLayers: function (keepsettings) {
 
+            if (this._layers) {
+                this.three.scene.remove(this._layers);
+                this._layers.traverse(threeDispose);
+            }
+            this._layers = new THREE.Group();
+            this.three.scene.add(this._layers);
+
             for (var i = 0; i < this.layers.length; i++) {
                 var op = false;
                 var os = false;
@@ -144,13 +151,14 @@
 
             for (var i in this.layers) {
                 i = parseInt(i);
-                var layer = this.layers[i]._layer;
+                var layer = this.layers[i];
+                var transvisible = layer.settings.layer_transvisible;
 
-                if (i == index) {
-                    this.three.scene.add(layer);
+                if (i == index || transvisible) {
+                    this._layers.add(layer._layer);
 
                 } else {
-                    this.three.scene.remove(layer);
+                    this._layers.remove(layer._layer);
                 }
             }
 
@@ -175,19 +183,17 @@
         },
 
         /**
-         *
-         * @param layer
+         * Render current and all transvisible layers
          * @param hook
          */
-        animateLayer: function (layer, hook) {
-            if (isNumber(layer) || isString(layer)) {
-                layer = this.layers[layer];
-
-            } else {
-                layer = this.currentLayer;
+        animate: function (hook) {
+            for (var l in this.layers) {
+                var layer = this.layers[l];
+                if (layer == this.currentLayer || layer.settings.layer_transvisible) {
+                    layer.animate(hook);
+                    hook = undefined;
+                }
             }
-
-            layer.animate(hook);
         },
 
         /**

@@ -7,7 +7,7 @@ HC.Layer.prototype.getMaterialMap = function () {
     if (seq !== 'none') {
         var plugin = this.getMaterialMapPlugin('sequence');
 
-        return plugin.texture;
+        return plugin;
 
     } else {
         var plugin = this.getMaterialMapPlugin('texture');

@@ -35,8 +35,6 @@ HC.shuffle_mode = HC.shuffle_mode || {};
                 }
             }
 
-            console.log('shuffle_mode.random.validate', this.layer, false);
-
             return false;
         }
     }

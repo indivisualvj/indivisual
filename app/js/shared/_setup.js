@@ -313,7 +313,9 @@ function setupResources() {
                 var keys = Object.keys(statics.SourceValues.input);
                 var index = keys.length;
                 for (var i in images) {
-                    statics.SourceValues.input[index++] = i;
+                    if (!i.match(/^.+\.mat$/)) {
+                        statics.SourceValues.input[index++] = i;
+                    }
                 }
 
                 finished();

@@ -265,6 +265,7 @@
          * @returns {boolean|*}
          */
         current: function () {
+            this.render();
 
             var renderer = this.three.renderer;
             if (renderer && renderer.view) {
@@ -298,14 +299,18 @@
          */
         render: function () {
 
-            listener.fireEvent('renderer.render', this);
+            if (this._last != animation.now) {
+                listener.fireEvent('renderer.render', this);
 
-            if (this.currentLayer.shaders()) {
-                this.currentLayer.doShaders();
-                this.currentLayer._composer.render();
+                if (this.currentLayer.shaders()) {
+                    this.currentLayer.doShaders();
+                    this.currentLayer._composer.render();
 
-            } else {
-                this.three.renderer.render(this.three.scene, this.currentLayer.three.camera, this.three.target);
+                } else {
+                    this.three.renderer.render(this.three.scene, this.currentLayer.three.camera, this.three.target);
+                }
+
+                this._last = animation.now;
             }
         },
 

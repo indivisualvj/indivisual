@@ -206,8 +206,9 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         render: function () {
-
-            sourceman.render(this.doNotDisplay);
+            if (IS_ANIMATION) {
+                sourceman.render();
+            }
             if (!this.doNotDisplay) {
                 displayman.render();
             }

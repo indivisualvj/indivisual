@@ -4,6 +4,18 @@
         file;
         loading;
 
+        alphaMap;
+        aoMap;
+        bumpMap;
+        bumpScale;
+        displacementMap;
+        displacementScale;
+        displacementBias;
+        lightMap;
+        metalnessMap;
+        normalMap;
+        roughnessMap;
+
         apply(file) {
 
             file = assetman.getImage(file);
@@ -55,6 +67,24 @@
             }
 
             return false;
+        }
+
+        reset() {
+            this.dispose();
+            var keys = Object.getOwnPropertyNames(this);
+            for (let k in keys) {
+                this[keys[k]] = undefined;
+            }
+        }
+
+        dispose() {
+            var keys = Object.getOwnPropertyNames(this);
+            for (let k in keys) {
+                let v = this[keys[k]];
+                if (v instanceof THREE.Texture) {
+                    v.dispose();
+                }
+            }
         }
     }
 }

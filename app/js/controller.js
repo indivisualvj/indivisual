@@ -625,6 +625,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
+         * @param data
+         */
+        updateMidi: function (data) {
+            if (midi) {
+                if (data.command == 'glow') {
+                    midi.glow(data.data, data.conf);
+
+                } else if (data.command == 'off') {
+                    midi.off(data.data);
+
+                } else if (data.command == 'clock') {
+                    midi.clock(data.data, data.conf);
+                }
+            }
+        },
+
+        /**
+         *
          * @param item
          * @param value
          */

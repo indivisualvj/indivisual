@@ -1,20 +1,27 @@
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
 {
     HC.plugins.material_map.texture = class Plugin extends HC.MaterialMapPlugin {
 
         file;
         loading;
 
-        alphaMap;
-        aoMap;
-        bumpMap;
-        bumpScale;
-        displacementMap;
-        displacementScale;
-        displacementBias;
-        lightMap;
-        metalnessMap;
-        normalMap;
-        roughnessMap;
+        properties = {
+            map: null,
+            emissiveMap: null,
+            alphaMap: null,
+            aoMap: null,
+            bumpMap: null,
+            bumpScale: null,
+            displacementMap: null,
+            displacementScale: null,
+            displacementBias: null,
+            lightMap: null,
+            metalnessMap: null,
+            normalMap: null,
+            roughnessMap: null
+        };
 
         apply(file) {
 
@@ -24,42 +31,22 @@
                 this.reset();
             }
 
-            if (!this.loading && !this.map) {
+            if (!this.loading && !this.properties.map) {
 
                 if (file) {
                     let inst = this;
                     let path = filePath(IMAGE_DIR, file);
                     this.loading = true;
 
-                    // complex
-                    if (file.match(/.+\.mat/i)) {
-                        assetman.loadMaterial(path, function (mat) {
-                            var keys = Object.getOwnPropertyNames(inst);
-                            for (let k in keys) {
-                                let key = keys[k]
-                                if (key in mat) {
-                                    inst[key] = mat[key];
-                                }
-                            }
-                            if (!inst.emissiveMap) {
-                                inst.emissiveMap = inst.map;
-                            }
+                    assetman.loadMaterialMap(this.properties, path, function (mat) {
+                        inst.file = file;
+                        inst.loading = false;
 
-                            inst.file = file;
-                            inst.loading = false;
+                        if (!mat.emissiveMap) {
+                            inst.properties.emissiveMap = mat.map;
+                        }
 
-                        }, this.reset);
-
-                    // simple
-                    } else {
-                        assetman.loadTexture(path, function (tex) {
-                            inst.file = file;
-                            inst.map = tex;
-                            inst.emissiveMap = tex;
-                            inst.loading = false;
-
-                        }, this.reset);
-                    }
+                    }, this.reset);
 
                 } else {
                     this.reset();
@@ -67,24 +54,6 @@
             }
 
             return false;
-        }
-
-        reset() {
-            this.dispose();
-            var keys = Object.getOwnPropertyNames(this);
-            for (let k in keys) {
-                this[keys[k]] = undefined;
-            }
-        }
-
-        dispose() {
-            var keys = Object.getOwnPropertyNames(this);
-            for (let k in keys) {
-                let v = this[keys[k]];
-                if (v instanceof THREE.Texture) {
-                    v.dispose();
-                }
-            }
         }
     }
 }

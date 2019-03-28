@@ -4,24 +4,21 @@
 var HC = HC || {};
 {
 
-    var inst;
+    let inst;
     /**
      *
+     * @type {HC.AssetManager}
      */
     HC.AssetManager = class AssetManager {
+        images = {};
+        cubes = {};
+        videos = {};
 
         /**
          *
-         * @param files
          */
         constructor() {
             inst = this;
-            this.files = {};
-            this.images = {};
-            this.cubes = {};
-            this.videos = {};
-            this.fonts = {};
-            this.textures = {};
         }
 
         /**
@@ -159,15 +156,9 @@ var HC = HC || {};
          * @param callback
          */
         loadFont(url, callback) {
-            if (this.fonts[url]) {
-                callback(this.fonts[url]);
-
-            } else {
-                new THREE.FontLoader().load(url, function (font) {
-                    inst.fonts[url] = font;
-                    callback(font);
-                });
-            }
+            new THREE.FontLoader().load(url, function (font) {
+                callback(font);
+            });
         }
 
         /**
@@ -177,15 +168,9 @@ var HC = HC || {};
          * @param error
          */
         loadTexture(url, callback, error) {
-            if (this.textures[url]) {
-                callback(this.textures[url]);
-
-            } else {
-                new THREE.TextureLoader().load(url, function (tex) {
-                    inst.textures[url] = tex;
-                    callback(tex);
-                }, false, error);
-            }
+            new THREE.TextureLoader().load(url, function (tex) {
+                callback(tex);
+            }, false, error);
         }
 
         /**
@@ -195,38 +180,32 @@ var HC = HC || {};
          * @param error
          */
         loadCubeTexture(url, callback, error) {
-            if (this.textures[url]) {
-                callback(this.textures[url]);
+            this._files(url, function (data) {
 
-            } else {
-                this._files(url, function (data) {
+                let images = [];
+                for (let k in data) {
+                    images.push(data[k].name);
+                }
 
-                    let images = [];
-                    for (let k in data) {
-                        images.push(data[k].name);
+                let order = ['posx', 'px', 'negx', 'nx', 'posy', 'py', 'negy', 'ny', 'posz', 'pz', 'negz', 'nz'];
+                images.sort(function (a, b) {
+                    var na = a.replace(/\.[^/.]+$/, "");
+                    var nb = b.replace(/\.[^/.]+$/, "");
+
+                    let ia = order.indexOf(na);
+                    let ib = order.indexOf(nb);
+
+                    if (ia > -1 && ib > -1) {
+                        return ia - ib;
                     }
 
-                    let order = ['posx', 'px', 'negx', 'nx', 'posy', 'py', 'negy', 'ny', 'posz', 'pz', 'negz', 'nz'];
-                    images.sort(function (a, b) {
-                        var na = a.replace(/\.[^/.]+$/, "");
-                        var nb = b.replace(/\.[^/.]+$/, "");
-
-                        let ia = order.indexOf(na);
-                        let ib = order.indexOf(nb);
-
-                        if (ia > -1 && ib > -1) {
-                            return ia - ib;
-                        }
-
-                        return a.localeCompare(b);
-                    });
-
-                    new THREE.CubeTextureLoader().setPath(filePath(url, '')).load(images, function (tex) {
-                        inst.textures[url] = tex;
-                        callback(tex);
-                    }, false, error);
+                    return a.localeCompare(b);
                 });
-            }
+
+                new THREE.CubeTextureLoader().setPath(filePath(url, '')).load(images, function (tex) {
+                    callback(tex);
+                }, false, error);
+            });
         }
 
         /**
@@ -236,7 +215,6 @@ var HC = HC || {};
          * @param error
          */
         loadMaterial(url, callback, error) {
-            let inst = this;
             this._files(url, function (data) {
 
                 let files = [];
@@ -282,6 +260,45 @@ var HC = HC || {};
                     });
                 }
             });
+        }
+
+        /**
+         *
+         * @param target
+         * @param path
+         * @param callback
+         * @param error
+         */
+        loadMaterialMap(target, path, callback, error) {
+            let _assign = function (to, from) {
+                var keys = Object.keys(from);
+                for (let k in keys) {
+                    let key = keys[k];
+                    if (key in to) {
+                        to[key] = from[key];
+                    }
+                }
+            };
+
+
+            // complex
+            if (path.match(/.+\.mat$/i)) {
+                assetman.loadMaterial(path, function (mat) {
+
+                    _assign(target, mat);
+                    callback(target);
+
+                }, error);
+
+            // simple
+            } else {
+                assetman.loadTexture(path, function (tex) {
+                    let mat = { map: tex };
+                    _assign(target, mat);
+                    callback(target);
+
+                }, error);
+            }
         }
 
         /**

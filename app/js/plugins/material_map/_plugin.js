@@ -2,25 +2,26 @@ HC.plugins.material_map = HC.plugins.material_map || {};
 {
     HC.MaterialMapPlugin = class Plugin extends HC.AnimationPlugin {
 
-        map;
-        emissiveMap;
+        properties = {
+            map: null,
+            emissiveMap: null
+        };
 
         reset() {
             this.dispose();
-            if (this.map) {
-                this.map = undefined;
-            }
-            if (this.emissiveMap) {
-                this.emissiveMap = undefined;
+            var keys = Object.keys(this.properties);
+            for (let k in keys) {
+                this.properties[keys[k]] = undefined;
             }
         }
 
         dispose() {
-            if (this.map) {
-                this.map.dispose();
-            }
-            if (this.emissiveMap) {
-                this.emissiveMap.dispose();
+            var keys = Object.keys(this.properties);
+            for (let k in keys) {
+                let v = this.properties[keys[k]];
+                if (v && v.dispose) {
+                    v.dispose();
+                }
             }
         }
     }

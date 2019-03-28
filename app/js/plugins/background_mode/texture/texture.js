@@ -1,5 +1,5 @@
 {
-    HC.plugins.background_mode.texture = class Plugin extends HC.BackgroundModePlugin {
+    HC.plugins.background_mode.texture = class Plugin extends HC.TextureBackgroundModePlugin {
         static index = 40;
 
         apply() {
@@ -7,6 +7,8 @@
             let id = this.id();
 
             if (this.current() != id) {
+                this.dispose();
+
                 let file = assetman.getImage(i);
                 if (file) {
                     this.current(id);

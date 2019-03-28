@@ -166,7 +166,7 @@
 "lighting_penumbra_oscillate":"off",
 "lighting_shadows":false,
 "background_mode":"flashcomplementary",
-"background_config":"#000000",
+"background_color":"#000000",
 "background_input":"off",
 "background_volume":1.5,
 "background_volume_oscillate":"off",

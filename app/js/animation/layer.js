@@ -27,7 +27,7 @@
         this._shapes = false;
         this._lighting = false;
         this._background = false;
-        this._layer = new THREE.Group();
+        this._layer = new THREE.Scene();
         this._layer.name = '_layer' + index;
 
         var three = renderer.three;

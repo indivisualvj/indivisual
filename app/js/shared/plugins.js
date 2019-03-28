@@ -26,8 +26,11 @@ HC.Shape.prototype.initPlugins = function () {
 
     this.plugins = JSON.parse(JSON.stringify(HC.Shape.prototype._plugins));
 };
-
 {
+    /**
+     *
+     * @type {HC.AnimationPlugin}
+     */
     HC.AnimationPlugin = class AnimationPlugin {
 
         layer;

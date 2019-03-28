@@ -302,6 +302,9 @@
             if (this._last != animation.now) {
                 listener.fireEvent('renderer.render', this);
 
+                this.three.scene.background = this.currentLayer._layer.background;
+                this.three.scene.fog = this.currentLayer._layer.fog;
+
                 if (this.currentLayer.shaders()) {
                     this.currentLayer.doShaders();
                     this.currentLayer._composer.render();

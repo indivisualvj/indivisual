@@ -162,7 +162,7 @@
 "lighting_penumbra_oscillate":"off",
 "lighting_shadows":false,
 "background_mode":"flashcomplementary",
-"background_config":"#000000",
+"background_color":"#000000",
 "background_input":"flyroyal,120,1280x720,30.png",
 "background_volume":1,
 "background_volume_oscillate":"off",

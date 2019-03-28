@@ -582,13 +582,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     case 'shape_modc':
                         layer.resetShapes();
                         break;
-                }
 
-                switch (item) { // special case for shapetastic
+                    // special case for shapetastic
                     case 'shape_vertices':
                         if (display) {
                             layer.resetShapes();
                         }
+                        break;
                 }
 
                 if (forward === true) {

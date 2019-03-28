@@ -4,15 +4,29 @@
 {
     /**
      *
-     * @param mesh
-     * @param index
-     * @param color
-     * @constructor
+     * @type {HC.Shape}
      */
     HC.Shape = class Shape {
 
+        parent;
+        visible = true;
+        _scale;
+        _rotationOffset;
+        _rotation;
+        _position;
+        index;
+        color;
+        mesh;
+        geometry;
+        normalScale;
+
+        /**
+         *
+         * @param mesh
+         * @param index
+         * @param color
+         */
         constructor(mesh, index, color) {
-            this.visible = true;
             this._scale = new THREE.Object3D();
             this._scale.name = '_scale' + index;
             this._scale.add(mesh);
@@ -307,19 +321,16 @@
             } else if (mat.refractionRatio != settings.material_shininess) {
                 mat.refractionRatio = settings.material_shininess / 100;
             }
-            if (mat.roughness != settings.material_roughness) {
-                mat.roughness = settings.material_roughness;
-            }
-            if (mat.metalness != settings.material_metalness) {
-                mat.metalness = settings.material_metalness;
-            }
 
-            if (plugin.map) {
-                if (mat.map != plugin.map) {
-                    var keys = Object.getOwnPropertyNames(plugin);
+            mat.roughness = settings.material_roughness;
+            mat.metalness = settings.material_metalness;
+
+            if (plugin.properties && plugin.properties.map) {
+                if (mat.map != plugin.properties.map) {
+                    var keys = Object.keys(plugin.properties);
                     for (let k in keys) {
                         let key = keys[k];
-                        let val = plugin[key];
+                        let val = plugin.properties[key];
                         if (key in mat && val !== undefined) {
                             mat[key] = val;
                         }
@@ -328,7 +339,7 @@
 
                 } else {
                     if (mat.emissive) {
-                        // for mapped material disable color by setting to lum 1
+                        // for mapped material disable color by setting to lum 1 todo hugh?
                         mat.emissive.setHSL(0, 0, emissive ? 1 : 0);
                     }
                 }
@@ -359,10 +370,9 @@
                 mat.needsUpdate = true;
             }
 
-            if (this.mesh.castShadow != settings.lighting_shadows) {
-                this.mesh.castShadow = settings.lighting_shadows;
-                this.mesh.receiveShadow = settings.lighting_shadows;
-            }
+            this.mesh.castShadow = settings.lighting_shadows;
+            this.mesh.receiveShadow = settings.lighting_shadows;
+
         }
 
         /**

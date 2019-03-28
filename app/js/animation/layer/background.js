@@ -12,7 +12,7 @@ HC.Layer.prototype.setBackground = function (value) {
         this._background.add(value);
     }
     if (value instanceof THREE.Color || value instanceof THREE.Texture) {
-        this.three.scene.background = value;
+        this._layer.background = value;
 
     } else {
         // already reset in resetBackground
@@ -29,7 +29,7 @@ HC.Layer.prototype.resetBackground = function (recreate) {
         this._background.traverse(threeDispose);
     }
 
-    this.three.scene.background = null;
+    this._layer.background = null;
 
     if (recreate !== false) {
         this._background = new THREE.Group();

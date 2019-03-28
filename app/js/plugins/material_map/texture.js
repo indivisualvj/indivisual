@@ -27,7 +27,7 @@
 
             file = assetman.getImage(file);
 
-            if (this.map && this.file != file) {
+            if (this.properties.map && this.file != file) {
                 this.reset();
             }
 

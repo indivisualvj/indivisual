@@ -51,7 +51,7 @@ material_blending: NormalBlending
 material_blendequation: AddEquation
 material_blendsrc: SrcAlphaFactor
 material_blenddst: OneMinusSrcAlphaFactor
-material_mapping: 'default' # todo three mapping modes?
+material_mapping: 'default'
 material_shininess: 2
 material_roughness: 0.5
 material_metalness: 0.5
@@ -61,7 +61,7 @@ material_shadowside: 2
 material_map: 'none'
 material_input: 'texture'
 material_style: fill
-material_uvx: 1
+material_uvx: 1 # todo bullshit, make it like background
 material_uvy: 1
 material_uvofx: .5
 material_uvofy: .5

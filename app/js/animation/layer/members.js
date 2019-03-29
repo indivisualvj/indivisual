@@ -7,7 +7,7 @@ HC.Layer.prototype.getMaterialMap = function () {
     if (seq !== 'none') {
         var plugin = this.getMaterialMapPlugin('sequence');
 
-        return plugin.texture;
+        return plugin;
 
     } else {
         var plugin = this.getMaterialMapPlugin('texture');
@@ -60,6 +60,17 @@ HC.Layer.prototype.rotation = function (x, y, z) {
     }
 
     return this._rotation.rotation;
+};
+
+/**
+ *
+ * @param x
+ * @param y
+ * @param z
+ */
+HC.Layer.prototype.position = function (x, y, z) {
+    var cdd = this.cameraDefaultDistance(.25);
+    this._rotation.position.set(this.resolution('half').x + x * cdd, -this.resolution('half').y - y * cdd, z * cdd);
 };
 
 /**

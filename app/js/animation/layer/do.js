@@ -1,4 +1,7 @@
 /**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+/**
  *
  * @param shape
  */
@@ -118,11 +121,12 @@ HC.Layer.prototype.doMaterialMap = function () {
 
     if (seq !== 'none') {
         var plugin = this.getMaterialMapPlugin('sequence');
-        color = plugin.apply(parseInt(seq));
+        // color = plugin.apply(parseInt(seq));
+        color = this.doPlugin(plugin, parseInt(seq));
 
     } else {
         var plugin = this.getMaterialMapPlugin('texture');
-        color = plugin.apply(map);
+        color = this.doPlugin(plugin, map);
     }
 
     return color;
@@ -324,16 +328,16 @@ HC.Layer.prototype.doOffsetMode = function (shape) {
 /**
  *
  * @param plugin
- * @param shape
+ * @param params
  * @returns {*}
  */
-HC.Layer.prototype.doPlugin = function (plugin, shape) {
+HC.Layer.prototype.doPlugin = function (plugin, params) { // todo calls containing second param maybe can be done here now
 
     var result = true;
     if (plugin && plugin.apply) {
         if (plugin.before) {
-            if (shape) {
-                result = plugin.before(shape);
+            if (params) {
+                result = plugin.before(params);
             } else {
                 result = plugin.before();
             }
@@ -342,8 +346,8 @@ HC.Layer.prototype.doPlugin = function (plugin, shape) {
         if (result === false) {
             return false;
         }
-        if (shape) {
-            result = plugin.apply(shape);
+        if (params) {
+            result = plugin.apply(params);
         } else {
             result = plugin.apply();
         }
@@ -352,8 +356,8 @@ HC.Layer.prototype.doPlugin = function (plugin, shape) {
             return false;
         }
         if (plugin.after) {
-            if (shape) {
-                plugin.after(shape);
+            if (params) {
+                plugin.after(params);
             } else {
                 plugin.after();
             }

@@ -10,9 +10,9 @@ audio_usewaveform: false
 camera_mode: manual
 camera_mode_volume: 1.0
 camera_mode_volume_oscillate: 'off'
-camera_rotationx_oscillate: off
-camera_rotationy_oscillate: off
-camera_rotationz_oscillate: off
+camera_rotationx_oscillate: 'off'
+camera_rotationy_oscillate: 'off'
+camera_rotationz_oscillate: 'off'
 camera_rotationx: 0
 camera_rotationy: 0
 camera_rotationz: 0
@@ -51,7 +51,7 @@ material_blending: NormalBlending
 material_blendequation: AddEquation
 material_blendsrc: SrcAlphaFactor
 material_blenddst: OneMinusSrcAlphaFactor
-material_mapping: 'default' # todo three mapping modes?
+material_mapping: 'default'
 material_shininess: 2
 material_roughness: 0.5
 material_metalness: 0.5
@@ -61,10 +61,15 @@ material_shadowside: 2
 material_map: 'none'
 material_input: 'texture'
 material_style: fill
-material_uvx: 1
-material_uvy: 1
-material_uvofx: .5
-material_uvofy: .5
+material_wraps: ClampToEdgeWrapping
+material_wrapt: ClampToEdgeWrapping
+material_repeatx: 1.0
+material_repeaty: 1.0
+material_offsetx: 0.0
+material_offsety: 0.0
+material_centerx: .5
+material_centery: .5
+material_rotation: 0.0
 material_volume: 1
 
 offset_audio: false
@@ -134,9 +139,16 @@ sizing_limit: false
 sizing_sync: true
 sizing_flip: 'off'
 
-layer_rotationx_oscillate: off
-layer_rotationy_oscillate: off
-layer_rotationz_oscillate: off
+layer_transvisible: false
+layer_positionx: 0
+layer_positionx_oscillate: 'off'
+layer_positiony: 0
+layer_positiony_oscillate: 'off'
+layer_positionz: 0
+layer_positionz_oscillate: 'off'
+layer_rotationx_oscillate: 'off'
+layer_rotationy_oscillate: 'off'
+layer_rotationz_oscillate: 'off'
 layer_rotationx: 0
 layer_rotationy: 0
 layer_rotationz: 0

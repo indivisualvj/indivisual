@@ -533,18 +533,9 @@
 
         /**
          *
-         * @param doNotDisplay
          */
-        render(doNotDisplay) {
-            if (this.animationInUse()) {
-                renderer.render(); // todo renderer.current sollte sich selbst rendern (1x pro animation.now). so bekommt man immer ein bild wenn nötig...
-            }
-            if (IS_ANIMATION) {
-                this.renderSamples();
-            }
-            if (!doNotDisplay) {
-                this.renderSequences();
-            }
+        render() {
+            this.renderSamples();
         }
 
         /**
@@ -571,62 +562,6 @@
                     sample.render(renderer.current(), progress, renderer.currentColor());
                 }
             }
-        }
-
-        /**
-         *
-         */
-        renderSequences() {
-            for (let i = 0; i < this.sequences.length; i++) {
-                let sequence = this.sequences[i];
-                if (sequence) {
-                    sequence.next(beatkeeper.getDefaultSpeed());
-                }
-            }
-        }
-
-        /**
-         *
-         * @returns {boolean}
-         */
-        animationInUse() {
-            let inuse = false;
-
-            if (!animation.offline) { // todo bei passthrough overlay nicht offline!
-                for (let dpl = 0; !inuse && dpl < statics.DisplayValues.display.length; dpl++) {
-                    let visible = getDisplayVisible(dpl);
-                    if (visible) {
-                        let src = getDisplaySource(dpl);
-                        if (src == 'sequence') {
-                            let seq = getDisplaySequence(dpl);
-                            let smp = getSampleBySequence(seq);
-                            smp = this.samples[smp];
-                            if (!smp || !smp.enabled) {
-                                inuse = true;
-
-                            } else {
-                                inuse = !smp.isReady();
-                            }
-
-                        } else if (src == 'animation') {
-                            inuse = true;
-                        }
-                    }
-                }
-
-                if (!inuse) {
-                    for (let i = 0; !inuse && i < this.samples.length; i++) {
-                        let smp = this.samples[i];
-                        if (smp && smp.enabled && smp.record) {
-                            inuse = true;
-                        }
-                    }
-                }
-            }
-
-            animation.offline = !inuse;
-
-            return inuse;
         }
     }
 }

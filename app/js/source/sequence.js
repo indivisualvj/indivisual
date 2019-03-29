@@ -104,8 +104,8 @@
          */
         brightness: function () {
             var v = this._brightness;
-            if (this._dirty) {
 
+            if (this._dirty) {
                 var plugin = this.oscillators[this.osci];
                 if (plugin && plugin.apply) {
                     var shs = {value: v};
@@ -124,45 +124,49 @@
          * @param beat
          */
         next: function (beat) {
-            var sample = this.sample;
 
-            if (sample && sample.isReady()) {
+            if (this._last != animation.now) {
 
-                // sample race on peak
-                if (this.audio && this.jump) {
-                    this._raceonpeak(beat);
+                var sample = this.sample;
 
-                    // sample audio
-                } else if (this.audio) {
-                    this._audio(beat);
+                if (sample && sample.isReady()) {
 
-                    // sample jump
-                } else if (this.jump) {
-                    this._jump(beat);
+                    // sample race on peak
+                    if (this.audio && this.jump) {
+                        this._raceonpeak(beat);
 
-                } else {
-                    this._progress(beat);
+                        // sample audio
+                    } else if (this.audio) {
+                        this._audio(beat);
+
+                        // sample jump
+                    } else if (this.jump) {
+                        this._jump(beat);
+
+                    } else {
+                        this._progress(beat);
+                    }
+
+                    // safety first
+                    if (this._pointer >= this.end) {
+                        this._pointer = this.start;
+
+                    } else if (this._pointer < this.start) {
+                        this._pointer = this.end - 1;
+                    }
+
                 }
 
-                // safety first
-                if (this._pointer >= this.end) {
-                    this._pointer = this.start;
-
-                } else if (this._pointer < this.start) {
-                    this._pointer = this.end - 1;
+                // autoflip flipa flip on peak if random hits
+                if (this.flipa && audio.peak && randomBool()) {
+                    this.flipx = randomBool() ? -1 : 1;
+                    this.flipy = randomBool() ? -1 : 1;
                 }
 
+                this._dirty = true;
+
+                this._last = animation.now;
             }
-
-            // autoflip flipa flip on peak if random hits
-            if (this.flipa && audio.peak && randomBool()) {
-                this.flipx = randomBool() ? -1 : 1;
-                this.flipy = randomBool() ? -1 : 1;
-            }
-
-            this._dirty = true;
-
-            //return frame;
         },
 
         /**
@@ -185,6 +189,8 @@
          * @returns {*}
          */
         current: function (fallback, passthrough) {
+
+            this.next(beatkeeper.getDefaultSpeed());
 
             var image = fallback;
             if (this.sample) {

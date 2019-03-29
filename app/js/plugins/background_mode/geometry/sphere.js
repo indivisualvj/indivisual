@@ -2,7 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    HC.plugins.background_mode.sphere = class Plugin extends HC.BackgroundModePlugin {
+    HC.plugins.background_mode.sphere = class Plugin extends HC.GeometryBackgroundModePlugin {
+        static index = 51;
 
         apply() {
             if (this.current() !== this.id()) {
@@ -13,9 +14,7 @@
                 res.multiplyScalar(this.settings.background_volume);
                 let geo = new THREE.SphereBufferGeometry(res.length() * 2, 16, 16);
                 geo.rotateY(Math.PI / 2);
-                let mat = new THREE.MeshStandardMaterial({
-                    // todo unconfigurable materials suck.
-                    // todo simple and complex materials for background materials too
+                let mat = new THREE.MeshPhysicalMaterial({
                     color: color,
                     side: THREE.DoubleSide
                 });
@@ -23,20 +22,20 @@
                 mesh.receiveShadow = true;
 
 
+                this.mesh = mesh;
 
                 this.layer.setBackground(mesh);
 
                 let file = assetman.getImage(this.settings.background_input);
                 if (file) {
-                    let inst = this;
-                    assetman.loadTexture(filePath(IMAGE_DIR, file), function (tex) {
-                        tex.wrapS = THREE.RepeatWrapping;
-                        tex.repeat.x = -1;
-                        mat.map = tex;
-                        mat.emissiveMap = tex;
-                        mat.needsUpdate = true;
+                    assetman.loadMaterialMap(mat, filePath(IMAGE_DIR, file), function (mat) {
+                        // tex.wrapS = THREE.RepeatWrapping; // todo assign to all ..maps?
+                        // tex.repeat.x = -1;
 
-                        inst.texture = tex;
+                        if (!mat.emissiveMap) {
+                            mat.emissiveMap = mat.map;
+                        }
+                        mat.needsUpdate = true;
                     });
                 }
             }

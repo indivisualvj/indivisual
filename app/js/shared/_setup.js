@@ -20,7 +20,7 @@ _MONITOR = 'monitor';
 
 IS_CONTROLLER = G_INSTANCE == _CONTROLLER;
 IS_SETUP = G_INSTANCE == _SETUP;
-IS_ANIMATION = G_INSTANCE == _ANIMATION;
+IS_ANIMATION = G_INSTANCE == _ANIMATION || G_INSTANCE == _CLIENT;
 IS_MONITOR = G_INSTANCE == _MONITOR;
 
 LAYER_KEYCODES = {
@@ -313,7 +313,9 @@ function setupResources() {
                 var keys = Object.keys(statics.SourceValues.input);
                 var index = keys.length;
                 for (var i in images) {
-                    statics.SourceValues.input[index++] = i;
+                    if (!i.match(/^.+\.mat$/)) {
+                        statics.SourceValues.input[index++] = i;
+                    }
                 }
 
                 finished();

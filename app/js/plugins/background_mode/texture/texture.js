@@ -1,5 +1,5 @@
 {
-    HC.plugins.background_mode.cubetexture = class Plugin extends HC.BackgroundModePlugin {
+    HC.plugins.background_mode.texture = class Plugin extends HC.TextureBackgroundModePlugin {
         static index = 40;
 
         apply() {
@@ -7,13 +7,18 @@
             let id = this.id();
 
             if (this.current() != id) {
-                let file = assetman.getCube(i);
+                this.dispose();
+
+                let file = assetman.getImage(i);
                 if (file) {
                     this.current(id);
                     let inst = this;
-                    let path = filePath(CUBE_DIR, file);
-                    assetman.loadCubeTexture(path, function (texture) {
-                        inst.texture = texture; // todo dispose texture
+                    let path = filePath(IMAGE_DIR, file);
+
+                    assetman.loadTexture(path, function (texture) {
+                        texture.center.set(.5, .5);
+                        inst.texture = texture;
+
                         inst.layer.setBackground(texture);
                     });
 

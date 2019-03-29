@@ -83,12 +83,12 @@ HC.Layer.prototype.updateLighting = function () {
  */
 HC.Layer.prototype.resetFog = function () {
     if (this.three.scene.fog) {
-        this.three.scene.fog = false;
+        this._layer.fog = null;
     }
 
     if (this.settings.lighting_fog) {
         var fog = new THREE.Fog(0x000000, this.settings.lighting_fog_near, this.settings.lighting_fog_far);
-        this.three.scene.fog = fog;
+        this._layer.fog = fog;
     }
 };
 

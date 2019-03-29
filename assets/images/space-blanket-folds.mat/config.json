@@ -6,5 +6,7 @@
   "displacementBias": 1,
   "metalnessMap": "metallic.jpg",
   "normalMap": "normal.jpg",
-  "roughnessMap": "roughness.jpg"
+  "roughnessMap": "roughness.jpg",
+  "roughness": 0.5,
+  "metalness": 0.9
 }

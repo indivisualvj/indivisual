@@ -44,46 +44,36 @@
             var co = document.getElementById('log');
             if (co) {
 
-                if (statics
-                    && statics.ControlSettings
-                    && !statics.ControlSettings.console
-                ) {
-                    co.style.display = 'none';
+                if (value == false) {
+                    value = value.toString();
+                }
+
+                if (IS_CONTROLLER || force) {
+                    messaging.emitLog(key, value);
+                }
+
+                var txt = '';
+                var elem = false;
+                if (value) {
+                    txt = key + ': ' + value;
 
                 } else {
-                    co.style.display = 'block';
-
-                    if (value == false) {
-                        value = value.toString();
-                    }
-
-                    if (IS_CONTROLLER || force) {
-                        messaging.emitLog(key, value);
-                    }
-
-                    var txt = '';
-                    var elem = false;
-                    if (value) {
-                        txt = key + ': ' + value;
-
-                    } else {
-                        txt = key;
-                    }
-
-                    if (key in logHistory) {
-                        elem = logHistory[key];
-
-                    } else {
-                        elem = document.createElement('div');
-                        logHistory[key] = elem;
-                    }
-
-                    elem.innerHTML = txt;
-                    co.appendChild(elem);
-
-                    co.scrollTop = co.scrollHeight;
-
+                    txt = key;
                 }
+
+                if (key in logHistory) {
+                    elem = logHistory[key];
+
+                } else {
+                    elem = document.createElement('div');
+                    logHistory[key] = elem;
+                }
+
+                elem.innerHTML = txt;
+                co.appendChild(elem);
+
+                co.scrollTop = co.scrollHeight;
+
             }
         });
     };

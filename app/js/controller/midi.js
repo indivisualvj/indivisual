@@ -139,7 +139,7 @@ HC.Controller.prototype.initMidi = function (instance) {
         if (data.length < 2) return;
         // console.log('', data); // MIDI data [144, 63, 73]
 
-        // listener.fireEvent('midi.onMessage', data); // todo forward midi through messaging and fire there to generate MIDI support for plugins.
+        messaging.emitMidi('message', data, {});
 
         var cmd = data[0];
         var id = data[1];

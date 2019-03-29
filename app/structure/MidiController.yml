@@ -38,33 +38,33 @@ constants:
 128:
   80:
     default:
-      type: off
+      type: 'off'
     sequence:
-      type: off
+      type: 'off'
     overlay:
-      type: off
+      type: 'off'
     sample:
-      type: off
+      type: 'off'
 
   83:
     default:
-      type: off
+      type: 'off'
     sequence:
-      type: off
+      type: 'off'
     overlay:
-      type: off
+      type: 'off'
     sample:
-      type: off
+      type: 'off'
 
   84:
     default:
-      type: off
+      type: 'off'
     sequence:
-      type: off
+      type: 'off'
     overlay:
-      type: off
+      type: 'off'
     sample:
-      type: off
+      type: 'off'
 
 144:
   80:
@@ -668,12 +668,12 @@ constants:
       type: assign
       section: Source
       name: _input
-      value: off
+      value: 'off'
     overlay:
       type: assign
       section: Source
       name: _overlay
-      value: off
+      value: 'off'
     sample:
       type: toggle
       section: Source

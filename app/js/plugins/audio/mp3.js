@@ -21,6 +21,7 @@
     }
 
     HC.audio.mediafile = class Plugin extends HC.AudioPlugin {
+        static index = 20;
         static tutorial = {
             howto: {
                 text: 'You now can drag/drop a media file into the animation window'

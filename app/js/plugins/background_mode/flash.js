@@ -1,7 +1,12 @@
 {
     HC.plugins.background_mode.flash = class Plugin extends HC.BackgroundModePlugin {
         static name = 'flash background color';
-        static index = 30;
+        static index = 20;
+        static tutorial = {
+            color: {
+                text: 'set background_color to any hex code (#ffaabb) to change color'
+            }
+        };
 
         apply(color) {
             let layer = this.layer;

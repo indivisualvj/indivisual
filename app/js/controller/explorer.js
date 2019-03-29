@@ -344,7 +344,7 @@
                 };
                 messaging.mkdir(STORAGE_DIR, name, false, function (result) {
                     HC.log(result);
-                    model.children.unshift(nu);
+                    model.children.splice(1, 0, nu);
                 });
             }
         },

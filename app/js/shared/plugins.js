@@ -5,7 +5,7 @@
 HC.plugins = HC.plugins || {};
 
 HC.Shape.prototype.injected = {
-    plugins: {}
+    plugins: {},
 };
 
 /**
@@ -13,24 +13,31 @@ HC.Shape.prototype.injected = {
  */
 HC.Shape.prototype.initPlugins = function () {
 
-    this.plugins = {}; // todo create cache in setup then object.create/assign here
-    var plugins = Object.keys(HC.Shape.prototype.injected.plugins);
-    for (var p = 0; p < plugins.length; p++) {
-        var key = plugins[p];
-        var plugin = HC.Shape.prototype.injected.plugins[key];
-        var clone = JSON.parse(JSON.stringify(plugin));
-        this.plugins[key] = clone;
+    if (!HC.Shape.prototype._plugins) {
+        HC.Shape.prototype._plugins = {};
+        var plugins = Object.keys(HC.Shape.prototype.injected.plugins);
+        for (var p = 0; p < plugins.length; p++) {
+            var key = plugins[p];
+            var plugin = HC.Shape.prototype.injected.plugins[key];
+            var clone = JSON.parse(JSON.stringify(plugin));
+            HC.Shape.prototype._plugins[key] = clone;
+        }
     }
-};
 
+    this.plugins = JSON.parse(JSON.stringify(HC.Shape.prototype._plugins));
+};
 {
+    /**
+     *
+     * @type {HC.AnimationPlugin}
+     */
     HC.AnimationPlugin = class AnimationPlugin {
 
         layer;
         settings;
         tree;
         key;
-
+        
         id(suffix) {
             return this.layer.index + '.' + this.tree + '.' + this.key + (suffix!==undefined?'.' + suffix:'');
         }
@@ -132,6 +139,36 @@ HC.Shape.prototype.initPlugins = function () {
          */
         ready() {
             return true;
+        }
+    }
+}
+{
+    HC.AnimationTexturePlugin = class AnimationTexturePlugin extends HC.AnimationPlugin {
+        /**
+         *
+         * @param texture
+         * @param prefix
+         */
+        updateTexture(texture, prefix) {
+            let wraps = THREE[this.settings[prefix + '_wraps']];
+            if (texture.wrapS != wraps) {
+                texture.wrapS = wraps;
+                if (texture.image) {
+                    texture.needsUpdate = true;
+                }
+            }
+            let wrapt = THREE[this.settings[prefix + '_wrapt']];
+            if (texture.wrapT != wrapt) {
+                texture.wrapT = wrapt;
+                if (texture.image) {
+                    texture.needsUpdate = true;
+                }
+            }
+
+            texture.repeat.set(this.settings[prefix + '_repeatx'], this.settings[prefix + '_repeaty']);
+            texture.offset.set(-this.settings[prefix + '_offsetx'], this.settings[prefix + '_offsety']);
+            texture.rotation = RAD * this.settings[prefix + '_rotation'];
+            texture.center.set(this.settings[prefix + '_centerx'], this.settings[prefix + '_centery']);
         }
     }
 }

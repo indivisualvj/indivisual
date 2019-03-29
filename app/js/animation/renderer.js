@@ -70,6 +70,13 @@
 
         initLayers: function (keepsettings) {
 
+            if (this._layers) {
+                this.three.scene.remove(this._layers);
+                this._layers.traverse(threeDispose);
+            }
+            this._layers = new THREE.Group();
+            this.three.scene.add(this._layers);
+
             for (var i = 0; i < this.layers.length; i++) {
                 var op = false;
                 var os = false;
@@ -144,13 +151,14 @@
 
             for (var i in this.layers) {
                 i = parseInt(i);
-                var layer = this.layers[i]._layer;
+                var layer = this.layers[i];
+                var transvisible = layer.settings.layer_transvisible;
 
-                if (i == index) {
-                    this.three.scene.add(layer);
+                if (i == index || transvisible) {
+                    this._layers.add(layer._layer);
 
                 } else {
-                    this.three.scene.remove(layer);
+                    this._layers.remove(layer._layer);
                 }
             }
 
@@ -175,19 +183,17 @@
         },
 
         /**
-         *
-         * @param layer
+         * Render current and all transvisible layers
          * @param hook
          */
-        animateLayer: function (layer, hook) {
-            if (isNumber(layer) || isString(layer)) {
-                layer = this.layers[layer];
-
-            } else {
-                layer = this.currentLayer;
+        animate: function (hook) {
+            for (var l in this.layers) {
+                var layer = this.layers[l];
+                if (layer == this.currentLayer || layer.settings.layer_transvisible) {
+                    layer.animate(hook);
+                    hook = undefined;
+                }
             }
-
-            layer.animate(hook);
         },
 
         /**
@@ -259,6 +265,7 @@
          * @returns {boolean|*}
          */
         current: function () {
+            this.render();
 
             var renderer = this.three.renderer;
             if (renderer && renderer.view) {
@@ -292,14 +299,21 @@
          */
         render: function () {
 
-            listener.fireEvent('renderer.render', this);
+            if (this._last != animation.now) {
+                listener.fireEvent('renderer.render', this);
 
-            if (this.currentLayer.shaders()) {
-                this.currentLayer.doShaders();
-                this.currentLayer._composer.render();
+                this.three.scene.background = this.currentLayer._layer.background;
+                this.three.scene.fog = this.currentLayer._layer.fog;
 
-            } else {
-                this.three.renderer.render(this.three.scene, this.currentLayer.three.camera, this.three.target);
+                if (this.currentLayer.shaders()) {
+                    this.currentLayer.doShaders();
+                    this.currentLayer._composer.render();
+
+                } else {
+                    this.three.renderer.render(this.three.scene, this.currentLayer.three.camera, this.three.target);
+                }
+
+                this._last = animation.now;
             }
         },
 

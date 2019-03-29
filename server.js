@@ -51,9 +51,9 @@ let sessions = {};
 let members = ['animation', 'controller', 'client', 'setup', 'monitor'];
 
 let targetsGroups = {
-    animation: ['controls', 'displays', 'sources', 'settings', 'log'],
+    animation: ['controls', 'displays', 'sources', 'settings', 'log', 'midi'],
     controller: ['controls', 'displays', 'sources', 'settings', 'log', 'attr', 'midi', 'data'],
-    client: ['controls', 'displays', 'sources', 'settings', 'log'],
+    client: ['controls', 'displays', 'sources', 'settings', 'log', 'midi'],
     setup: ['displays', 'data', 'settings'],
     monitor: ['displays', 'controls', 'settings', 'sources'], // displays added to have updates on resolution. animation.prepareMonitor takes care of the other settings.
     log: ['log']

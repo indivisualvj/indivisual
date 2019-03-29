@@ -1,3 +1,19 @@
+layer:
+  layer_transvisible:
+  layer_positionx:
+  layer_positionx_oscillate:
+  layer_positiony:
+  layer_positiony_oscillate:
+  layer_positionz:
+  layer_positionz_oscillate:
+  layer_rotationx:
+  layer_rotationx_oscillate:
+  layer_rotationy:
+  layer_rotationy_oscillate:
+  layer_rotationz:
+  layer_rotationz_oscillate:
+
+
 audio & timing:
   audio_thickness:
   audio_usewaveform:
@@ -86,14 +102,6 @@ camera:
   camera_rotationz:
   camera_rotationz_oscillate:
 
-layer:
-  layer_rotationx:
-  layer_rotationx_oscillate:
-  layer_rotationy:
-  layer_rotationy_oscillate:
-  layer_rotationz:
-  layer_rotationz_oscillate:
-
 pattern:
   pattern:
   pattern_shapes:
@@ -149,10 +157,15 @@ material:
   material_shadowside:
   material_input:
   material_mapping:
-  material_uvx:
-  material_uvy:
-  material_uvofx:
-  material_uvofy:
+  material_wraps:
+  material_wrapt:
+  material_repeatx:
+  material_repeaty:
+  material_offsetx:
+  material_offsety:
+  material_centerx:
+  material_centery:
+
 
 coloring:
   coloring_mode:

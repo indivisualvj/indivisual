@@ -198,7 +198,7 @@ document.addEventListener('DOMContentLoaded', function () {
             renderer.switchLayer(IS_MONITOR);
 
             var hook = this.doNotDisplay ? false : this._perspectiveHook;
-            renderer.animateLayer(renderer.currentLayer, hook);
+            renderer.animate(hook);
 
         },
 
@@ -206,8 +206,9 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         render: function () {
-
-            sourceman.render(this.doNotDisplay);
+            if (IS_ANIMATION) {
+                sourceman.render();
+            }
             if (!this.doNotDisplay) {
                 displayman.render();
             }
@@ -581,13 +582,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     case 'shape_modc':
                         layer.resetShapes();
                         break;
-                }
 
-                switch (item) { // special case for shapetastic
+                    // special case for shapetastic
                     case 'shape_vertices':
                         if (display) {
                             layer.resetShapes();
                         }
+                        break;
                 }
 
                 if (forward === true) {
@@ -757,6 +758,16 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateData: function (data) {
 
+        },
+
+        /**
+         *
+         * @param data
+         */
+        updateMidi: function (data) {
+            if (data.command == 'message') {
+                listener.fireEvent('midi.message', data.data);
+            }
         },
 
         /**

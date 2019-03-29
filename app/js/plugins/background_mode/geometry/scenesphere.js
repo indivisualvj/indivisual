@@ -2,8 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    HC.plugins.background_mode.scenecube = class Plugin extends HC.BackgroundModePlugin {
-        static index = 50;
+    HC.plugins.background_mode.scenesphere = class Plugin extends HC.GeometryBackgroundModePlugin {
+        static index = 61;
         material;
         counter = 0;
         target1;
@@ -20,8 +20,8 @@
                 this.target1 = new THREE.WebGLRenderTarget(edge, edge);
                 this.target2 = this.target1.clone();
 
-                res.multiplyScalar(2.5);
-                let geo = new THREE.BoxBufferGeometry(res.x, res.y, res.x);
+                let geo = new THREE.SphereBufferGeometry(res.length() * 2, 16, 16);
+                geo.rotateY(Math.PI / 2);
 
                 this.material = new THREE.MeshBasicMaterial({
                     color: color,
@@ -35,6 +35,7 @@
                 mesh.scale.x *= -1;
                 mesh.name = this.id();
                 mesh.receiveShadow = true;
+                this.mesh = mesh;
 
                 this.layer.setBackground(mesh);
 

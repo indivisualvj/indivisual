@@ -1,6 +1,6 @@
 HC.plugins.material_map = HC.plugins.material_map || {};
 {
-    HC.MaterialMapPlugin = class Plugin extends HC.AnimationPlugin {
+    HC.MaterialMapPlugin = class Plugin extends HC.AnimationTexturePlugin {
 
         properties = {
             map: null,

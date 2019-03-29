@@ -157,10 +157,15 @@ material:
   material_shadowside:
   material_input:
   material_mapping:
-  material_uvx:
-  material_uvy:
-  material_uvofx:
-  material_uvofy:
+  material_wraps:
+  material_wrapt:
+  material_repeatx:
+  material_repeaty:
+  material_offsetx:
+  material_offsety:
+  material_centerx:
+  material_centery:
+
 
 coloring:
   coloring_mode:

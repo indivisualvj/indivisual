@@ -48,6 +48,12 @@ background_wraps: &wraps
 background_wrapt:
   *wraps
 
+material_wraps:
+  *wraps
+
+material_wrapt:
+  *wraps
+
 material_input: #material_map inputs
   none: none
 

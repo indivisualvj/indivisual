@@ -8,7 +8,7 @@
 
         after() {
             if (this.texture) {
-                this.updateTexture(this.texture);
+                this.updateTexture(this.texture, 'background');
             }
         }
 

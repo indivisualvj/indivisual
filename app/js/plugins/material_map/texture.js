@@ -32,7 +32,6 @@
             }
 
             if (!this.loading && !this.properties.map) {
-
                 if (file) {
                     let inst = this;
                     let path = filePath(IMAGE_DIR, file);
@@ -53,7 +52,14 @@
                 }
             }
 
-            return false;
+            return '';
+        }
+
+        after() {
+            if (this.properties && this.properties.map) {
+                let map = this.properties.map;
+                this.updateTexture(map, 'material');
+            }
         }
     }
 }

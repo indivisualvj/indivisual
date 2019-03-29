@@ -13,7 +13,7 @@
                     let key = keys[k];
                     if (mat[key] instanceof THREE.Texture) {
                         let texture = mat[key];
-                        this.updateTexture(texture);
+                        this.updateTexture(texture, 'background');
                     }
                 }
             }

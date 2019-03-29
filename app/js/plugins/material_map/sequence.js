@@ -33,6 +33,7 @@
                 }
                 img._color = image._color;
             }
+            super.updateTexture(map, 'material');
             map.needsUpdate = true;
         }
 

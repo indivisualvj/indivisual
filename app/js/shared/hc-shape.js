@@ -344,7 +344,7 @@
                     }
                 }
 
-                this._updateMaterialMap();
+                // this._updateMaterialMap();
 
 
             } else if (mat.map) {
@@ -428,47 +428,44 @@
          *
          * @private
          */
-        _updateMaterialMap() {
-            let settings = this.parent.settings;
-            let mat = this.mesh.material;
-            if (mat.map) {
-                let repeat = mat.map.repeat;
-                let offset = mat.map.offset;
-                let center = mat.map.center;
-
-                if (repeat.x != settings.material_uvx) {
-                    repeat.x = 1 / settings.material_uvx;
-                }
-                if (repeat.y != settings.material_uvy) {
-                    repeat.y = 1 / settings.material_uvy;
-                }
-                if (settings.material_uvx <= 1) {
-                    center.x = .5;
-                    let uvofx;
-                    if (offset.x != -(uvofx = settings.material_uvofx - .5)) {
-                        offset.x = -uvofx;
-                    }
-
-                } else {
-                    offset.x = 0;
-                    if (center.x != settings.material_uvofx) {
-                        center.x = 1 - settings.material_uvofx;
-                    }
-                }
-                if (settings.material_uvy <= 1) {
-                    center.y = .5;
-                    let uvofy;
-                    if (offset.y != (uvofy = settings.material_uvofy - .5)) {
-                        offset.y = uvofy;
-                    }
-                } else {
-                    offset.y = 0;
-                    if (center.y != settings.material_uvofy) {
-                        center.y = settings.material_uvofy;
-                    }
-                }
-            }
-        }
+        // _updateMaterialMap() {
+        //     let settings = this.parent.settings;
+        //     let mat = this.mesh.material;
+        //     if (mat.map) {
+        //         let repeat = mat.map.repeat;
+        //         let offset = mat.map.offset;
+        //         let center = mat.map.center;
+        //
+        //         repeat.x = 1 / settings.material_repeatx;
+        //         repeat.y = 1 / settings.material_repeaty;
+        //
+        //         if (settings.material_repeatx <= 1) {
+        //             center.x = .5;
+        //             let uvofx;
+        //             if (offset.x != -(uvofx = settings.material_centerx - .5)) {
+        //                 offset.x = -uvofx;
+        //             }
+        //
+        //         } else {
+        //             offset.x = 0;
+        //             if (center.x != settings.material_centerx) {
+        //                 center.x = 1 - settings.material_centerx;
+        //             }
+        //         }
+        //         if (settings.material_repeaty <= 1) {
+        //             center.y = .5;
+        //             let uvofy;
+        //             if (offset.y != (uvofy = settings.material_centery - .5)) {
+        //                 offset.y = uvofy;
+        //             }
+        //         } else {
+        //             offset.y = 0;
+        //             if (center.y != settings.material_centery) {
+        //                 center.y = settings.material_centery;
+        //             }
+        //         }
+        //     }
+        // }
 
         getRootGeometry() {
             let _get = function (g) {

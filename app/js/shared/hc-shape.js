@@ -348,8 +348,13 @@
 
 
             } else if (mat.map) {
-                mat.map = false;
-                mat.emissiveMap = false;
+                var keys = Object.keys(plugin.properties);
+                for (let k in keys) {
+                    let key = keys[k];
+                    if (key in mat) {
+                        mat[key] = null;
+                    }
+                }
                 mat.needsUpdate = true;
             }
 

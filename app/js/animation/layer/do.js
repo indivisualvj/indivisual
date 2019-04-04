@@ -331,7 +331,7 @@ HC.Layer.prototype.doOffsetMode = function (shape) {
  * @param params
  * @returns {*}
  */
-HC.Layer.prototype.doPlugin = function (plugin, params) { // todo calls containing second param maybe can be done here now
+HC.Layer.prototype.doPlugin = function (plugin, params) {
 
     var result = true;
     if (plugin && plugin.apply) {
@@ -346,8 +346,9 @@ HC.Layer.prototype.doPlugin = function (plugin, params) { // todo calls containi
         if (result === false) {
             return false;
         }
-        if (params) {
+        if (params !== undefined) {
             result = plugin.apply(params);
+
         } else {
             result = plugin.apply();
         }
@@ -355,9 +356,11 @@ HC.Layer.prototype.doPlugin = function (plugin, params) { // todo calls containi
         if (result === false) {
             return false;
         }
+
         if (plugin.after) {
             if (params) {
                 plugin.after(params);
+
             } else {
                 plugin.after();
             }

@@ -165,6 +165,7 @@ material:
   material_offsety:
   material_centerx:
   material_centery:
+  material_rotation:
 
 
 coloring:

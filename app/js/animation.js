@@ -765,7 +765,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param data
          */
         updateMidi: function (data) {
-            if (data.command == 'message') {
+            if (listener && data.command == 'message') {
                 listener.fireEvent('midi.message', data.data);
             }
         },

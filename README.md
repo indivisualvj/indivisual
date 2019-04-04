@@ -128,7 +128,6 @@ Many thanks to:
 - https://github.com/vuejs/vue
 - https://github.com/dataarts/dat.gui
 - https://github.com/mrdoob/stats.js
-- https://github.com/chandlerprall/ThreeCSG
 - https://github.com/nodejs/node
 - https://github.com/yarnpkg/yarn
 - https://www.shadertoy.com/

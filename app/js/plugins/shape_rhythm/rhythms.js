@@ -155,7 +155,7 @@
         static name = 'full/half/quarter/eight';
 
         apply(shape, reverse) {
-            let layer = this.layer;
+            let layer = this.layer; // todo unused
             let params = this.params(shape);
             let mod = shape.index % 4;
             if (reverse) {

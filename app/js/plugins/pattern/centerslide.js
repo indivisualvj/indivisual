@@ -16,8 +16,9 @@
 
                 let size = layer.shapeSize(1);
                 let hsc = Math.floor(layer.shapeCount() / 2);
-                let w = layer.resolution().x;
-                let h = layer.resolution().y;
+                let p = this.settings.pattern_padding * this.settings.pattern_paddingx;
+                let w = layer.resolution().x * p;
+                // let h = layer.resolution().y;
 
                 if (shape.index < hsc) {
                     params.current.x = w/-2 - size;

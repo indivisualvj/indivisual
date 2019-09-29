@@ -32,6 +32,17 @@ HC.Controller.prototype.initMidi = function (instance) {
         // when we get a succesful response, run this code
         midi = midiAccess; // this is our raw MIDI data, inputs, outputs, and sysex status
         console.log('MIDI access available');
+
+        var _updateControlSet = function (input, settings) {
+            var constants = settings.constants;
+            for (var c in constants) {
+                var co = constants[c];
+                window[c] = co;
+            }
+
+            input.value._controlSet = settings;
+        };
+
         var _onStateChange = function () {
             if (midi.onstatechange == null) return;
             midi.onstatechange = null;
@@ -45,7 +56,19 @@ HC.Controller.prototype.initMidi = function (instance) {
                     success = true;
                 }
 
-                console.log(input.value.name, input.value);
+                // check for valid ControlSet by MIDI Device name
+                let name = input.value.name;
+                if (name in statics.MidiController) {
+                    _updateControlSet(input, statics.MidiController[name]);
+                }
+
+                // check for valid ControlSet by MIDI Device manufacturer
+                name = input.value.manufacturer;
+                if (name in statics.MidiController) {
+                    _updateControlSet(input, statics.MidiController[name]);
+                }
+
+                console.log(name, input.value);
                 input.value.onmidimessage = _onMessage;
 
             }
@@ -60,6 +83,7 @@ HC.Controller.prototype.initMidi = function (instance) {
         midi.onstatechange = _onStateChange;
         _onStateChange();
     }
+
 
     /**
      *
@@ -151,8 +175,8 @@ HC.Controller.prototype.initMidi = function (instance) {
 
         var shifts = Object.keys(midi_shifted);
 
-        if (cmd in statics.MidiController) {
-            cmd = statics.MidiController[cmd];
+        if (cmd in message.currentTarget._controlSet) {
+            cmd = message.currentTarget._controlSet[cmd];
 
             if (id in cmd) {
 

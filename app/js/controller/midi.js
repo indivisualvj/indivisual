@@ -32,6 +32,17 @@ HC.Controller.prototype.initMidi = function (instance) {
         // when we get a succesful response, run this code
         midi = midiAccess; // this is our raw MIDI data, inputs, outputs, and sysex status
         console.log('MIDI access available');
+
+        var _updateControlSet = function (input, settings) {
+            var constants = settings.constants;
+            for (var c in constants) {
+                var co = constants[c];
+                window[c] = co;
+            }
+
+            input.value._controlSet = settings;
+        };
+
         var _onStateChange = function () {
             if (midi.onstatechange == null) return;
             midi.onstatechange = null;
@@ -45,7 +56,19 @@ HC.Controller.prototype.initMidi = function (instance) {
                     success = true;
                 }
 
-                console.log(input.value.name, input.value);
+                // check for valid ControlSet by MIDI Device name
+                let name = input.value.name;
+                if (name in statics.MidiController) {
+                    _updateControlSet(input, statics.MidiController[name]);
+                }
+
+                // check for valid ControlSet by MIDI Device manufacturer
+                name = input.value.manufacturer;
+                if (name in statics.MidiController) {
+                    _updateControlSet(input, statics.MidiController[name]);
+                }
+
+                console.log(name, input.value);
                 input.value.onmidimessage = _onMessage;
 
             }
@@ -60,6 +83,7 @@ HC.Controller.prototype.initMidi = function (instance) {
         midi.onstatechange = _onStateChange;
         _onStateChange();
     }
+
 
     /**
      *
@@ -151,8 +175,9 @@ HC.Controller.prototype.initMidi = function (instance) {
 
         var shifts = Object.keys(midi_shifted);
 
-        if (cmd in statics.MidiController) {
-            cmd = statics.MidiController[cmd];
+        if (cmd in message.currentTarget._controlSet) {
+            let ctrlSet = message.currentTarget._controlSet;
+            cmd = ctrlSet[cmd];
 
             if (id in cmd) {
 
@@ -191,7 +216,7 @@ HC.Controller.prototype.initMidi = function (instance) {
                                 name = id.name;
                             }
 
-                            _switchType(id, name, vel, settings, values, types, func, message.timeStamp);
+                            _switchType(id, name, vel, settings, values, types, func, message.timeStamp, ctrlSet);
                         }
                     }
                 } else {
@@ -215,9 +240,10 @@ HC.Controller.prototype.initMidi = function (instance) {
      * @param types
      * @param func
      * @param timestamp
+     * @param ctrlSet
      * @private
      */
-    function _switchType(id, name, vel, settings, values, types, func, timestamp) {
+    function _switchType(id, name, vel, settings, values, types, func, timestamp, ctrlSet) {
 
         var last = (values + name) in cache ? cache[values + name] : [0, 0, 0];
         var tdiff = timestamp - last[1];
@@ -286,7 +312,7 @@ HC.Controller.prototype.initMidi = function (instance) {
                     _showOSD(id.type, id.shift + '/' + enable, false);
 
                     // search for assignment and send
-                    assignment = _findMidiAssignment(id, name, settings, values, types);
+                    assignment = _findMidiAssignment(id, name, settings, values, types, ctrlSet);
                     if (assignment !== false) {
                         _glow(assignment);
                     }
@@ -448,14 +474,15 @@ HC.Controller.prototype.initMidi = function (instance) {
      * @param settings
      * @param values
      * @param types
-     * @returns {*}
+     * @param ctrlSet
+     * @returns {boolean|number[]}
      * @private
      */
-    function _findMidiAssignment(id, name, settings, values, types) {
-        var cmd = statics.MidiController;
-        for (var m in cmd) {
+    function _findMidiAssignment(id, name, settings, values, types, ctrlSet) {
+
+        for (var m in ctrlSet) {
             m = parseInt(m);
-            var sub = cmd[m];
+            var sub = ctrlSet[m];
             for (var s in sub) {
                 s = parseInt(s);
                 var c = sub[s];

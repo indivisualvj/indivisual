@@ -3,704 +3,709 @@
 # UI feedback & timing
 #
 # # # # # # # # # # # # # # # # # # # #
-# todo MIDI config for each connected controller
-constants:
-  MIDI_CLOCK_NEXT: [248, 251]
-  MIDI_ROW_ONE:
-    "0": [176, 16]
-    "1": [176, 17]
-    "2": [176, 18]
-    "3": [176, 19]
-    "4": [176, 20]
-    "5": [176, 21]
-    "6": [176, 22]
-    "7": [176, 23]
-  MIDI_ROW_TWO:
-    "0": [176, 24]
-    "1": [176, 25]
-    "2": [176, 26]
-    "3": [176, 27]
-    "4": [176, 28]
-    "5": [176, 29]
-    "6": [176, 30]
-    "7": [176, 31]
-  MIDI_SAMPLE_FEEDBACK: [176, 22]
-  MIDI_PEAKBPM_FEEDBACK: [176, 23]
-  MIDI_BEAT_FEEDBACK: [176, 30]
-  MIDI_PEAK_FEEDBACK: [176, 31]
 
-# # # # # # # # # # # # # # # # # # # #
-#
-# sequencer
-#
-# # # # # # # # # # # # # # # # # # # #
+"Arturia BeatStep MIDI 1": &ArturiaBeatStep
+  constants:
+    MIDI_CLOCK_NEXT: [248, 251]
+    MIDI_ROW_ONE:
+      "0": [176, 16]
+      "1": [176, 17]
+      "2": [176, 18]
+      "3": [176, 19]
+      "4": [176, 20]
+      "5": [176, 21]
+      "6": [176, 22]
+      "7": [176, 23]
+    MIDI_ROW_TWO:
+      "0": [176, 24]
+      "1": [176, 25]
+      "2": [176, 26]
+      "3": [176, 27]
+      "4": [176, 28]
+      "5": [176, 29]
+      "6": [176, 30]
+      "7": [176, 31]
+    MIDI_SAMPLE_FEEDBACK: [176, 22]
+    MIDI_PEAKBPM_FEEDBACK: [176, 23]
+    MIDI_BEAT_FEEDBACK: [176, 30]
+    MIDI_PEAK_FEEDBACK: [176, 31]
 
-128:
-  80:
-    default:
-      type: 'off'
-    sequence:
-      type: 'off'
-    overlay:
-      type: 'off'
-    sample:
-      type: 'off'
+  # # # # # # # # # # # # # # # # # # # #
+  #
+  # sequencer
+  #
+  # # # # # # # # # # # # # # # # # # # #
 
-  83:
-    default:
-      type: 'off'
-    sequence:
-      type: 'off'
-    overlay:
-      type: 'off'
-    sample:
-      type: 'off'
+  128:
+    80:
+      default:
+        type: 'off'
+      sequence:
+        type: 'off'
+      overlay:
+        type: 'off'
+      sample:
+        type: 'off'
 
-  84:
-    default:
-      type: 'off'
-    sequence:
-      type: 'off'
-    overlay:
-      type: 'off'
-    sample:
-      type: 'off'
+    83:
+      default:
+        type: 'off'
+      sequence:
+        type: 'off'
+      overlay:
+        type: 'off'
+      sample:
+        type: 'off'
 
-144:
-  80:
-    default:
-      type: boolean
-      section: Display
-      name: reset_display_visibility
-      options:
-        silent: true
-    sequence:
-      type: boolean
-      section: Display
-      name: reset_display_visibility
-      options:
-        silent: true
-    overlay:
-      type: boolean
-      section: Display
-      name: reset_display_visibility
-      options:
-        silent: true
-    sample:
-      type: boolean
-      section: Display
-      name: reset_display_visibility
-      options:
-        silent: true
+    84:
+      default:
+        type: 'off'
+      sequence:
+        type: 'off'
+      overlay:
+        type: 'off'
+      sample:
+        type: 'off'
 
-  83:
-    default:
-      type: boolean
-      section: Display
-      name: trigger_display_visibility
-      options:
-        silent: true
-    sequence:
-      type: boolean
-      section: Display
-      name: trigger_display_visibility
-      options:
-        silent: true
-    overlay:
-      type: boolean
-      section: Display
-      name: trigger_display_visibility
-      options:
-        silent: true
-    sample:
-      type: boolean
-      section: Display
-      name: trigger_display_visibility
-      options:
-        silent: true
+  144:
+    80:
+      default:
+        type: boolean
+        section: Display
+        name: reset_display_visibility
+        options:
+          silent: true
+      sequence:
+        type: boolean
+        section: Display
+        name: reset_display_visibility
+        options:
+          silent: true
+      overlay:
+        type: boolean
+        section: Display
+        name: reset_display_visibility
+        options:
+          silent: true
+      sample:
+        type: boolean
+        section: Display
+        name: reset_display_visibility
+        options:
+          silent: true
 
-  84:
-    default:
-      type: boolean
-      section: Display
-      name: force_display_visibility
-      options:
-        silent: true
-    sequence:
-      type: boolean
-      section: Display
-      name: force_display_visibility
-      options:
-        silent: true
-    overlay:
-      type: boolean
-      section: Display
-      name: force_display_visibility
-      options:
-        silent: true
-    sample:
-      type: boolean
-      section: Display
-      name: force_display_visibility
-      options:
-        silent: true
+    83:
+      default:
+        type: boolean
+        section: Display
+        name: trigger_display_visibility
+        options:
+          silent: true
+      sequence:
+        type: boolean
+        section: Display
+        name: trigger_display_visibility
+        options:
+          silent: true
+      overlay:
+        type: boolean
+        section: Display
+        name: trigger_display_visibility
+        options:
+          silent: true
+      sample:
+        type: boolean
+        section: Display
+        name: trigger_display_visibility
+        options:
+          silent: true
 
-# # # # # # # # # # # # # # # # # # # #
-#
-# controller
-#
-# # # # # # # # # # # # # # # # # # # #
-176:
-  # --------------------
-  # jog dial
-  # --------------------
-  127:
-    default:
-      type: volume
-      section: Display
-      name: brightness
-  # --------------------
-  # transcoders
-  # --------------------
-  0:
-    default:
-      type: volume
-      section: Source
-      name: sequence0_brightness
-    sequence:
-      type: select
-      section: Source
-      name: _blendmode
-    display:
-      type: volume
-      section: Display
-      name: 0_smearing
-    sample:
-      type: select
-      section: Source
-      name: sample0_beats
+    84:
+      default:
+        type: boolean
+        section: Display
+        name: force_display_visibility
+        options:
+          silent: true
+      sequence:
+        type: boolean
+        section: Display
+        name: force_display_visibility
+        options:
+          silent: true
+      overlay:
+        type: boolean
+        section: Display
+        name: force_display_visibility
+        options:
+          silent: true
+      sample:
+        type: boolean
+        section: Display
+        name: force_display_visibility
+        options:
+          silent: true
 
-  1:
-    default:
-      type: volume
-      section: Source
-      name: sequence1_brightness
-    sequence:
-      type: select
-      section: Source
-      name: _osci
-    display:
-      type: volume
-      section: Display
-      name: 1_smearing
-    sample:
-      type: select
-      section: Source
-      name: sample1_beats
+  # # # # # # # # # # # # # # # # # # # #
+  #
+  # controller
+  #
+  # # # # # # # # # # # # # # # # # # # #
+  176:
+    # --------------------
+    # jog dial
+    # --------------------
+    127:
+      default:
+        type: volume
+        section: Display
+        name: brightness
+    # --------------------
+    # transcoders
+    # --------------------
+    0:
+      default:
+        type: volume
+        section: Source
+        name: sequence0_brightness
+      sequence:
+        type: select
+        section: Source
+        name: _blendmode
+      display:
+        type: volume
+        section: Display
+        name: 0_smearing
+      sample:
+        type: select
+        section: Source
+        name: sample0_beats
 
-  2:
-    default:
-      type: volume
-      section: Source
-      name: sequence2_brightness
-    sequence:
-      type: boolean
-      section: Source
-      name: _passthrough
-    display:
-      type: volume
-      section: Display
-      name: 2_smearing
-    sample:
-      type: select
-      section: Source
-      name: sample2_beats
+    1:
+      default:
+        type: volume
+        section: Source
+        name: sequence1_brightness
+      sequence:
+        type: select
+        section: Source
+        name: _osci
+      display:
+        type: volume
+        section: Display
+        name: 1_smearing
+      sample:
+        type: select
+        section: Source
+        name: sample1_beats
 
-  3:
-    default:
-      type: volume
-      section: Source
-      name: sequence3_brightness
-    sequence:
-      type: boolean
-      section: Source
-      name: _flipa
-    display:
-      type: volume
-      section: Display
-      name: 3_smearing
-    sample:
-      type: select
-      section: Source
-      name: sample3_beats
+    2:
+      default:
+        type: volume
+        section: Source
+        name: sequence2_brightness
+      sequence:
+        type: boolean
+        section: Source
+        name: _passthrough
+      display:
+        type: volume
+        section: Display
+        name: 2_smearing
+      sample:
+        type: select
+        section: Source
+        name: sample2_beats
 
-  4:
-    default:
-      type: volume
-      section: Source
-      name: sequence4_brightness
-    sequence:
-      type: volume
-      section: Source
-      name: _start
-      options:
-        unit: 1
-    display:
-      type: volume
-      section: Display
-      name: 4_smearing
-    sample:
-      type: select
-      section: Source
-      name: sample4_beats
+    3:
+      default:
+        type: volume
+        section: Source
+        name: sequence3_brightness
+      sequence:
+        type: boolean
+        section: Source
+        name: _flipa
+      display:
+        type: volume
+        section: Display
+        name: 3_smearing
+      sample:
+        type: select
+        section: Source
+        name: sample3_beats
 
-  5:
-    default:
-      type: select
-      section: Source
-      name: material_map
-    sequence:
-      type: volume
-      section: Source
-      name: _end
-      options:
-        unit: 1
-    display:
-      type: volume
-      section: Display
-      name: 5_smearing
-    sample:
-      type: select
-      section: Source
-      name: sample5_beats
+    4:
+      default:
+        type: volume
+        section: Source
+        name: sequence4_brightness
+      sequence:
+        type: volume
+        section: Source
+        name: _start
+        options:
+          unit: 1
+      display:
+        type: volume
+        section: Display
+        name: 4_smearing
+      sample:
+        type: select
+        section: Source
+        name: sample4_beats
 
-  6:
-    default:
-      type: volume
-      section: Display
-      name: smearing
-    sequence:
-      type: step
-      section: Source
-      name: _start
-    display:
-      type: volume
-      section: Display
-      name: 6_smearing
+    5:
+      default:
+        type: select
+        section: Source
+        name: material_map
+      sequence:
+        type: volume
+        section: Source
+        name: _end
+        options:
+          unit: 1
+      display:
+        type: volume
+        section: Display
+        name: 5_smearing
+      sample:
+        type: select
+        section: Source
+        name: sample5_beats
 
-  7:
-    default:
-      type: volume
-      section: Display
-      name: transparency
-    sequence:
-      type: step
-      section: Source
-      name: _end
-    display:
-      type: volume
-      section: Display
-      name: 7_smearing
+    6:
+      default:
+        type: volume
+        section: Display
+        name: smearing
+      sequence:
+        type: step
+        section: Source
+        name: _start
+      display:
+        type: volume
+        section: Display
+        name: 6_smearing
 
-  8:
-    default:
-      type: select
-      section: Display
-      name: display_visibility
-    sequence:
-      type: boolean
-      section: Source
-      name: _jump
-    display:
-      type: select
-      section: Display
-      name: border_mode
-    sample:
-      type: function
-      section: Source
-      name: sample0_reset
+    7:
+      default:
+        type: volume
+        section: Display
+        name: transparency
+      sequence:
+        type: step
+        section: Source
+        name: _end
+      display:
+        type: volume
+        section: Display
+        name: 7_smearing
 
-  9:
-    default:
-      type: select
-      section: Display
-      name: display_speed
-    sequence:
-      type: boolean
-      section: Source
-      name: _audio
-    display:
-      type: select
-      section: Display
-      name: border_speed
-    sample:
-      type: function
-      section: Source
-      name: sample1_reset
+    8:
+      default:
+        type: select
+        section: Display
+        name: display_visibility
+      sequence:
+        type: boolean
+        section: Source
+        name: _jump
+      display:
+        type: select
+        section: Display
+        name: border_mode
+      sample:
+        type: function
+        section: Source
+        name: sample0_reset
 
-  10:
-    default:
-      type: step
-      section: Display
-      name: border
-    sequence:
-      type: boolean
-      section: Source
-      name: _flipx
-    sample:
-      type: function
-      section: Source
-      name: sample2_reset
-    display:
-      type: select
-      section: Display
-      name: lighting_type
+    9:
+      default:
+        type: select
+        section: Display
+        name: display_speed
+      sequence:
+        type: boolean
+        section: Source
+        name: _audio
+      display:
+        type: select
+        section: Display
+        name: border_speed
+      sample:
+        type: function
+        section: Source
+        name: sample1_reset
 
-  11:
-#    default:
-#      type: select
-#      section: Display
-#      name: border_speed
-    sequence:
-      type: boolean
-      section: Source
-      name: _flipy
-    sample:
-      type: function
-      section: Source
-      name: sample3_reset
-    display:
-      type: select
-      section: Display
-      name: lighting_speed
+    10:
+      default:
+        type: step
+        section: Display
+        name: border
+      sequence:
+        type: boolean
+        section: Source
+        name: _flipx
+      sample:
+        type: function
+        section: Source
+        name: sample2_reset
+      display:
+        type: select
+        section: Display
+        name: lighting_type
 
-  12:
-#    default:
-#      type: boolean
-#      section: Control
-#      name: shuffle
-    default:
-      type: select
-      section: Control
-      name: shuffle_mode
-    sequence:
-      type: boolean
-      section: Source
-      name: _speeddown
-    sample:
-      type: function
-      section: Source
-      name: sample4_reset
+    11:
+  #    default:
+  #      type: select
+  #      section: Display
+  #      name: border_speed
+      sequence:
+        type: boolean
+        section: Source
+        name: _flipy
+      sample:
+        type: function
+        section: Source
+        name: sample3_reset
+      display:
+        type: select
+        section: Display
+        name: lighting_speed
 
-  13:
-    default:
-      type: step
-      section: Control
-      name: shuffle_every
-    sequence:
-      type: boolean
-      section: Source
-      name: _speedup
-    sample:
-      type: function
-      section: Source
-      name: sample5_reset
+    12:
+  #    default:
+  #      type: boolean
+  #      section: Control
+  #      name: shuffle
+      default:
+        type: select
+        section: Control
+        name: shuffle_mode
+      sequence:
+        type: boolean
+        section: Source
+        name: _speeddown
+      sample:
+        type: function
+        section: Source
+        name: sample4_reset
 
-  14:
-#    default:
-#      type: select
-#      section: Control
-#      name: shuffle_mode
-    sequence:
-      type: boolean
-      section: Source
-      name: _reversed
+    13:
+      default:
+        type: step
+        section: Control
+        name: shuffle_every
+      sequence:
+        type: boolean
+        section: Source
+        name: _speedup
+      sample:
+        type: function
+        section: Source
+        name: sample5_reset
 
-  15:
-    default:
-      type: select
-      section: Control
-      name: layer
-    sequence:
-      type: volume
-      section: Source
-      name: _speed
+    14:
+  #    default:
+  #      type: select
+  #      section: Control
+  #      name: shuffle_mode
+      sequence:
+        type: boolean
+        section: Source
+        name: _reversed
 
-  # --------------------
-  # pads
-  # --------------------
+    15:
+      default:
+        type: select
+        section: Control
+        name: layer
+      sequence:
+        type: volume
+        section: Source
+        name: _speed
 
-  16:
-    default:
-      type: shift
-      shift: overlay
-      section: Source
-      name: sequence0
-    sequence:
-      type: assign
-      section: Source
-      name: _input
-      value: 0
-    sample:
-      type: toggle
-      section: Source
-      name: sample0_enabled
-    display:
-      type: function
-      section: Source
-      name: g0animation
-  17:
-    default:
-      type: shift
-      shift: overlay
-      section: Source
-      name: sequence1
-    sequence:
-      type: assign
-      section: Source
-      name: _input
-      value: 1
-    sample:
-      type: toggle
-      section: Source
-      name: sample1_enabled
-    display:
-      type: function
-      section: Source
-      name: g0sequence
-  18:
-    default:
-      type: shift
-      shift: overlay
-      section: Source
-      name: sequence2
-    sequence:
-      type: assign
-      section: Source
-      name: _input
-      value: 2
-    sample:
-      type: toggle
-      section: Source
-      name: sample2_enabled
-    display:
-      type: function
-      section: Source
-      name: g0perspective
+    # --------------------
+    # pads
+    # --------------------
 
-  19:
-    default:
-      type: shift
-      shift: overlay
-      section: Source
-      name: sequence3
-    sequence:
-      type: assign
-      section: Source
-      name: _input
-      value: 3
-    sample:
-      type: toggle
-      section: Source
-      name: sample3_enabled
-    display:
-      type: function
-      section: Source
-      name: g0black
+    16:
+      default:
+        type: shift
+        shift: overlay
+        section: Source
+        name: sequence0
+      sequence:
+        type: assign
+        section: Source
+        name: _input
+        value: 0
+      sample:
+        type: toggle
+        section: Source
+        name: sample0_enabled
+      display:
+        type: function
+        section: Source
+        name: g0animation
+    17:
+      default:
+        type: shift
+        shift: overlay
+        section: Source
+        name: sequence1
+      sequence:
+        type: assign
+        section: Source
+        name: _input
+        value: 1
+      sample:
+        type: toggle
+        section: Source
+        name: sample1_enabled
+      display:
+        type: function
+        section: Source
+        name: g0sequence
+    18:
+      default:
+        type: shift
+        shift: overlay
+        section: Source
+        name: sequence2
+      sequence:
+        type: assign
+        section: Source
+        name: _input
+        value: 2
+      sample:
+        type: toggle
+        section: Source
+        name: sample2_enabled
+      display:
+        type: function
+        section: Source
+        name: g0perspective
 
-  20:
-    default:
-      type: shift
-      shift: overlay
-      section: Source
-      name: sequence4
-    sequence:
-      type: assign
-      section: Source
-      name: _input
-      value: 4
-    sample:
-      type: toggle
-      section: Source
-      name: sample4_enabled
-    display:
-      type: function
-      section: Source
-      name: g0offline
+    19:
+      default:
+        type: shift
+        shift: overlay
+        section: Source
+        name: sequence3
+      sequence:
+        type: assign
+        section: Source
+        name: _input
+        value: 3
+      sample:
+        type: toggle
+        section: Source
+        name: sample3_enabled
+      display:
+        type: function
+        section: Source
+        name: g0black
 
-  21:
-#    default:
-#      shift: display
-#      section: Display
-#      name: display
-    sequence:
-      type: assign
-      section: Source
-      name: _input
-      value: 5
-    sample:
-      type: toggle
-      section: Source
-      name: sample5_enabled
-  22:
-    default:
-      type: status
-      section: Source
-      data: SourceSettings
-      start: 16
-      name: sample
-      suffix: _enabled
+    20:
+      default:
+        type: shift
+        shift: overlay
+        section: Source
+        name: sequence4
+      sequence:
+        type: assign
+        section: Source
+        name: _input
+        value: 4
+      sample:
+        type: toggle
+        section: Source
+        name: sample4_enabled
+      display:
+        type: function
+        section: Source
+        name: g0offline
 
-  23:
-    default:
-      type: shift
-      shift: sample
-      section: Source
-      name: sample
+    21:
+  #    default:
+  #      shift: display
+  #      section: Display
+  #      name: display
+      sequence:
+        type: assign
+        section: Source
+        name: _input
+        value: 5
+      sample:
+        type: toggle
+        section: Source
+        name: sample5_enabled
+    22:
+      default:
+        type: status
+        section: Source
+        data: SourceSettings
+        start: 16
+        name: sample
+        suffix: _enabled
 
-  24:
-    default:
-      type: shift
-      shift: sequence
-      section: Source
-      name: sequence0
-    overlay:
-      type: assign
-      section: Source
-      name: _overlay
-      value: 0
-    sample:
-      type: toggle
-      section: Source
-      name: sample0_record
-    display:
-      type: function
-      section: Source
-      name: g1animation
+    23:
+      default:
+        type: shift
+        shift: sample
+        section: Source
+        name: sample
 
-  25:
-    default:
-      type: shift
-      shift: sequence
-      section: Source
-      name: sequence1
-    overlay:
-      type: assign
-      section: Source
-      name: _overlay
-      value: 1
-    sample:
-      type: toggle
-      section: Source
-      name: sample1_record
-    display:
-      type: function
-      section: Source
-      name: g1sequence
+    24:
+      default:
+        type: shift
+        shift: sequence
+        section: Source
+        name: sequence0
+      overlay:
+        type: assign
+        section: Source
+        name: _overlay
+        value: 0
+      sample:
+        type: toggle
+        section: Source
+        name: sample0_record
+      display:
+        type: function
+        section: Source
+        name: g1animation
 
-  26:
-    default:
-      type: shift
-      shift: sequence
-      section: Source
-      name: sequence2
-    overlay:
-      type: assign
-      section: Source
-      name: _overlay
-      value: 2
-    sample:
-      type: toggle
-      section: Source
-      name: sample2_record
-    display:
-      type: function
-      section: Source
-      name: g1perspective
+    25:
+      default:
+        type: shift
+        shift: sequence
+        section: Source
+        name: sequence1
+      overlay:
+        type: assign
+        section: Source
+        name: _overlay
+        value: 1
+      sample:
+        type: toggle
+        section: Source
+        name: sample1_record
+      display:
+        type: function
+        section: Source
+        name: g1sequence
 
-  27:
-    default:
-      type: shift
-      shift: sequence
-      section: Source
-      name: sequence3
-    overlay:
-      type: assign
-      section: Source
-      name: _overlay
-      value: 3
-    sample:
-      type: toggle
-      section: Source
-      name: sample3_record
-    display:
-      type: function
-      section: Source
-      name: g1black
+    26:
+      default:
+        type: shift
+        shift: sequence
+        section: Source
+        name: sequence2
+      overlay:
+        type: assign
+        section: Source
+        name: _overlay
+        value: 2
+      sample:
+        type: toggle
+        section: Source
+        name: sample2_record
+      display:
+        type: function
+        section: Source
+        name: g1perspective
 
-  28:
-    default:
-      type: shift
-      shift: sequence
-      section: Source
-      name: sequence4
-    overlay:
-      type: assign
-      section: Source
-      name: _overlay
-      value: 4
-    sample:
-      type: toggle
-      section: Source
-      name: sample4_record
-    display:
-      type: function
-      section: Source
-      name: g1offline
+    27:
+      default:
+        type: shift
+        shift: sequence
+        section: Source
+        name: sequence3
+      overlay:
+        type: assign
+        section: Source
+        name: _overlay
+        value: 3
+      sample:
+        type: toggle
+        section: Source
+        name: sample3_record
+      display:
+        type: function
+        section: Source
+        name: g1black
 
-  29:
-    default:
-      type: shift
-      shift: display
-      section: Display
-      name: display
-    sequence:
-      type: assign
-      section: Source
-      name: _input
-      value: 'off'
-    overlay:
-      type: assign
-      section: Source
-      name: _overlay
-      value: 'off'
-    sample:
-      type: toggle
-      section: Source
-      name: sample5_record
+    28:
+      default:
+        type: shift
+        shift: sequence
+        section: Source
+        name: sequence4
+      overlay:
+        type: assign
+        section: Source
+        name: _overlay
+        value: 4
+      sample:
+        type: toggle
+        section: Source
+        name: sample4_record
+      display:
+        type: function
+        section: Source
+        name: g1offline
 
-  30:
-    default:
-      type: function
-      section: Display
-      name: force_display_visibility
-    sequence:
-      type: function
-      section: Source
-      name: _reset
-    overlay:
-      type: function
-      section: Source
-      name: _rereset
+    29:
+      default:
+        type: shift
+        shift: display
+        section: Display
+        name: display
+      sequence:
+        type: assign
+        section: Source
+        name: _input
+        value: 'off'
+      overlay:
+        type: assign
+        section: Source
+        name: _overlay
+        value: 'off'
+      sample:
+        type: toggle
+        section: Source
+        name: sample5_record
 
-  31:
-    default:
-      type: function
-      section: Display
-      name: reset_display_visibility
+    30:
+      default:
+        type: function
+        section: Display
+        name: force_display_visibility
+      sequence:
+        type: function
+        section: Source
+        name: _reset
+      overlay:
+        type: function
+        section: Source
+        name: _rereset
 
-#  102:
-#    default:
-#      type: boolean
-#      section: Control
-#      name: beat
+    31:
+      default:
+        type: function
+        section: Display
+        name: reset_display_visibility
+
+  #  102:
+  #    default:
+  #      type: boolean
+  #      section: Control
+  #      name: beat
+
+
+Default: *ArturiaBeatStep
+Arturia: *ArturiaBeatStep

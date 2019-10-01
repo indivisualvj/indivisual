@@ -255,12 +255,13 @@ function setupResources() {
             callback: function (data, finished) {
 
                 var settings = jsyaml.load(data.contents);
-                var constants = settings.constants;
+
+                // create MIDI_ constants
+                var constants = settings.Default.constants;
                 for (var c in constants) {
                     var co = constants[c];
                     window[c] = co;
                 }
-                delete settings.constants;
 
                 statics.MidiController = new HC.Settings(settings);
                 finished();

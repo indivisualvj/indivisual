@@ -44,7 +44,7 @@
         };
 
         // source: https://www.shadertoy.com/view/Md2GDw
-        shader = { // todo shaders2plugins
+        shader = {
             uniforms: {
                 "tDiffuse": {type: "t", value: null},
                 "time": {type: "f", value: 1.0},

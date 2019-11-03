@@ -50,7 +50,7 @@
                 <div>
                     <span @click="loadPreset" class="property-name">{{item.name}}</span>
                     <div v-if="isFile" class="actions">
-                        {{item.layer}} {{item.changed}} {{item.visible ? 'v':'h'}}
+                        {{item.layer}} {{item.changed}}
                         <div @click="savePreset" class="save"></div>
                         <div @click="renameItem" class="rename"></div>
                         <div @click="deletePreset" class="delete"></div>

@@ -128,8 +128,12 @@
                         }
                     }
 
-                    this.currentLayer.pause();
-                    this.nextLayer.resume();
+                    if (!this.currentLayer.settings.layer_transvisible) {
+                        this.currentLayer.pause();
+                    }
+                    if (!this.nextLayer.settings.layer_transvisible) {
+                        this.nextLayer.resume();
+                    }
                     this.setLayer(this.nextLayer.index);
 
                     this.currentLayer = this.nextLayer;

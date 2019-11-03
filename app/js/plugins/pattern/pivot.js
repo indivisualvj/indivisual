@@ -1,31 +1,95 @@
 {
     HC.plugins.pattern.pivot = class Plugin extends HC.PatternPlugin {
         static name = 'random pivot (shape speed)';
-        next = {x: 0, y: 0, z: 0};
+
+        points = false;
+        centerPoint = false;
         injections = {
-            current: {x: 0, y: 0, z: 0}
+            centered: false,
+            currentPoint: false,
+            lastPoint: false,
+            position: false
         };
 
-        apply(shape, rhythm) {
-            let layer = this.layer;
-            let speed = layer.getShapeSpeed(shape);
-            if (speed.prc == 0) {
-                let rot = shape.rotationZ();
-
-                let pos = shape.position();
-                let resX = this.layer.resolution('half').x;
-                let resY = this.layer.resolution('half').y;
-                let length = this.layer.resolution().length();
-                let dist = randomInt(length/8, length, true);
-                let x = Math.cos(rot);
-                let y = Math.sin(rot);
-                let dir = new THREE.Vector3(x, y, 0);
-                dir.multiplyScalar(dist);
-                pos.add(dir);
-
-
+        before(shape) {
+            let params = this.params(shape);
+            if (!params.centered) {
+                let res = this.layer.resolution('half');
+                this.centerPoint = new THREE.Vector3(res.x, -res.y, 0);
+                shape.position().copy(this.centerPoint);
+                params.centered = true;
             }
 
+            if (!this.points || (this.isFirstShape(shape) && this.layer.getShapeSpeed(shape).prc == 0)) {
+                this.points = this.points || [];
+                for (let i = 0; i < this.layer.settings.pattern_shapes * 2; i++)  {
+
+                    if (this.points[i] && this.points[i]._mesh) {
+                        this.layer._shapes.remove(this.points[i]._mesh);
+                    }
+
+                    let p = this.layer.random2dPosition(0);//new THREE.Vector3(640, -600*i, 0);//
+                    p.z = 0;
+                    this.points[i] = p;
+
+                    let g = new THREE.CircleGeometry(this.layer.shapeSize(.125/2), 12);
+                    let mat = new THREE.MeshPhongMaterial({emissive: 0xffffff});
+                    let m = new THREE.Mesh(g, mat);
+                    this.layer._shapes.add(m);
+                    m.position.copy(p);
+                    p._mesh = m;
+                }
+            }
+        }
+
+        apply(shape, rhythm) {
+
+            let params = this.params(shape);
+            let a = shape.rotationZ();
+            let x = Math.cos(a);
+            let y = Math.sin(a);
+            let v1 = new THREE.Vector3(x, y, 0);
+            let e = new THREE.Euler(0, 0, RAD*90);
+            v1.applyEuler(e);
+            let v2 = v1.clone();
+            e = new THREE.Euler(0, 0, RAD*180);
+            v2.applyEuler(e);
+
+            v1.multiplyScalar(1000);
+            v2.multiplyScalar(1000);
+
+            v1.add(shape.position());
+            v2.add(shape.position());
+
+            let closestPoint = false;
+            let closest = 10000;
+
+            for (let i = 0; i < this.points.length; i++) {
+                let p = this.points[i];
+
+                if (p != params.currentPoint && p != params.lastPoint) {
+                    let n = Math.min(closest, this.closestPointOnLine(v1, v2, p));
+                    if (n < closest) {
+                        closest = n;
+                        closestPoint = p;
+                    }
+                }
+            }
+            if (closest < 5 && closestPoint) {
+                shape.position().copy(closestPoint);
+                params.lastPoint = params.currentPoint;
+                params.currentPoint = closestPoint;
+            }
+
+        }
+
+        closestPointOnLine (pointA, pointB, pointToCheck) {
+
+            let l = new THREE.Line3(pointA, pointB, pointToCheck);
+            let c = l.closestPointToPoint(pointToCheck, false, new THREE.Vector3());
+            let dist = c.distanceTo(pointToCheck);
+
+            return dist;
         }
     }
 }

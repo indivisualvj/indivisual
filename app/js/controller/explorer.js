@@ -39,8 +39,11 @@
 
             Vue.config.debug = DEBUG;
             Vue.directive('filter', function () {
-                var data = this.vm.treeData;
-                var sv = this.vm.searchValue;
+                if (!inst.gui) {
+                    return;
+                }
+                var data = inst.gui.treeData;
+                var sv = inst.gui.searchValue;
                 var reset = sv ? sv.length == 0 : true;
 
                 function _search(_data) {
@@ -74,7 +77,15 @@
                     return found;
                 }
 
-                _search(data);
+                if (inst.gui.searchTimeout) {
+                    clearTimeout(inst.gui.searchTimeout);
+                }
+
+                inst.gui.searchTimeout = setTimeout(() => {
+                    _search(data);
+                }, 250);
+
+
 
             });
             Vue.component('item', {
@@ -95,7 +106,9 @@
             this.gui = new Vue({
                 el: '#root',
                 data: {
-                    treeData: this.data
+                    treeData: this.data,
+                    searchValue: '',
+                    searchTimeout: false
                 }
             });
 

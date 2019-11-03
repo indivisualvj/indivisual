@@ -22,6 +22,42 @@
 
         <script src="controller.js"></script>
 
+        <script type="text/x-template" id="itemtpl">
+            <li v-if="isFolder" class="folder">
+                <div v-show="isVisible"  data-id="folder" class="dg">
+                    <ul :class="{closed: !open}">
+                        <li class="title">
+                            <span @click="toggleFolder">{{item.name}}</span>
+                            <div v-if="isRoot" class="actions">
+                                <div @click="newFolder" class="new_folder"></div>
+                                <div @click="reload" class="reset"></div>
+                            </div>
+
+                            <div v-if="!isRoot && !isDefault" class="actions">
+                                <div @click="newPreset" class="new"></div>
+                                <div @click="loadPresets" class="fill"></div>
+                                <div @click="savePresets" class="save"></div>
+                                <div @click="renameItem" class="rename"></div>
+                            </div>
+                        </li>
+
+                        <item v-for="child in item.children" :item="child" :key="child.name"></item>
+
+                    </ul>
+                </div>
+            </li>
+            <li v-else class="cr" :class="{function: isPreset, changed: hasChanged, selected: isLoaded}">
+                <div>
+                    <span @click="loadPreset" class="property-name">{{item.name}}</span>
+                    <div v-if="isFile" class="actions">
+                        {{item.layer}} {{item.changed}}
+                        <div @click="savePreset" class="save"></div>
+                        <div @click="renameItem" class="rename"></div>
+                        <div @click="deletePreset" class="delete"></div>
+                    </div>
+                </div>
+            </li>
+        </script>
     </head>
     <body>
         <pre id="osd"></pre>
@@ -36,70 +72,19 @@
 
             <div class="control metalback" >
             <div id="explorer" class="item">
-
-                <script type="text/x-template" id="itemtpl">
-
-                    <template v-if="isFolder">
-                    <div v-show="isVisible"  data-id="folder" class="dg">
-                        <ul v-class="closed: !open">
-                            <li class="title">
-                                <span v-on="click: toggleFolder">{{model.name}}</span>
-                                <template v-if="isRoot">
-                                    <div class="actions">
-                                        <div v-on="click: newFolder" class="new_folder"></div>
-                                        <div v-on="click: reload" class="reset"></div>
-                                    </div>
-                                </template>
-                                <template v-if="!isRoot && !isDefault">
-                                    <div class="actions">
-                                        <div v-on="click: newPreset" class="new"></div>
-                                        <div v-on="click: loadPresets" class="fill"></div>
-                                        <div v-on="click: savePresets" class="save"></div>
-                                        <div v-on="click: renameItem" class="rename"></div>
-
-                                        <!--<div v-on="click: reloadFolder" class="reset"></div>-->
-                                        <!--<div v-on="click: deleteFolder" class="delete"></div>-->
-                                    </div>
-                                </template>
-                            </li>
-
-                            <template v-repeat="model: model.children" v-component="itemtpl"></template>
-
-                        </ul>
-                    </div>
-                    </template>
-
-                    <template v-if="isPreset">
-                    <li class="cr"
-                        v-class="function: isPreset, changed: hasChanged, selected: isLoaded">
-                        <div>
-                            <span v-on="click: loadPreset"
-                                  class="property-name">{{model.name}}</span>
-                            <div v-if="isFile" class="actions">
-                                {{model.layer}} {{model.changed}}
-                                <div v-on="click: savePreset" class="save"></div>
-                                <div v-on="click: renameItem" class="rename"></div>
-                                <div v-on="click: deletePreset" class="delete"></div>
-                            </div>
-                        </div>
-                    </li>
-                    </template>
-                </script>
-
                 <div class="dg main">
                     <ul id="root">
                         <li class="cr string">
                             <div>
                                 <span class="property-name">search</span>
                                 <div class="c">
-                                    <input name="filterValue"
-                                           v-model="searchValue"
-                                           v-filter="searchValue"
-                                           type="text">
+                                    <input name="filterValue" v-model="searchValue" v-on:keyup="filterTree" type="text">
                                 </div>
                             </div>
                         </li>
-                        <li class="folder" v-component="itemtpl" v-with="model: treeData"></li>
+
+                        <item :item="treeData"></item>
+
                     </ul>
                 </div>
             </div>

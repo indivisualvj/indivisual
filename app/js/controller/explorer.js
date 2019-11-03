@@ -38,47 +38,11 @@
             };
 
             Vue.config.debug = DEBUG;
-            Vue.directive('filter', function () {
-                var data = this.vm.treeData;
-                var sv = this.vm.searchValue;
-                var reset = sv ? sv.length == 0 : true;
-
-                function _search(_data) {
-                    if (_data.root) {
-                        _search(data.children);
-                        return;
-                    }
-
-                    var found = false;
-                    for (var k in _data) {
-                        var _set = _data[k];
-                        if (!_set.default) {
-
-                            var ind = _set.name.indexOf(sv);
-                            var match = ind > -1;
-
-                            if (_set.type == 'folder') {
-                                var src = (!reset && match) || _search(_set.children);
-                                if (reset || src) {
-                                    _set.visible = true;
-                                    found = true;
-                                } else {
-                                    _set.visible = false;
-                                }
-
-                            } else if (match) {
-                                found = true;
-                            }
-                        }
-                    }
-                    return found;
-                }
-
-                _search(data);
-
-            });
-            Vue.component('itemtpl', {
+            Vue.component('item', {
                 template: '#itemtpl',
+                props: {
+                    item: Object
+                },
                 data: function () {
                     return {
                         open: false,
@@ -92,11 +56,63 @@
             this.gui = new Vue({
                 el: '#root',
                 data: {
-                    treeData: this.data
+                    treeData: this.data,
+                    searchValue: '',
+                    searchTimeout: false
+                },
+                methods: {
+                    filterTree: function (event) {
+
+                        var data = inst.gui.treeData;
+                        var sv = inst.gui.searchValue;
+                        var reset = sv ? sv.length == 0 : true;
+
+                        function _search(_data) {
+                            if (_data.root) {
+                                _search(data.children);
+                                return;
+                            }
+
+                            var found = false;
+                            for (var k in _data) {
+                                var _set = _data[k];
+                                if (!_set.default) {
+
+                                    var ind = _set.name.indexOf(sv);
+                                    var match = ind > -1;
+
+                                    if (_set.type == 'folder') {
+                                        var src = (!reset && match) || _search(_set.children);
+                                        if (reset || src) {
+                                            _set.visible = true;
+                                            found = true;
+                                        } else {
+                                            _set.visible = false;
+                                        }
+
+                                    } else if (match) {
+                                        found = true;
+                                    }
+                                }
+                            }
+                            return found;
+                        }
+
+                        if (inst.gui.searchTimeout) {
+                            clearTimeout(inst.gui.searchTimeout);
+                        }
+
+                        inst.gui.searchTimeout = setTimeout(() => {
+                            _search(data);
+                        }, 500);
+
+                    }
                 }
             });
 
-            this.gui.$root._children[0].toggleFolder();
+            if (this.gui.$root.$children.length > 0) {
+                this.gui.$root.$children[0].toggleFolder();
+            }
         },
 
         methods: {
@@ -111,16 +127,16 @@
             loadPreset: function () {
 
                 explorer.setPreset(statics.ControlSettings.layer, false);
-                explorer.setPreset(statics.ControlSettings.layer, this.model);
+                explorer.setPreset(statics.ControlSettings.layer, this.item);
 
-                if (this.model.type == 'preset') { // load default
+                if (this.item.type == 'preset') { // load default
                     var dflt = statics.AnimationSettings.defaults().prepare();
                     requestAnimationFrame(function () {
                         controller.preset(false, dflt);
                     });
 
                 } else { // load preset
-                    messaging.load(STORAGE_DIR, this.model.dir, this.model.name, function (data) {
+                    messaging.load(STORAGE_DIR, this.item.dir, this.item.name, function (data) {
                         requestAnimationFrame(function () {
 
                             if (statics.ctrlKey) { //load shaders into present presets
@@ -144,7 +160,7 @@
             },
 
             loadPresets: function () {
-                var children = this.model.children;
+                var children = this.item.children;
                 var dflt = [];
 
                 for (var i = 0; dflt.length < layers.length && i < children.length; i++) {
@@ -209,7 +225,7 @@
 
             savePresets: function () {
 
-                var model = this.model;
+                var model = this.item;
 
                 for (var i = 0; i < model.children.length; i++) {
                     var child = model.children[i];
@@ -232,11 +248,11 @@
 
             savePreset: function () {
 
-                var model = this.model;
+                var model = this.item;
 
                 var settings = statics.AnimationSettings.prepare();
                 statics.AnimationSettings.clean(settings, statics.AnimationSettings.initial);
-                messaging.save(STORAGE_DIR, this.model.dir, this.model.name, settings, function (result) {
+                messaging.save(STORAGE_DIR, this.item.dir, this.item.name, settings, function (result) {
                     HC.log(result);
                     explorer.setPreset(statics.ControlSettings.layer, false);
                     explorer.setPreset(statics.ControlSettings.layer, model);
@@ -249,16 +265,16 @@
                 var current = this;
                 var parent = current.$parent;
 
-                messaging.delete(STORAGE_DIR, this.model.dir, this.model.name, function (result) {
+                messaging.delete(STORAGE_DIR, this.item.dir, this.item.name, function (result) {
                     HC.log(result);
-                    parent.model.children.splice(current.$index, 1);
+                    parent.item.children.splice(current.$index, 1);
                 });
             },
 
             renameItem: function () {
                 var current = this;
 
-                var name = current.model.name;
+                var name = current.item.name;
                 var split = name.split('.');
                 var suffix = '';
                 if (split.length > 1) {
@@ -276,22 +292,22 @@
                     return;
                 }
 
-                messaging.rename(STORAGE_DIR, this.model.dir, this.model.name, name, function (result) {
+                messaging.rename(STORAGE_DIR, this.item.dir, this.item.name, name, function (result) {
                     HC.log(result);
-                    var children = current.model.children;
-                    var odir = current.model.name;
+                    var children = current.item.children;
+                    var odir = current.item.name;
                     for (var i = 0; i < children.length; i++) {
                         var dir = children[i].dir;
                         dir = dir.slice(-0, -odir.length);
                         children[i].dir = dir + name;
                     }
-                    current.model.name = name;
+                    current.item.name = name;
                 });
             },
 
             newPreset: function () {
 
-                var model = this.model;
+                var model = this.item;
 
                 var name = model.children.length;
 
@@ -324,7 +340,7 @@
             },
 
             newFolder: function () {
-                var model = this.model;
+                var model = this.item;
                 var name = '__NEW__';
 
                 var input = prompt('Please specify a name', name);
@@ -351,28 +367,28 @@
 
         computed: {
             isRoot: function () {
-                return this.model.root;
+                return this.item.root;
             },
             isFolder: function () {
-                return this.model.type == 'folder';
+                return this.item.type == 'folder';
             },
             isPreset: function () {
-                return this.model.type != 'folder';
+                return this.item.type != 'folder';
             },
             isFile: function () {
-                return this.model.type == 'file';
+                return this.item.type == 'file';
             },
             isLoaded: function () {
-                return this.model.loaded;
+                return this.item.loaded;
             },
             hasChanged: function () {
-                return this.model.layer && this.model.changed;
+                return this.item.layer && this.item.changed;
             },
             isVisible: function () {
-                return this.model.visible;
+                return this.item.visible;
             },
             isDefault: function () {
-                return this.model.default;
+                return this.item.default;
             }
         },
 
@@ -388,18 +404,6 @@
                 inst.data.children = tree;
             });
         },
-
-        // update: function (data) {
-        //
-        //     var dflt = this.data.children[0];
-        //     var tree = [dflt];
-        //
-        //     for (var i = 0; data && i < data.length; i++) {
-        //         var file = data[i];
-        //         tree.push(file);
-        //     }
-        //     this.data.children = tree;
-        // },
 
         setPreset: function (layer, model) {
             var l = sm.get(layer);

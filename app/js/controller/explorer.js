@@ -38,56 +38,6 @@
             };
 
             Vue.config.debug = DEBUG;
-            Vue.directive('filter', function () {
-                if (!inst.gui) {
-                    return;
-                }
-                var data = inst.gui.treeData;
-                var sv = inst.gui.searchValue;
-                var reset = sv ? sv.length == 0 : true;
-
-                function _search(_data) {
-                    if (_data.root) {
-                        _search(data.children);
-                        return;
-                    }
-
-                    var found = false;
-                    for (var k in _data) {
-                        var _set = _data[k];
-                        if (!_set.default) {
-
-                            var ind = _set.name.indexOf(sv);
-                            var match = ind > -1;
-
-                            if (_set.type == 'folder') {
-                                var src = (!reset && match) || _search(_set.children);
-                                if (reset || src) {
-                                    _set.visible = true;
-                                    found = true;
-                                } else {
-                                    _set.visible = false;
-                                }
-
-                            } else if (match) {
-                                found = true;
-                            }
-                        }
-                    }
-                    return found;
-                }
-
-                if (inst.gui.searchTimeout) {
-                    clearTimeout(inst.gui.searchTimeout);
-                }
-
-                inst.gui.searchTimeout = setTimeout(() => {
-                    _search(data);
-                }, 250);
-
-
-
-            });
             Vue.component('item', {
                 template: '#itemtpl',
                 props: {
@@ -109,6 +59,54 @@
                     treeData: this.data,
                     searchValue: '',
                     searchTimeout: false
+                },
+                methods: {
+                    filterTree: function (event) {
+
+                        var data = inst.gui.treeData;
+                        var sv = inst.gui.searchValue;
+                        var reset = sv ? sv.length == 0 : true;
+
+                        function _search(_data) {
+                            if (_data.root) {
+                                _search(data.children);
+                                return;
+                            }
+
+                            var found = false;
+                            for (var k in _data) {
+                                var _set = _data[k];
+                                if (!_set.default) {
+
+                                    var ind = _set.name.indexOf(sv);
+                                    var match = ind > -1;
+
+                                    if (_set.type == 'folder') {
+                                        var src = (!reset && match) || _search(_set.children);
+                                        if (reset || src) {
+                                            _set.visible = true;
+                                            found = true;
+                                        } else {
+                                            _set.visible = false;
+                                        }
+
+                                    } else if (match) {
+                                        found = true;
+                                    }
+                                }
+                            }
+                            return found;
+                        }
+
+                        if (inst.gui.searchTimeout) {
+                            clearTimeout(inst.gui.searchTimeout);
+                        }
+
+                        inst.gui.searchTimeout = setTimeout(() => {
+                            _search(data);
+                        }, 500);
+
+                    }
                 }
             });
 

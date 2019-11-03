@@ -78,10 +78,7 @@
                             <div>
                                 <span class="property-name">search</span>
                                 <div class="c">
-                                    <input name="filterValue"
-                                           v-model="searchValue"
-                                           v-filter="searchValue"
-                                           type="text">
+                                    <input name="filterValue" v-model="searchValue" v-on:keyup="filterTree" type="text">
                                 </div>
                             </div>
                         </li>

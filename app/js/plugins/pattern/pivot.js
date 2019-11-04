@@ -22,7 +22,8 @@
 
             if (!this.points || (this.isFirstShape(shape) && this.layer.getShapeSpeed(shape).prc == 0)) {
                 this.points = this.points || [];
-                for (let i = 0; i < this.layer.settings.pattern_shapes * 2; i++)  {
+                let numPoints = Math.ceil(this.layer.settings.pattern_shapes * 1.5);
+                for (let i = 0; i < numPoints; i++)  {
 
                     if (this.points[i] && this.points[i]._mesh) {
                         this.layer._shapes.remove(this.points[i]._mesh);

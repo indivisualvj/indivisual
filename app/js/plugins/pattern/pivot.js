@@ -22,7 +22,7 @@
 
             if (!this.points || (this.isFirstShape(shape) && this.layer.getShapeSpeed(shape).prc == 0)) {
                 this.points = this.points || [];
-                let numPoints = Math.ceil(this.layer.settings.pattern_shapes * 1.5);
+                let numPoints = 12;//clamp(this.layer.settings.pattern_shapes, 12, 24);
                 for (let i = 0; i < numPoints; i++)  {
 
                     if (this.points[i] && this.points[i]._mesh) {

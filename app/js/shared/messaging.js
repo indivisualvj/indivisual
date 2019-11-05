@@ -2,30 +2,31 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-(function () {
-    var inst;
+{
     /**
      *
-     * @param program
-     * @constructor
+     * @type {HC.Messaging}
      */
-    HC.Messaging = function (program) {
-        inst = this;
-        this.program = program;
-        this.socket = false;
-        this.sid = false;
-        this.timeouts = {};
+    HC.Messaging = class Messaging {
 
-        this.init();
-    };
+        /**
+         *
+         * @param program
+         */
+        constructor(program) {
+            this.program = program;
+            this.socket = false;
+            this.sid = false;
+            this.timeouts = {};
 
-    HC.Messaging.prototype = {
+            this.init();
+        }
 
         /**
          *
          * @returns {boolean}
          */
-        initSID: function () {
+        initSID() {
             this.sid = 'root';
 
             if (_HASH) {
@@ -38,22 +39,22 @@
             }
 
             return false;
-        },
+        }
 
         /**
          *
          */
-        init: function () {
+        init() {
             if (this.initSID()) {
                 this.program.name += '@' + this.sid;
                 G_INSTANCE = this.program.name;
             }
-        },
+        }
 
         /**
          *
          */
-        initEvents: function () {
+        initEvents() {
             this.on('log', this.onLog);
             this.on('controls', this.onControls);
             this.on('displays', this.onDisplays);
@@ -62,99 +63,99 @@
             this.on('attr', this.onAttr);
             this.on('midi', this.onMidi);
             this.on('data', this.onData);
-        },
+        }
 
-        on: function (event, callback) {
-            var that = this;
+        on(event, callback) {
+            let that = this;
 
             this.socket.on(event, function (data) {
                 callback(data, that);
             });
-        },
+        }
 
         /**
          *
          * @param callback
          */
-        connect: function (callback) {
+        connect(callback) {
             HC.log(this.program.name, 'connecting...', true);
             this.socket = io.connect(null, {'secure': true, 'forceNew': true});
 
             this.initEvents();
 
-            this.socket.once('connect', function () {
-                inst._join();
+            this.socket.once('connect', () => {
+                this._join();
                 callback(false);
 
-                inst.socket.on('connect', function () {
-                    inst._join();
+                this.socket.on('connect', () => {
+                    this._join();
                     callback(true);
                 });
             });
-        },
+        }
 
         /**
          *
          * @private
          */
-        _join: function () {
+        _join() {
             this._emit({action: 'join', name: this.program.name});
-        },
+        }
 
         /**
          *
          * @param data
          * @param that
          */
-        onSettings: function (data, that) {
+        onSettings(data, that) {
             requestAnimationFrame(function () {
                 that.program.updateSettings(data.layer, data.data, data.controls, data.forward, data.force);
             });
-        },
+        }
 
         /**
          *
          * @param data
          * @param that
          */
-        onControls: function (data, that) {
+        onControls(data, that) {
             requestAnimationFrame(function () {
                 that.program.updateControls(data.data, data.controls, data.forward, data.force);
             });
-        },
+        }
 
         /**
          *
          * @param data
          * @param that
          */
-        onDisplays: function (data, that) {
+        onDisplays(data, that) {
             requestAnimationFrame(function () {
                 that.program.updateDisplays(data.data, data.controls, data.forward, data.force);
             });
-        },
+        }
 
         /**
          *
          * @param data
          * @param that
          */
-        onSources: function (data, that) {
+        onSources(data, that) {
             requestAnimationFrame(function () {
                 that.program.updateSources(data.data, data.controls, data.forward, data.force);
             });
-        },
+        }
 
         /**
          *
          * @param data
          */
-        onAttr: function (data) {
-            var key = data.query.replace(/[^a-z0-9]+/gi, '') + data.key;
+        onAttr(data) {
+            let key = data.query.replace(/[^a-z0-9]+/gi, '') + data.key;
 
-            requestAnimationFrame(function () {
+            requestAnimationFrame(() => {
 
-                var elem = document.querySelector(data.query);
+                let elem = document.querySelector(data.query);
                 if (elem) {
                     if (data.value == '') {
                         elem.removeAttribute(data.key);
@@ -166,11 +167,11 @@
 
                     if (data.resetValue != undefined) {
 
-                        if (inst.timeouts[key]) {
-                            clearTimeout(inst.timeouts[key]);
+                        if (this.timeouts[key]) {
+                            clearTimeout(this.timeouts[key]);
                         }
 
-                        inst.timeouts[key] = setTimeout(function () {
+                        this.timeouts[key] = setTimeout(() => {
 
                             if (data.resetValue == '') {
                                 elem.removeAttribute(data.key);
@@ -178,54 +179,54 @@
                             } else {
                                 elem.setAttribute(data.key, data.resetValue);
                             }
-                            delete inst.timeouts[key];
+                            delete this.timeouts[key];
                         }, data.timeout ? data.timeout : 125);
                     }
                 }
             });
-        },
+        }
 
         /**
          *
          * @param data
          * @param that
          */
-        onMidi: function (data, that) {
+        onMidi(data, that) {
             that.program.updateMidi(data);
-        },
+        }
 
         /**
          *
          * @param data
          */
-        onData: function (data, that) {
+        onData(data, that) {
             requestAnimationFrame(function () {
                 that.program.updateData(data);
             });
-        },
+        }
 
         /**
          *
          * @param data
          */
-        onLog: function (data) {
+        onLog(data) {
 
             HC.log(data.key, data.value);
-        },
+        }
 
         /**
          *
          * @param key
          * @param value
          */
-        emitLog: function (key, value) {
-            var config = {
+        emitLog(key, value) {
+            let config = {
                 action: 'log',
                 key: key,
                 value: value
             };
             this._emit(config);
-        },
+        }
 
         /**
          *
@@ -234,8 +235,8 @@
          * @param value
          * @param resetValue
          */
-        emitAttr: function (query, key, value, resetValue) {
-            var config = {
+        emitAttr(query, key, value, resetValue) {
+            let config = {
                 action: 'attr',
                 query: query,
                 key: key,
@@ -243,7 +244,7 @@
                 resetValue: resetValue
             };
             this._emit(config);
-        },
+        }
 
         /**
          *
@@ -251,15 +252,15 @@
          * @param target
          * @param conf
          */
-        emitMidi: function (command, target, conf) {
-            var config = {
+        emitMidi(command, target, conf) {
+            let config = {
                 action: 'midi',
                 command: command,
                 data: target,
                 conf: conf
             };
             this._emit(config);
-        },
+        }
 
         /**
          *
@@ -268,7 +269,7 @@
          * @param forward
          * @param force
          */
-        emitControls: function (data, display, forward, force) {
+        emitControls(data, display, forward, force) {
             if (data) {
                 if (data instanceof HC.Settings) {
                     data = data.prepare();
@@ -276,7 +277,7 @@
 
                 statics.ControlSettings.clean(data, statics.ControlSettings.initial);
 
-                var config = {
+                let config = {
                     action: 'controls',
                     data: data,
                     controls: display,
@@ -286,7 +287,7 @@
 
                 this._emit(config);
             }
-        },
+        }
 
         /**
          *
@@ -295,7 +296,7 @@
          * @param forward
          * @param force
          */
-        emitDisplays: function (data, display, forward, force) {
+        emitDisplays(data, display, forward, force) {
             if (data) {
                 if (data instanceof HC.Settings) {
                     data = data.prepare();
@@ -303,7 +304,7 @@
 
                 statics.DisplaySettings.clean(data, statics.DisplaySettings.initial);
 
-                var config = {
+                let config = {
                     action: 'displays',
                     data: data,
                     controls: display,
@@ -313,7 +314,7 @@
 
                 this._emit(config);
             }
-        },
+        }
 
         /**
          *
@@ -322,7 +323,7 @@
          * @param forward
          * @param force
          */
-        emitSources: function (data, display, forward, force) {
+        emitSources(data, display, forward, force) {
             if (data) {
                 if (data instanceof HC.Settings) {
                     data = data.prepare();
@@ -330,7 +331,7 @@
 
                 statics.SourceSettings.clean(data, statics.SourceSettings.initial);
 
-                var config = {
+                let config = {
                     action: 'sources',
                     data: data,
                     controls: display,
@@ -340,7 +341,7 @@
 
                 this._emit(config);
             }
-        },
+        }
 
         /**
          *
@@ -350,7 +351,7 @@
          * @param forward
          * @param force
          */
-        emitSettings: function (layer, data, display, forward, force) {
+        emitSettings(layer, data, display, forward, force) {
             if (data) {
                 if (data instanceof HC.Settings) {
                     data = data.prepare();
@@ -358,7 +359,7 @@
 
                 statics.AnimationSettings.clean(data, statics.AnimationSettings.initial);
 
-                var config = {
+                let config = {
                     action: 'settings',
                     data: data,
                     controls: display,
@@ -369,43 +370,43 @@
 
                 this._emit(config);
             }
-        },
+        }
 
         /**
          *
          * @param keys
          * @param data
          */
-        emitData: function (key, data) {
-            var config = {
+        emitData(key, data) {
+            let config = {
                 action: 'data',
                 from: this.program.name,
                 key: key,
                 data: data
             };
             this._emit(config);
-        },
+        }
 
         /**
          * @param data
          * @param callback
          */
-        _emit: function (data, callback) {
+        _emit(data, callback) {
 
             data.sid = this.sid;
             data.from = this.program.name;
             this.socket.emit(data.action, data, callback);
-        },
+        }
 
         /**
          *
          * @param callback
          */
-        sync: function (callback) {
+        sync(callback) {
 
             HC.log(this.program.name, 'syncing...', true);
 
-            var data = {
+            let data = {
                 sid: this.sid,
                 action: 'sync',
                 from: this.program.name,
@@ -414,7 +415,7 @@
                 forward: false
             };
             this._emit(data, callback);
-        },
+        }
 
         /**
          *
@@ -422,16 +423,16 @@
          * @param file
          * @param callback
          */
-        load: function (base, dir, file, callback) {
-            var path = filePath(base, dir);
-            var data = {
+        load(base, dir, file, callback) {
+            let path = filePath(base, dir);
+            let data = {
                 action: 'get',
                 dir: dir,
                 name: file,
                 file: path + '/' + file
             };
             this._emit(data, callback);
-        },
+        }
 
         /**
          *
@@ -440,9 +441,9 @@
          * @param data
          * @param callback
          */
-        save: function (base, dir, file, data, callback) {
-            var path = filePath(base, dir);
-            var conf = {
+        save(base, dir, file, data, callback) {
+            let path = filePath(base, dir);
+            let conf = {
                 action: 'save',
                 dir: path,
                 file: file,
@@ -450,7 +451,7 @@
             };
 
             this._emit(conf, callback);
-        },
+        }
 
         /**
          *
@@ -459,30 +460,30 @@
          * @param data
          * @param callback
          */
-        mkdir: function (base, dir, data, callback) {
-            var path = filePath(base, dir);
-            var conf = {
+        mkdir(base, dir, data, callback) {
+            let path = filePath(base, dir);
+            let conf = {
                 action: 'mkdir',
                 dir: path,
                 contents: JSON.stringify(data)
             };
 
             this._emit(conf, callback);
-        },
+        }
 
         /**
          *
          * @param dir
          * @param callback
          */
-        files: function (dir, callback) {
-            var conf = {
+        files(dir, callback) {
+            let conf = {
                 action: 'files',
                 file: dir
             };
 
             this._emit(conf, callback);
-        },
+        }
 
         /**
          *
@@ -490,9 +491,9 @@
          * @param file
          * @param data
          */
-        sample: function (dir, file, data) {
-            var path = filePath(SAMPLE_DIR, dir);
-            var conf = {
+        sample(dir, file, data) {
+            let path = filePath(SAMPLE_DIR, dir);
+            let conf = {
                 action: 'sample',
                 dir: path,
                 file: file,
@@ -500,7 +501,7 @@
             };
 
             this._emit(conf);
-        },
+        }
 
         /**
          *
@@ -508,9 +509,9 @@
          * @param file
          * @param callback
          */
-        'delete': function (base, dir, file, callback) {
-            var path = filePath(base, dir);
-            var data = {
+        delete(base, dir, file, callback) {
+            let path = filePath(base, dir);
+            let data = {
                 action: 'delete',
                 dir: path,
                 file: file,
@@ -518,7 +519,7 @@
             };
 
             this._emit(data, callback);
-        },
+        }
 
         /**
          *
@@ -526,9 +527,9 @@
          * @param file
          * @param callback
          */
-        'rename': function (base, dir, file, nu, callback) {
-            var path = filePath(base, dir);
-            var data = {
+        rename(base, dir, file, nu, callback) {
+            let path = filePath(base, dir);
+            let data = {
                 action: 'rename',
                 dir: path,
                 file: file,
@@ -539,4 +540,4 @@
             this._emit(data, callback);
         }
     }
-})();
+}

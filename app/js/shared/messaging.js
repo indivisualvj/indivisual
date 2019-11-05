@@ -1,7 +1,6 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-
 {
     /**
      *
@@ -514,8 +513,7 @@
             let data = {
                 action: 'delete',
                 dir: path,
-                file: file,
-                contents: JSON.stringify(data)
+                file: file
             };
 
             this._emit(data, callback);
@@ -533,8 +531,7 @@
                 action: 'rename',
                 dir: path,
                 file: file,
-                nu: nu,
-                contents: JSON.stringify(data)
+                nu: nu
             };
 
             this._emit(data, callback);

@@ -2,26 +2,22 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-(function () {
-    var inst;
+{
     /**
      *
-     * @constructor
+     * @type {HC.Beatkeeper}
      */
-    HC.Beatkeeper = function () {
-        inst = this;
-        this.beatStartTime = 0;
-        this.firstTrigger = false;
-        this.triggerCounter = 0;
-        this.timeout = false;
-        this.bpm = 0;
-        this.tempo = 120;
-        this.tween = new TWEEN.Group();
-    };
+    HC.Beatkeeper = class Beatkeeper {
 
-    HC.Beatkeeper.prototype = {
+        beatStartTime = 0;
+        firstTrigger = false;
+        triggerCounter = 0;
+        timeout = false;
+        bpm = 0;
+        tempo = 120;
+        tween;
 
-        speeds: {
+        speeds = {
             "64": {
                 duration: 0,
                 progress: 0,
@@ -101,58 +97,65 @@
                 beats: 0,
                 divider: 16
             }
-        },
+        };
+
+        /**
+         *
+         */
+        constructor() {
+            this.tween = new TWEEN.Group();
+        }
 
         /**
          *
          * @param speed
          * @private
          */
-        _tween: function (speed) {
-            var next = {prc: 1, progress: speed.duration};
+        _tween(speed) {
+            let next = {prc: 1, progress: speed.duration};
 
-            var tween = new TWEEN.Tween(speed, this.tween);
+            let tween = new TWEEN.Tween(speed, this.tween);
             tween.to(next, speed.duration);
-            tween.onComplete(function (speed) {
+            tween.onComplete((speed) => {
                 speed.prc = 0;
                 speed.progress = 0;
                 speed.beats++;
 
-                var full = 60000 / inst.tempo * 4;
-                var duration = full / speed.divider;
-                var beats = speed.beats;
-                var elapsed = animation.now - inst.beatStartTime;
-                var estimated = duration * beats;
-                var offset = elapsed - estimated;
+                let full = 60000 / this.tempo * 4;
+                let duration = full / speed.divider;
+                let beats = speed.beats;
+                let elapsed = animation.now - this.beatStartTime;
+                let estimated = duration * beats;
+                let offset = elapsed - estimated;
 
                 speed.pitch = offset;
                 speed.duration = clamp(duration - offset, duration * .85, duration * 1.15);
 
                 // if (DEBUG && Math.abs(offset) > duration && speed.divider == 4) {
                 //     console.log(
-                //         inst.speeds.eight.pitch.toFixed(2),
-                //         inst.speeds.quarter.pitch.toFixed(2),
-                //         inst.speeds.half.pitch.toFixed(2),
-                //         inst.speeds.full.pitch.toFixed(2),
-                //         inst.speeds.double.pitch.toFixed(2)
+                //         this.speeds.eight.pitch.toFixed(2),
+                //         this.speeds.quarter.pitch.toFixed(2),
+                //         this.speeds.half.pitch.toFixed(2),
+                //         this.speeds.full.pitch.toFixed(2),
+                //         this.speeds.double.pitch.toFixed(2)
                 //     );
                 // }
 
-                inst._tween(speed);
+                this._tween(speed);
             });
 
             tween.start();
-        },
+        }
 
         /**
          *
          */
-        resetTrigger: function () {
+        resetTrigger() {
             clearTimeout(this.timeout);
             this.firstTrigger = false;
             this.triggerCounter = 0;
             this.timeout = false;
-        },
+        }
 
         /**
          * §
@@ -162,19 +165,19 @@
          * @param forward
          * @returns {boolean|*|statics.ControlSettings.beat}
          */
-        trigger: function (value, override, speed, forward) {
+        trigger(value, override, speed, forward) {
 
             if (this.timeout) { // following trigger
                 clearTimeout(this.timeout);
-                var diff = HC.now() - this.firstTrigger;
-                var bpm = this.triggerCounter / (diff / 60000);
+                let diff = HC.now() - this.firstTrigger;
+                let bpm = this.triggerCounter / (diff / 60000);
 
                 statics.ControlSettings.beat = true;
                 this.triggerCounter++;
 
-                this.timeout = setTimeout(function () {
-                    inst.resetCounters(inst.firstTrigger);
-                    inst.resetTrigger();
+                this.timeout = setTimeout(() => {
+                    this.resetCounters(this.firstTrigger);
+                    this.resetTrigger();
                 }, 1333);
 
                 if (forward) {
@@ -190,14 +193,14 @@
                 this.triggerCounter++;
 
                 clearTimeout(this.timeout);
-                this.timeout = setTimeout(function () {
+                this.timeout = setTimeout(() => {
                     statics.ControlSettings.beat = value;
-                    inst.resetTrigger();
+                    this.resetTrigger();
                 }, 1333);
             }
 
             return statics.ControlSettings.beat;
-        },
+        }
 
         /**
          *
@@ -206,12 +209,12 @@
          * @param speed
          * @returns {boolean}
          */
-        speedByPeakBpm: function (firstPeak, peakBpm, speed) {
-            var nuSpeed = false;
+        speedByPeakBpm(firstPeak, peakBpm, speed) {
+            let nuSpeed = false;
 
-            var prc = peakBpm / speed * 100;
-            var prcH = (peakBpm / 2) / speed * 100;
-            var prcD = (peakBpm * 2) / speed * 100;
+            let prc = peakBpm / speed * 100;
+            let prcH = (peakBpm / 2) / speed * 100;
+            let prcD = (peakBpm * 2) / speed * 100;
 
             if (prc > 99.9 && prc < 100.1) {
                 nuSpeed = false; // speed seems to be ok
@@ -231,16 +234,16 @@
             }
 
             return nuSpeed;
-        },
+        }
 
         /**
          *
          * @param rhythm
          * @returns {boolean}
          */
-        getSpeed: function (rhythm) {
+        getSpeed(rhythm) {
 
-            var speed = false;
+            let speed = false;
 
             if (rhythm in this.speeds) {
                 speed = this.speeds[rhythm];
@@ -250,24 +253,24 @@
             }
 
             return speed;
-        },
+        }
 
         /**
          *
          * @returns {boolean}
          */
-        getDefaultSpeed: function () {
+        getDefaultSpeed() {
             return this.getSpeed('quarter');
-        },
+        }
 
         /**
          *
          * @param diff
          * @param tempo
          */
-        updateSpeeds: function (diff, tempo) {
+        updateSpeeds(diff, tempo) {
 
-            var dflt = this.getDefaultSpeed();
+            let dflt = this.getDefaultSpeed();
             if (dflt.prc == 0) {
                 this.updatePitch(tempo);
             }
@@ -275,96 +278,96 @@
             this.tempo = tempo;
             this.tween.update(animation.now, false);
 
-        },
+        }
 
         /**
          *
          * @param speed
          * @param repeat
          */
-        updatePitch: function (speed, repeat) {
-            var unit = this.getDefaultSpeed();
-            var duration = 60000 / speed;
-            var beats = unit.beats;
-            var elapsed = animation.now - (this.beatStartTime);
-            var estimated = duration * beats;
-            var offset = elapsed - estimated;
-            var offbeat = Math.abs(offset) > duration;
+        updatePitch(speed, repeat) {
+            let unit = this.getDefaultSpeed();
+            let duration = 60000 / speed;
+            let beats = unit.beats;
+            let elapsed = animation.now - (this.beatStartTime);
+            let estimated = duration * beats;
+            let offset = elapsed - estimated;
+            let offbeat = Math.abs(offset) > duration;
 
             if (offbeat && !repeat) {
-                var add = Math.round(offset / duration);
+                let add = Math.round(offset / duration);
                 this.beatStartTime += add * duration;
                 this.updatePitch(speed, true);
 
                 return;
             }
 
-            var bpm = beats / (elapsed / 60000);
+            let bpm = beats / (elapsed / 60000);
             this.bpm = round(bpm, 2);
-        },
+        }
 
         /**
          *
          * @param beatStartTime
          */
-        resetCounters: function (beatStartTime) {
+        resetCounters(beatStartTime) {
             this.beatStartTime = beatStartTime;
-            var duration = 60000 / statics.ControlSettings.tempo;
-            var elapsed = HC.now() - this.beatStartTime;
-            var ebeats = Math.floor((elapsed / duration) / 4);
+            let duration = 60000 / statics.ControlSettings.tempo;
+            let elapsed = HC.now() - this.beatStartTime;
+            let ebeats = Math.floor((elapsed / duration) / 4);
 
             // HC.log('resetCounters', {ebeats:ebeats}, false, DEBUG);
 
-            for (var s in this.speeds) {
+            for (let s in this.speeds) {
                 s = this.speeds[s];
-                var beats = ebeats * s.divider;
+                let beats = ebeats * s.divider;
                 s.beats = beats;
             }
-        },
+        }
 
         /**
          *
          */
-        reset: function () {
+        reset() {
             this.resetCounters(animation.now);
             this.resetTrigger();
-        },
+        }
 
         /**
          *
          * @param rhythm
          * @returns {number}
          */
-        rhythmDivider: function (rhythm) {
+        rhythmDivider(rhythm) {
             return this.speeds[rhythm].divider;
-        },
+        }
 
         /**
          * @deprecated
          * @param rhythm
          * @returns {boolean}
          */
-        rhythmSlow: function (rhythm) {
+        rhythmSlow(rhythm) {
             return rhythm != 1;
-        },
+        }
 
 
         /**
          *
          */
-        stop: function () {
+        stop() {
             this.tween.removeAll();
-        },
+        }
 
         /**
          *
          */
-        play: function () {
-            for (var key in this.speeds) {
-                var s = this.speeds[key];
+        play() {
+            for (let key in this.speeds) {
+                let s = this.speeds[key];
                 s.pitch = 0;
                 this._tween(s);
             }
         }
     }
-})();
+}

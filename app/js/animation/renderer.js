@@ -2,49 +2,52 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-(function () {
+{
 
     /**
      *
-     * @param config
-     * @constructor
+     * @type {HC.Renderer}
      */
-    HC.Renderer = function (config) {
-        this.type = 'animation';
-        this.layers = config.layers;
-        this.flipx = 1;
-        this.flipy = 1;
-        this.resolution = {x: 1280, y: 720, aspect: 1280 / 720};
-        this.three = {
-            renderer: false,
-            scene: false
-        };
-        this.currentLayer = false;
-        this.nextLayer = false;
-        this.lastLayer = false;
-        this.layerSwitched = false;
+    HC.Renderer = class Renderer {
 
-        this.initThreeJs();
-        this.initLayers(false);
-    };
+        /**
+         *
+         * @param config
+         */
+        constructor(config) {
+            this.type = 'animation';
+            this.layers = config.layers;
+            this.flipx = 1;
+            this.flipy = 1;
+            this.resolution = {x: 1280, y: 720, aspect: 1280 / 720};
+            this.three = {
+                renderer: false,
+                scene: false
+            };
+            this.currentLayer = false;
+            this.nextLayer = false;
+            this.lastLayer = false;
+            this.layerSwitched = false;
 
-    HC.Renderer.prototype = {
+            this.initThreeJs();
+            this.initLayers(false);
+        }
 
         /**
          *
          * @param keepsettings
          */
-        fullReset: function (keepsettings) {
+        fullReset(keepsettings) {
             listener.removeEvent('renderer.render');
             this.resize();
             this.initLayers(keepsettings);
             this.setLayer(0);
-        },
+        }
 
         /**
          *
          */
-        initThreeJs: function () {
+        initThreeJs() {
             if (!this.three.renderer) {
                 var conf = {alpha: true, antialias: ANTIALIAS};
                 this.three.renderer = new THREE.WebGLRenderer(conf);
@@ -66,9 +69,9 @@
 
                 // })
             }
-        },
+        }
 
-        initLayers: function (keepsettings) {
+        initLayers(keepsettings) {
 
             if (this._layers) {
                 this.three.scene.remove(this._layers);
@@ -106,13 +109,13 @@
 
             this.currentLayer = this.layers[statics.ControlSettings.layer];
 
-        },
+        }
 
         /**
          *
          * @param force
          */
-        switchLayer: function (force) {
+        switchLayer(force) {
             this.layerSwitched = false;
 
             if (this.nextLayer) {
@@ -145,13 +148,13 @@
                     this.nextLayer = false;
                 }
             }
-        },
+        }
 
         /**
          *
          * @param index
          */
-        setLayer: function (index) {
+        setLayer(index) {
 
             for (var i in this.layers) {
                 i = parseInt(i);
@@ -165,32 +168,31 @@
                     this._layers.remove(layer._layer);
                 }
             }
-
-        },
+        }
 
         /**
          *
          */
-        pauseLayers: function () {
+        pauseLayers() {
             for (var i = 0; i < this.layers.length; i++) {
                 this.layers[i].pause();
             }
-        },
+        }
 
         /**
          *
          */
-        resumeLayers: function () {
+        resumeLayers() {
             for (var i = 0; i < this.layers.length; i++) {
                 this.layers[i].resume();
             }
-        },
+        }
 
         /**
          * Render current and all transvisible layers
          * @param hook
          */
-        animate: function (hook) {
+        animate(hook) {
             for (var l in this.layers) {
                 var layer = this.layers[l];
                 if (layer == this.currentLayer || layer.settings.layer_transvisible) {
@@ -198,13 +200,13 @@
                     hook = undefined;
                 }
             }
-        },
+        }
 
         /**
          *
          * @param layer
          */
-        resetLayer: function (layer) {
+        resetLayer(layer) {
 
             if (isNumber(layer) || isString(layer)) {
                 layer = this.layers[layer];
@@ -213,12 +215,12 @@
             this.nextLayer = false;
 
             layer.fullReset();
-        },
+        }
 
         /**
          *
          */
-        resize: function () {
+        resize() {
             var res = this.getResolution();
             this.resolution = res;
 
@@ -241,14 +243,13 @@
                 this.three.perspective1.aspect = aspect;
                 this.three.perspective2.aspect = aspect;
             }
-
-        },
+        }
 
         /**
          *
          * @returns {{aspect: number, x: number, y: number}}
          */
-        getResolution: function () {
+        getResolution() {
             var resolution;
 
             var res = statics.DisplaySettings.resolution;
@@ -262,13 +263,13 @@
             }
 
             return resolution;
-        },
+        }
 
         /**
          *
          * @returns {boolean|*}
          */
-        current: function () {
+        current() {
             this.render();
 
             var renderer = this.three.renderer;
@@ -279,29 +280,29 @@
             } else {
                 return false;
             }
-        },
+        }
 
         /**
          *
          * @returns {*}
          */
-        brightness: function () {
+        brightness() {
             return displayman.brightness();
-        },
+        }
 
         /**
          *
          * @param reference
          * @returns {*}
          */
-        bounds: function (reference) {
+        bounds(reference) {
             return reference;
-        },
+        }
 
         /**
          *
          */
-        render: function () {
+        render() {
 
             if (this._last != animation.now) {
                 listener.fireEvent('renderer.render', this);
@@ -319,16 +320,16 @@
 
                 this._last = animation.now;
             }
-        },
+        }
 
         /**
          *
          * @returns {*}
          */
-        currentColor: function () {
+        currentColor() {
             var hc = this.currentLayer.shapeColor(false);
 
             return hc;
         }
     }
-})();
+}

@@ -2,107 +2,113 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-(function () {
-    var inst;
-    HC.DisplayManager = function (config) {
-        this.displays = config.display;
-        this.width = 1280;
-        this.height = 720;
-        this.displayMap = [];
-        this.maptastic = this.initMaptastic();
-        this.cliptastic = this.initCliptastic();
-        this.mappingTimeouts = [];
-        this.maskTimeouts = [];
-        inst = this;
-    };
+{
+    /**
+     *
+     * @type {HC.DisplayManager}
+     */
+    HC.DisplayManager = class DisplayManager {
 
-    HC.DisplayManager.prototype = {
+        /**
+         *
+         * @param config
+         */
+        constructor(config) {
+            this.displays = config.display;
+            this.width = 1280;
+            this.height = 720;
+            this.displayMap = [];
+            this.maptastic = this.initMaptastic();
+            this.cliptastic = this.initCliptastic();
+            this.mappingTimeouts = [];
+            this.maskTimeouts = [];
+        }
 
         /**
          *
          */
-        initMaptastic: function () {
+        initMaptastic() {
             return Maptastic({
                 crosshairs: true,
                 autoSave: false,
                 autoLoad: false,
                 original: {width: this.width, height: this.height},
-                onchange: function (e) {
+                onchange(e) {
                     if (e && 'element' in e) {
-                        var element = e.element;
-                        var id = element.id;
-                        var mapping = {
+                        let element = e.element;
+                        let id = element.id;
+                        let mapping = {
                             //sourcePoints: e.sourcePoints,
                             targetPoints: e.targetPoints
                         };
-                        inst.onMapping(id, mapping);
+                        this.onMapping(id, mapping);
                     }
                 }
             });
-        },
+        }
 
         /**
          *
          * @param id
          * @param mapping
          */
-        onMapping: function (id, mapping) {
-            if (inst.mappingTimeouts[id]) {
-                clearTimeout(inst.mappingTimeouts[id]);
+        onMapping(id, mapping) {
+            if (this.mappingTimeouts[id]) {
+                clearTimeout(this.mappingTimeouts[id]);
             }
             if (animation) {
-                var f = function (id, mapping) {
-                    inst.mappingTimeouts[id] = setTimeout(function () {
+                let f = (id, mapping) => {
+                    this.mappingTimeouts[id] = setTimeout(function () {
                         animation.updateDisplay(id + '_mapping', JSON.stringify(mapping), false, true, false);
-                        inst.mappingTimeouts[id] = false;
+                        this.mappingTimeouts[id] = false;
                     }, 125);
                 };
                 f(id, mapping);
             }
-        },
+        }
 
         /**
          *
          */
-        initCliptastic: function () {
-            var onMask = function (id, mask) {
-                if (inst.maskTimeouts[id]) {
-                    clearTimeout(inst.maskTimeouts[id]);
+        initCliptastic() {
+            let onMask = (id, mask) => {
+                if (this.maskTimeouts[id]) {
+                    clearTimeout(this.maskTimeouts[id]);
                 }
                 if (animation) {
-                    var f = function (id, mask) {
-                        inst.maskTimeouts[id] = setTimeout(function () {
+                    let f = (id, mask) => {
+                        this.maskTimeouts[id] = setTimeout(function () {
                             animation.updateDisplay(id, JSON.stringify(mask), true, true, false);
-                            inst.maskTimeouts[id] = false;
+                            this.maskTimeouts[id] = false;
                         }, 125);
                     };
                     f(id, mask);
                 }
             };
             return Cliptastic({
-                onchange: function (e) {
+                onchange(e) {
                     if (e && 'element' in e) {
-                        var element = e.element;
-                        var id = element.id;
-                        var mask = {
+                        let element = e.element;
+                        let id = element.id;
+                        let mask = {
                             points: e.element.points
                         };
                         onMask(id, mask);
                     }
                 }
             });
-        },
+        }
 
         /**
          *
          * @param display
          * @param enable
          */
-        enableMaptastic: function (display, enable) {
+        enableMaptastic(display, enable) {
             if (display) {
-                var canvas = display.canvas;
+                let canvas = display.canvas;
                 if (enable) {
-                    var points = display.loadMapping();
+                    let points = display.loadMapping();
 
                     this.maptastic.addLayer(canvas, points.targetPoints, points.sourcePoints);
 
@@ -115,30 +121,30 @@
                     canvas.style.transform = '';
                     canvas.style.transformOrigin = '';
 
-                    var px = 0.5;
-                    var py = 0.5;
-                    var cx = px * window.innerWidth;
-                    var cy = py * window.innerHeight;
-                    var sw = canvas.width;
-                    var sh = canvas.height;
-                    var ml = cx - sw / 2;
-                    var mt = cy - sh / 2;
+                    let px = 0.5;
+                    let py = 0.5;
+                    let cx = px * window.innerWidth;
+                    let cy = py * window.innerHeight;
+                    let sw = canvas.width;
+                    let sh = canvas.height;
+                    let ml = cx - sw / 2;
+                    let mt = cy - sh / 2;
                     canvas.style.left = ml + 'px';
                     canvas.style.top = mt + 'px';
                 }
 
                 this.cliptastic.refresh();
             }
-        },
+        }
 
         /**
          *
          * @param display
          * @param enable
          */
-        enableCliptastic: function (display, enable) {
+        enableCliptastic(display, enable) {
             if (display && display.mask) {
-                var mask = display.mask;
+                let mask = display.mask;
                 if (enable) {
                     display.loadMask();
                     this.cliptastic.addLayer(mask);
@@ -147,22 +153,22 @@
                     this.cliptastic.removeLayer(mask);
                 }
             }
-        },
+        }
 
         /**
          *
          */
-        refreshCliptastic: function () {
+        refreshCliptastic() {
             this.cliptastic.refresh();
-        },
+        }
 
         /**
          *
          * @param v
          */
-        brightness: function (v) {
+        brightness(v) {
             if (v !== undefined) {
-                for (var i = 0; i < this.displays.length; i++) {
+                for (let i = 0; i < this.displays.length; i++) {
                     if (this.displays[i]) {
                         this.displays[i].ctx.globalAlpha = Math.min(1, v);
                     }
@@ -170,15 +176,15 @@
             }
 
             return Math.min(1, statics.DisplaySettings.brightness);
-        },
+        }
 
         /**
          *
          * @param i
          * @returns {*}
          */
-        getDisplay: function (i) {
-            var visible = statics.DisplaySettings['display' + i + '_visible'];
+        getDisplay(i) {
+            let visible = statics.DisplaySettings['display' + i + '_visible'];
             if (visible) {
                 if (!this.displays[i]) {
                     this.displays[i] = new HC.Display(i);
@@ -202,15 +208,15 @@
             }
 
             return this.displays[i];
-        },
+        }
 
         /**
          *
          * @param i
          * @param mode
          */
-        updateDisplay: function (i, mode) {
-            var display = this.getDisplay(i);
+        updateDisplay(i, mode) {
+            let display = this.getDisplay(i);
             if (display) {
                 display.update(this.width, this.height, statics.DisplaySettings);
 
@@ -236,36 +242,42 @@
             }
 
             this.updateDisplayMap();
-        },
-
-        _addDisplay: function (i) {
-            var display = this.getDisplay(i);
-            if (display) {
-                document.body.appendChild(display.canvas);
-            }
-        },
+        }
 
         /**
          *
          * @param i
+         * @private
          */
-        _removeDisplay: function (i) {
+        _addDisplay(i) {
+            let display = this.getDisplay(i);
+            if (display) {
+                document.body.appendChild(display.canvas);
+            }
+        }
+
+        /**
+         *
+         * @param i
+         * @private
+         */
+        _removeDisplay(i) {
             if (this.displays[i]) {
-                var display = this.displays[i];
+                let display = this.displays[i];
                 this.enableMaptastic(display, false);
                 this.enableCliptastic(display, false);
                 document.body.removeChild(display.canvas);
                 this.displays[i] = false;
             }
-        },
+        }
 
         /**
          *
          */
-        updateDisplayMap: function () {
+        updateDisplayMap() {
             this.displayMap = [];
-            var index = 0;
-            for (var i = 0; i < this.displays.length; i++) {
+            let index = 0;
+            for (let i = 0; i < this.displays.length; i++) {
                 if (this.displays[i]) {
                     if (!this.displays[i].static) {
                         this.displayMap.push(i);
@@ -273,7 +285,7 @@
                     this.displays[i].index = index++;
                 }
             }
-        },
+        }
 
         /**
          *
@@ -283,21 +295,21 @@
          * @param notify
          * @returns {*}
          */
-        centerDisplay: function (i, factor, screen, notify) {
-            var display = this.getDisplay(i);
+        centerDisplay(i, factor, screen, notify) {
+            let display = this.getDisplay(i);
             if (display) {
                 return this.maptastic.centerByElement(display.canvas, factor, screen, notify);
             }
 
             return false;
-        },
+        }
 
         /**
          *
          */
-        render: function () {
+        render() {
             this.renderDisplays();
-        },
+        }
 
         /**
          *
@@ -305,20 +317,20 @@
          * @param speed
          * @param mode
          */
-        renderBorder: function (display, speed, mode) {
+        renderBorder(display, speed, mode) {
             if (statics.DisplaySettings.border && !display.noborder) {
-                var lw = statics.DisplaySettings.border * 1;
-                var color = statics.DisplaySettings.border_color;
+                let lw = statics.DisplaySettings.border * 1;
+                let color = statics.DisplaySettings.border_color;
 
                 if (color == '') {
-                    var canvas = display.getSource() ? display.getSource().current() : false;
+                    let canvas = display.getSource() ? display.getSource().current() : false;
                     color = (canvas && canvas._color) ? canvas._color : renderer.currentLayer.shapeColor(false);
                 }
 
                 display.drawBorder(lw, color, mode, speed);
 
             }
-        },
+        }
 
         /**
          *
@@ -326,52 +338,55 @@
          * @param height
          * @param resolution
          */
-        resize: function (resolution) {
+        resize(resolution) {
             this.width = resolution.x;
             this.height = resolution.y;
             this.maptastic.resize(resolution);
             this.updateDisplays();
-        },
-
-        reset: function () {
-            this.updateDisplays();
-        },
+        }
 
         /**
          *
          */
-        updateDisplays: function () {
+        reset() {
+            this.updateDisplays();
+        }
+
+        /**
+         *
+         */
+        updateDisplays() {
 
             document.body.style.backgroundColor = statics.DisplaySettings.background;
 
-            for (var i = 0; i < this.displays.length; i++) {
+            for (let i = 0; i < this.displays.length; i++) {
                 this.updateDisplay(i, false);
             }
-        },
+        }
 
         /**
          *
          */
-        updateMasks: function () {
-            for (var i = 0; i < this.displays.length; i++) {
+        updateMasks() {
+            for (let i = 0; i < this.displays.length; i++) {
                 if (this.displays[i]) {
-                    var display = this.displays[i];
+                    let display = this.displays[i];
                     if (display && display.mask) {
                         display.mask.update();
                     }
                 }
             }
-        },
+        }
 
         /**
          *
          */
-        renderDisplays: function () {
-            var visibleIndex = 0;
-            var fallback = renderer.current();
+        renderDisplays() {
+            let visibleIndex = 0;
+            let fallback = renderer.current();
 
-            for (var i = 0; i < this.displays.length; i++) {
-                var display = this.displays[i];
+            for (let i = 0; i < this.displays.length; i++) {
+                let display = this.displays[i];
                 if (display && !display.offline) {
                     this._handleVisible(display, visibleIndex++);
 
@@ -382,7 +397,7 @@
                         display.clear();
                     }
 
-                    var bm = statics.display.border.random !== false
+                    let bm = statics.display.border.random !== false
                         ? statics.display.border.random
                         : statics.DisplaySettings.border_mode;
 
@@ -402,15 +417,16 @@
             statics.DisplaySettings.trigger_display_visibility = false;
             statics.DisplaySettings.force_display_visibility = false;
             statics.DisplaySettings.reset_display_visibility = false;
-        },
+        }
 
         /**
          *
          * @param display
+         * @param index
          * @private
          */
-        _handleVisible: function (display, index) {
-            var redo = false;
+        _handleVisible(display, index) {
+            let redo = false;
             if (!display.static) {
                 redo = this._visibilityMode(index, display.visible);
 
@@ -480,7 +496,7 @@
                     break;
             }
             display.blitz--;
-        },
+        }
 
         /**
          *
@@ -488,11 +504,11 @@
          * @param visible
          * @returns {boolean}
          */
-        _visibilityMode: function (index, visible) {
-            var redo = false;
+        _visibilityMode(index, visible) {
+            let redo = false;
 
-            var speed = this.visibilitySpeed();
-            var sv = statics.display.visibility.random !== false
+            let speed = this.visibilitySpeed();
+            let sv = statics.display.visibility.random !== false
                 ? statics.display.visibility.random : statics.DisplaySettings.display_visibility;
 
             if (statics.DisplaySettings.reset_display_visibility) {
@@ -617,15 +633,15 @@
             }
 
             return redo;
-        },
+        }
 
         /**
          *
          * @returns {boolean}
          */
-        visibilitySpeed: function () {
-            var speed = false;
-            var ds = statics.DisplaySettings.display_speed;
+        visibilitySpeed() {
+            let speed = false;
+            let ds = statics.DisplaySettings.display_speed;
             if (ds == 'midi') {
                 if (statics.DisplaySettings.trigger_display_visibility
                     || statics.DisplaySettings.force_display_visibility
@@ -655,16 +671,16 @@
             } else {
                 return false;
             }
-        },
+        }
 
         /**
          *
          * @returns {boolean}
          */
-        borderSpeed: function () {
-            var speed = beatkeeper.getSpeed(statics.DisplaySettings.border_speed);
+        borderSpeed() {
+            let speed = beatkeeper.getSpeed(statics.DisplaySettings.border_speed);
             return speed;
-        },
+        }
 
         /**
          *
@@ -672,11 +688,11 @@
          * @param dir
          * @param speed
          */
-        visibilityStack: function (index, dir, speed) {
+        visibilityStack(index, dir, speed) {
 
             if (index == 0 && ((speed === false && audio.peak) || speed === 0)) {
 
-                var i = statics.display.visibility.index;
+                let i = statics.display.visibility.index;
 
                 i += dir;
 
@@ -689,18 +705,17 @@
 
                 statics.display.visibility.index = i;
             }
-        },
+        }
 
         /**
          *
          * @param speed
          * @returns {number}
          */
-        flashTimeoutInFrames: function (speed) {
-            var timeout = beatkeeper.getSpeed(speed).duration / 2;
-            var count = Math.round((timeout / animation.duration) / 2);
+        flashTimeoutInFrames(speed) {
+            let timeout = beatkeeper.getSpeed(speed).duration / 2;
+            let count = Math.round((timeout / animation.duration) / 2);
             return count;
         }
-
-    };
-})();
+    }
+}

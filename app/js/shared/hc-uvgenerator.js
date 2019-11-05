@@ -9,20 +9,20 @@
         static front2back(geometry) {
             geometry.computeBoundingBox();
 
-            var max = geometry.boundingBox.max;
-            var min = geometry.boundingBox.min;
+            let max = geometry.boundingBox.max;
+            let min = geometry.boundingBox.min;
 
-            var offset = new THREE.Vector2(0 - min.x, 0 - min.y);
-            var range = new THREE.Vector2(max.x - min.x, max.y - min.y);
+            let offset = new THREE.Vector2(0 - min.x, 0 - min.y);
+            let range = new THREE.Vector2(max.x - min.x, max.y - min.y);
 
             geometry.faceVertexUvs[0] = [];
-            var faces = geometry.faces;
+            let faces = geometry.faces;
 
-            for (var i = 0; i < geometry.faces.length; i++) {
+            for (let i = 0; i < geometry.faces.length; i++) {
 
-                var v1 = geometry.vertices[faces[i].a];
-                var v2 = geometry.vertices[faces[i].b];
-                var v3 = geometry.vertices[faces[i].c];
+                let v1 = geometry.vertices[faces[i].a];
+                let v2 = geometry.vertices[faces[i].b];
+                let v3 = geometry.vertices[faces[i].c];
 
                 geometry.faceVertexUvs[0].push([
                     new THREE.Vector2((v1.x + offset.x) / range.x, (v1.y + offset.y) / range.y),

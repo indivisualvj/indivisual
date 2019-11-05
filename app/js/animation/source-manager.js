@@ -2,8 +2,16 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
+    /**
+     *
+     * @type {HC.SourceManager}
+     */
     HC.SourceManager = class SourceManager {
 
+        /**
+         *
+         * @param config
+         */
         constructor(config) {
             this.perspectives = new Array(3);
             this.samples = config.sample;

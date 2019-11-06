@@ -346,7 +346,7 @@ var Shapetastic = function(inst) {
 
         if (true) {
 
-            for (var i = 0; i < vtcs.length; i += 3) {
+            for (var i = 0; i < vtcs.length && vtcs.length > 2; i += 3) {
                 var v1 = new THREE.Vector3().fromArray(vtcs[i]).setZ(0);
                 var v2 = new THREE.Vector3().fromArray(vtcs[i + 1]).setZ(0);
                 var v3 = new THREE.Vector3().fromArray(vtcs[i + 2]).setZ(0);

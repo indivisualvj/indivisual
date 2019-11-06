@@ -22,7 +22,10 @@
             let shapeSpeed = layer.getShapeRhythmPlugin(this.settings.shape_rhythm).params(shape);
 
             if (this.isFirstShape(shape) && randomBool()) {
-                if ((!peak && layer.getCurrentSpeed().prc == 0) || (peak && audio.peak)) {
+                if (this.layer.settings.pattern_sync) {
+                    this.dir = -1;
+
+                } else if ((!peak && layer.getCurrentSpeed().prc == 0) || (peak && audio.peak)) {
                     this.dir = randomBool() ? -1 : 1;
                 }
             }
@@ -30,7 +33,8 @@
                 params.velocity = randomFloat(2, 3, 3);
             }
 
-            let dir = (gridPosition.y % 2 ? -1 : 1) * this.dir;
+            let dir = (gridPosition.y % 2 ? -1 : 1);
+            dir = (this.layer.settings.pattern_limit ? 1 : dir) * this.dir;
             let step = animation.diffPrc * dir * params.velocity * layer.resolution('relative').x;
             step *= this.settings.pattern_paddingx;
             shape.sceneObject().translateX(step);

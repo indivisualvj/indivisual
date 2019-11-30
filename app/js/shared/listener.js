@@ -4,7 +4,7 @@
 {
     /**
      *
-     * @constructor
+     * @type {HC.Listener}
      */
     HC.Listener = class Listener {
         events = {};

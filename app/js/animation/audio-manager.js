@@ -2,23 +2,27 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-(function () {
-
+{
     /**
      *
-     * @constructor
+     * @type {HC.AudioManager}
      */
-    HC.AudioManager = function () {
+    HC.AudioManager = class AudioManager {
 
-        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-        window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        /**
+         *
+         */
+        constructor() {
+            navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+            window.AudioContext = window.AudioContext || window.webkitAudioContext;
+        }
 
         /**
          *
          * @param name
          * @param callback
          */
-        this.initPlugin = function (name, callback) {
+        initPlugin(name, callback) {
 
             // this is 1 ugly workaround
             if (IS_MONITOR && name !== 'off') {
@@ -27,45 +31,45 @@
 
             this.plugin = new HC.audio[name]().construct(this.context);
             this.plugin.init(callback);
-        };
+        }
 
         /**
          *
          * @returns {boolean}
          */
-        this.isActive = function () {
+        isActive() {
             if (this.plugin) {
                 return this.plugin.isActive();
             }
 
             return false;
-        };
+        }
 
-        this.start = function () {
+        start() {
             if (this.plugin) {
                 this.plugin.start();
             }
-        };
+        }
 
         /**
          *
          */
-        this.stop = function () {
+        stop() {
             if (this.plugin) {
                 this.plugin.stop();
             }
 
             this.initContext();
-        };
+        }
 
         /**
          *
          */
-        this.initContext = function () {
+        initContext() {
             if (this.context) {
                 this.context.close();
             }
             this.context = new (window.AudioContext)();
         }
     }
-})();
+}

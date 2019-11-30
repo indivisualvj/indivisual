@@ -14,7 +14,7 @@ HC.Controller.prototype.initLogEvents = function () {
                 co.setAttribute('fixed', true);
             }
         }
-    };
+    }
 };
 
 /**

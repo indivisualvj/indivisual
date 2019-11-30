@@ -5,13 +5,13 @@ indivisual - VJ-Synthesizer is a rhythm based animation tool giving you the abil
 The most settings can be "oscillated" so that different variations on how a shape is moved, rotatet, transformed, modified, colored, 
 lit, sized, postprocessed, ... can be mixed in.  
 There also is a mechanism to record samples and then mix them in sequences with different composite operations. 
-Those sequences can be flipped, sliced, accelerated, slowed down, ... and also cans be used as shape material.
+Those sequences can be flipped, sliced, accelerated, slowed down, ... and also can be used as shape material.
 
 To get an idea of what can be done with it, visit my [YouTube channel](https://www.youtube.com/channel/UC2QczAUG69575hFIRg2JDcQ)  
 
 
 ## Getting Started
-- To get the best performance you should install [Google Chrome](https://www.google.com/chrome/) 
+- For the best performance you should install [Google Chrome](https://www.google.com/chrome/) 
 - Install [Node.js](https://nodejs.org/en/download/)
 - Install [yarn](https://yarnpkg.com/lang/en/docs/install) 
 - On debian (ubuntu/mint/...) you can install Node.js and yarn by executing:

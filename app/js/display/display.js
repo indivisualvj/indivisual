@@ -2,67 +2,67 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-(function () {
+{
     /**
      *
-     * @param index
-     * @constructor
+     * @type {HC.Display}
      */
-    HC.Display = function (index) {
-        this.index = index;
-        this.id = 'display' + index;
-        var canvas = document.createElement('canvas');
-        canvas.id = this.id;
-        this.canvas = canvas;
-        this.ctx = canvas.getContext('2d', {antialias: false});
-        canvas.ctx = this.ctx;
-        this.mask = false;
-        this.smear = false;
-        this.blitz = 0;
-        this.judder = false;
-        this.visible = true;
-        this.offline = false;
-        this.transparent = false;
-        this.keepbounds = true;
-        this.smearing = 0.0;
-        this._bounds = false;
-        this._points = false;
-        this._dirty = true;
-        this._source = false;
-    };
+    HC.Display = class Display {
 
-    HC.Display.prototype = {
+        constructor(index) {
+
+            this.index = index;
+            this.id = 'display' + index;
+            var canvas = document.createElement('canvas');
+            canvas.id = this.id;
+            this.canvas = canvas;
+            this.ctx = canvas.getContext('2d', {antialias: false});
+            canvas.ctx = this.ctx;
+            this.mask = false;
+            this.smear = false;
+            this.blitz = 0;
+            this.judder = false;
+            this.visible = true;
+            this.offline = false;
+            this.transparent = false;
+            this.keepbounds = true;
+            this.smearing = 0.0;
+            this._bounds = false;
+            this._points = false;
+            this._dirty = true;
+            this._source = false;
+        }
 
         /**
          *
          * @param source
          */
-        setSource: function (source) {
+        setSource(source) {
             this._source = source;
             this.updateClip();
-        },
+        }
 
         /**
          *
          * @returns {boolean|*}
          */
-        getSource: function () {
+        getSource() {
             return this._source;
-        },
+        }
 
         /**
          *
          * @returns {HTMLElement}
          */
-        current: function () {
+        current() {
             return this.canvas;
-        },
+        }
 
         /**
          *
          * @param fallback
          */
-        render: function (fallback) {
+        render(fallback) {
             var ctx = this.ctx;
             var bounds = this._clipBounds(false);
             var clip = bounds;
@@ -114,13 +114,13 @@
                 ctx.fillStyle = '#000000';
                 this._dirty = true;
             }
-        },
+        }
 
         /**
          *
          * @param bounds
          */
-        clear: function (bounds) {
+        clear(bounds) {
             if (this._dirty) {
                 bounds = bounds || this._clipBounds();
                 this.ctx.clearRect(bounds.x, bounds.y, bounds.width, bounds.height);
@@ -129,48 +129,48 @@
                 }
                 this._dirty = false;
             }
-        },
+        }
 
         /**
          *
          * @param keepbounds
-         * @returns {boolean|*}
+         * @returns {*}
          * @private
          */
-        _clipBounds: function (keepbounds) {
+        _clipBounds(keepbounds) {
             return !this.mask || keepbounds ? this._bounds : this.mask.bounds;
-        },
+        }
 
         /**
          *
          * @returns {HTMLElement|*}
          */
-        target: function () {
+        target() {
             return this.canvas;
-        },
+        }
 
         /**
          *
          * @returns {*|number}
          */
-        brightness: function () {
+        brightness() {
             return displayman.brightness();
-        },
+        }
 
         /**
          *
          * @returns {boolean|*}
          */
-        bounds: function () {
+        bounds() {
             return this._bounds;
-        },
+        }
 
         /**
          *
          * @param width
          * @param height
          */
-        update: function (width, height, settings) {
+        update(width, height, settings) {
 
             if (this.isFixedSize()) {
                 var b = this._source.bounds();
@@ -192,13 +192,13 @@
             this.transparent = settings[this.id + '_transparent'];
 
             this.ctx.globalAlpha = displayman.brightness();
-        },
+        }
 
         /**
          *
          * @returns {boolean}
          */
-        getSetBackground: function () {
+        getSetBackground() {
 
             if (this.transparent) {
                 return false; // durchsichtig
@@ -208,37 +208,37 @@
             }
 
             return true;
-        },
+        }
 
         /**
          *
          * @returns {*}
          */
-        width: function () {
+        width() {
             return this.canvas.width;
-        },
+        }
 
         /**
          *
          * @returns {*}
          */
-        height: function () {
+        height() {
             return this.canvas.height;
-        },
+        }
 
         /**
          *
          * @returns {number[]}
          */
-        points: function () {
+        points() {
             return [0, 0, this.canvas.width, 0, this.canvas.width, this.canvas.height, 0, this.canvas.height, 0, 0];
-        },
+        }
 
         /**
          *
          * @returns {*}
          */
-        updateMask: function () {
+        updateMask() {
 
             var canvas = this.canvas;
             var prefix = canvas.id + '_mask';
@@ -310,13 +310,12 @@
             this.canvas.style.background = this.getSetBackground() ? statics.DisplaySettings.background : 'none';
 
             return sh;
-
-        },
+        }
 
         /**
          *
          */
-        updateClip: function () {
+        updateClip() {
             if (this._source) {
                 var ob = this._clipBounds(true);
                 var mb = this._clipBounds(false);
@@ -333,13 +332,13 @@
                     this.clip = false;
                 }
             }
-        },
+        }
 
         /**
          *
          * @returns {boolean}
          */
-        isFixedSize: function () {
+        isFixedSize() {
             if (this._source) {
                 var sb = this._source.bounds(false);
                 if (sb) {
@@ -347,12 +346,12 @@
                 }
             }
             return false;
-        },
+        }
 
         /**
          *
          */
-        loadMask: function () {
+        loadMask() {
             if (this.mask) {
                 var mask = this.mask;
                 var stored = statics.DisplaySettings[mask.id];
@@ -376,13 +375,13 @@
                     mask.init();
                 }
             }
-        },
+        }
 
         /**
          *
          * @returns {{sourcePoints: *[], targetPoints: *[]}}
          */
-        loadMapping: function () {
+        loadMapping() {
             var bounds = this._clipBounds(this.keepbounds);
             var points = this._getMaptasticPoints(bounds);
             var sourcePoints = points;
@@ -400,15 +399,15 @@
                 sourcePoints: sourcePoints,
                 targetPoints: targetPoints
             };
-        },
+        }
 
         /**
          *
          * @returns {*}
          */
-        getMapping: function () {
+        getMapping() {
             return statics.DisplaySettings[this.id + '_mapping'];
-        },
+        }
 
         /**
          *
@@ -416,7 +415,7 @@
          * @returns {*[]}
          * @private
          */
-        _getMaptasticPoints: function (points) {
+        _getMaptasticPoints(points) {
             var l = points.x;
             var t = points.y;
             var r = points.width + points.x;
@@ -430,7 +429,7 @@
             ];
 
             return bounds;
-        },
+        }
 
         /**
          *
@@ -439,7 +438,7 @@
          * @param mode
          * @param speed
          */
-        drawBorder: function (lineWidth, color, mode, speed) {
+        drawBorder(lineWidth, color, mode, speed) {
 
             var ctx = this.ctx;
             var points = this.mask ? this.mask.points : this._points;
@@ -466,6 +465,5 @@
                 this._dirty = true;
             }
         }
-    };
-
-})();
+    }
+}

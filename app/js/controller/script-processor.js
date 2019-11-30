@@ -3,6 +3,10 @@
  */
 
 {
+    /**
+     *
+     * @type {HC.ScriptProcessor}
+     */
     HC.ScriptProcessor = class ScriptProcessor {
         constructor(key, desc) {
             this.key = key;

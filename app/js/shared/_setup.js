@@ -137,6 +137,10 @@ function setupResources() {
 
                 _loadAnimationPlugins(settings);
                 statics.ShaderSettings = new HC.Settings(_loadShaderSettings(settings.shaders));
+                statics.Passes = [];
+                for (let sh in statics.ShaderSettings.initial) {
+                    statics.Passes.push(sh);
+                }
                 _loadRhythms(settings);
 
                 statics.AnimationValues = new HC.Settings(settings);

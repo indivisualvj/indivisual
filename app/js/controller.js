@@ -108,6 +108,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     // HC.log(this.__gui.name + '/' + this.property, v); fixme
                 });
+                controller.addShaderPassControllers(function (v) {
+                    let shader = statics.ShaderSettings.copy(statics.ShaderSettings[statics.Passes[v]]);
+                    statics.AnimationSettings.passes.push(shader);
+
+                    controller.updateSetting(
+                        statics.ControlSettings.layer,
+                        'passes',
+                        statics.AnimationSettings.passes,
+                        true,
+                        true,
+                        false
+                    );
+
+                    controller.addShaderPassControllerByKey(v, controller.gui._passes, function () {
+                        controller.updateSetting(
+                            statics.ControlSettings.layer,
+                            'passes',
+                            statics.AnimationSettings.passes,
+                            true,
+                            true,
+                            false
+                        );
+                    })
+
+                    // HC.log(this.__gui.name + '/' + this.property, v); fixme
+                });
 
                 explorer = new HC.Explorer();
                 explorer.init();

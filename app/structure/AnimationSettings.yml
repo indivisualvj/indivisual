@@ -247,4 +247,4 @@ rotation_offsetz: 0.0
 rotation_offsetz_oscillate: 'off'
 
 shaders: {}
-passes: {}
+passes: []

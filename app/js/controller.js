@@ -132,8 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
 {
     /**
      *
-     * @param name
-     * @constructor
+     * @type {HC.Controller}
      */
     HC.Controller = class Controller {
 

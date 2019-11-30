@@ -78,7 +78,7 @@ HC.Osci = {
      * @param negative
      */
     step(pa, steps, speed, onpeak, negative) {
-        if ((onpeak && audio.peak) || (!onpeak && speed.prc == 0)) {
+        if ((onpeak && audio.peak) || (!onpeak && speed.starting())) {
             let n = pa.next;
             while (n == pa.next) {
                 n = (randomInt(0, steps, negative) / steps);

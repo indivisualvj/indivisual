@@ -2,13 +2,13 @@
  *
  * @param sample
  * @param image
- * @param progress
+ * @param speed
  * @param color
  */
-function renderSample(sample, image, progress, color, hook) {
+function renderSample(sample, image, speed, color, hook) {
     if (image && sample.frames) {
         if (!sample.started) {
-            if (progress.prc == 0) {
+            if (speed.starting()) {
                 listener.fireEventId('sample.render.start', sample.id, sample);
                 sample.started = true;
                 if (hook) {
@@ -18,7 +18,7 @@ function renderSample(sample, image, progress, color, hook) {
         }
         if (sample.started) {
             animation.powersave = true;
-            if (progress.prc == 0) {
+            if (speed.starting()) {
                 if (sample.counter >= sample.beats) {
                     sample.finish(sample.record);
 
@@ -32,8 +32,8 @@ function renderSample(sample, image, progress, color, hook) {
                 var target = sample.frames[sample.pointer++];
                 if (target && target.ctx) {
                     target._color = color;
-                    target.progress = sample.counter + progress.prc;
-                    target.prc = progress.prc;
+                    target.progress = sample.counter + speed.prc;
+                    target.prc = speed.prc;
                     var ctx = target.ctx;
                     ctx.clearRect(0, 0, sample.width, sample.height);
                     ctx.drawImage(image, 0, 0);

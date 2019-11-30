@@ -168,15 +168,15 @@
         /**
          *
          * @param image
-         * @param progress
+         * @param speed
          * @param color
          */
-        render: function (image, progress, color) {
+        render: function (image, speed, color) {
 
             if (this.enabled && this.initialized && !this.complete) {
                 if (image && this.frames) {
                     if (!this.started) {
-                        if (progress.prc == 0) {
+                        if (speed.starting()) {
                             //listener.fireEventId('sample.render.start', this.id, this);
                             this.started = true;
                             this.canvas.play();
@@ -209,8 +209,8 @@
                                     //var prc = allover - Math.floor(allover);
 
                                     target._color = color;
-                                    target.progress = this.counter + progress.prc;
-                                    target.prc = progress.prc;
+                                    target.progress = this.counter + speed.prc;
+                                    target.prc = speed.prc;
                                     var ctx = target.ctx;
                                     ctx.clearRect(0, 0, this.width, this.height);
                                     ctx.drawImage(

@@ -563,11 +563,11 @@
          * @param progress
          */
         renderSamples() {
-            let progress = beatkeeper.getDefaultSpeed();
+            let speed = beatkeeper.getDefaultSpeed();
             for (let i = 0; i < this.samples.length; i++) {
                 let sample = this.samples[i];
                 if (sample && sample.record && sample.enabled && sample.initialized && !sample.complete) {
-                    sample.render(renderer.current(), progress, renderer.currentColor());
+                    sample.render(renderer.current(), speed, renderer.currentColor());
                 }
             }
         }

@@ -140,7 +140,7 @@ sample5_load: false
 
 display_source: 'animation'
 display_sequence: 0
-material_map: none # todo animationsettings.material_input/map?!
+material_map: none
 
 lighting_type: 'off'
 lighting_color: 'current'

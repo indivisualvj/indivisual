@@ -121,9 +121,9 @@
 
         /**
          *
-         * @param beat
+         * @param speed
          */
-        next: function (beat) {
+        next: function (speed) {
 
             if (this._last != animation.now) {
 
@@ -133,18 +133,18 @@
 
                     // sample race on peak
                     if (this.audio && this.jump) {
-                        this._raceonpeak(beat);
+                        this._raceonpeak(speed);
 
                         // sample audio
                     } else if (this.audio) {
-                        this._audio(beat);
+                        this._audio(speed);
 
                         // sample jump
                     } else if (this.jump) {
-                        this._jump(beat);
+                        this._jump(speed);
 
                     } else {
-                        this._progress(beat);
+                        this._progress(speed);
                     }
 
                     // safety first
@@ -298,21 +298,21 @@
 
         /**
          *
-         * @param beat
+         * @param speed
          * @private
          */
-        _progress: function (beat) {
+        _progress: function (speed) {
             var sample = this.sample;
             var dur = sample.duration;
             var fd = dur / sample.frames.length;
             var ms = fd * this.length;
             dur /= sample.beats;
             var beats = Math.max(0.25, Math.round(ms / dur));
-            //if (beat.prc == 0) {
+            //if (beat.starting()) {
             //    listener.fireEventId('sequence.next.progress', this.id, this);
             //}
 
-            var prcb = beat;
+            var prcb = speed;
             if (this.speedup) {
                 prcb = beatkeeper.getSpeed('eight');
 
@@ -320,7 +320,7 @@
                 prcb = beatkeeper.getSpeed('half');
             }
 
-            if (prcb.prc == 0) {
+            if (prcb.starting()) {
                 this.counter++;
                 if (this.counter >= beats) {
                     this.counter = 0;

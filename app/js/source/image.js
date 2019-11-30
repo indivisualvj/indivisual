@@ -151,15 +151,15 @@
         /**
          *
          * @param image
-         * @param progress
+         * @param speed
          * @param color
          */
-        render: function (image, progress, color) {
+        render: function (image, speed, color) {
 
             if (this.enabled && this.initialized && !this.complete) {
                 if (this.canvas && this.frames) {
                     if (!this.started) {
-                        if (progress.prc == 0) {
+                        if (speed.starting()) {
                             listener.fireEventId('sample.render.start', this.id, this);
                             this.started = true;
                         }

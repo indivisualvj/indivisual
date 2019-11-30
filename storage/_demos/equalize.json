@@ -3,7 +3,7 @@
     "uuid": "",
     "tutorial": {},
     "oscillate": "off",
-    "audio_thickness": 0.9,
+    "audio_thickness": 0.8,
     "audio_usewaveform": false,
     "camera_mode": "manual",
     "camera_mode_volume": 1,

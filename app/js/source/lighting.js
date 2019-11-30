@@ -112,7 +112,7 @@
         updateLight: function (i, color) {
 
             var speed = beatkeeper.getSpeed(statics.SourceSettings.lighting_speed);
-            var redo = speed.prc == 0;
+            var redo = speed.starting();
             var m = this.lighting_type;
 
             if (redo && i == 0 && statics.SourceSettings.lighting_type == 'randomall'

@@ -99,8 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
 {
     /**
      *
-     * @param name
-     * @constructor
+     * @type {HC.Animation}
      */
     HC.Animation = class Animation {
 
@@ -140,7 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
              */
             let speed = beatkeeper.getDefaultSpeed();
 
-            if (IS_ANIMATION && speed.prc == 0) {
+            if (IS_ANIMATION && speed.starting()) {
 
                 let detectedSpeed = false;
 
@@ -259,7 +258,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     beatkeeper.updateSpeeds(this.diff, statics.ControlSettings.tempo);
 
-                    if (beatkeeper.getSpeed('sixteen').prc == 0) {
+                    if (beatkeeper.getSpeed('sixteen').starting()) {
                         this.doNotDisplay = false;
 
                     } else if (statics.DisplaySettings.fps < 46) {
@@ -447,7 +446,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     messaging.emitMidi('clock', MIDI_CLOCK_NEXT, {duration: beatkeeper.getDefaultSpeed().duration});
                 }
 
-                if (beatkeeper.getSpeed('half').prc == 0) {
+                if (beatkeeper.getSpeed('half').starting()) {
                     for (let i = 0; i < statics.SourceValues.sequence.length; i++) {
                         let parent = getSequenceHasParent(i);
                         let use = getSampleBySequence(i);

@@ -18,85 +18,17 @@
         tween;
 
         speeds = {
-            "64": {
-                duration: 0,
-                progress: 0,
-                prc: 1,
-                beats: 0,
-                divider: 1 / 64,
-                visible: false
-            },
-            "32": {
-                duration: 0,
-                progress: 0,
-                prc: 1,
-                beats: 0,
-                divider: 1 / 32,
-                visible: false
-            },
-            hexa: {
-                duration: 0,
-                progress: 0,
-                prc: 1,
-                beats: 0,
-                divider: 1 / 16
-            },
-            octa: {
-                duration: 0,
-                progress: 0,
-                prc: 1,
-                beats: 0,
-                divider: 1 / 8
-            },
-            quad: {
-                duration: 0,
-                progress: 0,
-                prc: 1,
-                beats: 0,
-                divider: 1 / 4
-            },
-            double: {
-                duration: 0,
-                progress: 0,
-                prc: 1,
-                beats: 0,
-                divider: 1 / 2
-            },
-            full: {
-                duration: 0,
-                progress: 0,
-                prc: 1,
-                beats: 0,
-                divider: 1
-            },
-            half: {
-                duration: 0,
-                progress: 0,
-                prc: 1,
-                beats: 0,
-                divider: 2
-            },
-            quarter: {
-                duration: 0,
-                progress: 0,
-                prc: 1,
-                beats: 0,
-                divider: 4
-            },
-            eight: {
-                duration: 0,
-                progress: 0,
-                prc: 1,
-                beats: 0,
-                divider: 8
-            },
-            sixteen: {
-                duration: 0,
-                progress: 0,
-                prc: 1,
-                beats: 0,
-                divider: 16
-            }
+            "64": new HC.Speed(1 / 64, false),
+            "32": new HC.Speed(1 / 32, false),
+            hexa: new HC.Speed(1 / 16, true),
+            octa: new HC.Speed(1 / 8, true),
+            quad: new HC.Speed(1 / 4, true),
+            double: new HC.Speed(1 / 2, true),
+            full: new HC.Speed(1, true),
+            half: new HC.Speed(2, true),
+            quarter: new HC.Speed(4, true),
+            eight: new HC.Speed(8, true),
+            sixteen: new HC.Speed(16, true)
         };
 
         /**
@@ -271,7 +203,7 @@
         updateSpeeds(diff, tempo) {
 
             let dflt = this.getDefaultSpeed();
-            if (dflt.prc == 0) {
+            if (dflt.starting()) {
                 this.updatePitch(tempo);
             }
 
@@ -351,7 +283,6 @@
             return rhythm != 1;
         }
 
-
         /**
          *
          */
@@ -368,6 +299,26 @@
                 s.pitch = 0;
                 this._tween(s);
             }
+        }
+    }
+}
+
+{
+    HC.Speed = class Speed {
+        duration = 0;
+        progress = 0;
+        prc = 1;
+        beats = 0;
+        divider;
+        visible = true;
+
+        constructor(divider, visible) {
+            this.divider = divider;
+            this.visible = visible;
+        }
+
+        starting() {
+            return this.prc == 0;
         }
     }
 }

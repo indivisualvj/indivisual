@@ -304,12 +304,12 @@
         /**
          *
          * @param image
-         * @param progress
+         * @param speed
          * @param color
          */
-        render: function (image, progress, color) {
+        render: function (image, speed, color) {
 
-            renderSample(this, image, progress, color);
+            renderSample(this, image, speed, color);
 
         },
 

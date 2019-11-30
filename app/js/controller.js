@@ -129,37 +129,36 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-(function () {
-    
-    var inst;
+{
     /**
      *
      * @param name
      * @constructor
      */
-    HC.Controller = function (name) {
-        inst = this;
-        this.name = name;
-        this.gui = false;
-        this.synced = {};
-        this.thumbTimeouts = [];
-    };
+    HC.Controller = class Controller {
 
-    HC.Controller.prototype = {
+        gui = false;
+        synced = {};
+        thumbTimeouts = [];
+        name;
+
+        constructor(name) {
+            this.name = name;
+        }
 
         /**
          *
          */
-        init: function () {
+        init() {
             this.gui = new dat.GUI({autoPlace: false});
             document.getElementById('controller').appendChild(this.gui.domElement);
-        },
+        }
 
         /**
          *
          * @param session
          */
-        loadSession: function (session) {
+        loadSession(session) {
 
             if ('controls' in session) {
                 HC.log('controls', 'synced');
@@ -189,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             this.updateControl('layer', statics.ControlSettings.layer, true, false, false);
-        },
+        }
 
         /**
          *
@@ -198,7 +197,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param forward
          * @param force
          */
-        updateSettings: function (layer, data, display, forward, force) {
+        updateSettings(layer, data, display, forward, force) {
 
             if (force) {
                 for (var k in data) {
@@ -223,14 +222,14 @@ document.addEventListener('DOMContentLoaded', function () {
                  *
                  */
             }
-        },
+        }
 
         /**
          *
          * @param folder
          * @param datasource
          */
-        shareSettings: function (folder, datasource) {
+        shareSettings(folder, datasource) {
 
             if (!datasource) {
                 var keys = Object.keys(statics.AnimationController[folder]);
@@ -261,14 +260,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     messaging.emitSettings(i, settings, false, false, true);
                 }
             }
-        },
+        }
 
         /**
          *
          * @param item
          * @param value
          */
-        shareSetting: function (item, value) {
+        shareSetting(item, value) {
             var data = {};
             data[item] = value;
 
@@ -289,20 +288,20 @@ document.addEventListener('DOMContentLoaded', function () {
                     messaging.emitSettings(i, data, false, false, true);
                 }
             }
-        },
+        }
 
         /**
          *
          * @param dir
          * @param value
          */
-        setSynchronized: function (dir, value) {
+        setSynchronized(dir, value) {
 
             for (var key in statics.AnimationController[dir]) {
                 this.synced[key] = value;
             }
 
-        },
+        }
 
         /**
          *
@@ -311,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param forward (notused)
          * @param force
          */
-        updateControls: function (data, display, forward, force) {
+        updateControls(data, display, forward, force) {
 
             if (force) {
                 for (var k in data) {
@@ -327,7 +326,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.updateControl(k, value, display, false, false);
                 }
             }
-        },
+        }
 
         /**
          *
@@ -336,7 +335,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param forward (notused)
          * @param force
          */
-        updateDisplays: function (data, display, forward, force) {
+        updateDisplays(data, display, forward, force) {
 
             if (force) {
                 for (var k in data) {
@@ -352,7 +351,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.updateDisplay(k, value, display, false, false);
                 }
             }
-        },
+        }
 
         /**
          *
@@ -361,7 +360,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param forward (notused)
          * @param force
          */
-        updateSources: function (data, display, forward, force) {
+        updateSources(data, display, forward, force) {
 
             if (force) {
                 for (var k in data) {
@@ -377,7 +376,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.updateSource(k, value, display, forward, false);
                 }
             }
-        },
+        }
 
         /**
          *
@@ -389,7 +388,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param force
          *
          */
-        updateSetting: function (layer, item, value, display, forward, force) {
+        updateSetting(layer, item, value, display, forward, force) {
 
             if (typeof value != 'object') {
                 HC.log(item, value);
@@ -415,7 +414,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     explorer.setChanged(statics.ControlSettings.layer, true);
                 }
             }
-        },
+        }
 
         /**
          *
@@ -425,7 +424,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param forward
          * @param force
          */
-        updateControl: function (item, value, display, forward, force) {
+        updateControl(item, value, display, forward, force) {
 
             if (typeof value != 'object') {
                 HC.log(item, value);
@@ -484,7 +483,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 }
             }
-        },
+        }
 
         /**
          *
@@ -494,7 +493,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param forward
          * @param force
          */
-        updateDisplay: function (item, value, display, forward, force) {
+        updateDisplay(item, value, display, forward, force) {
 
             if (typeof value != 'object') {
                 HC.log(item, value);
@@ -520,7 +519,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
             }
-        },
+        }
 
         /**
          *
@@ -530,7 +529,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param forward
          * @param force
          */
-        updateSource: function (item, value, display, forward, force) {
+        updateSource(item, value, display, forward, force) {
 
             if (typeof value != 'object') {
                 HC.log(item, value);
@@ -566,13 +565,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
             }
-        },
+        }
 
         /**
          *
          * @param data
          */
-        updateData: function (data) {
+        updateData(data) {
 
             if (data && data.data) {
 
@@ -620,14 +619,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
             }, 125);
-
-        },
+        }
 
         /**
          *
          * @param data
          */
-        updateMidi: function (data) {
+        updateMidi(data) {
             if (midi) {
                 if (data.command == 'glow') {
                     midi.glow(data.data, data.conf);
@@ -639,14 +637,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     midi.clock(data.data, data.conf);
                 }
             }
-        },
+        }
 
         /**
          *
          * @param item
          * @param value
          */
-        setAllDisplaysTo: function (item, value, group) {
+        setAllDisplaysTo(item, value, group) {
             var increment = value === false;
             if (increment) {
                 value = 0;
@@ -683,14 +681,14 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             this.updateSources(updates, true, false, false);
             messaging.emitSources(updates, true, true, false);
-        },
+        }
 
         /**
          *
          * @param item
          * @param value
          */
-        setAllSequencesTo: function (item, value) {
+        setAllSequencesTo(item, value) {
             var increment = value === false;
             if (increment) {
                 value = 0;
@@ -714,14 +712,14 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             this.updateSources(updates, true, false, false);
             messaging.emitSources(updates, true, true, false);
-        },
+        }
 
         /**
          *
          * @param item
          * @param value
          */
-        setAllSamplesTo: function (item, value) {
+        setAllSamplesTo(item, value) {
             var increment = value === false;
             if (increment) {
                 value = 0;
@@ -745,55 +743,55 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             this.updateSources(updates, true, false, false);
             messaging.emitSources(updates, true, true, false);
-        },
+        }
 
         /**
          *
          */
-        syncLayers: function () {
+        syncLayers() {
             for (var layer in layers) {
                 var to = parseInt(layer) * 150;
 
                 var st = function (layer, to) {
-                    setTimeout(function () {
-                        inst.syncLayer(layer);
+                    setTimeout(() => {
+                        this.syncLayer(layer);
                     }, to);
                 };
                 st(layer, to);
             }
             var to = statics.ControlValues.layer.length * 151;
 
-            setTimeout(function () {
-                inst.updateControl('layer', statics.ControlSettings.layer, true, true, true);
+            setTimeout(() => {
+                this.updateControl('layer', statics.ControlSettings.layer, true, true, true);
             }, to);
-        },
+        }
 
         /**
          *
          */
-        pushSources: function () {
+        pushSources() {
             messaging.emitSources(statics.SourceSettings, true, true, false);
-        },
+        }
 
         /**
          *
          * @param layer
          */
-        syncLayer: function (layer) {
+        syncLayer(layer) {
             var settings = layers[layer].settings;
 
             if (settings) {
                 settings = settings.prepare();
                 messaging.emitSettings(layer, settings, true, false, true);
             }
-        },
+        }
 
         /**
          *
          * @param name
          * @param data
          */
-        preset: function (name, data, layer) {
+        preset(name, data, layer) {
 
             HC.log('preset', name);
 
@@ -808,14 +806,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
             this.updateSettings(layer, dflt.prepare(), true, false, true);
             messaging.emitSettings(layer, statics.AnimationSettings.prepare(), false, false, true);
-        },
+        }
 
         /**
          *
          * @param name
          * @param data
          */
-        shaders: function (name, data, reset) {
+        shaders(name, data, reset) {
 
             HC.log('shaders', name);
 
@@ -853,12 +851,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     messaging.emitSettings(i, settings, false, false, true);
                 }
             }
-        },
+        }
 
         /**
          *
          */
-        refreshLayerInfo: function () {
+        refreshLayerInfo() {
             var preset = [];
 
             for (var i = 0; i < layers.length; i++) {
@@ -883,13 +881,13 @@ document.addEventListener('DOMContentLoaded', function () {
             };
 
             messaging.onAttr(config);
-        },
+        }
 
         /**
          *
          * @param open
          */
-        resetFolder: function (open) {
+        resetFolder(open) {
             var rst = {};
             var controls = false;
             for (var i = 0; i < open.__controllers.length; i++) {
@@ -920,4 +918,4 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
     }
-})();
+}

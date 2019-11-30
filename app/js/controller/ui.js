@@ -221,16 +221,26 @@ HC.Controller.prototype.addShaderControllers = function (submit) {
     this._addShareListener('shaders', dir, true);
 
     for (var key in statics.ShaderSettings.initial) {
-        var sh = statics.ShaderSettings[key];
-
-        // if (sh && key.indexOf('_') != 0) {
-        if (sh) {
-            var shd = dir.addFolder(key);
-            this.addShaderController(shd, false, sh, key, submit);
-        }
+        this.addShadercontrollerByKey(key, dir, submit);
     }
 
     return dir;
+};
+
+/**
+ *
+ * @param key
+ * @param dir
+ * @param submit
+ */
+HC.Controller.prototype.addShadercontrollerByKey = function (key, dir, submit) {
+    if (key in statics.ShaderSettings.initial) {
+        var sh = statics.ShaderSettings[key];
+        if (sh) {
+            var folder = dir.addFolder(key);
+            this.addShaderController(folder, false, sh, key, submit);
+        }
+    }
 };
 
 /**

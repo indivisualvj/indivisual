@@ -1,3 +1,106 @@
+{
+    /**
+     *
+     * @type {HC.Controller.ShaderController}
+     */
+    HC.Controller.ShaderController = class ShaderController {
+
+        /**
+         *
+         * @param v
+         */
+        onChange(v) {
+            controller.updateSetting(
+                statics.ControlSettings.layer,
+                'shaders',
+                statics.AnimationSettings.shaders,
+                true,
+                true,
+                false
+            );
+
+            HC.log(this.__gui.name + '/' + this.property, v);
+        }
+    }
+}
+
+{
+    /**
+     *
+     * @type {HC.Controller.ShaderPassController}
+     */
+    HC.Controller.ShaderPassController = class ShaderPassController {
+
+
+        /**
+         *
+         * @param controller
+         * @param name
+         */
+        constructor(controller, name) {
+
+            let shader = statics.ShaderSettings.copy(statics.ShaderSettings[name]);
+            let parent = {};
+            parent[name] = statics.AnimationSettings.initial.shaders[name];
+            let key = this.key(name);
+
+            shader.apply = true;
+
+            statics.AnimationSettings.passes[key] = {
+                _clean: {
+                    key: name,
+                    source: parent,
+                    target: shader
+                },
+                name: name,
+                shader: shader
+            };
+
+            controller.updateSetting(
+                statics.ControlSettings.layer,
+                'passes',
+                statics.AnimationSettings.passes,
+                true,
+                true,
+                false
+            );
+
+            controller.addShaderPassControllerByKey(key, controller._passes, this);
+        }
+
+        key(name) {
+
+            let i = 0;
+            while ((name + i) in statics.AnimationSettings.passes) {
+                i++;
+            }
+
+            return name + i;
+        }
+
+        onChange(v) {
+
+            let name = this._parent.name;
+
+            if (this.property == 'apply' && v === false) {
+                controller._passes.removeFolder(this._parent.name);
+                delete statics.AnimationSettings.passes[name];
+            }
+
+            controller.updateSetting(
+                statics.ControlSettings.layer,
+                'passes',
+                statics.AnimationSettings.passes,
+                true,
+                true,
+                false
+            );
+
+            HC.log(this.__gui.name + '/' + this.property, v);
+        }
+    }
+}
+
 /**
  *
  * @param controllers
@@ -212,16 +315,15 @@ HC.Controller.prototype._addShareListener = function (key, dir, datasource) {
 
 /**
  *
- * @param submit
  * @returns {*|dat.gui.GUI}
  */
-HC.Controller.prototype.addShaderControllers = function (submit) {
+HC.Controller.prototype.addShaderControllers = function () {
 
     var dir = controller.gui.addFolder('shaders');
     this._addShareListener('shaders', dir, true);
 
     for (var key in statics.ShaderSettings.initial) {
-        this.addShaderControllerByKey(key, dir, submit);
+        this.addShaderControllerByKey(key, dir);
     }
 
     return dir;
@@ -247,14 +349,13 @@ HC.Controller.prototype.addShaderPassControllers = function (submit) {
  *
  * @param key
  * @param dir
- * @param submit
  */
-HC.Controller.prototype.addShaderControllerByKey = function (key, dir, submit) {
+HC.Controller.prototype.addShaderControllerByKey = function (key, dir) {
     if (key in statics.ShaderSettings.initial) {
         var sh = statics.ShaderSettings[key];
         if (sh) {
             var folder = dir.addFolder(key);
-            this.addShaderController(folder, false, sh, key, submit);
+            this.addShaderController(folder, false, sh, key);
         }
     }
 };
@@ -264,14 +365,14 @@ HC.Controller.prototype.addShaderControllerByKey = function (key, dir, submit) {
  *
  * @param key
  * @param dir
- * @param submit
+ * @param controller
  */
-HC.Controller.prototype.addShaderPassControllerByKey = function (key, dir, submit) {
+HC.Controller.prototype.addShaderPassControllerByKey = function (key, dir, controller) {
     var sh = statics.AnimationSettings.passes[key];
     if (sh) {
         if (key.replace(/\d/, '') in statics.ShaderSettings.initial) {
             var folder = dir.addFolder(key);
-            this.addShaderController(folder, false, sh.shader, sh.name, submit);
+            this.addShaderController(folder, false, sh.shader, sh.name, controller);
         }
     }
 };
@@ -283,9 +384,12 @@ HC.Controller.prototype.addShaderPassControllerByKey = function (key, dir, submi
  * @param key
  * @param sh
  * @param parent
- * @param submit
+ * @param controller
  */
-HC.Controller.prototype.addShaderController = function (shd, key, sh, parent, submit) {
+HC.Controller.prototype.addShaderController = function (shd, key, sh, parent, controller) {
+
+    controller = controller || new HC.Controller.ShaderController();
+    let submit = controller.onChange;
 
     for (var skey in sh) {
         var shs = sh[skey];
@@ -403,6 +507,7 @@ HC.Controller.prototype.addShaderController = function (shd, key, sh, parent, su
 
         if (ctl) {
             ctl._parent = shd;
+            ctl.__controller = controller;
         }
     }
 };

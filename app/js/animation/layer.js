@@ -267,7 +267,7 @@
                 var sh = pass.shader;
 
                 if (sh) {
-                    var plugin = this.getShaderPlugin(pass.name);
+                    var plugin = this.getShaderPassPlugin(pass.name, key);
                     if (plugin) {
                         plugin.create();
                         plugin.updateResolution();

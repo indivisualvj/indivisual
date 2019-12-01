@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
+// todo ES6
 (function () {
 
     /**
@@ -244,6 +245,38 @@
                     if (!shaders[i]) {
                         shaders.splice(i, 1);
                         i--;
+                    }
+                }
+            }
+
+            this.shaders(shaders);
+
+            return shaders;
+        },
+
+        /**
+         *
+         * @returns {*}
+         */
+        updateShaderPasses: function () {
+            var shaders = null;
+
+            for (var key in this.settings.passes) {
+
+                var pass = this.settings.passes[key];
+                var sh = pass.shader;
+
+                if (sh) {
+                    var plugin = this.getShaderPlugin(pass.name);
+                    if (plugin) {
+                        plugin.create();
+                        plugin.updateResolution();
+                        if (!shaders) {
+                            shaders = [];
+                        }
+
+                        shaders.push(plugin);
+
                     }
                 }
             }

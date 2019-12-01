@@ -554,6 +554,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         layer.updateShaders();
                         break;
 
+                    case 'passes':
+                        layer.updateShaderPasses();
+                        break;
+
                     case 'lighting_ambient':
                         layer.resetAmbientLight();
                         break;

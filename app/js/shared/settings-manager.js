@@ -167,8 +167,8 @@
 
                     } else if (value && typeof value == 'object') {
 
-                        if (!k in target) {
-                            target[k] = this.copy(source);
+                        if (!(k in target)) {
+                            target[k] = this.copy(source[k]);
 
                         } else {
                             this.merge(target[k], source[k], initial ? initial[k] : false);
@@ -219,6 +219,12 @@
 
             for (var k in target) {
                 var v = target[k];
+
+                if (v && v._clean) {
+                    source = v._clean.source;
+                    k = v._clean.key;
+                    v = v._clean.target;
+                }
 
                 if (!(k in source)) {
                     delete target[k];

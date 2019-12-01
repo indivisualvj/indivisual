@@ -267,11 +267,11 @@ HC.Controller.prototype.addShaderControllerByKey = function (key, dir, submit) {
  * @param submit
  */
 HC.Controller.prototype.addShaderPassControllerByKey = function (key, dir, submit) {
-    if (key in statics.ShaderSettings.initial) {
-        var sh = statics.AnimationSettings.passes[key];
-        if (sh) {
+    var sh = statics.AnimationSettings.passes[key];
+    if (sh) {
+        if (key.replace(/\d/, '') in statics.ShaderSettings.initial) {
             var folder = dir.addFolder(key);
-            this.addShaderController(folder, false, sh, key, submit);
+            this.addShaderController(folder, false, sh.shader, sh.name, submit);
         }
     }
 };

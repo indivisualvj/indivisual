@@ -108,9 +108,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     // HC.log(this.__gui.name + '/' + this.property, v); fixme
                 });
-                controller.addShaderPassControllers(function (v) {
-                    let shader = statics.ShaderSettings.copy(statics.ShaderSettings[statics.Passes[v]]);
-                    statics.AnimationSettings.passes.push(shader);
+                controller.addShaderPassControllers(function (v, w) {
+                    let name = statics.Passes[v];
+                    let shader = statics.ShaderSettings.copy(statics.ShaderSettings[name]);
+                    let parent = {};
+                    parent[name] = statics.AnimationSettings.initial.shaders[name];
+                    let keys = Object.keys(statics.AnimationSettings.passes);
+                    let key = name + keys.length;
+//todo remove apply / add remove
+                    statics.AnimationSettings.passes[key] = {
+                        _clean: {
+                            key: name,
+                            source: parent,
+                            target: shader
+                        },
+                        name: name,
+                        shader: shader
+                    };
 
                     controller.updateSetting(
                         statics.ControlSettings.layer,
@@ -121,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         false
                     );
 
-                    controller.addShaderPassControllerByKey(v, controller.gui._passes, function () {
+                    controller.addShaderPassControllerByKey(key, controller._passes, function () {
                         controller.updateSetting(
                             statics.ControlSettings.layer,
                             'passes',

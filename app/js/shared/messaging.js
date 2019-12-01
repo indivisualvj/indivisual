@@ -108,6 +108,7 @@
          */
         onSettings(data, that) {
             requestAnimationFrame(function () {
+                console.log(data.data);
                 that.program.updateSettings(data.layer, data.data, data.controls, data.forward, data.force);
             });
         }

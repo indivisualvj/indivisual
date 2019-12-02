@@ -2,36 +2,32 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-
-// TODO ES6
-
-(function () {
+{
 
     /**
      *
-     * @param settings {HC.Settings}
-     * @param layers {[]}
-     * @constructor
+     * @type {HC.SettingsManager}
      */
-    HC.SettingsManager = function (settings, layers) {
-        this.settings = settings;
-        this.layers = layers;
-    };
+    HC.SettingsManager = class SettingsManager {
 
-    /**
-     *
-     * @type {{reset: Function, update: Function, get: Function}}
-     */
-    HC.SettingsManager.prototype = {
+        /**
+         *
+         * @param settings
+         * @param layers
+         */
+        constructor(settings, layers) {
+            this.settings = settings;
+            this.layers = layers;
+        }
 
         /**
          *
          */
-        reset: function (heap) {
+        reset(heap) {
 
             this.settings.reset();
 
-            for (var layer in this.layers) {
+            for (let layer in this.layers) {
 
                 if (heap && heap.length > 0) {
                     if (heap.indexOf(parseInt(layer)) < 0) {
@@ -44,7 +40,7 @@
                     this.layers[layer]._current = false;
                 }
             }
-        },
+        }
 
         /**
          *
@@ -53,24 +49,24 @@
          * @param value
          * @returns {*}
          */
-        update: function (layer, key, value) {
+        update(layer, key, value) {
 
-            var l = this.get(layer);
+            let l = this.get(layer);
 
-            var v = l.settings.update(key, value);
+            let v = l.settings.update(key, value);
 
             if (this.settings) {
                 v = this.settings.update(key, value);
             }
             return v;
-        },
+        }
 
         /**
          *
          * @param layer
          * @returns {*}
          */
-        get: function (layer) {
+        get(layer) {
             while (!layer in this.layers) {
                 this.layers.push({});
             }
@@ -80,42 +76,43 @@
             }
 
             if (!this.layers[layer].settings) {
-                var d = this.settings.defaults();
+                let d = this.settings.defaults();
                 this.layers[layer].settings = d;
             }
 
             return this.layers[layer];
         }
-    };
-})();
+    }
+}
 
-
-(function () {
+{
 
     /**
      *
-     * @param values {{}}
-     * @constructor
+     * @type {HC.Settings}
      */
-    HC.Settings = function (values) {
-
-        this.init(values);
-    };
-
-    HC.Settings.prototype = {
+    HC.Settings = class Settings {
 
         /**
          *
          * @param values
          */
-        init: function (values) {
+        constructor(values) {
+            this.init(values);
+        }
+
+        /**
+         *
+         * @param values
+         */
+        init(values) {
             this.isdefault = null;
             this.initial = this.copy(values);
 
-            for (var key in values) {
+            for (let key in values) {
                 this[key] = values[key];
             }
-        },
+        }
 
         /**
          *
@@ -123,10 +120,10 @@
          * @param value
          * @returns {*}
          */
-        update: function (key, value) {
+        update(key, value) {
             this.isdefault = null;
 
-            var isFunc = typeof value == 'function' || typeof this[key] == 'function';
+            let isFunc = typeof value == 'function' || typeof this[key] == 'function';
 
             if (key in this && isFunc) {
                 // do nothing
@@ -151,7 +148,7 @@
             }
 
             return key ? this[key] : this;
-        },
+        }
 
         /**
          *
@@ -159,11 +156,11 @@
          * @param source
          * @param initial
          */
-        merge: function (target, source, initial) {
+        merge(target, source, initial) {
 
             if (target) {
-                for (var k in source) {
-                    var value = source[k];
+                for (let k in source) {
+                    let value = source[k];
 
                     if (k in this && typeof this[k] == 'function') {
                         // do nothing
@@ -182,15 +179,15 @@
                     }
                 }
             }
-        },
+        }
 
         /**
          *
          * @returns {*}
          */
-        prepare: function () {
+        prepare() {
 
-            var data = this.copy(this);
+            let data = this.copy(this);
 
             delete data.isdefault;
             delete data.initial;
@@ -206,22 +203,22 @@
             }
 
             return data;
-        },
+        }
 
         /**
          * cleanses from removed settings
          * @param target
          * @param source
          */
-        clean: function (target, source) {
+        clean(target, source) {
 
             delete target.isdefault;
             delete target.initial;
             delete target._type;
             delete target.addons;
 
-            for (var k in target) {
-                var v = target[k];
+            for (let k in target) {
+                let v = target[k];
 
                 if (v && v._clean) {
                     source = v._clean.source;
@@ -239,47 +236,35 @@
                     // do nothing
                 }
             }
+        }
 
-        },
-
-        get: function (source, item) {
-            if (source && '_clean' in source && item in source) {
-                let v = source[item];
-                if (v in source._clean) {
-                    return source._clean[v];
-                }
-            }
-
-            return source[item];
-        },
-
-        reset: function () {
+        reset() {
 
             this.update(false, this.initial);
 
-        },
+        }
 
         /**
          *
          * @param data
          * @returns {any}
          */
-        copy: function (data) {
+        copy(data) {
             return JSON.parse(JSON.stringify(data));
-        },
+        }
 
         /**
          *
          * @param item
          * @returns {boolean}
          */
-        contains: function (item) {
+        contains(item) {
             if (!this.initial || !(item in this.initial)) {
                 return false;
             }
 
             return true;
-        },
+        }
 
         /**
          *
@@ -288,12 +273,12 @@
          * @param initial
          * @returns {*}
          */
-        validate: function (item, value, initial) {
+        validate(item, value, initial) {
 
-            var type = typeof value;
+            let type = typeof value;
             // check if string contains float and then convert
             if (type == 'string') {
-                var f = parseFloat(value);
+                let f = parseFloat(value);
                 if (f && f.toString().length == value.length) {
                     value = f;
                 }
@@ -301,8 +286,8 @@
 
             // avoid values to be overwritten by wrong type
             if (initial && item in initial) {
-                var org = initial[item];
-                var otype = typeof org;
+                let org = initial[item];
+                let otype = typeof org;
 
                 if (otype !== type) {
                     // console.log(item, type, value, otype, org);
@@ -311,30 +296,46 @@
             }
 
             return value;
-        },
+        }
 
         /**
          *
          * @returns {null|*}
          */
-        isDefault: function () {
+        isDefault() {
             if (this.isdefault === null) {
-                var prpd = JSON.stringify(this.prepare());
-                var init = JSON.stringify(this.defaults().prepare());
+                let prpd = JSON.stringify(this.prepare());
+                let init = JSON.stringify(this.defaults().prepare());
 
                 this.isdefault = prpd === init;
             }
 
             return this.isdefault;
-        },
+        }
 
         /**
          *
          * @returns {HC.Settings}
          */
-        defaults: function () {
+        defaults() {
             return new HC.Settings(this.copy(this.initial));
         }
-    }
 
-})();
+        /**
+         *
+         * @param source
+         * @param item
+         * @returns {*}
+         */
+        static get(source, item) {
+            if (source && '_clean' in source && item in source) {
+                let v = source[item];
+                if (v in source._clean) {
+                    return source._clean[v];
+                }
+            }
+
+            return source[item];
+        }
+    }
+}

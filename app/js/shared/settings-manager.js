@@ -2,6 +2,9 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
+
+// TODO ES6
+
 (function () {
 
     /**
@@ -237,6 +240,17 @@
                 }
             }
 
+        },
+
+        get: function (source, item) {
+            if (source && '_clean' in source && item in source) {
+                let v = source[item];
+                if (v in source._clean) {
+                    return source._clean[v];
+                }
+            }
+
+            return source[item];
         },
 
         reset: function () {

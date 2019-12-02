@@ -266,7 +266,8 @@
                 var pass = this.settings.passes[key];
                 var sh = pass.shader;
 
-                if (sh) {
+                if (sh && sh.apply) {
+
                     var plugin = this.getShaderPassPlugin(pass.name, key);
                     if (plugin) {
                         plugin.create();
@@ -278,6 +279,10 @@
                         shaders.push(plugin);
 
                     }
+
+                } else  {
+                    // HC.Settings.update can't delete missing settings. so delete them here...
+                    delete this.settings.passes[key];
                 }
             }
 

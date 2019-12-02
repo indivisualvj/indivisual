@@ -99,10 +99,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 controller.addShaderControllers();
 
-                controller.addShaderPassControllers(function (v) {
-                    let name = statics.Passes[v];
-                    new HC.Controller.ShaderPassController(controller, name);
-                });
+                controller.addShaderPassControllers(HC.Controller.ShaderPassController.onPasses);
 
                 explorer = new HC.Explorer();
                 explorer.init();
@@ -397,6 +394,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.shareSetting(item, value);
                 }
 
+                // if (item == 'passes') {
+                //     this.loadShaderPassControllers(value);
+                // }
+
                 if (forward) {
                     var data = {};
                     data[item] = value;
@@ -407,6 +408,18 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.updateUi(item);
                     explorer.setChanged(statics.ControlSettings.layer, true);
                 }
+            }
+        }
+
+        /**
+         *
+         * @param value
+         */
+        loadShaderPassControllers(value) {
+            for (let key in value) {
+                let sh = value[key];
+                let ctrl = new HC.Controller.ShaderPassController(sh.name);
+                this.addShaderPassControllerByKey(key, this._passes, ctrl);
             }
         }
 

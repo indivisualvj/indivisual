@@ -264,7 +264,7 @@
             for (var key in this.settings.passes) {
 
                 var pass = this.settings.passes[key];
-                var sh = pass.shader;
+                var sh = this.settings.get(['passes', key, 'shader', ]);
 
                 if (sh && sh.apply) {
 

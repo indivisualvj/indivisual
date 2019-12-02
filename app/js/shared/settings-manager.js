@@ -10,6 +10,9 @@
      */
     HC.SettingsManager = class SettingsManager {
 
+        settings;
+        layers;
+
         /**
          *
          * @param settings
@@ -323,16 +326,22 @@
 
         /**
          *
-         * @param source
-         * @param item
+         * @param tree
          * @returns {*}
          */
-        static get(source, item) {
-            if (source && '_clean' in source && item in source) {
-                let v = source[item];
-                if (v in source._clean) {
-                    return source._clean[v];
+        get(tree) {
+
+            let item = this;
+            let source;
+            for (let k in tree) {
+                if (tree[k] in item) {
+                    source = item;
+                    item = item[tree[k]];
                 }
+            }
+
+            if (source && '_clean' in source && item in source._clean) {
+                return source._clean[item];
             }
 
             return source[item];

@@ -55,7 +55,7 @@
                     target: shader
                 },
                 name: name,
-                shader: shader
+                shader: 'target'
             };
         }
 
@@ -398,12 +398,13 @@ HC.Controller.prototype.addShaderControllerByKey = function (key, dir) {
  * @param controller
  */
 HC.Controller.prototype.addShaderPassControllerByKey = function (key, dir, controller) {
-    var sh = statics.AnimationSettings.passes[key];
+    var pass = statics.AnimationSettings.passes[key];
+    var sh = statics.AnimationSettings.get(['passes', key, 'shader']);
     if (sh) {
         if (key.replace(/\d/, '') in statics.ShaderSettings.initial) {
             if (!(key in dir.__folders)) {
                 var folder = dir.addFolder(key);
-                this.addShaderController(folder, false, sh.shader, sh.name, controller);
+                this.addShaderController(folder, false, sh, pass.name, controller);
             }
         }
     }

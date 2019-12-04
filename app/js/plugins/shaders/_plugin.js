@@ -38,11 +38,12 @@ HC.plugins.shaders = HC.plugins.shaders || {};
             }
         }
 
-        apply(key, sh) {
+        apply(key, sh, shi) {
             let dependencies = this.dependencies;
             let glsh = this.pass;
             let name = this.key;
             sh = sh || this.settings.shaders[name];
+            shi = shi || this.__proto__.constructor.settings;
 
             if (sh.random) {
                 if ((audioman.isActive() && audio.peak && randomBool(3)) || (this.layer.getCurrentSpeed().prc == 0 && randomBool())) {
@@ -58,6 +59,7 @@ HC.plugins.shaders = HC.plugins.shaders || {};
 
             for (let skey in sh) {
                 let shs = sh[skey];
+                let shis = shi[skey];
 
                 if (typeof shs != 'boolean' && typeof shs != 'number') {
 
@@ -78,7 +80,7 @@ HC.plugins.shaders = HC.plugins.shaders || {};
 
                                 let plugin = this.layer.getOscillatePlugin(shs.oscillate);
                                 if (plugin) {
-                                    let allown = shs._type[0] < 0;
+                                    let allown = shis._type[0] < 0;
 
                                     plugin.store(shs);
 
@@ -88,7 +90,7 @@ HC.plugins.shaders = HC.plugins.shaders || {};
                                         v = Math.abs(v);
                                     }
 
-                                    if (shs.stepwise && isInteger(shs._type[2])) {
+                                    if (shs.stepwise && isInteger(shis._type[2])) {
                                         v = round(v, 0);
                                     }
 
@@ -167,7 +169,7 @@ HC.plugins.shaders = HC.plugins.shaders || {};
                         }
 
                     } else { // one level deeper
-                        return this.apply(skey, shs);
+                        return this.apply(skey, shs, shis);
                     }
                 }
             }

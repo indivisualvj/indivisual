@@ -5,6 +5,12 @@
      */
     HC.Controller.ShaderController = class ShaderController {
 
+        name;
+
+        constructor(name) {
+            this.name = name;
+        }
+
         /**
          *
          * @param v
@@ -21,6 +27,10 @@
 
             HC.log(this.__gui.name + '/' + this.property, v);
         }
+
+        getInitialSettings() {
+            return statics.ShaderSettings.initial[this.name];
+        }
     }
 }
 
@@ -29,14 +39,9 @@
      *
      * @type {HC.Controller.ShaderPassController}
      */
-    HC.Controller.ShaderPassController = class ShaderPassController {
+    HC.Controller.ShaderPassController = class ShaderPassController extends HC.Controller.ShaderController {
 
         _key;
-        name;
-
-        constructor(name) {
-            this.name = name;
-        }
 
         init() {
 
@@ -52,8 +57,13 @@
                 _clean: {
                     key: name,
                     source: parent,
-                    target: shader
+                    target: shader,
+                    // _delete: {
+                    //     tree: ['apply'],
+                    //     condition: false
+                    // }
                 },
+
                 name: name,
                 shader: 'target'
             };
@@ -84,7 +94,7 @@
          */
         onChange(v) {
 
-            // shaderPassControllers are added/remove in updateUi
+            // shaderPassControllers are added/removed in updateUiPasses
             controller.updateSetting(
                 statics.ControlSettings.layer,
                 'passes',
@@ -98,7 +108,8 @@
 
             if (this.property == 'apply' && v === false) {
                 // HC.Settings.update can't delete missing settings. so delete them here...
-                delete statics.AnimationSettings.passes[name];
+                controller.cleanShaderPasses();
+                controller.updateUiPasses();
             }
 
             HC.log(name + '/' + this.property, v);
@@ -111,6 +122,9 @@
                 let ctrl = new HC.Controller.ShaderPassController(name);
                 ctrl.init();
 
+                // shaderPassControllers are added/remove in updateUiPasses but we need this to still have _type in there
+                // controller.addShaderPassControllerByKey(ctrl.key(), controller._passes, ctrl);
+
                 controller.updateSetting(
                     statics.ControlSettings.layer,
                     'passes',
@@ -119,8 +133,6 @@
                     true,
                     false
                 );
-
-                // shaderPassControllers are added/remove in updateUi
             }
         }
     }
@@ -400,8 +412,8 @@ HC.Controller.prototype.addShaderControllerByKey = function (key, dir) {
 HC.Controller.prototype.addShaderPassControllerByKey = function (key, dir, controller) {
     var pass = statics.AnimationSettings.passes[key];
     var sh = statics.AnimationSettings.get(['passes', key, 'shader']);
-    if (sh) {
-        if (key.replace(/\d/, '') in statics.ShaderSettings.initial) {
+    if (sh && sh.apply) {
+        if (pass.name in statics.ShaderSettings.initial) {
             if (!(key in dir.__folders)) {
                 var folder = dir.addFolder(key);
                 this.addShaderController(folder, false, sh, pass.name, controller);
@@ -413,25 +425,27 @@ HC.Controller.prototype.addShaderPassControllerByKey = function (key, dir, contr
 
 /**
  *
- * @param shd
+ * @param folder
  * @param key
  * @param sh
  * @param parent
  * @param controller
  */
-HC.Controller.prototype.addShaderController = function (shd, key, sh, parent, controller) {
+HC.Controller.prototype.addShaderController = function (folder, key, sh, parent, controller) {
 
-    controller = controller || new HC.Controller.ShaderController();
+    controller = controller || new HC.Controller.ShaderController(parent);
+    let shi = controller.getInitialSettings() || {}; // fallback 4 cleaned settings from storage
     let submit = controller.onChange;
 
     for (var skey in sh) {
         var shs = sh[skey];
+        var shis = shi[skey] || {};
 
         var ctl = false;
         var label = skey;
 
         if (typeof shs == 'boolean') { // apply, etc.
-            ctl = shd.add(sh, skey)
+            ctl = folder.add(sh, skey)
                 .onFinishChange(submit);
 
             if (skey in statics.ShaderTypes) {
@@ -440,7 +454,7 @@ HC.Controller.prototype.addShaderController = function (shd, key, sh, parent, co
             }
 
         } else if (typeof shs == 'number') {
-            ctl = shd.add(sh, skey, 0)
+            ctl = folder.add(sh, skey, 0)
                 .onFinishChange(submit);
             ctl.step(1);
 
@@ -456,7 +470,7 @@ HC.Controller.prototype.addShaderController = function (shd, key, sh, parent, co
             var v = ('value' in shs) ? shs['value'] : null;
 
             if (v !== null) {
-                var b = ('_type' in shs) ? shs['_type'] : null;
+                var b = ('_type' in shs) ? shs['_type'] : (('_type' in shis) ? shis['_type'] : null);
                 var a = ('audio' in shs) ? shs['audio'] : null;
                 var s = ('stepwise' in shs) ? shs['stepwise'] : null;
                 var o = ('oscillate' in shs) ? shs['oscillate'] : null;
@@ -468,7 +482,7 @@ HC.Controller.prototype.addShaderController = function (shd, key, sh, parent, co
                     max = b[1];
                     step = b[2];
 
-                    ctl = shd.add(shs, 'value', min, max, step)
+                    ctl = folder.add(shs, 'value', min, max, step)
                         .name(label)
                         .onChange(submit)
                         .onFinishChange(submit);
@@ -477,14 +491,14 @@ HC.Controller.prototype.addShaderController = function (shd, key, sh, parent, co
                     el.setAttribute('data-step', step);
 
                 } else {
-                    ctl = shd.add(shs, 'value')
+                    ctl = folder.add(shs, 'value')
                         .name(label)
                         .onFinishChange(submit);
                 }
 
                 if (a !== null) {
                     var _label = skey + '_audio';
-                    ctl = shd.add(shs, 'audio')
+                    ctl = folder.add(shs, 'audio')
                         .name(_label)
                         .onFinishChange(submit);
                     ctl.parent = parent;
@@ -501,7 +515,7 @@ HC.Controller.prototype.addShaderController = function (shd, key, sh, parent, co
 
                 if (s !== null) {
                     var _label = skey + '_stepwise';
-                    ctl = shd.add(shs, 'stepwise')
+                    ctl = folder.add(shs, 'stepwise')
                         .name(_label)
                         .onFinishChange(submit);
                     ctl.parent = parent;
@@ -518,7 +532,7 @@ HC.Controller.prototype.addShaderController = function (shd, key, sh, parent, co
 
                 if (o !== null) {
                     var _label = skey + '_oscillate';
-                    ctl = shd.add(shs, 'oscillate', statics.ShaderValues.oscillate)
+                    ctl = folder.add(shs, 'oscillate', statics.ShaderValues.oscillate)
                         .name(_label)
                         .onFinishChange(submit);
                     ctl.parent = parent;
@@ -534,12 +548,12 @@ HC.Controller.prototype.addShaderController = function (shd, key, sh, parent, co
                 }
 
             } else { // go deeper
-                this.addShaderController(shd, skey, shs, parent, submit);
+                this.addShaderController(folder, skey, shs, parent, controller);
             }
         }
 
         if (ctl) {
-            ctl._parent = shd;
+            ctl._parent = folder;
             ctl.__controller = controller;
         }
     }
@@ -740,28 +754,7 @@ HC.Controller.prototype.updateUi = function (item, control) {
         control = this.gui;
         this.refreshLayerInfo();
 
-        controller._passes.__controllers[0].setValue(null);
-
-        let sKeys = Object.keys(statics.AnimationSettings.passes);
-        let fKeys = Object.keys(controller._passes.__folders);
-
-        if (controller._passes && fKeys.length != sKeys.length) {
-
-            console.log('updating passes ui');
-
-            for (let f in controller._passes.__folders) {
-                if (!(f in statics.AnimationSettings.passes)) {
-                    controller._passes.removeFolder(f);
-                }
-            }
-
-            for (let k in statics.AnimationSettings.passes) {
-                if (!(k in controller._passes.__folders)) {
-                    let name = statics.AnimationSettings.passes[k].name;
-                    controller.addShaderPassControllerByKey(k, controller._passes, new HC.Controller.ShaderPassController(name));
-                }
-            }
-        }
+        this.updateUiPasses();
     }
 
     var flds = control.__folders || [];
@@ -781,6 +774,32 @@ HC.Controller.prototype.updateUi = function (item, control) {
 
         if (!item || property == item) {
             ctrl.updateDisplay();
+        }
+    }
+};
+
+/**
+ *
+ */
+HC.Controller.prototype.updateUiPasses = function () {
+
+    if (this._passes) {
+        this._passes.__controllers[0].setValue(null);
+
+        let sKeys = Object.keys(statics.AnimationSettings.passes);
+        let fKeys = Object.keys(this._passes.__folders);
+
+        for (let f in this._passes.__folders) {
+            if (!(f in statics.AnimationSettings.passes)) {
+                this._passes.removeFolder(f);
+            }
+        }
+
+        for (let k in statics.AnimationSettings.passes) {
+            if (!(k in this._passes.__folders)) {
+                let name = statics.AnimationSettings.passes[k].name;
+                this.addShaderPassControllerByKey(k, this._passes, new HC.Controller.ShaderPassController(name));
+            }
         }
     }
 };

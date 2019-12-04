@@ -162,10 +162,28 @@
         merge(target, source, initial) {
 
             if (target) {
+                // delete target items in case source does not contain
+                // but this does not work if only fragments are updated ...
+                // for (let k in target) {
+                //     if (!(k in source)) {
+                //         delete target[k];
+                //     }
+                // }
+
                 for (let k in source) {
                     let value = source[k];
 
-                    if (k in this && typeof this[k] == 'function') {
+                    // let clean = this._clean(value);
+                    // if (clean === 'delete') {
+                    //     delete target[k];
+                    //     return;
+                    // } else if (clean) {
+                    //     target = clean.target;
+                    //     // k = clean.key;
+                    //     value = clean.source
+                    // }
+
+                    if (target === this && k in this && typeof this[k] == 'function') {
                         // do nothing
 
                     } else if (value && typeof value == 'object') {
@@ -223,10 +241,15 @@
             for (let k in target) {
                 let v = target[k];
 
-                if (v && v._clean) {
-                    source = v._clean.source;
-                    k = v._clean.key;
-                    v = v._clean.target;
+                /*
+                 this is a ****ing workaround to avoid settings to be deleted that were not in settings initially.
+                 e.g. "passes"
+                 */
+                let clean = this._clean(v, false);
+                if (clean) {
+                    source = clean.source;
+                    k = clean.key;
+                    v = clean.target
                 }
 
                 if (!(k in source)) {
@@ -241,6 +264,41 @@
             }
         }
 
+        /**
+         * See Example here: HC.Controller.ShaderPassController.init
+         *
+         * @param v
+         * @param deleet
+         * @returns {string|boolean|{source: {}, value, key}}
+         * @private
+         */
+        _clean(v, deleet = true) {
+            if (v && v._clean) {
+                if (deleet && v._clean._delete) {
+                    let t = v._clean._delete.tree;
+                    let c = v._clean._delete.condition;
+                    let target = v._clean.target;
+                    for (let b in t) {
+                        if (t[b] in target) {
+                            target = target[t[b]];
+                        }
+                    }
+
+                    if (target == c) {
+                        return 'delete';
+                    }
+                }
+
+                return {
+                    source: v._clean.source,
+                    key: v._clean.key,
+                    target: v._clean.target
+                };
+            }
+
+            return false;
+        }
+
         reset() {
 
             this.update(false, this.initial);
@@ -253,6 +311,9 @@
          * @returns {any}
          */
         copy(data) {
+            // todo was soll dass? ist nicht static und macht nur was mit den gegebenen daten???
+            // evtl sollte das wie get() funktionieren.
+            // ne ich mach ne funktion JSON.copy!!!
             return JSON.parse(JSON.stringify(data));
         }
 
@@ -344,7 +405,7 @@
                 return source._clean[item];
             }
 
-            return source[item];
+            return item;
         }
     }
 }

@@ -28,6 +28,7 @@
          *
          */
         initMaptastic() {
+            let self = this;
             return Maptastic({
                 crosshairs: true,
                 autoSave: false,
@@ -41,7 +42,7 @@
                             //sourcePoints: e.sourcePoints,
                             targetPoints: e.targetPoints
                         };
-                        this.onMapping(id, mapping);
+                        self.onMapping(id, mapping);
                     }
                 }
             });
@@ -58,7 +59,7 @@
             }
             if (animation) {
                 let f = (id, mapping) => {
-                    this.mappingTimeouts[id] = setTimeout(function () {
+                    this.mappingTimeouts[id] = setTimeout(() => {
                         animation.updateDisplay(id + '_mapping', JSON.stringify(mapping), false, true, false);
                         this.mappingTimeouts[id] = false;
                     }, 125);

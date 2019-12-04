@@ -88,13 +88,19 @@ HC.Layer.prototype.getShaderPassPlugin = function (name, key) {
     let plugin = this.getPlugin('passes', key, true);
     if (!plugin) {
         plugin = this.loadPlugin('shaders', name);
-        let settings = {shaders: {}};
-        settings.shaders[name] = this.settings.get(['passes', key, 'shader']);
-
-        plugin.construct(this, settings, 'shaders', name);
-        plugin.inject();
+        // let settings = {shaders: {}};
+        // settings.shaders[name] = this.settings.get(['passes', key, 'shader']);
+        //
+        // plugin.construct(this, settings, 'shaders', name);
+        // plugin.inject();
         this.setPlugin('passes', key, plugin);
     }
+
+    let settings = {shaders: {}};
+    settings.shaders[name] = this.settings.get(['passes', key, 'shader']);
+
+    plugin.construct(this, settings, 'shaders', name);
+
     return plugin;
 };
 

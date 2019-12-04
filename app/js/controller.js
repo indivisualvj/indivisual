@@ -423,10 +423,13 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         cleanShaderPasses() {
-            for (let key in statics.AnimationSettings.passes) {
-                let sh = statics.AnimationSettings.get(['passes', key, 'shader']);
+
+            let settings = sm.get(statics.ControlSettings.layer).settings;
+
+            for (let key in settings.passes) {
+                let sh = settings.get(['passes', key, 'shader']);
                 if (!sh || sh.apply === false) {
-                    delete statics.AnimationSettings.passes[key];
+                    delete settings.passes[key];
                 }
             }
         }

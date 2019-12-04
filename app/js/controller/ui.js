@@ -786,18 +786,20 @@ HC.Controller.prototype.updateUiPasses = function () {
     if (this._passes) {
         this._passes.__controllers[0].setValue(null);
 
-        let sKeys = Object.keys(statics.AnimationSettings.passes);
+
+        let passes = sm.get(statics.ControlSettings.layer).settings.passes;
+        let sKeys = Object.keys(passes);
         let fKeys = Object.keys(this._passes.__folders);
 
         for (let f in this._passes.__folders) {
-            if (!(f in statics.AnimationSettings.passes)) {
+            if (!(f in passes)) {
                 this._passes.removeFolder(f);
             }
         }
 
-        for (let k in statics.AnimationSettings.passes) {
+        for (let k in passes) {
             if (!(k in this._passes.__folders)) {
-                let name = statics.AnimationSettings.passes[k].name;
+                let name = passes[k].name;
                 this.addShaderPassControllerByKey(k, this._passes, new HC.Controller.ShaderPassController(name));
             }
         }

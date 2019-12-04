@@ -112,6 +112,7 @@
             this.resetLighting();
             this.resetBackground();
             this.updateShaders();
+            this.updateShaderPasses();
         },
 
         /**

@@ -1,4 +1,9 @@
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+
 HC.plugins.shaders = HC.plugins.shaders || {};
+
 {
     HC.ShaderPlugin = class Plugin extends HC.AnimationPlugin {
 

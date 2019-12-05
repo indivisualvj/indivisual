@@ -1,0 +1,22 @@
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+{
+    /**
+     *
+     * @type {HC.controls.filter}
+     */
+    HC.controls.filter = class ControlSet extends HC.ControlSet {
+
+        static index = 130;
+
+        settings = {
+            filter_mode: 'off',
+            filter_audio: false,
+            filter_limit: false,
+            filter_sync: false,
+            filter_volume: 1.0,
+            filter_volume_oscillate: 'off'
+        };
+    }
+}

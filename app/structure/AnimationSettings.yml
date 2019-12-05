@@ -72,10 +72,10 @@ material_centery: .5
 material_rotation: 0.0
 material_volume: 1
 
+offset_mode: 'off'
 offset_audio: false
 offset_limit: false
 offset_sync: true
-offset_mode: 'off'
 offset_x: 0
 offset_x_oscillate: 'off'
 offset_y: 0
@@ -162,6 +162,13 @@ lighting_ambient_intensity: 1
 lighting_bottom: false
 lighting_color: '#fff'
 lighting_intensity: 1
+lighting_angle: 1.05
+lighting_penumbra: 1
+lighting_intensity_oscillate: 'off'
+lighting_angle_oscillate: 'off'
+lighting_penumbra_oscillate: 'off'
+lighting_shadows: false
+
 lighting_pattern: 'ring'
 lighting_pattern_lights: 1
 lighting_pattern_rotation: 0
@@ -177,6 +184,7 @@ lighting_pattern_centery: 0
 lighting_pattern_centery_oscillate: 'off'
 lighting_pattern_centerz: 1
 lighting_pattern_centerz_oscillate: 'off'
+
 lighting_lookat: 'center'
 lighting_lookat_centerx: 0
 lighting_lookat_centerx_oscillate: 'off'
@@ -184,13 +192,6 @@ lighting_lookat_centery: 0
 lighting_lookat_centery_oscillate: 'off'
 lighting_lookat_centerz: -1
 lighting_lookat_centerz_oscillate: 'off'
-
-lighting_angle: 1.05
-lighting_penumbra: 1
-lighting_intensity_oscillate: 'off'
-lighting_angle_oscillate: 'off'
-lighting_penumbra_oscillate: 'off'
-lighting_shadows: false
 
 background_mode: 'transparent'
 background_color: '#000000'

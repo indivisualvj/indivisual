@@ -138,6 +138,29 @@
     }
 }
 
+
+/**
+ *
+ * @param controllers
+ * @param settings
+ * @param values
+ * @param types
+ * @param submit
+ * @param actions
+ */
+HC.Controller.prototype.addAnimationControllers = function (submit, actions) {
+
+    for (var key in statics.ControlSets) {
+
+        let cs = new statics.ControlSets[key]();
+        let ui = new HC.ControlSetUi(cs);
+
+        ui.addFolder(controller.gui, actions);
+
+        ui.addControls(submit, actions);
+    }
+};
+
 /**
  *
  * @param controllers

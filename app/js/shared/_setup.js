@@ -179,6 +179,7 @@ function setupResources() {
 
                 _loadAudioPlugins(settings);
                 _loadShufflePlugins(settings);
+                _loadControlSets();
 
                 statics.ControlValues = new HC.Settings(settings);
                 finished();
@@ -387,6 +388,57 @@ function setupResources() {
             }
 
             settings[section][pluginKey] = name;
+
+        }
+    }
+
+    /**
+     *
+     * @param settings
+     * @param tree
+     * @param section
+     * @param plugins
+     * @private
+     */
+    function _loadControlSets() {
+
+        statics.ControlSets = {};
+        let plugins = HC.controls;
+        let keys = Object.keys(plugins);
+        
+
+        keys.sort(function (a, b) {
+
+            let ai = plugins[a].index || 99999;
+            let bi = plugins[b].index || 99999;
+            let an = plugins[a].name || a;
+            let bn = plugins[b].name || b;
+
+            if (an === 'ControlSet') {
+                an = a;
+            }
+            if (bn === 'ControlSet') {
+                bn = b;
+            }
+
+            let cmpi = ai - bi;
+            if (cmpi == 0) {
+                return an.localeCompare(bn);
+            }
+            return cmpi;
+        });
+
+        for (let i = 0; i < keys.length; i++) {
+
+            let key = keys[i];
+            let plugin = HC.controls[key];
+            let name = plugin.name || key;
+
+            if (name == 'ControlSet') {
+                name = key;
+            }
+
+            statics.ControlSets[key] = name;
 
         }
     }

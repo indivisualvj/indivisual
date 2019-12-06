@@ -27,5 +27,22 @@
             locking_shapey_multiplier: 1,
             locking_shapez_multiplier: 1
         };
+        
+        types = {
+            shape_lookat_centerx_oscillate: ['half'],
+            shape_lookat_centerx: [-2, 2, 0.01, 'half'],
+            shape_lookat_centery_oscillate: ['half'],
+            shape_lookat_centery: [-2, 2, 0.01, 'half'],
+            shape_lookat_centerz_oscillate: ['half'],
+            shape_lookat_centerz: [-2, 2, 0.01, 'half'],
+            pattern_rotation: ['half'],
+            pattern_rotation_multiplier: [-4, 4, 0.001, 'half'],
+            locking_shapex: ['half'],
+            locking_shapey: ['half'],
+            locking_shapez: ['half'],
+            locking_shapex_multiplier: [-4, 4, 0.001, 'half'],
+            locking_shapey_multiplier: [-4, 4, 0.001, 'half'],
+            locking_shapez_multiplier: [-4, 4, 0.001, 'half']
+        }
     }
 }

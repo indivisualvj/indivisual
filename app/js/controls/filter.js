@@ -18,5 +18,14 @@
             filter_volume: 1.0,
             filter_volume_oscillate: 'off'
         };
+        
+        types = {
+            filter_mode: ['half'],
+            filter_audio: ['hex'],
+            filter_limit: ['hex'],
+            filter_sync: ['hex'],
+            filter_volume: [-10, 10, 0.01, 'half'],
+            filter_volume_oscillate: ['half']
+        };
     }
 }

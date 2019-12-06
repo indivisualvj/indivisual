@@ -26,5 +26,19 @@
             sizing_sync: true,
             sizing_flip: 'off'
         };
+        
+        types = {
+            sizing_scale: [-10, 10, 0.01, 'half'],
+            sizing_x: [-10, 10, 0.01, 'half'],
+            sizing_y: [-10, 10, 0.01, 'half'],
+            sizing_z: [-10, 10, 0.01, 'half'],
+            sizing_x_oscillate: ['half'],
+            sizing_y_oscillate: ['half'],
+            sizing_z_oscillate: ['half'],
+            sizing_scale_oscillate: ['half'],
+            sizing_audio: [hex],
+            sizing_limit: [hex],
+            sizing_sync: [hex]
+        };
     }
 }

@@ -22,5 +22,17 @@
             offset_z: 0,
             offset_z_oscillate: 'off'
         };
+        
+        types = {
+            offset_audio: ['third'],
+            offset_limit: ['third'],
+            offset_sync: ['third'],
+            offset_x: [-10, 10, 0.01, 'half'],
+            offset_y: [-10, 10, 0.01, 'half'],
+            offset_z: [-10, 10, 0.01, 'half'],
+            offset_x_oscillate: ['half'],
+            offset_y_oscillate: ['half'],
+            offset_z_oscillate: ['half'],
+        };
     }
 }

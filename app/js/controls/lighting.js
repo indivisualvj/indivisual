@@ -28,5 +28,22 @@
             lighting_penumbra_oscillate: 'off',
             lighting_shadows: false
         };
+        
+        types = {
+            lighting_intensity_oscillate: ['half'],
+            lighting_angle_oscillate: ['half'],
+            lighting_penumbra_oscillate: ['half'],
+            lighting_fog_near: [0, 5000, 1, 'half'],
+            lighting_fog_far: [500, 10000, 1, 'half'],
+            lighting_ambient: ['half'],
+            lighting_type: ['half'],
+            lighting_intensity: [0, 10.0, 0.01, 'half'],
+            lighting_ambient_intensity: [0, 1.0, 0.01, 'half'],
+            lighting_penumbra: [0, 1, 0.01, 'half'],
+            lighting_angle: [0, 1.05, 0.01, 'half'],
+            lighting_shadows: ['half'],
+            lighting_color: ['half'],
+            lighting_fog: ['half']
+        };
     }
 }

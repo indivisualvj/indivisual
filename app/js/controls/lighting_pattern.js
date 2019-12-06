@@ -28,5 +28,23 @@
             lighting_pattern_centerz: 1,
             lighting_pattern_centerz_oscillate: 'off'
         };
+        
+        types = {
+            lighting_pattern: ['half'],
+            lighting_pattern_lights: [1, 32, 1, 'half'],
+            lighting_pattern_rotation: [-4, 4, 0.01, 'half'],
+            lighting_pattern_rotation_oscillate: ['half'],
+            lighting_pattern_padding: [-10, 10, 0.01, 'half'],
+            lighting_pattern_padding_oscillate: ['half'],
+            lighting_pattern_paddingx: [-10, 10, 0.01, 'half'],
+            lighting_pattern_paddingy: [-10, 10, 0.01, 'half'],
+            lighting_pattern_paddingz: [-10, 10, 0.01, full],
+            lighting_pattern_centerx: [-5, 5, 0.01, 'half'],
+            lighting_pattern_centery: [-5, 5, 0.01, 'half'],
+            lighting_pattern_centerz: [-5, 5, 0.01, 'half'],
+            lighting_pattern_centerx_oscillate: ['half'],
+            lighting_pattern_centery_oscillate: ['half'],
+            lighting_pattern_centerz_oscillate: ['half']
+        };
     }
 }

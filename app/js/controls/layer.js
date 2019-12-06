@@ -26,5 +26,20 @@
             layer_rotationy: 0,
             layer_rotationz: 0
         };
+        
+        types = {
+            layer_positionx_oscillate: ['half'],
+            layer_positiony_oscillate: ['half'],
+            layer_positionz_oscillate: ['half'],
+            layer_positionx: [-5, 5, 0.01, 'half'],
+            layer_positiony: [-5, 5, 0.01, 'half'],
+            layer_positionz: [-5, 5, 0.01, 'half'],
+            layer_rotationx_oscillate: ['half'],
+            layer_rotationy_oscillate: ['half'],
+            layer_rotationz_oscillate: ['half'],
+            layer_rotationx: [-180, 180, 0.01, 'half'],
+            layer_rotationy: [-180, 180, 0.01, 'half'],
+            layer_rotationz: [-180, 180, 0.01, 'half']
+        };
     }
 }

@@ -23,7 +23,25 @@
             shape_transform_volume: 1,
             shape_modifier: 'off',
             shape_modifier_volume: 1,
-            shape_pairing: 'off'
+            shape_pairing: 'off',
+            shape_delay: 'off',
+            shape_rhythm: 'nochange'
+        };
+        
+        types = {
+            shape_geometry: ['half'],
+            shape_sizedivider: [1, 64, 1, 'half'],
+            shape_limit: ['quarter'],
+            shape_sync: ['quarter'],
+            shape_moda: [0, 128, 1, 'half'],
+            shape_modb: [0, 128, 1, 'half'],
+            shape_modc: [0, 128, 1, 'half'],
+            shape_transform: ['half'],
+            shape_transform_volume: [-5, 5, 0.01, 'half'],
+            shape_modifier: ['half'],
+            shape_modifier_volume: [-5, 5, 0.01, 'half'],
+            shape_rhythm: ['half'],
+            shape_delay: ['half'],
         };
     }
 }

@@ -27,5 +27,21 @@
             background_rotation: 0.0,
             background_volume_oscillate: 'off'
         };
+        
+        types = {
+            background_mode: ['half'],
+            background_color: ['half'],
+            background_volume: [-5, 5, 0.01, 'half'],
+            background_volume_oscillate: ['half'],
+            background_wraps: ['half'],
+            background_wrapt: ['half'],
+            background_repeatx: [-32, 32, 0.001, 'half'],
+            background_repeaty: [-32, 32, 0.001, 'half'],
+            background_offsetx: [-5, 5, 0.001, 'half'],
+            background_offsety: [-5, 5, 0.001, 'half'],
+            background_centerx: [0, 1, 0.001, 'half'],
+            background_centery: [0, 1, 0.001, 'half'],
+            background_rotation: [-180, 180, 0.01, 'half']
+        };
     }
 }

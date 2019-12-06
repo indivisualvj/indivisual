@@ -20,5 +20,15 @@
             lighting_lookat_centerz: -1,
             lighting_lookat_centerz_oscillate: 'off'
         };
+        
+        types = {
+            lighting_lookat: ['full'],
+            lighting_lookat_centerx: [-5, 5, 0.01, 'half'],
+            lighting_lookat_centerx_oscillate: ['half'],
+            lighting_lookat_centery: [-5, 5, 0.01, 'half'],
+            lighting_lookat_centery_oscillate: ['half'],
+            lighting_lookat_centerz: [-5, 5, 0.01, 'half'],
+            lighting_lookat_centerz_oscillate: ['half']
+        };
     }
 }

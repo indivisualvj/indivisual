@@ -37,5 +37,32 @@
             material_rotation: 0.0,
             material_volume: 1
         };
+        
+        types = {
+            mesh_material: ['half'],
+            material_blending: ['half'],
+            // #material_blendequation: ['half'],
+            // #material_blendsrc: ['half'],
+            // #material_blenddst: ['half'],
+            material_softshading: ['half'],
+            material_shadowside: ['half'],
+            material_shininess: [0, 100, 0.1, 'half'],
+            material_roughness: [0, 1, 0.01, 'half'],
+            material_metalness: [0, 1, 0.01, 'half'],
+            material_side: [0, 2, 1, 'half'],
+            material_mapping: ['half'],
+            material_input: ['half'],
+            material_style: ['half'],
+            material_wraps: ['half'],
+            material_wrapt: ['half'],
+            material_repeatx: [-32, 32, 0.001, 'half'],
+            material_repeaty: [-32, 32, 0.001, 'half'],
+            material_offsetx: [-5, 5, 0.001, 'half'],
+            material_offsety: [-5, 5, 0.001, 'half'],
+            material_centerx: [0, 1, 0.001, 'half'],
+            material_centery: [0, 1, 0.001, 'half'],
+            material_rotation: [-180, 180, 0.01, 'half'],
+            material_volume: [0, 10, 0.01, 'half']
+        };
     }
 }

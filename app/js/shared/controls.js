@@ -11,12 +11,18 @@ HC.controls = HC.controls || {};
      */
     HC.ControlSet = class ControlSet {
 
+        _name;
         settings;
         properties;
         types;
+        values = {};
 
-        construct() {
-            this.init();
+        constructor(name) {
+            if (!this.__proto__._name) {
+                this._name = name;
+            } else {
+                this._name = this.__proto__._name;
+            }
         }
 
         /**
@@ -26,6 +32,15 @@ HC.controls = HC.controls || {};
         init(reset) {
             if (!this.properties || reset) {
                 this.properties = this.defaults();
+            }
+
+            for (let key in this.settings) {
+                if (key.endsWith('_oscillate')) {
+                    this.values[key] = statics.AnimationValues.oscillate;
+
+                } else if (key in statics.AnimationValues) {
+                    this.values[key] = statics.AnimationValues[key];
+                }
             }
         }
 
@@ -137,7 +152,7 @@ HC.controls = HC.controls || {};
         }
 
         name() {
-            return this.__proto__._name || this.__proto__.constructor.name;
+            return this._name;
         }
     }
 }
@@ -152,29 +167,74 @@ HC.controls = HC.controls || {};
         controlSet;
         folder;
         
-        construct(controlSet) {
+        constructor(controlSet) {
             this.controlSet = controlSet
         }
         
-        addFolder(parent, actions) {
+        addFolder(parent) {
             let key = this.controlSet.name();
             this.folder = parent.addFolder(key);
             this.folder.__ul.parentNode.parentNode.setAttribute('data-id', key);
 
-            if (actions) {
-                this._addShareListener(key, this.folder, false);
-            }
+            this._addShareListener(key, this.folder, false);
 
             return this.folder;
         }
         
         addControls() {
-
+            
+            for(let key in this.controlSet.settings) {
+                this.addControl(key);
+            }
 
         }
 
-        _addControl(options, settings, values, ksub, dir, removePrefix) {
+        addControl(key) {
+            let types = this.controlSet.types[key];
+            let props = this.controlSet.properties;
+            let value = props[key];
+            let onChange = this.onChange();
+            let ctl;
+            
+            if (typeof value == 'number' && types) {
+                let bnd = types;
+                let min = bnd[0];
+                let max = bnd[1];
+                let step = bnd[2];
 
+                ctl = this.folder.add(props, key, min, max, step);
+                let el = ctl.domElement.getElementsByTagName('input')[0];
+                el.setAttribute('data-step', step);
+
+            } else {
+                let vls = this.controlSet.values[key] || null;
+                ctl = this.folder.add(props, key, vls);
+            }
+
+            let reg = new RegExp('\\w+_([^_]+)$');
+            let name = key.replace(reg, '$1');
+            ctl.name(name);
+
+            if (types) {
+                let bnd = types;
+                if (!bnd || bnd.length < 1) {
+                    console.log('error in ' + key);
+                } else {
+                    ctl.__li.setAttribute('data-class', bnd[bnd.length - 1]);
+                }
+            }
+
+            ctl.__li.setAttribute('data-id', key);
+
+            if (ctl instanceof dat.controllers.NumberControllerBox
+                || ctl instanceof dat.controllers.NumberControllerSlider
+            ) {
+                ctl.onChange(onChange);
+            } else {
+                ctl.onFinishChange(onChange);
+            }
+
+            ctl._parent = this.folder;
         }
 
         _addShareListener(key, dir, datasource) {
@@ -216,8 +276,18 @@ HC.controls = HC.controls || {};
             li.appendChild(ac);
         }
 
-        onChange(value) {
-
+        onChange() {
+            return () => {
+                console.log(this.controlSet.properties);
+                controller.updateControlSet(
+                    statics.ControlSettings.layer,
+                    this.controlSet.name(),
+                    this.controlSet.properties,
+                    true,
+                    true,
+                    false
+                );
+            }
         }
     }
 }

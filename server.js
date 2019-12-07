@@ -165,6 +165,13 @@ io.sockets.on('connection', function (socket) {
         }
     });
 
+    socket.on('controlset', function (data) {
+        _log('controlset', data);
+        if (_emit(data)) {
+            _store(data);
+        }
+    });
+
     socket.on('sync', function (data, callback) {
         _log('sync', data);
         let _finish = function (data) {
@@ -304,6 +311,12 @@ function cron() {
                     dir: path,
                     file: 'settings.json',
                     contents: (session.settings ? JSON.stringify(session.settings, null, 4) : '')
+                };
+
+                config = {
+                    dir: path,
+                    file: 'controlset.json',
+                    contents: (session.controlset ? JSON.stringify(session.controlset, null, 4) : '')
                 };
 
                 _save(config);

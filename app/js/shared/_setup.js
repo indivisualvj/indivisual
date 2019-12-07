@@ -405,7 +405,6 @@ function setupResources() {
         statics.ControlSets = {};
         let plugins = HC.controls;
         let keys = Object.keys(plugins);
-        
 
         keys.sort(function (a, b) {
 

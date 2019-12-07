@@ -141,23 +141,18 @@
 
 /**
  *
- * @param controllers
- * @param settings
- * @param values
- * @param types
- * @param submit
  * @param actions
  */
-HC.Controller.prototype.addAnimationControllers = function (submit, actions) {
+HC.Controller.prototype.addAnimationControllers = function () {
 
     for (var key in statics.ControlSets) {
 
-        let cs = new statics.ControlSets[key]();
+        let cs = new HC.controls[key](key);
+        cs.init();
         let ui = new HC.ControlSetUi(cs);
 
-        ui.addFolder(controller.gui, actions);
-
-        ui.addControls(submit, actions);
+        ui.addFolder(controller.gui);
+        ui.addControls();
     }
 };
 

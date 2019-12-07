@@ -88,14 +88,15 @@ document.addEventListener('DOMContentLoaded', function () {
                         controller.updateSource(this.property, value, true, true, false);
                     }
                 );
-                controller.addControllers(statics.AnimationController,
-                    statics.AnimationSettings,
-                    statics.AnimationValues,
-                    statics.AnimationTypes,
-                    function (value) {
-                        controller.updateSetting(statics.ControlSettings.layer, this.property, value, true, true, false);
-                    }, true
-                );
+                controller.addAnimationControllers();
+                // controller.addControllers(statics.AnimationController,
+                //     statics.AnimationSettings,
+                //     statics.AnimationValues,
+                //     statics.AnimationTypes,
+                //     function (value) {
+                //         controller.updateSetting(statics.ControlSettings.layer, this.property, value, true, true, false);
+                //     }, true
+                // );
 
                 controller.addShaderControllers();
 
@@ -404,6 +405,25 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.updateUi(item);
                     explorer.setChanged(statics.ControlSettings.layer, true);
                 }
+            }
+        }
+
+        updateControlSet(layer, name, set, display, forward, force) {
+
+            // todo update controlset
+
+            // if (item in this.synced && this.synced[item]) {
+                // this.shareSetting(item, value);
+            // }
+
+            if (forward) {
+                let data = {name: name, set: set};
+                messaging.emitControlSet(layer, data, display, false, false);
+            }
+
+            if (display !== false) {
+                // this.updateUi(set);
+                explorer.setChanged(statics.ControlSettings.layer, true);
             }
         }
 

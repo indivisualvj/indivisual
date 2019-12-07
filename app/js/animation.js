@@ -604,6 +604,76 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
+        updateControlSet(layer, name, set, display, forward, force) {
+
+            let layerIndex = layer;
+            layer = renderer.layers[layer];
+
+            // todo update layer controlset
+
+            for (let key in set) {
+                switch (key) {
+
+                    // complete layer reset:
+                    case 'shape_sizedivider':
+                    case 'pattern_shapes':
+                        renderer.resetLayer(layer);
+                        break;
+
+                    // shader reset
+                    case 'shaders':
+                        layer.updateShaders();
+                        break;
+
+                    case 'passes':
+                        layer.updateShaderPasses();
+                        break;
+
+                    case 'lighting_ambient':
+                        layer.resetAmbientLight();
+                        break;
+
+                    case 'lighting_type':
+                    case 'lighting_pattern_lights':
+                        layer.resetLighting();
+                        break;
+
+                    case 'lighting_fog':
+                        layer.resetFog();
+                        break;
+
+                    // reload shapes
+                    case 'pattern':
+                    case 'pattern_mover':
+                    case 'shape_modifier':
+                    case 'shape_modifier_volume':
+                    case 'shape_geometry':
+                    case 'shape_transform':
+                    case 'mesh_material':
+                    case 'material_mapping':
+                    case 'shape_moda':
+                    case 'shape_modb':
+                    case 'shape_modc':
+                        layer.resetShapes();
+                        break;
+
+                    // special case for shapetastic
+                    case 'shape_vertices':
+                        if (display) {
+                            layer.resetShapes();
+                        }
+                        break;
+                }
+            }
+
+            if (forward === true) {
+                let data = {name: name, set: set};
+                messaging.emitControlSet(layerIndex, data, true, false, force);
+            }
+
+            listener.fireEvent('animation.updateControlSet', {layer: layer, item: item, value: value});
+        }
+
         /**
          *
          * @param item

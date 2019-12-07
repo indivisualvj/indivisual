@@ -36,9 +36,9 @@
             sizing_y_oscillate: ['half'],
             sizing_z_oscillate: ['half'],
             sizing_scale_oscillate: ['half'],
-            sizing_audio: [hex],
-            sizing_limit: [hex],
-            sizing_sync: [hex]
+            sizing_audio: ['hex'],
+            sizing_limit: ['hex'],
+            sizing_sync: ['hex']
         };
     }
 }

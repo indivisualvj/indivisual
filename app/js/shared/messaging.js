@@ -59,6 +59,7 @@
             this.on('displays', this.onDisplays);
             this.on('sources', this.onSources);
             this.on('settings', this.onSettings);
+            this.on('controlset', this.onControlSet);
             this.on('attr', this.onAttr);
             this.on('midi', this.onMidi);
             this.on('data', this.onData);
@@ -109,6 +110,12 @@
         onSettings(data, that) {
             requestAnimationFrame(function () {
                 that.program.updateSettings(data.layer, data.data, data.controls, data.forward, data.force);
+            });
+        }
+
+        onControlSet(data, that) {
+            requestAnimationFrame(function () {
+                that.program.updateControlSet(data.layer, data.data.name, data.data.set, data.controls, data.forward, data.force);
             });
         }
 
@@ -360,6 +367,22 @@
 
                 let config = {
                     action: 'settings',
+                    data: data,
+                    controls: display,
+                    forward: forward,
+                    force: force,
+                    layer: layer
+                };
+
+                this._emit(config);
+            }
+        }
+
+        emitControlSet(layer, data, display, forward, force) {
+            if (data) {
+
+                let config = {
+                    action: 'controlset',
                     data: data,
                     controls: display,
                     forward: forward,

@@ -12,9 +12,9 @@
         static _name = 'audio & timing';
 
         settings = {
-            rhythm: 'half',
             audio_thickness: 0,
-            audio_usewaveform: false
+            audio_usewaveform: false,
+            rhythm: 'half'
         };
         
         types = {

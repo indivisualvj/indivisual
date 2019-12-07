@@ -19,12 +19,12 @@
             layer_positiony_oscillate: 'off',
             layer_positionz: 0,
             layer_positionz_oscillate: 'off',
-            layer_rotationx_oscillate: 'off',
-            layer_rotationy_oscillate: 'off',
-            layer_rotationz_oscillate: 'off',
             layer_rotationx: 0,
+            layer_rotationx_oscillate: 'off',
             layer_rotationy: 0,
-            layer_rotationz: 0
+            layer_rotationy_oscillate: 'off',
+            layer_rotationz: 0,
+            layer_rotationz_oscillate: 'off'
         };
         
         types = {

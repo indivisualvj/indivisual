@@ -170,140 +170,11 @@ HC.controls = HC.controls || {};
         
         addControls() {
 
-            let submit = this.onChange;
-            let dir = this.folder;
-            let values = this.controlSet.settings;
 
-            let controllers = statics.AnimationController[this.controlSet.name()];
-            for (let ksub in controllers) {
-                let options = controllers;
-                if (options[ksub]
-                    && typeof options[ksub] == 'object'
-                    && (ksub.match(/^_.+/))
-                ) {
-                    options = options[ksub];
-                    let _dir = this.folder.addFolder(ksub);
-                    _dir.__ul.parentNode.parentNode.setAttribute('data-id', ksub);
-                    _dir.__ul.parentNode.parentNode.setAttribute('data-parent', key);
-
-                    for (let _ksub in options) {
-                        let ctl = this._addControl(options, settings, values, _ksub, _dir, submit, ksub.substr(1) + '_');
-                        if (ctl) {
-                            ctl.__li.setAttribute('data-parent', ksub);
-                        }
-                    }
-
-                } else {
-                    let ctl = this._addControl(options, settings, values, ksub, dir, submit, key + '_');
-                    if (ctl) {
-                        ctl.__li.setAttribute('data-parent', key);
-                    }
-                }
-            }
         }
 
         _addControl(options, settings, values, ksub, dir, removePrefix) {
-            let submit = this.onChange;
-            let vsub = options[ksub];
-            let types = this.controlSet.types;
 
-            if (vsub === null) {
-                return; // not visible
-
-            } else if (ksub == 'open') {
-                dir.open();
-
-                return false; // prevent fucking it up later
-            }
-
-            let ctl = false;
-
-            if (typeof vsub == 'function') {
-
-                settings[ksub] = vsub;
-
-                ctl = dir.add(settings, ksub);
-                if (removePrefix) {
-                    let reg = new RegExp('^' + removePrefix);
-                    ctl.name(ksub.replace(reg, ''));
-                }
-                if (ksub in types) {
-                    let bnd = types[ksub];
-                    if (!bnd || bnd.length < 1) {
-                        console.log('error in ' + ksub);
-                    } else {
-                        ctl.__li.setAttribute('data-class', bnd[0]);
-                    }
-                }
-
-                ctl.__li.setAttribute('data-id', ksub);
-
-                return ctl; // prevent fucking it up later
-
-            } else if (ksub in values) { // dropdown
-
-                let vls = values[ksub];
-                if (typeof vls == 'object') {
-                    ctl = dir.add(settings, ksub, vls);
-
-                }
-
-            } else {
-                if (typeof vsub == 'number') {
-                    if (ksub in types) {
-                        let bnd = types[ksub];
-                        let min = bnd[0];
-                        let max = bnd[1];
-                        let step = bnd[2];
-
-                        ctl = dir.add(settings, ksub, min, max, step);
-                        let el = ctl.domElement.getElementsByTagName('input')[0];
-                        el.setAttribute('data-step', step);
-                    }
-                }
-            }
-
-            if (!ctl) {
-                ctl = dir.add(settings, ksub);
-            }
-
-            if (ctl) {
-
-                if (removePrefix) {
-                    // pattern_padding_oscillate -> oscillate
-                    // rotation_x_random -> random
-                    let reg = new RegExp('\\w+_([^_]+)$');
-                    let _ksub = ksub.replace(reg, '$1');
-                    ctl.name(_ksub);
-                    //ctl.name(ksub);
-                }
-                if (ksub.match(/[^0-9]+\d+_.+/)) {
-                    ctl.name(ksub.replace(/[^0-9]+(\d+_.+)/, '$1'));
-                }
-
-                if (ksub in types) {
-                    let bnd = types[ksub];
-                    if (!bnd || bnd.length < 1) {
-                        console.log('error in ' + ksub);
-                    } else {
-                        ctl.__li.setAttribute('data-class', bnd[bnd.length - 1]);
-                    }
-                }
-
-                ctl.__li.setAttribute('data-id', ksub);
-
-                if (ctl instanceof dat.controllers.NumberControllerBox
-                    || ctl instanceof dat.controllers.NumberControllerSlider
-                ) {
-                    ctl.onChange(submit);
-                } else {
-                    ctl.onFinishChange(submit);
-                }
-
-                ctl._parent = dir;
-            }
-
-            return ctl;
         }
 
         _addShareListener(key, dir, datasource) {
@@ -346,7 +217,7 @@ HC.controls = HC.controls || {};
         }
 
         onChange(value) {
-            controller.updateSetting(statics.ControlSettings.layer, this.property, value, true, true, false);
+
         }
     }
 }

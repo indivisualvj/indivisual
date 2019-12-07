@@ -19,13 +19,13 @@
             shape_limit: false,
             shape_sync: true,
             shape_vertices: '',
-            shape_transform: 'off',
-            shape_transform_volume: 1,
             shape_modifier: 'off',
             shape_modifier_volume: 1,
+            shape_transform: 'off',
+            shape_transform_volume: 1,
             shape_pairing: 'off',
-            shape_delay: 'off',
-            shape_rhythm: 'nochange'
+            shape_rhythm: 'nochange',
+            shape_delay: 'off'
         };
         
         types = {

@@ -12,6 +12,9 @@
 
         settings = {
             rotation_mode: 'default',
+            rotation_sync: true,
+            rotation_direction: 'random',
+            rotation_easing: 'off',
             rotation_x: false,
             rotation_x_random: false,
             rotation_x_volume: 1.0,
@@ -21,9 +24,6 @@
             rotation_z: false,
             rotation_z_random: false,
             rotation_z_volume: 1.0,
-            rotation_sync: true,
-            rotation_direction: 'random',
-            rotation_easing: 'off',
             rotation_offset_mode: 'off',
             rotation_offsetx: 0.0,
             rotation_offsetx_oscillate: 'off',

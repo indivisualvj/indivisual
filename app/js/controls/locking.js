@@ -19,12 +19,12 @@
             shape_lookat_centerz: 0.0,
             shape_lookat_centerz_oscillate: 'off',
             pattern_rotation: 'off',
-            locking_shapex: false,
-            locking_shapey: false,
-            locking_shapez: false,
             pattern_rotation_multiplier: 1,
+            locking_shapex: false,
             locking_shapex_multiplier: 1,
+            locking_shapey: false,
             locking_shapey_multiplier: 1,
+            locking_shapez: false,
             locking_shapez_multiplier: 1
         };
         

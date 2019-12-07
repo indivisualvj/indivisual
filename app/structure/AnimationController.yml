@@ -113,7 +113,6 @@ pattern:
   pattern_paddingy:
   pattern_centerz:
   pattern_paddingz:
-
   pattern_limit:
   pattern_audio:
   pattern_sync:
@@ -128,7 +127,6 @@ shape:
   shape_moda:
   shape_modb:
   shape_modc:
-
   shape_limit:
   shape_sync:
   shape_vertices:

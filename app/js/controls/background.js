@@ -15,6 +15,7 @@
             background_color: '#000000',
             background_input: 'none',
             background_volume: 1,
+            background_volume_oscillate: 'off',
             // background_mapping: todo background_mapping,
             background_wraps: 'ClampToEdgeWrapping',
             background_wrapt: 'ClampToEdgeWrapping',
@@ -24,8 +25,7 @@
             background_offsety: 0.0,
             background_centerx: .5,
             background_centery: .5,
-            background_rotation: 0.0,
-            background_volume_oscillate: 'off'
+            background_rotation: 0.0
         };
         
         types = {

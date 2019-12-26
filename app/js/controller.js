@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
      * @type {HC.Controller}
      */
     HC.Controller = class Controller {
-
+// todo ES6
         gui = false;
         synced = {};
         thumbTimeouts = [];
@@ -142,6 +142,10 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         init() {
+            // todo grid layout mit einer dat gui pro controlset
+            // todo dat gui wird in controlsetui initialisiert und platziert vom layoutmanager
+            // todo dat gui käse komplett mit aktueller datgui version aufbauen
+
             this.gui = new dat.GUI({autoPlace: false});
             document.getElementById('controller').appendChild(this.gui.domElement);
         }

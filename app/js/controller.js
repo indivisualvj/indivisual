@@ -142,7 +142,7 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         init() {
-            // todo grid layout mit einer dat gui pro controlset
+            // todo grid layout mit einer dat gui pro controlset https://vuejsexamples.com/simple-and-flexible-vue-js-component-for-grid-layout/
             // todo dat gui wird in controlsetui initialisiert und platziert vom layoutmanager
             // todo dat gui käse komplett mit aktueller datgui version aufbauen
 

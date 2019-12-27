@@ -16,6 +16,7 @@
         this.index = index;
         this.preset = false;
         this.settings = false;
+        this.controlsets = false;
         this.lights = false;
         this.ambientLight = false;
         this.shapes = false;

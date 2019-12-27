@@ -299,6 +299,9 @@
             return false;
         }
 
+        /**
+         *
+         */
         reset() {
 
             this.update(false, this.initial);

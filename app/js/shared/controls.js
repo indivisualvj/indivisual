@@ -76,12 +76,26 @@ HC.controls = HC.controls || {};
             return null;
         }
 
+        /**
+         *
+         * @param key
+         * @param value
+         * @returns {*}
+         */
         set(key, value) {
             if (key in this.settings) {
                 this.properties[key] = this.validate(key, value)
             }
+
+            return this.properties[key];
         }
 
+        /**
+         *
+         * @param key
+         * @param value
+         * @returns {number}
+         */
         validate(key, value) {
             let type = typeof value;
             // check if string contains float and then convert
@@ -104,6 +118,27 @@ HC.controls = HC.controls || {};
             }
 
             return value;
+        }
+
+        /**
+         * especially for old saved settings not using HC.ControlSet
+         * calls merge until more action is required
+         * @param data
+         */
+        migrate(data) {
+            this.merge(data);
+        }
+
+        /**
+         * set every each member of settings to data[member] if exists
+         * @param data
+         */
+        merge(data) {
+            for (let key in this.settings) {
+                if (key in data) {
+                    this.set(key, data[key]);
+                }
+            }
         }
 
         /**
@@ -166,11 +201,20 @@ HC.controls = HC.controls || {};
         
         controlSet;
         folder;
-        
+
+        /**
+         *
+         * @param controlSet
+         */
         constructor(controlSet) {
             this.controlSet = controlSet
         }
-        
+
+        /**
+         *
+         * @param parent
+         * @returns {*}
+         */
         addFolder(parent) {
             let key = this.controlSet.name();
             this.folder = parent.addFolder(key);
@@ -180,7 +224,10 @@ HC.controls = HC.controls || {};
 
             return this.folder;
         }
-        
+
+        /**
+         *
+         */
         addControls() {
             
             for(let key in this.controlSet.settings) {
@@ -189,11 +236,14 @@ HC.controls = HC.controls || {};
 
         }
 
+        /**
+         *
+         * @param key
+         */
         addControl(key) {
             let types = this.controlSet.types[key];
             let props = this.controlSet.properties;
             let value = props[key];
-            let onChange = this.onChange();
             let ctl;
             
             if (typeof value == 'number' && types) {
@@ -226,6 +276,8 @@ HC.controls = HC.controls || {};
 
             ctl.__li.setAttribute('data-id', key);
 
+            let onChange = this.onChange;
+
             if (ctl instanceof dat.controllers.NumberControllerBox
                 || ctl instanceof dat.controllers.NumberControllerSlider
             ) {
@@ -235,8 +287,18 @@ HC.controls = HC.controls || {};
             }
 
             ctl._parent = this.folder;
+            ctl._controlSetUi = this;
+            ctl._controlSet = this.controlSet;
         }
 
+
+        /**
+         *
+         * @param key
+         * @param dir
+         * @param datasource
+         * @private
+         */
         _addShareListener(key, dir, datasource) {
             let ul = dir.__ul;
             let li = ul.lastChild;
@@ -276,18 +338,20 @@ HC.controls = HC.controls || {};
             li.appendChild(ac);
         }
 
-        onChange() {
-            return () => {
-                console.log(this.controlSet.properties);
-                controller.updateControlSet(
-                    statics.ControlSettings.layer,
-                    this.controlSet.name(),
-                    this.controlSet.properties,
-                    true,
-                    true,
-                    false
-                );
-            }
+        /**
+         *
+         * @returns {Function}
+         */
+        onChange(value) {
+            controller.updateControlSet(
+                statics.ControlSettings.layer,
+                this._controlSet.name(),
+                this.property,
+                value,
+                true,
+                true,
+                false
+            );
         }
     }
 }

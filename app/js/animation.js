@@ -12,6 +12,7 @@ var displayman = false;
 var sourceman = false;
 var listener = false;
 var sm = false;
+var cm = false;
 
 /**
  *
@@ -58,6 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 sm = new HC.SettingsManager(statics.AnimationSettings, renderer.layers);
+                cm = new HC.ControlSetsManager(renderer.layers);
 
                 displayman = new HC.DisplayManager({
                     display: new Array(statics.DisplayValues.display.length)
@@ -604,74 +606,81 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        updateControlSet(layer, name, set, display, forward, force) {
+        /**
+         *
+         * @param layer
+         * @param set
+         * @param property
+         * @param value
+         * @param display
+         * @param forward
+         * @param force
+         */
+        updateControlSet(layer, set, property, value, display, forward, force) {
 
             let layerIndex = layer;
             layer = renderer.layers[layer];
 
-            // todo update layer controlset
+            value = cm.update(layer, set, property, value);
 
-            for (let key in set) {
-                switch (key) {
+            switch (property) {
 
-                    // complete layer reset:
-                    case 'shape_sizedivider':
-                    case 'pattern_shapes':
-                        renderer.resetLayer(layer);
-                        break;
+                // complete layer reset:
+                case 'shape_sizedivider':
+                case 'pattern_shapes':
+                    renderer.resetLayer(layer);
+                    break;
 
-                    // shader reset
-                    case 'shaders':
-                        layer.updateShaders();
-                        break;
+                // shader reset
+                case 'shaders':
+                    layer.updateShaders();
+                    break;
 
-                    case 'passes':
-                        layer.updateShaderPasses();
-                        break;
+                case 'passes':
+                    layer.updateShaderPasses();
+                    break;
 
-                    case 'lighting_ambient':
-                        layer.resetAmbientLight();
-                        break;
+                case 'lighting_ambient':
+                    layer.resetAmbientLight();
+                    break;
 
-                    case 'lighting_type':
-                    case 'lighting_pattern_lights':
-                        layer.resetLighting();
-                        break;
+                case 'lighting_type':
+                case 'lighting_pattern_lights':
+                    layer.resetLighting();
+                    break;
 
-                    case 'lighting_fog':
-                        layer.resetFog();
-                        break;
+                case 'lighting_fog':
+                    layer.resetFog();
+                    break;
 
-                    // reload shapes
-                    case 'pattern':
-                    case 'pattern_mover':
-                    case 'shape_modifier':
-                    case 'shape_modifier_volume':
-                    case 'shape_geometry':
-                    case 'shape_transform':
-                    case 'mesh_material':
-                    case 'material_mapping':
-                    case 'shape_moda':
-                    case 'shape_modb':
-                    case 'shape_modc':
+                // reload shapes
+                case 'pattern':
+                case 'pattern_mover':
+                case 'shape_modifier':
+                case 'shape_modifier_volume':
+                case 'shape_geometry':
+                case 'shape_transform':
+                case 'mesh_material':
+                case 'material_mapping':
+                case 'shape_moda':
+                case 'shape_modb':
+                case 'shape_modc':
+                    layer.resetShapes();
+                    break;
+
+                // special case for shapetastic
+                case 'shape_vertices':
+                    if (display) {
                         layer.resetShapes();
-                        break;
-
-                    // special case for shapetastic
-                    case 'shape_vertices':
-                        if (display) {
-                            layer.resetShapes();
-                        }
-                        break;
-                }
+                    }
+                    break;
             }
 
             if (forward === true) {
-                let data = {name: name, set: set};
-                messaging.emitControlSet(layerIndex, data, true, false, force);
+                messaging.emitControlSet(layerIndex, set, property, value, true, false, force);
             }
 
-            listener.fireEvent('animation.updateControlSet', {layer: layer, item: item, value: value});
+            listener.fireEvent('animation.updateSetting', {layer: layer, item: property, value: value});
         }
 
         /**

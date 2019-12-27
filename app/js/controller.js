@@ -228,16 +228,15 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         shareSettings(folder, datasource) {
 
+            let settings = {};
             if (!datasource) {
                 let keys = Object.keys(statics.AnimationController[folder]);
-                let settings = {};
 
                 for (let i = 0; i < keys.length; i++) {
                     settings[keys[i]] = statics.AnimationSettings[keys[i]];
                 }
 
             } else {
-                settings = {};
                 settings[folder] = statics.AnimationSettings[folder];
             }
 
@@ -413,17 +412,26 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
-        updateControlSet(layer, name, set, display, forward, force) {
+        /**
+         *
+         * @param layer
+         * @param set
+         * @param property
+         * @param value
+         * @param display
+         * @param forward
+         * @param force
+         */
+        updateControlSet(layer, set, property, value, display, forward, force) {
 
-            // todo update controlset
+            // todo update controlset?
 
             // if (item in this.synced && this.synced[item]) {
                 // this.shareSetting(item, value);
             // }
 
             if (forward) {
-                let data = {name: name, set: set};
-                messaging.emitControlSet(layer, data, display, false, false);
+                messaging.emitControlSet(layer, set, property, value, display, false, false);
             }
 
             if (display !== false) {

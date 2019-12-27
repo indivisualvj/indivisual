@@ -206,6 +206,7 @@
          *
          * @param layer
          */
+
         resetLayer(layer) {
 
             if (isNumber(layer) || isString(layer)) {

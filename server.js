@@ -51,17 +51,17 @@ let sessions = {};
 let members = ['animation', 'controller', 'client', 'setup', 'monitor'];
 
 let targetsGroups = {
-    animation: ['controls', 'displays', 'sources', 'settings', 'log', 'midi'],
-    controller: ['controls', 'displays', 'sources', 'settings', 'log', 'attr', 'midi', 'data'],
-    client: ['controls', 'displays', 'sources', 'settings', 'log', 'midi'],
-    setup: ['displays', 'data', 'settings'],
-    monitor: ['displays', 'controls', 'settings', 'sources'], // displays added to have updates on resolution. HC.Monitor.init() takes care of the other settings.
+    animation: ['controls', 'displays', 'sources', 'settings', 'controlset', 'log', 'midi'],
+    controller: ['controls', 'displays', 'sources', 'settings', 'controlset', 'log', 'attr', 'midi', 'data'],
+    client: ['controls', 'displays', 'sources', 'settings', 'controlset', 'log', 'midi'],
+    setup: ['displays', 'data', 'settings', 'controlset'],
+    monitor: ['displays', 'controls', 'settings', 'controlset', 'sources'], // displays added to have updates on resolution. HC.Monitor.init() takes care of the other settings.
     log: ['log']
 };
 
 let sourcesGroups = {
     animation: ['controls', 'displays', 'sources', 'attr', 'midi', 'log', 'data'],
-    controller: ['controls', 'displays', 'sources', 'settings', 'log', 'attr', 'midi'],
+    controller: ['controls', 'displays', 'sources', 'settings', 'controlset', 'log', 'attr', 'midi'],
     client: targetsGroups.log,
     setup: targetsGroups.setup,
     monitor: targetsGroups.log

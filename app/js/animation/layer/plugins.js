@@ -11,9 +11,9 @@ HC.Layer.prototype.getPlugin = function (plugin, name, dontcry) {
         if (!(plugin in this.plugins)) {
             console.error('plugin not found: ' + plugin);
         }
-        if (!(plugin in this.settings)) {
-            console.error('setting not found: ' + plugin);
-        }
+        // if (!(this.settings[plugin])) {
+        //     console.error('setting not found: ' + plugin);
+        // }
     }
 
     name = name || this.settings[plugin];
@@ -412,6 +412,7 @@ HC.Layer.prototype.reloadPlugins = function () {
             }
             var instance = this.loadPlugin(plugin, key);
             instance.construct(this, this.settings, plugin, key);
+            // instance.construct(this, this.controlsets, plugin, key);
             instance.inject();
             this.setPlugin(plugin, key, instance);
         }

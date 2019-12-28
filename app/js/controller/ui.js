@@ -145,10 +145,10 @@
  */
 HC.Controller.prototype.addAnimationControllers = function () {
 
-    for (var key in statics.ControlSets) {
+    for (let key in statics.ControlSets) {
 
         let cs = new HC.controls[key](key);
-        cs.init();
+        cs.init(statics.AnimationValues);
         let ui = new HC.ControlSetUi(cs);
 
         ui.addFolder(controller.gui);

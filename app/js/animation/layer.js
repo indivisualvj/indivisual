@@ -165,6 +165,7 @@
 
             var sc = this.three.scene;
             this.settings = false;
+            this.controlsets = false;
             this.shapes = false;
             this.plugins = {};
             this._shapes = false;

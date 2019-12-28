@@ -143,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         init() {
             // todo grid layout mit einer dat gui pro controlset https://vuejsexamples.com/simple-and-flexible-vue-js-component-for-grid-layout/
-            // https://jons.website/projects/reaction-diffusion/
+            // https://github.com/colejd/guify
             // todo dat gui wird in controlsetui initialisiert und platziert vom layoutmanager
             // todo dat gui käse komplett mit aktueller datgui version aufbauen
 
@@ -422,7 +422,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param forward
          * @param force
          */
-        updateControlSet(layer, set, property, value, display, forward, force) {
+        updateControlSet(layer, data, display, forward, force) {
 
             // todo update controlset?
 
@@ -431,7 +431,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // }
 
             if (forward) {
-                messaging.emitControlSet(layer, set, property, value, display, false, false);
+                messaging.emitControlSet(layer, data, display, false, false);
             }
 
             if (display !== false) {

@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 sm = new HC.SettingsManager(statics.AnimationSettings, renderer.layers);
-                cm = new HC.ControlSetsManager(renderer.layers);
+                cm = new HC.ControlSetsManager(renderer.layers, statics.AnimationValues);
 
                 displayman = new HC.DisplayManager({
                     display: new Array(statics.DisplayValues.display.length)
@@ -497,13 +497,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.updateSources(sources, true, false, true);
             }
 
-            if ('settings' in session) {
-                HC.log('settings', 'synced');
-                let settings = session.settings;
+            if ('controlset' in session) {
+                HC.log('controlset', 'synced');
+                let settings = session.controlset;
                 for (let k in settings) {
-                    this.updateSettings(k, settings[k], true, false, true);
+                    for (let s in settings[k]) {
+                        let sub = {};
+                        sub[s] = settings[k][s];
+                        this.updateControlSet(k, sub, true, false, true);
+                    }
                 }
             }
+
+            // if ('settings' in session) {
+            //     HC.log('settings', 'synced');
+            //     let settings = session.settings;
+            //     for (let k in settings) {
+            //         this.updateSettings(k, settings[k], true, false, true);
+            //     }
+            // }
 
             if ('controls' in session) {
                 HC.log('controls', 'synced');
@@ -616,12 +628,20 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param forward
          * @param force
          */
-        updateControlSet(layer, set, property, value, display, forward, force) {
+        updateControlSet(layer, data, display, forward, force) {
 
             let layerIndex = layer;
             layer = renderer.layers[layer];
 
-            value = cm.update(layer, set, property, value);
+            let updated = cm.update(layer, data);
+            let property;
+            let value;
+            if (isArray(updated)) {
+                property = updated[0].property;
+                value = updated[0].value;
+            }
+
+            HC.log(property, value, false, true);
 
             switch (property) {
 
@@ -677,7 +697,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (forward === true) {
-                messaging.emitControlSet(layerIndex, set, property, value, true, false, force);
+                messaging.emitControlSet(layerIndex, data, true, false, force);
             }
 
             listener.fireEvent('animation.updateSetting', {layer: layer, item: property, value: value});

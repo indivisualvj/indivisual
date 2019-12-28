@@ -11,10 +11,30 @@ HC.controls = HC.controls || {};
      */
     HC.ControlSet = class ControlSet {
 
+        /**
+         *
+         */
         _name;
+
+        /**
+         * definition of all available settings
+         */
         settings;
+
+        /**
+         * actual settings
+         */
         properties;
+
+        /**
+         * control and data types
+         */
         types;
+
+        /**
+         *
+         * @type {{}}
+         */
         values = {};
 
         constructor(name) {
@@ -27,19 +47,20 @@ HC.controls = HC.controls || {};
 
         /**
          *
+         * @param pluggedValues
          * @param reset
          */
-        init(reset) {
+        init(pluggedValues, reset) {
             if (!this.properties || reset) {
                 this.properties = this.defaults();
             }
 
             for (let key in this.settings) {
                 if (key.endsWith('_oscillate')) {
-                    this.values[key] = statics.AnimationValues.oscillate;
+                    this.values[key] = pluggedValues.oscillate;
 
-                } else if (key in statics.AnimationValues) {
-                    this.values[key] = statics.AnimationValues[key];
+                } else if (key in pluggedValues) {
+                    this.values[key] = pluggedValues[key];
                 }
             }
         }
@@ -343,11 +364,13 @@ HC.controls = HC.controls || {};
          * @returns {Function}
          */
         onChange(value) {
+            let data = {};
+            data[this._controlSet.name()] = {};
+            data[this._controlSet.name()][this.property] = value;
+
             controller.updateControlSet(
                 statics.ControlSettings.layer,
-                this._controlSet.name(),
-                this.property,
-                value,
+                data,
                 true,
                 true,
                 false

@@ -115,7 +115,7 @@
 
         onControlSet(data, that) {
             requestAnimationFrame(function () {
-                that.program.updateControlSet(data.layer, data.data.set, data.data.property, data.data.value, data.controls, data.forward, data.force);
+                that.program.updateControlSet(data.layer, data.data, data.controls, data.forward, data.force);
             });
         }
 
@@ -381,33 +381,22 @@
         /**
          *
          * @param layer
-         * @param set
-         * @param property
-         * @param value
+         * @param data
          * @param display
          * @param forward
          * @param force
          */
-        emitControlSet(layer, set, property, value, display, forward, force) {
-            if (set && property) {
+        emitControlSet(layer, data, display, forward, force) {
+            let config = {
+                action: 'controlset',
+                data: data,
+                controls: display,
+                forward: forward,
+                force: force,
+                layer: layer
+            };
 
-                let data = {
-                    set: set,
-                    property: property,
-                    value: value
-                };
-
-                let config = {
-                    action: 'controlset',
-                    data: data,
-                    controls: display,
-                    forward: forward,
-                    force: force,
-                    layer: layer
-                };
-
-                this._emit(config);
-            }
+            this._emit(config);
         }
 
         /**

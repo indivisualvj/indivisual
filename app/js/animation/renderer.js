@@ -3,6 +3,7 @@
  */
 
 {
+    // todo var2let
 
     /**
      *
@@ -92,7 +93,7 @@
                      */
                     if ((keepsettings || !layerShuffleable(i))) {
                         op = this.layers[i].preset;
-                        os = this.layers[i].settings;
+                        os = this.layers[i].controlsets;
                     }
                     ol.dispose();
                 }
@@ -100,7 +101,8 @@
                 var l = new HC.Layer(this, i);
 
                 l.preset = op;
-                l.settings = os || statics.AnimationSettings.defaults();
+                l.controlsets = os || HC.ControlSetsManager.initAll();
+                l.settings = os || HC.ControlSetsManager.proxy(l.controlsets);
 
                 this.layers[i] = l;
 

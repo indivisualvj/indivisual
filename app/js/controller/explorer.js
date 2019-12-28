@@ -101,7 +101,7 @@
                 l._preset.changed = '';
                 l._preset.layer = '';
             }
-            l._preset = model; // todo why _preset?
+            l._preset = model;
         }
 
         /**
@@ -224,6 +224,7 @@
             explorer.setPreset(statics.ControlSettings.layer, this.item);
 
             if (this.item.type == 'preset') { // load default
+                // fixme load default CS
                 let dflt = statics.AnimationSettings.defaults().prepare();
                 requestAnimationFrame(function () {
                     controller.preset(false, dflt);
@@ -242,6 +243,7 @@
 
                             let key = data.dir + '/' + data.name;
                             let contents = JSON.parse(data.contents);
+                            // todo make tutorial own invisible controlset
                             if (contents.tutorial && Object.keys(contents.tutorial).length) {
                                 new HC.ScriptProcessor(key, Object.create(contents.tutorial)).log();
                             }

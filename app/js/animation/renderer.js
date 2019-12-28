@@ -102,7 +102,7 @@
 
                 l.preset = op;
                 l.controlsets = os || HC.ControlSetsManager.initAll();
-                l.settings = os || HC.ControlSetsManager.proxy(l.controlsets);
+                l.settings = HC.ControlSetsManager.proxy(os || l.controlsets);
 
                 this.layers[i] = l;
 

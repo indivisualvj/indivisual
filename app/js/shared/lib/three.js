@@ -1,5 +1,5 @@
 /**
- * todo THREE.traverseDispose o.ä.
+ *
  * @param obj
  */
 function threeDispose(obj) {

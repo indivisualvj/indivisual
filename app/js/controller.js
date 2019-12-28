@@ -123,12 +123,12 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 {
+    // todo ES5
     /**
      *
      * @type {HC.Controller}
      */
     HC.Controller = class Controller {
-// todo ES6
         gui = false;
         synced = {};
         thumbTimeouts = [];
@@ -833,6 +833,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (settings) {
                 settings = settings.prepare();
+                // fixme emit controlsets
                 messaging.emitSettings(layer, settings, true, false, true);
             }
         }
@@ -847,7 +848,7 @@ document.addEventListener('DOMContentLoaded', function () {
             HC.log('preset', name);
 
             let dflt = statics.AnimationSettings.defaults();
-            // todo preserve tutorial from being wiped here?
+            // fixme update controlsets via csmanager migrate
             dflt.clean(data, dflt);
             dflt.update(false, data);
 

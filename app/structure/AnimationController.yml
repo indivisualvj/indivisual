@@ -123,7 +123,7 @@ pattern:
 
 shape:
   shape_geometry:
-  shape_sizedivider: # todo fick die henne.
+  shape_sizedivider:
   shape_moda:
   shape_modb:
   shape_modc:

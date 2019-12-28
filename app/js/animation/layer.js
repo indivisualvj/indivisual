@@ -2,7 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-// todo ES6
+// todo ES5
 (function () {
 
     /**

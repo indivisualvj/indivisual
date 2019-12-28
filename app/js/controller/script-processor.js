@@ -3,6 +3,7 @@
  */
 
 {
+    // todo var2let
     /**
      *
      * @type {HC.ScriptProcessor}

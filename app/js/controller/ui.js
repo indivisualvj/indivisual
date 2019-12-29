@@ -54,7 +54,7 @@
 
             let key = this.key(name);
             statics.AnimationSettings.passes[key] = {
-                _clean: {
+                _clean: { // fixme bullshit weg wenn passes in CS
                     key: name,
                     source: parent,
                     target: shader,

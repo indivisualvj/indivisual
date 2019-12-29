@@ -9,6 +9,7 @@ let midi = false;
 let beatkeeper = false;
 let layers = false;
 let sm = false;
+let controlsets = false;
 
 /**
  *
@@ -58,6 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 layers = new Array(statics.ControlValues.layer.length);
                 sm = new HC.SettingsManager(statics.AnimationSettings, layers);
+                controlsets = HC.ControlSetsManager.initAll();
 
                 statics.ControlController = new HC.ControlController();
                 statics.DisplayController = new HC.DisplayController();
@@ -123,7 +125,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 {
-    // todo ES5
+    // todo var2let
     /**
      *
      * @type {HC.Controller}
@@ -133,6 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
         synced = {};
         thumbTimeouts = [];
         name;
+        cm;
 
         constructor(name) {
             this.name = name;
@@ -189,6 +192,30 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
+         * @param layer
+         * @param data
+         */
+        migrateSettings(layer, data) {
+
+            let mappings = HC.ControlSetsManager.mappings(HC.ControlSetsManager.initAll());
+
+            for (let k in data) {
+                let value = data[k];
+                if (typeof value !== 'object') {
+                    let set = mappings[k];
+                    if (set) {
+                        controlsets[set].set(k, value);
+                    }
+
+                } else {
+                    // todo migrate shaders and passes to CS
+                }
+            }
+            this.updateUi();
+        }
+
+        /**
+         *
          * @param data
          * @param display
          * @param forward
@@ -223,6 +250,40 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
+         * @param data
+         * @param display
+         * @param forward
+         * @param force
+         */
+        updateControlSets(layer, data, display, forward, force) {
+
+            if (force) {
+                for (let k in data) {
+                    let value = data[k];
+                    cm.update(layer, k, value);
+                }
+                this.updateUi();
+
+            } else {
+                for (let k in data) {
+                    let value = data[k];
+                    this.updateControlSet(layer, value, display, false, false);
+                }
+            }
+
+            if (forward) {
+                /**
+                 * we don't want forwarding here because:
+                 * - it could be enabled when coming from messaging.onSettings
+                 * - there are several calls of updateSetting(....forward=true and then messaging.emitSettings that disallow
+                 * calling messaging.emitSettings here
+                 *
+                 */
+            }
+        }
+
+        /**
+         * todo CS
          * @param folder
          * @param datasource
          */
@@ -259,7 +320,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         *
+         * todo CS
          * @param item
          * @param value
          */
@@ -375,7 +436,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         *
+         * todo delete CS
          * @param layer
          * @param item
          * @param value
@@ -415,23 +476,22 @@ document.addEventListener('DOMContentLoaded', function () {
         /**
          *
          * @param layer
-         * @param set
-         * @param property
-         * @param value
+         * @param data
          * @param display
          * @param forward
          * @param force
          */
         updateControlSet(layer, data, display, forward, force) {
 
-            // todo update controlset?
+            // todo update controlset!
+            // cm.updateData(layer, data);
 
             // if (item in this.synced && this.synced[item]) {
                 // this.shareSetting(item, value);
             // }
 
             if (forward) {
-                messaging.emitControlSet(layer, data, display, false, false);
+                messaging.emitControlSet(layer, [data], display, false, false);
             }
 
             if (display !== false) {
@@ -825,7 +885,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         *
+         * todo CS
          * @param layer
          */
         syncLayer(layer) {
@@ -833,7 +893,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (settings) {
                 settings = settings.prepare();
-                // fixme emit controlsets
                 messaging.emitSettings(layer, settings, true, false, true);
             }
         }
@@ -847,17 +906,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
             HC.log('preset', name);
 
-            let dflt = statics.AnimationSettings.defaults();
-            // fixme update controlsets via csmanager migrate
-            dflt.clean(data, dflt);
-            dflt.update(false, data);
+            // let dflt = statics.AnimationSettings.defaults();
+            // dflt.clean(data, dflt);
+            // dflt.update(false, data);
 
             if (layer == undefined) {
                 layer = statics.ControlSettings.layer;
             }
+            // todo check if works
+            this.migrateSettings(layer, data, true, false, true);
+            messaging.emitControlSet(layer, controlsets); // todo emit properties, not instances
 
-            this.updateSettings(layer, dflt.prepare(), true, false, true);
-            messaging.emitSettings(layer, statics.AnimationSettings.prepare(), false, false, true);
+            // this.updateSettings(layer, dflt.prepare(), true, false, true);
+            // messaging.emitSettings(layer, statics.AnimationSettings.prepare(), false, false, true);
         }
 
         /**

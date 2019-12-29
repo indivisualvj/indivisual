@@ -633,7 +633,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let layerIndex = layer;
             layer = renderer.layers[layer];
 
-            let updated = cm.update(layer, data);
+            let updated = cm.updateData(layer, data);
             let property;
             let value;
             if (isArray(updated)) {
@@ -697,7 +697,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (forward === true) {
-                messaging.emitControlSet(layerIndex, data, true, false, force);
+                messaging.emitControlSet(layerIndex, [data], true, false, force);
             }
 
             listener.fireEvent('animation.updateSetting', {layer: layer, item: property, value: value});
@@ -961,6 +961,30 @@ document.addEventListener('DOMContentLoaded', function () {
                 for (var k in data) {
                     var value = data[k];
                     this.updateSetting(layer, k, value, display, forward, force);
+                }
+            }
+        }
+
+        /**
+         *
+         * @param data
+         * @param display
+         * @param forward
+         * @param force
+         */
+        updateControlSets(layer, data, display, forward, force) {
+
+            if (force) {
+                for (var k in data) {
+                    cm.update(layer, k, data[k]);
+                }
+
+                renderer.resetLayer(layer);
+
+            } else {
+                for (var k in data) {
+                    var value = data[k];
+                    this.updateControlSet(layer, value, display, forward, force);
                 }
             }
         }

@@ -207,7 +207,7 @@
 
     /**
      *
-     * @type {{toggleFolder: HC.Explorer.VueItemMethods.toggleFolder, newPreset: HC.Explorer.VueItemMethods.newPreset, reload: HC.Explorer.VueItemMethods.reload, savePresets: HC.Explorer.VueItemMethods.savePresets, renameItem: HC.Explorer.VueItemMethods.renameItem, loadPreset: HC.Explorer.VueItemMethods.loadPreset, deletePreset: HC.Explorer.VueItemMethods.deletePreset, loadPresets: HC.Explorer.VueItemMethods.loadPresets, savePreset: HC.Explorer.VueItemMethods.savePreset, newFolder: HC.Explorer.VueItemMethods.newFolder}}
+     *
      */
     HC.Explorer.VueItemMethods = {
         toggleFolder: function () {
@@ -329,8 +329,7 @@
 
                 if (layer >= 0 && child.changed) {
                     let save = function (layer, child) {
-                        let settings = layers[layer].settings.prepare();
-                        statics.AnimationSettings.clean(settings, statics.AnimationSettings.initial);
+                        let settings = cm.getLayerSettings(layer);
                         messaging.save(STORAGE_DIR, child.dir, child.name, settings, function (result) {
                             HC.log(result);
                             explorer.setChanged(layer, false);
@@ -346,8 +345,9 @@
 
             let model = this.item;
 
-            let settings = statics.AnimationSettings.prepare();
-            statics.AnimationSettings.clean(settings, statics.AnimationSettings.initial);
+            // let settings = statics.AnimationSettings.prepare();
+            // statics.AnimationSettings.clean(settings, statics.AnimationSettings.initial);
+            let settings = cm.getLayerSettings(statics.ControlSettings.layer);
             messaging.save(STORAGE_DIR, this.item.dir, this.item.name, settings, function (result) {
                 HC.log(result);
                 explorer.setPreset(statics.ControlSettings.layer, false);
@@ -418,7 +418,7 @@
                 changed: '',
                 dir: model.name,
                 name: name + '.json',
-                settings: statics.AnimationSettings.prepare(),
+                settings: cm.getLayerSettings(statics.ControlSettings.layer),
                 children: []
             };
 

@@ -10,6 +10,7 @@
      */
     HC.ControlSetsManager = class ControlSetsManager {
 
+        static _mappings = false;
         layers;
         pluggedValues;
 
@@ -30,9 +31,8 @@
          * @param property
          * @param value
          * @returns {*}
-         * @private
          */
-        _update(layer, set, property, value) {
+        update(layer, set, property, value) {
             let cs = this.get(layer, set);
             let v = cs.set(property, value);
             return v;
@@ -44,7 +44,7 @@
          * @param data
          * @returns {Array}
          */
-        update(layer, data) {
+        updateData(layer, data) {
             let updated = [];
             for (let k in data) {
                 let set = k;
@@ -52,7 +52,7 @@
                 for (let l in dat) {
                     let prop = l;
                     let val = dat[prop];
-                    data[set][prop] = this._update(layer, set, prop, val);
+                    data[set][prop] = this.update(layer, set, prop, val);
                     let upd = {
                         property: prop,
                         value: val
@@ -90,20 +90,26 @@
         }
 
         /**
-         * fixme NOT a final solution? is it fast enough when called in every plugin in every frame? otherwise rewrite all plugins and everything...
+         *
+         * @param layer
+         * @returns {boolean|*}
+         */
+        getLayerSettings(layer) {
+            if (isNumber(layer) || isString(layer)) {
+                layer = this.layers[layer];
+            }
+
+            return layer.controlsets;
+        }
+
+        /**
+         * fixme NOT a final solution! 1rms! rewrite all plugins and everything...
          * @param controlsets
          * @returns {Proxy}
          */
         static proxy(controlsets) {
 
-            let mappings = {};
-            for (let set in controlsets) {
-                let settings = controlsets[set].settings;
-
-                for (let prop in settings) {
-                    mappings[prop] = set;
-                }
-            }
+            let mappings = HC.ControlSetsManager.mappings(controlsets);
 
             let proxy = new Proxy(controlsets, {
                 get(target, name, receiver) {
@@ -126,10 +132,43 @@
                 },
 
                 set(target, name, value, receiver) {
-                    throw new Error(name + ' not settable through proxy!');
+                    let key = mappings[name];
+                    let set = target[key];
+
+                    if (set) {
+                        let props = set.properties;
+
+                        if (name in props) {
+                            props[name] = value;
+
+                            return value;
+                        }
+                    }
+
+                    return undefined;
                 }
             });
             return proxy;
+        }
+
+        /**
+         *
+         */
+        static mappings(controlsets) {
+            if (!HC.ControlSetsManager._mappings) {
+                let mappings = {};
+                for (let set in controlsets) {
+                    let settings = controlsets[set].settings;
+
+                    for (let prop in settings) {
+                        mappings[prop] = set;
+                    }
+                }
+
+                HC.ControlSetsManager._mappings = mappings;
+            }
+
+            return HC.ControlSetsManager._mappings;
         }
 
         /**

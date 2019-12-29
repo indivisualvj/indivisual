@@ -113,9 +113,14 @@
             });
         }
 
+        /**
+         *
+         * @param data
+         * @param that
+         */
         onControlSet(data, that) {
             requestAnimationFrame(function () {
-                that.program.updateControlSet(data.layer, data.data, data.controls, data.forward, data.force);
+                that.program.updateControlSets(data.layer, data.data, data.controls, data.forward, data.force);
             });
         }
 

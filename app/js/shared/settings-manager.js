@@ -162,26 +162,9 @@
         merge(target, source, initial) {
 
             if (target) {
-                // delete target items in case source does not contain
-                // but this does not work if only fragments are updated ...
-                // for (let k in target) {
-                //     if (!(k in source)) {
-                //         delete target[k];
-                //     }
-                // }
 
                 for (let k in source) {
                     let value = source[k];
-
-                    // let clean = this._clean(value);
-                    // if (clean === 'delete') {
-                    //     delete target[k];
-                    //     return;
-                    // } else if (clean) {
-                    //     target = clean.target;
-                    //     // k = clean.key;
-                    //     value = clean.source
-                    // }
 
                     if (target === this && k in this && typeof this[k] == 'function') {
                         // do nothing

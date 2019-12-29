@@ -185,5 +185,18 @@
 
             return controlsets;
         }
+
+        /**
+         *
+         * @param controlsets
+         */
+        static prepare(controlsets) {
+            let sets = {};
+            for (let k in controlsets) {
+                sets[k] = controlsets[k].properties;
+            }
+
+            return sets;
+        }
     }
 }

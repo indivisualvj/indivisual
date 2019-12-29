@@ -266,7 +266,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             } else {
                 for (let k in data) {
-                    let value = data[k];
+                    let value = {};
+                    value[k] = data[k];
                     this.updateControlSet(layer, value, display, false, false);
                 }
             }
@@ -915,7 +916,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             // todo check if works
             this.migrateSettings(layer, data, true, false, true);
-            messaging.emitControlSet(layer, controlsets); // todo emit properties, not instances
+            messaging.emitControlSet(layer, HC.ControlSetsManager.prepare(controlsets));
 
             // this.updateSettings(layer, dflt.prepare(), true, false, true);
             // messaging.emitSettings(layer, statics.AnimationSettings.prepare(), false, false, true);

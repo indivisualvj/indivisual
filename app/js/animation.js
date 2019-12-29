@@ -641,8 +641,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 value = updated[0].value;
             }
 
-            HC.log(property, value, false, true);
-
             switch (property) {
 
                 // complete layer reset:
@@ -983,7 +981,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             } else {
                 for (var k in data) {
-                    var value = data[k];
+                    let value = {};
+                    value[k] = data[k];
                     this.updateControlSet(layer, value, display, forward, force);
                 }
             }

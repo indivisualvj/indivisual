@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 layers = new Array(statics.ControlValues.layer.length);
                 sm = new HC.SettingsManager(statics.AnimationSettings, layers);
-                controlsets = HC.ControlSetsManager.initAll();
+                controlsets = HC.ControlSetsManager.initAll(); // todo kan use csman like settsman!
 
                 statics.ControlController = new HC.ControlController();
                 statics.DisplayController = new HC.DisplayController();
@@ -135,7 +135,6 @@ document.addEventListener('DOMContentLoaded', function () {
         synced = {};
         thumbTimeouts = [];
         name;
-        cm;
 
         constructor(name) {
             this.name = name;

@@ -187,7 +187,7 @@
         }
 
         /**
-         *
+         * todo once using CM remove param and static, add layer property
          * @param controlsets
          */
         static prepare(controlsets) {

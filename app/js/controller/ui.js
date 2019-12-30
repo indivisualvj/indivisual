@@ -122,7 +122,7 @@
                 let ctrl = new HC.Controller.ShaderPassController(name);
                 ctrl.init();
 
-                // shaderPassControllers are added/remove in updateUiPasses but we need this to still have _type in there
+                // shaderPassControllers are added/removed in updateUiPasses but we need this to still have _type in there
                 // controller.addShaderPassControllerByKey(ctrl.key(), controller._passes, ctrl);
 
                 controller.updateSetting(
@@ -151,7 +151,7 @@ HC.Controller.prototype.addAnimationControllers = function () {
         cs.init(statics.AnimationValues);
         let ui = new HC.ControlSetUi(cs);
 
-        ui.addFolder(controller.gui);
+        ui.addFolder(this.gui);
         ui.addControls();
     }
 };

@@ -444,6 +444,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          * todo delete CS
+         *
          * @param layer
          * @param item
          * @param value
@@ -917,10 +918,6 @@ document.addEventListener('DOMContentLoaded', function () {
         preset(name, data, layer) {
 
             HC.log('preset', name);
-
-            // let dflt = statics.AnimationSettings.defaults();
-            // dflt.clean(data, dflt);
-            // dflt.update(false, data);
 
             if (layer == undefined) {
                 layer = statics.ControlSettings.layer;

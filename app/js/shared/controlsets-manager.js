@@ -72,21 +72,15 @@
          */
         get(layer, set) {
 
-            if (isNumber(layer) || isString(layer)) {
-                layer = this.layers[layer];
-            }
+            let controlsets = this.getLayerSettings(layer);
 
-            if (!layer.controlsets) {
-                layer.controlsets = {};
-            }
+            // if (!controlsets[set]) {
+            //     let cs = new HC.controls[set](set);
+            //     cs.init(this.pluggedValues);
+            //     controlsets[set] = cs;
+            // }
 
-            if (!layer.controlsets[set]) {
-                let cs = new HC.controls[set](set);
-                cs.init(this.pluggedValues);
-                layer.controlsets[set] = cs;
-            }
-
-            return layer.controlsets[set];
+            return controlsets[set];
         }
 
         /**
@@ -95,11 +89,40 @@
          * @returns {boolean|*}
          */
         getLayerSettings(layer) {
+            layer = this.getLayer(layer);
+
+            if (!layer.controlsets) {
+                this.setLayerSettings(layer, HC.ControlSetsManager.initAll(this.pluggedValues));
+            }
+
+            return layer.controlsets;
+        }
+
+        /**
+         *
+         * @param layer
+         * @param controlsets
+         * @returns {*}
+         */
+        setLayerSettings(layer, controlsets) {
+            layer = this.getLayer(layer);
+
+            layer.controlsets = controlsets;
+
+            return layer;
+        }
+
+        /**
+         *
+         * @param layer
+         * @returns {*}
+         */
+        getLayer(layer) {
             if (isNumber(layer) || isString(layer)) {
                 layer = this.layers[layer];
             }
 
-            return layer.controlsets;
+            return layer;
         }
 
         /**
@@ -109,6 +132,7 @@
         prepare(layer) {
             let sets = {};
             let controlsets = this.getLayerSettings(layer);
+
             for (let k in controlsets) {
                 sets[k] = controlsets[k].properties;
             }

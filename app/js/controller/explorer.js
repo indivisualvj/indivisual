@@ -223,28 +223,31 @@
             explorer.setPreset(statics.ControlSettings.layer, false);
             explorer.setPreset(statics.ControlSettings.layer, this.item);
 
-            if (this.item.type == 'preset') { // load default
+            if (this.item.type == 'preset') {
+                // load default
+                cm.setLayerSettings(statics.ControlSettings.layer, false);
                 requestAnimationFrame(function () {
-                    // fixme does not work
-                    controller.preset(false, HC.ControlSetsManager.initAll(statics.AnimationValues));
+                    controller.preset(false, cm.prepare(statics.ControlSettings.layer));
                 });
 
-            } else { // load preset
+            } else {
+                // load preset
                 messaging.load(STORAGE_DIR, this.item.dir, this.item.name, function (data) {
                     requestAnimationFrame(function () {
 
                         if (statics.ctrlKey) { //load shaders into present presets
                             controller.shaders(data.dir + '/' + data.name, JSON.parse(data.contents));
 
-                        } else { // load the preset
+                        } else {
+                            // load the preset
 
                             HC.clearLog();
 
                             let key = data.dir + '/' + data.name;
                             let contents = JSON.parse(data.contents);
-                            // todo make tutorial own invisible controlset
-                            if (contents.tutorial && Object.keys(contents.tutorial).length) {
-                                new HC.ScriptProcessor(key, Object.create(contents.tutorial)).log();
+
+                            if (contents.info && contents.info.tutorial && Object.keys(contents.info.tutorial).length) {
+                                new HC.ScriptProcessor(key, Object.create(contents.info.tutorial)).log();
                             }
                             controller.preset(key, contents);
                             explorer.setLoaded(statics.ControlSettings.layer, true);

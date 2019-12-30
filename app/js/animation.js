@@ -501,11 +501,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 HC.log('controlset', 'synced');
                 let settings = session.controlset;
                 for (let k in settings) {
-                    for (let s in settings[k]) {
-                        let sub = {};
-                        sub[s] = settings[k][s];
-                        this.updateControlSet(k, sub, true, false, true);
-                    }
+                    this.updateControlSets(k, settings[k], true, false, true);
                 }
             }
 
@@ -695,7 +691,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (forward === true) {
-                messaging.emitControlSet(layerIndex, [data], true, false, force);
+                messaging.emitControlSet(layerIndex, data, true, false, force);
             }
 
             listener.fireEvent('animation.updateSetting', {layer: layer, item: property, value: value});

@@ -224,10 +224,9 @@
             explorer.setPreset(statics.ControlSettings.layer, this.item);
 
             if (this.item.type == 'preset') { // load default
-                // fixme load default CS
-                let dflt = statics.AnimationSettings.defaults().prepare();
                 requestAnimationFrame(function () {
-                    controller.preset(false, dflt);
+                    // fixme does not work
+                    controller.preset(false, HC.ControlSetsManager.initAll(statics.AnimationValues));
                 });
 
             } else { // load preset

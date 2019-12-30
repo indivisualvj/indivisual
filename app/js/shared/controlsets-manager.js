@@ -103,6 +103,20 @@
         }
 
         /**
+         *
+         * @param layer
+         */
+        prepare(layer) {
+            let sets = {};
+            let controlsets = this.getLayerSettings(layer);
+            for (let k in controlsets) {
+                sets[k] = controlsets[k].properties;
+            }
+
+            return sets;
+        }
+
+        /**
          * fixme NOT a final solution! 1rms! rewrite all plugins and everything...
          * @param controlsets
          * @returns {Proxy}
@@ -173,30 +187,18 @@
 
         /**
          *
+         * @param pluggedValues
          */
-        static initAll() {
+        static initAll(pluggedValues) {
             let controlsets = {};
             for (let key in statics.ControlSets) {
                 let cs = new HC.controls[key](key);
-                cs.init(statics.AnimationValues);
+                cs.init(pluggedValues);
 
                 controlsets[key] = cs;
             }
 
             return controlsets;
-        }
-
-        /**
-         * todo once using CM remove param and static, add layer property
-         * @param controlsets
-         */
-        static prepare(controlsets) {
-            let sets = {};
-            for (let k in controlsets) {
-                sets[k] = controlsets[k].properties;
-            }
-
-            return sets;
         }
     }
 }

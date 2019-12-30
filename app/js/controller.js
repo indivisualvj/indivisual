@@ -9,7 +9,7 @@ let midi = false;
 let beatkeeper = false;
 let layers = false;
 let sm = false;
-let controlsets = false;
+let cm = false;
 
 /**
  *
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 layers = new Array(statics.ControlValues.layer.length);
                 sm = new HC.SettingsManager(statics.AnimationSettings, layers);
-                controlsets = HC.ControlSetsManager.initAll(); // todo kan use csman like settsman!
+                cm = new HC.ControlSetsManager(layers, statics.AnimationValues); // todo kan use csman like settsman!
 
                 statics.ControlController = new HC.ControlController();
                 statics.DisplayController = new HC.DisplayController();
@@ -174,13 +174,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 let sources = session.sources;
                 this.updateSources(sources, true, false, true);
             }
-            if ('settings' in session) {
-                HC.log('settings', 'synced');
-                let settings = session.settings;
+            if ('controlset' in session) {
+                HC.log('controlset', 'synced');
+                let settings = session.controlset;
                 for (let k in settings) {
-                    this.updateSettings(k, settings[k], true, false, true);
+                    this.updateControlSets(k, settings[k], true, false, true);
                 }
             }
+            // if ('settings' in session) {
+            //     HC.log('settings', 'synced');
+            //     let settings = session.settings;
+            //     for (let k in settings) {
+            //         this.updateSettings(k, settings[k], true, false, true);
+            //     }
+            // }
             if ('data' in session) {
                 HC.log('data', 'synced');
                 this.updateData();
@@ -194,16 +201,16 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param layer
          * @param data
          */
-        migrateSettings(layer, data) {
+        migrateSettings0(layer, data) {
 
-            let mappings = HC.ControlSetsManager.mappings(HC.ControlSetsManager.initAll());
+            let mappings = HC.ControlSetsManager.mappings(HC.ControlSetsManager.initAll(statics.AnimationValues));
 
             for (let k in data) {
                 let value = data[k];
                 if (typeof value !== 'object') {
                     let set = mappings[k];
                     if (set) {
-                        controlsets[set].set(k, value);
+                        cm.update(layer, set, k, value);
                     }
 
                 } else {
@@ -483,19 +490,24 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateControlSet(layer, data, display, forward, force) {
 
-            // todo update controlset!
-            // cm.updateData(layer, data);
+            let updated = cm.updateData(layer, data);
+            let property;
+            let value;
+            if (isArray(updated)) {
+                property = updated[0].property;
+                value = updated[0].value;
+            }
 
-            // if (item in this.synced && this.synced[item]) {
-                // this.shareSetting(item, value);
-            // }
+            if (property in this.synced && this.synced[property]) {
+                this.shareSetting(property, value);
+            }
 
             if (forward) {
-                messaging.emitControlSet(layer, [data], display, false, false);
+                messaging.emitControlSet(layer, data, display, false, false);
             }
 
             if (display !== false) {
-                // this.updateUi(set);
+                this.updateUi(property);
                 explorer.setChanged(statics.ControlSettings.layer, true);
             }
         }
@@ -914,9 +926,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 layer = statics.ControlSettings.layer;
             }
             // todo check if works
-            this.migrateSettings(layer, data, true, false, true);
-            messaging.emitControlSet(layer, HC.ControlSetsManager.prepare(controlsets));
+            if (!('info' in data)) {
+                this.migrateSettings0(layer, data, true, false, true);
 
+            } else if ('info' in data && data.info.version > 1.99) {
+                // this.migrateSettings1(layer, data, true, false, true);
+
+            } else {
+                this.updateControlSets(layer, data, true, false, true);
+            }
+
+            messaging.emitControlSet(layer, cm.prepare(layer));
+
+            // todo migrate shaders2passes via migrate-/emit- ShaderPasses
             // this.updateSettings(layer, dflt.prepare(), true, false, true);
             // messaging.emitSettings(layer, statics.AnimationSettings.prepare(), false, false, true);
         }

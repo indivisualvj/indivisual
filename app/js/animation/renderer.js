@@ -101,7 +101,7 @@
                 var l = new HC.Layer(this, i);
 
                 l.preset = op;
-                l.controlsets = os || HC.ControlSetsManager.initAll();
+                l.controlsets = os || HC.ControlSetsManager.initAll(statics.AnimationValues);
                 l.settings = HC.ControlSetsManager.proxy(os || l.controlsets);
 
                 this.layers[i] = l;

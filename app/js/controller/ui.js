@@ -143,13 +143,14 @@
  *
  * @param actions
  */
-HC.Controller.prototype.addAnimationControllers = function () {
+HC.Controller.prototype.addAnimationControllers = function (controlsets) {
 
-    for (let key in statics.ControlSets) {
+    for (let cs in controlsets) {
 
-        let cs = new HC.controls[key](key);
-        cs.init(statics.AnimationValues);
-        let ui = new HC.ControlSetUi(cs);
+        // let cs = new HC.controls[key](key);
+        // cs.init(statics.AnimationValues);
+        let set = controlsets[cs];
+        let ui = new HC.ControlSetUi(set);
 
         ui.addFolder(this.gui);
         ui.addControls();

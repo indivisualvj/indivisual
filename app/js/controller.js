@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 layers = new Array(statics.ControlValues.layer.length);
                 sm = new HC.SettingsManager(statics.AnimationSettings, layers);
-                cm = new HC.ControlSetsManager(layers, statics.AnimationValues); // todo kan use csman like settsman!
+                cm = new HC.ControlSetsManager(layers, statics.AnimationValues);
 
                 statics.ControlController = new HC.ControlController();
                 statics.DisplayController = new HC.DisplayController();
@@ -90,15 +90,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         controller.updateSource(this.property, value, true, true, false);
                     }
                 );
-                controller.addAnimationControllers();
-                // controller.addControllers(statics.AnimationController,
-                //     statics.AnimationSettings,
-                //     statics.AnimationValues,
-                //     statics.AnimationTypes,
-                //     function (value) {
-                //         controller.updateSetting(statics.ControlSettings.layer, this.property, value, true, true, false);
-                //     }, true
-                // );
+                controller.addAnimationControllers(cm.getGlobalProperties());
 
                 controller.addShaderControllers();
 
@@ -564,9 +556,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 value = statics.ControlSettings.update(item, value);
 
                 if (item == 'layer') {
-                    let l = sm.get(value);
 
-                    this.updateSettings(value, l.settings.prepare(), true, false, true);
+                    // this.updateSettings(value, l.settings.prepare(), true, false, true);
+                    this.updateControlSets(value, cm.prepareLayer(value), true, false, true);
 
                     explorer.resetLoaded();
                     explorer.setLoaded(value, true);
@@ -915,27 +907,28 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param name
          * @param data
          */
-        preset(name, data, layer) {
+        updatePreset(name, data, layer) {
 
             HC.log('preset', name);
 
             if (layer == undefined) {
                 layer = statics.ControlSettings.layer;
             }
-            // todo check if works
+
             if (!('info' in data)) {
+                // todo does it work?
                 this.migrateSettings0(layer, data, true, false, true);
 
-            } else if ('info' in data && data.info.version > 1.99) {
+            // example!
+            // } else if ('info' in data && data.info.version > 1.99) {
                 // this.migrateSettings1(layer, data, true, false, true);
 
             } else {
                 this.updateControlSets(layer, data, true, false, true);
             }
 
-            messaging.emitControlSet(layer, cm.prepare(layer));
+            messaging.emitControlSet(layer, cm.prepareLayer(layer), false, false, true);
 
-            // todo migrate shaders2passes via migrate-/emit- ShaderPasses
             // this.updateSettings(layer, dflt.prepare(), true, false, true);
             // messaging.emitSettings(layer, statics.AnimationSettings.prepare(), false, false, true);
         }
@@ -997,7 +990,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     if (l.settings) {
                         let s = l.settings;
-
+                        // todo cm.isDefault(l)
                         if (!s.isDefault() && layerShuffleable(i)) {
                             preset.push(i + 1);
                         }

@@ -55,5 +55,5 @@
         }
     }
 
-    HC.plugins.pattern_overlay.dropz = Plugin;
+    HC.plugins.pattern_overlay.dropz = Plugin; // todo why is this still there?
 }

@@ -969,9 +969,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateControlSets(layer, data, display, forward, force) {
 
             if (force) {
-                for (var k in data) {
-                    cm.update(layer, k, data[k]);
-                }
+                cm.updateData(layer, data);
 
                 renderer.resetLayer(layer);
 

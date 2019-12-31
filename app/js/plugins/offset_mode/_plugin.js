@@ -22,5 +22,5 @@ HC.plugins.offset_mode = HC.plugins.offset_mode || {};
         }
     }
 
-    HC.OffsetModePlugin = Plugin;
+    HC.OffsetModePlugin = Plugin; // todo why is this still there?
 }

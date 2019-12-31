@@ -37,6 +37,10 @@ HC.controls = HC.controls || {};
          */
         values = {};
 
+        /**
+         *
+         * @param name
+         */
         constructor(name) {
             if (!this.__proto__._name) {
                 this._name = name;
@@ -141,43 +145,34 @@ HC.controls = HC.controls || {};
             return value;
         }
 
-        /**
-         * especially for old saved settings not using HC.ControlSet
-         * calls merge until more action is required
-         * @param data
-         */
-        migrate(data) {
-            this.merge(data);
-        }
-
-        /**
-         * set every each member of settings to data[member] if exists
-         * @param data
-         */
-        merge(data) {
-            for (let key in this.settings) {
-                if (key in data) {
-                    this.set(key, data[key]);
-                }
-            }
-        }
-
-        /**
-         *
-         * @param key
-         * @returns {null|*}
-         */
-        getDefault(key) {
-            if (key in this.settings) {
-                return this.settings[key];
-            }
-            key = this._key(key);
-            if (key in this.settings) {
-                return this.settings[key];
-            }
-
-            return null;
-        }
+        // /**
+        //  * set every each member of settings to data[member] if exists
+        //  * @param data
+        //  */
+        // merge(data) {
+        //     for (let key in this.settings) {
+        //         if (key in data) {
+        //             this.set(key, data[key]);
+        //         }
+        //     }
+        // }
+        //
+        // /**
+        //  *
+        //  * @param key
+        //  * @returns {null|*}
+        //  */
+        // getDefault(key) {
+        //     if (key in this.settings) {
+        //         return this.settings[key];
+        //     }
+        //     key = this._key(key);
+        //     if (key in this.settings) {
+        //         return this.settings[key];
+        //     }
+        //
+        //     return null;
+        // }
 
         /**
          * This is here for migrating settings from e.g. lighting_lookat_[property] to lookat_[property]
@@ -197,6 +192,10 @@ HC.controls = HC.controls || {};
             return JSON.stringify(this.properties, null, 4)
         }
 
+        /**
+         *
+         * @param json
+         */
         fromJSON(json) {
             let data = JSON.parse(json);
 
@@ -207,6 +206,10 @@ HC.controls = HC.controls || {};
             }
         }
 
+        /**
+         *
+         * @returns {*}
+         */
         name() {
             return this._name;
         }

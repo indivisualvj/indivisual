@@ -13,6 +13,7 @@
         static _mappings = false;
         layers;
         pluggedValues;
+        globalProperties;
 
         /**
          *
@@ -35,6 +36,12 @@
         update(layer, set, property, value) {
             let cs = this.get(layer, set);
             let v = cs.set(property, value);
+
+            if (this.globalProperties) {
+                this.globalProperties[set].set(property, value);
+            }
+
+            // todo update globalProperties
             return v;
         }
 
@@ -72,13 +79,8 @@
          */
         get(layer, set) {
 
-            let controlsets = this.getLayerSettings(layer);
+            let controlsets = this.getLayerProperties(layer);
 
-            // if (!controlsets[set]) {
-            //     let cs = new HC.controls[set](set);
-            //     cs.init(this.pluggedValues);
-            //     controlsets[set] = cs;
-            // }
 
             return controlsets[set];
         }
@@ -88,11 +90,11 @@
          * @param layer
          * @returns {boolean|*}
          */
-        getLayerSettings(layer) {
+        getLayerProperties(layer) {
             layer = this.getLayer(layer);
 
             if (!layer.controlsets) {
-                this.setLayerSettings(layer, HC.ControlSetsManager.initAll(this.pluggedValues));
+                this.setLayerProperties(layer, HC.ControlSetsManager.initAll(this.pluggedValues));
             }
 
             return layer.controlsets;
@@ -104,7 +106,7 @@
          * @param controlsets
          * @returns {*}
          */
-        setLayerSettings(layer, controlsets) {
+        setLayerProperties(layer, controlsets) {
             layer = this.getLayer(layer);
 
             layer.controlsets = controlsets;
@@ -129,9 +131,9 @@
          *
          * @param layer
          */
-        prepare(layer) {
+        prepareLayer(layer) {
             let sets = {};
-            let controlsets = this.getLayerSettings(layer);
+            let controlsets = this.getLayerProperties(layer);
 
             for (let k in controlsets) {
                 sets[k] = controlsets[k].properties;
@@ -141,7 +143,18 @@
         }
 
         /**
-         * fixme NOT a final solution! 1rms! rewrite all plugins and everything...
+         *
+         */
+        getGlobalProperties() {
+            if (!this.globalProperties) {
+                this.globalProperties = HC.ControlSetsManager.initAll(this.pluggedValues);
+            }
+
+            return this.globalProperties;
+        }
+
+        /**
+         * fixme NOT a final solution!  drops rms by 1! rewrite all plugins and everything...
          * @param controlsets
          * @returns {Proxy}
          */

@@ -77,5 +77,5 @@ HC.plugins.oscillate = HC.plugins.oscillate || {};
         }
     }
 
-    HC.OscillatePlugin = Plugin;
+    HC.OscillatePlugin = Plugin; // todo why is this still there?
 }

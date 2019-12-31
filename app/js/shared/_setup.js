@@ -482,16 +482,18 @@ function setupResources() {
 
         }
 
-        var keys = Object.keys(settings);
-        for (var i = 0; i < keys.length; i++) {
-            var key = keys[i];
-            if (key.endsWith('_oscillate')) {
-                settings[key] = settings.oscillate;
-                statics.oscillator.push(key.replace('_oscillate', ''));
-            }
-        }
-
-        statics.ShaderValues.oscillate = settings.oscillate;
+        // fixme does not work
+        // for (let key in settings) {
+        //     let set = settings[key];
+        //     for (let prop in set) {
+        //         if (prop.endsWith('_oscillate')) {
+        //             set[prop] = settings.oscillate;
+        //             statics.oscillator.push(prop.replace('_oscillate', ''));
+        //         }
+        //     }
+        // }
+        //
+        // statics.ShaderValues.oscillate = settings.oscillate;
     }
 
     /**

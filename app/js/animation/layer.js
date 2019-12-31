@@ -137,6 +137,7 @@
             this.resetPlugins();
             this.initRotator();
             this.resetAnimation();
+
             var sgp = this.getShapeGeometryPlugin();
             if (sgp)sgp.reset();
             var smp = this.getShapeModifierPlugin();

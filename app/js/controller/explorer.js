@@ -219,15 +219,15 @@
         },
 
         loadPreset: function () {
-
+// todo PresetManager?
             explorer.setPreset(statics.ControlSettings.layer, false);
             explorer.setPreset(statics.ControlSettings.layer, this.item);
 
             if (this.item.type == 'preset') {
                 // load default
-                cm.setLayerSettings(statics.ControlSettings.layer, false);
+                cm.setLayerProperties(statics.ControlSettings.layer, false);
                 requestAnimationFrame(function () {
-                    controller.preset(false, cm.prepare(statics.ControlSettings.layer));
+                    controller.updatePreset(false, cm.prepareLayer(statics.ControlSettings.layer));
                 });
 
             } else {
@@ -249,7 +249,7 @@
                             if (contents.info && contents.info.tutorial && Object.keys(contents.info.tutorial).length) {
                                 new HC.ScriptProcessor(key, Object.create(contents.info.tutorial)).log();
                             }
-                            controller.preset(key, contents);
+                            controller.updatePreset(key, contents);
                             explorer.setLoaded(statics.ControlSettings.layer, true);
                         }
                     });
@@ -303,7 +303,7 @@
                                 controller.updateControl('layer', i, true, true);
                                 let key = data.dir + '/' + data.name;
                                 let contents = JSON.parse(data.contents);
-                                controller.preset(key, contents);
+                                controller.updatePreset(key, contents);
 
                                 if (di == dflt.length - 1) {
                                     controller.updateControl('layer', 0, true, true);
@@ -315,8 +315,8 @@
                     load(dflt[di], i, di++);
 
                 } else {
-                    controller.preset('default', statics.AnimationSettings.initial, i);
-                    //break;
+                    cm.setLayerProperties(i, false);
+                    controller.updatePreset('default', cm.prepareLayer(i), i);
                 }
             }
         },
@@ -331,7 +331,7 @@
 
                 if (layer >= 0 && child.changed) {
                     let save = function (layer, child) {
-                        let settings = cm.getLayerSettings(layer);
+                        let settings = cm.getLayerProperties(layer);
                         messaging.save(STORAGE_DIR, child.dir, child.name, settings, function (result) {
                             HC.log(result);
                             explorer.setChanged(layer, false);
@@ -349,7 +349,7 @@
 
             // let settings = statics.AnimationSettings.prepare();
             // statics.AnimationSettings.clean(settings, statics.AnimationSettings.initial);
-            let settings = cm.getLayerSettings(statics.ControlSettings.layer);
+            let settings = cm.getLayerProperties(statics.ControlSettings.layer);
             messaging.save(STORAGE_DIR, this.item.dir, this.item.name, settings, function (result) {
                 HC.log(result);
                 explorer.setPreset(statics.ControlSettings.layer, false);
@@ -420,7 +420,7 @@
                 changed: '',
                 dir: model.name,
                 name: name + '.json',
-                settings: cm.getLayerSettings(statics.ControlSettings.layer),
+                settings: cm.getLayerProperties(statics.ControlSettings.layer),
                 children: []
             };
 

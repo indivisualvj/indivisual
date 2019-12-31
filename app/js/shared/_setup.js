@@ -157,14 +157,14 @@ function setupResources() {
                 finished();
             }
         },
-        {
-            file: 'structure/AnimationController.yml',
-            callback: function (data, finished) {
-                data = jsyaml.load(data.contents);
-                statics.AnimationController = new HC.AnimationController(data, statics.AnimationSettings);
-                finished();
-            }
-        },
+        // {
+        //     file: 'structure/AnimationController.yml',
+        //     callback: function (data, finished) {
+        //         data = jsyaml.load(data.contents);
+        //         statics.AnimationController = new HC.AnimationController(data, statics.AnimationSettings);
+        //         finished();
+        //     }
+        // },
         {
             file: 'structure/AnimationTypes.yml',
             callback: function (data, finished) {
@@ -482,18 +482,7 @@ function setupResources() {
 
         }
 
-        // fixme does not work
-        // for (let key in settings) {
-        //     let set = settings[key];
-        //     for (let prop in set) {
-        //         if (prop.endsWith('_oscillate')) {
-        //             set[prop] = settings.oscillate;
-        //             statics.oscillator.push(prop.replace('_oscillate', ''));
-        //         }
-        //     }
-        // }
-        //
-        // statics.ShaderValues.oscillate = settings.oscillate;
+        statics.ShaderValues.oscillate = settings.oscillate;
     }
 
     /**

@@ -57,9 +57,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             loadResources(setupResources(), function () {
 
-                layers = new Array(statics.ControlValues.layer.length);
-                sm = new HC.SettingsManager(statics.AnimationSettings, layers);
-                cm = new HC.ControlSetsManager(layers, statics.AnimationValues);
+                sm = new HC.SettingsManager(statics.AnimationSettings, []);
+                cm = new HC.ControlSetsManager([], statics.AnimationValues);
 
                 statics.ControlController = new HC.ControlController();
                 statics.DisplayController = new HC.DisplayController();
@@ -136,10 +135,12 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         init() {
-            // todo grid layout mit einer dat gui pro controlset https://vuejsexamples.com/simple-and-flexible-vue-js-component-for-grid-layout/
-            // https://github.com/colejd/guify
-            // todo dat gui wird in controlsetui initialisiert und platziert vom layoutmanager
-            // todo dat gui käse komplett mit aktueller datgui version aufbauen
+            // todo grid layout mit einer UI instanz pro controlset https://vuejsexamples.com/simple-and-flexible-vue-js-component-for-grid-layout/
+            // todo UI wird in controlsetui initialisiert und platziert vom layoutmanager
+            // todo neue UI https://github.com/colejd/guify
+            // todo oder dat gui käse komplett mit aktueller datgui version aufbauen
+
+
 
             this.gui = new dat.GUI({autoPlace: false});
             document.getElementById('controller').appendChild(this.gui.domElement);
@@ -256,10 +257,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateControlSets(layer, data, display, forward, force) {
 
             if (force) {
-                for (let k in data) {
-                    let value = data[k];
-                    cm.update(layer, k, value);
-                }
+                cm.updateData(layer, data);
                 this.updateUi();
 
             } else {
@@ -347,13 +345,13 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         *
+         * todo CS
          * @param dir
          * @param value
          */
         setSynchronized(dir, value) {
 
-            for (let key in statics.AnimationController[dir]) {
+            for (let key in statics.AnimationController[dir]) { // todo CS
                 this.synced[key] = value;
             }
 
@@ -574,7 +572,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 } else if (item == 'reset') {
                     if (force) {
-                        sm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
+                        cm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
+                        // sm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
                     }
                 }
 
@@ -890,15 +889,14 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         * todo CS
+         *
          * @param layer
          */
         syncLayer(layer) {
-            let settings = layers[layer].settings;
+            let settings = cm.prepareLayer(layer);
 
             if (settings) {
-                settings = settings.prepare();
-                messaging.emitSettings(layer, settings, true, false, true);
+                messaging.emitControlSet(layer, settings, true, false, true);
             }
         }
 
@@ -1038,6 +1036,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 messaging.emitControls(rst, true, false, false);
 
             } else {
+                // todo CS
                 controller.updateSettings(statics.ControlSettings.layer, rst, true, false, false);
                 messaging.emitSettings(statics.ControlSettings.layer, rst, true, false, false);
             }

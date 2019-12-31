@@ -102,7 +102,7 @@
 
                 l.preset = op;
                 l.controlsets = os || HC.ControlSetsManager.initAll(statics.AnimationValues);
-                l.settings = HC.ControlSetsManager.proxy(os || l.controlsets);
+                l.settings = HC.ControlSetsManager.settingsProxy(os || l.controlsets);
 
                 this.layers[i] = l;
 

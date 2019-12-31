@@ -17,6 +17,12 @@ HC.controls = HC.controls || {};
         _name;
 
         /**
+         *
+         * @type {boolean}
+         */
+        visible = true;
+
+        /**
          * definition of all available settings
          */
         settings;
@@ -311,8 +317,9 @@ HC.controls = HC.controls || {};
             }
 
             ctl._parent = this.folder;
-            ctl._controlSetUi = this;
-            ctl._controlSet = this.controlSet;
+            // ctl._controlSetUi = this;
+            // ctl._controlSet = this.controlSet;
+            ctl.object.name = this.controlSet.name();
         }
 
 
@@ -368,8 +375,8 @@ HC.controls = HC.controls || {};
          */
         onChange(value) {
             let data = {};
-            data[this._controlSet.name()] = {};
-            data[this._controlSet.name()][this.property] = value;
+            data[this.object.name] = {};
+            data[this.object.name][this.property] = value;
 
             controller.updateControlSet(
                 statics.ControlSettings.layer,

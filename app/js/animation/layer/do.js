@@ -259,10 +259,11 @@ HC.Layer.prototype.doSizing = function (shape) {
  * @param enable
  */
 HC.Layer.prototype.doOscillate = function (enable) {
-    for (var i = 0; i < statics.oscillator.length; i++) { // fixme does not contain oscis
-        var key = statics.oscillator[i];
+    let oscillator = HC.ControlSetsManager.getAllOsciProperties();
+    for (var i = 0; i < oscillator.length; i++) {
+        var key = oscillator[i];
         var okey = key + '_oscillate';
-        if (okey in this.settings) {
+        if (this.settings[okey] !== undefined) {
             var osci = this.settings[okey];
             if (osci in HC.plugins.oscillate) {
                 var plugin = this.getOscillatePlugin(osci);

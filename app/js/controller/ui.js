@@ -53,20 +53,20 @@
             shader.apply = true;
 
             let key = this.key(name);
-            statics.AnimationSettings.passes[key] = {
-                _clean: { // fixme bullshit weg wenn passes in CS
-                    key: name,
-                    source: parent,
-                    target: shader,
+            // statics.AnimationSettings.passes[key] = {
+                // _clean: { // fixme bullshit weg wenn passes in CS
+                //     key: name,
+                //     source: parent,
+                //     target: shader,
                     // _delete: {
                     //     tree: ['apply'],
                     //     condition: false
                     // }
-                },
+                // },
 
-                name: name,
-                shader: 'target'
-            };
+                // name: name,
+                // shader: 'target'
+            // };
         }
 
         /**
@@ -146,14 +146,12 @@
 HC.Controller.prototype.addAnimationControllers = function (controlsets) {
 
     for (let cs in controlsets) {
-
-        // let cs = new HC.controls[key](key);
-        // cs.init(statics.AnimationValues);
         let set = controlsets[cs];
-        let ui = new HC.ControlSetUi(set);
-
-        ui.addFolder(this.gui);
-        ui.addControls();
+        if (set.visible !== false) {
+            let ui = new HC.ControlSetUi(set);
+            ui.addFolder(this.gui);
+            ui.addControls();
+        }
     }
 };
 

@@ -11,6 +11,7 @@
     HC.ControlSetsManager = class ControlSetsManager {
 
         static _mappings = false;
+        static _oscillatorProperties = false;
         layers;
         pluggedValues;
         globalProperties;
@@ -41,7 +42,6 @@
                 this.globalProperties[set].set(property, value);
             }
 
-            // todo update globalProperties
             return v;
         }
 
@@ -80,8 +80,6 @@
         get(layer, set) {
 
             let controlsets = this.getLayerProperties(layer);
-
-
             return controlsets[set];
         }
 
@@ -121,6 +119,12 @@
          */
         getLayer(layer) {
             if (isNumber(layer) || isString(layer)) {
+                layer = parseInt(layer);
+
+                while (!(layer in this.layers)) {
+                    this.layers.push({});
+                }
+
                 layer = this.layers[layer];
             }
 
@@ -154,11 +158,51 @@
         }
 
         /**
+         *
+         */
+        reset(heap) {
+
+            if (this.globalProperties) {
+                // todo set global properties to defaults (no reset because these are used in the UI!)
+                let defaults = HC.ControlSetsManager.initAll(this.pluggedValues);
+                let _set = function (source, target) {
+                    for (let key in source) {
+                        let s1 = source[key];
+                        if (typeof s1 == 'object') {
+                            _set(s1, target[key]);
+
+                        } else {
+                            target[key] = s1;
+                        }
+                    }
+                };
+
+                _set(defaults, this.globalProperties);
+            }
+
+            for (let layer in this.layers) {
+
+                if (heap && heap.length > 0) {
+                    if (heap.indexOf(parseInt(layer)) < 0) {
+                        continue;
+                    }
+                }
+
+                this.setLayerProperties(layer, false);
+                this.getLayerProperties(layer);
+
+                if (this.layers[layer]._current) {
+                    this.layers[layer]._current = false;
+                }
+            }
+        }
+
+        /**
          * fixme NOT a final solution!  drops rms by 1! rewrite all plugins and everything...
          * @param controlsets
          * @returns {Proxy}
          */
-        static proxy(controlsets) {
+        static settingsProxy(controlsets) {
 
             let mappings = HC.ControlSetsManager.mappings(controlsets);
 
@@ -192,11 +236,11 @@
                         if (name in props) {
                             props[name] = value;
 
-                            return value;
+                            return true;
                         }
                     }
 
-                    return undefined;
+                    return false;
                 }
             });
             return proxy;
@@ -236,6 +280,33 @@
             }
 
             return controlsets;
+        }
+
+        /**
+         *
+         * @returns {{}}
+         */
+        static getAllOsciProperties() {
+            if (!HC.ControlSetsManager._oscillatorProperties) {
+                let controlsets = HC.ControlSetsManager.initAll({});
+                let oscis = [];
+                for (let set in controlsets) {
+                    let settings = controlsets[set].settings;
+
+                    for (let prop in settings) {
+                        if (prop + '_oscillate' in settings) {
+                            oscis.push(prop);
+                        }
+                        // if (prop.endsWith('_oscillate')) {
+                        //     oscis.push(prop.replace('_oscillate', ''));
+                        // }
+                    }
+                }
+
+                HC.ControlSetsManager._oscillatorProperties = oscis;
+            }
+
+            return HC.ControlSetsManager._oscillatorProperties;
         }
     }
 }

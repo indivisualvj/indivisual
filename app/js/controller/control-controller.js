@@ -37,7 +37,8 @@
                 }
 
                 if (statics.shiftKey || statics.ctrlKey) {
-                    sm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
+                    // sm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
+                    cm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
                     controller.syncLayers();
                     controller.updateControl('reset', true, true, true, true);
                     explorer.resetPresets();

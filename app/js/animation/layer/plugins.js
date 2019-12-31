@@ -412,6 +412,7 @@ HC.Layer.prototype.reloadPlugins = function () {
             }
             var instance = this.loadPlugin(plugin, key);
             instance.construct(this, this.settings, plugin, key);
+            instance.setControlSets(this.controlsets);
             // instance.construct(this, this.controlsets, plugin, key);
             instance.inject();
             this.setPlugin(plugin, key, instance);

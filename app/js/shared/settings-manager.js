@@ -297,9 +297,6 @@
          * @returns {any}
          */
         copy(data) {
-            // todo was soll dass? ist nicht static und macht nur was mit den gegebenen daten???
-            // evtl sollte das wie get() funktionieren.
-            // ne ich mach ne funktion JSON.copy!!!
             return JSON.parse(JSON.stringify(data));
         }
 

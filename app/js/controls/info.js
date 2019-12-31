@@ -8,8 +8,9 @@
      */
     HC.controls.info = class ControlSet extends HC.ControlSet {
 
-        static index = 0;
+        static index = 5;
         static _name = 'info';
+        visible = false;
 
         settings = {
             name: 0,

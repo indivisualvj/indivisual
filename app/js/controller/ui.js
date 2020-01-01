@@ -41,51 +41,22 @@
      */
     HC.Controller.ShaderPassController = class ShaderPassController extends HC.Controller.ShaderController {
 
-        _key;
+        shader;
 
         init() {
 
             let name = this.name;
-            let shader = statics.ShaderSettings.copy(statics.ShaderSettings[name]);
-            let parent = {};
-            parent[name] = statics.AnimationSettings.initial.shaders[name];
-
+            let shader = JSON.copy(statics.ShaderSettings[name]);
             shader.apply = true;
-
-            let key = this.key(name);
-            // statics.AnimationSettings.passes[key] = {
-                // _clean: { // fixme bullshit weg wenn passes in CS
-                //     key: name,
-                //     source: parent,
-                //     target: shader,
-                    // _delete: {
-                    //     tree: ['apply'],
-                    //     condition: false
-                    // }
-                // },
-
-                // name: name,
-                // shader: 'target'
-            // };
+            this.shader = shader;
         }
 
         /**
          *
-         * @param name
          * @returns {*}
          */
-        key(name) {
-
-            if (!this._key) {
-                let i = 0;
-                while ((name + i) in statics.AnimationSettings.passes) {
-                    i++;
-                }
-
-                this._key = name + i;
-            }
-
-            return this._key;
+        getShader() {
+            return this.shader;
         }
 
         /**
@@ -122,16 +93,9 @@
                 let ctrl = new HC.Controller.ShaderPassController(name);
                 ctrl.init();
 
-                // shaderPassControllers are added/removed in updateUiPasses but we need this to still have _type in there
-                // controller.addShaderPassControllerByKey(ctrl.key(), controller._passes, ctrl);
-
-                controller.updateSetting(
+                controller.addShaderPass(
                     statics.ControlSettings.layer,
-                    'passes',
-                    statics.AnimationSettings.passes,
-                    true,
-                    true,
-                    false
+                    ctrl
                 );
             }
         }
@@ -422,21 +386,13 @@ HC.Controller.prototype.addShaderControllerByKey = function (key, dir) {
 
 /**
  *
- * @param key
- * @param dir
  * @param controller
+ * @param parent
  */
-HC.Controller.prototype.addShaderPassControllerByKey = function (key, dir, controller) {
-    var pass = statics.AnimationSettings.passes[key];
-    var sh = statics.AnimationSettings.get(['passes', key, 'shader']);
-    if (sh && sh.apply) {
-        if (pass.name in statics.ShaderSettings.initial) {
-            if (!(key in dir.__folders)) {
-                var folder = dir.addFolder(key);
-                this.addShaderController(folder, false, sh, pass.name, controller);
-            }
-        }
-    }
+HC.Controller.prototype.addShaderPassController = function (controller, parent) {
+    let folder = parent.addFolder(controller.name);
+    let sh = controller.getShader();
+    this.addShaderController(folder, false, sh, controller.name, controller);
 };
 
 
@@ -817,7 +773,7 @@ HC.Controller.prototype.updateUiPasses = function () {
         for (let k in passes) {
             if (!(k in this._passes.__folders)) {
                 let name = passes[k].name;
-                this.addShaderPassControllerByKey(k, this._passes, new HC.Controller.ShaderPassController(name));
+                this.addShaderPassController(k, this._passes, new HC.Controller.ShaderPassController(name));
             }
         }
     }

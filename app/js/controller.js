@@ -216,18 +216,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         return ia - ib;
                     });
-                    let passes = [];
+
+                    let passes = cm.get(layer, 'passes');
                     for (let key in keys) {
                         let name = keys[key];
                         let sh = value[name];
                         if (sh.apply) {
                             let pass = {};
                             pass[name] = sh;
-                            passes.push(pass);
+                            passes.addShaderPass(pass);
                         }
                     }
-
-                    console.log(passes);
 
                     // todo migrate shaders and passes to CS
                 }
@@ -533,8 +532,7 @@ document.addEventListener('DOMContentLoaded', function () {
         addShaderPass(layer, ctrl) {
             let passes = cm.get(layer, 'passes');
             let pass = {};
-            pass[ctrl.name] = ctrl.getSblu
-            hader();
+            pass[ctrl.name] = ctrl.getShader();
             passes.addShaderPass(pass);
 
             this.addShaderPassController(ctrl, this._passes);
@@ -557,10 +555,10 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         cleanShaderPasses() {
 
-            let passes = cm.get(statics.ControlSettings.layer, 'passes');
+            let passes = cm.get(statics.ControlSettings.layer, 'passes').getShaderPasses();
 
             for (let key in passes) {
-                let sh = passes.properties.shaders[key];
+                let sh = passes[key];
                 if (!sh || sh.apply === false) {
                     delete settings.passes[key];
                 }

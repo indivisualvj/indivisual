@@ -264,32 +264,34 @@
          */
         updateShaderPasses: function () {
             var shaders = null;
+            if (cm) {
+                let passes = cm.get(statics.ControlSettings.layer, 'passes');
+                let shds = passes.getShaderPasses();
 
-            for (var key in this.settings.passes) {
+                for (var index in shds) {
 
-                var pass = this.settings.passes[key];
-                var sh = this.settings.get(['passes', key, 'shader']);
+                    var shader = passes.getShader(index);
 
-                if (sh && sh.apply) {
+                    if (shader && shader.apply) {
+                        var name = passes.getShaderName(index);
+                        var plugin = this.getShaderPassPlugin(name, shader);
+                        if (plugin) {
+                            plugin.create();
+                            plugin.updateResolution();
+                            if (!shaders) {
+                                shaders = [];
+                            }
 
-                    var plugin = this.getShaderPassPlugin(pass.name, key);
-                    if (plugin) {
-                        plugin.create();
-                        plugin.updateResolution();
-                        if (!shaders) {
-                            shaders = [];
+                            shaders.push(plugin);
+
                         }
 
-                        shaders.push(plugin);
-
+                    } else {
+                        // HC.Settings.update can't delete missing settings. so delete them here...
+                        passes.removeShaderPass(index);
                     }
-
-                } else  {
-                    // HC.Settings.update can't delete missing settings. so delete them here...
-                    delete this.settings.passes[key];
                 }
             }
-
             this.shaders(shaders);
 
             return shaders;

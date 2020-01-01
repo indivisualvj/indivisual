@@ -43,12 +43,11 @@
 
         shader;
 
-        init() {
-
+        init(shader) {
             let name = this.name;
-            let shader = JSON.copy(statics.ShaderSettings[name]);
+            shader = shader || JSON.copy(statics.ShaderSettings[name]);
             shader.apply = true;
-            this.shader = shader;
+            this.setShader(shader);
         }
 
         /**
@@ -57,6 +56,14 @@
          */
         getShader() {
             return this.shader;
+        }
+
+        /**
+         *
+         * @param sh
+         */
+        setShader(sh) {
+            this.shader = sh;
         }
 
         /**
@@ -390,7 +397,7 @@ HC.Controller.prototype.addShaderControllerByKey = function (key, dir) {
  * @param parent
  */
 HC.Controller.prototype.addShaderPassController = function (controller, parent) {
-    let folder = parent.addFolder(controller.name);
+    let folder = parent.addFolder(controller.name); // todo numerate passes by count
     let sh = controller.getShader();
     this.addShaderController(folder, false, sh, controller.name, controller);
 };
@@ -759,22 +766,19 @@ HC.Controller.prototype.updateUiPasses = function () {
     if (this._passes) {
         this._passes.__controllers[0].setValue(null);
 
-
-        let passes = sm.get(statics.ControlSettings.layer).settings.passes;
-        let sKeys = Object.keys(passes);
-        let fKeys = Object.keys(this._passes.__folders);
+        let cs = cm.get(statics.ControlSettings.layer, 'passes');
+        let passes = cs.getShaderPasses();
 
         for (let f in this._passes.__folders) {
-            if (!(f in passes)) {
-                this._passes.removeFolder(f);
-            }
+            this._passes.removeFolder(f);
         }
 
         for (let k in passes) {
-            if (!(k in this._passes.__folders)) {
-                let name = passes[k].name;
-                this.addShaderPassController(k, this._passes, new HC.Controller.ShaderPassController(name));
-            }
+            let name = cs.getShaderName(k);
+            let sh = cs.getShader(k);
+            let ctrl = new HC.Controller.ShaderPassController(name);
+            ctrl.init(sh);
+            this.addShaderPassController(ctrl, this._passes);
         }
     }
 };

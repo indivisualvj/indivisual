@@ -218,6 +218,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
 
                     let passes = cm.get(layer, 'passes');
+                    passes.removeShaderPasses();
                     for (let key in keys) {
                         let name = keys[key];
                         let sh = value[name];

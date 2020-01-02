@@ -56,6 +56,7 @@
             for (let k in data) {
                 let set = k;
                 let dat = data[set];
+
                 for (let l in dat) {
                     let prop = l;
                     let val = dat[prop];

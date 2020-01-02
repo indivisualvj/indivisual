@@ -71,24 +71,16 @@
          * @param v
          */
         onChange(v) {
-
-            // shaderPassControllers are added/removed in updateUiPasses
-            controller.updateSetting(
-                statics.ControlSettings.layer,
-                'passes',
-                statics.AnimationSettings.passes,
-                true,
-                true,
-                false
-            );
-
             let name = this.__gui.name;
 
             if (this.property == 'apply' && v === false) {
-                // HC.Settings.update can't delete missing settings. so delete them here...
                 controller.cleanShaderPasses();
                 controller.updateUiPasses();
             }
+
+            let passes = cm.get(statics.ControlSettings.layer, 'passes');
+            let data = {passes: {shaders: passes.getShaderPasses()}};
+            messaging.emitControlSet(statics.ControlSettings.layer, data, false, false, false);
 
             HC.log(name + '/' + this.property, v);
         }

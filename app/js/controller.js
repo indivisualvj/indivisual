@@ -228,8 +228,6 @@ document.addEventListener('DOMContentLoaded', function () {
                             passes.addShaderPass(pass);
                         }
                     }
-
-                    // todo migrate shaders and passes to CS
                 }
             }
             this.updateUi();
@@ -536,19 +534,10 @@ document.addEventListener('DOMContentLoaded', function () {
             pass[ctrl.name] = ctrl.getShader();
             passes.addShaderPass(pass);
 
-            this.addShaderPassController(ctrl, this._passes);
-        }
+            this.updateUi();
 
-        /**
-         *
-         * @param passes
-         */
-        loadShaderPassControllers(passes) {
-            for (let key in passes) {
-                let sh = passes[key];
-                // let ctrl = new HC.Controller.ShaderPassController(sh.name);
-                // this.addShaderPassController(ctrl, this._passes);
-            }
+            let data = {passes: {shaders: passes.getShaderPasses()}};
+            messaging.emitControlSet(layer, data, false, false, false);
         }
 
         /**
@@ -556,12 +545,13 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         cleanShaderPasses() {
 
-            let passes = cm.get(statics.ControlSettings.layer, 'passes').getShaderPasses();
+            let passes = cm.get(statics.ControlSettings.layer, 'passes');
+            let shds = passes.getShaderPasses();
 
-            for (let key in passes) {
-                let sh = passes[key];
+            for (let key in shds) {
+                let sh = passes.getShader(key);
                 if (!sh || sh.apply === false) {
-                    delete settings.passes[key];
+                    passes.removeShaderPass(key);
                 }
             }
         }
@@ -944,13 +934,12 @@ document.addEventListener('DOMContentLoaded', function () {
         updatePreset(name, data, layer) {
 
             HC.log('preset', name);
-
+// todo loading a preset does not reset shaderpasses
             if (layer == undefined) {
                 layer = statics.ControlSettings.layer;
             }
 
             if (!('info' in data)) {
-                // todo does it work?
                 this.migrateSettings0(layer, data, true, false, true);
 
             // example!
@@ -962,9 +951,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             messaging.emitControlSet(layer, cm.prepareLayer(layer), false, false, true);
-
-            // this.updateSettings(layer, dflt.prepare(), true, false, true);
-            // messaging.emitSettings(layer, statics.AnimationSettings.prepare(), false, false, true);
         }
 
         /**

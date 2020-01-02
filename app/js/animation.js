@@ -647,10 +647,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // shader reset
                 case 'shaders':
-                    layer.updateShaders();
-                    break;
-
-                case 'passes':
                     layer.updateShaderPasses();
                     break;
 

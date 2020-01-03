@@ -92,6 +92,23 @@ HC.controls = HC.controls || {};
 
         /**
          *
+         * @returns {boolean}
+         */
+        isDefault() {
+            for (let key in this.settings) {
+                let set = this.settings[key];
+                let prop = this.properties[key];
+
+                if (set != prop) {
+                    return false;
+                }
+
+            }
+            return true;
+        }
+
+        /**
+         *
          * @param key
          * @returns {null|Object}
          */

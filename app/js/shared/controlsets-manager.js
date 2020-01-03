@@ -87,7 +87,7 @@
         /**
          *
          * @param layer
-         * @returns {boolean|*}
+         * @returns {Object.<string, HC.ControlSet>}
          */
         getLayerProperties(layer) {
             layer = this.getLayer(layer);
@@ -103,20 +103,17 @@
          *
          * @param layer
          * @param controlsets
-         * @returns {*}
          */
         setLayerProperties(layer, controlsets) {
             layer = this.getLayer(layer);
 
             layer.controlsets = controlsets;
-
-            return layer;
         }
 
         /**
          *
          * @param layer
-         * @returns {*}
+         * @returns {Object.<string, Object>}
          */
         getLayer(layer) {
             if (isNumber(layer) || isString(layer)) {
@@ -135,6 +132,7 @@
         /**
          *
          * @param layer
+         * @return {Object.<string, Object>}
          */
         prepareLayer(layer) {
             let sets = {};
@@ -149,6 +147,7 @@
 
         /**
          *
+         * @return {Object.<string, HC.ControlSet>}
          */
         getGlobalProperties() {
             if (!this.globalProperties) {
@@ -160,11 +159,29 @@
 
         /**
          *
+         * @param layer
+         * @returns {boolean}
+         */
+        isDefault(layer) {
+            let controlsets = this.getLayerProperties(layer);
+
+            for (let key in controlsets) {
+                let set = controlsets[key];
+                if (!set.isDefault()) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        /**
+         *
          */
         reset(heap) {
 
             if (this.globalProperties) {
-                // todo set global properties to defaults (no reset because these are used in the UI!)
+                // check does it work?
                 let defaults = HC.ControlSetsManager.initAll(this.pluggedValues);
                 let _set = function (source, target) {
                     for (let key in source) {

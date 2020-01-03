@@ -122,5 +122,13 @@
 
             return null;
         }
+
+        /**
+         *
+         * @returns {boolean}
+         */
+        isDefault() {
+            return this.properties.shaders.length === 0;
+        }
     }
 }

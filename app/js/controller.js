@@ -2,14 +2,42 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-let messaging = false;
-let explorer = false;
-let controller = false;
-let midi = false;
-let beatkeeper = false;
-let layers = false;
-let sm = false;
-let cm = false;
+/**
+ *
+ * @type {HC.Messaging}
+ */
+let messaging;
+/**
+ *
+ * @type {HC.Explorer}
+ */
+let explorer;
+/**
+ *
+ * @type {HC.Controller}
+ */
+let controller;
+/**
+ *
+ * @type {HC.Midi}
+ */
+let midi;
+/**
+ *
+ * @type {HC.Beatkeeper}
+ */
+let beatkeeper;
+
+/**
+ *
+ * @type {HC.SettingsManager}
+ */
+let sm;
+/**
+ *
+ * @type {HC.ControlSetsManager}
+ */
+let cm;
 
 /**
  *
@@ -91,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 );
                 controller.addAnimationControllers(cm.getGlobalProperties());
 
-                controller.addShaderControllers();
+                // controller.addShaderControllers();
 
                 controller.addShaderPassControllers(HC.Controller.ShaderPassController.onPasses);
 
@@ -139,8 +167,6 @@ document.addEventListener('DOMContentLoaded', function () {
             // todo UI wird in controlsetui initialisiert und platziert vom layoutmanager
             // todo neue UI https://github.com/colejd/guify
             // todo oder dat gui käse komplett mit aktueller datgui version aufbauen
-
-
 
             this.gui = new dat.GUI({autoPlace: false});
             document.getElementById('controller').appendChild(this.gui.domElement);
@@ -209,9 +235,11 @@ document.addEventListener('DOMContentLoaded', function () {
                         cm.update(layer, set, k, value);
                     }
 
-                } else if (k == 'shaders') {
+                } else if (k == 'shaders' || k == 'passes') {
                     // sort shaders by index
                     delete value._template;
+                    delete value.isdefault;
+                    delete value.initial;
                     let keys = Object.keys(value);
                     keys.sort(function (a, b) {
                         let ia = value[a].index;
@@ -319,16 +347,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 settings[folder] = statics.AnimationSettings[folder];
             }
 
-            for (let i = 0; i < layers.length; i++) {
+            for (let i = 0; i < cm.layers.length; i++) {
                 if (i != statics.ControlSettings.layer
-                    && (i in layers)
-                    && layers[i].settings
-                    && !layers[i].settings.isDefault()
+                    && (i in cm.layers)
+                    && cm.layers[i].controlsets // check need this?
+                    && !cm.isDefault(i)
                     && layerShuffleable(i) == layerShuffleable(statics.ControlSettings.layer)
                 ) {
                     this.updateSettings(i, settings, true, false, true);
 
-                    if (layers[i]._preset) {
+                    if (cm.layers[i]._preset) {
                         explorer.setChanged(i, true);
                     }
 
@@ -346,17 +374,16 @@ document.addEventListener('DOMContentLoaded', function () {
             let data = {};
             data[item] = value;
 
-            for (let i = 0; i < layers.length; i++) {
+            for (let i = 0; i < cm.layers.length; i++) {
                 if (i != statics.ControlSettings.layer
-                    && (i in layers)
-                    && layers[i].settings
-                    && !layers[i].settings.isDefault()
+                    && cm.layers[i].controlsets
+                    && !cm.isDefault(i)
                     && layerShuffleable(i) == layerShuffleable(statics.ControlSettings.layer)
                 ) {
 
                     this.updateSettings(i, data, true, false, true);
 
-                    if (layers[i]._preset) {
+                    if (cm.layers[i]._preset) {
                         explorer.setChanged(i, true);
                     }
 
@@ -372,7 +399,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         setSynchronized(dir, value) {
 
-            for (let key in statics.AnimationController[dir]) { // todo CS
+            for (let key in statics.AnimationController[dir]) {
                 this.synced[key] = value;
             }
 
@@ -891,7 +918,7 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         syncLayers() {
-            for (let layer in layers) {
+            for (let layer in cm.layers) {
                 let to = parseInt(layer) * 150;
 
                 let st = (layer, to) => {
@@ -980,17 +1007,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
             shaders = nu;
 
-            for (let i = 0; i < layers.length; i++) {
-                if ((i in layers)
-                    && layers[i].settings
-                    && layers[i].settings.shaders
-                    && !layers[i].settings.isDefault()
+            for (let i = 0; i < cm.layers.length; i++) {
+                if (cm.layers[i].controlsets
+                    && cm.layers[i].controlsets.passes
+                    && !cm.isDefault(i)
                     && layerShuffleable(i) == layerShuffleable(statics.ControlSettings.layer)
                 ) {
                     let settings = {shaders: shaders};
                     this.updateSettings(i, settings, true, false, true);
 
-                    if (layers[i]._preset) {
+                    if (cm.layers[i]._preset) {
                         explorer.setChanged(i, true);
                     }
 
@@ -1005,16 +1031,11 @@ document.addEventListener('DOMContentLoaded', function () {
         refreshLayerInfo() {
             let preset = [];
 
-            for (let i = 0; i < layers.length; i++) {
-                if (layers[i]) {
-                    let l = layers[i];
-
-                    if (l.settings) {
-                        let s = l.settings;
-                        // todo cm.isDefault(l)
-                        if (!s.isDefault() && layerShuffleable(i)) {
-                            preset.push(i + 1);
-                        }
+            for (let i = 0; i < cm.layers.length; i++) {
+                if (cm.layers[i]) {
+                    let l = cm.getLayer(i);
+                    if (!cm.isDefault(l) && layerShuffleable(i)) {
+                        preset.push(i + 1);
                     }
                 }
             }

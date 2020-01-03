@@ -90,7 +90,7 @@
          * @param model
          */
         setPreset(layer, model) {
-            let l = sm.get(layer);
+            let l = cm.getLayer(layer);
             if (model) {
                 model.layer = layer + 1;
                 model.loaded = false;
@@ -101,14 +101,14 @@
                 l._preset.changed = '';
                 l._preset.layer = '';
             }
-            l._preset = model;
+            l._preset = model; // todo find better way to store preset info
         }
 
         /**
          * 
          */
         resetPresets() {
-            for (let i = 0; i < layers.length; i++) {
+            for (let i = 0; i < cm.layers.length; i++) {
                 this.setPreset(i, false);
             }
         }
@@ -119,7 +119,7 @@
          * @param changed
          */
         setChanged(layer, changed) {
-            let l = sm.get(layer);
+            let l = cm.getLayer(layer);
             if (l._preset) {
                 if (changed) {
                     l._preset.changed = '*';
@@ -136,7 +136,7 @@
          * @param loaded
          */
         setLoaded(layer, loaded) {
-            let l = sm.get(layer);
+            let l = cm.getLayer(layer);
             if (l._preset) {
                 l._preset.loaded = loaded;
             }
@@ -146,7 +146,7 @@
          * 
          */
         resetLoaded() {
-            for (let i = 0; i < layers.length; i++) {
+            for (let i = 0; i < cm.layers.length; i++) {
                 this.setLoaded(i, false);
             }
         }
@@ -261,7 +261,7 @@
             let children = this.item.children;
             let dflt = [];
 
-            for (let i = 0; dflt.length < layers.length && i < children.length; i++) {
+            for (let i = 0; dflt.length < cm.layers.length && i < children.length; i++) {
                 let child = children[i];
                 if (!child.name.match(/^_.+/)) {
                     dflt.push(child);
@@ -276,11 +276,11 @@
 
             HC.clearLog();
 
-            for (let i = 0; i < layers.length; i++) {
+            for (let i = 0; i < cm.layers.length; i++) {
                 if (statics.shiftKey) { // shift means append presets to free layers. no overwrite.
-                    if ((i in layers)
-                        && layers[i].settings
-                        && !layers[i].settings.isDefault()
+                    if ((i in cm.layers)
+                        && cm.layers[i].controlsets
+                        && cm.isDefault(i)
                     ) {
                         continue;
                     }

@@ -2,17 +2,60 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-var messaging = false;
-var audio = false;
-var audioman = false;
-var beatkeeper = false;
-var animation = false;
-var renderer = false;
-var displayman = false;
-var sourceman = false;
-var listener = false;
-var sm = false;
-var cm = false;
+/**
+ *
+ * @type {HC.Messaging}
+ */
+let messaging;
+/**
+ *
+ * @type {HC.AudioManager}
+ */
+let audioman;
+/**
+ *
+ * @type {HC.Animation}
+ */
+let animation;
+/**
+ *
+ * @type {HC.Renderer}
+ */
+let renderer;
+/**
+ *
+ * @type {HC.Beatkeeper}
+ */
+let beatkeeper;
+/**
+ * @type {HC.AudioAnalyser}
+ */
+let audio;
+/**
+ *
+ * @type {HC.DisplayManager}
+ */
+let displayman;
+/**
+ *
+ * @type {HC.SourceManager}
+ */
+let sourceman;
+/**
+ *
+ * @type {HC.Listener}
+ */
+let listener;
+/**
+ *
+ * @type {HC.SettingsManager}
+ */
+let sm;
+/**
+ *
+ * @type {HC.ControlSetsManager}
+ */
+let cm;
 
 /**
  *

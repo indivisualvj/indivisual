@@ -270,6 +270,11 @@
         static mappings(controlsets) {
             if (!HC.ControlSetsManager._mappings) {
                 let mappings = {};
+
+                if (typeof controlsets == 'function') {
+                    controlsets = controlsets();
+                }
+
                 for (let set in controlsets) {
                     let settings = controlsets[set].settings;
 

@@ -30,11 +30,6 @@ let beatkeeper;
 
 /**
  *
- * @type {HC.SettingsManager}
- */
-let sm;
-/**
- *
  * @type {HC.ControlSetsManager}
  */
 let cm;
@@ -85,7 +80,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             loadResources(setupResources(), function () {
 
-                sm = new HC.SettingsManager(statics.AnimationSettings, []);
                 cm = new HC.ControlSetsManager([], statics.AnimationValues);
 
                 statics.ControlController = new HC.ControlController();
@@ -121,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // controller.addShaderControllers();
 
-                controller.addShaderPassControllers(HC.Controller.ShaderPassController.onPasses);
+                controller.addShaderPassControllers(HC.ShaderPassUi.onPasses);
 
                 explorer = new HC.Explorer();
                 explorer.init();
@@ -200,13 +194,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.updateControlSets(k, settings[k], true, false, true);
                 }
             }
-            // if ('settings' in session) {
-            //     HC.log('settings', 'synced');
-            //     let settings = session.settings;
-            //     for (let k in settings) {
-            //         this.updateSettings(k, settings[k], true, false, true);
-            //     }
-            // }
             if ('data' in session) {
                 HC.log('data', 'synced');
                 this.updateData();
@@ -222,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         migrateSettings0(layer, data) {
 
-            let mappings = HC.ControlSetsManager.mappings(HC.ControlSetsManager.initAll(statics.AnimationValues));
+            let mappings = HC.ControlSetsManager.mappings(() => {return HC.ControlSetsManager.initAll(statics.AnimationValues);});
 
             let passes = cm.get(layer, 'passes');
             passes.removeShaderPasses();
@@ -269,40 +256,6 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param forward
          * @param force
          */
-        updateSettings(layer, data, display, forward, force) {
-
-            if (force) {
-                for (let k in data) {
-                    let value = data[k];
-                    sm.update(layer, k, value);
-                }
-                this.updateUi();
-
-            } else {
-                for (let k in data) {
-                    let value = data[k];
-                    this.updateSetting(layer, k, value, display, false, false);
-                }
-            }
-
-            if (forward) {
-                /**
-                 * we don't want forwarding here because:
-                 * - it could be enabled when coming from messaging.onSettings
-                 * - there are several calls of updateSetting(....forward=true and then messaging.emitSettings that disallow
-                 * calling messaging.emitSettings here
-                 *
-                 */
-            }
-        }
-
-        /**
-         *
-         * @param data
-         * @param display
-         * @param forward
-         * @param force
-         */
         updateControlSets(layer, data, display, forward, force) {
 
             if (force) {
@@ -329,77 +282,99 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         * todo CS
+         *
          * @param folder
          * @param datasource
          */
         shareSettings(folder, datasource) {
 
             let settings = {};
+            let controlsets = cm.prepareLayer(statics.ControlSettings.layer);
             if (!datasource) {
-                let keys = Object.keys(statics.AnimationController[folder]);
+                let keys = Object.keys(controlsets[folder]);
 
                 for (let i = 0; i < keys.length; i++) {
-                    settings[keys[i]] = statics.AnimationSettings[keys[i]];
+                    settings[keys[i]] = controlsets[folder][keys[i]];
                 }
 
             } else {
-                settings[folder] = statics.AnimationSettings[folder];
+                settings[folder] = controlsets[folder];
             }
 
-            for (let i = 0; i < cm.layers.length; i++) {
-                if (i != statics.ControlSettings.layer
-                    && (i in cm.layers)
-                    && cm.layers[i].controlsets // check need this?
-                    && !cm.isDefault(i)
-                    && layerShuffleable(i) == layerShuffleable(statics.ControlSettings.layer)
-                ) {
-                    this.updateSettings(i, settings, true, false, true);
+            let data = {};
+            data[folder] = settings;
 
-                    if (cm.layers[i]._preset) {
-                        explorer.setChanged(i, true);
-                    }
-
-                    messaging.emitSettings(i, settings, false, false, true);
+            for (let i = 0; i < statics.ControlValues.layer.length; i++) {
+                if (i == statics.ControlSettings.layer) {
+                    console.log('currentlayer');
+                    continue;
                 }
+                if (cm.isDefault(i)) {
+                    console.log('isdefault');
+                    continue;
+                }
+                if (layerShuffleable(i) != layerShuffleable(statics.ControlSettings.layer)) {
+                    console.log('not same kind of shuffleable');
+                    continue;
+                }
+
+                this.updateControlSets(i, data, true, false, true);
+
+                if (cm.layers[i]._preset) {
+                    explorer.setChanged(i, true);
+                }
+
+                messaging.emitControlSet(i, data, false, false, true);
+
             }
         }
 
         /**
-         * todo CS
+         *
          * @param item
          * @param value
          */
         shareSetting(item, value) {
+            let mappings = HC.ControlSetsManager.mappings(() => {return HC.ControlSetsManager.initAll(statics.AnimationValues);});
+            let set = mappings[item];
             let data = {};
-            data[item] = value;
+            data[set] = {};
+            data[set][item] = value;
 
-            for (let i = 0; i < cm.layers.length; i++) {
-                if (i != statics.ControlSettings.layer
-                    && cm.layers[i].controlsets
-                    && !cm.isDefault(i)
-                    && layerShuffleable(i) == layerShuffleable(statics.ControlSettings.layer)
-                ) {
-
-                    this.updateSettings(i, data, true, false, true);
-
-                    if (cm.layers[i]._preset) {
-                        explorer.setChanged(i, true);
-                    }
-
-                    messaging.emitSettings(i, data, false, false, true);
+            for (let i = 0; i < statics.ControlValues.layer.length; i++) {
+                if (i == statics.ControlSettings.layer) {
+                    console.log('currentlayer');
+                    continue;
                 }
+                if (cm.isDefault(i)) {
+                    console.log('isdefault');
+                    continue;
+                }
+                if (layerShuffleable(i) != layerShuffleable(statics.ControlSettings.layer)) {
+                    console.log('not same kind of shuffleable');
+                    continue;
+                }
+
+                this.updateControlSets(i, data, false, false, true);
+
+                if (cm.layers[i]._preset) {
+                    explorer.setChanged(i, true);
+                }
+
+                messaging.emitControlSet(i, data, false, false, true);
+                // messaging.emitSettings(i, data, false, false, true);
             }
         }
 
         /**
-         * todo CS
+         *
          * @param dir
          * @param value
          */
         setSynchronized(dir, value) {
 
-            for (let key in statics.AnimationController[dir]) {
+            let controlsets = cm.prepareLayer(0);
+            for (let key in controlsets[dir]) {
                 this.synced[key] = value;
             }
 
@@ -481,45 +456,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         * todo delete CS
-         *
-         * @param layer
-         * @param item
-         * @param value
-         * @param display
-         * @param forward
-         * @param force
-         *
-         */
-        updateSetting(layer, item, value, display, forward, force) {
-
-            if (typeof value != 'object') {
-                HC.log(item, value);
-                this.explainPlugin(item, value);
-            }
-
-            if (statics.AnimationSettings.contains(item)) {
-
-                value = sm.update(layer, item, value);
-
-                if (item in this.synced && this.synced[item]) {
-                    this.shareSetting(item, value);
-                }
-
-                if (forward) {
-                    let data = {};
-                    data[item] = value;
-                    messaging.emitSettings(layer, data, display, false, false);
-                }
-
-                if (display !== false) {
-                    this.updateUi(item);
-                    explorer.setChanged(statics.ControlSettings.layer, true);
-                }
-            }
-        }
-
-        /**
          *
          * @param layer
          * @param data
@@ -573,13 +509,13 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         cleanShaderPasses() {
 
-            let passes = cm.get(statics.ControlSettings.layer, 'passes');
-            let shds = passes.getShaderPasses();
+            let cs = cm.get(statics.ControlSettings.layer, 'passes');
+            let passes = cs.getShaderPasses();
 
-            for (let key in shds) {
-                let sh = passes.getShader(key);
+            for (let key in passes) {
+                let sh = cs.getShader(key);
                 if (!sh || sh.apply === false) {
-                    passes.removeShaderPass(key);
+                    cs.removeShaderPass(key);
                 }
             }
         }
@@ -608,8 +544,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 value = statics.ControlSettings.update(item, value);
 
                 if (item == 'layer') {
-
-                    // this.updateSettings(value, l.settings.prepare(), true, false, true);
                     this.updateControlSets(value, cm.prepareLayer(value), true, false, true);
 
                     explorer.resetLoaded();
@@ -982,7 +916,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         *
+         * todo CS
          * @param name
          * @param data
          */
@@ -1007,20 +941,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
             shaders = nu;
 
-            for (let i = 0; i < cm.layers.length; i++) {
-                if (cm.layers[i].controlsets
-                    && cm.layers[i].controlsets.passes
-                    && !cm.isDefault(i)
+            for (let i = 0; i < statics.ControlValues.layer.length; i++) {
+                if (!cm.get(i, 'passes').isDefault()
                     && layerShuffleable(i) == layerShuffleable(statics.ControlSettings.layer)
                 ) {
                     let settings = {shaders: shaders};
-                    this.updateSettings(i, settings, true, false, true);
+                    // this.updateSettings(i, settings, true, false, true);
 
                     if (cm.layers[i]._preset) {
                         explorer.setChanged(i, true);
                     }
 
-                    messaging.emitSettings(i, settings, false, false, true);
+                    // messaging.emitSettings(i, settings, false, false, true);
                 }
             }
         }
@@ -1031,7 +963,7 @@ document.addEventListener('DOMContentLoaded', function () {
         refreshLayerInfo() {
             let preset = [];
 
-            for (let i = 0; i < cm.layers.length; i++) {
+            for (let i = 0; i < statics.ControlValues.layer.length; i++) {
                 if (cm.layers[i]) {
                     let l = cm.getLayer(i);
                     if (!cm.isDefault(l) && layerShuffleable(i)) {
@@ -1055,34 +987,16 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param open
          */
         resetFolder(open) {
-            let rst = {};
-            let controls = false;
-            for (let i = 0; i < open.__controllers.length; i++) {
-                let ctl = open.__controllers[i];
-
-                if ('play' in ctl.object) {
-                    controls = true;
-                    if (statics.ControlSettings.contains(ctl.property)) {
-                        let val = statics.ControlSettings.initial[ctl.property];
-                        rst[ctl.property] = val;
-                    }
-
-                } else {
-                    if (statics.AnimationSettings.contains(ctl.property)) {
-                        let val = statics.AnimationSettings.initial[ctl.property];
-                        rst[ctl.property] = val;
-                    }
+            if (open.__controllers.length) {
+                let ctl = open.__controllers[0];
+                let mappings = HC.ControlSetsManager.mappings(() => {return HC.ControlSetsManager.initAll(statics.AnimationValues);});
+                let set = mappings[ctl.property];
+                if (set) {
+                    let cs = cm.get(statics.ControlSettings.layer, set);
+                    cs.reset();
+                    let data = cs.prepare();
+                    controller.updateControlSet(statics.ControlSettings.layer, data, true, true, false);
                 }
-            }
-
-            if (controls) {
-                controller.updateControls(rst, true, false);
-                messaging.emitControls(rst, true, false, false);
-
-            } else {
-                // todo CS
-                controller.updateSettings(statics.ControlSettings.layer, rst, true, false, false);
-                messaging.emitSettings(statics.ControlSettings.layer, rst, true, false, false);
             }
         }
     }

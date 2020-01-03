@@ -2,7 +2,7 @@
     class Plugin extends HC.AnimationPlugin {
         static name = 'drop Z';
         static tutorial = {
-            activate: {
+            activate: { // todo CS
                 text: 'Accelerates shapes on Z-Axis towards the Camera. To make it work perfectly, set pattern_overlay_volume to 1.0',
                 action: function () {
                     controller.closeAll();
@@ -10,7 +10,7 @@
                     controller.updateSetting(statics.ControlSettings.layer, 'pattern_overlay_volume', 1, true, true);
                 }
             },
-            invert: {
+            invert: { // todo CS
                 text: 'To invert movement, twist the layer by 180°',
                 action: function () {
                     controller.closeAll();

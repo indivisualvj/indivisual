@@ -11,13 +11,13 @@
             shape_modb: {
                 text: 'set the initial direction of the shape (shape_modb x 360/shape_moda/2 = degrees)'
             },
-            circle: {
+            circle: { // todo CS
                 text: 'set number of edges to 32',
                 action: function () {
                     controller.updateSetting(statics.ControlSettings.layer, 'shape_moda', 32, true, true);
                 }
             },
-            hive: {
+            hive: { // todo CS
                 text: 'Create a hive by setting pattern to hive, shape_sizedivider to 16, edges to 6 and initial direction to 2',
                 action: function () {
                     let data = {

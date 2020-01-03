@@ -58,7 +58,6 @@
             this.on('controls', this.onControls);
             this.on('displays', this.onDisplays);
             this.on('sources', this.onSources);
-            this.on('settings', this.onSettings);
             this.on('controlset', this.onControlSet);
             this.on('attr', this.onAttr);
             this.on('midi', this.onMidi);
@@ -100,17 +99,6 @@
          */
         _join() {
             this._emit({action: 'join', name: this.program.name});
-        }
-
-        /**
-         *
-         * @param data
-         * @param that
-         */
-        onSettings(data, that) {
-            requestAnimationFrame(function () {
-                that.program.updateSettings(data.layer, data.data, data.controls, data.forward, data.force);
-            });
         }
 
         /**
@@ -348,35 +336,6 @@
                     controls: display,
                     forward: forward,
                     force: force
-                };
-
-                this._emit(config);
-            }
-        }
-
-        /**
-         *
-         * @param layer
-         * @param data
-         * @param display
-         * @param forward
-         * @param force
-         */
-        emitSettings(layer, data, display, forward, force) {
-            if (data) {
-                if (data instanceof HC.Settings) {
-                    data = data.prepare();
-                }
-
-                statics.AnimationSettings.clean(data, statics.AnimationSettings.initial);
-
-                let config = {
-                    action: 'settings',
-                    data: data,
-                    controls: display,
-                    forward: forward,
-                    force: force,
-                    layer: layer
                 };
 
                 this._emit(config);

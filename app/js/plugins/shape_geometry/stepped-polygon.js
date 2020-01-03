@@ -15,7 +15,7 @@
             shape_modc: {
                 text: 'set number of stepped overlapping shapes'
             },
-            steprect: {
+            steprect: { // todo CS
                 text: 'Set overlapping shapes to 4. Set number of edges to 4. Set direction to 2. Set material_blending to normal or additive and reduce coloring_opacity to make the single steps shine through',
                 action: function () {
                     controller.updateSetting(statics.ControlSettings.layer, 'shape_moda', 4, true, true);

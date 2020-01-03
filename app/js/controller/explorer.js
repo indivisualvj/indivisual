@@ -108,7 +108,7 @@
          * 
          */
         resetPresets() {
-            for (let i = 0; i < cm.layers.length; i++) {
+            for (let i = 0; i < statics.ControlValues.layer.length; i++) {
                 this.setPreset(i, false);
             }
         }
@@ -146,7 +146,7 @@
          * 
          */
         resetLoaded() {
-            for (let i = 0; i < cm.layers.length; i++) {
+            for (let i = 0; i < statics.ControlValues.layer.length; i++) {
                 this.setLoaded(i, false);
             }
         }
@@ -261,7 +261,7 @@
             let children = this.item.children;
             let dflt = [];
 
-            for (let i = 0; dflt.length < cm.layers.length && i < children.length; i++) {
+            for (let i = 0; dflt.length < statics.ControlValues.layer.length && i < children.length; i++) {
                 let child = children[i];
                 if (!child.name.match(/^_.+/)) {
                     dflt.push(child);
@@ -276,12 +276,9 @@
 
             HC.clearLog();
 
-            for (let i = 0; i < cm.layers.length; i++) {
+            for (let i = 0; i < statics.ControlValues.layer.length; i++) {
                 if (statics.shiftKey) { // shift means append presets to free layers. no overwrite.
-                    if ((i in cm.layers)
-                        && cm.layers[i].controlsets
-                        && cm.isDefault(i)
-                    ) {
+                    if (cm.isDefault(i)) {
                         continue;
                     }
                 }
@@ -331,7 +328,7 @@
 
                 if (layer >= 0 && child.changed) {
                     let save = function (layer, child) {
-                        let settings = cm.getLayerProperties(layer);
+                        let settings = cm.prepareLayer(layer);
                         messaging.save(STORAGE_DIR, child.dir, child.name, settings, function (result) {
                             HC.log(result);
                             explorer.setChanged(layer, false);
@@ -347,9 +344,7 @@
 
             let model = this.item;
 
-            // let settings = statics.AnimationSettings.prepare();
-            // statics.AnimationSettings.clean(settings, statics.AnimationSettings.initial);
-            let settings = cm.getLayerProperties(statics.ControlSettings.layer);
+            let settings = cm.prepareLayer(statics.ControlSettings.layer);
             messaging.save(STORAGE_DIR, this.item.dir, this.item.name, settings, function (result) {
                 HC.log(result);
                 explorer.setPreset(statics.ControlSettings.layer, false);

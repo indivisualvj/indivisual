@@ -587,7 +587,7 @@ var Shapetastic = function(inst) {
         vertices = vertices.replace(/\.(\d{4})(\d+)/gm, '.$1');
 
         vertices = vertices.slice(1, vertices.length - 1);
-
+        // todo CS
         animation.updateSetting(statics.ControlSettings.layer, 'shape_vertices', vertices, jo, jo);
     };
 

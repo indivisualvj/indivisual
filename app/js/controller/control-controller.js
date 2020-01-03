@@ -57,6 +57,7 @@
                 controller.pushSources();
             },
             rst_shaders: function () {
+                // todo CS
                 controller.shaders('default', statics.AnimationSettings.initial, true);
             },
             debug: statics.ControlSettings.debug,

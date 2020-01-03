@@ -6,92 +6,6 @@
 
     /**
      *
-     * @type {HC.SettingsManager}
-     */
-    HC.SettingsManager = class SettingsManager {
-
-        settings;
-        layers;
-
-        /**
-         *
-         * @param settings
-         * @param layers
-         */
-        constructor(settings, layers) {
-            this.settings = settings;
-            this.layers = layers;
-        }
-
-        /**
-         *
-         */
-        reset(heap) {
-
-            this.settings.reset();
-
-            for (let layer in this.layers) {
-
-                if (heap && heap.length > 0) {
-                    if (heap.indexOf(parseInt(layer)) < 0) {
-                        continue;
-                    }
-                }
-
-                this.layers[layer].settings.reset();
-                if (this.layers[layer]._current) {
-                    this.layers[layer]._current = false;
-                }
-            }
-        }
-
-        /**
-         *
-         * @param layer
-         * @param key
-         * @param value
-         * @returns {*}
-         */
-        update(layer, key, value) {
-
-            let l = this.get(layer);
-
-            let v = l.settings.update(key, value);
-
-            if (this.settings) {
-                v = this.settings.update(key, value);
-            }
-            return v;
-        }
-
-        /**
-         *
-         * @param layer
-         * @returns {*}
-         */
-        get(layer) {
-            while (!layer in this.layers) {
-                this.layers.push({});
-            }
-
-            if (!this.layers[layer]) {
-                this.layers[layer] = {}
-            }
-
-            if (!this.layers[layer].settings) {
-                let d = this.settings.defaults();
-                this.layers[layer].settings = d;
-            }
-
-            return this.layers[layer];
-        }
-    }
-}
-
-{
-
-    /**
-     *
      * @type {HC.Settings}
      */
     HC.Settings = class Settings {
@@ -322,7 +236,7 @@
         validate(item, value, initial) {
 
             let type = typeof value;
-            // check if string contains float and then convert
+            // _check if string contains float and then convert
             if (type == 'string') {
                 let f = parseFloat(value);
                 if (f && f.toString().length == value.length) {

@@ -18,17 +18,24 @@ HC.controls = HC.controls || {};
 
         /**
          *
+         */
+        _className;
+
+        /**
+         *
          * @type {boolean}
          */
         visible = true;
 
         /**
          * definition of all available settings
+         * @type {Object.<string, *>}
          */
         settings;
 
         /**
          * actual settings
+         * @type {Object.<string, *>}
          */
         properties;
 
@@ -39,7 +46,7 @@ HC.controls = HC.controls || {};
 
         /**
          *
-         * @type {{}}
+         * @type {Object.<string, *>}
          */
         values = {};
 
@@ -48,6 +55,7 @@ HC.controls = HC.controls || {};
          * @param name
          */
         constructor(name) {
+            this._className = name;
             if (!this.__proto__._name) {
                 this._name = name;
             } else {
@@ -60,17 +68,19 @@ HC.controls = HC.controls || {};
          * @param pluggedValues
          * @param reset
          */
-        init(pluggedValues, reset) {
-            if (!this.properties || reset) {
+        init(pluggedValues) {
+            if (!this.properties) {
                 this.properties = this.defaults();
             }
 
-            for (let key in this.settings) {
-                if (key.endsWith('_oscillate')) {
-                    this.values[key] = pluggedValues.oscillate;
+            if (pluggedValues) {
+                for (let key in this.settings) {
+                    if (key.endsWith('_oscillate')) {
+                        this.values[key] = pluggedValues.oscillate;
 
-                } else if (key in pluggedValues) {
-                    this.values[key] = pluggedValues[key];
+                    } else if (key in pluggedValues) {
+                        this.values[key] = pluggedValues[key];
+                    }
                 }
             }
         }
@@ -79,7 +89,16 @@ HC.controls = HC.controls || {};
          *
          */
         reset() {
-            this.init(true);
+            this.setAll(this.defaults());
+        }
+
+        /**
+         * @type {Object.<string, Object.<string, *>>}
+         */
+        prepare() {
+            let data = {};
+            data[this.className()] = this.properties;
+            return data;
         }
 
         /**
@@ -136,6 +155,16 @@ HC.controls = HC.controls || {};
             }
 
             return this.properties[key];
+        }
+
+        /**
+         *
+         * @param data
+         */
+        setAll(data) {
+            for (let k in data) {
+                this.set(k, data[k]);
+            }
         }
 
         /**
@@ -231,10 +260,18 @@ HC.controls = HC.controls || {};
 
         /**
          *
-         * @returns {*}
+         * @returns {string}
          */
         name() {
             return this._name;
+        }
+
+        /**
+         *
+         * @return {string}
+         */
+        className() {
+            return this._className;
         }
     }
 }
@@ -245,7 +282,10 @@ HC.controls = HC.controls || {};
      * @type {HC.ControlSetUi}
      */
     HC.ControlSetUi = class ControlSetUi {
-        
+
+        /**
+         * @type {HC.ControlSet}
+         */
         controlSet;
         folder;
 
@@ -263,8 +303,9 @@ HC.controls = HC.controls || {};
          * @returns {*}
          */
         addFolder(parent) {
-            let key = this.controlSet.name();
-            this.folder = parent.addFolder(key);
+            let key = this.controlSet.className();
+            let name = this.controlSet.name()
+            this.folder = parent.addFolder(name);
             this.folder.__ul.parentNode.parentNode.setAttribute('data-id', key);
 
             this._addShareListener(key, this.folder, false);
@@ -402,6 +443,99 @@ HC.controls = HC.controls || {};
                 true,
                 false
             );
+
+            HC.log(this.object.name + '/' + this.property, value);
+        }
+    }
+}
+
+{
+    /**
+     *
+     * @type {HC.ShaderPassUi}
+     */
+    HC.ShaderPassUi = class ShaderPassUi {
+
+        shader;
+        name;
+
+        /**
+         *
+         * @param name
+         */
+        constructor(name) {
+            this.name = name;
+        }
+
+        /**
+         *
+         * @param shader
+         */
+        init(shader) {
+            shader.apply = true;
+            this.setShader(shader);
+        }
+
+        /**
+         *
+         * @returns {*}
+         */
+        getShader() {
+            return this.shader;
+        }
+
+        /**
+         *
+         * @param sh
+         */
+        setShader(sh) {
+            this.shader = sh;
+        }
+
+        /**
+         *
+         * @param v
+         */
+        onChange(v) {
+            if (this.property == 'apply' && v === false) {
+                controller.cleanShaderPasses();
+                controller.updateUiPasses();
+            }
+
+            let passes = cm.get(statics.ControlSettings.layer, 'passes');
+            let data = {passes: {shaders: passes.getShaderPasses()}};
+            messaging.emitControlSet(statics.ControlSettings.layer, data, false, false, false);
+
+            let name = this.__gui ? this.__gui.name : this.property;
+            HC.log(name + '/' + this.property, v);
+        }
+
+        /**
+         *
+         * @return {*}
+         */
+        getInitialSettings() {
+            // todo statics becomes HC.collections
+            return statics.ShaderSettings[this.name];
+        }
+
+        /**
+         *
+         * @param v
+         */
+        static onPasses(v) {
+
+            if (v in statics.Passes) {
+                let name = statics.Passes[v];
+                let ctrl = new HC.ShaderPassUi(name);
+                let sh = JSON.copy(statics.ShaderSettings[name]);
+                ctrl.init(sh);
+
+                controller.addShaderPass(
+                    statics.ControlSettings.layer,
+                    ctrl
+                );
+            }
         }
     }
 }

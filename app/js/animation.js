@@ -48,11 +48,6 @@ let sourceman;
 let listener;
 /**
  *
- * @type {HC.SettingsManager}
- */
-let sm;
-/**
- *
  * @type {HC.ControlSetsManager}
  */
 let cm;
@@ -101,7 +96,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                 }
 
-                sm = new HC.SettingsManager(statics.AnimationSettings, renderer.layers);
                 cm = new HC.ControlSetsManager(renderer.layers, statics.AnimationValues);
 
                 displayman = new HC.DisplayManager({
@@ -579,87 +573,6 @@ document.addEventListener('DOMContentLoaded', function () {
         /**
          *
          * @param layer
-         * @param item
-         * @param value
-         * @param display
-         * @param forward
-         * @param force
-         */
-        updateSetting(layer, item, value, display, forward, force) {
-
-            if (statics.AnimationSettings.contains(item)) {
-
-                value = sm.update(layer, item, value);
-
-                let layerIndex = layer;
-                layer = renderer.layers[layer];
-
-                switch (item) {
-
-                    // complete layer reset:
-                    case 'shape_sizedivider':
-                    case 'pattern_shapes':
-                        renderer.resetLayer(layer);
-                        break;
-
-                    // shader reset
-                    case 'shaders':
-                        layer.updateShaders();
-                        break;
-
-                    case 'passes':
-                        layer.updateShaderPasses();
-                        break;
-
-                    case 'lighting_ambient':
-                        layer.resetAmbientLight();
-                        break;
-
-                    case 'lighting_type':
-                    case 'lighting_pattern_lights':
-                        layer.resetLighting();
-                        break;
-
-                    case 'lighting_fog':
-                        layer.resetFog();
-                        break;
-
-                    // reload shapes
-                    case 'pattern':
-                    case 'pattern_mover':
-                    case 'shape_modifier':
-                    case 'shape_modifier_volume':
-                    case 'shape_geometry':
-                    case 'shape_transform':
-                    case 'mesh_material':
-                    case 'material_mapping':
-                    case 'shape_moda':
-                    case 'shape_modb':
-                    case 'shape_modc':
-                        layer.resetShapes();
-                        break;
-
-                    // special case for shapetastic
-                    case 'shape_vertices':
-                        if (display) {
-                            layer.resetShapes();
-                        }
-                        break;
-                }
-
-                if (forward === true) {
-                    let data = {};
-                    data[item] = value;
-                    messaging.emitSettings(layerIndex, data, true, false, force);
-                }
-
-                listener.fireEvent('animation.updateSetting', {layer: layer, item: item, value: value});
-            }
-        }
-
-        /**
-         *
-         * @param layer
          * @param set
          * @param property
          * @param value
@@ -970,30 +883,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         displayman.updateDisplay(i);
                         animation.offline = false;
                     }
-                }
-            }
-        }
-
-        /**
-         *
-         * @param data
-         * @param display
-         * @param forward
-         * @param force
-         */
-        updateSettings(layer, data, display, forward, force) {
-
-            if (force) {
-                for (var k in data) {
-                    sm.update(layer, k, data[k]);
-                }
-
-                renderer.resetLayer(layer);
-
-            } else {
-                for (var k in data) {
-                    var value = data[k];
-                    this.updateSetting(layer, k, value, display, forward, force);
                 }
             }
         }

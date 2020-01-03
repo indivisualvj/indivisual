@@ -5,7 +5,7 @@
             refraction_ratio: {
                 text: 'use material_shininess to change the material\'s refraction ratio'
             },
-            marbles: {
+            marbles: { // todo CS
                 text: 'set refraction ratio to 50, shape_geometry to icosahedron and level of detail (shape_moda) to 3',
                 action: function () {
                     let data = {

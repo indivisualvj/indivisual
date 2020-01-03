@@ -47,7 +47,7 @@
          *
          */
         removeShaderPasses() {
-            this.properties.shader = [];
+            this.properties.shaders = [];
         }
 
         /**

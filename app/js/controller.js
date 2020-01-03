@@ -198,6 +198,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             let mappings = HC.ControlSetsManager.mappings(HC.ControlSetsManager.initAll(statics.AnimationValues));
 
+            let passes = cm.get(layer, 'passes');
+            passes.removeShaderPasses();
+
             for (let k in data) {
                 let value = data[k];
                 if (typeof value !== 'object') {
@@ -217,8 +220,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         return ia - ib;
                     });
 
-                    let passes = cm.get(layer, 'passes');
-                    passes.removeShaderPasses();
                     for (let key in keys) {
                         let name = keys[key];
                         let sh = value[name];
@@ -934,7 +935,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updatePreset(name, data, layer) {
 
             HC.log('preset', name);
-// todo loading a preset does not reset shaderpasses
+
             if (layer == undefined) {
                 layer = statics.ControlSettings.layer;
             }

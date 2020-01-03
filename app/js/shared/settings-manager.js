@@ -248,7 +248,6 @@
         }
 
         /**
-         * See Example here: HC.Controller.ShaderPassController.init
          *
          * @param v
          * @param deleet

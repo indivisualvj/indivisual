@@ -274,21 +274,18 @@
 
                     if (shader && shader.apply) {
                         var name = passes.getShaderName(index);
-                        var plugin = this.getShaderPassPlugin(name, shader);
+                        var key = passes.getShaderPassKey(index);
+                        var plugin = this.getShaderPassPlugin(name, key, shader);
                         if (plugin) {
                             plugin.create();
                             plugin.updateResolution();
+
                             if (!shaders) {
                                 shaders = [];
                             }
 
                             shaders.push(plugin);
-
                         }
-
-                    } else {
-                        // HC.Settings.update can't delete missing settings. so delete them here...
-                        passes.removeShaderPass(index);
                     }
                 }
             }

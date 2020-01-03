@@ -90,6 +90,27 @@
         /**
          *
          * @param index
+         * @returns {string}
+         */
+        getShaderPassKey(index) {
+            let name = this.getShaderName(index);
+            let count = 0;
+
+            for (let k in this.properties.shaders) {
+                if (k == index) {
+                    break;
+                }
+                if (this.getShaderName(k) == name) {
+                    count++;
+                }
+            }
+
+            return name + '' + count;
+        }
+
+        /**
+         *
+         * @param index
          * @returns {null|{}}
          */
         getShader(index) {

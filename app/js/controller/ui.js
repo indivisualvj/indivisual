@@ -44,8 +44,6 @@
         shader;
 
         init(shader) {
-            let name = this.name;
-            shader = shader || JSON.copy(statics.ShaderSettings[name]);
             shader.apply = true;
             this.setShader(shader);
         }
@@ -90,7 +88,8 @@
             if (v in statics.Passes) {
                 let name = statics.Passes[v];
                 let ctrl = new HC.Controller.ShaderPassController(name);
-                ctrl.init();
+                let sh = JSON.copy(statics.ShaderSettings[name]);
+                ctrl.init(sh);
 
                 controller.addShaderPass(
                     statics.ControlSettings.layer,
@@ -388,8 +387,8 @@ HC.Controller.prototype.addShaderControllerByKey = function (key, dir) {
  * @param controller
  * @param parent
  */
-HC.Controller.prototype.addShaderPassController = function (controller, parent) {
-    let folder = parent.addFolder(controller.name); // todo numerate passes by count
+HC.Controller.prototype.addShaderPassController = function (key, controller, parent) {
+    let folder = parent.addFolder(key);
     let sh = controller.getShader();
     this.addShaderController(folder, false, sh, controller.name, controller);
 };
@@ -766,11 +765,12 @@ HC.Controller.prototype.updateUiPasses = function () {
         }
 
         for (let k in passes) {
+            let key = cs.getShaderPassKey(k);
             let name = cs.getShaderName(k);
             let sh = cs.getShader(k);
             let ctrl = new HC.Controller.ShaderPassController(name);
             ctrl.init(sh);
-            this.addShaderPassController(ctrl, this._passes);
+            this.addShaderPassController(key, ctrl, this._passes);
         }
     }
 };

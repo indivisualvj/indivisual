@@ -265,7 +265,7 @@
         updateShaderPasses: function () {
             var shaders = null;
             if (cm) {
-                let passes = cm.get(statics.ControlSettings.layer, 'passes');
+                let passes = cm.get(this.index, 'passes');
                 let shds = passes.getShaderPasses();
 
                 for (var index in shds) {

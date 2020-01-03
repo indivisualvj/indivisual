@@ -306,15 +306,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
             for (let i = 0; i < statics.ControlValues.layer.length; i++) {
                 if (i == statics.ControlSettings.layer) {
-                    console.log('currentlayer');
                     continue;
                 }
                 if (cm.isDefault(i)) {
-                    console.log('isdefault');
                     continue;
                 }
                 if (layerShuffleable(i) != layerShuffleable(statics.ControlSettings.layer)) {
-                    console.log('not same kind of shuffleable');
                     continue;
                 }
 

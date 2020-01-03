@@ -479,6 +479,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (display !== false) {
+                this.explainPlugin(property, value);
                 this.updateUi(property);
                 explorer.setChanged(statics.ControlSettings.layer, true);
             }

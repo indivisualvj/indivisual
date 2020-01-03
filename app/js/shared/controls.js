@@ -333,6 +333,15 @@ HC.controls = HC.controls || {};
             let props = this.controlSet.properties;
             let value = props[key];
             let ctl;
+
+            if (types) {
+                let bnd = types;
+                if (!bnd || bnd.length < 1) {
+                    console.log('error in ' + key);
+                } else if(bnd[bnd.length - 1] == 'hidden') {
+                    return;
+                }
+            }
             
             if (typeof value == 'number' && types) {
                 let bnd = types;
@@ -515,7 +524,6 @@ HC.controls = HC.controls || {};
          * @return {*}
          */
         getInitialSettings() {
-            // todo statics becomes HC.collections
             return statics.ShaderSettings[this.name];
         }
 

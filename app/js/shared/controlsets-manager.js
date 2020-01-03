@@ -181,7 +181,6 @@
         reset(heap) {
 
             if (this.globalProperties) {
-                // check does it work?
                 let defaults = HC.ControlSetsManager.initAll(this.pluggedValues);
                 let _set = function (source, target) {
                     for (let key in source) {

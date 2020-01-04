@@ -1,6 +1,6 @@
 HC.plugins.oscillate = HC.plugins.oscillate || {};
 {
-    class Plugin extends HC.AnimationPlugin {
+    HC.OscillatePlugin = class Plugin extends HC.AnimationPlugin {
 
         construct(layer, settings, tree, key) {
             HC.AnimationPlugin.prototype.construct.call(this, layer, settings, tree, key);
@@ -72,10 +72,8 @@ HC.plugins.oscillate = HC.plugins.oscillate || {};
                     this.settings[key] *= value;
                 }
 
-                // return this.settings[key];
+                return this.settings[key];
             }
         }
     }
-
-    HC.OscillatePlugin = Plugin; // todo why is this still there?
 }

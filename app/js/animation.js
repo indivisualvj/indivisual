@@ -534,11 +534,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.updateSources(sources, true, false, true);
             }
 
-            if ('controlset' in session) {
-                HC.log('controlset', 'synced');
-                let settings = session.controlset;
+            if ('settings' in session) {
+                HC.log('settings', 'synced');
+                let settings = session.settings;
                 for (let k in settings) {
-                    this.updateControlSets(k, settings[k], true, false, true);
+                    this.updateSettings(k, settings[k], true, false, true);
                 }
             }
 
@@ -580,7 +580,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param forward
          * @param force
          */
-        updateControlSet(layer, data, display, forward, force) {
+        updateSetting(layer, data, display, forward, force) {
 
             let layerIndex = layer;
             layer = renderer.layers[layer];
@@ -643,7 +643,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (forward === true) {
-                messaging.emitControlSet(layerIndex, data, true, false, force);
+                messaging.emitSettings(layerIndex, data, true, false, force);
             }
 
             listener.fireEvent('animation.updateSetting', {layer: layer, item: property, value: value});
@@ -894,7 +894,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param forward
          * @param force
          */
-        updateControlSets(layer, data, display, forward, force) {
+        updateSettings(layer, data, display, forward, force) {
 
             if (force) {
                 cm.updateData(layer, data);
@@ -905,7 +905,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 for (var k in data) {
                     let value = {};
                     value[k] = data[k];
-                    this.updateControlSet(layer, value, display, forward, force);
+                    this.updateSetting(layer, value, display, forward, force);
                 }
             }
         }

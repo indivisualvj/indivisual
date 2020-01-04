@@ -439,7 +439,7 @@ HC.controls = HC.controls || {};
             data[this.object.name] = {};
             data[this.object.name][this.property] = value;
 
-            controller.updateControlSet(
+            controller.updateSetting(
                 statics.ControlSettings.layer,
                 data,
                 true,
@@ -507,7 +507,7 @@ HC.controls = HC.controls || {};
 
             let passes = cm.get(statics.ControlSettings.layer, 'passes');
             let data = {passes: {shaders: passes.getShaderPasses()}};
-            messaging.emitControlSet(statics.ControlSettings.layer, data, false, false, false);
+            messaging.emitSettings(statics.ControlSettings.layer, data, false, false, false);
 
             let name = this.__gui ? this.__gui.name : this.property;
             HC.log(name + '/' + this.property, v);

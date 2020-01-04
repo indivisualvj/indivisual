@@ -138,7 +138,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 {
-    // todo var2let
     /**
      *
      * @type {HC.Controller}
@@ -187,11 +186,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 let sources = session.sources;
                 this.updateSources(sources, true, false, true);
             }
-            if ('controlset' in session) {
-                HC.log('controlset', 'synced');
-                let settings = session.controlset;
+            if ('settings' in session) {
+                HC.log('settings', 'synced');
+                let settings = session.settings;
                 for (let k in settings) {
-                    this.updateControlSets(k, settings[k], true, false, true);
+                    this.updateSettings(k, settings[k], true, false, true);
                 }
             }
             if ('data' in session) {
@@ -256,7 +255,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param forward
          * @param force
          */
-        updateControlSets(layer, data, display, forward, force) {
+        updateSettings(layer, data, display, forward, force) {
 
             if (force) {
                 cm.updateData(layer, data);
@@ -266,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 for (let k in data) {
                     let value = {};
                     value[k] = data[k];
-                    this.updateControlSet(layer, value, display, false, false);
+                    this.updateSetting(layer, value, display, false, false);
                 }
             }
 
@@ -315,13 +314,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     continue;
                 }
 
-                this.updateControlSets(i, data, true, false, true);
+                this.updateSettings(i, data, true, false, true);
 
                 if (cm.layers[i]._preset) {
                     explorer.setChanged(i, true);
                 }
 
-                messaging.emitControlSet(i, data, false, false, true);
+                messaging.emitSettings(i, data, false, false, true);
 
             }
         }
@@ -352,13 +351,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     continue;
                 }
 
-                this.updateControlSets(i, data, false, false, true);
+                this.updateSettings(i, data, false, false, true);
 
                 if (cm.layers[i]._preset) {
                     explorer.setChanged(i, true);
                 }
 
-                messaging.emitControlSet(i, data, false, false, true);
+                messaging.emitSettings(i, data, false, false, true);
                 // messaging.emitSettings(i, data, false, false, true);
             }
         }
@@ -460,7 +459,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param forward
          * @param force
          */
-        updateControlSet(layer, data, display, forward, force) {
+        updateSetting(layer, data, display, forward, force) {
 
             let updated = cm.updateData(layer, data);
             let property;
@@ -475,7 +474,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (forward) {
-                messaging.emitControlSet(layer, data, display, false, false);
+                messaging.emitSettings(layer, data, display, false, false);
             }
 
             if (display !== false) {
@@ -499,7 +498,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.updateUi();
 
             let data = {passes: {shaders: passes.getShaderPasses()}};
-            messaging.emitControlSet(layer, data, false, false, false);
+            messaging.emitSettings(layer, data, false, false, false);
         }
 
         /**
@@ -542,7 +541,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 value = statics.ControlSettings.update(item, value);
 
                 if (item == 'layer') {
-                    this.updateControlSets(value, cm.prepareLayer(value), true, false, true);
+                    this.updateSettings(value, cm.prepareLayer(value), true, false, true);
 
                     explorer.resetLoaded();
                     explorer.setLoaded(value, true);
@@ -882,7 +881,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let settings = cm.prepareLayer(layer);
 
             if (settings) {
-                messaging.emitControlSet(layer, settings, true, false, true);
+                messaging.emitSettings(layer, settings, true, false, true);
             }
         }
 
@@ -907,10 +906,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 // this.migrateSettings1(layer, data, true, false, true);
 
             } else {
-                this.updateControlSets(layer, data, true, false, true);
+                this.updateSettings(layer, data, true, false, true);
             }
 
-            messaging.emitControlSet(layer, cm.prepareLayer(layer), false, false, true);
+            messaging.emitSettings(layer, cm.prepareLayer(layer), false, false, true);
         }
 
         /**
@@ -993,7 +992,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     let cs = cm.get(statics.ControlSettings.layer, set);
                     cs.reset();
                     let data = cs.prepare();
-                    controller.updateControlSet(statics.ControlSettings.layer, data, true, true, false);
+                    controller.updateSetting(statics.ControlSettings.layer, data, true, true, false);
                 }
             }
         }

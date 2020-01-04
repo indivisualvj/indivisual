@@ -115,7 +115,7 @@ HC.plugins.shaders = HC.plugins.shaders || {};
                                                 let dpck = dpc;
                                                 dpc = dependencies[dpck]; // get linked dep
                                                 let rv = glsh.uniforms[dpck].value; // get current value from dep
-                                                if (dpc[rv]) { // check if linked dep contains current dep
+                                                if (dpc[rv]) { // _check if linked dep contains current dep
                                                     dpc = dpc[rv]; // get valid values for skey from dep
                                                     let dky = Object.keys(dpc);
                                                     v = dky[randomInt(0, dky.length - 1)]; // random from valid values

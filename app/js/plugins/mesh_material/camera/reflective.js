@@ -2,15 +2,17 @@
     HC.plugins.mesh_material.reflective = class Plugin extends HC.MeshCameraMaterialPlugin {
 
         static tutorial = {
-            shiny_balls: { // todo CS
+            shiny_balls: {
                 text: 'set shape_geometry to icosahedron and level of detail (shape_moda) to 3',
                 action: function () {
-                    let data = {shape: {
-                        shape_geometry: 'icosahedron',
-                        shape_moda: 3
-                    }};
-                    controller.updateControlSets(statics.ControlSettings.layer, data, true, false, true);
-                    messaging.emitControlSet(statics.ControlSettings.layer, data, true, true, true);
+                    let data = {
+                        shape: {
+                            shape_geometry: 'icosahedron',
+                            shape_moda: 3
+                        }
+                    };
+                    controller.updateSettings(statics.ControlSettings.layer, data, true, false, true);
+                    messaging.emitSettings(statics.ControlSettings.layer, data, true, true, true);
                 }
             }
         };

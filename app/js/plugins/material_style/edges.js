@@ -22,7 +22,7 @@
                 this.active[shape.index] = true;
 
                 let inst = this;
-                listener.register('animation.updateSetting', this.id(shape.index), function (data) { // todo läuft das mit CS?
+                listener.register('animation.updateSetting', this.id(shape.index), function (data) {
                     if (inst.layer == data.layer) {
                         switch (data.item) {
                             case inst.tree:
@@ -74,7 +74,7 @@
                 this.active[shape.index] = true;
 
                 let inst = this;
-                listener.register('animation.updateSetting', this.id(shape.index), function (data) {  // todo läuft das mit CS?
+                listener.register('animation.updateSetting', this.id(shape.index), function (data) {
                     if (inst.layer == data.layer) {
                         switch (data.item) {
                             case inst.tree:

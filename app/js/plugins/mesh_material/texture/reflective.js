@@ -29,7 +29,7 @@
             this.cubeTextureFromBackgroundInput(_onLoad);
 
             let id = this.id(index);
-            listener.register('animation.updateSetting', id, function (data) { // todo läuft das mit CS?
+            listener.register('animation.updateSetting', id, function (data) {
                 if (data.layer === inst.layer) {
                     switch (data.item) {
                         case 'background_input':

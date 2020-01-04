@@ -58,7 +58,7 @@
             this.on('controls', this.onControls);
             this.on('displays', this.onDisplays);
             this.on('sources', this.onSources);
-            this.on('controlset', this.onControlSet);
+            this.on('settings', this.onSettings);
             this.on('attr', this.onAttr);
             this.on('midi', this.onMidi);
             this.on('data', this.onData);
@@ -106,9 +106,9 @@
          * @param data
          * @param that
          */
-        onControlSet(data, that) {
+        onSettings(data, that) {
             requestAnimationFrame(function () {
-                that.program.updateControlSets(data.layer, data.data, data.controls, data.forward, data.force);
+                that.program.updateSettings(data.layer, data.data, data.controls, data.forward, data.force);
             });
         }
 
@@ -350,9 +350,9 @@
          * @param forward
          * @param force
          */
-        emitControlSet(layer, data, display, forward, force) {
+        emitSettings(layer, data, display, forward, force) {
             let config = {
-                action: 'controlset',
+                action: 'settings',
                 data: data,
                 controls: display,
                 forward: forward,

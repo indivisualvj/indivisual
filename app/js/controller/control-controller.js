@@ -59,8 +59,8 @@
             rst_shaders: function () {
                 cm.update(statics.ControlSettings.layer, 'passes', 'shaders', []);
                 let data = cm.get(statics.ControlSettings.layer, 'passes').prepare();
-                controller.updateControlSets(statics.ControlSettings.layer, data, false, false, true);
-                messaging.emitControlSet(statics.ControlSettings.layer, data, false, false, true);
+                controller.updateSettings(statics.ControlSettings.layer, data, false, false, true);
+                messaging.emitSettings(statics.ControlSettings.layer, data, false, false, true);
                 // controller.shaders('default', statics.AnimationSettings.initial, true);
             },
             debug: statics.ControlSettings.debug,

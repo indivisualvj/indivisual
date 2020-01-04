@@ -1,21 +1,21 @@
 {
-    class Plugin extends HC.AnimationPlugin {
+    HC.plugins.pattern_overlay.dropz = class Plugin extends HC.AnimationPlugin {
         static name = 'drop Z';
         static tutorial = {
-            activate: { // todo CS
+            activate: {
                 text: 'Accelerates shapes on Z-Axis towards the Camera. To make it work perfectly, set pattern_overlay_volume to 1.0',
                 action: function () {
                     controller.closeAll();
                     controller.toggleByProperty('pattern_overlay_volume');
-                    controller.updateSetting(statics.ControlSettings.layer, 'pattern_overlay_volume', 1, true, true);
+                    controller.updateSetting(statics.ControlSettings.layer, {pattern:{pattern_overlay_volume: 1}}, true, true);
                 }
             },
-            invert: { // todo CS
+            invert: {
                 text: 'To invert movement, twist the layer by 180°',
                 action: function () {
                     controller.closeAll();
                     controller.toggleByProperty('layer_rotationy');
-                    controller.updateSetting(statics.ControlSettings.layer, 'layer_rotationy', 180, true, true);
+                    controller.updateSetting(statics.ControlSettings.layer, {layer:{layer_rotationy: 180}}, true, true);
                 }
             }
         };
@@ -54,6 +54,4 @@
             }
         }
     }
-
-    HC.plugins.pattern_overlay.dropz = Plugin; // todo why is this still there?
 }

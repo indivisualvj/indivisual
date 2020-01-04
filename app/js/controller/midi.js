@@ -56,13 +56,13 @@ HC.Controller.prototype.initMidi = function (instance) {
                     success = true;
                 }
 
-                // check for valid ControlSet by MIDI Device name
+                // _check for valid ControlSet by MIDI Device name
                 let name = input.value.name;
                 if (name in statics.MidiController) {
                     _updateControlSet(input, statics.MidiController[name]);
                 }
 
-                // check for valid ControlSet by MIDI Device manufacturer
+                // _check for valid ControlSet by MIDI Device manufacturer
                 name = input.value.manufacturer;
                 if (name in statics.MidiController) {
                     _updateControlSet(input, statics.MidiController[name]);

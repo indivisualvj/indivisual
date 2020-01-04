@@ -206,12 +206,14 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param layer
          * @param data
          */
-        migrateSettings0(layer, data) {
+        migrateSettings0(layer, data, keepPasses) {
 
             let mappings = HC.ControlSetsManager.mappings(() => {return HC.ControlSetsManager.initAll(statics.AnimationValues);});
 
             let passes = cm.get(layer, 'passes');
-            passes.removeShaderPasses();
+            if (keepPasses !== true) {
+                passes.removeShaderPasses();
+            }
 
             for (let k in data) {
                 let value = data[k];
@@ -899,57 +901,56 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (!('info' in data)) {
-                this.migrateSettings0(layer, data, true, false, true);
+                this.migrateSettings0(layer, data);
 
             // example!
             // } else if ('info' in data && data.info.version > 1.99) {
                 // this.migrateSettings1(layer, data, true, false, true);
 
             } else {
-                this.updateSettings(layer, data, true, false, true);
+                this.updateSettings(layer, data, false, false, true);
             }
 
             messaging.emitSettings(layer, cm.prepareLayer(layer), false, false, true);
         }
 
         /**
-         * todo CS
+         *
          * @param name
          * @param data
          */
-        shaders(name, data, reset) {
+        transferShaderPasses(name, data) {
 
-            HC.log('shaders', name);
-
-            let shaders = data.shaders;
-            let nu = {};
-            for (let n in shaders) {
-                let shd = shaders[n];
-                if (shd) {
-                    if (reset) {
-                        nu[n] = shd;
-
-                    } else if (shd.apply) {
-                        shd.index += 100;
-                        nu[n] = shd;
-                    }
-                }
-            }
-
-            shaders = nu;
+            HC.log('passes', name);
 
             for (let i = 0; i < statics.ControlValues.layer.length; i++) {
                 if (!cm.get(i, 'passes').isDefault()
                     && layerShuffleable(i) == layerShuffleable(statics.ControlSettings.layer)
                 ) {
-                    let settings = {shaders: shaders};
-                    // this.updateSettings(i, settings, true, false, true);
+                    if (!('info' in data)) {
+
+                        let shaders = {shaders: data.shaders};
+
+                        this.migrateSettings0(i, shaders, true);
+
+                    // example!
+                    // } else if ('info' in data && data.info.version > 1.99) {
+                    // this.migrateSettings1(layer, data, true, false, true);
+
+                    } else {
+                        let nu = data.passes;
+                        let passes = cm.get(i, 'passses');
+
+                        for (let k in nu) {
+                            passes.addShaderPass(nu[k]);
+                        }
+                    }
 
                     if (cm.layers[i]._preset) {
                         explorer.setChanged(i, true);
                     }
 
-                    // messaging.emitSettings(i, settings, false, false, true);
+                    messaging.emitSettings(i, cm.prepareLayer(i), false, false, true);
                 }
             }
         }

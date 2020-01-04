@@ -61,7 +61,6 @@
                 let data = cm.get(statics.ControlSettings.layer, 'passes').prepare();
                 controller.updateSettings(statics.ControlSettings.layer, data, false, false, true);
                 messaging.emitSettings(statics.ControlSettings.layer, data, false, false, true);
-                // controller.shaders('default', statics.AnimationSettings.initial, true);
             },
             debug: statics.ControlSettings.debug,
             tempo: statics.ControlSettings.tempo,

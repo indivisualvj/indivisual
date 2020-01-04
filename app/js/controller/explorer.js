@@ -236,7 +236,7 @@
                     requestAnimationFrame(function () {
 
                         if (statics.ctrlKey) { //load shaders into present presets
-                            controller.shaders(data.dir + '/' + data.name, JSON.parse(data.contents));
+                            controller.transferShaderPasses(data.dir + '/' + data.name, JSON.parse(data.contents));
 
                         } else {
                             // load the preset

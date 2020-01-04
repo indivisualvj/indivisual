@@ -20,12 +20,16 @@
         };
         
         types = {
-            filter_mode: ['half'],
+            filter_volume: [-10, 10, 0.01]
+        };
+
+        settings = {
+            filter_mode: ['half', 'clear'],
             filter_audio: ['hex'],
             filter_limit: ['hex'],
             filter_sync: ['hex'],
-            filter_volume: [-10, 10, 0.01, 'half'],
-            filter_volume_oscillate: ['half']
+            filter_volume: ['half', 'clear'],
+            filter_volume_oscillate: ['half'],
         };
     }
 }

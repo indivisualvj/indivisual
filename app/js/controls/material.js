@@ -38,30 +38,47 @@
         };
         
         types = {
-            mesh_material: ['half'],
-            material_blending: ['half'],
             material_blendequation: ['hidden'],
             material_blendsrc: ['hidden'],
             material_blenddst: ['hidden'],
-            material_softshading: ['half'],
-            material_shadowside: ['half'],
-            material_shininess: [0, 100, 0.1, 'half'],
-            material_roughness: [0, 1, 0.01, 'half'],
-            material_metalness: [0, 1, 0.01, 'half'],
-            material_side: ['half'],
-            material_mapping: ['half'],
-            material_input: ['half'],
+            material_shininess: [0, 100, 0.1],
+            material_roughness: [0, 1, 0.01],
+            material_metalness: [0, 1, 0.01],
+            material_repeatx: [-32, 32, 0.001],
+            material_repeaty: [-32, 32, 0.001],
+            material_offsetx: [-5, 5, 0.001],
+            material_offsety: [-5, 5, 0.001],
+            material_centerx: [0, 1, 0.001],
+            material_centery: [0, 1, 0.001],
+            material_rotation: [-180, 180, 0.01],
+            material_volume: [0, 10, 0.01]
+        };
+
+        styles = {
+            mesh_material: ['half', 'clear'],
             material_style: ['half'],
-            material_wraps: ['half'],
+            material_blending: ['half', 'clear'],
+            // material_blendequation: ['half'],
+            // material_blendsrc: ['half', 'clear'],
+            // material_blenddst: ['half'],
+            material_side: ['half'],
+            material_shininess: ['half', 'clear'],
+            material_volume: ['half'],
+            material_roughness: ['half', 'clear'],
+            material_metalness: ['half'],
+            material_softshading: ['half', 'clear'],
+            material_shadowside: ['half'],
+            material_input: ['half', 'clear'],
+            material_mapping: ['half'],
+            material_wraps: ['half', 'clear'],
             material_wrapt: ['half'],
-            material_repeatx: [-32, 32, 0.001, 'half'],
-            material_repeaty: [-32, 32, 0.001, 'half'],
-            material_offsetx: [-5, 5, 0.001, 'half'],
-            material_offsety: [-5, 5, 0.001, 'half'],
-            material_centerx: [0, 1, 0.001, 'half'],
-            material_centery: [0, 1, 0.001, 'half'],
-            material_rotation: [-180, 180, 0.01, 'half'],
-            material_volume: [0, 10, 0.01, 'half']
+            material_repeatx: ['half', 'clear'],
+            material_repeaty: ['half'],
+            material_offsetx: ['half', 'clear'],
+            material_offsety: ['half'],
+            material_centerx: ['half', 'clear'],
+            material_centery: ['half'],
+            // material_rotation: ['half']
         };
     }
 }

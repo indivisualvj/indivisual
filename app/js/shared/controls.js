@@ -489,6 +489,13 @@ HC.controls = HC.controls || {};
             for(let key in this.controlSet.settings) {
                 control = this.addControl(key);
             }
+
+            let clear = document.createElement('div');
+            clear.classList.add('guify-component-container');
+            clear.classList.add('clear');
+            this.folder.folderContainer.appendChild(clear);
+
+            this.folder.folderContainer.setAttribute('data-border', 'red');
         }
 
         /**
@@ -570,12 +577,6 @@ HC.controls = HC.controls || {};
             }
 
             this.folder.opts.controllers[key] = this.gui.Register(config);
-
-            if (types) {
-                if (types.length > 0) {
-                    this.folder.opts.controllers[key].container.setAttribute('data-class', types[types.length - 1]);
-                }
-            }
 
             if (styles) {
                 this.folder.opts.controllers[key].container.setAttribute('data-class', styles[0]);

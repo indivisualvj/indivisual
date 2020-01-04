@@ -839,3 +839,8 @@ select option {
 .noclear {
     clear: none !important;
 }
+
+[data-border="red"] {
+    border-left-color: rgba(255, 10, 10, 1) !important;
+    border-left-width: 1px;
+}

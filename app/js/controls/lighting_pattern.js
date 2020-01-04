@@ -46,5 +46,23 @@
             lighting_pattern_centery_oscillate: ['half'],
             lighting_pattern_centerz_oscillate: ['half']
         };
+
+        styles = {
+            lighting_pattern: ['half', 'clear'],
+            lighting_pattern_lights: ['half'],
+            lighting_pattern_rotation: ['half', 'clear'],
+            lighting_pattern_rotation_oscillate: ['half'],
+            lighting_pattern_padding: ['half', 'clear'],
+            lighting_pattern_padding_oscillate: ['half'],
+            lighting_pattern_paddingx: ['half', 'clear'],
+            lighting_pattern_paddingy: ['half'],
+            // lighting_pattern_paddingz: ['half'],
+            lighting_pattern_centerx: ['half', 'clear'],
+            lighting_pattern_centerx_oscillate: ['half'],
+            lighting_pattern_centery: ['half', 'clear'],
+            lighting_pattern_centery_oscillate: ['half'],
+            lighting_pattern_centerz: ['half', 'clear'],
+            lighting_pattern_centerz_oscillate: ['half']
+        };
     }
 }

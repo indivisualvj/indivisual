@@ -175,7 +175,7 @@ HC.controls = HC.controls || {};
          */
         validate(key, value) {
             let type = typeof value;
-            // check if string contains float and then convert
+            // _check if string contains float and then convert
             if (type == 'string') {
                 let f = parseFloat(value);
                 if (f && f.toString().length == value.length) {
@@ -184,13 +184,25 @@ HC.controls = HC.controls || {};
             }
 
             // avoid values to be overwritten by wrong type
-            if (key in this.properties) {
-                let org = this.properties[key];
-                let otype = typeof org;
+            if (key in this.settings) {
+                if (key in this.values) {
+                    let keys = Object.keys(this.values[key]);
+                    let oval = keys[parseInt(value)];
 
-                if (otype !== type) {
-                    // console.log(item, type, value, otype, org);
-                    value = org;
+                    if (oval !== undefined) {
+                        // console.log(value, oval);
+                        value = oval;
+                    }
+
+
+                } else {
+                    let org = this.settings[key];
+                    let otype = typeof org;
+
+                    if (otype !== type) {
+                        // console.log(key, type, value, otype, org);
+                        value = org;
+                    }
                 }
             }
 

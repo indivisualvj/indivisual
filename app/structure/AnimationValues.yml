@@ -58,14 +58,14 @@ material_input: #material_map inputs
   none: none
 
 material_side:
-  0: front
-  1: back
-  2: double
+  '0': front
+  '1': back
+  '2': double
 
 material_shadowside:
-  0: front
-  1: back
-  2: double
+  '0': front
+  '1': back
+  '2': double
 
 material_mapping:
   default: default

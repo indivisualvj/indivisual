@@ -23,7 +23,7 @@
             material_roughness: 0.5,
             material_metalness: 0.5,
             material_softshading: false,
-            material_shadowside: '2', // fixme never shown as 'unchanged' in UI
+            material_shadowside: '2',
             material_input: 'texture',
             material_mapping: 'default',
             material_wraps: 'ClampToEdgeWrapping',

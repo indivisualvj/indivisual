@@ -11,22 +11,67 @@
 
         /**
          *
+         * @type {string}
+         */
+        type = 'animation';
+
+        /**
+         * @type {Array}
+         */
+        layers;
+
+        /**
+         *
+         * @type {number}
+         */
+        flipx = 1;
+
+        /**
+         *
+         * @type {number}
+         */
+        flipy = 1;
+
+        /**
+         *
+         * @type {{aspect: number, x: number, y: number}}
+         */
+        resolution = {x: 1280, y: 720, aspect: 1280 / 720};
+
+        /**
+         *
+         * @type {{renderer: THREE.WebGLRenderer, perspective2: THREE.PerspectiveCamera, perspective0: THREE.PerspectiveCamera, perspective1: THREE.PerspectiveCamera, scene: THREE.Scene}}
+         */
+        three = {
+            renderer: null,
+            scene: null,
+            perspective0: null,
+            perspective1: null,
+            perspective2: null
+        };
+
+        /**
+         * @type {Object}
+         */
+        currentLayer;
+
+        /**
+         * @type {Object}
+         */
+        nextLayer;
+
+        /**
+         *
+         * @type {boolean}
+         */
+        layerSwitched = false;
+
+        /**
+         *
          * @param config
          */
         constructor(config) {
-            this.type = 'animation';
             this.layers = config.layers;
-            this.flipx = 1;
-            this.flipy = 1;
-            this.resolution = {x: 1280, y: 720, aspect: 1280 / 720};
-            this.three = {
-                renderer: false,
-                scene: false
-            };
-            this.currentLayer = false;
-            this.nextLayer = false;
-            this.lastLayer = false;
-            this.layerSwitched = false;
 
             this.initThreeJs();
             this.initLayers(false);
@@ -34,12 +79,12 @@
 
         /**
          *
-         * @param keepsettings
+         * @param keepSettings
          */
-        fullReset(keepsettings) {
+        fullReset(keepSettings) {
             listener.removeEvent('renderer.render');
             this.resize();
-            this.initLayers(keepsettings);
+            this.initLayers(keepSettings);
             this.setLayer(0);
         }
 

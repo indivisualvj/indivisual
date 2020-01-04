@@ -184,25 +184,13 @@ HC.controls = HC.controls || {};
             }
 
             // avoid values to be overwritten by wrong type
-            if (key in this.settings) {
-                if (key in this.values) {
-                    let keys = Object.keys(this.values[key]);
-                    let oval = keys[parseInt(value)];
+            if (key in this.properties) {
+                let org = this.properties[key];
+                let otype = typeof org;
 
-                    if (oval !== undefined) {
-                        // console.log(value, oval);
-                        value = oval;
-                    }
-
-
-                } else {
-                    let org = this.settings[key];
-                    let otype = typeof org;
-
-                    if (otype !== type) {
-                        // console.log(key, type, value, otype, org);
-                        value = org;
-                    }
+                if (otype !== type) {
+                    // console.log(item, type, value, otype, org);
+                    value = org;
                 }
             }
 
@@ -346,20 +334,17 @@ HC.controls = HC.controls || {};
             let value = props[key];
             let ctl;
 
-            if (types) {
-                let bnd = types;
-                if (!bnd || bnd.length < 1) {
-                    console.log('error in ' + key);
-                } else if(bnd[bnd.length - 1] == 'hidden') {
+            // _check if hidden
+            if (types && types.length > 0) {
+                if(types[types.length - 1] == 'hidden') {
                     return;
                 }
             }
-            
-            if (typeof value == 'number' && types) {
-                let bnd = types;
-                let min = bnd[0];
-                let max = bnd[1];
-                let step = bnd[2];
+
+            if (typeof value == 'number' && types && types.length > 2) {
+                let min = types[0];
+                let max = types[1];
+                let step = types[2];
 
                 ctl = this.folder.add(props, key, min, max, step);
                 let el = ctl.domElement.getElementsByTagName('input')[0];
@@ -370,34 +355,31 @@ HC.controls = HC.controls || {};
                 ctl = this.folder.add(props, key, vls);
             }
 
+            // shorten name by regexp
             let reg = new RegExp('\\w+_([^_]+)$');
             let name = key.replace(reg, '$1');
             ctl.name(name);
 
+            // set width
             if (types) {
-                let bnd = types;
-                if (!bnd || bnd.length < 1) {
-                    console.log('error in ' + key);
-                } else {
-                    ctl.__li.setAttribute('data-class', bnd[bnd.length - 1]);
+                if (types.length > 0) {
+                    ctl.__li.setAttribute('data-class', types[types.length - 1]);
                 }
             }
 
-            ctl.__li.setAttribute('data-id', key);
-
-            let onChange = this.onChange;
-
+            // add listener
             if (ctl instanceof dat.controllers.NumberControllerBox
                 || ctl instanceof dat.controllers.NumberControllerSlider
             ) {
-                ctl.onChange(onChange);
+                ctl.onChange(this.onChange);
+
             } else {
-                ctl.onFinishChange(onChange);
+                ctl.onFinishChange(this.onChange);
             }
 
+            // set meta
+            ctl.__li.setAttribute('data-id', key);
             ctl._parent = this.folder;
-            // ctl._controlSetUi = this;
-            // ctl._controlSet = this.controlSet;
             ctl.object.name = this.controlSet.name();
         }
 

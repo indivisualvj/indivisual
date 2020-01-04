@@ -339,7 +339,7 @@
 
                 } else {
                     if (mat.emissive) {
-                        // for mapped material disable color by setting to lum 1 check hugh?
+                        // for mapped material disable color by setting to lum 1 _check hugh?
                         mat.emissive.setHSL(0, 0, emissive ? 1 : 0);
                     }
                 }

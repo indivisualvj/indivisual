@@ -351,24 +351,16 @@
          * @param force
          */
         emitSettings(layer, data, display, forward, force) {
-            if (data) {
-                if (data instanceof HC.Settings) {
-                    data = data.prepare();
-                }
+            let config = {
+                action: 'settings',
+                data: data,
+                controls: display,
+                forward: forward,
+                force: force,
+                layer: layer
+            };
 
-                statics.AnimationSettings.clean(data, statics.AnimationSettings.initial);
-
-                let config = {
-                    action: 'settings',
-                    data: data,
-                    controls: display,
-                    forward: forward,
-                    force: force,
-                    layer: layer
-                };
-
-                this._emit(config);
-            }
+            this._emit(config);
         }
 
         /**

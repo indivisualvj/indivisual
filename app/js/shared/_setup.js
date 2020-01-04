@@ -119,7 +119,7 @@ function setupResources() {
             file: 'structure/ShaderValues.yml',
             callback: function (data, finished) {
                 var settings = jsyaml.load(data.contents);
-                statics.ShaderValues = new HC.Settings(settings);
+                statics.ShaderValues = settings;
                 finished();
             }
         },
@@ -136,35 +136,14 @@ function setupResources() {
                 var settings = jsyaml.load(data.contents);
 
                 _loadAnimationPlugins(settings);
-                statics.ShaderSettings = new HC.Settings(_loadShaderSettings(settings.shaders));
+                statics.ShaderSettings = _loadShaderSettings(settings.shaders);
+                statics.Passes = [];
+                for (let sh in statics.ShaderSettings) {
+                    statics.Passes.push(sh);
+                }
                 _loadRhythms(settings);
 
-                statics.AnimationValues = new HC.Settings(settings);
-                finished();
-            }
-        },
-        {
-            file: 'structure/AnimationSettings.yml',
-            callback: function (data, finished) {
-                data = jsyaml.load(data.contents);
-                data.shaders = statics.ShaderSettings;
-                // console.log(data.shaders);
-                statics.AnimationSettings = new HC.Settings(data);
-                finished();
-            }
-        },
-        {
-            file: 'structure/AnimationController.yml',
-            callback: function (data, finished) {
-                data = jsyaml.load(data.contents);
-                statics.AnimationController = new HC.AnimationController(data, statics.AnimationSettings);
-                finished();
-            }
-        },
-        {
-            file: 'structure/AnimationTypes.yml',
-            callback: function (data, finished) {
-                statics.AnimationTypes = new HC.Settings(jsyaml.load(data.contents));
+                statics.AnimationValues = settings;
                 finished();
             }
         },
@@ -175,8 +154,9 @@ function setupResources() {
 
                 _loadAudioPlugins(settings);
                 _loadShufflePlugins(settings);
+                _loadControlSets();
 
-                statics.ControlValues = new HC.Settings(settings);
+                statics.ControlValues = settings;
                 finished();
             }
         },
@@ -190,14 +170,14 @@ function setupResources() {
         {
             file: 'structure/ControlTypes.yml',
             callback: function (data, finished) {
-                statics.ControlTypes = new HC.Settings(jsyaml.load(data.contents));
+                statics.ControlTypes = jsyaml.load(data.contents);
                 finished();
             }
         },
         {
             file: 'structure/DisplayValues.yml',
             callback: function (data, finished) {
-                statics.DisplayValues = new HC.Settings(jsyaml.load(data.contents));
+                statics.DisplayValues = jsyaml.load(data.contents);
                 finished();
             }
         },
@@ -211,14 +191,14 @@ function setupResources() {
         {
             file: 'structure/DisplayTypes.yml',
             callback: function (data, finished) {
-                statics.DisplayTypes = new HC.Settings(jsyaml.load(data.contents));
+                statics.DisplayTypes = jsyaml.load(data.contents);
                 finished();
             }
         },
         {
             file: 'structure/SourceValues.yml',
             callback: function (data, finished) {
-                statics.SourceValues = new HC.Settings(jsyaml.load(data.contents));
+                statics.SourceValues = jsyaml.load(data.contents);
                 finished();
             }
         },
@@ -232,7 +212,7 @@ function setupResources() {
         {
             file: 'structure/SourceTypes.yml',
             callback: function (data, finished) {
-                statics.SourceTypes = new HC.Settings(jsyaml.load(data.contents));
+                statics.SourceTypes = jsyaml.load(data.contents);
                 finished();
             }
         },
@@ -246,7 +226,7 @@ function setupResources() {
         {
             file: 'structure/SourceTypes.yml',
             callback: function (data, finished) {
-                statics.DataTypes = new HC.Settings(jsyaml.load(data.contents));
+                statics.DataTypes = jsyaml.load(data.contents);
                 finished();
             }
         },
@@ -263,7 +243,7 @@ function setupResources() {
                     window[c] = co;
                 }
 
-                statics.MidiController = new HC.Settings(settings);
+                statics.MidiController = settings;
                 finished();
             }
         },
@@ -390,6 +370,56 @@ function setupResources() {
     /**
      *
      * @param settings
+     * @param tree
+     * @param section
+     * @param plugins
+     * @private
+     */
+    function _loadControlSets() {
+
+        statics.ControlSets = {};
+        let plugins = HC.controls;
+        let keys = Object.keys(plugins);
+
+        keys.sort(function (a, b) {
+
+            let ai = plugins[a].index || 99999;
+            let bi = plugins[b].index || 99999;
+            let an = plugins[a].name || a;
+            let bn = plugins[b].name || b;
+
+            if (an === 'ControlSet') {
+                an = a;
+            }
+            if (bn === 'ControlSet') {
+                bn = b;
+            }
+
+            let cmpi = ai - bi;
+            if (cmpi == 0) {
+                return an.localeCompare(bn);
+            }
+            return cmpi;
+        });
+
+        for (let i = 0; i < keys.length; i++) {
+
+            let key = keys[i];
+            let plugin = HC.controls[key];
+            let name = plugin.name || key;
+
+            if (name == 'ControlSet') {
+                name = key;
+            }
+
+            statics.ControlSets[key] = name;
+
+        }
+    }
+
+    /**
+     *
+     * @param settings
      * @private
      */
     function _loadAudioPlugins(settings) {
@@ -425,15 +455,6 @@ function setupResources() {
 
             _loadPlugins(settings, HC.plugins, section, HC.plugins[section]);
 
-        }
-
-        var keys = Object.keys(settings);
-        for (var i = 0; i < keys.length; i++) {
-            var key = keys[i];
-            if (key.endsWith('_oscillate')) {
-                settings[key] = settings.oscillate;
-                statics.oscillator.push(key.replace('_oscillate', ''));
-            }
         }
 
         statics.ShaderValues.oscillate = settings.oscillate;

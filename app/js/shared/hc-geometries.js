@@ -207,7 +207,7 @@
             var n = geometry.faces;
             for (var i = 0; i < n.length; i++) {
                 var face = n[i];
-                if (face.normal.z < 0) { // check for twisted faces and twist
+                if (face.normal.z < 0) { // _check for twisted faces and twist
                     var tmp = face.a;
                     face.a = face.c;
                     face.c = tmp;

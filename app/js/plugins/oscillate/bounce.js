@@ -21,7 +21,7 @@
             let pa = this.params(key);
             let speed = layer.getCurrentSpeed();
 
-            // eher xing als bounce
+            // more xing than bounce example
             // let progress = speed.prc - .5;
             // progress = Math.pow(progress, 2) * 4;
             // progress = Math.max(0, 1 - progress) * pa;
@@ -29,12 +29,13 @@
 
             let prc = (speed.prc - 0.5);
             let v = Math.pow(prc, 2) * 4 * pa;
-            return this.activate(key, v);
 
             if (round(v, 1) == 0) {
                 pa *= -1;
                 this.params(key, pa);
             }
+
+            return this.activate(key, v);
         }
     }
 }

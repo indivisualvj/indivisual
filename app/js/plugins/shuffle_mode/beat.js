@@ -48,12 +48,14 @@
         next() {
             let pile = [];
             for(let i = 0; i < statics.ControlValues.layer.length; i++) {
-                if (layerShuffleable(i) && !renderer.layers[i].settings.isDefault()) {
+                if (layerShuffleable(i) && !cm.isDefault(i)) {
                     pile.push(i);
                 }
             }
 
-            this.layer = pile[randomInt(0, pile.length-1, false)];
+            if (pile.length) {
+                this.layer = pile[randomInt(0, pile.length - 1, false)];
+            }
         }
     }
 }

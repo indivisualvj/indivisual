@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
+// todo ES5
 (function () {
 
     /**
@@ -15,6 +16,7 @@
         this.index = index;
         this.preset = false;
         this.settings = false;
+        this.controlsets = false;
         this.lights = false;
         this.ambientLight = false;
         this.shapes = false;
@@ -111,6 +113,7 @@
             this.resetLighting();
             this.resetBackground();
             this.updateShaders();
+            this.updateShaderPasses();
         },
 
         /**
@@ -134,6 +137,7 @@
             this.resetPlugins();
             this.initRotator();
             this.resetAnimation();
+
             var sgp = this.getShapeGeometryPlugin();
             if (sgp)sgp.reset();
             var smp = this.getShapeModifierPlugin();
@@ -162,6 +166,7 @@
 
             var sc = this.three.scene;
             this.settings = false;
+            this.controlsets = false;
             this.shapes = false;
             this.plugins = {};
             this._shapes = false;
@@ -248,6 +253,42 @@
                 }
             }
 
+            this.shaders(shaders);
+
+            return shaders;
+        },
+
+        /**
+         *
+         * @returns {*}
+         */
+        updateShaderPasses: function () {
+            var shaders = null;
+            if (cm) {
+                let passes = cm.get(this.index, 'passes');
+                let shds = passes.getShaderPasses();
+
+                for (var index in shds) {
+
+                    var shader = passes.getShader(index);
+
+                    if (shader && shader.apply) {
+                        var name = passes.getShaderName(index);
+                        var key = passes.getShaderPassKey(index);
+                        var plugin = this.getShaderPassPlugin(name, key, shader);
+                        if (plugin) {
+                            plugin.create();
+                            plugin.updateResolution();
+
+                            if (!shaders) {
+                                shaders = [];
+                            }
+
+                            shaders.push(plugin);
+                        }
+                    }
+                }
+            }
             this.shaders(shaders);
 
             return shaders;

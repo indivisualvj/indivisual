@@ -32858,7 +32858,7 @@
 
 					'name': track.name,
 					'times': AnimationUtils.convertArray( track.times, Array ),
-					'values': AnimationUtils.convertArray( track.values, Array )
+					'values': AnimationUtils.convertArray( track.pluggedValues, Array )
 
 				};
 

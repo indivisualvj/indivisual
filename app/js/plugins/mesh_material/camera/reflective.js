@@ -6,8 +6,10 @@
                 text: 'set shape_geometry to icosahedron and level of detail (shape_moda) to 3',
                 action: function () {
                     let data = {
-                        shape_geometry: 'icosahedron',
-                        shape_moda: 3
+                        shape: {
+                            shape_geometry: 'icosahedron',
+                            shape_moda: 3
+                        }
                     };
                     controller.updateSettings(statics.ControlSettings.layer, data, true, false, true);
                     messaging.emitSettings(statics.ControlSettings.layer, data, true, true, true);

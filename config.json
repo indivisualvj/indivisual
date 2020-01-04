@@ -7,7 +7,8 @@
     "js/shared",
     "js/source",
     "js/display",
-    "js/plugins"
+    "js/plugins",
+    "js/controls"
   ],
 
   "animation": [

@@ -1,5 +1,5 @@
 {
-    let SOUNDCLOUD_CLIENT_ID = '118f93afdbb12c9d2f2ed3551478feab'; // todo stolen client_id (https://codepen.io/jadiego/pen/ONwwJB)
+    let SOUNDCLOUD_CLIENT_ID = '118f93afdbb12c9d2f2ed3551478feab'; // ugly stolen client_id (https://codepen.io/jadiego/pen/ONwwJB)
 
     if (IS_ANIMATION) {
 

@@ -2,117 +2,34 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-(function () {
+{
 
     /**
      *
-     * @param settings {HC.Settings}
-     * @param layers {[]}
-     * @constructor
+     * @type {HC.Settings}
      */
-    HC.SettingsManager = function (settings, layers) {
-        this.settings = settings;
-        this.layers = layers;
-    };
-
-    /**
-     *
-     * @type {{reset: Function, update: Function, get: Function}}
-     */
-    HC.SettingsManager.prototype = {
-
-        /**
-         *
-         */
-        reset: function (heap) {
-
-            this.settings.reset();
-
-            for (var layer in this.layers) {
-
-                if (heap && heap.length > 0) {
-                    if (heap.indexOf(parseInt(layer)) < 0) {
-                        continue;
-                    }
-                }
-
-                this.layers[layer].settings.reset();
-                if (this.layers[layer]._current) {
-                    this.layers[layer]._current = false;
-                }
-            }
-        },
-
-        /**
-         *
-         * @param layer
-         * @param key
-         * @param value
-         * @returns {*}
-         */
-        update: function (layer, key, value) {
-
-            var l = this.get(layer);
-
-            var v = l.settings.update(key, value);
-
-            if (this.settings) {
-                v = this.settings.update(key, value);
-            }
-            return v;
-        },
-
-        /**
-         *
-         * @param layer
-         * @returns {*}
-         */
-        get: function (layer) {
-            while (!layer in this.layers) {
-                this.layers.push({});
-            }
-
-            if (!this.layers[layer]) {
-                this.layers[layer] = {}
-            }
-
-            if (!this.layers[layer].settings) {
-                var d = this.settings.defaults();
-                this.layers[layer].settings = d;
-            }
-
-            return this.layers[layer];
-        }
-    };
-})();
-
-
-(function () {
-
-    /**
-     *
-     * @param values {{}}
-     * @constructor
-     */
-    HC.Settings = function (values) {
-
-        this.init(values);
-    };
-
-    HC.Settings.prototype = {
+    HC.Settings = class Settings {
 
         /**
          *
          * @param values
          */
-        init: function (values) {
+        constructor(values) {
+            this.init(values);
+        }
+
+        /**
+         *
+         * @param values
+         */
+        init(values) {
             this.isdefault = null;
             this.initial = this.copy(values);
 
-            for (var key in values) {
+            for (let key in values) {
                 this[key] = values[key];
             }
-        },
+        }
 
         /**
          *
@@ -120,10 +37,10 @@
          * @param value
          * @returns {*}
          */
-        update: function (key, value) {
+        update(key, value) {
             this.isdefault = null;
 
-            var isFunc = typeof value == 'function' || typeof this[key] == 'function';
+            let isFunc = typeof value == 'function' || typeof this[key] == 'function';
 
             if (key in this && isFunc) {
                 // do nothing
@@ -148,7 +65,7 @@
             }
 
             return key ? this[key] : this;
-        },
+        }
 
         /**
          *
@@ -156,19 +73,20 @@
          * @param source
          * @param initial
          */
-        merge: function (target, source, initial) {
+        merge(target, source, initial) {
 
             if (target) {
-                for (var k in source) {
-                    var value = source[k];
 
-                    if (k in this && typeof this[k] == 'function') {
+                for (let k in source) {
+                    let value = source[k];
+
+                    if (target === this && k in this && typeof this[k] == 'function') {
                         // do nothing
 
                     } else if (value && typeof value == 'object') {
 
-                        if (!k in target) {
-                            target[k] = this.copy(source);
+                        if (!(k in target)) {
+                            target[k] = this.copy(source[k]);
 
                         } else {
                             this.merge(target[k], source[k], initial ? initial[k] : false);
@@ -179,15 +97,15 @@
                     }
                 }
             }
-        },
+        }
 
         /**
          *
          * @returns {*}
          */
-        prepare: function () {
+        prepare() {
 
-            var data = this.copy(this);
+            let data = this.copy(this);
 
             delete data.isdefault;
             delete data.initial;
@@ -203,22 +121,33 @@
             }
 
             return data;
-        },
+        }
 
         /**
          * cleanses from removed settings
          * @param target
          * @param source
          */
-        clean: function (target, source) {
+        clean(target, source) {
 
             delete target.isdefault;
             delete target.initial;
             delete target._type;
             delete target.addons;
 
-            for (var k in target) {
-                var v = target[k];
+            for (let k in target) {
+                let v = target[k];
+
+                /*
+                 this is a ****ing workaround to avoid settings to be deleted that were not in settings initially.
+                 e.g. "passes"
+                 */
+                let clean = this._clean(v, false);
+                if (clean) {
+                    source = clean.source;
+                    k = clean.key;
+                    v = clean.target
+                }
 
                 if (!(k in source)) {
                     delete target[k];
@@ -230,36 +159,72 @@
                     // do nothing
                 }
             }
+        }
 
-        },
+        /**
+         *
+         * @param v
+         * @param deleet
+         * @returns {string|boolean|{source: {}, value, key}}
+         * @private
+         */
+        _clean(v, deleet = true) {
+            if (v && v._clean) {
+                if (deleet && v._clean._delete) {
+                    let t = v._clean._delete.tree;
+                    let c = v._clean._delete.condition;
+                    let target = v._clean.target;
+                    for (let b in t) {
+                        if (t[b] in target) {
+                            target = target[t[b]];
+                        }
+                    }
 
-        reset: function () {
+                    if (target == c) {
+                        return 'delete';
+                    }
+                }
+
+                return {
+                    source: v._clean.source,
+                    key: v._clean.key,
+                    target: v._clean.target
+                };
+            }
+
+            return false;
+        }
+
+        /**
+         *
+         */
+        reset() {
 
             this.update(false, this.initial);
 
-        },
+        }
 
         /**
          *
          * @param data
          * @returns {any}
          */
-        copy: function (data) {
+        copy(data) {
             return JSON.parse(JSON.stringify(data));
-        },
+        }
 
         /**
          *
          * @param item
          * @returns {boolean}
          */
-        contains: function (item) {
+        contains(item) {
             if (!this.initial || !(item in this.initial)) {
                 return false;
             }
 
             return true;
-        },
+        }
 
         /**
          *
@@ -268,12 +233,12 @@
          * @param initial
          * @returns {*}
          */
-        validate: function (item, value, initial) {
+        validate(item, value, initial) {
 
-            var type = typeof value;
-            // check if string contains float and then convert
+            let type = typeof value;
+            // _check if string contains float and then convert
             if (type == 'string') {
-                var f = parseFloat(value);
+                let f = parseFloat(value);
                 if (f && f.toString().length == value.length) {
                     value = f;
                 }
@@ -281,8 +246,8 @@
 
             // avoid values to be overwritten by wrong type
             if (initial && item in initial) {
-                var org = initial[item];
-                var otype = typeof org;
+                let org = initial[item];
+                let otype = typeof org;
 
                 if (otype !== type) {
                     // console.log(item, type, value, otype, org);
@@ -291,30 +256,52 @@
             }
 
             return value;
-        },
+        }
 
         /**
          *
          * @returns {null|*}
          */
-        isDefault: function () {
+        isDefault() {
             if (this.isdefault === null) {
-                var prpd = JSON.stringify(this.prepare());
-                var init = JSON.stringify(this.defaults().prepare());
+                let prpd = JSON.stringify(this.prepare());
+                let init = JSON.stringify(this.defaults().prepare());
 
                 this.isdefault = prpd === init;
             }
 
             return this.isdefault;
-        },
+        }
 
         /**
          *
          * @returns {HC.Settings}
          */
-        defaults: function () {
+        defaults() {
             return new HC.Settings(this.copy(this.initial));
         }
-    }
 
-})();
+        /**
+         *
+         * @param tree
+         * @returns {*}
+         */
+        get(tree) {
+
+            let item = this;
+            let source;
+            for (let k in tree) {
+                if (tree[k] in item) {
+                    source = item;
+                    item = item[tree[k]];
+                }
+            }
+
+            if (source && '_clean' in source && item in source._clean) {
+                return source._clean[item];
+            }
+
+            return item;
+        }
+    }
+}

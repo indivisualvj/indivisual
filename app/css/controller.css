@@ -805,3 +805,37 @@ select option {
     margin-left: -50%;
     height: 100%;
 }
+/* [role="button"] */
+.guify-component-container {
+    clear: both !important;
+}
+
+.guify-component-container[data-class] {
+    float: left;
+    margin-right: 1%;
+    box-sizing: border-box;
+}
+
+.guify-component-container[data-class="half"] {
+    width: 49%;
+}
+
+.guify-component-container[data-class="third"] {
+    width: 32.3333%;
+}
+
+.guify-component-container[data-class="quarter"] {
+    width: 24%;
+}
+
+.guify-component-container[data-class="hex"] {
+    width: 15.666%;
+}
+
+.clear {
+    clear: both !important;
+}
+
+.noclear {
+    clear: none !important;
+}

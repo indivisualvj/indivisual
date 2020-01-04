@@ -7,8 +7,8 @@ HC.Controller.prototype.addAnimationControllers = function (controlsets) {
     for (let cs in controlsets) {
         let set = controlsets[cs];
         if (set.visible !== false) {
-            let ui = new HC.ControlSetUi(set);
-            ui.addFolder(this.gui);
+            let ui = new HC.ControlSetGuifyUi(set, this.animationSettingsGui);
+            ui.addFolder();
             ui.addControls();
         }
     }

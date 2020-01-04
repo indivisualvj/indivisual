@@ -57,5 +57,27 @@
             rotation_y_oscillate: ['half'],
             rotation_z_oscillate: ['half']
         };
+
+        styles = {
+            rotation_mode: ['half', 'clear'],
+            rotation_sync: ['half'],
+            rotation_direction: ['half', 'clear'],
+            rotation_easing: ['half'],
+            rotation_x: ['quarter', 'clear'],
+            rotation_x_random: ['quarter'],
+            rotation_x_volume: ['half'],
+            rotation_y: ['quarter', 'clear'],
+            rotation_y_random: ['half'],
+            rotation_y_volume: ['half'],
+            rotation_z: ['quarter', 'clear'],
+            rotation_z_random: ['quarter'],
+            rotation_z_volume: ['half'],
+            rotation_offsetx: ['half', 'clear'],
+            rotation_offsetx_oscillate: ['half'],
+            rotation_offsety: ['half', 'clear'],
+            rotation_offsety_oscillate: ['half'],
+            rotation_offsetz: ['half', 'clear'],
+            rotation_offsetz_oscillate: ['half']
+        };
     }
 }

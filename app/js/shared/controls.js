@@ -46,6 +46,12 @@ HC.controls = HC.controls || {};
 
         /**
          *
+         * @type {{}}
+         */
+        styles = {};
+
+        /**
+         *
          * @type {Object.<string, *>}
          */
         values = {};
@@ -448,6 +454,163 @@ HC.controls = HC.controls || {};
             );
 
             HC.log(this.object.name + '/' + this.property, value);
+        }
+    }
+}
+
+{
+    /**
+     *
+     * @type {HC.ControlsetGuifyUi}
+     */
+    HC.ControlSetGuifyUi = class ControlsetGuifyUi extends HC.ControlSetUi {
+
+        /**
+         * @type {animationSettingsGui}
+         */
+        gui;
+
+        /**
+         *
+         * @param controlSet
+         * @param gui
+         */
+        constructor(controlSet, gui) {
+            super(controlSet);
+            this.gui = gui;
+        }
+
+        /**
+         *
+         */
+        addControls() {
+
+            let control;
+            for(let key in this.controlSet.settings) {
+                control = this.addControl(key);
+            }
+        }
+
+        /**
+         *
+         * @param {}parent
+         * @return {*}
+         */
+        addFolder() {
+            let key = this.controlSet.className();
+            let name = this.controlSet.name();
+
+            this.folder = this.gui.Register({
+                type: 'folder',
+                label: name,
+                open: false,
+                set: key,
+                controllers: {}
+            });
+
+            // this._addShareListener(key, this.folder, false);
+
+            return this.folder;
+        }
+
+        /**
+         *
+         * @param key
+         */
+        addControl(key) {
+            let types = this.controlSet.types[key];
+            let styles = this.controlSet.styles[key];
+            let props = this.controlSet.properties;
+            let values = this.controlSet.values[key] || null;
+            let value = props[key];
+
+            // _check if hidden
+            if (types && types.length > 0) {
+                if(types[types.length - 1] == 'hidden') {
+                    return;
+                }
+            }
+
+            // shorten name by regexp
+            let reg = new RegExp('\\w+_([^_]+)$');
+            let name = key.replace(reg, '$1');
+
+            let config = {
+                type: 'text',
+                label: name,
+                object: props,
+                property: key,
+                onChange: this.onChange,
+                folder: this.folder.opts.label,
+                parent: this.folder,
+                set: this.controlSet.className()
+            };
+
+            if (typeof value == 'number' && types && types.length > 2) {
+                if (true) {
+                    config.type = 'range';
+                    let min = types[0];
+                    let max = types[1];
+                    let step = types[2];
+                    config.min = min;
+                    config.max = max;
+                    config.step = step;
+                }
+
+            } else if (typeof value == 'boolean') {
+                config.type = 'checkbox';
+
+            } else if (typeof value == 'string' && value.startsWith('#')) {
+                config.type = 'color';
+                config.format = 'hex';
+
+            } else if (values) {
+                config.type = 'select';
+                config.options = values;
+            }
+
+            this.folder.opts.controllers[key] = this.gui.Register(config);
+
+            if (types) {
+                if (types.length > 0) {
+                    this.folder.opts.controllers[key].container.setAttribute('data-class', types[types.length - 1]);
+                }
+            }
+
+            if (styles) {
+                this.folder.opts.controllers[key].container.setAttribute('data-class', styles[0]);
+
+                if (styles.length > 1) {
+                    this.folder.opts.controllers[key].container.classList.add(styles[styles.length - 1]);
+
+                } else {
+                    this.folder.opts.controllers[key].container.classList.add('noclear');
+                }
+            }
+
+            return this.folder.opts.controllers[key];
+
+        }
+
+        /**
+         *
+         * @param value
+         */
+        onChange(value) {
+            let data = {};
+            data[this.set] = {};
+            data[this.set][this.property] = value;
+
+            controller.updateSetting(
+                statics.ControlSettings.layer,
+                data,
+                true,
+                true,
+                false
+            );
+
+            HC.log(this.set + '/' + this.property, value);
+
         }
     }
 }

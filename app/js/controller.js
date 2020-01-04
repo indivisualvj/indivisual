@@ -144,6 +144,7 @@ document.addEventListener('DOMContentLoaded', function () {
      */
     HC.Controller = class Controller {
         gui = false;
+        animationSettingsGui;
         synced = {};
         thumbTimeouts = [];
         name;
@@ -163,6 +164,44 @@ document.addEventListener('DOMContentLoaded', function () {
 
             this.gui = new dat.GUI({autoPlace: false});
             document.getElementById('controller').appendChild(this.gui.domElement);
+
+            let guifyEl = document.getElementById('guify');
+
+            this.animationSettingsGui = new guify({
+                title: 'AnimationSettings',
+                theme: 'dark', // dark, light, yorha, or theme object
+                align: 'right', // left, right
+                width: '100%',
+                barMode: 'offset', // none, overlay, above, offset
+                panelMode: 'inner',
+                opacity: 1,
+                root: guifyEl,
+                open: false
+            });
+
+            this.displaySettingsGui = new guify({
+                title: 'DisplaySettings',
+                theme: 'dark', // dark, light, yorha, or theme object
+                align: 'right', // left, right
+                width: '100%',
+                barMode: 'offset', // none, overlay, above, offset
+                panelMode: 'inner',
+                opacity: 1,
+                root: guifyEl,
+                open: false
+            });
+
+            this.controlSettingsGui = new guify({
+                title: 'ControlSettings',
+                theme: 'dark', // dark, light, yorha, or theme object
+                align: 'right', // left, right
+                width: '100%',
+                barMode: 'offset', // none, overlay, above, offset
+                panelMode: 'inner',
+                opacity: 1,
+                root: guifyEl,
+                open: false
+            });
         }
 
         /**

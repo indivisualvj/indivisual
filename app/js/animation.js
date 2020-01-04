@@ -582,6 +582,8 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateSetting(layer, data, display, forward, force) {
 
+            if (!renderer)return;
+
             let layerIndex = layer;
             layer = renderer.layers[layer];
 

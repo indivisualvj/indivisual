@@ -13,7 +13,7 @@
 
         settings = {
             lighting_type: 'off',
-            lighting_color: '#fff',
+            lighting_color: '#ffffff',
             lighting_intensity: 1,
             lighting_intensity_oscillate: 'off',
             lighting_angle: 1.05,

@@ -23,7 +23,7 @@
             filter_volume: [-10, 10, 0.01]
         };
 
-        settings = {
+        styles = {
             filter_mode: ['half', 'clear'],
             filter_audio: ['hex'],
             filter_limit: ['hex'],

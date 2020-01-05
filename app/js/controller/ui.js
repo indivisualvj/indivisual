@@ -368,7 +368,7 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
 
                 if (o !== null) {
                     var _label = skey + '_oscillate';
-                    ctl = folder.add(shs, 'oscillate', statics.ShaderValues.oscillate)
+                    ctl = folder.add(shs, 'oscillate', statics.AnimationValues.oscillate)
                         .name(_label)
                         .onFinishChange(submit);
                     ctl.parent = parent;

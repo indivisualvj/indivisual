@@ -116,14 +116,6 @@ function setupResources() {
             }
         },
         {
-            file: 'structure/ShaderValues.yml',
-            callback: function (data, finished) {
-                var settings = jsyaml.load(data.contents);
-                statics.ShaderValues = settings;
-                finished();
-            }
-        },
-        {
             file: 'structure/ShaderTypes.yml',
             callback: function (data, finished) {
                 statics.ShaderTypes = new HC.Settings(jsyaml.load(data.contents));
@@ -361,6 +353,9 @@ function setupResources() {
             if (name == 'Plugin') {
                 name = pluginKey;
             }
+            if (!(section in settings)) {
+                settings[section] = {};
+            }
 
             settings[section][pluginKey] = name;
 
@@ -456,8 +451,6 @@ function setupResources() {
             _loadPlugins(settings, HC.plugins, section, HC.plugins[section]);
 
         }
-
-        statics.ShaderValues.oscillate = settings.oscillate;
     }
 
     /**
@@ -467,6 +460,7 @@ function setupResources() {
      */
     function _loadRhythms(settings) {
         var speeds = HC.Beatkeeper.initSpeeds();
+        settings.rhythm = {};
         for (var key in speeds) {
             if (speeds[key].visible !== false) {
                 settings.rhythm[key] = key;

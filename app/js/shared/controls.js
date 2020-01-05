@@ -525,10 +525,10 @@ HC.controls = HC.controls || {};
          * @param key
          */
         addControl(key) {
-            let types = this.controlSet.types[key];
-            let styles = this.controlSet.styles[key];
+            let types = this.controlSet.types[key] || false;
+            let styles = this.controlSet.styles[key] || false;
             let props = this.controlSet.properties;
-            let values = this.controlSet.values[key] || null;
+            let values = this.controlSet.values[key] || false;
             let value = props[key];
 
             // _check if hidden

@@ -92,7 +92,7 @@ function loadResources(resources, callback) {
             statics.ControlValues.session[_HASH] = _HASH;
         }
 
-        statics.ControlSettings.session = _HASH;
+        // statics.ControlSettings.session = _HASH;
 
         callback();
     };
@@ -149,20 +149,6 @@ function setupResources() {
                 _loadControlSets();
 
                 statics.ControlValues = settings;
-                finished();
-            }
-        },
-        {
-            file: 'structure/ControlSettings.yml',
-            callback: function (data, finished) {
-                statics.ControlSettings = new HC.Settings(jsyaml.load(data.contents));
-                finished();
-            }
-        },
-        {
-            file: 'structure/ControlTypes.yml',
-            callback: function (data, finished) {
-                statics.ControlTypes = jsyaml.load(data.contents);
                 finished();
             }
         },

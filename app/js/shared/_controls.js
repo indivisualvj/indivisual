@@ -28,6 +28,12 @@ HC.controls = HC.controls || {};
         visible = true;
 
         /**
+         *
+         * @type {boolean}
+         */
+        open = false;
+
+        /**
          * definition of all available settings
          * @type {Object.<string, *>}
          */
@@ -203,35 +209,6 @@ HC.controls = HC.controls || {};
             return value;
         }
 
-        // /**
-        //  * set every each member of settings to data[member] if exists
-        //  * @param data
-        //  */
-        // merge(data) {
-        //     for (let key in this.settings) {
-        //         if (key in data) {
-        //             this.set(key, data[key]);
-        //         }
-        //     }
-        // }
-        //
-        // /**
-        //  *
-        //  * @param key
-        //  * @returns {null|*}
-        //  */
-        // getDefault(key) {
-        //     if (key in this.settings) {
-        //         return this.settings[key];
-        //     }
-        //     key = this._key(key);
-        //     if (key in this.settings) {
-        //         return this.settings[key];
-        //     }
-        //
-        //     return null;
-        // }
-
         /**
          * This is here for migrating settings from e.g. lighting_lookat_[property] to lookat_[property]
          * @param key
@@ -285,6 +262,38 @@ HC.controls = HC.controls || {};
 {
     /**
      *
+     * @type {HC.StaticControlSet}
+     */
+    HC.StaticControlSet = class StaticControlSet extends HC.ControlSet {
+
+        /**
+         * check might this be the better way to copy instead of JSON.parse etc?
+         * @returns Object
+         */
+        defaults() {
+            let _copy = function (settings) {
+                let props = {};
+                for (let key in settings) {
+                    let value = settings[key];
+
+                    if (typeof value !== 'object') {
+                        props[key] = value;
+                    } else {
+                        props[key] = _copy(value);
+                    }
+                }
+
+                return props;
+            };
+
+            return _copy(this.settings);
+        }
+    }
+}
+
+{
+    /**
+     *
      * @type {HC.ControlSetUi}
      */
     HC.ControlSetUi = class ControlSetUi {
@@ -293,6 +302,10 @@ HC.controls = HC.controls || {};
          * @type {HC.ControlSet}
          */
         controlSet;
+
+        /**
+         * @type {guify}
+         */
         folder;
 
         /**
@@ -466,7 +479,7 @@ HC.controls = HC.controls || {};
     HC.ControlSetGuifyUi = class ControlsetGuifyUi extends HC.ControlSetUi {
 
         /**
-         * @type {animationSettingsGui}
+         * @type {guify}
          */
         gui;
 
@@ -500,8 +513,7 @@ HC.controls = HC.controls || {};
 
         /**
          *
-         * @param {}parent
-         * @return {*}
+         * @return {guify}
          */
         addFolder() {
             let key = this.controlSet.className();
@@ -510,7 +522,7 @@ HC.controls = HC.controls || {};
             this.folder = this.gui.Register({
                 type: 'folder',
                 label: name,
-                open: false,
+                open: this.controlSet.open,
                 set: key,
                 controllers: {}
             });
@@ -553,7 +565,14 @@ HC.controls = HC.controls || {};
                 set: this.controlSet.className()
             };
 
-            if (typeof value == 'number' && types && types.length > 2) {
+            if (typeof value == 'function') {
+                config.type = 'button';
+                config.action = value;
+                delete config.onChange;
+                delete config.property;
+                delete config.object;
+
+            } else if (typeof value == 'number' && types && types.length > 2) {
                 if (true) {
                     config.type = 'range';
                     let min = types[0];

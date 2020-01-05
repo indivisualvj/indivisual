@@ -259,7 +259,7 @@ HC.Layer.prototype.doSizing = function (shape) {
  * @param enable
  */
 HC.Layer.prototype.doOscillate = function (enable) {
-    let oscillator = HC.ControlSetsManager.getAllOsciProperties();
+    let oscillator = HC.LayeredControlSetsManager.getAllOsciProperties();
     for (var i = 0; i < oscillator.length; i++) {
         var key = oscillator[i];
         var okey = key + '_oscillate';

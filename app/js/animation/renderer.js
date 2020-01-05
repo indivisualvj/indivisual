@@ -144,8 +144,8 @@
                 let l = new HC.Layer(this, i);
 
                 l.preset = op;
-                l.controlsets = os || HC.ControlSetsManager.initAll(statics.AnimationValues);
-                l.settings = HC.ControlSetsManager.settingsProxy(os || l.controlsets);
+                l.controlsets = os || HC.LayeredControlSetsManager.initAll(statics.AnimationValues);
+                l.settings = HC.LayeredControlSetsManager.settingsProxy(os || l.controlsets);
 
                 this.layers[i] = l;
 

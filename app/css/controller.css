@@ -808,6 +808,7 @@ select option {
 /* [role="button"] */
 .guify-component-container {
     clear: both !important;
+    width: 99%;
 }
 
 .guify-component-container[data-class] {
@@ -826,6 +827,10 @@ select option {
 
 .guify-component-container[data-class="quarter"] {
     width: 24%;
+}
+
+.guify-component-container[data-class="eight"] {
+    width: 11.5%;
 }
 
 .guify-component-container[data-class="hex"] {
@@ -852,3 +857,23 @@ select option {
 /*.guify-folder_1FExAJ div {*/
 /*    color: #e61d5f;*/
 /*}*/
+
+.guify-button_1S84xL {
+    width: calc(100%) !important;
+}
+
+input[type=checkbox].guify-checkbox_hxzak + label {
+    position: absolute;
+    right: 0px;
+}
+
+/*.guify-container_be6yU*/
+.guify-panel-container_39NJay
+/*.guify-panel-toggle-button_39NJay*/
+{
+    position: relative !important;
+}
+
+.fullscreenable:fullscreen {
+    overflow-y: auto;
+}

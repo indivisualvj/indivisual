@@ -125,7 +125,7 @@ HC.Controller.prototype.initKeyboard = function () {
             controller.updateControl('play', !statics.ControlSettings.play, true, true, false);
 
         } else if (e.keyCode == 46) { // DEL = reset
-            statics.ControlController.g_controls.reset();
+            statics.ControlSettings.reset();
 
         } else if (e.keyCode == 8) {
             var open = controller.nextOpenFolder();
@@ -149,17 +149,17 @@ HC.Controller.prototype.initKeyboard = function () {
         } else if (e.keyCode == 35) { // END = push_layers
             e.stopPropagation();
             e.preventDefault();
-            statics.ControlController.g_controls.push_layers();
+            statics.ControlSettings.push_layers();
 
         } else if (e.keyCode == 33) { // PG_UP = rst_shaders
             e.stopPropagation();
             e.preventDefault();
-            statics.ControlController.g_controls.rst_shaders();
+            statics.ControlSettings.rst_shaders();
 
         } else if (e.keyCode == 34) { // PG_DOWN = push_sources
             e.stopPropagation();
             e.preventDefault();
-            statics.ControlController.g_controls.push_sources();
+            statics.ControlSettings.push_sources();
         }
 
         if (e.keyCode in LAYER_KEYCODES) {

@@ -1,0 +1,140 @@
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+
+HC.ControlController = HC.ControlController || {};
+
+{
+    /**
+     * 
+     * @type {HC.ControlController.g_session}
+     */
+    HC.ControlController.g_session = class g_session extends HC.StaticControlSet {
+
+        static index = 10;
+        // static _name = 'session';
+
+        settings = {
+            session: 'root'
+        };
+
+        types = {
+        };
+
+        styles = {
+        };
+    }
+}
+
+{
+    /**
+     *
+     * @type {HC.ControlController.g_controls}
+     */
+    HC.ControlController.g_controls = class g_controls extends HC.StaticControlSet {
+
+        static index = 20;
+        // static _name = 'controls';
+        open = true;
+
+        settings = {
+            play: true,
+
+            reset: function () {
+
+                if (statics.ctrlKey) {
+                    let yes = confirm('Reset everything?');
+                    if (yes) {
+                        let os = statics.ControlSettings.session;
+                        // statics.ControlSettings.update(statics.ControlSettings.initial);
+                        statics.ControlSettings.session = os;
+
+                        messaging.emitControls(statics.ControlSettings, true, true, true);
+                    }
+                }
+
+                if (statics.shiftKey || statics.ctrlKey) {
+                    // sm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
+                    cm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
+                    controller.syncLayers();
+                    controller.updateControl('reset', true, true, true, true);
+                    explorer.resetPresets();
+                    controller.updateControl('layer', statics.ControlSettings.layer, true, false, false);
+
+                } else {
+                    controller.updateControl('reset', true, true, true, false);
+                }
+            },
+
+            monitor: false,
+            push_layers: function () {
+                controller.syncLayers();
+            },
+            push_sources: function () {
+                controller.pushSources();
+            },
+            rst_shaders: function () {
+                cm.update(statics.ControlSettings.layer, 'passes', 'shaders', []);
+                let data = cm.get(statics.ControlSettings.layer, 'passes').prepare();
+                controller.updateSettings(statics.ControlSettings.layer, data, false, false, true);
+                messaging.emitSettings(statics.ControlSettings.layer, data, false, false, true);
+            },
+            debug: false,
+            tempo: 120.00,
+            beat: true,
+            audio: 'off',
+            peak_bpm_detect: true,
+            layer: 0,
+
+            shuffleable: '',
+            shuffle_mode: 'off',
+            shuffle_every: 16,
+
+            volume: 1,
+        };
+
+        types = {
+            tempo: [1, 200, 0.01],
+            shuffle_every: [1, 64, 1],
+            volume: ['hidden']
+        };
+
+        styles = {
+            play: ['eight', 'clear'],
+            reset: ['eight'],
+            monitor: ['hex'],
+            push_layers: ['hex'],
+            push_sources: ['hex'],
+            rst_shaders: ['eight'],
+            debug: ['eight'],
+
+            tempo: ['half', 'clear'],
+            beat: ['half'],
+
+            audio: ['half', 'clear'],
+            peak_bpm_detect: ['half'],
+
+            layer: ['half', 'clear'],
+            shuffleable: ['half'],
+
+            shuffle_mode: ['half', 'clear'],
+            shuffle_every: ['half']
+        };
+    }
+}
+
+{
+    /**
+     *
+     * @type {HC.ControlControllerUi}
+     */
+    HC.ControlControllerUi = class ControlControllerUi extends HC.ControlSetGuifyUi {
+        /**
+         *
+         * @param value
+         */
+        onChange(value) {
+            controller.updateControl(this.property, value, true, true, false);
+        }
+    }
+}

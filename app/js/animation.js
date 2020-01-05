@@ -48,7 +48,7 @@ let sourceman;
 let listener;
 /**
  *
- * @type {HC.ControlSetsManager}
+ * @type {HC.LayeredControlSetsManager}
  */
 let cm;
 
@@ -69,6 +69,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 HC.DisplayController.createAllControls();
                 HC.SourceController.createAllControls();
+                statics.ControlSettingsManager = new HC.ControlSetsManager(HC.Statics.initAllControlSets())
+                statics.ControlSettings = statics.ControlSettingsManager.settingsProxy();
 
                 listener = new HC.Listener();
                 audioman = new HC.AudioManager();
@@ -96,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                 }
 
-                cm = new HC.ControlSetsManager(renderer.layers, statics.AnimationValues);
+                cm = new HC.LayeredControlSetsManager(renderer.layers, statics.AnimationValues);
 
                 displayman = new HC.DisplayManager({
                     display: new Array(statics.DisplayValues.display.length)
@@ -662,7 +664,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateControl(item, value, display, forward, force) {
 
-            if (statics.ControlSettings && statics.ControlSettings.contains(item)) {
+            if (statics.ControlSettings) {
 
                 if (item == 'beat') {
                     value = beatkeeper.trigger(value, true, statics.ControlSettings.tempo, true);
@@ -675,7 +677,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     return;
                 }
 
-                value = statics.ControlSettings.update(item, value);
+                value = statics.ControlSettingsManager.updateItem(item, value);
 
                 if (forward === true) {
                     let data = {};

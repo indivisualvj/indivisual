@@ -30,7 +30,7 @@ let beatkeeper;
 
 /**
  *
- * @type {HC.ControlSetsManager}
+ * @type {HC.LayeredControlSetsManager}
  */
 let cm;
 
@@ -80,21 +80,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
             loadResources(setupResources(), function () {
 
-                cm = new HC.ControlSetsManager([], statics.AnimationValues);
+                cm = new HC.LayeredControlSetsManager([], statics.AnimationValues);
 
-                statics.ControlController = new HC.ControlController();
                 statics.DisplayController = new HC.DisplayController();
                 statics.SourceController = new HC.SourceController();
 
                 controller.init();
-                controller.addControllers(statics.ControlController,
-                    statics.ControlSettings,
+
+                let controlSets = controller.addGuifyControllers(
+                    HC.ControlController,
                     statics.ControlValues,
-                    statics.ControlTypes,
-                    function (value) {
-                        controller.updateControl(this.property, value, true, true, false);
-                    }
+                    HC.ControlControllerUi,
+                    controller.controlSettingsGui
                 );
+                statics.ControlSettingsManager = new HC.ControlSetsManager(controlSets);
+                statics.ControlSettings = statics.ControlSettingsManager.settingsProxy(); // fixme not a final solution
+
                 controller.addControllers(statics.DisplayController,
                     statics.DisplaySettings,
                     statics.DisplayValues,
@@ -167,16 +168,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
             let guifyEl = document.getElementById('guify');
 
-            this.animationSettingsGui = new guify({
-                title: 'AnimationSettings',
+            this.controlSettingsGui = new guify({
+                title: 'ControlSettings',
                 theme: 'dark', // dark, light, yorha, or theme object
                 align: 'right', // left, right
                 width: '100%',
                 barMode: 'offset', // none, overlay, above, offset
                 panelMode: 'inner',
                 opacity: 1,
-                root: guifyEl,
-                open: false
+                root: document.getElementById('ControlsSettings'),
+                open: true
             });
 
             this.displaySettingsGui = new guify({
@@ -187,20 +188,32 @@ document.addEventListener('DOMContentLoaded', function () {
                 barMode: 'offset', // none, overlay, above, offset
                 panelMode: 'inner',
                 opacity: 1,
-                root: guifyEl,
+                root: document.getElementById('DisplaySettings'),
                 open: false
             });
 
-            this.controlSettingsGui = new guify({
-                title: 'ControlSettings',
+            this.sourceSettingsGui = new guify({
+                title: 'SourceSettings',
                 theme: 'dark', // dark, light, yorha, or theme object
                 align: 'right', // left, right
                 width: '100%',
                 barMode: 'offset', // none, overlay, above, offset
                 panelMode: 'inner',
                 opacity: 1,
-                root: guifyEl,
+                root: document.getElementById('SourceSettings'),
                 open: false
+            });
+
+            this.animationSettingsGui = new guify({
+                title: 'AnimationSettings',
+                theme: 'dark', // dark, light, yorha, or theme object
+                align: 'right', // left, right
+                width: '100%',
+                barMode: 'offset', // none, overlay, above, offset
+                panelMode: 'inner',
+                opacity: 1,
+                root: document.getElementById('AnimationSettings'),
+                open: true
             });
         }
 
@@ -247,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         migrateSettings0(layer, data, keepPasses) {
 
-            let mappings = HC.ControlSetsManager.mappings(() => {return HC.ControlSetsManager.initAll(statics.AnimationValues);});
+            let mappings = HC.LayeredControlSetsManager.mappings(() => {return HC.LayeredControlSetsManager.initAll(statics.AnimationValues);});
 
             let passes = cm.get(layer, 'passes');
             if (keepPasses !== true) {
@@ -286,7 +299,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }
             }
-            this.updateUi();
+            this.updateUi(this.animationSettingsGui);
         }
 
         /**
@@ -300,7 +313,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (force) {
                 cm.updateData(layer, data);
-                this.updateUi();
+                this.updateUi(this.animationSettingsGui);
 
             } else {
                 for (let k in data) {
@@ -372,7 +385,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param value
          */
         shareSetting(item, value) {
-            let mappings = HC.ControlSetsManager.mappings(() => {return HC.ControlSetsManager.initAll(statics.AnimationValues);});
+            let mappings = HC.LayeredControlSetsManager.mappings(() => {return HC.LayeredControlSetsManager.initAll(statics.AnimationValues);});
             let set = mappings[item];
             let data = {};
             data[set] = {};
@@ -429,9 +442,9 @@ document.addEventListener('DOMContentLoaded', function () {
             if (force) {
                 for (let k in data) {
                     let value = data[k];
-                    statics.ControlSettings.update(k, value);
+                    statics.ControlSettingsManager.updateItem(k, value);
                 }
-                this.updateUi();
+                this.updateUi(this.controlSettingsGui);
                 this.showDisplayControls();
 
             } else {
@@ -456,7 +469,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     let value = data[k];
                     statics.DisplaySettings.update(k, value);
                 }
-                this.updateUi();
+                this.updateUi(this.displaySettingsGui);
                 this.showDisplayControls();
 
             } else {
@@ -481,7 +494,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     let value = data[k];
                     statics.SourceSettings.update(k, value);
                 }
-                this.updateUi();
+                this.updateUi(this.sourceSettingsGui);
                 this.showDisplayControls();
 
             } else {
@@ -536,7 +549,7 @@ document.addEventListener('DOMContentLoaded', function () {
             pass[ctrl.name] = ctrl.getShader();
             passes.addShaderPass(pass);
 
-            this.updateUi();
+            this.updateUi(this.animationSettingsGui);
 
             let data = {passes: {shaders: passes.getShaderPasses()}};
             messaging.emitSettings(layer, data, false, false, false);
@@ -573,13 +586,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.explainPlugin(item, value, HC);
             }
 
-            if (statics.ControlSettings && statics.ControlSettings.contains(item)) {
+            if (statics.ControlSettings) {
 
                 if (item == 'beat') {
                     value = beatkeeper.trigger(value, true, statics.ControlSettings.tempo, false);
                 }
 
-                value = statics.ControlSettings.update(item, value);
+                value = statics.ControlSettingsManager.updateItem(item, value);
 
                 if (item == 'layer') {
                     this.updateSettings(value, cm.prepareLayer(value), true, false, true);
@@ -599,7 +612,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else if (item == 'reset') {
                     if (force) {
                         cm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
-                        // sm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
                     }
                 }
 
@@ -615,7 +627,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         this.updateData();
                     }
 
-                    this.updateUi(item);
+                    this.updateUi(this.controlSettingsGui);
                 }
 
                 if (item == 'session' && value != _HASH) {
@@ -656,7 +668,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 if (display !== false) {
-                    this.updateUi(item);
+                    this.updateUi(this.displaySettingsGui);
                 }
 
             }
@@ -702,7 +714,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         this.loadClip(numberExtract(item, 'sample'));
                     }
 
-                    this.updateUi(item);
+                    this.updateUi(this.sourceSettingsGui);
                 }
 
             }
@@ -725,7 +737,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     }
                 }
-                controller.updateUi();
+                controller.updateUi(this.sourceSettingsGui);
             }
 
             if (statics.SourceValues && statics.SourceValues.sequence) {
@@ -1026,7 +1038,7 @@ document.addEventListener('DOMContentLoaded', function () {
         resetFolder(open) {
             if (open.__controllers.length) {
                 let ctl = open.__controllers[0];
-                let mappings = HC.ControlSetsManager.mappings(() => {return HC.ControlSetsManager.initAll(statics.AnimationValues);});
+                let mappings = HC.LayeredControlSetsManager.mappings(() => {return HC.LayeredControlSetsManager.initAll(statics.AnimationValues);});
                 let set = mappings[ctl.property];
                 if (set) {
                     let cs = cm.get(statics.ControlSettings.layer, set);

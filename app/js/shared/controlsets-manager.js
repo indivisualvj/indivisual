@@ -3,55 +3,60 @@
  */
 
 {
-
     /**
      *
      * @type {HC.ControlSetsManager}
      */
     HC.ControlSetsManager = class ControlSetsManager {
 
-        static _mappings = false;
-        static _oscillatorProperties = false;
-        layers;
-        pluggedValues;
-        globalProperties;
+        /**
+         * @type {Object.<string, HC.ControlSet>}
+         */
+        controlSets;
+
+        /**
+         * @type {Object.<string, *>}
+         */
+        _mappings;
 
         /**
          *
-         * @param layers
-         * @param pluggedValues
+         * @param controlSets
          */
-        constructor(layers, pluggedValues) {
-            this.layers = layers;
-            this.pluggedValues = pluggedValues;
+        constructor(controlSets) {
+            this.controlSets = controlSets;
         }
 
         /**
          *
-         * @param layer
          * @param set
          * @param property
          * @param value
-         * @returns {*}
+         * @return {*}
          */
-        update(layer, set, property, value) {
-            let cs = this.get(layer, set);
+        update(set, property, value) {
+            let cs = this.get(set);
             let v = cs.set(property, value);
-
-            if (this.globalProperties) {
-                this.globalProperties[set].set(property, value);
-            }
 
             return v;
         }
 
         /**
          *
-         * @param layer
-         * @param data
-         * @returns {Array}
+         * @param item
+         * @param value
          */
-        updateData(layer, data) {
+        updateItem(item, value) {
+            let mappings = this.mappings();
+            return this.update(mappings[item], item, value);
+        }
+
+        /**
+         *
+         * @param data
+         * @return {Array}
+         */
+        updateData(data) {
             let updated = [];
             for (let k in data) {
                 let set = k;
@@ -60,7 +65,7 @@
                 for (let l in dat) {
                     let prop = l;
                     let val = dat[prop];
-                    data[set][prop] = this.update(layer, set, prop, val);
+                    data[set][prop] = this.update(set, prop, val);
                     let upd = {
                         property: prop,
                         value: val
@@ -74,72 +79,22 @@
 
         /**
          *
-         * @param layer
          * @param set
-         * @returns HC.ControlSet
+         * @return {HC.ControlSet}
          */
-        get(layer, set) {
-
-            let controlsets = this.getLayerProperties(layer);
-            return controlsets[set];
+        get(set) {
+            return this.controlSets[set];
         }
 
         /**
          *
-         * @param layer
-         * @returns {Object.<string, HC.ControlSet>}
-         */
-        getLayerProperties(layer) {
-            layer = this.getLayer(layer);
-
-            if (!layer.controlsets) {
-                this.setLayerProperties(layer, HC.ControlSetsManager.initAll(this.pluggedValues));
-            }
-
-            return layer.controlsets;
-        }
-
-        /**
-         *
-         * @param layer
-         * @param controlsets
-         */
-        setLayerProperties(layer, controlsets) {
-            layer = this.getLayer(layer);
-
-            layer.controlsets = controlsets;
-        }
-
-        /**
-         *
-         * @param layer
-         * @returns {Object.<string, Object>}
-         */
-        getLayer(layer) {
-            if (isNumber(layer) || isString(layer)) {
-                layer = parseInt(layer);
-
-                while (!(layer in this.layers)) {
-                    this.layers.push({});
-                }
-
-                layer = this.layers[layer];
-            }
-
-            return layer;
-        }
-
-        /**
-         *
-         * @param layer
          * @return {Object.<string, Object>}
          */
-        prepareLayer(layer) {
+        prepare() {
             let sets = {};
-            let controlsets = this.getLayerProperties(layer);
 
-            for (let k in controlsets) {
-                sets[k] = controlsets[k].properties;
+            for (let k in this.controlSets) {
+                sets[k] = this.controlSets[k].properties;
             }
 
             return sets;
@@ -147,26 +102,12 @@
 
         /**
          *
-         * @return {Object.<string, HC.ControlSet>}
-         */
-        getGlobalProperties() {
-            if (!this.globalProperties) {
-                this.globalProperties = HC.ControlSetsManager.initAll(this.pluggedValues);
-            }
-
-            return this.globalProperties;
-        }
-
-        /**
-         *
          * @param layer
          * @returns {boolean}
          */
-        isDefault(layer) {
-            let controlsets = this.getLayerProperties(layer);
-
-            for (let key in controlsets) {
-                let set = controlsets[key];
+        isDefault() {
+            for (let key in this.controlSets) {
+                let set = this.controlSets[key];
                 if (!set.isDefault()) {
                     return false;
                 }
@@ -178,39 +119,9 @@
         /**
          *
          */
-        reset(heap) {
-
-            if (this.globalProperties) {
-                let defaults = HC.ControlSetsManager.initAll(this.pluggedValues);
-                let _set = function (source, target) {
-                    for (let key in source) {
-                        let s1 = source[key];
-                        if (typeof s1 == 'object') {
-                            _set(s1, target[key]);
-
-                        } else {
-                            target[key] = s1;
-                        }
-                    }
-                };
-
-                _set(defaults, this.globalProperties);
-            }
-
-            for (let layer in this.layers) {
-
-                if (heap && heap.length > 0) {
-                    if (heap.indexOf(parseInt(layer)) < 0) {
-                        continue;
-                    }
-                }
-
-                this.setLayerProperties(layer, false);
-                this.getLayerProperties(layer);
-
-                if (this.layers[layer]._current) {
-                    this.layers[layer]._current = false;
-                }
+        reset() {
+            for (let k in this.controlSets) {
+                this.controlSets[k].reset();
             }
         }
 
@@ -219,11 +130,11 @@
          * @param controlsets
          * @returns {Proxy}
          */
-        static settingsProxy(controlsets) {
+        settingsProxy() {
 
-            let mappings = HC.ControlSetsManager.mappings(controlsets);
+            let mappings = this.mappings();
 
-            let proxy = new Proxy(controlsets, {
+            let proxy = new Proxy(this.controlSets, {
                 get(target, name, receiver) {
                     let key = mappings[name];
                     let set = target[key];
@@ -235,10 +146,6 @@
                             return props[name];
                         }
                     }
-
-                    // if (DEBUG) {
-                    //     console.error('setting not found: ' + name);
-                    // }
 
                     return undefined;
                 },
@@ -260,75 +167,27 @@
                     return false;
                 }
             });
+
             return proxy;
         }
 
         /**
          *
          */
-        static mappings(controlsets) {
-            if (!HC.ControlSetsManager._mappings) {
+        mappings() {
+            if (!this._mappings) {
                 let mappings = {};
 
-                if (typeof controlsets == 'function') {
-                    controlsets = controlsets();
-                }
-
-                for (let set in controlsets) {
-                    let settings = controlsets[set].settings;
+                for (let set in this.controlSets) {
+                    let settings = this.controlSets[set].settings;
 
                     for (let prop in settings) {
                         mappings[prop] = set;
                     }
                 }
-
-                HC.ControlSetsManager._mappings = mappings;
+                this._mappings = mappings;
             }
-
-            return HC.ControlSetsManager._mappings;
-        }
-
-        /**
-         *
-         * @param pluggedValues
-         */
-        static initAll(pluggedValues) {
-            let controlsets = {};
-            for (let key in statics.ControlSets) {
-                let cs = new HC.controls[key](key);
-                cs.init(pluggedValues);
-
-                controlsets[key] = cs;
-            }
-
-            return controlsets;
-        }
-
-        /**
-         *
-         * @returns {{}}
-         */
-        static getAllOsciProperties() {
-            if (!HC.ControlSetsManager._oscillatorProperties) {
-                let controlsets = HC.ControlSetsManager.initAll({});
-                let oscis = [];
-                for (let set in controlsets) {
-                    let settings = controlsets[set].settings;
-
-                    for (let prop in settings) {
-                        if (prop + '_oscillate' in settings) {
-                            oscis.push(prop);
-                        }
-                        // if (prop.endsWith('_oscillate')) {
-                        //     oscis.push(prop.replace('_oscillate', ''));
-                        // }
-                    }
-                }
-
-                HC.ControlSetsManager._oscillatorProperties = oscis;
-            }
-
-            return HC.ControlSetsManager._oscillatorProperties;
+            return this._mappings;
         }
     }
 }

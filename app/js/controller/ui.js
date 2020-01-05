@@ -16,6 +16,33 @@ HC.Controller.prototype.addAnimationControllers = function (controlsets) {
 
 /**
  *
+ * @param controlsets
+ * @param values
+ * @param uiClass
+ * @param gui
+ */
+HC.Controller.prototype.addGuifyControllers = function (controlsets, values, uiClass, gui) {
+
+    let instances = {};
+
+    for (let cs in controlsets) {
+        let set = controlsets[cs];
+        let inst = new set(cs);
+        inst.init(values);
+        instances[cs] = inst;
+
+        if (set.visible !== false) {
+            let ui = new uiClass(inst, gui);
+            ui.addFolder();
+            ui.addControls();
+        }
+    }
+
+    return instances;
+};
+
+/**
+ *
  * @param controllers
  * @param settings
  * @param values
@@ -580,16 +607,13 @@ HC.Controller.prototype.scrollToControl = function (control) {
 
 /**
  *
- * @param item
  * @param control
- * @param show
  */
-HC.Controller.prototype.updateUi = function (item, control) {
+HC.Controller.prototype.updateUi = function (control) {
 
-    if (!control) {
-        control = this.gui;
-        this.refreshLayerInfo();
+    this.refreshLayerInfo();
 
+    if (control = this.animationSettingsGui) {
         this.updateUiPasses();
     }
 
@@ -598,19 +622,8 @@ HC.Controller.prototype.updateUi = function (item, control) {
     for (var key in flds) {
         var fld = flds[key];
 
-        this.updateUi(item, fld);
+        this.updateUi(fld);
         this.updateValuesChanged(fld);
-    }
-
-    var ctrls = control.__controllers || [];
-
-    for (var key in ctrls) {
-        var ctrl = ctrls[key];
-        var property = ctrl.property;
-
-        if (!item || property == item) {
-            ctrl.updateDisplay();
-        }
     }
 };
 

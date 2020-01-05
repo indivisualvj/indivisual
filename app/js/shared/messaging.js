@@ -270,11 +270,6 @@
          */
         emitControls(data, display, forward, force) {
             if (data) {
-                if (data instanceof HC.Settings) {
-                    data = data.prepare();
-                }
-
-                statics.ControlSettings.clean(data, statics.ControlSettings.initial);
 
                 let config = {
                     action: 'controls',

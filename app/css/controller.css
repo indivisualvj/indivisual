@@ -841,6 +841,14 @@ select option {
 }
 
 [data-border="red"] {
-    border-left-color: rgba(255, 10, 10, 1) !important;
+    border-left-color: #e61d5f !important;
     border-left-width: 1px;
 }
+
+.guify-folder_1FExAJ div {
+    font-weight: bold;
+}
+
+/*.guify-folder_1FExAJ div {*/
+/*    color: #e61d5f;*/
+/*}*/

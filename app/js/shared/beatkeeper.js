@@ -17,19 +17,11 @@
         tempo = 120;
         tween;
 
-        speeds = {
-            "64": new HC.Speed(1 / 64, false),
-            "32": new HC.Speed(1 / 32, false),
-            hexa: new HC.Speed(1 / 16, true),
-            octa: new HC.Speed(1 / 8, true),
-            quad: new HC.Speed(1 / 4, true),
-            double: new HC.Speed(1 / 2, true),
-            full: new HC.Speed(1, true),
-            half: new HC.Speed(2, true),
-            quarter: new HC.Speed(4, true),
-            eight: new HC.Speed(8, true),
-            sixteen: new HC.Speed(16, true)
-        };
+        /**
+         *
+         * @type {Object.<string, HC.Speed>}
+         */
+        speeds = HC.Beatkeeper.initSpeeds();
 
         /**
          *
@@ -300,10 +292,30 @@
                 this._tween(s);
             }
         }
+
+        static initSpeeds() {
+            return {
+                "64": new HC.Speed(1 / 64, false),
+                "32": new HC.Speed(1 / 32, false),
+                hexa: new HC.Speed(1 / 16, true),
+                octa: new HC.Speed(1 / 8, true),
+                quad: new HC.Speed(1 / 4, true),
+                double: new HC.Speed(1 / 2, true),
+                full: new HC.Speed(1, true),
+                half: new HC.Speed(2, true),
+                quarter: new HC.Speed(4, true),
+                eight: new HC.Speed(8, true),
+                sixteen: new HC.Speed(16, true)
+            };
+        }
     }
 }
 
 {
+    /**
+     *
+     * @type {HC.Speed}
+     */
     HC.Speed = class Speed {
         duration = 0;
         progress = 0;

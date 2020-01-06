@@ -1,13 +1,13 @@
 fps: 60
-brightness: 1.00
 resolution: '1280x720'
-distance: 1.0
 fov: 1
+brightness: 1.00
 transparency: 1.0
 smearing: 0.0
+background: '#000000'
+distance: 1.0
 powersave: false
 clip_context: true
-background: '#000'
 keep_mapping_bounds: true
 border: 0
 border_mode: 'parent'
@@ -17,16 +17,16 @@ border_speed: 'half'
 display_visibility: 'visible'
 display_speed: 'quarter'
 display_visible: false
-display_video: 0
 display_mapping: ''
 display_static: false
-display_transparent: false
 display_noborder: false
+display_transparent: false
+display_video: 0
+display_smearing: 0.0
 display_zindex: 0
 display_mask_shape: 'off'
 display_keepbounds: true
 display_mask: ''
-display_smearing: 0.0
 
 trigger_display_visibility: false
 force_display_visibility: false

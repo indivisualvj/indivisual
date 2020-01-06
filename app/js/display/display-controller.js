@@ -7,7 +7,7 @@
      *
      * @type {HC.DisplayController}
      */
-    HC.DisplayController = class DisplayController {
+    HC._DisplayController = class DisplayController {
 
         /**
          *

@@ -160,19 +160,6 @@
             controls[getSampleEnabledKey(i)] = false;
             controls[getSampleRecordKey(i)] = false;
             controls[beatKey] = 8;
-
-            // var _reset = function (smp) {
-            //     var key = getSampleKey(smp);
-            //     controls[getSampleResetKey(smp)] = function () {
-            //         var updates = {};
-            //         updates[key + '_enabled'] = false;
-            //         updates[key + '_record'] = false;
-            //
-            //         controller.updateSources(updates, true, false, false);
-            //         messaging.emitSources(updates, true, true, false);
-            //     };
-            // };
-            // _reset(i);
         }
 
         return controls;

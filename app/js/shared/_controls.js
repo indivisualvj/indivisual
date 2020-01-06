@@ -23,6 +23,11 @@ HC.controls = HC.controls || {};
 
         /**
          *
+         */
+        parent;
+
+        /**
+         *
          * @type {boolean}
          */
         visible = true;
@@ -519,12 +524,23 @@ HC.controls = HC.controls || {};
             let key = this.controlSet.className();
             let name = this.controlSet.name();
 
+            if (this.controlSet.parent && !(this.controlSet.parent in this.gui.opts.folders)) {
+                let folder = this.gui.Register({
+                    type: 'folder',
+                    label: this.controlSet.parent,
+                    open: false
+                });
+
+                this.gui.opts.folders[this.controlSet.parent] = folder;
+            }
+
             this.folder = this.gui.Register({
                 type: 'folder',
                 label: name,
                 open: this.controlSet.open,
                 set: key,
-                controllers: {}
+                controllers: {},
+                folder: this.controlSet.parent
             });
 
             // this._addShareListener(key, this.folder, false);

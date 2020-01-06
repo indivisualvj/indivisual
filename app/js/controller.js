@@ -82,7 +82,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 cm = new HC.LayeredControlSetsManager([], statics.AnimationValues);
 
-                statics.DisplayController = new HC.DisplayController();
+                // statics.DisplayController = new HC.DisplayController();
                 statics.SourceController = new HC.SourceController();
 
                 controller.init();
@@ -96,14 +96,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 statics.ControlSettingsManager = new HC.ControlSetsManager(controlSets);
                 statics.ControlSettings = statics.ControlSettingsManager.settingsProxy(); // fixme not a final solution
 
-                controller.addControllers(statics.DisplayController,
-                    statics.DisplaySettings,
+                controlSets = controller.addGuifyControllers(
+                    HC.DisplayController,
                     statics.DisplayValues,
-                    statics.DisplayTypes,
-                    function (value) {
-                        controller.updateDisplay(this.property, value, true, true, false);
-                    }
+                    HC.DisplayControllerUi,
+                    controller.displaySettingsGui
                 );
+                statics.DisplaySettingsManager = new HC.ControlSetsManager(controlSets);
+                statics.DisplaySettings = statics.DisplaySettingsManager.settingsProxy(); // fixme not a final solution
+
+                // controller.addControllers(statics.DisplayController,
+                //     statics.DisplaySettings,
+                //     statics.DisplayValues,
+                //     statics.DisplayTypes,
+                //     function (value) {
+                //         controller.updateDisplay(this.property, value, true, true, false);
+                //     }
+                // );
                 controller.addControllers(statics.SourceController,
                     statics.SourceSettings,
                     statics.SourceValues,
@@ -166,54 +175,29 @@ document.addEventListener('DOMContentLoaded', function () {
             this.gui = new dat.GUI({autoPlace: false});
             document.getElementById('controller').appendChild(this.gui.domElement);
 
-            let guifyEl = document.getElementById('guify');
+            this.controlSettingsGui = this.createGuify('ControlSettings', true);
+            this.displaySettingsGui = this.createGuify('DisplaySettings');
+            this.sourceSettingsGui = this.createGuify('SourceSettings');
+            this.animationSettingsGui = this.createGuify('AnimationSettings');
+        }
 
-            this.controlSettingsGui = new guify({
-                title: 'ControlSettings',
+        /**
+         *
+         * @param id
+         * @param open
+         */
+        createGuify(id, open) {
+            return new guify({
+                title: id,
                 theme: 'dark', // dark, light, yorha, or theme object
                 align: 'right', // left, right
                 width: '100%',
                 barMode: 'offset', // none, overlay, above, offset
                 panelMode: 'inner',
                 opacity: 1,
-                root: document.getElementById('ControlsSettings'),
-                open: true
-            });
-
-            this.displaySettingsGui = new guify({
-                title: 'DisplaySettings',
-                theme: 'dark', // dark, light, yorha, or theme object
-                align: 'right', // left, right
-                width: '100%',
-                barMode: 'offset', // none, overlay, above, offset
-                panelMode: 'inner',
-                opacity: 1,
-                root: document.getElementById('DisplaySettings'),
-                open: false
-            });
-
-            this.sourceSettingsGui = new guify({
-                title: 'SourceSettings',
-                theme: 'dark', // dark, light, yorha, or theme object
-                align: 'right', // left, right
-                width: '100%',
-                barMode: 'offset', // none, overlay, above, offset
-                panelMode: 'inner',
-                opacity: 1,
-                root: document.getElementById('SourceSettings'),
-                open: false
-            });
-
-            this.animationSettingsGui = new guify({
-                title: 'AnimationSettings',
-                theme: 'dark', // dark, light, yorha, or theme object
-                align: 'right', // left, right
-                width: '100%',
-                barMode: 'offset', // none, overlay, above, offset
-                panelMode: 'inner',
-                opacity: 1,
-                root: document.getElementById('AnimationSettings'),
-                open: true
+                root: document.getElementById(id),
+                open: open,
+                folders: {}
             });
         }
 
@@ -467,7 +451,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (force) {
                 for (let k in data) {
                     let value = data[k];
-                    statics.DisplaySettings.update(k, value);
+                    // value = statics.DisplaySettingsManager.updateItem(k, value);
                 }
                 this.updateUi(this.displaySettingsGui);
                 this.showDisplayControls();
@@ -655,7 +639,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (statics.DisplaySettings.contains(item)) {
 
-                value = statics.DisplaySettings.update(item, value);
+                // value = statics.DisplaySettingsManager.updateItem(item, value);
 
                 if (item.match(/display\d+_visible/)) {
                     this.showDisplayControls();

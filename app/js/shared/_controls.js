@@ -28,6 +28,12 @@ HC.controls = HC.controls || {};
 
         /**
          *
+         * @type {{}}
+         */
+        parents = {};
+
+        /**
+         *
          * @type {boolean}
          */
         visible = true;
@@ -315,6 +321,12 @@ HC.controls = HC.controls || {};
 
         /**
          *
+         * @type {{}}
+         */
+        folders = {};
+
+        /**
+         *
          * @param controlSet
          */
         constructor(controlSet) {
@@ -558,6 +570,17 @@ HC.controls = HC.controls || {};
             let props = this.controlSet.properties;
             let values = this.controlSet.values[key] || false;
             let value = props[key];
+            let parent = this.controlSet.parents[key] || undefined;
+
+            if (parent && !this.folders[parent]) {
+                let pf = this.gui.Register({
+                    type: 'folder',
+                    label: parent,
+                    open: false,
+                    folder: this.controlSet.parent || this.folder.opts.label
+                });
+                this.folders[parent] = pf;
+            }
 
             // _check if hidden
             if (types && types.length > 0) {
@@ -576,7 +599,7 @@ HC.controls = HC.controls || {};
                 object: props,
                 property: key,
                 onChange: this.onChange,
-                folder: this.folder.opts.label,
+                folder: parent || this.folder.opts.label,
                 parent: this.folder,
                 set: this.controlSet.className()
             };

@@ -10,12 +10,11 @@ HC.DisplayController = HC.DisplayController || {};
      * @type {HC.DisplayController._general}
      *
      */
-    HC.DisplayController._general = class _general extends HC.StaticControlSet {
+    HC.DisplayController.v_general = class _general extends HC.StaticControlSet {
 
         static index = 10;
 
         parent=  'g_video';
-        // static _name = 'session';
 
         settings = {
             fps: 60,
@@ -175,155 +174,176 @@ HC.DisplayController = HC.DisplayController || {};
     }
 }
 
-// {
-//     /**
-//      *
-//      * @type {HC.DisplayController.g_displays}
-//      */
-//     HC.DisplayController.g_displays = class g_displays extends HC.StaticControlSet {
-//
-//         static index = 20;
-//         // static _name = 'controls';
-//
-//         constructor(name) {
-//             super(name);
-//
-//             this.createSettings();
-//             this.createMappingSettings();
-//         }
-//
-//         settings = {
-//             _general: {
-//                 display_visibility: 'visible',
-//                 display_speed: 'quarter',
-//                 border: 0,
-//                 border_mode: 'parent',
-//                 border_color: '#ffffff',
-//                 border_speed: 'half',
-//                 trigger_display_visibility: function () {
-//                     controller.updateDisplay('trigger_display_visibility', true, true, true, false);
-//                 },
-//                 force_display_visibility: function () {
-//                     controller.updateDisplay('force_display_visibility', true, true, true, false);
-//                 },
-//                 reset_display_visibility: function () {
-//                     controller.updateDisplay('reset_display_visibility', true, true, true, false);
-//                 }
-//             }
-//         };
-//
-//         types = {
-//             display_zindex: [0, 18, 1],
-//             display_smearing: [0, 0.96, 0.02],
-//         };
-//
-//         styles = {
-//
-//         };
-//
-//         values = {
-//             display_visibility: 'visible',
-//             display_speed: 'quarter',
-//             display_visible: false,
-//             display_mapping: '',
-//             display_static: false,
-//             display_noborder: false,
-//             display_transparent: false,
-//             display_video: 0,
-//             display_smearing: 0.0,
-//             display_zindex: 0,
-//             display_mask_shape: 'off',
-//             display_keepbounds: true,
-//             display_mask: ''
-//         };
-//
-//         /**
-//          *
-//          */
-//         createSettings() {
-//             let okey = 'display';
-//             for (let i = 0; i < statics.DisplayValues.display.length; i++) {
-//
-//                 let key = 'display' + i;
-//                 let ukey = '_' + key;
-//
-//                 this.settings[ukey] = {};
-//
-//                 // settings
-//                 this.settings[ukey][key + '_static'] = this.values[okey + '_static'];
-//                 this.settings[ukey][key + '_transparent'] = this.values[okey + '_transparent'];
-//                 this.settings[ukey][key + '_noborder'] = this.values[okey + '_noborder'];
-//                 this.settings[ukey][key + '_video'] = this.values[okey + '_video'];
-//                 this.settings[ukey][key + '_smearing'] = this.values[okey + '_smearing'];
-//
-//                 // types
-//                 this.types[key + '_zindex'] = this.types[okey + '_zindex'];
-//                 this.types[key + '_smearing'] = this.types[okey + '_smearing'];
-//
-//                 // values
-//                 this.values[key + '_video'] = statics.DisplayValues.video;
-//
-//                 // styles
-//                 this.styles[key + '_static'] = ['quarter'];
-//                 this.styles[key + '_transparent'] = ['quarter'];
-//                 this.styles[key + '_noborder'] = ['quarter'];
-//                 this.styles[key + '_video'] = ['half'];
-//                 this.styles[key + '_smearing'] = ['half'];
-//
-//             }
-//         }
-//
-//         /**
-//          *
-//          * @return {*}
-//          */
-//         createMappingSettings() {
-//             let okey = 'display';
-//             for (let i = 0; i < statics.DisplayValues.display.length; i++) {
-//
-//                 let key = 'display' + i;
-//                 let ukey = '_' + key;
-//
-//                 // values
-//                 this.values[key + '_mask_shape'] = statics.DisplayValues['masking_shape'];
-//
-//                 // styles
-//                 this.styles[key + '_visible'] = ['quarter', 'clear'];
-//                 this.styles[key + '_keepbounds'] = ['quarter'];
-//                 this.styles[key + '_1'] = ['eight'];
-//                 this.styles[key + '_2'] = ['eight'];
-//                 this.styles[key + '_3'] = ['eight'];
-//                 this.styles[key + '_4'] = ['eight'];
-//                 this.styles[key + '_zindex'] = ['half', 'clear'];
-//                 this.styles[key + '_mapping'] = ['half'];
-//                 this.styles[key + '_mask_shape'] = ['half', 'clear'];
-//                 this.styles[key + '_mask'] = ['half'];
-//
-//                 // settings
-//                 let _resize = function (key, factor) {
-//                     return function () {
-//                         let _key = (key + '_' + factor);
-//                         let data = {};
-//                         data[_key] = factor;
-//                         messaging.emitDisplays(data, true, true, false);
-//                     };
-//                 };
-//
-//                 this.settings[ukey] = {};
-//                 this.settings[ukey][key + '_visible'] = this.values[okey + '_visible'];
-//                 this.settings[ukey][key + '_keepbounds'] = this.values[okey + '_keepbounds'];
-//                 this.settings[ukey][key + '_1'] = _resize(key, 1);
-//                 this.settings[ukey][key + '_2'] = _resize(key, 2);
-//                 this.settings[ukey][key + '_3'] = _resize(key, 3);
-//                 this.settings[ukey][key + '_4'] = _resize(key, 4);
-//                 this.settings[ukey][key + '_zindex'] = i + 1;
-//                 this.settings[ukey][key + '_mapping'] = this.values[okey + '_mapping'];
-//                 this.settings[ukey][key + '_mask_shape'] = this.values[okey + '_mask_shape'];
-//                 this.settings[ukey][key + '_mask'] = this.values[okey + '_mask'];
-//             }
-//         }
-//     }
-// }
+{
+    /**
+     *
+     * @type {HC.DisplayController.g_displays}
+     */
+    HC.DisplayController.d_general = class _general extends HC.StaticControlSet {
+
+        static index = 20;
+        
+        parent = 'g_displays';
+
+        constructor(name) {
+            super(name);
+
+            this.createSettings();
+            this.createMappingSettings();
+        }
+
+        settings = {
+            display_visibility: 'visible',
+            display_speed: 'quarter',
+            border_mode: 'parent',
+            border_speed: 'half',
+            border: 0,
+            border_color: '#ffffff',
+            trigger_display_visibility: function () {
+                controller.updateDisplay('trigger_display_visibility', true, true, true, false);
+            },
+            force_display_visibility: function () {
+                controller.updateDisplay('force_display_visibility', true, true, true, false);
+            },
+            reset_display_visibility: function () {
+                controller.updateDisplay('reset_display_visibility', true, true, true, false);
+            }
+        };
+
+        types = {
+            display_zindex: [0, 18, 1],
+            display_smearing: [0, 0.96, 0.02],
+        };
+
+        styles = {
+            display_visibility: ['half', 'clear'],
+            display_speed: ['half'],
+            border_mode: ['half', 'clear'],
+            border_speed: ['half'],
+            border: ['half', 'clear'],
+            border_color: ['half']
+        };
+
+        values = {
+            display_visibility: 'visible',
+            display_speed: 'quarter',
+            display_visible: false,
+            display_mapping: '',
+            display_static: false,
+            display_noborder: false,
+            display_transparent: false,
+            display_video: 0,
+            display_smearing: 0.0,
+            display_zindex: 0,
+            display_mask_shape: 'off',
+            display_keepbounds: true,
+            display_mask: ''
+        };
+
+        /**
+         *
+         */
+        createSettings() {
+            let okey = 'display';
+            for (let i = 0; i < statics.DisplayValues.display.length; i++) {
+
+                let key = 'display' + i;
+                let ukey = '_' + key;
+
+                // settings
+                this.settings[key + '_static'] = this.values[okey + '_static'];
+                this.settings[key + '_transparent'] = this.values[okey + '_transparent'];
+                this.settings[key + '_noborder'] = this.values[okey + '_noborder'];
+                this.settings[key + '_video'] = this.values[okey + '_video'];
+                this.settings[key + '_smearing'] = this.values[okey + '_smearing'];
+                this.settings[key + '_zindex'] = this.values[okey + '_zindex'];
+
+                // parents
+                this.parents[key + '_static'] = ukey;
+                this.parents[key + '_transparent'] = ukey;
+                this.parents[key + '_noborder'] = ukey;
+                this.parents[key + '_video'] = ukey;
+                this.parents[key + '_smearing'] = ukey;
+                this.parents[key + '_zindex'] = ukey;
+
+                // types
+                this.types[key + '_zindex'] = this.types[okey + '_zindex'];
+                this.types[key + '_smearing'] = this.types[okey + '_smearing'];
+
+                // values
+                this.values[key + '_video'] = statics.DisplayValues.video;
+
+                // styles
+                this.styles[key + '_static'] = ['quarter'];
+                this.styles[key + '_transparent'] = ['quarter'];
+                this.styles[key + '_noborder'] = ['quarter'];
+                this.styles[key + '_video'] = ['half'];
+                this.styles[key + '_smearing'] = ['half'];
+
+            }
+        }
+
+        /**
+         *
+         * @return {*}
+         */
+        createMappingSettings() {
+            let okey = 'display';
+            for (let i = 0; i < statics.DisplayValues.display.length; i++) {
+
+                let key = 'display' + i;
+                let ukey = '_' + key;
+
+                // values
+                this.values[key + '_mask_shape'] = statics.DisplayValues['masking_shape'];
+
+                // styles
+                this.styles[key + '_visible'] = ['quarter', 'clear'];
+                this.styles[key + '_keepbounds'] = ['quarter'];
+                this.styles[key + '_1'] = ['eight'];
+                this.styles[key + '_2'] = ['eight'];
+                this.styles[key + '_3'] = ['eight'];
+                this.styles[key + '_4'] = ['eight'];
+                this.styles[key + '_zindex'] = ['half', 'clear'];
+                this.styles[key + '_mapping'] = ['half'];
+                this.styles[key + '_mask_shape'] = ['half', 'clear'];
+                this.styles[key + '_mask'] = ['half'];
+
+                // settings
+                let _resize = function (key, factor) {
+                    return function () {
+                        let _key = (key + '_' + factor);
+                        let data = {};
+                        data[_key] = factor;
+                        messaging.emitDisplays(data, true, true, false);
+                    };
+                };
+
+                this.settings[key + '_visible'] = this.values[okey + '_visible'];
+                this.settings[key + '_keepbounds'] = this.values[okey + '_keepbounds'];
+                this.settings[key + '_1'] = _resize(key, 1);
+                this.settings[key + '_2'] = _resize(key, 2);
+                this.settings[key + '_3'] = _resize(key, 3);
+                this.settings[key + '_4'] = _resize(key, 4);
+                this.settings[key + '_zindex'] = i + 1;
+                this.settings[key + '_mapping'] = this.values[okey + '_mapping'];
+                this.settings[key + '_mask_shape'] = this.values[okey + '_mask_shape'];
+                this.settings[key + '_mask'] = this.values[okey + '_mask'];
+
+                this.parents[key + '_visible'] = ukey;
+                this.parents[key + '_keepbounds'] = ukey;
+                this.parents[key + '_1'] = ukey;
+                this.parents[key + '_2'] = ukey;
+                this.parents[key + '_3'] = ukey;
+                this.parents[key + '_4'] = ukey;
+                this.parents[key + '_zindex'] = ukey;
+                this.parents[key + '_mapping'] = ukey;
+                this.parents[key + '_mask_shape'] = ukey;
+                this.parents[key + '_mask'] = ukey;
+            }
+        }
+    }
+}
 
 {
     /**

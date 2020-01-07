@@ -16,6 +16,12 @@ HC.DisplayController = HC.DisplayController || {};
 
         parent=  'g_video';
 
+        constructor(name) {
+            super(name);
+
+            this.createMappingSettings();
+        }
+
         settings = {
             fps: 60,
             resolution: '1280x720',
@@ -107,7 +113,8 @@ HC.DisplayController = HC.DisplayController || {};
             fov: [0.001, 2, 0.001],
             brightness: [0, 1, 0.02],
             transparency: [0, 1, 0.02],
-            smearing: [0, 0.96, 0.02]
+            smearing: [0, 0.96, 0.02],
+            display_zindex: [0, 18, 1],
         };
 
         styles = {
@@ -124,6 +131,77 @@ HC.DisplayController = HC.DisplayController || {};
             third: ['eight'],
             auto: ['eight']
         };
+
+        values = {
+            display_visibility: 'visible',
+            display_speed: 'quarter',
+            display_visible: false,
+            display_mapping: '',
+            display_zindex: 0,
+            display_mask_shape: 'off',
+            display_keepbounds: true,
+            display_mask: ''
+        };
+
+        /**
+         *
+         * @return {*}
+         */
+        createMappingSettings() {
+            let okey = 'display';
+            for (let i = 0; i < statics.DisplayValues.display.length; i++) {
+
+                let key = 'display' + i;
+                let ukey = '_' + key;
+
+                // values
+                this.values[key + '_mask_shape'] = statics.DisplayValues['masking_shape'];
+
+                // styles
+                this.styles[key + '_visible'] = ['quarter', 'clear'];
+                this.styles[key + '_keepbounds'] = ['quarter'];
+                this.styles[key + '_1'] = ['eight'];
+                this.styles[key + '_2'] = ['eight'];
+                this.styles[key + '_3'] = ['eight'];
+                this.styles[key + '_4'] = ['eight'];
+                this.styles[key + '_zindex'] = ['half', 'clear'];
+                this.styles[key + '_mapping'] = ['half'];
+                this.styles[key + '_mask_shape'] = ['half', 'clear'];
+                this.styles[key + '_mask'] = ['half'];
+
+                // settings
+                let _resize = function (key, factor) {
+                    return function () {
+                        let _key = (key + '_' + factor);
+                        let data = {};
+                        data[_key] = factor;
+                        messaging.emitDisplays(data, true, true, false);
+                    };
+                };
+
+                this.settings[key + '_visible'] = this.values[okey + '_visible'];
+                this.settings[key + '_keepbounds'] = this.values[okey + '_keepbounds'];
+                this.settings[key + '_1'] = _resize(key, 1);
+                this.settings[key + '_2'] = _resize(key, 2);
+                this.settings[key + '_3'] = _resize(key, 3);
+                this.settings[key + '_4'] = _resize(key, 4);
+                this.settings[key + '_zindex'] = i + 1;
+                this.settings[key + '_mapping'] = this.values[okey + '_mapping'];
+                this.settings[key + '_mask_shape'] = this.values[okey + '_mask_shape'];
+                this.settings[key + '_mask'] = this.values[okey + '_mask'];
+
+                this.parents[key + '_visible'] = ukey;
+                this.parents[key + '_keepbounds'] = ukey;
+                this.parents[key + '_1'] = ukey;
+                this.parents[key + '_2'] = ukey;
+                this.parents[key + '_3'] = ukey;
+                this.parents[key + '_4'] = ukey;
+                this.parents[key + '_zindex'] = ukey;
+                this.parents[key + '_mapping'] = ukey;
+                this.parents[key + '_mask_shape'] = ukey;
+                this.parents[key + '_mask'] = ukey;
+            }
+        }
     }
 }
 
@@ -189,7 +267,6 @@ HC.DisplayController = HC.DisplayController || {};
             super(name);
 
             this.createSettings();
-            this.createMappingSettings();
         }
 
         settings = {
@@ -211,7 +288,6 @@ HC.DisplayController = HC.DisplayController || {};
         };
 
         types = {
-            display_zindex: [0, 18, 1],
             display_smearing: [0, 0.96, 0.02],
         };
 
@@ -225,19 +301,11 @@ HC.DisplayController = HC.DisplayController || {};
         };
 
         values = {
-            display_visibility: 'visible',
-            display_speed: 'quarter',
-            display_visible: false,
-            display_mapping: '',
             display_static: false,
             display_noborder: false,
             display_transparent: false,
             display_video: 0,
-            display_smearing: 0.0,
-            display_zindex: 0,
-            display_mask_shape: 'off',
-            display_keepbounds: true,
-            display_mask: ''
+            display_smearing: 0.0
         };
 
         /**
@@ -256,7 +324,6 @@ HC.DisplayController = HC.DisplayController || {};
                 this.settings[key + '_noborder'] = this.values[okey + '_noborder'];
                 this.settings[key + '_video'] = this.values[okey + '_video'];
                 this.settings[key + '_smearing'] = this.values[okey + '_smearing'];
-                this.settings[key + '_zindex'] = this.values[okey + '_zindex'];
 
                 // parents
                 this.parents[key + '_static'] = ukey;
@@ -264,10 +331,8 @@ HC.DisplayController = HC.DisplayController || {};
                 this.parents[key + '_noborder'] = ukey;
                 this.parents[key + '_video'] = ukey;
                 this.parents[key + '_smearing'] = ukey;
-                this.parents[key + '_zindex'] = ukey;
 
                 // types
-                this.types[key + '_zindex'] = this.types[okey + '_zindex'];
                 this.types[key + '_smearing'] = this.types[okey + '_smearing'];
 
                 // values
@@ -280,66 +345,6 @@ HC.DisplayController = HC.DisplayController || {};
                 this.styles[key + '_video'] = ['half'];
                 this.styles[key + '_smearing'] = ['half'];
 
-            }
-        }
-
-        /**
-         *
-         * @return {*}
-         */
-        createMappingSettings() {
-            let okey = 'display';
-            for (let i = 0; i < statics.DisplayValues.display.length; i++) {
-
-                let key = 'display' + i;
-                let ukey = '_' + key;
-
-                // values
-                this.values[key + '_mask_shape'] = statics.DisplayValues['masking_shape'];
-
-                // styles
-                this.styles[key + '_visible'] = ['quarter', 'clear'];
-                this.styles[key + '_keepbounds'] = ['quarter'];
-                this.styles[key + '_1'] = ['eight'];
-                this.styles[key + '_2'] = ['eight'];
-                this.styles[key + '_3'] = ['eight'];
-                this.styles[key + '_4'] = ['eight'];
-                this.styles[key + '_zindex'] = ['half', 'clear'];
-                this.styles[key + '_mapping'] = ['half'];
-                this.styles[key + '_mask_shape'] = ['half', 'clear'];
-                this.styles[key + '_mask'] = ['half'];
-
-                // settings
-                let _resize = function (key, factor) {
-                    return function () {
-                        let _key = (key + '_' + factor);
-                        let data = {};
-                        data[_key] = factor;
-                        messaging.emitDisplays(data, true, true, false);
-                    };
-                };
-
-                this.settings[key + '_visible'] = this.values[okey + '_visible'];
-                this.settings[key + '_keepbounds'] = this.values[okey + '_keepbounds'];
-                this.settings[key + '_1'] = _resize(key, 1);
-                this.settings[key + '_2'] = _resize(key, 2);
-                this.settings[key + '_3'] = _resize(key, 3);
-                this.settings[key + '_4'] = _resize(key, 4);
-                this.settings[key + '_zindex'] = i + 1;
-                this.settings[key + '_mapping'] = this.values[okey + '_mapping'];
-                this.settings[key + '_mask_shape'] = this.values[okey + '_mask_shape'];
-                this.settings[key + '_mask'] = this.values[okey + '_mask'];
-
-                this.parents[key + '_visible'] = ukey;
-                this.parents[key + '_keepbounds'] = ukey;
-                this.parents[key + '_1'] = ukey;
-                this.parents[key + '_2'] = ukey;
-                this.parents[key + '_3'] = ukey;
-                this.parents[key + '_4'] = ukey;
-                this.parents[key + '_zindex'] = ukey;
-                this.parents[key + '_mapping'] = ukey;
-                this.parents[key + '_mask_shape'] = ukey;
-                this.parents[key + '_mask'] = ukey;
             }
         }
     }

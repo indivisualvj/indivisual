@@ -637,24 +637,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 // this.explainPlugin(item, value);
             }
 
-            if (statics.DisplaySettings.contains(item)) {
+            value = statics.DisplaySettingsManager.updateItem(item, value);
 
-                // value = statics.DisplaySettingsManager.updateItem(item, value);
+            if (item.match(/display\d+_visible/)) {
+                this.showDisplayControls();
+            }
 
-                if (item.match(/display\d+_visible/)) {
-                    this.showDisplayControls();
-                }
+            if (forward) {
+                let data = {};
+                data[item] = value;
+                messaging.emitDisplays(data, true, false, force);
+            }
 
-                if (forward) {
-                    let data = {};
-                    data[item] = value;
-                    messaging.emitDisplays(data, true, false, force);
-                }
-
-                if (display !== false) {
-                    this.updateUi(this.displaySettingsGui);
-                }
-
+            if (display !== false) {
+                this.updateUi(this.displaySettingsGui);
             }
         }
 

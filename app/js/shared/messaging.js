@@ -292,11 +292,6 @@
          */
         emitDisplays(data, display, forward, force) {
             if (data) {
-                if (data instanceof HC.Settings) {
-                    data = data.prepare();
-                }
-
-                statics.DisplaySettings.clean(data, statics.DisplaySettings.initial);
 
                 let config = {
                     action: 'displays',

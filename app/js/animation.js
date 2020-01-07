@@ -67,9 +67,10 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!reconnect) {
             loadResources(setupResources(), function () {
 
-                HC.DisplayController.createAllControls();
+                statics.DisplaySettingsManager = new HC.ControlSetsManager(HC.Statics.initDisplayControlSets());
+                statics.DisplaySettings = statics.DisplaySettingsManager.settingsProxy();
                 HC.SourceController.createAllControls();
-                statics.ControlSettingsManager = new HC.ControlSetsManager(HC.Statics.initAllControlSets())
+                statics.ControlSettingsManager = new HC.ControlSetsManager(HC.Statics.initControlControlSets());
                 statics.ControlSettings = statics.ControlSettingsManager.settingsProxy();
 
                 listener = new HC.Listener();
@@ -837,11 +838,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     displayman.centerDisplay(numberExtract(item, 'display'), value);
                     this.updateDisplay(item, false, display, true);
                 }
-                statics.DisplaySettings.update(item, value);
+                statics.DisplaySettingsManager.updateItem(item, value);
 
-            } else if (statics.DisplaySettings.contains(item)) {
+            } else {
 
-                value = statics.DisplaySettings.update(item, value);
+                value = statics.DisplaySettingsManager.updateItem(item, value);
 
                 if (forward === true) {
                     var data = {};
@@ -939,7 +940,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (force) {
                 for (var k in data) {
-                    statics.DisplaySettings.update(k, data[k]);
+                    statics.DisplaySettingsManager.updateItem(k, data[k]);
                 }
                 displayman.reset();
                 // this.fullReset(true);

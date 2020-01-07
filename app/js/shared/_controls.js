@@ -524,8 +524,6 @@ HC.controls = HC.controls || {};
             clear.classList.add('guify-component-container');
             clear.classList.add('clear');
             this.folder.folderContainer.appendChild(clear);
-
-            this.folder.folderContainer.setAttribute('data-border', 'red');
         }
 
         /**
@@ -554,6 +552,10 @@ HC.controls = HC.controls || {};
                 controllers: {},
                 folder: this.controlSet.parent
             });
+
+            this.folder.folderContainer.setAttribute('data-border', 'red');
+            this.folder.folderContainer.setAttribute('data-id', key);
+            this.folder.folderContainer.setAttribute('data-parent', this.controlSet.parent);
 
             // this._addShareListener(key, this.folder, false);
 

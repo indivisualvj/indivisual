@@ -659,7 +659,7 @@ HC.Controller.prototype.updateUiPasses = function () {
 HC.Controller.prototype.showDisplayControls = function () {
     for (var i = 0; i < statics.DisplayValues.display.length; i++) {
         var n = 'display' + i;
-        var v = statics.DisplaySettings[n + '_visible'];
+        var v = statics.DisplaySettingsManager.get('d_general').get(n + '_visible');
         this.showControls(n, 'g_sources', v);
 
         n = '_display' + i;

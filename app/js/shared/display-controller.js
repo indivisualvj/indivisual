@@ -5,16 +5,15 @@
 HC.DisplayController = HC.DisplayController || {};
 
 {
+    HC.DisplayController.g_video = {};
+
     /**
      *
-     * @type {HC.DisplayController._general}
-     *
+     * @type {HC.DisplayController.g_video._general}
      */
-    HC.DisplayController.v_general = class _general extends HC.StaticControlSet {
+    HC.DisplayController.g_video._general = class _general extends HC.StaticControlSet {
 
         static index = 10;
-
-        parent=  'g_video';
 
         constructor(name) {
             super(name);
@@ -202,20 +201,16 @@ HC.DisplayController = HC.DisplayController || {};
                 this.parents[key + '_mask'] = ukey;
             }
         }
-    }
-}
+    };
 
-{
     /**
      *
-     * @type {HC.DisplayController.g_video}
+     * @type {HC.DisplayController.g_video._perspective}
+     * @private
      */
-    HC.DisplayController._perspective = class _perspective extends HC.StaticControlSet {
+    HC.DisplayController.g_video._perspective = class _perspective extends HC.StaticControlSet {
 
         static index = 10;
-        // static _name = 'session';
-
-        parent = 'g_video';
 
         settings = {
             perspective0_zoom: 1.0,
@@ -253,15 +248,15 @@ HC.DisplayController = HC.DisplayController || {};
 }
 
 {
+    HC.DisplayController.g_displays = {};
+
     /**
      *
-     * @type {HC.DisplayController.g_displays}
+     * @type {HC.DisplayController.g_displays._general}
      */
-    HC.DisplayController.d_general = class _general extends HC.StaticControlSet {
+    HC.DisplayController.g_displays._general = class _general extends HC.StaticControlSet {
 
         static index = 20;
-        
-        parent = 'g_displays';
 
         constructor(name) {
             super(name);

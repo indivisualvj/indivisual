@@ -30,10 +30,13 @@ HC.Statics = HC.Statics || {};
         let instances = {};
 
         for (let cs in HC.DisplayController) {
-            let set = HC.DisplayController[cs];
-            let inst = new set(cs);
-            inst.init(statics.DisplayValues);
-            instances[cs] = inst;
+            let group = HC.DisplayController[cs];
+            for (let s in group) {
+                let set = group[s];
+                let inst = new set(cs);
+                inst.init(statics.DisplayValues);
+                instances[cs] = inst;
+            }
         }
 
         return instances;

@@ -9,9 +9,25 @@ HC.Controller.prototype.addAnimationControllers = function (controlsets) {
         if (set.visible !== false) {
             let ui = new HC.ControlSetGuifyUi(set, this.animationSettingsGui);
             ui.addFolder();
-            ui.addControls();
+            ui.addControllers();
         }
     }
+};
+
+HC.Controller.prototype.addGuifyDisplayControllers = function (groups, values, uiClass, gui) {
+
+    let controlsets = {};
+    for (let k in groups) {
+        let group = groups[k];
+        let folder = gui.addFolder(k);
+        let sets = this.addGuifyControllers(group, values, uiClass, folder);
+
+        for (let s in sets) {
+            controlsets[k + '.' + s] = sets[s];
+        }
+    }
+
+    return controlsets;
 };
 
 /**
@@ -34,7 +50,7 @@ HC.Controller.prototype.addGuifyControllers = function (controlsets, values, uiC
         if (set.visible !== false) {
             let ui = new uiClass(inst, gui);
             ui.addFolder();
-            ui.addControls();
+            ui.addControllers();
         }
     }
 
@@ -659,7 +675,7 @@ HC.Controller.prototype.updateUiPasses = function () {
 HC.Controller.prototype.showDisplayControls = function () {
     for (var i = 0; i < statics.DisplayValues.display.length; i++) {
         var n = 'display' + i;
-        var v = statics.DisplaySettingsManager.get('d_general').get(n + '_visible');
+        var v = statics.DisplaySettings[n + '_visible'];
         this.showControls(n, 'g_sources', v);
 
         n = '_display' + i;

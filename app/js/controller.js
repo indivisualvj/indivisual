@@ -96,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 statics.ControlSettingsManager = new HC.ControlSetsManager(controlSets);
                 statics.ControlSettings = statics.ControlSettingsManager.settingsProxy(); // fixme not a final solution
 
-                controlSets = controller.addGuifyControllers(
+                controlSets = controller.addGuifyDisplayControllers(
                     HC.DisplayController,
                     statics.DisplayValues,
                     HC.DisplayControllerUi,
@@ -105,27 +105,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 statics.DisplaySettingsManager = new HC.ControlSetsManager(controlSets);
                 statics.DisplaySettings = statics.DisplaySettingsManager.settingsProxy(); // fixme not a final solution
 
-                // controller.addControllers(statics.DisplayController,
-                //     statics.DisplaySettings,
-                //     statics.DisplayValues,
-                //     statics.DisplayTypes,
+                // controller.addControllers(statics.SourceController,
+                //     statics.SourceSettings,
+                //     statics.SourceValues,
+                //     statics.SourceTypes,
                 //     function (value) {
-                //         controller.updateDisplay(this.property, value, true, true, false);
+                //         controller.updateSource(this.property, value, true, true, false);
                 //     }
                 // );
-                controller.addControllers(statics.SourceController,
-                    statics.SourceSettings,
-                    statics.SourceValues,
-                    statics.SourceTypes,
-                    function (value) {
-                        controller.updateSource(this.property, value, true, true, false);
-                    }
-                );
                 controller.addAnimationControllers(cm.getGlobalProperties());
-
-                // controller.addShaderControllers();
-
-                controller.addShaderPassControllers(HC.ShaderPassUi.onPasses);
+                // controller.addShaderPassControllers(HC.ShaderPassUi.onPasses);
 
                 explorer = new HC.Explorer();
                 explorer.init();
@@ -167,38 +156,13 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         init() {
-            // todo grid layout mit einer UI instanz pro controlset https://vuejsexamples.com/simple-and-flexible-vue-js-component-for-grid-layout/
-            // todo UI wird in controlsetui initialisiert und platziert vom layoutmanager
-            // todo neue UI https://github.com/colejd/guify
-            // todo oder dat gui käse komplett mit aktueller datgui version aufbauen
-
             this.gui = new dat.GUI({autoPlace: false});
             document.getElementById('controller').appendChild(this.gui.domElement);
 
-            this.controlSettingsGui = this.createGuify('ControlSettings', true);
-            this.displaySettingsGui = this.createGuify('DisplaySettings');
-            this.sourceSettingsGui = this.createGuify('SourceSettings');
-            this.animationSettingsGui = this.createGuify('AnimationSettings');
-        }
-
-        /**
-         *
-         * @param id
-         * @param open
-         */
-        createGuify(id, open) {
-            return new guify({
-                title: id,
-                theme: 'dark', // dark, light, yorha, or theme object
-                align: 'right', // left, right
-                width: '100%',
-                barMode: 'offset', // none, overlay, above, offset
-                panelMode: 'inner',
-                opacity: 1,
-                root: document.getElementById(id),
-                open: open,
-                folders: {}
-            });
+            this.controlSettingsGui = new HC.ControllerUi('ControlSettings', true);
+            this.displaySettingsGui = new HC.ControllerUi('DisplaySettings');
+            this.sourceSettingsGui = new HC.ControllerUi('SourceSettings');
+            this.animationSettingsGui = new HC.ControllerUi('AnimationSettings');
         }
 
         /**

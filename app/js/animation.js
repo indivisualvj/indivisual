@@ -69,7 +69,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 statics.DisplaySettingsManager = new HC.ControlSetsManager(HC.Statics.initDisplayControlSets());
                 statics.DisplaySettings = statics.DisplaySettingsManager.settingsProxy();
-                HC.SourceController.createAllControls();
+                statics.SourceSettingsManager = new HC.ControlSetsManager(HC.Statics.initSourceControlSets());
+                statics.SourceSettings = statics.SourceSettingsManager.settingsProxy();
                 statics.ControlSettingsManager = new HC.ControlSetsManager(HC.Statics.initControlControlSets());
                 statics.ControlSettings = statics.ControlSettingsManager.settingsProxy();
 
@@ -743,64 +744,61 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateSource(item, value, display, forward, force) {
 
-            if (statics.SourceSettings.contains(item)) {
+            value = statics.SourceSettingsManager.updateItem(item, value);
 
-                value = statics.SourceSettings.update(item, value);
+            if (forward === true) {
+                let data = {};
+                data[item] = value;
+                messaging.emitSources(data, true, false, force);
+            }
 
-                if (forward === true) {
-                    let data = {};
-                    data[item] = value;
-                    messaging.emitSources(data, true, false, force);
+            if (display) {
+                let action = false;
+                // if (item.match(/^sample\d+_store/) && value) {
+                //     //var sample =
+                //     sourceman.storeSample(number_extract(item, 'sample'), value, 1, false);
+                //     this.updateSource(item, false, false, true, false);
+                //
+                // } else
+                if (item.match(/^sample\d+_load/) && value) {
+                    if (IS_MONITOR || display) {
+                        sourceman.loadSample(numberExtract(item, 'sample'), value);
+                    }
+                    this.updateSource(item, false, false, true, false);
+
+                } else if (item.match(/^sample\d+_/)) {
+                    sourceman.updateSample(numberExtract(item, 'sample'));
+                    action = true;
+
+                } else if (item.match(/^sequence\d+_/)) {
+                    sourceman.updateSequence(numberExtract(item, 'sequence'));
+                    action = true;
+
+                } else if (item.match(/display\d+_source/)) {
+                    var display = displayman.getDisplay(numberExtract(item, 'display'));
+                    sourceman.updateSource(display);
+
+                    if (display && display.isFixedSize()) {
+                        displayman.updateDisplay(display.index, false);
+                    }
+
+                    action = true;
+
+                } else if (item.match(/display\d+_sequence/)) {
+                    sourceman.updateSource(displayman.getDisplay(numberExtract(item, 'display')));
+                    action = true;
+
+                } else if (item.match(/^lighting_(lights|scale)/)) {
+                    displayman.updateDisplays();
+                    action = true;
+
+                } else if (item.match(/^lighting_(mode|color)/)) {
+                    sourceman.getLighting(0).update();
+                    action = true;
                 }
 
-                if (display) {
-                    let action = false;
-                    // if (item.match(/^sample\d+_store/) && value) {
-                    //     //var sample =
-                    //     sourceman.storeSample(number_extract(item, 'sample'), value, 1, false);
-                    //     this.updateSource(item, false, false, true, false);
-                    //
-                    // } else
-                    if (item.match(/^sample\d+_load/) && value) {
-                        if (IS_MONITOR || display) {
-                            sourceman.loadSample(numberExtract(item, 'sample'), value);
-                        }
-                        this.updateSource(item, false, false, true, false);
-
-                    } else if (item.match(/^sample\d+_/)) {
-                        sourceman.updateSample(numberExtract(item, 'sample'));
-                        action = true;
-
-                    } else if (item.match(/^sequence\d+_/)) {
-                        sourceman.updateSequence(numberExtract(item, 'sequence'));
-                        action = true;
-
-                    } else if (item.match(/display\d+_source/)) {
-                        var display = displayman.getDisplay(numberExtract(item, 'display'));
-                        sourceman.updateSource(display);
-
-                        if (display && display.isFixedSize()) {
-                            displayman.updateDisplay(display.index, false);
-                        }
-
-                        action = true;
-
-                    } else if (item.match(/display\d+_sequence/)) {
-                        sourceman.updateSource(displayman.getDisplay(numberExtract(item, 'display')));
-                        action = true;
-
-                    } else if (item.match(/^lighting_(lights|scale)/)) {
-                        displayman.updateDisplays();
-                        action = true;
-
-                    } else if (item.match(/^lighting_(mode|color)/)) {
-                        sourceman.getLighting(0).update();
-                        action = true;
-                    }
-
-                    if (action) {
-                        animation.offline = false;
-                    }
+                if (action) {
+                    animation.offline = false;
                 }
             }
         }

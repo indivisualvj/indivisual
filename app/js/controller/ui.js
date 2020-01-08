@@ -680,10 +680,10 @@ HC.Controller.prototype.showDisplayControls = function () {
     for (var i = 0; i < statics.DisplayValues.display.length; i++) {
         var n = 'display' + i;
         var v = statics.DisplaySettings[n + '_visible'];
-        this.showControls(n, 'g_sources', v);
+        this.showControls(n, 'source', v);
 
         n = '_display' + i;
-        this.showControls(n, 'g_displays', v);
+        this.showControls(n, 'displays', v);
     }
 };
 

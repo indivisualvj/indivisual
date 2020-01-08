@@ -264,41 +264,6 @@ HC.controls = HC.controls || {};
         }
     }
 }
-//
-// {
-//     /**
-//      *
-//      * @type {HC.StaticControlSet}
-//      */
-//     HC.StaticControlSet = class StaticControlSet extends HC.ControlSet {
-//
-//         /**
-//          * check might this be the better way to copy instead of JSON.parse etc?
-//          * @returns Object
-//          */
-//         defaults() {
-//
-//             // check spread operator settings = {...this.settings};
-//
-//             let _copy = function (settings) {
-//                 let props = {};
-//                 for (let key in settings) {
-//                     let value = settings[key];
-//
-//                     if (typeof value !== 'object') {
-//                         props[key] = value;
-//                     } else {
-//                         props[key] = _copy(value);
-//                     }
-//                 }
-//
-//                 return props;
-//             };
-//
-//             return _copy(this.settings);
-//         }
-//     }
-// }
 
 {
     /**

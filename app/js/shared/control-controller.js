@@ -7,9 +7,9 @@ HC.ControlController = HC.ControlController || {};
 {
     /**
      * 
-     * @type {HC.ControlController.g_session}
+     * @type {HC.ControlController.session}
      */
-    HC.ControlController.g_session = class g_session extends HC.ControlSet {
+    HC.ControlController.session = class session extends HC.ControlSet {
 
         static index = 10;
         // static _name = 'session';
@@ -29,9 +29,9 @@ HC.ControlController = HC.ControlController || {};
 {
     /**
      *
-     * @type {HC.ControlController.g_controls}
+     * @type {HC.ControlController.controls}
      */
-    HC.ControlController.g_controls = class g_controls extends HC.ControlSet {
+    HC.ControlController.controls = class controls extends HC.ControlSet {
 
         static index = 20;
         // static _name = 'controls';

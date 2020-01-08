@@ -40,5 +40,21 @@ HC.Statics = HC.Statics || {};
         }
 
         return instances;
-    }
+    };
+
+    /**
+     *
+     */
+    HC.Statics.initSourceControlSets = function () {
+        let instances = {};
+
+        for (let cs in HC.SourceController) {
+            let set = HC.SourceController[cs];
+            let inst = new set(cs);
+            inst.init(statics.SourceValues);
+            instances[cs] = inst;
+        }
+
+        return instances;
+    };
 }

@@ -28,7 +28,7 @@ layer:
 shuffle_mode: {}
 
 _keys: # todo make keycode and label configurable here
-  g_controls:
+  controls:
     play: spc
     reset: del
     monitor: hm

@@ -2,7 +2,7 @@
 "uuid":"",
 "tutorial":{
   "enable audio": {
-    "text": "First you have to enable audio in the g_controls folder.",
+    "text": "First you have to enable audio in the controls folder.",
     "exec": [
       "controller,closeAll",
       "controller,toggleByProperty,audio",

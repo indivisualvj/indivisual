@@ -5,13 +5,13 @@
 HC.DisplayController = HC.DisplayController || {};
 
 {
-    HC.DisplayController.g_video = {};
+    HC.DisplayController.video = {};
 
     /**
      *
-     * @type {HC.DisplayController.g_video._general}
+     * @type {HC.DisplayController.video._general}
      */
-    HC.DisplayController.g_video._general = class _general extends HC.ControlSet {
+    HC.DisplayController.video._general = class _general extends HC.ControlSet {
 
         static index = 10;
 
@@ -128,10 +128,10 @@ HC.DisplayController = HC.DisplayController || {};
 
     /**
      *
-     * @type {HC.DisplayController.g_video._perspective}
+     * @type {HC.DisplayController.video._perspective}
      * @private
      */
-    HC.DisplayController.g_video._perspective = class _perspective extends HC.ControlSet {
+    HC.DisplayController.video._perspective = class _perspective extends HC.ControlSet {
 
         static index = 10;
 
@@ -171,9 +171,9 @@ HC.DisplayController = HC.DisplayController || {};
 
     /**
      *
-     * @type {HC.DisplayController.g_video.displayN}
+     * @type {HC.DisplayController.video.displayN}
      */
-    HC.DisplayController.g_video.displayN = class displayN extends HC.IterableControlSet {
+    HC.DisplayController.video.displayN = class displayN extends HC.IterableControlSet {
 
         static index = 10;
         prefix = 'display';
@@ -264,13 +264,13 @@ HC.DisplayController = HC.DisplayController || {};
 }
 
 {
-    HC.DisplayController.g_displays = {};
+    HC.DisplayController.displays = {};
 
     /**
      *
-     * @type {HC.DisplayController.g_displays._general}
+     * @type {HC.DisplayController.displays._general}
      */
-    HC.DisplayController.g_displays._general = class _general extends HC.ControlSet {
+    HC.DisplayController.displays._general = class _general extends HC.ControlSet {
 
         static index = 20;
 
@@ -320,9 +320,9 @@ HC.DisplayController = HC.DisplayController || {};
 
     /**
      *
-     * @type {HC.DisplayController.g_displays.displayN}
+     * @type {HC.DisplayController.displays.displayN}
      */
-    HC.DisplayController.g_displays.displayN = class displayN extends HC.IterableControlSet {
+    HC.DisplayController.displays.displayN = class displayN extends HC.IterableControlSet {
 
         static index = 20;
 

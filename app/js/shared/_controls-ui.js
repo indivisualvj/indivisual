@@ -287,7 +287,8 @@
             }
 
             // shorten name by regexp
-            let reg = new RegExp('\\w+_([^_]+)$');
+            let reg = new RegExp('^' + folder.getLabel() + '(.+)');
+            // let reg = new RegExp('\\w+_([^_]+)$');
             let name = key.replace(reg, '$1');
 
             let config = {
@@ -300,7 +301,6 @@
             };
 
             if (typeof value == 'function') {
-                config.label = key;
                 config.type = 'button';
                 config.action = value;
                 delete config.onChange;

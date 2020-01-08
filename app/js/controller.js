@@ -82,8 +82,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 cm = new HC.LayeredControlSetsManager([], statics.AnimationValues);
 
-                statics.SourceController = new HC.SourceController();
-
                 controller.init();
 
                 let controlSets = HC.Statics.initControlControlSets();
@@ -108,15 +106,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     controller.displaySettingsGui
                 );
 
+                controlSets = HC.Statics.initSourceControlSets();
+                statics.SourceSettingsManager = new HC.ControlSetsManager(controlSets);
+                statics.SourceSettings = statics.SourceSettingsManager.settingsProxy(); // fixme not a final solution
 
-                // controller.addControllers(statics.SourceController,
-                //     statics.SourceSettings,
-                //     statics.SourceValues,
-                //     statics.SourceTypes,
-                //     function (value) {
-                //         controller.updateSource(this.property, value, true, true, false);
-                //     }
-                // );
+                controller.addGuifyControllers(
+                    controlSets,
+                    HC.SourceControllerUi,
+                    controller.sourceSettingsGui
+                );
 
                 controller.addAnimationControllers(cm.getGlobalProperties());
                 // controller.addShaderPassControllers(HC.ShaderPassUi.onPasses);
@@ -164,6 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.gui = new dat.GUI({autoPlace: false});
             // document.getElementById('controller').appendChild(this.gui.domElement);
 
+            // todo evtl doch das? https://github.com/automat/controlkit.js
             this.controlSettingsGui = new HC.ControllerUi('ControlSettings', true);
             this.displaySettingsGui = new HC.ControllerUi('DisplaySettings');
             this.sourceSettingsGui = new HC.ControllerUi('SourceSettings');
@@ -638,35 +637,32 @@ document.addEventListener('DOMContentLoaded', function () {
                 // this.explainPlugin(item, value);
             }
 
-            if (statics.SourceSettings.contains(item)) {
+            value = statics.SourceSettingsManager.updateItem(item, value);
 
-                value = statics.SourceSettings.update(item, value);
+            if (forward) {
+                let data = {};
+                data[item] = value;
+                messaging.emitSources(data, true, false, force);
+            }
 
-                if (forward) {
-                    let data = {};
-                    data[item] = value;
-                    messaging.emitSources(data, true, false, force);
-                }
+            if (display !== false) {
 
-                if (display !== false) {
+                if (item.match(/_(start|end|input|sequence|source)/)) {
+                    this.updateData();
 
-                    if (item.match(/_(start|end|input|sequence|source)/)) {
-                        this.updateData();
-
-                    } else if (item.match(/_(enabled)/)) {
-                        if (!value) { // set record to false if enabled == false
-                            let smp = numberExtract(item, 'sample');
-                            this.updateSource(getSampleRecordKey(smp), false, true, true, false);
-                        }
-
-                    } else if (item.match(/_(load)/)) {
-                        this.loadClip(numberExtract(item, 'sample'));
+                } else if (item.match(/_(enabled)/)) {
+                    if (!value) { // set record to false if enabled == false
+                        let smp = numberExtract(item, 'sample');
+                        this.updateSource(getSampleRecordKey(smp), false, true, true, false);
                     }
 
-                    this.updateUi(this.sourceSettingsGui);
+                } else if (item.match(/_(load)/)) {
+                    this.loadClip(numberExtract(item, 'sample'));
                 }
 
+                this.updateUi(this.sourceSettingsGui);
             }
+
         }
 
         /**

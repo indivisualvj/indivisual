@@ -829,6 +829,10 @@ select option {
     width: 24%;
 }
 
+.guify-component-container[data-class="quint"] {
+    width: 19%;
+}
+
 .guify-component-container[data-class="eight"] {
     width: 11.5%;
 }

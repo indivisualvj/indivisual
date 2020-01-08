@@ -1,5 +1,5 @@
 
-masking_shape:
+display_mask_shape:
   off: 'off'
 #  circle: circle
   triangle: triangle

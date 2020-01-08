@@ -10,7 +10,7 @@
 }
 *::-webkit-scrollbar-thumb {
     border-radius: 5px;
-    background: #676767;
+    background: grey;
 }
 
 body {
@@ -846,17 +846,25 @@ select option {
 }
 
 [data-border="red"] {
-    border-left-color: #e61d5f !important;
-    border-left-width: 1px;
+    border-left: 1px solid #e61d5f !important;
 }
+
+[data-border="yellow"] {
+    border-left: 1px solid rgba(255, 220, 10, 0.7) !important;
+}
+
+[data-border="green"] {
+    border-left: 1px solid rgba(10, 255, 10, 0.7) !important;
+}
+
+[data-border="blue"] {
+    border-left: 1px solid #2fa1d6 !important;
+}
+
 
 .guify-folder_1FExAJ div {
     font-weight: bold;
 }
-
-/*.guify-folder_1FExAJ div {*/
-/*    color: #e61d5f;*/
-/*}*/
 
 .guify-button_1S84xL {
     width: calc(100%) !important;
@@ -867,9 +875,7 @@ input[type=checkbox].guify-checkbox_hxzak + label {
     right: 0px;
 }
 
-/*.guify-container_be6yU*/
 .guify-panel-container_39NJay
-/*.guify-panel-toggle-button_39NJay*/
 {
     position: relative !important;
 }

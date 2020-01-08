@@ -82,28 +82,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 cm = new HC.LayeredControlSetsManager([], statics.AnimationValues);
 
-                // statics.DisplayController = new HC.DisplayController();
                 statics.SourceController = new HC.SourceController();
 
                 controller.init();
 
-                let controlSets = controller.addGuifyControllers(
-                    HC.ControlController,
-                    statics.ControlValues,
-                    HC.ControlControllerUi,
-                    controller.controlSettingsGui
-                );
+                let controlSets = HC.Statics.initControlControlSets();
                 statics.ControlSettingsManager = new HC.ControlSetsManager(controlSets);
                 statics.ControlSettings = statics.ControlSettingsManager.settingsProxy(); // fixme not a final solution
 
-                controlSets = controller.addGuifyDisplayControllers(
+                controller.addGuifyControllers(
+                    controlSets,
+                    HC.ControlControllerUi,
+                    controller.controlSettingsGui
+                );
+
+
+                controlSets = HC.Statics.initDisplayControlSets();
+                statics.DisplaySettingsManager = new HC.ControlSetsManager(controlSets);
+                statics.DisplaySettings = statics.DisplaySettingsManager.settingsProxy(); // fixme not a final solution
+
+                controller.addGuifyDisplayControllers(
                     HC.DisplayController,
-                    statics.DisplayValues,
+                    controlSets,
                     HC.DisplayControllerUi,
                     controller.displaySettingsGui
                 );
-                statics.DisplaySettingsManager = new HC.ControlSetsManager(controlSets);
-                statics.DisplaySettings = statics.DisplaySettingsManager.settingsProxy(); // fixme not a final solution
+
 
                 // controller.addControllers(statics.SourceController,
                 //     statics.SourceSettings,
@@ -113,6 +117,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 //         controller.updateSource(this.property, value, true, true, false);
                 //     }
                 // );
+
                 controller.addAnimationControllers(cm.getGlobalProperties());
                 // controller.addShaderPassControllers(HC.ShaderPassUi.onPasses);
 
@@ -157,7 +162,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         init() {
             this.gui = new dat.GUI({autoPlace: false});
-            document.getElementById('controller').appendChild(this.gui.domElement);
+            // document.getElementById('controller').appendChild(this.gui.domElement);
 
             this.controlSettingsGui = new HC.ControllerUi('ControlSettings', true);
             this.displaySettingsGui = new HC.ControllerUi('DisplaySettings');

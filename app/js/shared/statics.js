@@ -33,9 +33,9 @@ HC.Statics = HC.Statics || {};
             let group = HC.DisplayController[cs];
             for (let s in group) {
                 let set = group[s];
-                let inst = new set(cs);
+                let inst = new set(s);
                 inst.init(statics.DisplayValues);
-                instances[cs] = inst;
+                instances[cs + '.' + s] = inst;
             }
         }
 

@@ -209,14 +209,18 @@
          */
         addControllers() {
 
+            let folders = {};
             for(let key in this.controlSet.settings) {
-                this.addController(key);
+                let ctrl = this.addController(key);
+                if (ctrl) {
+                    folders[ctrl.getParent().getLabel()] = ctrl.getParent();
+                }
+
             }
 
-            let clear = document.createElement('div');
-            clear.classList.add('guify-component-container');
-            clear.classList.add('clear');
-            this.folder.folder.folderContainer.appendChild(clear);
+            for (let k in folders) {
+                this._finishFolder(folders[k]);
+            }
         }
 
         /**
@@ -229,17 +233,28 @@
             let name = this.controlSet.name();
 
             this.folder = this.gui.addFolder(name, this.controlSet.open);
-            let fld = this.folder.folder;
-
-            fld.folderContainer.setAttribute('data-border', 'red');
-            fld.folderContainer.setAttribute('data-id', key);
-            if (this.folder.getParent()) {
-                fld.folderContainer.setAttribute('data-parent', this.folder.getParent().getLabel());
-            }
+            this._styleFolder(this.folder, key, 'green');
 
             // this._addShareListener(key, this.folder, false);
 
             return this.folder;
+        }
+
+        _styleFolder(folder, key, border) {
+            let fld = folder.folder;
+
+            fld.folderContainer.setAttribute('data-border', border);
+            fld.folderContainer.setAttribute('data-id', key);
+            if (this.folder.getParent()) {
+                fld.folderContainer.setAttribute('data-parent', this.folder.getParent().getLabel());
+            }
+        }
+
+        _finishFolder(folder) {
+            let clear = document.createElement('div');
+            clear.classList.add('guify-component-container');
+            clear.classList.add('clear');
+            folder.folder.folderContainer.appendChild(clear);
         }
 
         /**
@@ -251,7 +266,18 @@
             let styles = this.controlSet.styles[key] || false;
             let props = this.controlSet.properties;
             let values = this.controlSet.values[key] || false;
+            let parent = this.controlSet.parents[key] || undefined;
             let value = props[key];
+            let folder = this.folder;
+
+            if (parent) {
+                if (!this.folder.children[parent]) {
+                    folder = this.folder.addFolder(parent, false);
+                    this._styleFolder(folder, parent,'blue');
+                } else {
+                    folder = this.folder.children[parent];
+                }
+            }
 
             // _check if hidden
             if (types && types.length > 0) {
@@ -274,6 +300,7 @@
             };
 
             if (typeof value == 'function') {
+                config.label = key;
                 config.type = 'button';
                 config.action = value;
                 delete config.onChange;
@@ -303,7 +330,7 @@
                 config.options = values;
             }
 
-            let controller = this.folder.addController(config);
+            let controller = folder.addController(config);
             let ctrl = controller.controller;
 
             if (styles) {

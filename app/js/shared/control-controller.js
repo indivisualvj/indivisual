@@ -9,7 +9,7 @@ HC.ControlController = HC.ControlController || {};
      * 
      * @type {HC.ControlController.g_session}
      */
-    HC.ControlController.g_session = class g_session extends HC.StaticControlSet {
+    HC.ControlController.g_session = class g_session extends HC.ControlSet {
 
         static index = 10;
         // static _name = 'session';
@@ -31,7 +31,7 @@ HC.ControlController = HC.ControlController || {};
      *
      * @type {HC.ControlController.g_controls}
      */
-    HC.ControlController.g_controls = class g_controls extends HC.StaticControlSet {
+    HC.ControlController.g_controls = class g_controls extends HC.ControlSet {
 
         static index = 20;
         // static _name = 'controls';
@@ -96,7 +96,8 @@ HC.ControlController = HC.ControlController || {};
         types = {
             tempo: [1, 200, 0.01],
             shuffle_every: [1, 64, 1],
-            volume: ['hidden']
+            volume: ['hidden'],
+            debug: ['hidden']
         };
 
         styles = {
@@ -105,7 +106,7 @@ HC.ControlController = HC.ControlController || {};
             monitor: ['hex'],
             push_layers: ['hex'],
             push_sources: ['hex'],
-            rst_shaders: ['eight'],
+            rst_shaders: ['quarter'],
             debug: ['eight'],
 
             tempo: ['half', 'clear'],

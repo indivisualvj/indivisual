@@ -14,47 +14,51 @@ HC.Controller.prototype.addAnimationControllers = function (controlsets) {
     }
 };
 
-HC.Controller.prototype.addGuifyDisplayControllers = function (groups, values, uiClass, gui) {
+/**
+ *
+ * @param groups
+ * @param controlSets
+ * @param uiClass
+ * @param gui
+ * @returns {*}
+ */
+HC.Controller.prototype.addGuifyDisplayControllers = function (groups, controlSets, uiClass, gui) {
 
-    let controlsets = {};
     for (let k in groups) {
         let group = groups[k];
         let folder = gui.addFolder(k);
-        let sets = this.addGuifyControllers(group, values, uiClass, folder);
+        let sets = {};
 
-        for (let s in sets) {
-            controlsets[k + '.' + s] = sets[s];
+        for (let s in group) {
+            sets[s] = controlSets[k + '.' + s];
         }
-    }
 
-    return controlsets;
+        this.addGuifyControllers(sets, uiClass, folder);
+    }
 };
 
 /**
  *
- * @param controlsets
- * @param values
+ * @param controlSets
  * @param uiClass
- * @param gui
+ * @param parent
  */
-HC.Controller.prototype.addGuifyControllers = function (controlsets, values, uiClass, gui) {
+HC.Controller.prototype.addGuifyControllers = function (controlSets, uiClass, parent) {
+    for (let k in controlSets) {
+        let inst = controlSets[k];
 
-    let instances = {};
+        if (inst.visible !== false) {
+            let ui = new uiClass(inst, parent);
 
-    for (let cs in controlsets) {
-        let set = controlsets[cs];
-        let inst = new set(cs);
-        inst.init(values);
-        instances[cs] = inst;
+            if (inst instanceof HC.IterableControlSet) {
+                ui.folder = parent;
 
-        if (set.visible !== false) {
-            let ui = new uiClass(inst, gui);
-            ui.addFolder();
+            } else {
+                ui.addFolder();
+            }
             ui.addControllers();
         }
     }
-
-    return instances;
 };
 
 /**

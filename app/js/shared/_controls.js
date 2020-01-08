@@ -124,7 +124,7 @@ HC.controls = HC.controls || {};
          * @returns Object
          */
         defaults() {
-            return JSON.parse(JSON.stringify(this.settings, null, 4));
+            return {...this.settings};
         }
 
         /**
@@ -264,38 +264,108 @@ HC.controls = HC.controls || {};
         }
     }
 }
+//
+// {
+//     /**
+//      *
+//      * @type {HC.StaticControlSet}
+//      */
+//     HC.StaticControlSet = class StaticControlSet extends HC.ControlSet {
+//
+//         /**
+//          * check might this be the better way to copy instead of JSON.parse etc?
+//          * @returns Object
+//          */
+//         defaults() {
+//
+//             // check spread operator settings = {...this.settings};
+//
+//             let _copy = function (settings) {
+//                 let props = {};
+//                 for (let key in settings) {
+//                     let value = settings[key];
+//
+//                     if (typeof value !== 'object') {
+//                         props[key] = value;
+//                     } else {
+//                         props[key] = _copy(value);
+//                     }
+//                 }
+//
+//                 return props;
+//             };
+//
+//             return _copy(this.settings);
+//         }
+//     }
+// }
 
 {
     /**
      *
-     * @type {HC.StaticControlSet}
+     * @type {HC.IterableControlSet}
      */
-    HC.StaticControlSet = class StaticControlSet extends HC.ControlSet {
+    HC.IterableControlSet = class IterableControlSet extends HC.ControlSet {
+
+        prefix = '';
+
+        prefixes = {};
+
+        members = {settings: null, types: null, styles: null, values: null, parents: null};
 
         /**
-         * check might this be the better way to copy instead of JSON.parse etc?
-         * @returns Object
+         *
+         * @param pluggedValues
          */
-        defaults() {
+        init(pluggedValues) {
+            this.initMembers();
+            this.createSettings(pluggedValues);
+            super.init(pluggedValues);
+        }
 
-            // check spread operator settings = {...this.settings};
+        /**
+         *
+         */
+        initMembers() {
+            for (let member in this.members) {
+                let settings = {...this[member]}; // clone by spread (ES6)
+                this.members[member] = settings;
+            }
+        }
 
-            let _copy = function (settings) {
-                let props = {};
-                for (let key in settings) {
-                    let value = settings[key];
-
-                    if (typeof value !== 'object') {
-                        props[key] = value;
-                    } else {
-                        props[key] = _copy(value);
-                    }
+        /**
+         *
+         * @param pluggedValues
+         */
+        createSettings(pluggedValues) {
+            for (let member in this.members) {
+                let settings = this.members[member];
+                this[member] = {};
+                for (let i = 0; i < pluggedValues[this.prefix].length; i++) {
+                    this._create(member, i, settings);
                 }
+            }
+        }
 
-                return props;
-            };
+        /**
+         *
+         * @param member
+         * @param i
+         * @param settings
+         * @param value
+         * @protected
+         */
+        _create(member, i, settings, value) {
+            let prefix = ((member in this.prefixes) ? this.prefixes[member] : this.prefix);
+            let regex = new RegExp('^' + prefix);
 
-            return _copy(this.settings);
+            for (let k in settings) {
+                let key = k.replace(regex, prefix + i);
+                let v = (value !== undefined) ? value : settings[k];
+                this[member][key] = v;
+
+                // console.log(member, k, key, v);
+            }
         }
     }
 }

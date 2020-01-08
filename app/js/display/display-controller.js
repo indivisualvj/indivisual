@@ -169,7 +169,7 @@
                     statics.DisplaySettings.initial[key + '_3'] = 3;
                     statics.DisplaySettings.initial[key + '_4'] = 4;
 
-                    statics.DisplayValues[key + '_mask_shape'] = statics.DisplayValues['masking_shape'];
+                    statics.DisplayValues[key + '_mask_shape'] = statics.DisplayValues.display_mask_shape;
 
                     // type
                     statics.DisplayTypes[key + '_visible'] = ['quarter'];

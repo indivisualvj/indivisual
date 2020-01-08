@@ -34,7 +34,7 @@
          * @returns {Folder}
          */
         addFolder(name, open) {
-            let folder = new Folder(this.gui, name, null, open);
+            let folder = new Folder(this.gui, null, name, open);
             this.children[folder.getLabel()] = folder;
 
             return folder;
@@ -46,10 +46,22 @@
          * @returns {Controller}
          */
         addController(opts) {
-            let controller = new Controller(this.gui, opts);
+            let controller = new Controller(this, opts);
             this.children[controller.getLabel()] = controller;
 
             return controller;
+        }
+
+        /**
+         *
+         * @returns {string}
+         */
+        getLabel() {
+            return this.gui.opts.title;
+        }
+
+        getParent() {
+            return null;
         }
     };
 
@@ -67,22 +79,26 @@
 
         folder;
 
+        /**
+         *
+         * @type {Object.<string, *>}
+         */
         children = {};
 
         /**
          *
          * @param gui
-         * @param name
          * @param parent
+         * @param name
          * @param open
          */
-        constructor(gui, name, parent, open) {
+        constructor(gui, parent, name, open) {
             this.gui = gui;
             this.parent = parent;
             this.folder = this.gui.Register({
                 type: 'folder',
                 label: name,
-                folder: parent ? parent.getLabel() : null,
+                folder: (parent ? parent.folder : null),
                 open: open
             });
         }
@@ -94,7 +110,7 @@
          * @returns {Folder}
          */
         addFolder(name, open) {
-            let folder = new Folder(this.gui, name, this, open);
+            let folder = new Folder(this.gui, this, name, open);
             this.children[folder.getLabel()] = folder;
 
             return folder;
@@ -106,8 +122,7 @@
          * @returns {Controller}
          */
         addController(opts) {
-            opts.folder = this.getLabel();
-            let controller = new Controller(this.gui, opts);
+            let controller = new Controller(this, opts);
             this.children[controller.getLabel()] = controller;
 
             return controller;
@@ -155,12 +170,14 @@
 
         /**
          *
-         * @param gui
+         * @param parent
          * @param opts
          * @returns {*}
          */
-        constructor(gui, opts) {
-            this.gui = gui;
+        constructor(parent, opts) {
+            this.parent = parent;
+            this.gui = parent.gui;
+            opts.folder = parent.folder;
             this.controller = this.gui.Register(opts);
         }
 
@@ -170,6 +187,14 @@
          */
         getLabel() {
             return this.controller.opts.label;
+        }
+
+        /**
+         *
+         * @returns {*}
+         */
+        getParent() {
+            return this.parent;
         }
     }
 }

@@ -49,7 +49,16 @@ HC.Shape.prototype.initPlugins = function () {
             this.tree = tree;
             this.key = key;
 
+            this.init();
+
             return this;
+        }
+
+        /**
+         * use this for custom code on construction
+         */
+        init() {
+            //
         }
 
         setControlSets(controlsets) {

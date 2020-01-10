@@ -6,7 +6,6 @@
         apply(shape) {
             let layer = this.layer;
 
-
             let params = this.params(shape);
 
             let firstRun = false;

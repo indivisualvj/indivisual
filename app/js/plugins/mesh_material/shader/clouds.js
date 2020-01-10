@@ -51,11 +51,11 @@
                 }
                 
                 // -----------------------------------------------
+                vec2 iResolution = vec2(1.0);
                 
                 void main () {
-                    vec2 iResolution = vec2(1.0);
                     vec2 p = vUv.xy / iResolution.xy;
-                    vec2 uv = p*vec2(iResolution.x/iResolution.y,1.0);    
+                    vec2 uv = p*vec2(iResolution.x/iResolution.y,1.0);
                     float time = uTime * speed;
                     float q = fbm(uv * cloudscale * 0.5);
                     

@@ -28,7 +28,7 @@ HC.shuffle_mode = HC.shuffle_mode || {};
 
             let shuffleable = layerShuffleable(this.layer);
             if (shuffleable) {
-                let isdefault = renderer.layers[this.layer].settings.isDefault();
+                let isdefault = cm.isDefault(this.layer);
                 if (!isdefault) {
                     // alright!
                     return true;

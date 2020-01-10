@@ -2,16 +2,55 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-var messaging = false;
-var audio = false;
-var audioman = false;
-var beatkeeper = false;
-var animation = false;
-var renderer = false;
-var displayman = false;
-var sourceman = false;
-var listener = false;
-var sm = false;
+/**
+ *
+ * @type {HC.Messaging}
+ */
+let messaging;
+/**
+ *
+ * @type {HC.AudioManager}
+ */
+let audioman;
+/**
+ *
+ * @type {HC.Animation}
+ */
+let animation;
+/**
+ *
+ * @type {HC.Renderer}
+ */
+let renderer;
+/**
+ *
+ * @type {HC.Beatkeeper}
+ */
+let beatkeeper;
+/**
+ * @type {HC.AudioAnalyser}
+ */
+let audio;
+/**
+ *
+ * @type {HC.DisplayManager}
+ */
+let displayman;
+/**
+ *
+ * @type {HC.SourceManager}
+ */
+let sourceman;
+/**
+ *
+ * @type {HC.Listener}
+ */
+let listener;
+/**
+ *
+ * @type {HC.ControlSetsManager}
+ */
+let cm;
 
 /**
  *
@@ -57,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     });
                 }
 
-                sm = new HC.SettingsManager(statics.AnimationSettings, renderer.layers);
+                cm = new HC.ControlSetsManager(renderer.layers, statics.AnimationValues);
 
                 displayman = new HC.DisplayManager({
                     display: new Array(statics.DisplayValues.display.length)
@@ -503,6 +542,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
+            // if ('settings' in session) {
+            //     HC.log('settings', 'synced');
+            //     let settings = session.settings;
+            //     for (let k in settings) {
+            //         this.updateSettings(k, settings[k], true, false, true);
+            //     }
+            // }
+
             if ('controls' in session) {
                 HC.log('controls', 'synced');
                 let controls = session.controls;
@@ -526,78 +573,80 @@ document.addEventListener('DOMContentLoaded', function () {
         /**
          *
          * @param layer
-         * @param item
+         * @param set
+         * @param property
          * @param value
          * @param display
          * @param forward
          * @param force
          */
-        updateSetting(layer, item, value, display, forward, force) {
+        updateSetting(layer, data, display, forward, force) {
 
-            if (statics.AnimationSettings.contains(item)) {
+            let layerIndex = layer;
+            layer = renderer.layers[layer];
 
-                value = sm.update(layer, item, value);
-
-                let layerIndex = layer;
-                layer = renderer.layers[layer];
-
-                switch (item) {
-
-                    // complete layer reset:
-                    case 'shape_sizedivider':
-                    case 'pattern_shapes':
-                        renderer.resetLayer(layer);
-                        break;
-
-                    // shader reset
-                    case 'shaders':
-                        layer.updateShaders();
-                        break;
-
-                    case 'lighting_ambient':
-                        layer.resetAmbientLight();
-                        break;
-
-                    case 'lighting_type':
-                    case 'lighting_pattern_lights':
-                        layer.resetLighting();
-                        break;
-
-                    case 'lighting_fog':
-                        layer.resetFog();
-                        break;
-
-                    // reload shapes
-                    case 'pattern':
-                    case 'pattern_mover':
-                    case 'shape_modifier':
-                    case 'shape_modifier_volume':
-                    case 'shape_geometry':
-                    case 'shape_transform':
-                    case 'mesh_material':
-                    case 'material_mapping':
-                    case 'shape_moda':
-                    case 'shape_modb':
-                    case 'shape_modc':
-                        layer.resetShapes();
-                        break;
-
-                    // special case for shapetastic
-                    case 'shape_vertices':
-                        if (display) {
-                            layer.resetShapes();
-                        }
-                        break;
-                }
-
-                if (forward === true) {
-                    let data = {};
-                    data[item] = value;
-                    messaging.emitSettings(layerIndex, data, true, false, force);
-                }
-
-                listener.fireEvent('animation.updateSetting', {layer: layer, item: item, value: value});
+            let updated = cm.updateData(layer, data);
+            let property;
+            let value;
+            if (isArray(updated)) {
+                property = updated[0].property;
+                value = updated[0].value;
             }
+
+            switch (property) {
+
+                // complete layer reset:
+                case 'shape_sizedivider':
+                case 'pattern_shapes':
+                    renderer.resetLayer(layer);
+                    break;
+
+                // shader reset
+                case 'shaders':
+                    layer.updateShaderPasses();
+                    break;
+
+                case 'lighting_ambient':
+                    layer.resetAmbientLight();
+                    break;
+
+                case 'lighting_type':
+                case 'lighting_pattern_lights':
+                    layer.resetLighting();
+                    break;
+
+                case 'lighting_fog':
+                    layer.resetFog();
+                    break;
+
+                // reload shapes
+                case 'pattern':
+                case 'pattern_mover':
+                case 'shape_modifier':
+                case 'shape_modifier_volume':
+                case 'shape_geometry':
+                case 'shape_transform':
+                case 'mesh_material':
+                case 'material_mapping':
+                case 'shape_moda':
+                case 'shape_modb':
+                case 'shape_modc':
+                    layer.resetShapes();
+                    break;
+
+                // special case for shapetastic
+                case 'shape_vertices':
+                    if (display) {
+                        layer.resetShapes();
+                    }
+                    break;
+            }
+
+            if (forward === true) {
+                messaging.emitSettings(layerIndex, data, true, false, force);
+            }
+
+            listener.fireEvent('animation.updateSetting', {layer: layer, item: property, value: value});
         }
 
         /**
@@ -848,16 +897,15 @@ document.addEventListener('DOMContentLoaded', function () {
         updateSettings(layer, data, display, forward, force) {
 
             if (force) {
-                for (var k in data) {
-                    sm.update(layer, k, data[k]);
-                }
+                cm.updateData(layer, data);
 
                 renderer.resetLayer(layer);
 
             } else {
                 for (var k in data) {
-                    var value = data[k];
-                    this.updateSetting(layer, k, value, display, forward, force);
+                    let value = {};
+                    value[k] = data[k];
+                    this.updateSetting(layer, value, display, forward, force);
                 }
             }
         }

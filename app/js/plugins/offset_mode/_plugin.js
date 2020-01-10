@@ -1,6 +1,6 @@
 HC.plugins.offset_mode = HC.plugins.offset_mode || {};
 {
-    class Plugin extends HC.AnimationPlugin {
+    HC.OffsetModePlugin = class Plugin extends HC.AnimationPlugin {
         after(shape) {
             let layer = this.layer;
             if (this.settings.offset_audio && audioman.isActive()) {
@@ -21,6 +21,4 @@ HC.plugins.offset_mode = HC.plugins.offset_mode || {};
             }
         }
     }
-
-    HC.OffsetModePlugin = Plugin;
 }

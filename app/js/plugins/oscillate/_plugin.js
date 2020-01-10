@@ -1,6 +1,6 @@
 HC.plugins.oscillate = HC.plugins.oscillate || {};
 {
-    class Plugin extends HC.AnimationPlugin {
+    HC.OscillatePlugin = class Plugin extends HC.AnimationPlugin {
 
         construct(layer, settings, tree, key) {
             HC.AnimationPlugin.prototype.construct.call(this, layer, settings, tree, key);
@@ -22,7 +22,7 @@ HC.plugins.oscillate = HC.plugins.oscillate || {};
 
             } else {
                 // key does not exist
-                this.cache[ckey] = isObject(this.preset) ? Object.create(this.preset) : 0;
+                this.cache[ckey] = isObject(this.preset) ? Object.create(this.preset) : this.preset ? this.preset : 0;
             }
 
             return this.cache[ckey];
@@ -72,10 +72,8 @@ HC.plugins.oscillate = HC.plugins.oscillate || {};
                     this.settings[key] *= value;
                 }
 
-                this.settings[key];
+                return this.settings[key];
             }
         }
     }
-
-    HC.OscillatePlugin = Plugin;
 }

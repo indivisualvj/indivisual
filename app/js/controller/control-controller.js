@@ -37,7 +37,8 @@
                 }
 
                 if (statics.shiftKey || statics.ctrlKey) {
-                    sm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
+                    // sm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
+                    cm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
                     controller.syncLayers();
                     controller.updateControl('reset', true, true, true, true);
                     explorer.resetPresets();
@@ -56,7 +57,10 @@
                 controller.pushSources();
             },
             rst_shaders: function () {
-                controller.shaders('default', statics.AnimationSettings.initial, true);
+                cm.update(statics.ControlSettings.layer, 'passes', 'shaders', []);
+                let data = cm.get(statics.ControlSettings.layer, 'passes').prepare();
+                controller.updateSettings(statics.ControlSettings.layer, data, false, false, true);
+                messaging.emitSettings(statics.ControlSettings.layer, data, false, false, true);
             },
             debug: statics.ControlSettings.debug,
             tempo: statics.ControlSettings.tempo,

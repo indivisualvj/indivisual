@@ -24,9 +24,9 @@ HC.plugins.pattern = HC.plugins.pattern || {};
         boundsCheck(shape, extend, depthMultiplier, velocity) {
 
             let direction = new THREE.Vector3(0, 0, 0);
-            // todo greedy?
+            // check greedy!?
 
-            // bounds check
+            // bounds _check
             let mx = this.layer.resolution('half').x + (extend || 0);
             let my = this.layer.resolution('half').y + (extend || 0);
             let mz = this.layer.cameraDefaultDistance(depthMultiplier || 0);

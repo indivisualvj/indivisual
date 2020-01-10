@@ -1,6 +1,12 @@
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+
 HC.plugins.shaders = HC.plugins.shaders || {};
+
 {
     HC.ShaderPlugin = class Plugin extends HC.AnimationPlugin {
+
         create() {
             console.error('HC.ShaderPlugin: .create() must be implemented in derived plugin.');
         }
@@ -37,13 +43,14 @@ HC.plugins.shaders = HC.plugins.shaders || {};
             }
         }
 
-        apply(key, sh) {
+        apply(key, properties, settings) {
             let dependencies = this.dependencies;
             let glsh = this.pass;
             let name = this.key;
-            sh = sh || this.settings.shaders[name];
+            properties = properties || this.settings.shaders[name];
+            settings = settings || this.__proto__.constructor.settings;
 
-            if (sh.random) {
+            if (properties.random) {
                 if ((audioman.isActive() && audio.peak && randomBool(3)) || (this.layer.getCurrentSpeed().prc == 0 && randomBool())) {
                     glsh.enabled = !glsh.enabled;
                 }
@@ -55,15 +62,16 @@ HC.plugins.shaders = HC.plugins.shaders || {};
                 return false;
             }
 
-            for (let skey in sh) {
-                let shs = sh[skey];
+            for (let skey in properties) {
+                let sProperty = properties[skey];
+                let sSetting = settings[skey];
 
-                if (typeof shs != 'boolean' && typeof shs != 'number') {
+                if (typeof sProperty != 'boolean' && typeof sProperty != 'number') {
 
-                    if ('value' in shs) {
-                        let v = shs.value;
+                    if ('value' in sProperty) {
+                        let v = sProperty.value;
 
-                        if (shs.type == 'sampler2D') {
+                        if (sSetting.type == 'sampler2D') {
                             let img = statics.overlay_one ? statics.overlay_one.target : false;
                             if (img) {
                                 v = statics.overlay_one.target;
@@ -73,31 +81,31 @@ HC.plugins.shaders = HC.plugins.shaders || {};
                                 glsh.uniforms[skey + '_ready'].value = 0;
                             }
                         } else {
-                            if (shs.oscillate && shs.oscillate != 'off') {
+                            if (sProperty.oscillate && sProperty.oscillate != 'off') {
 
-                                let plugin = this.layer.getOscillatePlugin(shs.oscillate);
+                                let plugin = this.layer.getOscillatePlugin(sProperty.oscillate);
                                 if (plugin) {
-                                    let allown = shs._type[0] < 0;
+                                    let allown = sSetting._type[0] < 0;
 
-                                    plugin.store(shs);
+                                    plugin.store(sProperty);
 
-                                    plugin.apply(shs);
-                                    v = shs.value;
+                                    plugin.apply(sProperty);
+                                    v = sProperty.value;
                                     if (allown === false) {
                                         v = Math.abs(v);
                                     }
 
-                                    if (shs.stepwise && isInteger(shs._type[2])) {
+                                    if (sProperty.stepwise && isInteger(sSetting._type[2])) {
                                         v = round(v, 0);
                                     }
 
-                                    plugin.restore(shs);
+                                    plugin.restore(sProperty);
                                 }
                             }
 
-                            if (audioman.isActive() && shs.audio) {
+                            if (audioman.isActive() && sProperty.audio) {
 
-                                if (shs._type && isInteger(shs._type[2])) {
+                                if (sSetting._type && isInteger(sSetting._type[2])) {
 
                                     if (audio.peak && randomBool()) {
                                         if (dependencies && dependencies[skey]) { // is in dependency
@@ -107,13 +115,13 @@ HC.plugins.shaders = HC.plugins.shaders || {};
                                                 let dpck = dpc;
                                                 dpc = dependencies[dpck]; // get linked dep
                                                 let rv = glsh.uniforms[dpck].value; // get current value from dep
-                                                if (dpc[rv]) { // check if linked dep contains current dep
+                                                if (dpc[rv]) { // _check if linked dep contains current dep
                                                     dpc = dpc[rv]; // get valid values for skey from dep
                                                     let dky = Object.keys(dpc);
                                                     v = dky[randomInt(0, dky.length - 1)]; // random from valid values
 
                                                 } else { // fallback
-                                                    v = randomInt(shs._type[0], shs.value);
+                                                    v = randomInt(sSetting._type[0], sProperty.value);
                                                 }
 
                                             } else {
@@ -123,7 +131,7 @@ HC.plugins.shaders = HC.plugins.shaders || {};
                                             }
 
                                         } else {
-                                            v = randomInt(shs._type[0], shs.value);
+                                            v = randomInt(sSetting._type[0], sProperty.value);
                                         }
 
                                     } else {
@@ -139,13 +147,13 @@ HC.plugins.shaders = HC.plugins.shaders || {};
                         // finalize
                         if (v !== null) {
 
-                            if (shs._func) {
+                            if (sSetting._func) {
 
-                                if (v < shs._type[0]) {
-                                    v = shs._type[0] + v;
+                                if (v < sSetting._type[0]) {
+                                    v = sSetting._type[0] + v;
                                 }
 
-                                v = this[shs._func](v);
+                                v = this[sSetting._func](v);
                             }
 
                             if (glsh.uniforms) {
@@ -166,7 +174,7 @@ HC.plugins.shaders = HC.plugins.shaders || {};
                         }
 
                     } else { // one level deeper
-                        return this.apply(skey, shs);
+                        return this.apply(skey, sProperty, sSetting);
                     }
                 }
             }

@@ -53,8 +53,6 @@ HC.Shape.prototype.initPlugins = function () {
             return this;
         }
 
-<<<<<<< Updated upstream
-=======
         /**
          * use this for custom code on construction
          */
@@ -66,7 +64,6 @@ HC.Shape.prototype.initPlugins = function () {
             this.controlsets = controlsets;
         }
 
->>>>>>> Stashed changes
         inject() {
             let inst = this;
             HC.Shape.prototype.injected.plugins[this.tree][this.key] = {

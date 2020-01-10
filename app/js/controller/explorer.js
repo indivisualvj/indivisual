@@ -90,7 +90,7 @@
          * @param model
          */
         setPreset(layer, model) {
-            let l = sm.get(layer);
+            let l = cm.getLayer(layer);
             if (model) {
                 model.layer = layer + 1;
                 model.loaded = false;
@@ -101,14 +101,14 @@
                 l._preset.changed = '';
                 l._preset.layer = '';
             }
-            l._preset = model; // todo why _preset?
+            l._preset = model; // todo find better way to store preset info
         }
 
         /**
          * 
          */
         resetPresets() {
-            for (let i = 0; i < layers.length; i++) {
+            for (let i = 0; i < statics.ControlValues.layer.length; i++) {
                 this.setPreset(i, false);
             }
         }
@@ -119,7 +119,7 @@
          * @param changed
          */
         setChanged(layer, changed) {
-            let l = sm.get(layer);
+            let l = cm.getLayer(layer);
             if (l._preset) {
                 if (changed) {
                     l._preset.changed = '*';
@@ -136,7 +136,7 @@
          * @param loaded
          */
         setLoaded(layer, loaded) {
-            let l = sm.get(layer);
+            let l = cm.getLayer(layer);
             if (l._preset) {
                 l._preset.loaded = loaded;
             }
@@ -146,7 +146,7 @@
          * 
          */
         resetLoaded() {
-            for (let i = 0; i < layers.length; i++) {
+            for (let i = 0; i < statics.ControlValues.layer.length; i++) {
                 this.setLoaded(i, false);
             }
         }
@@ -207,7 +207,7 @@
 
     /**
      *
-     * @type {{toggleFolder: HC.Explorer.VueItemMethods.toggleFolder, newPreset: HC.Explorer.VueItemMethods.newPreset, reload: HC.Explorer.VueItemMethods.reload, savePresets: HC.Explorer.VueItemMethods.savePresets, renameItem: HC.Explorer.VueItemMethods.renameItem, loadPreset: HC.Explorer.VueItemMethods.loadPreset, deletePreset: HC.Explorer.VueItemMethods.deletePreset, loadPresets: HC.Explorer.VueItemMethods.loadPresets, savePreset: HC.Explorer.VueItemMethods.savePreset, newFolder: HC.Explorer.VueItemMethods.newFolder}}
+     *
      */
     HC.Explorer.VueItemMethods = {
         toggleFolder: function () {
@@ -219,33 +219,37 @@
         },
 
         loadPreset: function () {
-
+// todo PresetManager?
             explorer.setPreset(statics.ControlSettings.layer, false);
             explorer.setPreset(statics.ControlSettings.layer, this.item);
 
-            if (this.item.type == 'preset') { // load default
-                let dflt = statics.AnimationSettings.defaults().prepare();
+            if (this.item.type == 'preset') {
+                // load default
+                cm.setLayerProperties(statics.ControlSettings.layer, false);
                 requestAnimationFrame(function () {
-                    controller.preset(false, dflt);
+                    controller.updatePreset(false, cm.prepareLayer(statics.ControlSettings.layer));
                 });
 
-            } else { // load preset
+            } else {
+                // load preset
                 messaging.load(STORAGE_DIR, this.item.dir, this.item.name, function (data) {
                     requestAnimationFrame(function () {
 
                         if (statics.ctrlKey) { //load shaders into present presets
-                            controller.shaders(data.dir + '/' + data.name, JSON.parse(data.contents));
+                            controller.transferShaderPasses(data.dir + '/' + data.name, JSON.parse(data.contents));
 
-                        } else { // load the preset
+                        } else {
+                            // load the preset
 
                             HC.clearLog();
 
                             let key = data.dir + '/' + data.name;
                             let contents = JSON.parse(data.contents);
-                            if (contents.tutorial && Object.keys(contents.tutorial).length) {
-                                new HC.ScriptProcessor(key, Object.create(contents.tutorial)).log();
+
+                            if (contents.info && contents.info.tutorial && Object.keys(contents.info.tutorial).length) {
+                                new HC.ScriptProcessor(key, Object.create(contents.info.tutorial)).log();
                             }
-                            controller.preset(key, contents);
+                            controller.updatePreset(key, contents);
                             explorer.setLoaded(statics.ControlSettings.layer, true);
                         }
                     });
@@ -257,7 +261,7 @@
             let children = this.item.children;
             let dflt = [];
 
-            for (let i = 0; dflt.length < layers.length && i < children.length; i++) {
+            for (let i = 0; dflt.length < statics.ControlValues.layer.length && i < children.length; i++) {
                 let child = children[i];
                 if (!child.name.match(/^_.+/)) {
                     dflt.push(child);
@@ -272,12 +276,9 @@
 
             HC.clearLog();
 
-            for (let i = 0; i < layers.length; i++) {
+            for (let i = 0; i < statics.ControlValues.layer.length; i++) {
                 if (statics.shiftKey) { // shift means append presets to free layers. no overwrite.
-                    if ((i in layers)
-                        && layers[i].settings
-                        && !layers[i].settings.isDefault()
-                    ) {
+                    if (cm.isDefault(i)) {
                         continue;
                     }
                 }
@@ -299,7 +300,7 @@
                                 controller.updateControl('layer', i, true, true);
                                 let key = data.dir + '/' + data.name;
                                 let contents = JSON.parse(data.contents);
-                                controller.preset(key, contents);
+                                controller.updatePreset(key, contents);
 
                                 if (di == dflt.length - 1) {
                                     controller.updateControl('layer', 0, true, true);
@@ -311,8 +312,8 @@
                     load(dflt[di], i, di++);
 
                 } else {
-                    controller.preset('default', statics.AnimationSettings.initial, i);
-                    //break;
+                    cm.setLayerProperties(i, false);
+                    controller.updatePreset('default', cm.prepareLayer(i), i);
                 }
             }
         },
@@ -327,8 +328,7 @@
 
                 if (layer >= 0 && child.changed) {
                     let save = function (layer, child) {
-                        let settings = layers[layer].settings.prepare();
-                        statics.AnimationSettings.clean(settings, statics.AnimationSettings.initial);
+                        let settings = cm.prepareLayer(layer);
                         messaging.save(STORAGE_DIR, child.dir, child.name, settings, function (result) {
                             HC.log(result);
                             explorer.setChanged(layer, false);
@@ -344,8 +344,7 @@
 
             let model = this.item;
 
-            let settings = statics.AnimationSettings.prepare();
-            statics.AnimationSettings.clean(settings, statics.AnimationSettings.initial);
+            let settings = cm.prepareLayer(statics.ControlSettings.layer);
             messaging.save(STORAGE_DIR, this.item.dir, this.item.name, settings, function (result) {
                 HC.log(result);
                 explorer.setPreset(statics.ControlSettings.layer, false);
@@ -416,7 +415,7 @@
                 changed: '',
                 dir: model.name,
                 name: name + '.json',
-                settings: statics.AnimationSettings.prepare(),
+                settings: cm.getLayerProperties(statics.ControlSettings.layer),
                 children: []
             };
 

@@ -1,17 +1,24 @@
-HC.Layer.prototype.getPlugin = function (plugin, name) {
+/**
+ *
+ * @param plugin
+ * @param name
+ * @param dontcry
+ * @returns {*|boolean}
+ */
+HC.Layer.prototype.getPlugin = function (plugin, name, dontcry) {
 
-    if (DEBUG) {
+    if (DEBUG && !dontcry) {
         if (!(plugin in this.plugins)) {
             console.error('plugin not found: ' + plugin);
         }
-        if (!(plugin in this.settings)) {
-            console.error('setting not found: ' + plugin);
-        }
+        // if (!(this.settings[plugin])) {
+        //     console.error('setting not found: ' + plugin);
+        // }
     }
 
     name = name || this.settings[plugin];
 
-    if (DEBUG) {
+    if (DEBUG && !dontcry) {
         if (!(name in this.plugins[plugin])) {
             console.error('plugin not found: ' + plugin + '.' + name);
         }
@@ -65,6 +72,33 @@ HC.Layer.prototype.getLightingTypePlugin = function (name) {
 HC.Layer.prototype.getShaderPlugin = function (name) {
     return this.getPlugin('shaders', name);
 };
+
+/**
+ *
+ * @param name
+ * @param key
+ * @returns {*}
+ */
+HC.Layer.prototype.getShaderPassPlugin = function (name, key, properties) {
+
+    if (!('passes' in this.plugins)) {
+        this.plugins['passes'] = {};
+    }
+
+    let plugin = this.getPlugin('passes', key, true);
+    if (!plugin) {
+        plugin = this.loadPlugin('shaders', name);
+        this.setPlugin('passes', key, plugin);
+    }
+
+    let settings = {shaders: {}};
+    settings.shaders[key] = properties;
+
+    plugin.construct(this, settings, 'shaders', key);
+
+    return plugin;
+};
+
 
 /**
  *
@@ -373,6 +407,8 @@ HC.Layer.prototype.reloadPlugins = function () {
             }
             var instance = this.loadPlugin(plugin, key);
             instance.construct(this, this.settings, plugin, key);
+            instance.setControlSets(this.controlsets);
+            // instance.construct(this, this.controlsets, plugin, key);
             instance.inject();
             this.setPlugin(plugin, key, instance);
         }

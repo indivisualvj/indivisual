@@ -4187,7 +4187,7 @@ var Checkbox = function (_EventEmitter) {
         __webpack_require__(5)(_this.container, opts.label, theme);
 
         _this.input = _this.container.appendChild(document.createElement('input'));
-        _this.input.id = 'checkbox-' + opts.label + uuid;
+        _this.input.id = 'checkbox-' + opts.property + uuid;
         _this.input.type = 'checkbox';
         _this.input.checked = opts.initial;
         _this.input.className = styles['guify-checkbox'];

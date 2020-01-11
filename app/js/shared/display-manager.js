@@ -21,7 +21,6 @@
             this.maptastic = this.initMaptastic();
             this.cliptastic = this.initCliptastic();
             this.mappingTimeouts = [];
-            this.maskTimeouts = [];
         }
 
         /**
@@ -72,22 +71,24 @@
          *
          */
         initCliptastic() {
-            let onMask = (id, mask) => {
-                if (this.maskTimeouts[id]) {
-                    clearTimeout(this.maskTimeouts[id]);
+
+            let maskTimeouts = [];
+            let onMask = function (id, mask) {
+                if (maskTimeouts[id]) {
+                    clearTimeout(maskTimeouts[id]);
                 }
                 if (animation) {
                     let f = (id, mask) => {
-                        this.maskTimeouts[id] = setTimeout(function () {
+                        maskTimeouts[id] = setTimeout(function () {
                             animation.updateDisplay(id, JSON.stringify(mask), true, true, false);
-                            this.maskTimeouts[id] = false;
+                            maskTimeouts[id] = false;
                         }, 125);
                     };
                     f(id, mask);
                 }
             };
             return Cliptastic({
-                onchange(e) {
+                onchange: function (e) {
                     if (e && 'element' in e) {
                         let element = e.element;
                         let id = element.id;

@@ -164,6 +164,19 @@ HC.controls = HC.controls || {};
         /**
          *
          * @param key
+         * @returns {null|Object}
+         */
+        getDefault(key) {
+            if (key in this.settings) {
+                return this.settings[key];
+            }
+
+            return null;
+        }
+
+        /**
+         *
+         * @param key
          * @param value
          * @returns {*}
          */

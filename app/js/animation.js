@@ -133,6 +133,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         new HC.Animation.ResizeListener().init();
                     }
                 };
+
                 messaging.sync(callback);
             });
         }
@@ -145,6 +146,8 @@ document.addEventListener('DOMContentLoaded', function () {
      * @type {HC.Animation}
      */
     HC.Animation = class Animation {
+
+        ready = false;
 
         constructor(name) {
             this.name = name;
@@ -586,7 +589,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateSetting(layer, data, display, forward, force) {
 
-            if (!renderer)return;
+            // if (!renderer)return;
 
             let layerIndex = layer;
             layer = renderer.layers[layer];
@@ -666,7 +669,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateControl(item, value, display, forward, force) {
 
-            if (statics.ControlSettings) {
+            // if (statics.ControlSettings) {
 
                 if (item == 'beat') {
                     value = beatkeeper.trigger(value, true, statics.ControlSettings.tempo, true);
@@ -730,7 +733,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     }
                 }
-            }
+            // }
         }
 
         /**

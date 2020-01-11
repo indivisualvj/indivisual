@@ -27,15 +27,11 @@ HC.DisplayController = HC.DisplayController || {};
                 let updates = {};
                 for (let i = 1; i < statics.DisplayValues.display.length; i++) {
                     let v = 'display' + i + '_visible';
-                    if (this.settings[v]) {
+                    if (statics.DisplaySettings[v]) {
                         let okey = 'display0_mask';
-                        let key = new RegExp('^display' + i + '_mask');
-                        for (let c in this.settings) {
-                            if (c.match(key)) {
-                                let oc = c.replace(key, okey);
-                                updates[c] = this.settings[oc];
-                            }
-                        }
+                        let key = 'display' + i + '_mask';
+
+                        updates[key] = statics.DisplaySettings[okey];
                     }
                 }
                 controller.updateDisplays(updates, true, true, true);
@@ -44,11 +40,11 @@ HC.DisplayController = HC.DisplayController || {};
             mask_reset: function () {
                 let updates = {};
                 for (let i = 0; i < statics.DisplayValues.display.length; i++) {
-                    let key = new RegExp('^display' + i + '_mask');
-                    for (let c in this.settings) {
-                        if (c.match(key)) {
-                            updates[c] = this.settings[c];
-                        }
+                    let key = 'display' + i;
+                    let v = key + '_visible';
+                    key +=  '_mask';
+                    if (statics.DisplaySettings[v]) {
+                        updates[key] = statics.DisplaySettingsManager.get('video.displayN').getDefault(key);
                     }
                 }
                 controller.updateDisplays(updates, true, true, true);
@@ -57,9 +53,9 @@ HC.DisplayController = HC.DisplayController || {};
             auto: function () {
                 for (let i = 0; i < statics.DisplayValues.display.length; i++) {
                     let key = 'display' + i;
-                    let _key = key + '_mapping';
+                    key += '_mapping';
                     let data = {};
-                    data[_key] = '';
+                    data[key] = '';
                     messaging.emitDisplays(data, true, true, false);
                 }
             },
@@ -67,10 +63,10 @@ HC.DisplayController = HC.DisplayController || {};
                 for (let i = 0; i < statics.DisplayValues.display.length; i++) {
                     let key = 'display' + i;
                     let v = key + '_visible';
-                    if (this.settings[v]) {
-                        let _key = (key + '_' + 1);
+                    if (statics.DisplaySettings[v]) {
+                        key += '_' + 1;
                         let data = {};
-                        data[_key] = 1;
+                        data[key] = 1;
                         messaging.emitDisplays(data, true, true, false);
                     }
                 }
@@ -79,10 +75,10 @@ HC.DisplayController = HC.DisplayController || {};
                 for (let i = 0; i < statics.DisplayValues.display.length; i++) {
                     let key = 'display' + i;
                     let v = key + '_visible';
-                    if (this.settings[v]) {
-                        let _key = (key + '_' + 2);
+                    if (statics.DisplaySettings[v]) {
+                        key += '_' + 2;
                         let data = {};
-                        data[_key] = 2;
+                        data[key] = 2;
                         messaging.emitDisplays(data, true, true, false);
                     }
                 }
@@ -91,10 +87,10 @@ HC.DisplayController = HC.DisplayController || {};
                 for (let i = 0; i < statics.DisplayValues.display.length; i++) {
                     let key = 'display' + i;
                     let v = key + '_visible';
-                    if (this.settings[v]) {
-                        let _key = (key + '_' + 3);
+                    if (statics.DisplaySettings[v]) {
+                        key += '_' + 3;
                         let data = {};
-                        data[_key] = 3;
+                        data[key] = 3;
                         messaging.emitDisplays(data, true, true, false);
                     }
                 }
@@ -117,7 +113,8 @@ HC.DisplayController = HC.DisplayController || {};
             smearing: ['half', 'clear'],
             background: ['half'],
 
-            mask_copy: ['quarter'],
+            mask_copy: ['quarter', 'clear'],
+            mask_reset: ['quarter'],
             full: ['eight'],
             half: ['eight'],
             third: ['eight'],

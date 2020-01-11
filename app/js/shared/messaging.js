@@ -107,9 +107,11 @@
          * @param that
          */
         onSettings(data, that) {
-            requestAnimationFrame(function () {
-                that.program.updateSettings(data.layer, data.data, data.controls, data.forward, data.force);
-            });
+            if (that.program.ready) {
+                requestAnimationFrame(function () {
+                    that.program.updateSettings(data.layer, data.data, data.controls, data.forward, data.force);
+                });
+            }
         }
 
         /**
@@ -118,9 +120,11 @@
          * @param that
          */
         onControls(data, that) {
-            requestAnimationFrame(function () {
-                that.program.updateControls(data.data, data.controls, data.forward, data.force);
-            });
+            if (that.program.ready) {
+                requestAnimationFrame(function () {
+                    that.program.updateControls(data.data, data.controls, data.forward, data.force);
+                });
+            }
         }
 
         /**
@@ -129,9 +133,11 @@
          * @param that
          */
         onDisplays(data, that) {
-            requestAnimationFrame(function () {
-                that.program.updateDisplays(data.data, data.controls, data.forward, data.force);
-            });
+            if (that.program.ready) {
+                requestAnimationFrame(function () {
+                    that.program.updateDisplays(data.data, data.controls, data.forward, data.force);
+                });
+            }
         }
 
         /**
@@ -140,9 +146,11 @@
          * @param that
          */
         onSources(data, that) {
-            requestAnimationFrame(function () {
-                that.program.updateSources(data.data, data.controls, data.forward, data.force);
-            });
+            if (that.program.ready) {
+                requestAnimationFrame(function () {
+                    that.program.updateSources(data.data, data.controls, data.forward, data.force);
+                });
+            }
         }
 
         /**
@@ -384,6 +392,8 @@
          * @param callback
          */
         sync(callback) {
+
+            this.program.ready = true;
 
             HC.log(this.program.name, 'syncing...', true);
 

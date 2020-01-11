@@ -94,7 +94,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     controller.controlSettingsGui
                 );
 
-
                 controlSets = HC.Statics.initDisplayControlSets();
                 statics.DisplaySettingsManager = new HC.ControlSetsManager(controlSets);
                 statics.DisplaySettings = statics.DisplaySettingsManager.settingsProxy(); // fixme not a final solution
@@ -150,6 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
         synced = {};
         thumbTimeouts = [];
         name;
+        ready = false;
 
         constructor(name) {
             this.name = name;
@@ -419,7 +419,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (force) {
                 for (let k in data) {
                     let value = data[k];
-                    // value = statics.DisplaySettingsManager.updateItem(k, value);
+                    value = statics.DisplaySettingsManager.updateItem(k, value);
                 }
                 this.updateUi(this.displaySettingsGui);
                 this.showDisplayControls();
@@ -538,7 +538,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.explainPlugin(item, value, HC);
             }
 
-            if (statics.ControlSettings) {
+            // if (statics.ControlSettings) {
 
                 if (item == 'beat') {
                     value = beatkeeper.trigger(value, true, statics.ControlSettings.tempo, false);
@@ -587,7 +587,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.location.reload();
 
                 }
-            }
+            // }
         }
 
         /**

@@ -335,18 +335,6 @@ pre .orange {
     background-image: -o-linear-gradient(bottom, #383b3c 25%, #313334 75%);
 }
 
-.boolean[data-class] .property-name {
-    width: 70%;
-}
-
-.function[data-class] .property-name {
-    width: 70%;
-}
-
-.number.has-slider .c {
-    width: 68.5%;
-}
-
 .dg .c select {
     padding: 2px !important;
     margin-top: 0 !important;
@@ -422,6 +410,21 @@ pre .orange {
     z-index: 1;
 }
 
+.guify-container_be6yU[data-mnemonic]:before {
+    top: 5px;
+    left: 56px;
+}
+
+.guify-component-container[data-mnemonic]:before {
+    top: -4px;
+    left: -6px;
+}
+
+.guify-component-container[role="button"][data-mnemonic]:before {
+    top: 7px;
+    left: -8px;
+}
+
 .folder[data-mnemonic]:before {
     top: 2px;
     left: 3px;
@@ -434,7 +437,7 @@ pre .orange {
     color: #2fa1d6;
 }
 
-.folder ul[data-changed] > .title {
+[data-changed] {
     color: #e61d5f !important;
 }
 
@@ -444,13 +447,14 @@ pre .orange {
 [data-changed] > div > .c .slider:hover .slider-fg {
     background: #e61d5f !important;
 }
-[data-changed] > div > .c input[type=text] {
+[data-changed] label,
+[data-changed] input {
     color: #e61d5f !important;
 }
-[data-changed] > div > .c > select {
+[data-changed] select {
     color: #e61d5f !important;
 }
-[data-changed] > div > .property-name {
+.guify-component-container[data-changed] > div > div {
     color: #e61d5f !important;
 }
 
@@ -876,7 +880,7 @@ select option {
 
 input[type=checkbox].guify-checkbox_hxzak + label {
     position: absolute;
-    right: 0px;
+    right: 2px;
 }
 
 .guify-panel-container_39NJay

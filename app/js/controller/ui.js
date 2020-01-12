@@ -277,7 +277,7 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
 };
 
 /**
- * todo guify
+ *
  * @param control
  * @returns {*}
  */
@@ -287,7 +287,7 @@ HC.Controller.prototype.nextOpenFolder = function (control) {
         return this.nextOpenFolder(this.controlSettingsGui) ||
         this.nextOpenFolder(this.displaySettingsGui) ||
         this.nextOpenFolder(this.sourceSettingsGui) ||
-        this.nextOpenFolder(this.animationSettingsGui);
+        this.nextOpenFolder(this.animationSettingsGui) || this.controlSettingsGui;
     }
 
     if (control instanceof HC.ControllerUi && !control.isExpanded()) {
@@ -314,49 +314,68 @@ HC.Controller.prototype.nextOpenFolder = function (control) {
  * @param name
  */
 HC.Controller.prototype.toggleByName = function (name) {
-    // todo für tutorials und öffnen von shaders
+    // for tutorials and to open shader passes
+    console.error('not implemented');
 };
 
 /**
  *
  * @param property
  */
-HC.Controller.prototype.toggleByProperty = function (property) {
-    var control = this.getControlParentByProperty(property);
-    control.open();
-    this.scrollToControl(control);
+HC.Controller.prototype.openTreeByProperty = function (property) {
+
+    let roots = [
+        this.controlSettingsGui,
+        this.displaySettingsGui,
+        this.sourceSettingsGui,
+        this.animationSettingsGui
+    ];
+
+    for (let k in roots) {
+        let control;
+        if (control = roots[k].findControlByProperty(property)) {
+            this.closeAll(roots[k]);
+            let scrollto = control;
+            control = control.getParent();
+
+            do {
+                control.setExpanded(true);
+            } while(control = control.getParent())
+
+            this.scrollToControl(scrollto);
+        }
+    }
 };
 
 /**
- * todo guify
- * @param property
- * @param [control]
- * @returns {*}
+ *
+ * @param key
  */
-HC.Controller.prototype.getControlParentByProperty = function (property, control) {
+HC.Controller.prototype.openTreeByFolder = function (key) {
+    let roots = [
+        this.controlSettingsGui,
+        this.displaySettingsGui,
+        this.sourceSettingsGui,
+        this.animationSettingsGui
+    ];
 
-    control = control || this.gui;
+    for (let k in roots) {
+        let folder;
+        if (folder = roots[k].findFolderByKey(key)) {
+            this.closeAll(roots[k]);
+            let scrollto = folder;
 
-    for (var c in control.__controllers) {
-        var co = control.__controllers[c];
-        if (co.property == property) {
-            // found
-            return control;
+            do {
+                folder.setExpanded(true);
+            } while(folder = folder.getParent())
+
+            this.scrollToControl(scrollto);
         }
     }
-    for (var k in control.__folders) {
-        var v = control.__folders[k];
-
-        var c = this.getControlParentByProperty(property, v);
-        if (c) {
-            return c;
-        }
-    }
-    return false;
 };
 
 /**
- * todo zeigt bei z.B. audio tutorial nichts an
+ *
  * @param item
  * @param value
  */
@@ -391,7 +410,7 @@ HC.Controller.prototype.closeAll = function (control) {
     }
 
     if (control instanceof HC.ControllerUi) {
-        // todo close gui
+        control.setExpanded(false);
 
     } else if (control instanceof HC.ControllerUi.Folder) {
         control.setExpanded(false);
@@ -413,66 +432,56 @@ HC.Controller.prototype.closeAll = function (control) {
 };
 
 /**
- * todo guify
+ *
  * @param ci
  * @param shiftKey
  */
 HC.Controller.prototype.toggleByKey = function (ci, shiftKey) {
-    var open = this.nextOpenFolder(this.gui);
-    var folderKeys = [];
-    if (open.__folders) {
-        folderKeys = Object.keys(open.__folders);
+    let roots = [
+        this.controlSettingsGui,
+        this.displaySettingsGui,
+        this.sourceSettingsGui,
+        this.animationSettingsGui
+    ];
+    let open = this.nextOpenFolder();
+
+    if (!open.isExpanded()) {
+        if (ci < roots.length) {
+            roots[ci].setExpanded(true);
+        }
+        return;
     }
 
-    var controllerKeys = [];
-    if (open.__controllers) {
-        controllerKeys = Object.keys(open.__controllers);
+    let controllers = open.getControllers();
+    let folders = open.getFolders();
 
-        if (shiftKey && controllerKeys.length > 0) { // reset on shift
-            this.resetFolder(open);
-            return;
-        }
-
+    if (shiftKey && controllers.length > 0) { // reset on shift
+        this.resetFolder(open);
+        return;
     }
 
-    if (folderKeys && folderKeys.length > ci) { // open folder
-        var control = open.__folders[folderKeys[ci]];
-        control.open();
-        this.scrollToControl(control);
+    if (ci >= folders.length) {
+        ci -= folders.length;
 
-    } else if (!shiftKey
-        && controllerKeys
-        && folderKeys.length + controllerKeys.length > ci
-    ) { // activate controller
+        if (ci < controllers.length) {
+            let controller = controllers[ci];
 
-        var folder = open.name;
-        if (folder in statics.ControlValues.predefined_keys) {
-            ci += Object.keys(statics.ControlValues.predefined_keys[folder]).length; // vorbelegte überspringen
-        }
-
-        var control = open.__controllers[controllerKeys[ci - folderKeys]];
-
-        if (control && control.__li.hasAttribute('data-mnemonic')) {
-            if (control instanceof dat.controllers.BooleanController
-                || control instanceof dat.controllers.FunctionController
-            ) {
-                control.domElement.click();
-
-            } else if (control instanceof dat.controllers.NumberControllerSlider
-                || control instanceof dat.controllers.NumberControllerBox
-                || control instanceof dat.controllers.StringController
-            ) {
-                var el = control.domElement.getElementsByTagName('input')[0];
-                el.focus();
-                el.select();
-
-            } else if (control instanceof dat.controllers.OptionController) {
-                control.domElement.getElementsByTagName('select')[0].focus();
-
-            } else {
-                HC.log(control);
+            let guiTitle = open.gui.opts.title;
+            let keys = statics.ControlValues.predefined_keys;
+            if (guiTitle in keys) {
+                keys = keys[guiTitle][open.getKey()];
+                if (keys) {
+                    ci += Object.keys(keys).length - 1;
+                    controller = controllers[ci];
+                }
             }
+
+            controller.catchFocus();
         }
+
+    } else {
+        let folder = folders[ci];
+        folder.setExpanded(true);
     }
 };
 
@@ -498,17 +507,24 @@ HC.Controller.prototype.updateUi = function (control) {
 
     this.refreshLayerInfo();
 
-    if (control = this.animationSettingsGui) {
+    if (!control) {
+        this.updateValuesChanged(this.controlSettingsGui);
+        this.updateValuesChanged(this.displaySettingsGui);
+        this.updateValuesChanged(this.sourceSettingsGui);
+        this.updateValuesChanged(this.animationSettingsGui);
+        return;
+    }
+
+    if (control == this.animationSettingsGui) {
         this.updateUiPasses();
     }
 
-    var flds = control.__folders || [];
+    for (let key in control.children) {
+        let child = control.getChild(key);
 
-    for (var key in flds) {
-        var fld = flds[key];
-
-        this.updateUi(fld);
-        this.updateValuesChanged(fld);
+        if (child instanceof HC.ControllerUi.Folder) {
+            this.updateValuesChanged(child);
+        }
     }
 };
 
@@ -539,66 +555,72 @@ HC.Controller.prototype.updateUiPasses = function () {
 };
 
 /**
- * todo guify
+ *
  */
 HC.Controller.prototype.showDisplayControls = function () {
-    for (var i = 0; i < statics.DisplayValues.display.length; i++) {
-        var n = 'display' + i;
-        var v = statics.DisplaySettings[n + '_visible'];
-        this.showControls(n, 'source', v);
+    for (let i = 0; i < statics.DisplayValues.display.length; i++) {
+        let key = 'display' + i;
+        let visible = statics.DisplaySettings[key + '_visible'];
 
-        n = '_display' + i;
-        this.showControls(n, 'displays', v);
+        let displays = this.displaySettingsGui.children.displays.children;
+        let display = displays[key];
+        display.setVisible(visible);
+
+        let sources = this.sourceSettingsGui.children.source.children;
+        let sk = key + '_source';
+        let ctrl = sources[sk];
+        ctrl.setVisible(visible);
+        sk = key + '_sequence';
+        ctrl = sources[sk];
+        ctrl.setVisible(visible);
     }
 };
 
 
 /**
- *  todo guify
+ *
  * @param folder
  */
 HC.Controller.prototype.updateValuesChanged = function (folder) {
 
-    var changed = false;
+    let changes = false;
 
     if (!folder) {
-        folder = this.gui;
+        this.updateValuesChanged(this.controlSettingsGui);
+        this.updateValuesChanged(this.displaySettingsGui);
+        this.updateValuesChanged(this.sourceSettingsGui);
+        this.updateValuesChanged(this.animationSettingsGui);
+        return;
     }
 
-    var flds = folder.__folders || [];
-
-    for (var key in flds) {
-        var fld = flds[key];
-
-        if (this.updateValuesChanged(fld)) {
-            changed = true;
-        }
-    }
-
-    var ctrls = folder.__controllers || [];
-
-    for (var key in ctrls) {
-        var ctrl = ctrls[key];
-        var li = ctrl.__li;
-
-        if (ctrl.isModified()) {
-            li.setAttribute('data-changed', true);
-            changed = true;
+    for (let key in folder.children) {
+        let child = folder.getChild(key);
+        let changed = false;
+        if (child instanceof HC.ControllerUi.Folder) {
+            changed = this.updateValuesChanged(child);
 
         } else {
-            li.removeAttribute('data-changed');
+            changed = child.isModified();
+        }
+
+        if (changed) {
+            changes = true;
+            child.getContainer().setAttribute('data-changed', true);
+
+        } else {
+            child.getContainer().removeAttribute('data-changed');
         }
     }
 
-    var ul = folder.__ul || folder.__gui.__ul;
-    if (ul && changed) {
-        ul.setAttribute('data-changed', true);
+    if (changes) {
+        folder.getContainer().setAttribute('data-changed', true);
 
     } else {
-        ul.removeAttribute('data-changed');
+        folder.getContainer().removeAttribute('data-changed');
     }
 
-    return changed;
+
+    return changes;
 };
 
 /**
@@ -625,30 +647,6 @@ HC.Controller.prototype.updateThumbs = function () {
             sampleNode.removeAttribute('style');
         }
     }
-};
-
-/**
- *  todo guify
- * @param item
- * @param parent
- * @param enabled
- */
-HC.Controller.prototype.showControls = function (item, parent, enabled) {
-    requestAnimationFrame(function () {
-        var n = item.replace(/(display\d+)[^0-9]+/, '$1');
-        var q = '[data-id^="' + n + '"]';
-        var elem = document.querySelectorAll(q);
-        for (var i = 0; i < elem.length; i++) {
-            var e = elem[i];
-            if (e.getAttribute('data-parent') == parent) {
-                if (enabled) {
-                    e.style.display = '';
-                } else {
-                    e.style.display = 'none';
-                }
-            }
-        }
-    });
 };
 
 /**
@@ -725,7 +723,6 @@ HC.Controller.prototype.updateIndicator = function (seq) {
 HC.Controller.prototype.updateClip = function (seq) {
 
     var sequenceKey = getSequenceKey(seq);
-    //var sequenceInUse = getSequenceInUse(seq);
     var sample = getSampleBySequence(seq);
     var sampleKey = getSampleKey(sample);
     var clipKey = sequenceKey + '_clip';
@@ -769,15 +766,9 @@ HC.Controller.prototype.updateClip = function (seq) {
     var clipEnabled = clipNode.getAttribute('data-enabled') === 'true';
     clipNode.setAttribute('data-sample', sample);
     clipNode.setAttribute('data-enabled', enabled);
-    //clipNode.style.background = '#ccc';
 
     if (data) {
-        //if (sequenceInUse) {
         firstNode.setAttribute('data-color', 'green');
-        //
-        //} else {
-        //    firstNode.setAttribute('data-color', 'yellow');
-        //}
 
         if (clipEnabled != enabled || clipSample != sample) {
             clipNode.innerHTML = '';

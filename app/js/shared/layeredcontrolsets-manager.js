@@ -35,10 +35,15 @@
          */
         update(layer, set, property, value) {
             let cs = this.get(layer, set);
-            let v = cs.set(property, value);
+            let v = value;
+            if (cs) {
+                v = cs.set(property, value);
 
-            if (this.globalProperties) {
-                this.globalProperties[set].set(property, value);
+                if (this.globalProperties) {
+                    this.globalProperties[set].set(property, value);
+                }
+            } else {
+                console.error('property combination unknown', set, property, value);
             }
 
             return v;

@@ -405,10 +405,23 @@ HC.SourceController = HC.SourceController || {};
          * @param pluggedValues
          */
         createSettings(pluggedValues) {
-            this.createResets();
+
+            for (let k in pluggedValues.sequence) {
+
+                this.values['sequence' + k + '_input'] = pluggedValues.input;
+                this.values['sequence' + k + '_overlay'] = pluggedValues.overlay;
+                this.values['sequence' + k + '_blendmode'] = pluggedValues.blendmode;
+                this.values['sequence' + k + '_osci'] = pluggedValues.oscillator;
+            }
+
+            this.createResets(pluggedValues);
         }
 
-        createResets()  {
+        /**
+         *
+         * @param pluggedValues
+         */
+        createResets(pluggedValues)  {
             var _reset = (seq) => {
                 var key = getSequenceKey(seq);
                 this.settings[key + '_reset'] = () => {
@@ -448,7 +461,7 @@ HC.SourceController = HC.SourceController || {};
                 var key = getSequenceKey(seq);
                 this.settings[key + '_rereset'] = () => {
                     var updates = {};
-                    updates[key + '_overlay'] = this.values[key + '_overlay'];
+                    updates[key + '_overlay'] = this.values[key + '_overlay']; // fixme values missing?!
                     updates[key + '_input'] = this.values[key + '_input'];
                     updates[key + '_blendmode'] = this.values[key + '_blendmode'];
                     updates[key + '_osci'] = this.values[key + '_osci'];

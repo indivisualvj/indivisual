@@ -343,6 +343,11 @@
          * @param force
          */
         emitSettings(layer, data, display, forward, force) {
+
+            if ('info' in data) {
+                delete data.info.tutorial;
+            }
+
             let config = {
                 action: 'settings',
                 data: data,

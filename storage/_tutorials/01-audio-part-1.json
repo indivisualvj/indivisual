@@ -5,7 +5,7 @@
     "text": "First you have to enable audio in the controls folder.",
     "exec": [
       "controller,closeAll",
-      "controller,toggleByProperty,audio",
+      "controller,openTreeByProperty,audio",
       "controller,updateControl,audio,soundcloud,true,true,true"
     ]
   },
@@ -13,8 +13,8 @@
     "text": "Audio flags are checkboxes placed within several folders such as pattern/coloring/filter/sizing/offset and shaders. Enable them and also try to check and uncheck the sync and limit flags.",
     "exec": [
       "controller,closeAll",
-      "controller,toggleByProperty,sizing_audio",
-      "controller,updateSetting,0,sizing_audio,true,true,true"
+      "controller,openTreeByProperty,sizing_audio",
+      "controller,updateSetting,0,{\"sizing\": {\"sizing_audio\": true}},true,true,true"
     ]
   }
 },

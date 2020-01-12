@@ -4201,8 +4201,13 @@ var Checkbox = function (_EventEmitter) {
             _this.emit('initialized', _this.input.checked);
         });
 
-        _this.input.onchange = function (data) {
-            _this.emit('input', data.target.checked);
+        // this.input.onchange = (data) => {
+        //     this.emit('input', data.target.checked)
+        // }
+
+        _this.container.onclick = function (data) {
+            _this.input.checked = !_this.input.checked;
+            _this.emit('input', _this.input.checked);
         };
 
         return _this;
@@ -4305,7 +4310,8 @@ var Select = function (_EventEmitter) {
             for (i = 0; i < opts.options.length; i++) {
                 option = opts.options[i];
                 el = document.createElement('option');
-                el.value = el.textContent = option;
+                el.value = i;
+                el.textContent = option;
                 if (opts.initial === option) {
                     el.selected = 'selected';
                 }

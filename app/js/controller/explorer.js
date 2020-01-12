@@ -246,9 +246,9 @@
                             let key = data.dir + '/' + data.name;
                             let contents = JSON.parse(data.contents);
 
-                            if (contents.info && contents.info.tutorial && Object.keys(contents.info.tutorial).length) {
-                                new HC.ScriptProcessor(key, Object.create(contents.info.tutorial)).log();
-                            }
+                            // if (contents.info && contents.info.tutorial && Object.keys(contents.info.tutorial).length) {
+                            //     new HC.ScriptProcessor(key, Object.create(contents.info.tutorial)).log();
+                            // }
                             controller.updatePreset(key, contents);
                             explorer.setLoaded(statics.ControlSettings.layer, true);
                         }

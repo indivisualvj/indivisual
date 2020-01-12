@@ -136,10 +136,20 @@ HC.controls = HC.controls || {};
                 let set = this.settings[key];
                 let prop = this.properties[key];
 
-                if (set != prop) {
+                let st = typeof set;
+                let sp = typeof prop;
+
+                if (st === 'object' && sp === 'object') {
+                    // compare by json
+                    if (JSON.stringify(set) != JSON.stringify(prop)) {
+                        // console.log('no default', set, prop);
+                        return false;
+                    }
+
+                } else if (set != prop) {
+                    // console.log('no default', set, prop);
                     return false;
                 }
-
             }
             return true;
         }

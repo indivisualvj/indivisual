@@ -222,13 +222,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             for (let k in data) {
                 let value = data[k];
-                if (typeof value !== 'object') {
-                    let set = mappings[k];
-                    if (set) {
-                        cm.update(layer, set, k, value);
-                    }
-
-                } else if (k == 'shaders' || k == 'passes') {
+                if (k == 'shaders' || k == 'passes') {
                     // sort shaders by index
                     delete value._template;
                     delete value.isdefault;
@@ -250,7 +244,13 @@ document.addEventListener('DOMContentLoaded', function () {
                             passes.addShaderPass(pass);
                         }
                     }
+                } else {
+                    let set = mappings[k];
+                    if (set) {
+                        cm.update(layer, set, k, value);
+                    }
                 }
+
             }
             this.updateUi(this.animationSettingsGui);
         }
@@ -486,7 +486,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (display !== false) {
                 this.explainPlugin(property, value);
-                this.updateUi(property);
+                this.updateUi(this.animationSettingsGui);
                 explorer.setChanged(statics.ControlSettings.layer, true);
             }
         }
@@ -749,9 +749,6 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         setAllDisplaysTo(item, value, group) {
             let increment = value === false;
-            if (increment) {
-                value = 0;
-            }
             group = splitToIntArray(statics.SourceSettings[group]);
 
             let updates = {};
@@ -764,21 +761,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 let n = 'display' + i;
                 let nv = n + '_visible';
                 if (statics.DisplaySettings[nv]) {
-                    let key = new RegExp('^' + n + '_' + item);
+                    let key = n + '_' + item;
                     let ns = n + '_static';
                     if (!statics.DisplaySettings[ns]) {
-                        for (let c in statics.SourceSettings.initial) {
-                            if (c.match(key)) {
-                                updates[c] = value;
-
-                                if (increment) {
-                                    value++;
-                                    if (value >= statics.SourceValues[item].length) {
-                                        value = 0;
-                                    }
-                                }
+                        if (increment) {
+                            value = statics.SourceSettings[n + '_' + item];
+                            value++;
+                            if (value >= statics.SourceValues[item].length) {
+                                value = 0;
                             }
                         }
+
+                        updates[key] = value;
                     }
                 }
             }
@@ -787,7 +781,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         *
+         * todo guify
          * @param item
          * @param value
          */
@@ -818,7 +812,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         *
+         * todo guify
          * @param item
          * @param value
          */
@@ -912,7 +906,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.updateSettings(layer, data, false, false, true);
             }
 
-            messaging.emitSettings(layer, cm.prepareLayer(layer), false, false, true);
+            data = cm.prepareLayer(layer);
+            if (cm.get(layer, 'info').hasTutorial()) {
+                new HC.ScriptProcessor(name, Object.create(data.info.tutorial)).log();
+            }
+
+            messaging.emitSettings(layer, data, false, false, true);
         }
 
         /**
@@ -983,15 +982,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
-         * @param open
+         * @param open {HC.ControllerUi.Folder}
          */
         resetFolder(open) {
-            if (open.__controllers.length) {
-                let ctl = open.__controllers[0];
-                let mappings = HC.LayeredControlSetsManager.mappings(() => {return HC.LayeredControlSetsManager.initAll(statics.AnimationValues);});
-                let set = mappings[ctl.property];
-                if (set) {
-                    let cs = cm.get(statics.ControlSettings.layer, set);
+            let set = open.getKey();
+            if (set) {
+                let cs = cm.get(statics.ControlSettings.layer, set);
+                if (cs) {
                     cs.reset();
                     let data = cs.prepare();
                     controller.updateSetting(statics.ControlSettings.layer, data, true, true, false);

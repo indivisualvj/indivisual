@@ -15,12 +15,16 @@
         settings = {
             name: 0,
             version: 1.0,
-            tutorial: ''
+            tutorial: {}
         };
 
         types = {
             name: ['half'],
             version: ['half']
         };
+
+        hasTutorial() {
+            return (typeof this.properties.tutorial === 'object');
+        }
     }
 }

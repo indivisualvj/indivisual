@@ -5,18 +5,18 @@
     "text": "Many settings also can be oscillated which gives you a powerful tool to make things change unexpectedly.",
     "exec": [
       "controller,closeAll",
-      "controller,toggleByProperty,sizing_scale_oscillate",
-      "controller,updateSetting,0,sizing_scale_oscillate,oscillator,true,true"
+      "controller,openTreeByProperty,sizing_scale_oscillate",
+      "controller,updateSetting,0,{\"sizing\": {\"sizing_scale_oscillate\": \"oscillator\"}},true,true"
     ]
   },
   "oscillator settings": {
     "text": "Some plugins called 'oscillator' or 'by osciN_period' can be influenced by settings in the oscillator folder.",
     "exec": [
       "controller,closeAll",
-      "controller,toggleByProperty,osci1_period",
-      "controller,updateSetting,0,osci1_period,8,true,true",
-      "controller,updateSetting,0,osci2_period,5,true,true",
-      "controller,updateSetting,0,osci3_period,2,true,true"
+      "controller,openTreeByProperty,osci1_period",
+      "controller,updateSetting,0,{\"oscillator\": {\"osci1_period\": 8}},true,true",
+      "controller,updateSetting,0,{\"oscillator\": {\"osci2_period\": 5}},true,true",
+      "controller,updateSetting,0,{\"oscillator\": {\"osci3_period\": 2}},true,true"
     ]
   },
   "further steps": {

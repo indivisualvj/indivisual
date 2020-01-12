@@ -126,6 +126,7 @@
             let name = this.controlSet.name();
 
             this.folder = this.gui.addFolder(name, this.controlSet.open);
+            this.folder.setKey(key);
             this._styleFolder(this.folder, key, 'green');
 
             // this._addShareListener(key, this.folder, false);
@@ -190,7 +191,8 @@
                 object: props,
                 property: key,
                 onChange: this.onChange,
-                set: this.controlSet.className()
+                set: this.controlSet.className(),
+                initial: props[key]
             };
 
             if (typeof value == 'function') {

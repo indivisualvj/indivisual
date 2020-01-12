@@ -105,20 +105,25 @@ HC.Controller.prototype.initLogEvents = function () {
  */
 HC.Controller.prototype.initKeyboard = function () {
 
-    var keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-
-    var setMnemonics = function (control, key) {
+    let keys = MNEMONICS;
+    let ci = 0;
+    let setMnemonics = function (control, key) {
         key = key || control.getLabel();
         let guiKeys = statics.ControlValues.predefined_keys[key] ? statics.ControlValues.predefined_keys[key] : {};
+
+        if (control instanceof HC.ControllerUi) {
+            let key = keys.charAt(ci++);
+            control.setMnemonic(key);
+        }
 
         let gi = 0;
         if (control.children) {
             for (let k in control.children) {
-                let child = control.getChild(k);;
+                let child = control.getChild(k);
 
                 if (child instanceof HC.ControllerUi.Folder) {
                     if (gi < keys.length) {
-                        child.folder.container.setAttribute('data-mnemonic', keys.charAt(gi++));
+                        child.setMnemonic(keys.charAt(gi++));
                     }
                     setMnemonics(child, key);
 
@@ -138,7 +143,7 @@ HC.Controller.prototype.initKeyboard = function () {
                             key = keys.charAt(gi++);
                         }
 
-                        child.controller.container.setAttribute('data-mnemonic', key);
+                        child.setMnemonic(key);
                     }
                 }
             }

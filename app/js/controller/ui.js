@@ -417,8 +417,8 @@ HC.Controller.prototype.toggleByKey = function (ci, shiftKey) {
     ) { // activate controller
 
         var folder = open.name;
-        if (folder in statics.ControlValues._keys) {
-            ci += Object.keys(statics.ControlValues._keys[folder]).length; // vorbelegte überspringen
+        if (folder in statics.ControlValues.predefined_keys) {
+            ci += Object.keys(statics.ControlValues.predefined_keys[folder]).length; // vorbelegte überspringen
         }
 
         var control = open.__controllers[controllerKeys[ci - folderKeys]];

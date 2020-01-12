@@ -220,7 +220,6 @@ HC.controls = HC.controls || {};
                 let otype = typeof org;
 
                 if (otype !== type) {
-                    // console.log(item, type, value, otype, org);
                     value = org;
                 }
             }

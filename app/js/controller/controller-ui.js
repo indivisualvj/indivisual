@@ -34,7 +34,7 @@
          * @returns {Folder}
          */
         addFolder(name, open) {
-            let folder = new Folder(this.gui, null, name, open);
+            let folder = new HC.ControllerUi.Folder(this.gui, null, name, open);
             this.children[folder.getLabel()] = folder;
 
             return folder;
@@ -46,7 +46,7 @@
          * @returns {Controller}
          */
         addController(opts) {
-            let controller = new Controller(this, opts);
+            let controller = new HC.ControllerUi.Controller(this, opts);
             this.children[controller.getLabel()] = controller;
 
             return controller;
@@ -60,15 +60,28 @@
             return this.gui.opts.title;
         }
 
+        /**
+         *
+         * @return {null}
+         */
         getParent() {
             return null;
+        }
+
+        /**
+         *
+         * @param key
+         * @return {*}
+         */
+        getChild(key) {
+            return this.children[key];
         }
     };
 
     /**
      *
      */
-    class Folder {
+    HC.ControllerUi.Folder = class Folder {
 
         /**
          * @type {guify}
@@ -107,10 +120,10 @@
          *
          * @param name
          * @param open
-         * @returns {Folder}
+         * @returns {HC.ControllerUi.Folder}
          */
         addFolder(name, open) {
-            let folder = new Folder(this.gui, this, name, open);
+            let folder = new HC.ControllerUi.Folder(this.gui, this, name, open);
             this.children[folder.getLabel()] = folder;
 
             return folder;
@@ -119,10 +132,10 @@
         /**
          *
          * @param opts
-         * @returns {Controller}
+         * @returns {HC.ControllerUi.Controller}
          */
         addController(opts) {
-            let controller = new Controller(this, opts);
+            let controller = new HC.ControllerUi.Controller(this, opts);
             this.children[controller.getLabel()] = controller;
 
             return controller;
@@ -139,7 +152,7 @@
 
         /**
          *
-         * @returns {*}
+         * @returns {HC.ControllerUi.Folder}
          */
         getParent() {
             return this.parent;
@@ -152,12 +165,12 @@
         getLabel() {
             return this.folder.opts.label;
         }
-    }
+    };
 
     /**
      *
      */
-    class Controller {
+    HC.ControllerUi.Controller = class Controller {
         /**
          * @type {guify}
          */
@@ -191,10 +204,18 @@
 
         /**
          *
+         * @return {string}
+         */
+        getProperty() {
+            return this.controller.opts.property || this.getLabel();
+        }
+
+        /**
+         *
          * @returns {*}
          */
         getParent() {
             return this.parent;
         }
-    }
+    };
 }

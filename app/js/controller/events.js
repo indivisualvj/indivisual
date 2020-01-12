@@ -21,46 +21,51 @@ HC.Controller.prototype.initLogEvents = function () {
  * todo guify
  */
 HC.Controller.prototype.initKeyboard = function () {
+
     var keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    var setMnemonics = function (control) {
 
-        var gi = 0;
-        if (control.__folders) {
-            for (var k in control.__folders) {
-                var v = control.__folders[k];
+    var setMnemonics = function (control, key) {
+        key = key || control.getLabel();
+        let guiKeys = statics.ControlValues.predefined_keys[key] ? statics.ControlValues.predefined_keys[key] : {};
 
-                if (gi < keys.length) {
-                    v.domElement.parentElement.setAttribute('data-mnemonic', keys.charAt(gi++));
-                }
-                setMnemonics(v);
-            }
-        }
-        if (control.__controllers && control.__controllers.length) {
-            for (var k in control.__controllers) {
-                var v = control.__controllers[k];
-                var folder = control.name;
-                var name = v.property;
+        let gi = 0;
+        if (control.children) {
+            for (let k in control.children) {
+                let child = control.getChild(k);;
 
-                if (gi < keys.length) {
-
-                    var key = null;
-                    if (folder in statics.ControlValues._keys
-                        && name in statics.ControlValues._keys[folder]
-                    ) { // vorbelegte
-                        key = statics.ControlValues._keys[folder][name];
-
-                    } else {
-                        key = keys.charAt(gi++);
+                if (child instanceof HC.ControllerUi.Folder) {
+                    if (gi < keys.length) {
+                        child.folder.container.setAttribute('data-mnemonic', keys.charAt(gi++));
                     }
+                    setMnemonics(child, key);
 
-                    v.domElement.parentElement
-                        .parentElement.setAttribute('data-mnemonic', key);
+                } else {
+                    let folder = child.getParent().getLabel();
+                    let name = child.getProperty();
+
+                    if (gi < keys.length) {
+
+                        let key = null;
+                        if (folder in guiKeys
+                            && name in guiKeys[folder]
+                        ) { // vorbelegte
+                            key = guiKeys[folder][name];
+
+                        } else {
+                            key = keys.charAt(gi++);
+                        }
+
+                        child.controller.container.setAttribute('data-mnemonic', key);
+                    }
                 }
             }
         }
     };
 
-    setMnemonics(controller.gui);
+    setMnemonics(controller.controlSettingsGui);
+    setMnemonics(controller.displaySettingsGui);
+    setMnemonics(controller.sourceSettingsGui);
+    setMnemonics(controller.animationSettingsGui);
 
     window.addEventListener('keyup', function (e) {
         statics.ctrlKey = e.ctrlKey;

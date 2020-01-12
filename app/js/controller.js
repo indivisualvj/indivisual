@@ -545,6 +545,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     value = beatkeeper.trigger(value, true, statics.ControlSettings.tempo, false);
                 }
 
+            let tValue = value;
                 value = statics.ControlSettingsManager.updateItem(item, value);
 
                 if (item == 'layer') {
@@ -569,6 +570,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 if (forward) {
+                    if (typeof value === 'function') { // reset to
+                        value = tValue;
+                    }
                     let data = {};
                     data[item] = value;
                     messaging.emitControls(data, true, false, force);

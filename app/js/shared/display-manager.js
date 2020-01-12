@@ -9,6 +9,16 @@
      */
     HC.DisplayManager = class DisplayManager {
 
+        settings = {
+            visibility: {
+                index: 0,
+                random: false
+            },
+            border: {
+                random: false
+            }
+        };
+
         /**
          *
          * @param config
@@ -399,8 +409,8 @@
                         display.clear();
                     }
 
-                    let bm = statics.display.border.random !== false
-                        ? statics.display.border.random
+                    let bm = this.settings.border.random !== false
+                        ? this.settings.border.random
                         : statics.DisplaySettings.border_mode;
 
                     switch (bm) {
@@ -510,8 +520,8 @@
             let redo = false;
 
             let speed = this.visibilitySpeed();
-            let sv = statics.display.visibility.random !== false
-                ? statics.display.visibility.random : statics.DisplaySettings.display_visibility;
+            let sv = this.settings.visibility.random !== false
+                ? this.settings.visibility.random : statics.DisplaySettings.display_visibility;
 
             if (statics.DisplaySettings.reset_display_visibility) {
                 sv = 'visible';
@@ -527,19 +537,19 @@
                 case 'randomoneon':
                     if ((speed === false && audio.peak) || speed === 0) {
                         if (index == 0) {
-                            statics.display.visibility.index = randomInt(0, this.displayMap.length - 1);
+                            this.settings.visibility.index = randomInt(0, this.displayMap.length - 1);
                         }
                     }
-                    redo = statics.display.visibility.index == index ? 1 : 0;
+                    redo = this.settings.visibility.index == index ? 1 : 0;
                     break;
 
                 case 'randomoneoff':
                     if ((speed === false && audio.peak) || speed === 0) {
                         if (index == 0) {
-                            statics.display.visibility.index = randomInt(0, this.displayMap.length - 1);
+                            this.settings.visibility.index = randomInt(0, this.displayMap.length - 1);
                         }
                     }
-                    redo = statics.display.visibility.index == index ? 0 : 1;
+                    redo = this.settings.visibility.index == index ? 0 : 1;
                     break;
 
                 case 'randomflash':
@@ -576,7 +586,7 @@
                     var prc = percentile * (index + 1);
                     //if (speed === false) {
                     this.visibilityStack(index, 1, speed);
-                    var i = statics.display.visibility.index + 2;
+                    var i = this.settings.visibility.index + 2;
                     speed = i * percentile;
                     //}
                     if (speed > prc) {
@@ -591,7 +601,7 @@
                     var prc = percentile * (index);
                     //if (speed === false) {
                     this.visibilityStack(index, 1, speed);
-                    var i = statics.display.visibility.index;
+                    var i = this.settings.visibility.index;
                     speed = i * percentile;
                     //}
                     if (1 - speed > prc) {
@@ -603,7 +613,7 @@
 
                 case 'stackoof': // stack one off forward
                     this.visibilityStack(index, 1, speed);
-                    var i = statics.display.visibility.index;
+                    var i = this.settings.visibility.index;
                     if (index == i) {
                         redo = 0;
                     } else {
@@ -613,7 +623,7 @@
 
                 case 'stackoor': // stack one off reversed
                     this.visibilityStack(index, -1, speed);
-                    var i = statics.display.visibility.index;
+                    var i = this.settings.visibility.index;
                     if (index == i) {
                         redo = 0;
                     } else {
@@ -694,7 +704,7 @@
 
             if (index == 0 && ((speed === false && audio.peak) || speed === 0)) {
 
-                let i = statics.display.visibility.index;
+                let i = this.settings.visibility.index;
 
                 i += dir;
 
@@ -705,7 +715,7 @@
                     i = this.displayMap.length - 1;
                 }
 
-                statics.display.visibility.index = i;
+                this.settings.visibility.index = i;
             }
         }
 
@@ -719,5 +729,6 @@
             let count = Math.round((timeout / animation.duration) / 2);
             return count;
         }
+
     }
 }

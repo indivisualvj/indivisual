@@ -62,173 +62,7 @@ HC.Controller.prototype.addGuifyControllers = function (controlSets, uiClass, pa
 };
 
 /**
- *
- * @param controllers
- * @param settings
- * @param values
- * @param types
- * @param submit
- * @param actions
- */
-HC.Controller.prototype.addControllers = function (controllers, settings, values, types, submit, actions) {
-
-    for (var key in controllers) {
-        var dir = controller.gui.addFolder(key);
-        dir.__ul.parentNode.parentNode.setAttribute('data-id', key);
-
-        if (actions) {
-            this._addShareListener(key, dir, false);
-        }
-
-        for (var ksub in controllers[key]) {
-            var options = controllers[key];
-            if (options[ksub]
-                && typeof options[ksub] == 'object'
-                && (ksub.match(/^_.+/))
-            ) {
-                options = options[ksub];
-                var _dir = dir.addFolder(ksub);
-                _dir.__ul.parentNode.parentNode.setAttribute('data-id', ksub);
-                _dir.__ul.parentNode.parentNode.setAttribute('data-parent', key);
-
-                for (var _ksub in options) {
-                    var ctl = this._addControl(options, settings, values, types, _ksub, _dir, submit, ksub.substr(1) + '_');
-                    if (ctl) {
-                        ctl.__li.setAttribute('data-parent', ksub);
-                    }
-                }
-
-            } else {
-                var ctl = this._addControl(options, settings, values, types, ksub, dir, submit, key + '_');
-                if (ctl) {
-                    ctl.__li.setAttribute('data-parent', key);
-                }
-            }
-        }
-
-    }
-};
-
-/**
- *
- * @param options
- * @param settings
- * @param values
- * @param types
- * @param ksub
- * @param dir
- * @param submit
- * @param removePrefix
- * @returns {*}
- * @private
- */
-HC.Controller.prototype._addControl = function (options, settings, values, types, ksub, dir, submit, removePrefix) {
-    var vsub = options[ksub];
-
-    if (vsub === null) {
-        return; // not visible
-
-    } else if (ksub == 'open') {
-        dir.open();
-
-        return false; // prevent fucking it up later
-    }
-
-    var ctl = false;
-
-    if (typeof vsub == 'function') {
-
-        settings[ksub] = vsub;
-
-        ctl = dir.add(settings, ksub);
-        if (removePrefix) {
-            var reg = new RegExp('^' + removePrefix);
-            ctl.name(ksub.replace(reg, ''));
-        }
-        if (ksub in types) {
-            var bnd = types[ksub];
-            if (!bnd || bnd.length < 1) {
-                console.log('error in ' + ksub);
-            } else {
-                ctl.__li.setAttribute('data-class', bnd[0]);
-            }
-        }
-
-        ctl.__li.setAttribute('data-id', ksub);
-
-        return ctl; // prevent fucking it up later
-
-    } else if (ksub in values) { // dropdown
-
-        var vls = values[ksub];
-        if (typeof vls == 'object') {
-            ctl = dir.add(settings, ksub, vls);
-
-        }
-        //else if (typeof vls == 'boolean') {
-        //ctl = dir.add(settings, ksub);
-        //}
-
-    } else {
-        if (typeof vsub == 'number') {
-            if (ksub in types) {
-                var bnd = types[ksub];
-                var min = bnd[0];
-                var max = bnd[1];
-                var step = bnd[2];
-
-                ctl = dir.add(settings, ksub, min, max, step);
-                var el = ctl.domElement.getElementsByTagName('input')[0];
-                el.setAttribute('data-step', step);
-            }
-        }
-    }
-
-    if (!ctl) {
-        ctl = dir.add(settings, ksub);
-    }
-
-    if (ctl) {
-
-        if (removePrefix) {
-            // pattern_padding_oscillate -> oscillate
-            // rotation_x_random -> random
-            var reg = new RegExp('\\w+_([^_]+)$');
-            var _ksub = ksub.replace(reg, '$1');
-            ctl.name(_ksub);
-            //ctl.name(ksub);
-        }
-        if (ksub.match(/[^0-9]+\d+_.+/)) {
-            ctl.name(ksub.replace(/[^0-9]+(\d+_.+)/, '$1'));
-        }
-
-        if (ksub in types) {
-            var bnd = types[ksub];
-            if (!bnd || bnd.length < 1) {
-                console.log('error in ' + ksub);
-            } else {
-                ctl.__li.setAttribute('data-class', bnd[bnd.length - 1]);
-            }
-        }
-
-        ctl.__li.setAttribute('data-id', ksub);
-
-        if (ctl instanceof dat.controllers.NumberControllerBox
-            || ctl instanceof dat.controllers.NumberControllerSlider
-        ) {
-            ctl.onChange(submit);
-        } else {
-            ctl.onFinishChange(submit);
-        }
-
-        ctl._parent = dir;
-    }
-
-    return ctl;
-};
-
-/**
- *
+ * todo guify
  * @param key
  * @param dir
  * @param datasource
@@ -274,7 +108,7 @@ HC.Controller.prototype._addShareListener = function (key, dir, datasource) {
 };
 
 /**
- *
+ * todo guify
  * @param submit
  * @returns {*|dat.gui.GUI}
  */
@@ -295,7 +129,7 @@ HC.Controller.prototype.addShaderPassControllers = function (submit) {
 
 
 /**
- *
+ * todo guify
  * @param controller
  * @param parent
  */
@@ -307,7 +141,7 @@ HC.Controller.prototype.addShaderPassController = function (key, controller, par
 
 
 /**
- *
+ * todo guify
  * @param folder
  * @param key
  * @param sh
@@ -443,7 +277,7 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
 };
 
 /**
- *
+ * todo guify
  * @param control
  * @returns {*}
  */
@@ -484,7 +318,7 @@ HC.Controller.prototype.toggleByProperty = function (property) {
 };
 
 /**
- *
+ * todo guify
  * @param property
  * @param [control]
  * @returns {*}
@@ -648,7 +482,7 @@ HC.Controller.prototype.updateUi = function (control) {
 };
 
 /**
- *
+ * todo guify
  */
 HC.Controller.prototype.updateUiPasses = function () {
 
@@ -674,7 +508,7 @@ HC.Controller.prototype.updateUiPasses = function () {
 };
 
 /**
- *
+ * todo guify
  */
 HC.Controller.prototype.showDisplayControls = function () {
     for (var i = 0; i < statics.DisplayValues.display.length; i++) {
@@ -689,7 +523,7 @@ HC.Controller.prototype.showDisplayControls = function () {
 
 
 /**
- *
+ *  todo guify
  * @param folder
  */
 HC.Controller.prototype.updateValuesChanged = function (folder) {
@@ -737,7 +571,7 @@ HC.Controller.prototype.updateValuesChanged = function (folder) {
 };
 
 /**
- *
+ *  todo guify
  */
 HC.Controller.prototype.updateThumbs = function () {
 
@@ -763,7 +597,7 @@ HC.Controller.prototype.updateThumbs = function () {
 };
 
 /**
- *
+ *  todo guify
  * @param item
  * @param parent
  * @param enabled
@@ -787,7 +621,7 @@ HC.Controller.prototype.showControls = function (item, parent, enabled) {
 };
 
 /**
- *
+ * todo guify
  * @param name
  */
 HC.Controller.prototype.loadClip = function (i) {
@@ -810,7 +644,7 @@ HC.Controller.prototype.loadClip = function (i) {
 };
 
 /**
- *
+ * todo guify
  * @param seq
  */
 HC.Controller.prototype.updateIndicator = function (seq) {
@@ -854,7 +688,7 @@ HC.Controller.prototype.updateIndicator = function (seq) {
 };
 
 /**
- *
+ * todo guify
  * @param seq
  */
 HC.Controller.prototype.updateClip = function (seq) {

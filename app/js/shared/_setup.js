@@ -23,29 +23,6 @@ IS_SETUP = G_INSTANCE == _SETUP;
 IS_ANIMATION = G_INSTANCE == _ANIMATION || G_INSTANCE == _CLIENT;
 IS_MONITOR = G_INSTANCE == _MONITOR;
 
-LAYER_KEYCODES = {
-    "49": 0,
-    "50": 1,
-    "51": 2,
-    "52": 3,
-    "53": 4,
-    "54": 5,
-    "55": 6,
-    "56": 7,
-    "57": 8,
-    "48": 9,
-    "97": 0,
-    "98": 1,
-    "99": 2,
-    "100": 3,
-    "101": 4,
-    "102": 5,
-    "103": 6,
-    "104": 7,
-    "105": 8,
-    "96": 9
-};
-
 OSD_TIMEOUT = 2000;
 RAD = Math.PI / 180;
 DEG = 180 / Math.PI;
@@ -59,8 +36,13 @@ if (TWEEN) {
     TWEEN.now = HC.now;
 }
 
+/**
+ *
+ * @type {HC.AssetManager}
+ */
 var assetman = new HC.AssetManager();
-var statics;
+
+var statics = {};
 
 /**
  *
@@ -109,13 +91,6 @@ function loadResources(resources, callback) {
 function setupResources() {
     return [
         {
-            file: 'structure/Statics.yml',
-            callback: function (data, finished) {
-                statics = new HC.Settings(jsyaml.load(data.contents));
-                finished();
-            }
-        },
-        {
             file: 'structure/ShaderTypes.yml',
             callback: function (data, finished) {
                 statics.ShaderTypes = new HC.Settings(jsyaml.load(data.contents));
@@ -160,13 +135,6 @@ function setupResources() {
             }
         },
         {
-            file: 'structure/DisplaySettings.yml',
-            callback: function (data, finished) {
-                statics.DisplaySettings = new HC.Settings(jsyaml.load(data.contents));
-                finished();
-            }
-        },
-        {
             file: 'structure/DisplayTypes.yml',
             callback: function (data, finished) {
                 statics.DisplayTypes = jsyaml.load(data.contents);
@@ -180,34 +148,13 @@ function setupResources() {
                 finished();
             }
         },
-        {
-            file: 'structure/SourceSettings.yml',
-            callback: function (data, finished) {
-                statics.SourceSettings = new HC.Settings(jsyaml.load(data.contents));
-                finished();
-            }
-        },
-        {
-            file: 'structure/SourceTypes.yml',
-            callback: function (data, finished) {
-                statics.SourceTypes = jsyaml.load(data.contents);
-                finished();
-            }
-        },
-        {
-            file: 'structure/DataSettings.yml',
-            callback: function (data, finished) {
-                statics.DataSettings = new HC.Settings(jsyaml.load(data.contents));
-                finished();
-            }
-        },
-        {
-            file: 'structure/SourceTypes.yml',
-            callback: function (data, finished) {
-                statics.DataTypes = jsyaml.load(data.contents);
-                finished();
-            }
-        },
+        // {
+        //     file: 'structure/SourceTypes.yml',
+        //     callback: function (data, finished) {
+        //         statics.SourceTypes = jsyaml.load(data.contents);
+        //         finished();
+        //     }
+        // },
         {
             file: 'structure/MidiController.yml',
             callback: function (data, finished) {

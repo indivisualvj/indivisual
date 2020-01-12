@@ -18,7 +18,7 @@ HC.Controller.prototype.initLogEvents = function () {
 };
 
 /**
- *
+ * todo guify
  */
 HC.Controller.prototype.initKeyboard = function () {
     var keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -162,8 +162,8 @@ HC.Controller.prototype.initKeyboard = function () {
             statics.ControlSettings.push_sources();
         }
 
-        if (e.keyCode in LAYER_KEYCODES) {
-            var val = LAYER_KEYCODES[e.keyCode];
+        if (e.keyCode in statics.ControlValues.layer_keycodes) {
+            var val = statics.ControlValues.layer_keycodes[e.keyCode];
 
             if (e.ctrlKey) {
                 e.preventDefault();

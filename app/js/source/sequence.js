@@ -267,7 +267,6 @@
                     } else {
                         ctx.drawImage(image, 0, 0, image.width * flipx, image.height * flipy);
                     }
-                    //statics.tmp._draw++;
 
                     if (flipped) {
                         ctx.setTransform(1, 0, 0, 1, 0, 0);
@@ -291,7 +290,6 @@
                     ctx.globalAlpha = br;
                     ctx.globalCompositeOperation = blendmode ? blendmode : 'source-over';
                     ctx.drawImage(image, 0, 0, image.width, image.height);//, 0, 0, this.width, this.height);
-                    //statics.tmp._draw++;
                 }
             }
         },

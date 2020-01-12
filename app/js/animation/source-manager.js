@@ -130,10 +130,10 @@
                             type[1] = sequence.sample.last();
                             type[2] = round(sequence.sample.last() / 50, 0);
                         }
-                        let conf = {SourceTypes: {}};
-                        conf.SourceTypes[getSequenceStartKey(sequence.index)] = type;
-                        conf.SourceTypes[getSequenceEndKey(sequence.index)] = type;
-                        messaging.emitData(sequence.sample.id, conf);
+                        // let conf = {SourceTypes: {}};
+                        // conf.SourceTypes[getSequenceStartKey(sequence.index)] = type;
+                        // conf.SourceTypes[getSequenceEndKey(sequence.index)] = type;
+                        // messaging.emitData(sequence.sample.id, conf);
 
                         animation.updateSource(getSequenceStartKey(sequence.index), 0, false, true);
                         animation.updateSource(getSequenceEndKey(sequence.index), type[1], false, true);

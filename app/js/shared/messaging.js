@@ -322,12 +322,6 @@
          */
         emitSources(data, display, forward, force) {
             if (data) {
-                if (data instanceof HC.Settings) {
-                    data = data.prepare();
-                }
-
-                statics.SourceSettings.clean(data, statics.SourceSettings.initial);
-
                 let config = {
                     action: 'sources',
                     data: data,

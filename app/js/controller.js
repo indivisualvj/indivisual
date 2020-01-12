@@ -118,6 +118,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 controller.addAnimationControllers(cm.getGlobalProperties());
                 // controller.addShaderPassControllers(HC.ShaderPassUi.onPasses);
 
+                statics.DataSettings = new HC.Settings({});
+
                 explorer = new HC.Explorer();
                 explorer.init();
                 explorer.load();
@@ -144,7 +146,9 @@ document.addEventListener('DOMContentLoaded', function () {
      * @type {HC.Controller}
      */
     HC.Controller = class Controller {
-        gui = false;
+        animationSettingsGui;
+        displaySettingsGui;
+        sourceSettingsGui;
         animationSettingsGui;
         synced = {};
         thumbTimeouts = [];
@@ -159,9 +163,6 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         init() {
-            this.gui = new dat.GUI({autoPlace: false});
-            // document.getElementById('controller').appendChild(this.gui.domElement);
-
             // todo evtl doch das? https://github.com/automat/controlkit.js
             this.controlSettingsGui = new HC.ControllerUi('ControlSettings', true);
             this.displaySettingsGui = new HC.ControllerUi('DisplaySettings');
@@ -444,7 +445,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (force) {
                 for (let k in data) {
                     let value = data[k];
-                    statics.SourceSettings.update(k, value);
+                    statics.SourceSettingsManager.updateItem(k, value);
                 }
                 this.updateUi(this.sourceSettingsGui);
                 this.showDisplayControls();

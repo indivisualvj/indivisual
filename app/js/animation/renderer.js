@@ -167,7 +167,7 @@
 
                 if (this.currentLayer !== this.nextLayer) {
 
-                    if (!force && statics.ControlSettings.shuffle) {
+                    if (!force && statics.ControlSettings.shuffle) { // check .shuffle? ist doch höchstens OFF!
                         let speed = this.nextLayer.getCurrentSpeed();
                         if (speed.prc != 0) {
                             return;

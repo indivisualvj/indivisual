@@ -869,8 +869,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         case 'display_visibility':
                         case 'border_mode':
-                            statics.display.visibility.random = false;
-                            statics.display.border.random = false;
+                            displayman.settings.visibility.random = false;
+                            displayman.settings.border.random = false;
                             break;
                     }
                 }

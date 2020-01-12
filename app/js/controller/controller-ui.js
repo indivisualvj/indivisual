@@ -25,6 +25,8 @@
                 root: document.getElementById(id),
                 open: open
             });
+
+            this.gui.container.style.zIndex = 998;
         }
 
         /**
@@ -75,6 +77,33 @@
          */
         getChild(key) {
             return this.children[key];
+        }
+
+        /**
+         *
+         * @return {boolean}
+         */
+        isExpanded() {
+            let style = window.getComputedStyle(this.gui.panel.panel);
+            let display = style.getPropertyValue('display');
+
+            return display != 'none';
+        }
+
+        /**
+         *
+         * @param exp
+         */
+        setExpanded(exp) {
+            // todo how to set gui open/closed?
+        }
+
+        /**
+         *
+         * @return {*}
+         */
+        getContainer() {
+            return this.gui.container;
         }
     };
 
@@ -143,11 +172,11 @@
 
         /**
          *
-         * @param name
+         * @param key
          * @returns {*}
          */
-        getChild(name) {
-            return this.children[name];
+        getChild(key) {
+            return this.children[key];
         }
 
         /**
@@ -164,6 +193,30 @@
          */
         getLabel() {
             return this.folder.opts.label;
+        }
+
+        /**
+         *
+         * @return {boolean}
+         */
+        isExpanded() {
+            return this.folder.open;
+        }
+
+        /**
+         *
+         * @param exp
+         */
+        setExpanded(exp) {
+            this.folder.SetOpen(exp);
+        }
+
+        /**
+         *
+         * @return {HTMLDivElement}
+         */
+        getContainer() {
+            return this.folder.container;
         }
     };
 
@@ -216,6 +269,14 @@
          */
         getParent() {
             return this.parent;
+        }
+
+        /**
+         *
+         * @return {HTMLDivElement}
+         */
+        getContainer() {
+            return this.controller.container;
         }
     };
 }

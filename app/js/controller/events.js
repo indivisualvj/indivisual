@@ -114,7 +114,7 @@ HC.Controller.prototype.initKeyboard = function () {
             return;
 
         } else if (src.nodeName.match(/(SELECT)/i)) {
-            if (e.keyCode == 8 || e.keyCode == 27) { // BACKSPACE + ESCAPE
+            if (e.keyCode == 8 || e.keyCode == 27) { // BACKSPACE | ESCAPE
                 this.focus();
                 src.blur();
                 this.focus();
@@ -132,15 +132,15 @@ HC.Controller.prototype.initKeyboard = function () {
         } else if (e.keyCode == 46) { // DEL = reset
             statics.ControlSettings.reset();
 
-        } else if (e.keyCode == 8) {
+        } else if (e.keyCode == 8) { // BACKSPACE = close folders
             var open = controller.nextOpenFolder();
-            if (open != controller.gui) {
-                controller.closeAll(open.parent);
-                controller.scrollToControl(open.parent);
+            if (!(open instanceof HC.ControllerUi)) {
+                controller.closeAll(open);
+                controller.scrollToControl(open);
 
             } else {
-                controller.closeAll(controller.gui);
-                controller.scrollToControl(controller.gui);
+                let open = controller.closeAll();
+                controller.scrollToControl(open);
             }
             e.preventDefault();
             e.stopPropagation();

@@ -284,15 +284,25 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
 HC.Controller.prototype.nextOpenFolder = function (control) {
 
     if (!control) {
-        control = this.gui;
+        return this.nextOpenFolder(this.controlSettingsGui) ||
+        this.nextOpenFolder(this.displaySettingsGui) ||
+        this.nextOpenFolder(this.sourceSettingsGui) ||
+        this.nextOpenFolder(this.animationSettingsGui);
     }
 
-    if (control.__folders) {
-        for (var k in control.__folders) {
-            var v = control.__folders[k];
-            if (!v.closed) {
-                control = this.nextOpenFolder(v);
-                break;
+    if (control instanceof HC.ControllerUi && !control.isExpanded()) {
+        return false;
+    }
+
+    if (control.children) {
+        for (let k in control.children) {
+            let child = control.getChild(k);
+            if (child instanceof HC.ControllerUi.Folder) {
+
+                if (child.isExpanded()) {
+                    control = this.nextOpenFolder(child);
+                    break;
+                }
             }
         }
     }
@@ -372,19 +382,38 @@ HC.Controller.prototype.explainPlugin = function (item, value, tree) {
  */
 HC.Controller.prototype.closeAll = function (control) {
 
-    control = control || this.gui;
+    if (!control) {
+        this.closeAll(this.controlSettingsGui);
+        this.closeAll(this.displaySettingsGui);
+        this.closeAll(this.sourceSettingsGui);
+        this.closeAll(this.animationSettingsGui);
+        return;
+    }
 
-    if (control.__folders) {
-        for (var k in control.__folders) {
-            var v = control.__folders[k];
-            v.close();
-            this.closeAll(v);
+    if (control instanceof HC.ControllerUi) {
+        // todo close gui
+
+    } else if (control instanceof HC.ControllerUi.Folder) {
+        control.setExpanded(false);
+    }
+
+    let result;
+    if (control.children) {
+        for (let k in control.children) {
+            let child = control.getChild(k);
+            if (child instanceof HC.ControllerUi.Folder) {
+                child.setExpanded(false);
+                result = child;
+                this.closeAll(child);
+            }
         }
     }
+
+    return result;
 };
 
 /**
- *
+ * todo guify
  * @param ci
  * @param shiftKey
  */
@@ -453,10 +482,12 @@ HC.Controller.prototype.toggleByKey = function (ci, shiftKey) {
  */
 HC.Controller.prototype.scrollToControl = function (control) {
 
-    setTimeout(function () {
-        var container = control.__ul;
-        container.scrollIntoView();
-    }, 125);
+    if (control) {
+        setTimeout(function () {
+            var container = control.getContainer();
+            container.scrollIntoView();
+        }, 125);
+    }
 };
 
 /**

@@ -1,3 +1,7 @@
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+
 {
     HC.ControllerUi = class ControllerUi {
 
@@ -245,6 +249,114 @@
             this.gui = parent.gui;
             opts.folder = parent.folder;
             this.controller = this.gui.Register(opts);
+
+            this.initEvents();
+        }
+
+        /**
+         *
+         */
+        initEvents() {
+            if (this.controller.opts.type == 'range') {
+                this._initRangeEvents();
+
+            } else if (this.controller.opts.type === 'checkbox') {
+                this._initCheckboxEvents();
+            }
+
+            this._initInputEvents();
+        }
+
+        _initCheckboxEvents() {
+            this.controller.container.addEventListener('mousedown', (e) => {
+                this.toggleValue();
+            });
+        }
+
+        /**
+         *
+         * @private
+         */
+        _initInputEvents() {
+
+            let valueCompondent = this.controller.valueComponent || this.controller.input;
+            if (!valueCompondent) {
+                return;
+            }
+
+            valueCompondent.addEventListener('keydown', function (e) {
+                if (e.ctrlKey && (e.shiftKey || e.altKey)) {
+                    return;
+                }
+
+                if (valueCompondent.nodeName === 'INPUT') {
+                    if (e.keyCode == 27) { // ESCAPE
+                        this.focus();
+                        valueCompondent.blur();
+                        this.focus();
+                        valueCompondent.blur();
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                    } else if (e.keyCode == 9) { // TAB
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                    }
+
+                } else if (valueCompondent.nodeName === 'SELECT') {
+                    if (e.keyCode == 8 || e.keyCode == 27) { // BACKSPACE | ESCAPE
+                        this.focus();
+                        valueCompondent.blur();
+                        this.focus();
+                        valueCompondent.blur();
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                    }
+                }
+            });
+        }
+
+        /**
+         *
+         * @private
+         */
+        _initRangeEvents() {
+            let active = false;
+            let valueCompondent = this.controller.valueComponent;
+
+            valueCompondent.addEventListener('keyup', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+
+                if (e.keyCode == 38) { // UP
+                    this.incrementValue();
+
+                } else if (e.keyCode == 40) { // DOWN
+                    this.decrementValue();
+                }
+            });
+
+            valueCompondent.addEventListener('mousedown', function (e) {
+                active = true;
+            });
+
+            window.addEventListener('mousemove', (e) => {
+                if (active) {
+                    let dy = e.movementY;
+                    if (dy < 0) {
+                        this.incrementValue();
+
+                    } else if (dy > 0) {
+                        this.decrementValue();
+                    }
+                }
+            });
+
+            window.addEventListener('mouseup', function (e) {
+                active = false;
+            });
         }
 
         /**
@@ -277,6 +389,57 @@
          */
         getContainer() {
             return this.controller.container;
+        }
+
+        /**
+         *
+         * @return {*}
+         */
+        getValue() {
+            return this.controller.opts.object[this.getProperty()];
+        }
+
+        /**
+         *
+         * @param v
+         * @return {*}
+         */
+        setValue(v) {
+            this.controller.opts.object[this.getProperty()] = v;
+        }
+
+        /**
+         *
+         * @return {number}
+         */
+        getStep() {
+            return this.controller.opts.step;
+        }
+
+        /**
+         *
+         */
+        toggleValue() {
+            let v = this.getValue();
+            this.setValue(!v);
+        }
+
+        /**
+         *
+         */
+        incrementValue() {
+            let v = this.getValue();
+            let s = this.getStep();
+            this.setValue(v + s);
+        }
+
+        /**
+         *
+         */
+        decrementValue() {
+            let v = this.getValue();
+            let s = this.getStep();
+            this.setValue(v - s);
         }
     };
 }

@@ -29,93 +29,6 @@
 
         /**
          *
-         * @param parent
-         * @returns {*}
-         */
-        addFolder(parent) {
-            let key = this.controlSet.className();
-            let name = this.controlSet.name();
-            this.folder = parent.addFolder(name);
-            this.folder.__ul.parentNode.parentNode.setAttribute('data-id', key);
-
-            this._addShareListener(key, this.folder, false);
-
-            return this.folder;
-        }
-
-        /**
-         *
-         */
-        addControls() {
-            
-            for(let key in this.controlSet.settings) {
-                this.addControl(key);
-            }
-
-        }
-
-        /**
-         *
-         * @param key
-         */
-        addControl(key) {
-            let types = this.controlSet.types[key];
-            let props = this.controlSet.properties;
-            let value = props[key];
-            let ctl;
-
-            // _check if hidden
-            if (types && types.length > 0) {
-                if(types[types.length - 1] == 'hidden') {
-                    return;
-                }
-            }
-
-            if (typeof value == 'number' && types && types.length > 2) {
-                let min = types[0];
-                let max = types[1];
-                let step = types[2];
-
-                ctl = this.folder.add(props, key, min, max, step);
-                let el = ctl.domElement.getElementsByTagName('input')[0];
-                el.setAttribute('data-step', step);
-
-            } else {
-                let vls = this.controlSet.values[key] || null;
-                ctl = this.folder.add(props, key, vls);
-            }
-
-            // shorten name by regexp
-            let reg = new RegExp('\\w+_([^_]+)$');
-            let name = key.replace(reg, '$1');
-            ctl.name(name);
-
-            // set width
-            if (types) {
-                if (types.length > 0) {
-                    ctl.__li.setAttribute('data-class', types[types.length - 1]);
-                }
-            }
-
-            // add listener
-            if (ctl instanceof dat.controllers.NumberControllerBox
-                || ctl instanceof dat.controllers.NumberControllerSlider
-            ) {
-                ctl.onChange(this.onChange);
-
-            } else {
-                ctl.onFinishChange(this.onChange);
-            }
-
-            // set meta
-            ctl.__li.setAttribute('data-id', key);
-            ctl._parent = this.folder;
-            ctl.object.name = this.controlSet.name();
-        }
-
-
-        /**
-         *
          * @param key
          * @param dir
          * @param datasource
@@ -158,26 +71,6 @@
             ac.appendChild(sh);
 
             li.appendChild(ac);
-        }
-
-        /**
-         *
-         * @returns {Function}
-         */
-        onChange(value) {
-            let data = {};
-            data[this.object.name] = {};
-            data[this.object.name][this.property] = value;
-
-            controller.updateSetting(
-                statics.ControlSettings.layer,
-                data,
-                true,
-                true,
-                false
-            );
-
-            HC.log(this.object.name + '/' + this.property, value);
         }
     }
 }

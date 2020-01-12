@@ -356,7 +356,7 @@ HC.Controller.prototype.getControlParentByProperty = function (property, control
 };
 
 /**
- *
+ * todo zeigt bei z.B. audio tutorial nichts an
  * @param item
  * @param value
  */

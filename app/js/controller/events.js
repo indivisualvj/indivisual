@@ -1,4 +1,87 @@
 /**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+{
+    /**
+     *
+     * @type {HC.Event}
+     */
+    HC.Event = class Event {
+
+        /**
+         * @type {HTMLElement}
+         */
+        element;
+
+        /**
+         * @type {string}
+         */
+        type;
+
+        /**
+         * @type {function}
+         */
+        callback;
+
+        /**
+         *
+         * @param element
+         * @param type
+         * @param callback
+         */
+        constructor(element, type, callback) {
+            this.element = element;
+            this.type = type;
+            this.callback = callback;
+        }
+
+        /**
+         *
+         * @return {HC.Event}
+         */
+        init() {
+            this.element.addEventListener(this.type, this.callback);
+
+            return this;
+        }
+    };
+
+    /**
+     *
+     * @type {HC.KeyEvent}
+     */
+    HC.KeyEvent = class KeyEvent extends HC.Event {
+
+        codes;
+
+        label;
+
+        /**
+         *
+         * @param element
+         * @param type
+         * @param codes
+         * @param callback
+         * @param label
+         */
+        constructor(element, type, codes, callback, label) {
+            super(element, type, callback);
+            this.codes = codes;
+            this.label = label;
+        }
+    };
+
+    /**
+     *
+     * @type {HC.MouseEvent}
+     */
+    HC.MouseEvent = class MouseEvent extends HC.Event {
+
+    };
+}
+
+
+/**
  *
  */
 HC.Controller.prototype.initLogEvents = function () {
@@ -83,50 +166,7 @@ HC.Controller.prototype.initKeyboard = function () {
             return;
         }
 
-        var src = e.srcElement;
-        if (src.nodeName.match(/(INPUT)/i)) {
-            if (e.keyCode == 27) { // ESCAPE
-                this.focus();
-                src.blur();
-                this.focus();
-                src.blur();
-                e.preventDefault();
-                e.stopPropagation();
-
-            } else if (e.keyCode == 9) { // TAB
-                e.preventDefault();
-                e.stopPropagation();
-
-            } else if (e.keyCode == 38 || e.keyCode == 40) { // UP + DOWN
-                var f = parseFloat(src.value);
-                if (!isNaN(f)) {
-                    var s = parseFloat(src.getAttribute('data-step'));
-                    if (!isNaN(s)) {
-                        if (e.keyCode == 40) {
-                            s *= -1;
-                        }
-                        src.value = f + s;
-                        src.blur();
-                        src.focus();
-                    }
-                }
-            }
-            return;
-
-        } else if (src.nodeName.match(/(SELECT)/i)) {
-            if (e.keyCode == 8 || e.keyCode == 27) { // BACKSPACE | ESCAPE
-                this.focus();
-                src.blur();
-                this.focus();
-                src.blur();
-                e.preventDefault();
-                e.stopPropagation();
-
-            }
-            return;
-        }
-
-        if (e.keyCode == 32) { // SPACE = play/pause
+        if (e.keyCode == 32) { // SPACE = play/pause todo: eigenschaft von controlset events? events={play: {new HC.KeydDownEvent('spc', 32, function)}}
             controller.updateControl('play', !statics.ControlSettings.play, true, true, false);
 
         } else if (e.keyCode == 46) { // DEL = reset

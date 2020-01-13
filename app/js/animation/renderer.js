@@ -175,7 +175,7 @@
 
                         }
                     }
-
+// fixme transvisibility does not work / reset on loadPresets and even more?
                     if (!this.currentLayer.settings.layer_transvisible) {
                         this.currentLayer.pause();
                     }

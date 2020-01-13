@@ -3,7 +3,7 @@
  */
 {
     HC.plugins.mesh_material.cellular = class Plugin extends HC.MeshShaderMaterialPlugin {
-
+// todo make background transparent?
         shader = {
             uniforms: {
                 uTime: {type: 'f', value: 1.0}

@@ -985,7 +985,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         doShuffle() {
             var plugin = this.getShuffleModePlugin(statics.ControlSettings.shuffle_mode);
-
+// fixme load _transivisbles, try shuffle, then load moonshine, try shuffle. wont work anymore...
             var result = plugin.apply();
             if (result !== false) {
                 result = plugin.after();

@@ -1,6 +1,6 @@
 (function () {
     /**
-     *
+     * todo ES5
      * @param index
      * @constructor
      *
@@ -16,6 +16,7 @@
         this.scale = 1;
         this.lighting_type = 'off';
         this._strobeModuloOdd = false;
+        this.shuffleCounter = 0;
     };
 
     HC.Lighting.prototype = {
@@ -87,6 +88,12 @@
 
                 this.canvas.ctx.clearRect(0, 0, 4 * this.pixel.length * this.scale, 1 * this.scale);
 
+                var speed = beatkeeper.getSpeed(statics.SourceSettings.lighting_speed);
+                var redo = speed.starting();
+                if (redo) {
+                    this.shuffleCounter ++;
+                }
+
                 for (var i = 0; i < this.pixel.length; i++) {
                     this.updateLight(i, color);
                     var br = this.pixel[i].brightness * statics.SourceSettings.lighting_brightness;
@@ -116,7 +123,8 @@
             var m = this.lighting_type;
 
             if (redo && i == 0 && statics.SourceSettings.lighting_type == 'randomall'
-                && statics.shuffle.counter >= statics.ControlSettings.shuffle_every - 1) { // fixme statics.shuffle.counter does not exist
+                && this.shuffleCounter >= statics.ControlSettings.shuffle_every - 1) {
+                this.shuffleCounter = 0;
 
                 var k = Object.keys(statics.SourceValues.lighting_type);
                 var c = randomInt(1, k.length - 2);

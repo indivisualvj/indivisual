@@ -565,7 +565,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 } else if (item == 'reset') {
                     if (force) {
-                        // todo after reset all layers layerInfo is wrong
                         cm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
                     }
                 }

@@ -154,19 +154,19 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
     let shi = controller.getInitialSettings() || {}; // fallback 4 cleaned settings from storage
     let submit = controller.onChange;
 
-    for (var skey in sh) {
-        var shs = sh[skey];
-        var shis = shi[skey] || {};
+    for (let skey in sh) {
+        let shs = sh[skey];
+        let shis = shi[skey] || {};
 
-        var ctl = false;
-        var label = skey;
+        let ctl = false;
+        let label = skey;
 
         if (typeof shs == 'boolean') { // apply, etc.
             ctl = folder.add(sh, skey)
                 .onFinishChange(submit);
 
             if (skey in statics.ShaderTypes) {
-                var bnd = statics.ShaderTypes[skey];
+                let bnd = statics.ShaderTypes[skey];
                 ctl.__li.setAttribute('data-class', bnd[0]);
             }
 
@@ -175,25 +175,25 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                 .onFinishChange(submit);
             ctl.step(1);
 
-            var el = ctl.domElement.getElementsByTagName('input')[0];
+            let el = ctl.domElement.getElementsByTagName('input')[0];
             el.setAttribute('data-step', 1);
 
             if (skey in statics.ShaderTypes) {
-                var bnd = statics.ShaderTypes[skey];
+                let bnd = statics.ShaderTypes[skey];
                 ctl.__li.setAttribute('data-class', bnd[0]);
             }
 
         } else {
-            var v = ('value' in shs) ? shs['value'] : null;
+            let v = ('value' in shs) ? shs['value'] : null;
 
             if (v !== null) {
-                var b = ('_type' in shs) ? shs['_type'] : (('_type' in shis) ? shis['_type'] : null);
-                var a = ('audio' in shs) ? shs['audio'] : null;
-                var s = ('stepwise' in shs) ? shs['stepwise'] : null;
-                var o = ('oscillate' in shs) ? shs['oscillate'] : null;
+                let b = ('_type' in shs) ? shs['_type'] : (('_type' in shis) ? shis['_type'] : null);
+                let a = ('audio' in shs) ? shs['audio'] : null;
+                let s = ('stepwise' in shs) ? shs['stepwise'] : null;
+                let o = ('oscillate' in shs) ? shs['oscillate'] : null;
 
                 label = (key ? (key + '_') : '') + skey;
-                var min, max, step;
+                let min, max, step;
                 if (b) {
                     min = b[0];
                     max = b[1];
@@ -204,7 +204,7 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                         .onChange(submit)
                         .onFinishChange(submit);
 
-                    var el = ctl.domElement.getElementsByTagName('input')[0];
+                    let el = ctl.domElement.getElementsByTagName('input')[0];
                     el.setAttribute('data-step', step);
 
                 } else {
@@ -214,7 +214,7 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                 }
 
                 if (a !== null) {
-                    var _label = skey + '_audio';
+                    let _label = skey + '_audio';
                     ctl = folder.add(shs, 'audio')
                         .name(_label)
                         .onFinishChange(submit);
@@ -222,16 +222,16 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                     ctl.label = _label;
 
                     if (_label) {
-                        var suffix = _label.replace(/^.+_/, '_');
+                        let suffix = _label.replace(/^.+_/, '_');
                         if (suffix in statics.ShaderTypes) {
-                            var bnd = statics.ShaderTypes[suffix];
+                            let bnd = statics.ShaderTypes[suffix];
                             ctl.__li.setAttribute('data-class', bnd[0]);
                         }
                     }
                 }
 
                 if (s !== null) {
-                    var _label = skey + '_stepwise';
+                    let _label = skey + '_stepwise';
                     ctl = folder.add(shs, 'stepwise')
                         .name(_label)
                         .onFinishChange(submit);
@@ -239,16 +239,16 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                     ctl.label = _label;
 
                     if (_label) {
-                        var suffix = _label.replace(/^.+_/, '_');
+                        let suffix = _label.replace(/^.+_/, '_');
                         if (suffix in statics.ShaderTypes) {
-                            var bnd = statics.ShaderTypes[suffix];
+                            let bnd = statics.ShaderTypes[suffix];
                             ctl.__li.setAttribute('data-class', bnd[0]);
                         }
                     }
                 }
 
                 if (o !== null) {
-                    var _label = skey + '_oscillate';
+                    let _label = skey + '_oscillate';
                     ctl = folder.add(shs, 'oscillate', statics.AnimationValues.oscillate)
                         .name(_label)
                         .onFinishChange(submit);
@@ -256,9 +256,9 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                     ctl.label = _label;
 
                     if (_label) {
-                        var suffix = _label.replace(/^.+_/, '_');
+                        let suffix = _label.replace(/^.+_/, '_');
                         if (suffix in statics.ShaderTypes) {
-                            var bnd = statics.ShaderTypes[suffix];
+                            let bnd = statics.ShaderTypes[suffix];
                             ctl.__li.setAttribute('data-class', bnd[0]);
                         }
                     }
@@ -529,19 +529,18 @@ HC.Controller.prototype.updateUi = function (control) {
 };
 
 /**
- * todo guify
+ * 
  */
 HC.Controller.prototype.updateUiPasses = function () {
 
-    if (this._passes) {
-        this._passes.__controllers[0].setValue(null);
+    let passFld = this.animationSettingsGui.getChild('passes');
+    if (passFld) {
+        passFld.getChild('pass').setValue(null);
 
         let cs = cm.get(statics.ControlSettings.layer, 'passes');
         let passes = cs.getShaderPasses();
 
-        for (let f in this._passes.__folders) {
-            this._passes.removeFolder(f);
-        }
+        passFld.removeChildren();
 
         for (let k in passes) {
             let key = cs.getShaderPassKey(k);
@@ -549,7 +548,7 @@ HC.Controller.prototype.updateUiPasses = function () {
             let sh = cs.getShader(k);
             let ctrl = new HC.ShaderPassUi(name);
             ctrl.init(sh);
-            this.addShaderPassController(key, ctrl, this._passes);
+            this.addShaderPassController(key, ctrl, passFld);
         }
     }
 };

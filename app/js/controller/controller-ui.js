@@ -62,6 +62,25 @@
 
         /**
          *
+         */
+        remove() {
+            if (this.getParent()) {
+                this.folder.Remove();
+            }
+        }
+
+        /**
+         *
+         */
+        removeChildren() {
+            for (let f in this.children) {
+                this.getChild(f).remove();
+                delete this.children[f];
+            }
+        }
+
+        /**
+         *
          * @returns {HC.ControllerUi.Folder}
          */
         getParent() {
@@ -631,6 +650,13 @@
          */
         getMnemonic() {
             return this.mnemonic;
+        }
+
+        /**
+         *
+         */
+        remove() {
+            this.controller.Remove();
         }
     };
 }

@@ -34,8 +34,8 @@
          * @param datasource
          * @private
          */
-        _addShareListener(key, dir, datasource) {
-            let ul = dir.__ul;
+        _addShareListener(key, control, datasource) {
+            let ul = control.getContainer();
             let li = ul.lastChild;
             let ac = document.createElement('div');
             ac.setAttribute('class', 'actions');
@@ -43,7 +43,7 @@
             let sy = document.createElement('div');
             sy.setAttribute('class', 'sync');
 
-            sy.addEventListener('click', function () {
+            sy.addEventListener('click', function (e) {
 
                 if (sy.classList.contains('selected')) {
                     controller.setSynchronized(key, false);
@@ -54,7 +54,8 @@
                     sy.setAttribute('class', 'sync selected');
                 }
 
-                dir.closed = !dir.closed; // no toggle folder tweak
+                e.preventDefault();
+                e.stopPropagation();
             });
 
             ac.appendChild(sy);
@@ -62,10 +63,11 @@
             let sh = document.createElement('div');
             sh.setAttribute('class', 'share');
 
-            sh.addEventListener('click', function () {
+            sh.addEventListener('click', function (e) {
                 // share to all layers
                 controller.shareSettings(key, datasource);
-                dir.closed = !dir.closed;  // no toggle folder tweak
+                e.preventDefault();
+                e.stopPropagation();
             });
 
             ac.appendChild(sh);
@@ -129,7 +131,7 @@
             this.folder.setKey(key);
             this._styleFolder(this.folder, key, 'green');
 
-            // this._addShareListener(key, this.folder, false);
+            this._addShareListener(key, this.folder, false);
 
             return this.folder;
         }

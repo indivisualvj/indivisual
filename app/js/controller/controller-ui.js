@@ -41,14 +41,58 @@
 
         /**
          *
-         * @param opts
+         * @param opts {{}|HC.ControllerUi.Controller}
          * @returns {Controller}
          */
         addController(opts) {
-            let controller = new HC.ControllerUi.Controller(this, opts);
+
+            let controller;
+            if (opts instanceof HC.ControllerUi.Controller) {
+                controller = opts;
+
+            } else {
+                controller = new HC.ControllerUi.Controller(this, opts);
+            }
+
             this.children[controller.getLabel()] = controller;
 
             return controller;
+        }
+
+        /**
+         *
+         * @param label
+         * @param options
+         * @param onChange
+         * @param opts
+         */
+        addSelectController(label, property, object, options, onChange, opts) {
+            opts = this._buildControllerOptions('select', label, property, object, onChange, opts);
+            opts.options = options;
+
+            return this.addController(opts);
+        }
+
+        /**
+         *
+         * @param type
+         * @param label
+         * @param property
+         * @param object
+         * @param onChange
+         * @param opts
+         * @return {number}
+         * @private
+         */
+        _buildControllerOptions(type, label, property, object, onChange, opts) {
+            opts = opts || {};
+            opts.type = type;
+            opts.label = label;
+            opts.property = property;
+            opts.object = object;
+            opts.onChange = onChange;
+
+            return opts;
         }
 
         /**
@@ -66,7 +110,20 @@
         remove() {
             if (this.getParent()) {
                 this.folder.Remove();
+
+                for (let k in this.children) {
+                    this.getChild(k).remove();
+                }
             }
+        }
+
+        /**
+         *
+         * @param key
+         */
+        removeChild(key) {
+            this.children[key].remove();
+            delete this.children[key];
         }
 
         /**
@@ -161,8 +218,15 @@
          *
          * @param exp
          */
-        setExpanded(exp) {
+        setOpen(exp) {
             this.folder.SetOpen(exp);
+        }
+
+        /**
+         *
+         */
+        toggle() {
+            this.folder.Toggle();
         }
 
         /**
@@ -210,7 +274,7 @@
          * @param v
          */
         setVisible(v) {
-            this.setExpanded(false);
+            this.setOpen(false);
             this.folder.container.style.display = v ? 'block' : 'none';
         }
 
@@ -291,7 +355,7 @@
          *
          * @param exp
          */
-        setExpanded(exp) {
+        setOpen(exp) {
             this.gui.panel.SetVisible(exp);
         }
 
@@ -389,6 +453,13 @@
             this.gui = parent.gui;
             opts.folder = parent.folder;
             this.controller = this.gui.Register(opts);
+
+            if (opts.dataClass) {
+                this.getContainer().setAttribute('data-class', opts.dataClass);
+            }
+            if (opts.cssClasses) {
+                this.getContainer().classList.add(opts.cssClasses);
+            }
 
             this.initEvents();
         }

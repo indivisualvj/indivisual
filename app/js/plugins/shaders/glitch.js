@@ -13,7 +13,6 @@
         static settings = {
             apply: false,
             random: false,
-            index: 0,
             twist: {
                 value: 1,
                 _type: [0, 64, 0.1],

@@ -343,7 +343,7 @@
          */
         static onPasses(v) {
 
-            if (v in statics.Passes) {
+            if (v !== null && v in statics.Passes) {
                 let name = statics.Passes[v];
                 let ctrl = new HC.ShaderPassUi(name);
                 let sh = JSON.copy(statics.ShaderSettings[name]);

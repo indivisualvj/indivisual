@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 );
 
                 controller.addAnimationControllers(cm.getGlobalProperties());
-                // controller.addShaderPassControllers(HC.ShaderPassUi.onPasses);
+                controller.addPassesFolder(HC.ShaderPassUi.onPasses);
 
                 statics.DataSettings = new HC.Settings({});
 
@@ -910,6 +910,8 @@ document.addEventListener('DOMContentLoaded', function () {
             data = cm.prepareLayer(layer);
             if (cm.get(layer, 'info').hasTutorial()) {
                 new HC.ScriptProcessor(name, Object.create(data.info.tutorial)).log();
+
+                data.info.tutorial = {}; // fixme tutorial will be deleted on savePreset
             }
 
             messaging.emitSettings(layer, data, false, false, true);

@@ -92,20 +92,13 @@ function loadResources(resources, callback) {
 function setupResources() {
     return [
         {
-            file: 'structure/ShaderTypes.yml',
-            callback: function (data, finished) {
-                statics.ShaderTypes = new HC.Settings(jsyaml.load(data.contents));
-                finished();
-            }
-        },
-        {
             file: 'structure/AnimationValues.yml',
             callback: function (data, finished) {
                 var settings = jsyaml.load(data.contents);
 
                 _loadAnimationPlugins(settings);
                 statics.ShaderSettings = _loadShaderSettings(settings.shaders);
-                statics.Passes = [];
+                statics.Passes = [null];
                 for (let sh in statics.ShaderSettings) {
                     statics.Passes.push(sh);
                 }
@@ -136,36 +129,22 @@ function setupResources() {
             }
         },
         {
-            file: 'structure/DisplayTypes.yml',
-            callback: function (data, finished) {
-                statics.DisplayTypes = jsyaml.load(data.contents);
-                finished();
-            }
-        },
-        {
             file: 'structure/SourceValues.yml',
             callback: function (data, finished) {
                 statics.SourceValues = jsyaml.load(data.contents);
                 finished();
             }
         },
-        // {
-        //     file: 'structure/SourceTypes.yml',
-        //     callback: function (data, finished) {
-        //         statics.SourceTypes = jsyaml.load(data.contents);
-        //         finished();
-        //     }
-        // },
         {
             file: 'structure/MidiController.yml',
             callback: function (data, finished) {
 
-                var settings = jsyaml.load(data.contents);
+                let settings = jsyaml.load(data.contents);
 
                 // create MIDI_ constants
-                var constants = settings.Default.constants;
-                for (var c in constants) {
-                    var co = constants[c];
+                let constants = settings.Default.constants;
+                for (let c in constants) {
+                    let co = constants[c];
                     window[c] = co;
                 }
 
@@ -178,8 +157,8 @@ function setupResources() {
             base: '.',
             file: SESSION_DIR,
             callback: function (files, finished) {
-                for (var i = 0; i < files.length; i++) {
-                    var f = files[i];
+                for (let i = 0; i < files.length; i++) {
+                    let f = files[i];
                     statics.ControlValues.session[f.name] = f.name;
                 }
 
@@ -192,12 +171,12 @@ function setupResources() {
             file: VIDEO_DIR,
             callback: function (files, finished) {
 
-                var videos = assetman.addVideos(files, 'name');
+                let videos = assetman.addVideos(files, 'name');
 
                 // add videos into source values by index
-                var keys = Object.keys(statics.SourceValues.input);
-                var index = keys.length;
-                for (var i in videos) {
+                let keys = Object.keys(statics.SourceValues.input);
+                let index = keys.length;
+                for (let i in videos) {
                     statics.SourceValues.input[index++] = i;
                 }
 
@@ -209,17 +188,17 @@ function setupResources() {
             base: '.',
             file: IMAGE_DIR,
             callback: function (files, finished) {
-                var images = assetman.addImages(files, 'name');
+                let images = assetman.addImages(files, 'name');
                 // add images into AnimationValues by name
-                for (var i in images) {
+                for (let i in images) {
                     statics.AnimationValues.material_input[i] = i;
                     statics.AnimationValues.background_input[i] = i;
                 }
 
                 // add images into source values by index
-                var keys = Object.keys(statics.SourceValues.input);
-                var index = keys.length;
-                for (var i in images) {
+                let keys = Object.keys(statics.SourceValues.input);
+                let index = keys.length;
+                for (let i in images) {
                     if (!i.match(/^.+\.mat$/)) {
                         statics.SourceValues.input[index++] = i;
                     }
@@ -233,10 +212,10 @@ function setupResources() {
             base: '.',
             file: CUBE_DIR,
             callback: function (files, finished) {
-                var cubes = assetman.addCubes(files, 'name');
+                let cubes = assetman.addCubes(files, 'name');
                 // add cubes into AnimationValues by name
-                for (var i in cubes) {
-                    var name = i + '.cube';
+                for (let i in cubes) {
+                    let name = i + '.cube';
                     statics.AnimationValues.background_input[i] = name;
                 }
 

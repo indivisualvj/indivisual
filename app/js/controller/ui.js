@@ -108,28 +108,26 @@ HC.Controller.prototype._addShareListener = function (key, dir, datasource) {
 };
 
 /**
- * todo guify
+ *
  * @param submit
  * @returns {*|dat.gui.GUI}
  */
-HC.Controller.prototype.addShaderPassControllers = function (submit) {
+HC.Controller.prototype.addPassesFolder = function (submit) {
 
-    if (controller._passes) {
-        controller.gui.removeFolder(controller._passes.name);
+    let passes = this.animationSettingsGui.getChild('passes');
+    if (passes) {
+        this.animationSettingsGui.removeChild(passes.getLabel());
     }
-    let dir = controller.gui.addFolder('passes');
-    controller._passes = dir;
-    this._addShareListener('passes', dir, true);
+    let dir = this.animationSettingsGui.addFolder('passes');
 
-    let ctl = dir.add({pass: ''}, 'pass', statics.Passes);
-    ctl.onFinishChange(submit);
+    // todo this._addShareListener('passes', dir, true);
 
-    return dir;
+    dir.addSelectController('pass', 'pass', {pass: ''}, statics.Passes, submit);
 };
 
 
 /**
- * todo guify
+ *
  * @param controller
  * @param parent
  */
@@ -141,7 +139,7 @@ HC.Controller.prototype.addShaderPassController = function (key, controller, par
 
 
 /**
- * todo guify
+ *
  * @param folder
  * @param key
  * @param sh
@@ -158,120 +156,114 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
         let shs = sh[skey];
         let shis = shi[skey] || {};
 
-        let ctl = false;
         let label = skey;
 
-        if (typeof shs == 'boolean') { // apply, etc.
-            ctl = folder.add(sh, skey)
-                .onFinishChange(submit);
+        let opts = {
+            label: label,
+            onChange: submit,
+            folder: folder,
+            property: skey,
+            object: sh
+        };
 
-            if (skey in statics.ShaderTypes) {
-                let bnd = statics.ShaderTypes[skey];
-                ctl.__li.setAttribute('data-class', bnd[0]);
-            }
+        opts.cssClasses = 'clear';
+
+        switch(skey) {
+            case 'apply':
+                opts.dataClass = 'half';
+                break;
+
+            case 'random':
+                opts.dataClass = 'half';
+                opts.cssClasses = 'noclear';
+                break;
+        }
+
+        if (typeof shs == 'boolean') { // apply, etc.
+            opts.type = 'checkbox';
+            folder.addController(opts);
 
         } else if (typeof shs == 'number') {
-            ctl = folder.add(sh, skey, 0)
-                .onFinishChange(submit);
-            ctl.step(1);
+            opts.type = 'range';
+            opts.step = 1;
 
-            let el = ctl.domElement.getElementsByTagName('input')[0];
-            el.setAttribute('data-step', 1);
-
-            if (skey in statics.ShaderTypes) {
-                let bnd = statics.ShaderTypes[skey];
-                ctl.__li.setAttribute('data-class', bnd[0]);
-            }
+            folder.addController(opts);
 
         } else {
             let v = ('value' in shs) ? shs['value'] : null;
 
             if (v !== null) {
-                let b = ('_type' in shs) ? shs['_type'] : (('_type' in shis) ? shis['_type'] : null);
-                let a = ('audio' in shs) ? shs['audio'] : null;
-                let s = ('stepwise' in shs) ? shs['stepwise'] : null;
-                let o = ('oscillate' in shs) ? shs['oscillate'] : null;
+                let range = ('_type' in shs) ? shs['_type'] : (('_type' in shis) ? shis['_type'] : null);
+                let audio = ('audio' in shs) ? shs['audio'] : null;
+                let stepwise = ('stepwise' in shs) ? shs['stepwise'] : null;
+                let oscillate = ('oscillate' in shs) ? shs['oscillate'] : null;
+
+                opts.object = shs;
 
                 label = (key ? (key + '_') : '') + skey;
                 let min, max, step;
-                if (b) {
-                    min = b[0];
-                    max = b[1];
-                    step = b[2];
+                if (range) {
+                    min = range[0];
+                    max = range[1];
+                    step = range[2];
 
-                    ctl = folder.add(shs, 'value', min, max, step)
-                        .name(label)
-                        .onChange(submit)
-                        .onFinishChange(submit);
+                    opts.type = 'range';
+                    opts.property = 'value';
+                    opts.min = min;
+                    opts.max = max;
+                    opts.step = step;
 
-                    let el = ctl.domElement.getElementsByTagName('input')[0];
-                    el.setAttribute('data-step', step);
+                    folder.addController(opts);
 
                 } else {
-                    ctl = folder.add(shs, 'value')
-                        .name(label)
-                        .onFinishChange(submit);
+                    let type = typeof v;
+                    opts.type = type==='number' ? 'range' : type==='boolean' ? 'checkbox' : 'text';
+                    opts.property = 'value';
+                    opts.object = shs;
+
+                    folder.addController(opts);
                 }
 
-                if (a !== null) {
+                if (audio !== null) {
                     let _label = skey + '_audio';
-                    ctl = folder.add(shs, 'audio')
-                        .name(_label)
-                        .onFinishChange(submit);
-                    ctl.parent = parent;
-                    ctl.label = _label;
 
-                    if (_label) {
-                        let suffix = _label.replace(/^.+_/, '_');
-                        if (suffix in statics.ShaderTypes) {
-                            let bnd = statics.ShaderTypes[suffix];
-                            ctl.__li.setAttribute('data-class', bnd[0]);
-                        }
-                    }
+                    opts.type = 'checkbox';
+                    opts.label = _label;
+                    opts.property = 'audio';
+                    opts.cssClasses = 'clear';
+                    opts.dataClass = 'quarter';
+
+                    folder.addController(opts);
                 }
 
-                if (s !== null) {
+                if (stepwise !== null) {
                     let _label = skey + '_stepwise';
-                    ctl = folder.add(shs, 'stepwise')
-                        .name(_label)
-                        .onFinishChange(submit);
-                    ctl.parent = parent;
-                    ctl.label = _label;
 
-                    if (_label) {
-                        let suffix = _label.replace(/^.+_/, '_');
-                        if (suffix in statics.ShaderTypes) {
-                            let bnd = statics.ShaderTypes[suffix];
-                            ctl.__li.setAttribute('data-class', bnd[0]);
-                        }
-                    }
+                    opts.type = 'checkbox';
+                    opts.label = _label;
+                    opts.property = 'stepwise';
+                    opts.dataClass = 'quarter';
+                    opts.cssClasses = 'noclear';
+
+                    folder.addController(opts);
                 }
 
-                if (o !== null) {
+                if (oscillate !== null) {
                     let _label = skey + '_oscillate';
-                    ctl = folder.add(shs, 'oscillate', statics.AnimationValues.oscillate)
-                        .name(_label)
-                        .onFinishChange(submit);
-                    ctl.parent = parent;
-                    ctl.label = _label;
+                    opts.label = _label;
+                    opts.type = 'select';
+                    opts.property = 'oscillate';
+                    opts.options = statics.AnimationValues.oscillate;
+                    opts.onChange = submit;
+                    opts.dataClass = 'half';
+                    opts.cssClasses = 'noclear';
 
-                    if (_label) {
-                        let suffix = _label.replace(/^.+_/, '_');
-                        if (suffix in statics.ShaderTypes) {
-                            let bnd = statics.ShaderTypes[suffix];
-                            ctl.__li.setAttribute('data-class', bnd[0]);
-                        }
-                    }
+                    folder.addController(opts);
                 }
 
             } else { // go deeper
                 this.addShaderController(folder, skey, shs, parent, controller);
             }
-        }
-
-        if (ctl) {
-            ctl._parent = folder;
-            ctl.__controller = controller;
         }
     }
 };
@@ -339,7 +331,7 @@ HC.Controller.prototype.openTreeByProperty = function (property) {
             control = control.getParent();
 
             do {
-                control.setExpanded(true);
+                control.setOpen(true);
             } while(control = control.getParent())
 
             this.scrollToControl(scrollto);
@@ -366,7 +358,7 @@ HC.Controller.prototype.openTreeByFolder = function (key) {
             let scrollto = folder;
 
             do {
-                folder.setExpanded(true);
+                folder.setOpen(true);
             } while(folder = folder.getParent())
 
             this.scrollToControl(scrollto);
@@ -410,10 +402,10 @@ HC.Controller.prototype.closeAll = function (control) {
     }
 
     if (control instanceof HC.ControllerUi) {
-        control.setExpanded(false);
+        control.setOpen(false);
 
     } else if (control instanceof HC.ControllerUi.Folder) {
-        control.setExpanded(false);
+        control.setOpen(false);
     }
 
     let result;
@@ -421,7 +413,7 @@ HC.Controller.prototype.closeAll = function (control) {
         for (let k in control.children) {
             let child = control.getChild(k);
             if (child instanceof HC.ControllerUi.Folder) {
-                child.setExpanded(false);
+                child.setOpen(false);
                 result = child;
                 this.closeAll(child);
             }
@@ -447,7 +439,7 @@ HC.Controller.prototype.toggleByKey = function (ci, shiftKey) {
 
     if (!open.isExpanded()) {
         if (ci < roots.length) {
-            roots[ci].setExpanded(true);
+            roots[ci].setOpen(true);
         }
         return;
     }
@@ -481,7 +473,7 @@ HC.Controller.prototype.toggleByKey = function (ci, shiftKey) {
 
     } else {
         let folder = folders[ci];
-        folder.setExpanded(true);
+        folder.setOpen(true);
     }
 };
 
@@ -534,13 +526,16 @@ HC.Controller.prototype.updateUi = function (control) {
 HC.Controller.prototype.updateUiPasses = function () {
 
     let passFld = this.animationSettingsGui.getChild('passes');
-    if (passFld) {
+    if (passFld && passFld.getChild('pass')) {
         passFld.getChild('pass').setValue(null);
 
         let cs = cm.get(statics.ControlSettings.layer, 'passes');
         let passes = cs.getShaderPasses();
 
-        passFld.removeChildren();
+        for (let k in passFld.children) {
+            if (k == 'pass')continue;
+            passFld.removeChild(k);
+        }
 
         for (let k in passes) {
             let key = cs.getShaderPassKey(k);

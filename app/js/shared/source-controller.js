@@ -141,10 +141,10 @@ HC.SourceController = HC.SourceController || {};
          * @param pluggedValues
          */
         createSourceSettings(pluggedValues) {
-            var okey = 'display';
-            for (var i = 0; i < statics.DisplayValues.display.length; i++) {
+            let okey = 'display';
+            for (let i = 0; i < statics.DisplayValues.display.length; i++) {
 
-                var key = 'display' + i;
+                let key = 'display' + i;
 
                 // settings
                 this.settings[key + '_source'] = this.values[okey + '_source'];
@@ -422,10 +422,10 @@ HC.SourceController = HC.SourceController || {};
          * @param pluggedValues
          */
         createResets(pluggedValues)  {
-            var _reset = (seq) => {
-                var key = getSequenceKey(seq);
+            let _reset = (seq) => {
+                let key = getSequenceKey(seq);
                 this.settings[key + '_reset'] = () => {
-                    var updates = {};
+                    let updates = {};
                     updates[key + '_jump'] = false;
                     updates[key + '_audio'] = false;
                     updates[key + '_flipa'] = false;
@@ -439,10 +439,10 @@ HC.SourceController = HC.SourceController || {};
 
                     updates[getSequenceStartKey(seq)] = 0;
 
-                    var endKey = getSequenceEndKey(seq);
+                    let endKey = getSequenceEndKey(seq);
                     if (endKey in this.types) {
-                        var type = this.types[endKey];
-                        var length = type[1];
+                        let type = this.types[endKey];
+                        let length = type[1];
                         updates[endKey] = length;
                     }
 
@@ -457,11 +457,11 @@ HC.SourceController = HC.SourceController || {};
             _reset(3);
             _reset(4);
 
-            var _rereset = (seq) => {
-                var key = getSequenceKey(seq);
+            let _rereset = (seq) => {
+                let key = getSequenceKey(seq);
                 this.settings[key + '_rereset'] = () => {
-                    var updates = {};
-                    updates[key + '_overlay'] = this.values[key + '_overlay']; // fixme values missing?!
+                    let updates = {};
+                    updates[key + '_overlay'] = this.values[key + '_overlay'];
                     updates[key + '_input'] = this.values[key + '_input'];
                     updates[key + '_blendmode'] = this.values[key + '_blendmode'];
                     updates[key + '_osci'] = this.values[key + '_osci'];
@@ -576,8 +576,8 @@ HC.SourceController = HC.SourceController || {};
         }
 
         createSampleSettings(pluggedValues) {
-            for (var i in pluggedValues.sample) {
-                var beatKey = getSampleBeatKey(i);
+            for (let i in pluggedValues.sample) {
+                let beatKey = getSampleBeatKey(i);
 
                 this.values[beatKey] = pluggedValues.beats;
 

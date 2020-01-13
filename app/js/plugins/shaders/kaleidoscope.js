@@ -13,7 +13,6 @@
         static settings = {
             apply: false,
             random: false,
-            index: 0,
             sides: {
                 value: 6,
                 _type: [2, 16, 1],

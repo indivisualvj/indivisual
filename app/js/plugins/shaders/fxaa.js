@@ -20,7 +20,6 @@
         static settings = {
             apply: false,
             random: false,
-            index: 1000,
             resolution: {
                 x: {
                     value: 1,

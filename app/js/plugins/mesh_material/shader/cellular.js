@@ -3,7 +3,7 @@
  */
 {
     HC.plugins.mesh_material.cellular = class Plugin extends HC.MeshShaderMaterialPlugin {
-// todo make background transparent?
+
         shader = {
             uniforms: {
                 uTime: {type: 'f', value: 1.0}
@@ -39,7 +39,7 @@
                     float ii = r.x/side+2.;
                     float jj = r.y/side+4.;
                 
-                    vec3 pix = vec3(1.0);
+                    vec3 pix = vec3(0.0);
                 
                     float rad, disks;
                 

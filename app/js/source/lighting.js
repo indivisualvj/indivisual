@@ -1,45 +1,43 @@
-(function () {
+{
     /**
-     * todo ES5
-     * @param index
-     * @constructor
      *
-     * mapping 1280x720 UpperLeftCorner: {"targetPoints":[[5760,3240],[5840,3240],[5840,3241],[5760,3241]]}
-     *
+     * @type {HC.Lighting}
      */
-    HC.Lighting = function (index) {
-        this.type = 'Lighting';
-        this.index = index;
-        this.id = this.type + this.index;
-        this._bounds = false;
-        this.pixel = [];
-        this.scale = 1;
-        this.lighting_type = 'off';
-        this._strobeModuloOdd = false;
-        this.shuffleCounter = 0;
-    };
-
-    HC.Lighting.prototype = {
+    HC.Lighting = class Lighting {
 
         /**
          *
-         * @param width
-         * @param height
+         * @param index
          */
-        update: function () {
-            var pixelUpdate = this.pixel.length != statics.SourceSettings.lighting_pattern_lights;
-            var scaleUpdate = this.scale != statics.SourceSettings.lighting_scale;
+        constructor(index) {
+            this.type = 'Lighting';
+            this.index = index;
+            this.id = this.type + this.index;
+            this._bounds = false;
+            this.pixel = [];
+            this.scale = 1;
+            this.lighting_type = 'off';
+            this._strobeModuloOdd = false;
+            this.shuffleCounter = 0;
+        }
+
+        /**
+         *
+         */
+        update() {
+            let pixelUpdate = this.pixel.length != statics.SourceSettings.lighting_pattern_lights;
+            let scaleUpdate = this.scale != statics.SourceSettings.lighting_scale;
             if (pixelUpdate || scaleUpdate) {
                 this.init();
             }
 
             this.lighting_type = statics.SourceSettings.lighting_type;
-        },
+        }
 
         /**
          *
          */
-        init: function () {
+        init() {
             if (!this.canvas) {
                 this.canvas = document.createElement('canvas');
                 this.canvas.ctx = this.canvas.getContext('2d');
@@ -48,7 +46,7 @@
 
             this.scale = statics.SourceSettings.lighting_scale;
             this.pixel = [];
-            for (var i = 0; i < statics.SourceSettings.lighting_pattern_lights; i++) {
+            for (let i = 0; i < statics.SourceSettings.lighting_pattern_lights; i++) {
                 this.pixel[i] = {
                     brightness: 0.0,
                     color: '#ff0000'
@@ -57,46 +55,46 @@
 
             this.canvas.width = this.width = this.pixel.length * 4 * this.scale;
             this.canvas.height = this.height = 1 * this.scale;
-        },
+        }
 
         /**
          *
-         * @param reference
-         * @returns {*}
+         * @returns {HC.Rectangle}
          */
-        bounds: function () {
+        bounds() {
             return new HC.Rectangle(0, 0, this.pixel.length * 4 * this.scale, 1 * this.scale);
-        },
+        }
 
         /**
          *
-         * @returns {*}
+         * @returns {number}
          */
-        brightness: function () {
+        brightness() {
             return displayman.brightness();
-        },
+        }
 
         /**
          *
-         * @returns {HTMLElement|*}
+         * @param fallback
+         * @returns {HTMLCanvasElement}
          */
-        current: function (fallback) {
+        current(fallback) {
 
             if (statics.SourceSettings.lighting_type != 'off') {
-                var index = this.getPixelIndex();
-                var color = this.getFillColor(fallback, index);
+                let index = this.getPixelIndex();
+                let color = this.getFillColor(fallback, index);
 
                 this.canvas.ctx.clearRect(0, 0, 4 * this.pixel.length * this.scale, 1 * this.scale);
 
-                var speed = beatkeeper.getSpeed(statics.SourceSettings.lighting_speed);
-                var redo = speed.starting();
+                let speed = beatkeeper.getSpeed(statics.SourceSettings.lighting_speed);
+                let redo = speed.starting();
                 if (redo) {
-                    this.shuffleCounter ++;
+                    this.shuffleCounter++;
                 }
 
-                for (var i = 0; i < this.pixel.length; i++) {
+                for (let i = 0; i < this.pixel.length; i++) {
                     this.updateLight(i, color);
-                    var br = this.pixel[i].brightness * statics.SourceSettings.lighting_brightness;
+                    let br = this.pixel[i].brightness * statics.SourceSettings.lighting_brightness;
                     if (br) {
                         this.canvas.ctx.fillStyle = this.pixel[i].color;
                         this.canvas.ctx.globalAlpha = br;
@@ -109,25 +107,25 @@
             }
 
             return this.canvas;
-        },
+        }
 
         /**
          *
          * @param i
-         * @returns {*}
+         * @param color
          */
-        updateLight: function (i, color) {
+        updateLight(i, color) {
 
-            var speed = beatkeeper.getSpeed(statics.SourceSettings.lighting_speed);
-            var redo = speed.starting();
-            var m = this.lighting_type;
+            let speed = beatkeeper.getSpeed(statics.SourceSettings.lighting_speed);
+            let redo = speed.starting();
+            let m = this.lighting_type;
 
             if (redo && i == 0 && statics.SourceSettings.lighting_type == 'randomall'
                 && this.shuffleCounter >= statics.ControlSettings.shuffle_every - 1) {
                 this.shuffleCounter = 0;
 
-                var k = Object.keys(statics.SourceValues.lighting_type);
-                var c = randomInt(1, k.length - 2);
+                let k = Object.keys(statics.SourceValues.lighting_type);
+                let c = randomInt(1, k.length - 2);
                 this.lighting_type = k[c];
             }
 
@@ -136,20 +134,20 @@
                 this.pixel[i].color = color;
 
             } else if (redo && m.match(/^shuffle/)) {
-                var on = randomInt(0, this.pixel.length, false) > this.pixel.length / 1.5;
+                let on = randomInt(0, this.pixel.length, false) > this.pixel.length / 1.5;
                 this.pixel[i].brightness = on ? 1.0 : 0.0;
                 this.pixel[i].color = color;
 
             } else if (m.match(/^wave/)) {
-                var p = i / this.pixel.length;
-                var d = Math.abs(p - speed.prc);
-                var v = 0.25 - Math.min(d, 0.25);
+                let p = i / this.pixel.length;
+                let d = Math.abs(p - speed.prc);
+                let v = 0.25 - Math.min(d, 0.25);
                 this.pixel[i].brightness = v / 0.25;
                 this.pixel[i].color = color;
 
             } else if (m.match(/^randomblitz/)) {
                 if (redo && this.pixel[i].brightness == 0.0) {
-                    var on = randomInt(0, this.pixel.length, false) > this.pixel.length / 1.5;
+                    let on = randomInt(0, this.pixel.length, false) > this.pixel.length / 1.5;
                     this.pixel[i].brightness = on ? 1.0 : 0.0;
 
                 } else if (this.pixel[i].brightness > 0.0) {
@@ -160,10 +158,10 @@
 
             } else if (m.match(/^randomoneon/)) {
                 if (redo && i == 0) {
-                    for (var f = 0; f < this.pixel.length; f++) {
+                    for (let f = 0; f < this.pixel.length; f++) {
                         this.pixel[f].brightness = 0.0;
                     }
-                    var n = randomInt(0, this.pixel.length - 1, false);
+                    let n = randomInt(0, this.pixel.length - 1, false);
                     this.pixel[n].brightness = 1.0;
                 }
                 if (this.pixel[i].brightness > 0.0) {
@@ -186,17 +184,17 @@
                 }
             }
 
-        },
+        }
 
         /**
          *
          * @param fallback
          * @param index
-         * @returns {*}
+         * @returns {string}
          */
-        getFillColor: function (fallback, index) {
-            var color = fallback && fallback._color ? fallback._color : '#ff0000';
-            var lc = statics.SourceSettings.lighting_color;
+        getFillColor(fallback, index) {
+            let color = fallback && fallback._color ? fallback._color : '#ff0000';
+            let lc = statics.SourceSettings.lighting_color;
 
             if (index > 0) {
                 color = '#ffffff';
@@ -228,14 +226,14 @@
             }
 
             return color;
-        },
+        }
 
         /**
          *
          * @returns {number}
          */
-        getPixelIndex: function () {
-            var m = this.lighting_type;
+        getPixelIndex() {
+            let m = this.lighting_type;
 
             if (m.match(/amber$/)) {
                 return 1;
@@ -250,7 +248,5 @@
 
             return 0;
         }
-
-    };
-
-}());
+    }
+}

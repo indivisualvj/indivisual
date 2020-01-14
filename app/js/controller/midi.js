@@ -3,7 +3,7 @@
  */
 
 /**
- * todo var2let / es5
+ * todo ES6
  * @param instance
  */
 HC.Controller.prototype.initMidi = function (instance) {

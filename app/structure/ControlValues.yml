@@ -27,17 +27,6 @@ layer:
 
 shuffle_mode: {}
 
-predefined_keys: # todo make keycode and label configurable here
-  ControlSettings:
-    controls:
-      play: spc
-      reset: del
-      monitor: hm
-      push_layers: end
-      push_sources: pgd
-      rst_shaders: pgu
-      debug: "-"
-
 layer_keycodes:
   "49": 0
   "50": 1

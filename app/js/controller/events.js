@@ -9,11 +9,6 @@
     HC.Event = class Event {
 
         /**
-         * @type {HTMLElement}
-         */
-        element;
-
-        /**
          * @type {string}
          */
         type;
@@ -25,21 +20,20 @@
 
         /**
          *
-         * @param element
          * @param type
          * @param callback
          */
-        constructor(element, type, callback) {
-            this.element = element;
+        constructor(type, callback) {
             this.type = type;
             this.callback = callback;
         }
 
         /**
          *
+         * @param element
          */
-        register() {
-            this.element.addEventListener(this.type, this.callback);
+        register(element) {
+            element.addEventListener(this.type, this.callback);
         }
     };
 
@@ -55,14 +49,13 @@
 
         /**
          *
-         * @param element
          * @param type
          * @param codes
          * @param callback
          * @param label
          */
-        constructor(element, type, codes, callback, label) {
-            super(element, type, callback);
+        constructor(type, codes, callback, label) {
+            super(type, callback);
             this.codes = codes;
             this.label = label;
         }
@@ -70,9 +63,11 @@
         /**
          *
          */
-        register() {
-            this.element.addEventListener(this.type, (e) => {
+        register(element) {
+            element.addEventListener(this.type, (e) => {
                 if (this.codes.includes(e.keyCode)) {
+                    e.preventDefault(); // fixme eg. pgdown scrolls. no prevent... :(
+                    e.stopPropagation();
                     this.callback(e);
                 }
             });
@@ -109,7 +104,7 @@ HC.Controller.prototype.initLogEvents = function () {
 };
 
 /**
- * todo guify
+ *
  */
 HC.Controller.prototype.initKeyboard = function () {
 
@@ -117,7 +112,6 @@ HC.Controller.prototype.initKeyboard = function () {
     let ci = 0;
     let setMnemonics = function (control, key) {
         key = key || control.getLabel();
-        let guiKeys = statics.ControlValues.predefined_keys[key] ? statics.ControlValues.predefined_keys[key] : {};
 
         if (control instanceof HC.GuifyGui) {
             let key = keys.charAt(ci++);
@@ -130,27 +124,15 @@ HC.Controller.prototype.initKeyboard = function () {
                 let child = control.getChild(k);
 
                 if (child instanceof HC.GuifyFolder) {
-                    if (gi < keys.length) {
+                    if (!child.getMnemonic() && gi < keys.length) {
                         child.setMnemonic(keys.charAt(gi++));
                     }
                     setMnemonics(child, key);
 
                 } else {
-                    let folder = child.getParent().getLabel();
-                    let name = child.getProperty();
 
-                    if (gi < keys.length) {
-
-                        let key = null;
-                        if (folder in guiKeys
-                            && name in guiKeys[folder]
-                        ) { // vorbelegte
-                            key = guiKeys[folder][name];
-
-                        } else {
-                            key = keys.charAt(gi++);
-                        }
-
+                    if (!child.getMnemonic() && gi < keys.length) {
+                        let key = keys.charAt(gi++);
                         child.setMnemonic(key);
                     }
                 }
@@ -179,14 +161,7 @@ HC.Controller.prototype.initKeyboard = function () {
             return;
         }
 
-        // if (e.keyCode == 32) { // SPACE = play/pause todo: eigenschaft von controlset events? events={play: {new HC.KeydDownEvent('spc', 32, function)}}
-        //     controller.updateControl('play', !statics.ControlSettings.play, true, true, false);
-        //
-        // } else
-            if (e.keyCode == 46) { // DEL = reset
-            statics.ControlSettings.reset();
-
-        } else if (e.keyCode == 8) { // BACKSPACE = close folders
+        if (e.keyCode == 8) { // BACKSPACE = close folders
             var open = controller.nextOpenFolder();
             if (!(open instanceof HC.GuifyGui)) {
                 controller.closeAll(open);
@@ -200,25 +175,6 @@ HC.Controller.prototype.initKeyboard = function () {
             e.stopPropagation();
             return;
 
-        } else if (e.keyCode == 36) { // HOME = monitor
-            e.stopPropagation();
-            e.preventDefault();
-            controller.updateControl('monitor', !statics.ControlSettings.monitor, true, true, false);
-
-        } else if (e.keyCode == 35) { // END = push_layers
-            e.stopPropagation();
-            e.preventDefault();
-            statics.ControlSettings.push_layers();
-
-        } else if (e.keyCode == 33) { // PG_UP = rst_shaders
-            e.stopPropagation();
-            e.preventDefault();
-            statics.ControlSettings.rst_shaders();
-
-        } else if (e.keyCode == 34) { // PG_DOWN = push_sources
-            e.stopPropagation();
-            e.preventDefault();
-            statics.ControlSettings.push_sources();
         }
 
         if (e.keyCode in statics.ControlValues.layer_keycodes) {

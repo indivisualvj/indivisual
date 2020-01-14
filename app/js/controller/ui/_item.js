@@ -44,7 +44,7 @@
          * @param key
          */
         setMnemonic(key) {
-            this.mnemonic = key.length < 2 ? key : null;
+            this.mnemonic = key;
             this.getContainer().setAttribute('data-mnemonic', key)
         }
 

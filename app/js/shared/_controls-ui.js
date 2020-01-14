@@ -158,6 +158,7 @@
          * @param key
          */
         addController(key) {
+            let events = this.controlSet.events[key] || false;
             let types = this.controlSet.types[key] || false;
             let styles = this.controlSet.styles[key] || false;
             let props = this.controlSet.properties;
@@ -239,6 +240,12 @@
                 } else {
                     ctrl.container.classList.add('noclear');
                 }
+            }
+
+            if (events) {
+                let e = events(this.controlSet);
+                controller.setMnemonic(e.label);
+                e.register(window);
             }
 
             return controller;

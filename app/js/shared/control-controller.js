@@ -123,9 +123,24 @@ HC.ControlController = HC.ControlController || {};
         };
 
         events = {
-            // play: new HC.KeyEvent(window, 'keyup', [32], (e) => {
-            //     controller.updateControl('play', !statics.ControlSettings.play, true, true, false);
-            // }, 'spc')
+            play: (inst) => { return new HC.KeyEvent('keyup', [32], (e) => {
+                controller.updateControl('play', !statics.ControlSettings.play, true, true, false);
+            }, 'spc')},
+            reset: (inst) => { return new HC.KeyEvent('keyup', [46], (e) => {
+                inst.settings.reset();
+            }, 'del')},
+            monitor: (inst) => { return new HC.KeyEvent('keyup', [36], (e) => {
+                controller.updateControl('monitor', !statics.ControlSettings.monitor, true, true, false);
+            }, 'hm')},
+            push_layers: (inst) => { return new HC.KeyEvent('keyup', [35], (e) => {
+                inst.settings.push_layers();
+            }, 'end')},
+            push_sources: (inst) => { return new HC.KeyEvent('keyup', [34], (e) => {
+                inst.settings.push_sources();
+            }, 'pgd')},
+            rst_shaders: (inst) => { return new HC.KeyEvent('keyup', [33], (e) => {
+                inst.settings.rst_shaders();
+            }, 'pgu')},
         };
     }
 }

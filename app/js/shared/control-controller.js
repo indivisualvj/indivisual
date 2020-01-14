@@ -121,6 +121,12 @@ HC.ControlController = HC.ControlController || {};
             shuffle_mode: ['half', 'clear'],
             shuffle_every: ['half']
         };
+
+        events = {
+            play: new HC.KeyEvent(window, 'keyup', [32], (e) => {
+                controller.updateControl('play', !statics.ControlSettings.play, true, true, false);
+            }, 'spc')
+        }
     }
 }
 

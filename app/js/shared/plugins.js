@@ -35,7 +35,7 @@ HC.Shape.prototype.initPlugins = function () {
 
         layer;
         settings;
-        controlsets;
+        controlSets;
         tree;
         key;
         
@@ -61,8 +61,8 @@ HC.Shape.prototype.initPlugins = function () {
             //
         }
 
-        setControlSets(controlsets) {
-            this.controlsets = controlsets;
+        setControlSets(controlSets) {
+            this.controlSets = controlSets;
         }
 
         inject() {

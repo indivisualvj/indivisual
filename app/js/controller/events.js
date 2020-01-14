@@ -37,12 +37,9 @@
 
         /**
          *
-         * @return {HC.Event}
          */
-        init() {
+        register() {
             this.element.addEventListener(this.type, this.callback);
-
-            return this;
         }
     };
 
@@ -68,6 +65,17 @@
             super(element, type, callback);
             this.codes = codes;
             this.label = label;
+        }
+
+        /**
+         *
+         */
+        register() {
+            this.element.addEventListener(this.type, (e) => {
+                if (this.codes.includes(e.keyCode)) {
+                    this.callback(e);
+                }
+            });
         }
     };
 
@@ -111,7 +119,7 @@ HC.Controller.prototype.initKeyboard = function () {
         key = key || control.getLabel();
         let guiKeys = statics.ControlValues.predefined_keys[key] ? statics.ControlValues.predefined_keys[key] : {};
 
-        if (control instanceof HC.ControllerUi) {
+        if (control instanceof HC.GuifyGui) {
             let key = keys.charAt(ci++);
             control.setMnemonic(key);
         }
@@ -121,7 +129,7 @@ HC.Controller.prototype.initKeyboard = function () {
             for (let k in control.children) {
                 let child = control.getChild(k);
 
-                if (child instanceof HC.ControllerUi.Folder) {
+                if (child instanceof HC.GuifyFolder) {
                     if (gi < keys.length) {
                         child.setMnemonic(keys.charAt(gi++));
                     }
@@ -171,15 +179,16 @@ HC.Controller.prototype.initKeyboard = function () {
             return;
         }
 
-        if (e.keyCode == 32) { // SPACE = play/pause todo: eigenschaft von controlset events? events={play: {new HC.KeydDownEvent('spc', 32, function)}}
-            controller.updateControl('play', !statics.ControlSettings.play, true, true, false);
-
-        } else if (e.keyCode == 46) { // DEL = reset
+        // if (e.keyCode == 32) { // SPACE = play/pause todo: eigenschaft von controlset events? events={play: {new HC.KeydDownEvent('spc', 32, function)}}
+        //     controller.updateControl('play', !statics.ControlSettings.play, true, true, false);
+        //
+        // } else
+            if (e.keyCode == 46) { // DEL = reset
             statics.ControlSettings.reset();
 
         } else if (e.keyCode == 8) { // BACKSPACE = close folders
             var open = controller.nextOpenFolder();
-            if (!(open instanceof HC.ControllerUi)) {
+            if (!(open instanceof HC.GuifyGui)) {
                 controller.closeAll(open);
                 controller.scrollToControl(open);
 
@@ -232,7 +241,7 @@ HC.Controller.prototype.initKeyboard = function () {
             e.preventDefault();
             e.stopPropagation();
 
-            controller.toggleByKey(ci, e.shiftKey);
+            controller.toggleByKey(ci, char, e.shiftKey);
         }
     });
 };

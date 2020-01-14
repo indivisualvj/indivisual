@@ -2,10 +2,10 @@
  *
  * @param actions
  */
-HC.Controller.prototype.addAnimationControllers = function (controlsets) {
+HC.Controller.prototype.addAnimationControllers = function (controlSets) {
 
-    for (let cs in controlsets) {
-        let set = controlsets[cs];
+    for (let cs in controlSets) {
+        let set = controlSets[cs];
         if (set.visible !== false) {
             let ui = new HC.ControlSetGuifyUi(set, this.animationSettingsGui);
             ui.addFolder();
@@ -282,14 +282,14 @@ HC.Controller.prototype.nextOpenFolder = function (control) {
         this.nextOpenFolder(this.animationSettingsGui) || this.controlSettingsGui;
     }
 
-    if (control instanceof HC.ControllerUi && !control.isExpanded()) {
+    if (control instanceof HC.GuifyGui && !control.isExpanded()) {
         return false;
     }
 
     if (control.children) {
         for (let k in control.children) {
             let child = control.getChild(k);
-            if (child instanceof HC.ControllerUi.Folder) {
+            if (child instanceof HC.GuifyFolder) {
 
                 if (child.isExpanded()) {
                     control = this.nextOpenFolder(child);
@@ -401,10 +401,10 @@ HC.Controller.prototype.closeAll = function (control) {
         return;
     }
 
-    if (control instanceof HC.ControllerUi) {
+    if (control instanceof HC.GuifyGui) {
         control.setOpen(false);
 
-    } else if (control instanceof HC.ControllerUi.Folder) {
+    } else if (control instanceof HC.GuifyFolder) {
         control.setOpen(false);
     }
 
@@ -412,7 +412,7 @@ HC.Controller.prototype.closeAll = function (control) {
     if (control.children) {
         for (let k in control.children) {
             let child = control.getChild(k);
-            if (child instanceof HC.ControllerUi.Folder) {
+            if (child instanceof HC.GuifyFolder) {
                 child.setOpen(false);
                 result = child;
                 this.closeAll(child);
@@ -428,7 +428,7 @@ HC.Controller.prototype.closeAll = function (control) {
  * @param ci
  * @param shiftKey
  */
-HC.Controller.prototype.toggleByKey = function (ci, shiftKey) {
+HC.Controller.prototype.toggleByKey = function (ci, char, shiftKey) {
     let roots = [
         this.controlSettingsGui,
         this.displaySettingsGui,
@@ -445,36 +445,13 @@ HC.Controller.prototype.toggleByKey = function (ci, shiftKey) {
     }
 
     let controllers = open.getControllers();
-    let folders = open.getFolders();
 
     if (shiftKey && controllers.length > 0) { // reset on shift
         this.resetFolder(open);
         return;
     }
 
-    if (ci >= folders.length) {
-        ci -= folders.length;
-
-        if (ci < controllers.length) {
-            let controller = controllers[ci];
-
-            let guiTitle = open.gui.opts.title;
-            let keys = statics.ControlValues.predefined_keys;
-            if (guiTitle in keys) {
-                keys = keys[guiTitle][open.getKey()];
-                if (keys) {
-                    ci += Object.keys(keys).length - 1;
-                    controller = controllers[ci];
-                }
-            }
-
-            controller.catchFocus();
-        }
-
-    } else {
-        let folder = folders[ci];
-        folder.setOpen(true);
-    }
+    open.toggleByMnemonic(char);
 };
 
 /**
@@ -514,7 +491,7 @@ HC.Controller.prototype.updateUi = function (control) {
     for (let key in control.children) {
         let child = control.getChild(key);
 
-        if (child instanceof HC.ControllerUi.Folder) {
+        if (child instanceof HC.GuifyFolder) {
             this.updateValuesChanged(child);
         }
     }
@@ -590,7 +567,7 @@ HC.Controller.prototype.updateValuesChanged = function (folder) {
     for (let key in folder.children) {
         let child = folder.getChild(key);
         let changed = false;
-        if (child instanceof HC.ControllerUi.Folder) {
+        if (child instanceof HC.GuifyFolder) {
             changed = this.updateValuesChanged(child);
 
         } else {

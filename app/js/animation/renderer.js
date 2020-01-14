@@ -136,7 +136,7 @@
                      */
                     if ((keepsettings || !layerShuffleable(i))) {
                         op = this.layers[i].preset;
-                        os = this.layers[i].controlsets;
+                        os = this.layers[i].controlSets;
                     }
                     ol.dispose();
                 }
@@ -144,8 +144,8 @@
                 let l = new HC.Layer(this, i);
 
                 l.preset = op;
-                l.controlsets = os || HC.LayeredControlSetsManager.initAll(statics.AnimationValues);
-                l.settings = HC.LayeredControlSetsManager.settingsProxy(os || l.controlsets);
+                l.controlSets = os || HC.LayeredControlSetsManager.initAll(statics.AnimationValues);
+                l.settings = HC.LayeredControlSetsManager.settingsProxy(os || l.controlSets);
 
                 this.layers[i] = l;
 
@@ -166,16 +166,15 @@
             if (this.nextLayer) {
 
                 if (this.currentLayer !== this.nextLayer) {
-
-                    if (!force && statics.ControlSettings.shuffle) { // check .shuffle? ist doch höchstens OFF!
+                    if (!force && statics.ControlSettings.shuffle_mode != 'off') {
                         let speed = this.nextLayer.getCurrentSpeed();
-                        if (speed.prc != 0) {
+                        if (!speed.starting()) {
                             return;
                         } else {
 
                         }
                     }
-// fixme transvisibility does not work / reset on loadPresets and even more?
+
                     if (!this.currentLayer.settings.layer_transvisible) {
                         this.currentLayer.pause();
                     }

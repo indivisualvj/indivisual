@@ -506,13 +506,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            // let sh = statics.ControlSettings.shuffle;
-            // let count = statics.ControlSettings.shuffle_usepeak ? audio.peakCount :
-            //     (statics.shuffle.counter % statics.ControlSettings.shuffle_every);
-            // messaging.emitAttr('#layer', 'data-label', count + (sh ? 's' : ''));
-
-            let layerDisplayValue = (statics.ControlSettings.layer + 1);
-            messaging.emitAttr('#layers', 'data-mnemonic', layerDisplayValue);
+            messaging.emitAttr('#layers', 'data-mnemonic', (renderer.currentLayer.index + 1));
 
             if (animation.stats) {
                 let state = (animation.powersave ? 'i' : '') + (animation.offline ? 'o' : '');
@@ -985,7 +979,6 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         doShuffle() {
             var plugin = this.getShuffleModePlugin(statics.ControlSettings.shuffle_mode);
-// fixme load _transivisbles, try shuffle, then load moonshine, try shuffle. wont work anymore...
             var result = plugin.apply();
             if (result !== false) {
                 result = plugin.after();

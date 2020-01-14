@@ -127,7 +127,7 @@
 
         /**
          * fixme NOT a final solution!  drops rms by 1! rewrite all plugins and everything...
-         * @param controlsets
+         * @param controlSets
          * @returns {Proxy}
          */
         settingsProxy() {

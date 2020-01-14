@@ -164,10 +164,10 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         init() {
             // todo evtl doch das? https://github.com/automat/controlkit.js
-            this.controlSettingsGui = new HC.ControllerUi('ControlSettings', true);
-            this.displaySettingsGui = new HC.ControllerUi('DisplaySettings');
-            this.sourceSettingsGui = new HC.ControllerUi('SourceSettings');
-            this.animationSettingsGui = new HC.ControllerUi('AnimationSettings');
+            this.controlSettingsGui = new HC.GuifyGui('ControlSettings', true);
+            this.displaySettingsGui = new HC.GuifyGui('DisplaySettings');
+            this.sourceSettingsGui = new HC.GuifyGui('SourceSettings');
+            this.animationSettingsGui = new HC.GuifyGui('AnimationSettings');
         }
 
         /**
@@ -295,16 +295,16 @@ document.addEventListener('DOMContentLoaded', function () {
         shareSettings(folder, datasource) {
 
             let settings = {};
-            let controlsets = cm.prepareLayer(statics.ControlSettings.layer);
+            let controlSets = cm.prepareLayer(statics.ControlSettings.layer);
             if (!datasource) {
-                let keys = Object.keys(controlsets[folder]);
+                let keys = Object.keys(controlSets[folder]);
 
                 for (let i = 0; i < keys.length; i++) {
-                    settings[keys[i]] = controlsets[folder][keys[i]];
+                    settings[keys[i]] = controlSets[folder][keys[i]];
                 }
 
             } else {
-                settings[folder] = controlsets[folder];
+                settings[folder] = controlSets[folder];
             }
 
             let data = {};
@@ -376,8 +376,8 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         setSynchronized(dir, value) {
 
-            let controlsets = cm.prepareLayer(0);
-            for (let key in controlsets[dir]) {
+            let controlSets = cm.prepareLayer(0);
+            for (let key in controlSets[dir]) {
                 this.synced[key] = value;
             }
 
@@ -895,6 +895,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 layer = statics.ControlSettings.layer;
             }
 
+            cm.resetLayer(layer);
+
             if (!('info' in data)) {
                 this.migrateSettings0(layer, data);
 
@@ -984,7 +986,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
-         * @param open {HC.ControllerUi.Folder}
+         * @param open {HC.GuifyFolder}
          */
         resetFolder(open) {
             let set = open.getKey();

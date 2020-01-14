@@ -70,6 +70,12 @@ HC.controls = HC.controls || {};
 
         /**
          *
+         * @type {Object.<string, HC.Event>}
+         */
+        events = {};
+
+        /**
+         *
          * @param name
          */
         constructor(name) {

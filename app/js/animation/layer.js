@@ -16,7 +16,7 @@
         this.index = index;
         this.preset = false;
         this.settings = false;
-        this.controlsets = false;
+        this.controlSets = false;
         this.lights = false;
         this.ambientLight = false;
         this.shapes = false;
@@ -166,7 +166,7 @@
 
             var sc = this.three.scene;
             this.settings = false;
-            this.controlsets = false;
+            this.controlSets = false;
             this.shapes = false;
             this.plugins = {};
             this._shapes = false;

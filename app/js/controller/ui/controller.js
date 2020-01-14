@@ -10,10 +10,9 @@
          * @returns {*}
          */
         constructor(parent, opts) {
-            super();
+            super(parent.gui);
             this.parent = parent;
-            this.gui = parent.gui;
-            opts.folder = parent.folder;
+            opts.folder = parent.getComponent();
             this.component = this.gui.Register(opts);
 
             if (opts.dataClass) {
@@ -30,7 +29,7 @@
          *
          */
         initEvents() {
-            if (this.component.opts.type == 'range') {
+            if (this.getComponent().opts.type == 'range') {
                 this._initRangeEvents();
 
             }
@@ -44,7 +43,7 @@
          */
         _initInputEvents() {
 
-            let valueComponent = this.component.valueComponent || this.component.input;
+            let valueComponent = this.getComponent().valueComponent || this.getComponent().input;
             if (!valueComponent) {
                 return;
             }
@@ -131,7 +130,7 @@
          * @return {string}
          */
         getProperty() {
-            return this.component.opts.property || this.getLabel();
+            return this.getComponent().opts.property || this.getLabel();
         }
 
         /**
@@ -139,8 +138,8 @@
          * @return {*}
          */
         getValue() {
-            if (this.component.opts.object && this.getProperty() in this.component.opts.object) {
-                return this.component.opts.object[this.getProperty()];
+            if (this.getComponent().opts.object && this.getProperty() in this.getComponent().opts.object) {
+                return this.getComponent().opts.object[this.getProperty()];
             }
 
             return undefined;
@@ -152,8 +151,8 @@
          * @return {*}
          */
         setValue(v) {
-            if (this.component.opts.object && this.getProperty() in this.component.opts.object) {
-                this.component.opts.object[this.getProperty()] = v;
+            if (this.getComponent().opts.object && this.getProperty() in this.getComponent().opts.object) {
+                this.getComponent().opts.object[this.getProperty()] = v;
             }
         }
 
@@ -162,7 +161,7 @@
          * @return {number}
          */
         getStep() {
-            return this.component.opts.step;
+            return this.getComponent().opts.step;
         }
 
         /**
@@ -171,7 +170,7 @@
         toggleValue() {
             let v = this.getValue();
             this.setValue(!v);
-            this.component.emit('input', this.getValue());
+            this.getComponent().emit('input', this.getValue());
         }
 
         /**
@@ -181,7 +180,7 @@
             let v = this.getValue();
             let s = this.getStep();
             this.setValue(v + s);
-            this.component.emit('input', this.getValue());
+            this.getComponent().emit('input', this.getValue());
         }
 
         /**
@@ -191,7 +190,7 @@
             let v = this.getValue();
             let s = this.getStep();
             this.setValue(v - s);
-            this.component.emit('input', this.getValue());
+            this.getComponent().emit('input', this.getValue());
         }
 
         /**
@@ -199,8 +198,8 @@
          * @return {*|Array|*[]}
          */
         getInitialValue() {
-            if ('initial' in this.component.opts) {
-                let initial = this.component.opts.initial;
+            if ('initial' in this.getComponent().opts) {
+                let initial = this.getComponent().opts.initial;
                 return initial;
             }
 
@@ -225,11 +224,11 @@
          *
          */
         catchFocus() {
-            if (this.component.opts.type == 'checkbox') {
+            if (this.getComponent().opts.type == 'checkbox') {
                 this.toggleValue();
 
             } else {
-                let elem = this.component.valueComponent || this.component.input;
+                let elem = this.getComponent().valueComponent || this.getComponent().input;
                 if (elem) {
                     elem.focus();
                 }

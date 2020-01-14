@@ -137,12 +137,12 @@
         }
 
         _styleFolder(folder, key, border) {
-            let fld = folder.folder;
+            let container = folder.getFolderContainer();
 
-            fld.folderContainer.setAttribute('data-border', border);
-            fld.folderContainer.setAttribute('data-id', key);
+            container.setAttribute('data-border', border);
+            container.setAttribute('data-id', key);
             if (this.folder.getParent()) {
-                fld.folderContainer.setAttribute('data-parent', this.folder.getParent().getLabel());
+                container.setAttribute('data-parent', this.folder.getParent().getLabel());
             }
         }
 
@@ -150,7 +150,7 @@
             let clear = document.createElement('div');
             clear.classList.add('guify-component-container');
             clear.classList.add('clear');
-            folder.folder.folderContainer.appendChild(clear);
+            folder.getFolderContainer().appendChild(clear);
         }
 
         /**
@@ -228,7 +228,7 @@
             }
 
             let controller = folder.addController(config);
-            let ctrl = controller.controller;
+            let ctrl = controller.getComponent();
 
             if (styles) {
                 ctrl.container.setAttribute('data-class', styles[0]);

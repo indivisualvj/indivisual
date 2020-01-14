@@ -15,6 +15,13 @@
 
         component;
 
+        /**
+         *
+         * @param gui
+         */
+        constructor(gui) {
+            this.gui = gui;
+        }
 
         /**
          *
@@ -26,11 +33,19 @@
 
         /**
          *
+         * @returns {*}
+         */
+        getComponent() {
+            return this.component;
+        }
+
+        /**
+         *
          * @param key
          */
         setMnemonic(key) {
             this.mnemonic = key.length < 2 ? key : null;
-            this.component.container.setAttribute('data-mnemonic', key)
+            this.getContainer().setAttribute('data-mnemonic', key)
         }
 
         /**
@@ -41,6 +56,9 @@
             return this.mnemonic;
         }
 
+        /**
+         *
+         */
         mnemonicAction() {
             console.log('not implemented');
         }
@@ -50,8 +68,7 @@
          * @param v
          */
         setVisible(v) {
-            this.setOpen(false);
-            this.component.container.style.display = v ? 'block' : 'none';
+            this.getComponent().container.style.display = v ? 'block' : 'none';
         }
 
         /**
@@ -59,7 +76,7 @@
          */
         remove() {
             if (this.getParent()) {
-                this.component.Remove();
+                this.getComponent().Remove();
 
                 return true;
             }
@@ -72,7 +89,7 @@
          * @returns {string}
          */
         getLabel() {
-            return this.component.opts.label;
+            return this.getComponent().opts.label;
         }
 
 
@@ -81,7 +98,7 @@
          * @return {HTMLDivElement}
          */
         getContainer() {
-            return this.component.container;
+            return this.getComponent().container;
         }
     }
 

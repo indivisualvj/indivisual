@@ -6,7 +6,7 @@
      *
      * @type {HC.GuifyGui}
      */
-    HC.GuifyGui = class ControllerUi extends HC.GuifyFolder {
+    HC.GuifyGui = class GuifyGui extends HC.GuifyFolder {
 
         /**
          *
@@ -14,16 +14,24 @@
          * @param open
          */
         constructor(id, open) {
-            super();
+            super(null, null, id, open);
+        }
+
+        /**
+         *
+         * @param name
+         * @param open
+         */
+        init(name, open) {
             this.gui = new guify({
-                title: id,
+                title: name,
                 theme: 'dark', // dark, light, yorha, or theme object
                 align: 'right', // left, right
                 width: '100%',
                 barMode: 'offset', // none, overlay, above, offset
                 panelMode: 'inner',
                 opacity: 1,
-                root: document.getElementById(id),
+                root: document.getElementById(name),
                 open: open
             });
             this.component = this.gui;
@@ -33,18 +41,23 @@
 
         /**
          *
-         * @returns {string}
+         * @param name
+         * @param open
+         * @returns {HC.GuifyFolder}
          */
-        getLabel() {
-            return this.gui.opts.title;
+        addFolder(name, open) {
+            let folder = new HC.GuifyFolder(this.gui, null, name, open);
+            this.children[folder.getLabel()] = folder;
+
+            return folder;
         }
 
         /**
          *
-         * @return {null}
+         * @returns {string}
          */
-        getParent() {
-            return null;
+        getLabel() {
+            return this.gui.opts.title;
         }
 
         /**

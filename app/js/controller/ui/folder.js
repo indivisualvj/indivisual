@@ -31,10 +31,19 @@
             super();
             this.gui = gui;
             this.parent = parent;
-            this.folder = this.gui.Register({
+            this.init(name, open);
+        }
+
+        /**
+         *
+         * @param name
+         * @param open
+         */
+        init(name, open) {
+            this.component = this.gui.Register({
                 type: 'folder',
                 label: name,
-                folder: (parent ? parent.folder : null),
+                folder: (this.getParent() ? this.getParent().getComponent() : null),
                 open: open
             });
         }
@@ -66,6 +75,22 @@
             this.children[folder.getLabel()] = folder;
 
             return folder;
+        }
+
+        /**
+         *
+         * @param v
+         */
+        setVisible(v) {
+            this.setOpen(false);
+            super.setVisible(v);
+        }
+
+        /**
+         *
+         */
+        getFolderContainer() {
+            return this.getComponent().folderContainer;
         }
 
         /**
@@ -222,7 +247,7 @@
          * @return {boolean}
          */
         isExpanded() {
-            return this.component.open;
+            return this.getComponent().open;
         }
 
         /**
@@ -230,14 +255,14 @@
          * @param exp
          */
         setOpen(exp) {
-            this.component.SetOpen(exp);
+            this.getComponent().SetOpen(exp);
         }
 
         /**
          *
          */
         toggle() {
-            this.component.Toggle();
+            this.getComponent().Toggle();
         }
 
         /**
@@ -275,6 +300,7 @@
         /**
          *
          * @param char
+         * @returns {null|*}
          */
         toggleByMnemonic(char) {
             for (let k in this.children) {
@@ -282,8 +308,11 @@
 
                 if (child.getMnemonic() == char) {
                     child.mnemonicAction();
+                    return child;
                 }
             }
+
+            return null;
         }
 
         /**

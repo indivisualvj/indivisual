@@ -451,7 +451,8 @@ HC.Controller.prototype.toggleByKey = function (ci, char, shiftKey) {
         return;
     }
 
-    open.toggleByMnemonic(char);
+    let ctrl = open.toggleByMnemonic(char);
+    this.scrollToControl(ctrl);
 };
 
 /**

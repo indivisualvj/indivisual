@@ -161,6 +161,10 @@ HC.Controller.prototype.initKeyboard = function () {
             return;
         }
 
+        if (/INPUT|TEXTAREA|SELECT|BUTTON/.test(e.target.nodeName)) {
+            return;
+        }
+
         if (e.keyCode == 8) { // BACKSPACE = close folders
             var open = controller.nextOpenFolder();
             if (!(open instanceof HC.GuifyGui)) {

@@ -85,7 +85,7 @@
     HC.ControlSetGuifyUi = class ControlsetGuifyUi extends HC.ControlSetUi {
 
         /**
-         * @type {HC.GuifyGui}
+         * @type {HC.Guify}
          */
         gui;
 

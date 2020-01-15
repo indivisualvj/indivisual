@@ -4,9 +4,9 @@
 {
     /**
      *
-     * @type {HC.GuifyGui}
+     * @type {HC.Guify}
      */
-    HC.GuifyGui = class GuifyGui extends HC.GuifyFolder {
+    HC.Guify = class Guify extends HC.GuifyFolder {
 
         /**
          *

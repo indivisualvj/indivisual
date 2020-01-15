@@ -235,7 +235,7 @@ HC.Controller.prototype.nextOpenFolder = function (control) {
         this.nextOpenFolder(this.animationSettingsGui) || this.controlSettingsGui;
     }
 
-    if (control instanceof HC.GuifyGui && !control.isExpanded()) {
+    if (control instanceof HC.Guify && !control.isExpanded()) {
         return false;
     }
 
@@ -344,7 +344,7 @@ HC.Controller.prototype.closeAll = function (control) {
         return;
     }
 
-    if (control instanceof HC.GuifyGui) {
+    if (control instanceof HC.Guify) {
         control.setOpen(false);
 
     } else if (control instanceof HC.GuifyFolder) {

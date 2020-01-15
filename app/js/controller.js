@@ -137,23 +137,23 @@ document.addEventListener('DOMContentLoaded', function () {
     HC.Controller = class Controller {
 
         /**
-         * @type {HC.GuifyGui[]}
+         * @type {HC.Guify[]}
          */
         guis;
         /**
-         * @type {HC.GuifyGui}
+         * @type {HC.Guify}
          */
         controlSettingsGui;
         /**
-         * @type {HC.GuifyGui}
+         * @type {HC.Guify}
          */
         displaySettingsGui;
         /**
-         * @type {HC.GuifyGui}
+         * @type {HC.Guify}
          */
         sourceSettingsGui;
         /**
-         * @type {HC.GuifyGui}
+         * @type {HC.Guify}
          */
         animationSettingsGui;
         /**
@@ -204,10 +204,10 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         init() {
             // todo evtl doch das? https://github.com/automat/controlkit.js
-            this.controlSettingsGui = new HC.GuifyGui('ControlSettings', true);
-            this.displaySettingsGui = new HC.GuifyGui('DisplaySettings');
-            this.sourceSettingsGui = new HC.GuifyGui('SourceSettings');
-            this.animationSettingsGui = new HC.GuifyGui('AnimationSettings');
+            this.controlSettingsGui = new HC.Guify('ControlSettings', true);
+            this.displaySettingsGui = new HC.Guify('DisplaySettings');
+            this.sourceSettingsGui = new HC.Guify('SourceSettings');
+            this.animationSettingsGui = new HC.Guify('AnimationSettings');
 
             this.guis = [
                 this.controlSettingsGui,

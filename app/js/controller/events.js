@@ -113,7 +113,7 @@ HC.Controller.prototype.initKeyboard = function () {
     let setMnemonics = function (control, key) {
         key = key || control.getLabel();
 
-        if (control instanceof HC.GuifyGui) {
+        if (control instanceof HC.Guify) {
             let key = keys.charAt(ci++);
             control.setMnemonic(key);
         }
@@ -167,7 +167,7 @@ HC.Controller.prototype.initKeyboard = function () {
 
         if (e.keyCode == 8) { // BACKSPACE = close folders
             var open = controller.nextOpenFolder();
-            if (!(open instanceof HC.GuifyGui)) {
+            if (!(open instanceof HC.Guify)) {
                 controller.closeAll(open);
                 controller.scrollToControl(open);
 

@@ -65,8 +65,8 @@
          */
         register(element) {
             element.addEventListener(this.type, (e) => {
-                if (this.codes.includes(e.keyCode)) {
-                    e.preventDefault(); // fixme eg. pgdown scrolls. no prevent... :(
+                if (this.codes.includes(e.keyCode) && !(/INPUT|TEXTAREA|SELECT|BUTTON/.test(e.target.nodeName))) {
+                    e.preventDefault();
                     e.stopPropagation();
                     this.callback(e);
                 }

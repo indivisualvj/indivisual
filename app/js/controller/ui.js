@@ -62,52 +62,6 @@ HC.Controller.prototype.addGuifyControllers = function (controlSets, uiClass, pa
 };
 
 /**
- * todo guify
- * @param key
- * @param dir
- * @param datasource
- * @private
- */
-HC.Controller.prototype._addShareListener = function (key, dir, datasource) {
-    var ul = dir.__ul;
-    var li = ul.lastChild;
-    var ac = document.createElement('div');
-    ac.setAttribute('class', 'actions');
-
-    var sy = document.createElement('div');
-    sy.setAttribute('class', 'sync');
-
-    sy.addEventListener('click', function () {
-
-        if (sy.classList.contains('selected')) {
-            controller.setSynchronized(key, false);
-            sy.setAttribute('class', 'sync');
-
-        } else {
-            controller.setSynchronized(key, true);
-            sy.setAttribute('class', 'sync selected');
-        }
-
-        dir.closed = !dir.closed; // no toggle folder tweak
-    });
-
-    ac.appendChild(sy);
-
-    var sh = document.createElement('div');
-    sh.setAttribute('class', 'share');
-
-    sh.addEventListener('click', function () {
-        // share to all layers
-        controller.shareSettings(key, datasource);
-        dir.closed = !dir.closed;  // no toggle folder tweak
-    });
-
-    ac.appendChild(sh);
-
-    li.appendChild(ac);
-};
-
-/**
  *
  * @param submit
  * @returns {*|dat.gui.GUI}
@@ -118,9 +72,8 @@ HC.Controller.prototype.addPassesFolder = function (submit) {
     if (passes) {
         this.animationSettingsGui.removeChild(passes.getLabel());
     }
-    let dir = this.animationSettingsGui.addFolder('passes');
-
-    // todo this._addShareListener('passes', dir, true);
+    let ui = new HC.ControlSetGuifyUi(cm.getGlobalProperties()['passes'], this.animationSettingsGui);
+    let dir = ui.addFolder();
 
     dir.addSelectController('pass', 'pass', {pass: ''}, statics.Passes, submit);
 };

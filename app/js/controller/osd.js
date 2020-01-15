@@ -1,5 +1,3 @@
-osdHistory = {};
-osdTimeout = false;
 
 /**
  *
@@ -7,17 +5,22 @@ osdTimeout = false;
  * @param value
  * @param timeout
  */
-function _osd(key, value, timeout, color) {
-    requestAnimationFrame(function () {
-        var co = document.getElementById('osd');
+HC.Controller.prototype.showOSD = function (key, value, timeout, color) {
+
+    this._osdHistory = this._osdHistory || {};
+    this._osdTimeout = this._osdTimeout || false;
+
+
+    requestAnimationFrame(() => {
+        let co = document.getElementById('osd');
         if (co) {
 
-            if (osdTimeout) {
-                clearTimeout(osdTimeout);
+            if (this._osdTimeout) {
+                clearTimeout(this._osdTimeout);
             }
 
             if (timeout) {
-                osdTimeout = setTimeout(function () {
+                this._osdTimeout = setTimeout(function () {
                     co.style.opacity = 0;
                 }, timeout);
             }
@@ -29,8 +32,8 @@ function _osd(key, value, timeout, color) {
                     value = value.toString();
                 }
 
-                var txt = '';
-                var elem = false;
+                let txt = '';
+                let elem = false;
                 if (value) {
                     txt = key + ': ' + value;
 
@@ -38,12 +41,12 @@ function _osd(key, value, timeout, color) {
                     txt = key;
                 }
 
-                if (key in osdHistory) {
-                    elem = osdHistory[key];
+                if (key in this._osdHistory) {
+                    elem = this._osdHistory[key];
 
                 } else {
                     elem = document.createElement('DIV');
-                    osdHistory[key] = elem;
+                    this._osdHistory[key] = elem;
                 }
 
                 elem.innerHTML = txt;
@@ -55,4 +58,4 @@ function _osd(key, value, timeout, color) {
             }
         }
     });
-}
+};

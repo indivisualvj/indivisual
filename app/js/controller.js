@@ -9,19 +9,10 @@
 let messaging;
 /**
  *
- * @type {HC.Explorer}
- */
-let explorer; // todo can be stored as member of controller
-/**
- *
  * @type {HC.Controller}
  */
 let controller;
-/**
- *
- * @type {HC.Midi}
- */
-let midi; // todo can be stored as member of controller
+
 /**
  *
  * @type {HC.Beatkeeper}
@@ -120,9 +111,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 statics.DataSettings = new HC.Settings({});
 
-                explorer = new HC.Explorer(); // todo lets hav utilities classes have owners instead calling eg. controller directly
-                explorer.init();
-                explorer.load();
+                controller.explorer = new HC.Explorer(controller, statics); // todo lets have utilities classes have owners instead calling eg. controller directly
 
                 beatkeeper = new HC.Beatkeeper();
 
@@ -132,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 controller.initKeyboard();
                 controller.initLogEvents();
-                midi = controller.initMidi(controller);
+                controller.midi = new HC.Midi(controller, statics);
 
                 onResize();
             });
@@ -146,16 +135,66 @@ document.addEventListener('DOMContentLoaded', function () {
      * @type {HC.Controller}
      */
     HC.Controller = class Controller {
+
+        /**
+         * @type {HC.GuifyGui[]}
+         */
         guis;
+        /**
+         * @type {HC.GuifyGui}
+         */
         controlSettingsGui;
+        /**
+         * @type {HC.GuifyGui}
+         */
         displaySettingsGui;
+        /**
+         * @type {HC.GuifyGui}
+         */
         sourceSettingsGui;
+        /**
+         * @type {HC.GuifyGui}
+         */
         animationSettingsGui;
+        /**
+         *
+         * @type {{}}
+         */
         synced = {};
+
+        /**
+         *
+         * @type {*[]}
+         */
         thumbTimeouts = [];
+
+        /**
+         * @type {string}
+         */
         name;
+
+        /**
+         *
+         * @type {boolean}
+         */
         ready = false;
 
+        /**
+         *
+         * @type {HC.Midi}
+         */
+        midi;
+
+        /**
+         *
+         * @type {HC.Explorer}
+         */
+        explorer;
+
+        /**
+         *
+         * @param name
+         */
         constructor(name) {
             this.name = name;
         }
@@ -332,7 +371,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.updateSettings(i, data, true, false, true);
 
                 if (cm.layers[i]._preset) {
-                    explorer.setChanged(i, true);
+                    controller.explorer.setChanged(i, true);
                 }
 
                 messaging.emitSettings(i, data, false, false, true);
@@ -369,7 +408,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.updateSettings(i, data, false, false, true);
 
                 if (cm.layers[i]._preset) {
-                    explorer.setChanged(i, true);
+                    controller.explorer.setChanged(i, true);
                 }
 
                 messaging.emitSettings(i, data, false, false, true);
@@ -495,7 +534,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (display !== false) {
                 this.explainPlugin(property, value);
                 this.updateUi(this.animationSettingsGui);
-                explorer.setChanged(statics.ControlSettings.layer, true);
+                controller.explorer.setChanged(statics.ControlSettings.layer, true);
             }
         }
 
@@ -559,8 +598,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (item == 'layer') {
                     this.updateSettings(value, cm.prepareLayer(value), true, false, true);
 
-                    explorer.resetLoaded();
-                    explorer.setLoaded(value, true);
+                    controller.explorer.resetLoaded();
+                    controller.explorer.setLoaded(value, true);
 
                     let config = {
                         action: 'attr',
@@ -737,15 +776,15 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param data
          */
         updateMidi(data) {
-            if (midi) {
+            if (this.midi) {
                 if (data.command == 'glow') {
-                    midi.glow(data.data, data.conf);
+                    this.midi.glow(data.data, data.conf);
 
                 } else if (data.command == 'off') {
-                    midi.off(data.data);
+                    this.midi.off(data.data);
 
                 } else if (data.command == 'clock') {
-                    midi.clock(data.data, data.conf);
+                    this.midi.clock(data.data, data.conf);
                 }
             }
         }
@@ -959,7 +998,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
                     if (cm.layers[i]._preset) {
-                        explorer.setChanged(i, true);
+                        controller.explorer.setChanged(i, true);
                     }
 
                     messaging.emitSettings(i, cm.prepareLayer(i), false, false, true);

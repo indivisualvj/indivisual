@@ -32,6 +32,25 @@
                 }
             ]
         };
+        /**
+         * @type {HC.Controller}
+         */
+        owner;
+
+        statics;
+
+        /**
+         *
+         * @param owner
+         * @param settings
+         */
+        constructor(owner, settings) {
+            this.owner = owner; // todo use it!
+            this.statics = settings; // todo use it!
+
+            this.init();
+            this.load();
+        }
 
         /**
          *
@@ -114,7 +133,7 @@
         }
 
         /**
-         * fixme wenever preset is loaded its status is set to changed
+         * fixme wenever preset is loaded its status is set to changed by guify colorpicker
          * @param layer
          * @param changed
          */
@@ -146,7 +165,7 @@
          * 
          */
         resetLoaded() {
-            for (let i = 0; i < statics.ControlValues.layer.length; i++) {
+            for (let i = 0; i < this.statics.ControlValues.layer.length; i++) {
                 this.setLoaded(i, false);
             }
         }
@@ -215,13 +234,13 @@
         },
 
         reload: function () {
-            explorer.load();
+            controller.explorer.load();
         },
 
         loadPreset: function () {
 // todo PresetManager?
-            explorer.setPreset(statics.ControlSettings.layer, false);
-            explorer.setPreset(statics.ControlSettings.layer, this.item);
+            controller.explorer.setPreset(statics.ControlSettings.layer, false);
+            controller.explorer.setPreset(statics.ControlSettings.layer, this.item);
 
             if (this.item.type == 'preset') {
                 // load default
@@ -250,7 +269,7 @@
                             //     new HC.ScriptProcessor(key, Object.create(contents.info.tutorial)).log();
                             // }
                             controller.updatePreset(key, contents);
-                            explorer.setLoaded(statics.ControlSettings.layer, true);
+                            controller.explorer.setLoaded(statics.ControlSettings.layer, true);
                         }
                     });
                 });
@@ -269,7 +288,7 @@
             }
 
             if (!statics.shiftKey) {
-                explorer.resetPresets();
+                controller.explorer.resetPresets();
             }
 
             let di = 0;
@@ -291,7 +310,7 @@
 
                     let load = function (child, i, di) {
 
-                        explorer.setPreset(i, child);
+                        controller.explorer.setPreset(i, child);
 
                         messaging.load(STORAGE_DIR, child.dir, child.name, function (data) {
 
@@ -331,7 +350,7 @@
                         let settings = cm.prepareLayer(layer);
                         messaging.save(STORAGE_DIR, child.dir, child.name, settings, function (result) {
                             HC.log(result);
-                            explorer.setChanged(layer, false);
+                            controller.explorer.setChanged(layer, false);
                         }, '');
                     };
 
@@ -347,9 +366,9 @@
             let settings = cm.prepareLayer(statics.ControlSettings.layer);
             messaging.save(STORAGE_DIR, this.item.dir, this.item.name, settings, function (result) {
                 HC.log(result);
-                explorer.setPreset(statics.ControlSettings.layer, false);
-                explorer.setPreset(statics.ControlSettings.layer, model);
-                explorer.setLoaded(statics.ControlSettings.layer, true);
+                controller.explorer.setPreset(statics.ControlSettings.layer, false);
+                controller.explorer.setPreset(statics.ControlSettings.layer, model);
+                controller.explorer.setLoaded(statics.ControlSettings.layer, true);
 
             });
         },
@@ -422,9 +441,9 @@
             messaging.save(STORAGE_DIR, nu.dir, nu.name, nu.settings, function (result) {
                 HC.log(result);
                 model.children.unshift(nu);
-                explorer.setPreset(statics.ControlSettings.layer, false);
-                explorer.setPreset(statics.ControlSettings.layer, nu);
-                explorer.setLoaded(statics.ControlSettings.layer, true);
+                controller.explorer.setPreset(statics.ControlSettings.layer, false);
+                controller.explorer.setPreset(statics.ControlSettings.layer, nu);
+                controller.explorer.setLoaded(statics.ControlSettings.layer, true);
             }, '');
         },
 
@@ -455,7 +474,7 @@
 
     /**
      *
-     * @type {{isFolder: (function(): boolean), isDefault: (function(): (boolean|Array|*)), isRoot: (function(): (boolean|Node|Element)), isFile: (function(): boolean), hasChanged: (function(): (string|number|*)), isPreset: (function(): boolean), isVisible: (function(): *), isLoaded: (function(): (boolean|number|*))}}
+     * @type {{isFolder: (function(): boolean), isDefault: (function(): *), isRoot: (function(): boolean|Node|Element), isFile: (function(): boolean), hasChanged: (function(): *|string), isPreset: (function(): boolean), isVisible: (function(): *), isLoaded: (function(): boolean|number)}}
      */
     HC.Explorer.VueItemComputed = {
         isRoot: function () {

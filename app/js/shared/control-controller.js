@@ -58,7 +58,7 @@ HC.ControlController = HC.ControlController || {};
                     cm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
                     controller.syncLayers();
                     controller.updateControl('reset', true, true, true, true);
-                    explorer.resetPresets();
+                    controller.explorer.resetPresets();
                     controller.updateControl('layer', statics.ControlSettings.layer, true, false, false);
 
                 } else {

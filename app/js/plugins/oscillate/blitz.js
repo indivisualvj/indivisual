@@ -89,7 +89,7 @@
 
         apply(key) {
             let pa = this.params(key);
-
+            // todo plugins should have owners also -> this.owner.beatkeeper
             let speed = beatkeeper.getSpeed('quarter');
 
             if (pa > 0) {

@@ -11,7 +11,7 @@ let messaging;
  *
  * @type {HC.Explorer}
  */
-let explorer;
+let explorer; // todo can be stored as member of controller
 /**
  *
  * @type {HC.Controller}
@@ -21,7 +21,7 @@ let controller;
  *
  * @type {HC.Midi}
  */
-let midi;
+let midi; // todo can be stored as member of controller
 /**
  *
  * @type {HC.Beatkeeper}
@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 statics.DataSettings = new HC.Settings({});
 
-                explorer = new HC.Explorer();
+                explorer = new HC.Explorer(); // todo lets hav utilities classes have owners instead calling eg. controller directly
                 explorer.init();
                 explorer.load();
 
@@ -146,7 +146,8 @@ document.addEventListener('DOMContentLoaded', function () {
      * @type {HC.Controller}
      */
     HC.Controller = class Controller {
-        animationSettingsGui;
+        guis;
+        controlSettingsGui;
         displaySettingsGui;
         sourceSettingsGui;
         animationSettingsGui;
@@ -168,6 +169,13 @@ document.addEventListener('DOMContentLoaded', function () {
             this.displaySettingsGui = new HC.GuifyGui('DisplaySettings');
             this.sourceSettingsGui = new HC.GuifyGui('SourceSettings');
             this.animationSettingsGui = new HC.GuifyGui('AnimationSettings');
+
+            this.guis = [
+                this.controlSettingsGui,
+                this.displaySettingsGui,
+                this.sourceSettingsGui,
+                this.animationSettingsGui,
+            ]
         }
 
         /**

@@ -114,7 +114,7 @@
         }
 
         /**
-         * 
+         * fixme wenever preset is loaded its status is set to changed
          * @param layer
          * @param changed
          */

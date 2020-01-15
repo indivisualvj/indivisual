@@ -316,12 +316,7 @@ HC.Controller.prototype.toggleByName = function (name) {
  */
 HC.Controller.prototype.openTreeByProperty = function (property) {
 
-    let roots = [
-        this.controlSettingsGui,
-        this.displaySettingsGui,
-        this.sourceSettingsGui,
-        this.animationSettingsGui
-    ];
+    let roots = this.guis;
 
     for (let k in roots) {
         let control;
@@ -344,12 +339,7 @@ HC.Controller.prototype.openTreeByProperty = function (property) {
  * @param key
  */
 HC.Controller.prototype.openTreeByFolder = function (key) {
-    let roots = [
-        this.controlSettingsGui,
-        this.displaySettingsGui,
-        this.sourceSettingsGui,
-        this.animationSettingsGui
-    ];
+    let roots = this.guis;
 
     for (let k in roots) {
         let folder;
@@ -429,12 +419,7 @@ HC.Controller.prototype.closeAll = function (control) {
  * @param shiftKey
  */
 HC.Controller.prototype.toggleByKey = function (ci, char, shiftKey) {
-    let roots = [
-        this.controlSettingsGui,
-        this.displaySettingsGui,
-        this.sourceSettingsGui,
-        this.animationSettingsGui
-    ];
+    let roots = this.guis;
     let open = this.nextOpenFolder();
 
     if (!open.isExpanded()) {

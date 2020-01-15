@@ -30,7 +30,7 @@ DEG = 180 / Math.PI;
 SQUARE_DIAMETER = (Math.sqrt(2 * 2 + 2 * 2) / 2);
 ANTIALIAS = true;
 
-var HC = HC || {};
+let HC = HC || {};
 
 HC.now = window.performance.now.bind(window.performance);
 if (TWEEN) {
@@ -41,9 +41,9 @@ if (TWEEN) {
  *
  * @type {HC.AssetManager}
  */
-var assetman = new HC.AssetManager();
+let assetman = new HC.AssetManager();
 
-var statics = {};
+let statics = {};
 
 /**
  *
@@ -51,18 +51,18 @@ var statics = {};
  * @param callback
  */
 function loadResources(resources, callback) {
-    var _load = function (index, finished) {
+    let _load = function (index, finished) {
 
         if (index > resources.length - 1) {
             finished();
             return;
         }
-        var rsc = resources[index];
-        var action = 'get';
+        let rsc = resources[index];
+        let action = 'get';
         if (rsc.action) {
             action = rsc.action;
         }
-        var file = filePath(rsc.base || APP_DIR, rsc.file);
+        let file = filePath(rsc.base || APP_DIR, rsc.file);
         messaging._emit({action: action, file: file, name: rsc.name}, function (data) {
             rsc.callback(data, function () {
                 _load(index + 1, finished);
@@ -70,7 +70,7 @@ function loadResources(resources, callback) {
         });
     };
 
-    var _setup = function (callback) {
+    let _setup = function (callback) {
         if (!(_HASH in statics.ControlValues.session)) {
             statics.ControlValues.session[_HASH] = _HASH;
         }
@@ -86,7 +86,7 @@ function loadResources(resources, callback) {
 }
 
 /**
- * All setup operations are encapsulated into this function
+ * setup operations are encapsulated into this function
  * @returns {*[]}
  */
 function setupResources() {
@@ -94,7 +94,7 @@ function setupResources() {
         {
             file: 'structure/AnimationValues.yml',
             callback: function (data, finished) {
-                var settings = jsyaml.load(data.contents);
+                let settings = jsyaml.load(data.contents);
 
                 _loadAnimationPlugins(settings);
                 statics.ShaderSettings = _loadShaderSettings(settings.shaders);
@@ -111,7 +111,7 @@ function setupResources() {
         {
             file: 'structure/ControlValues.yml',
             callback: function (data, finished) {
-                var settings = jsyaml.load(data.contents);
+                let settings = jsyaml.load(data.contents);
 
                 _loadAudioPlugins(settings);
                 _loadShufflePlugins(settings);
@@ -234,14 +234,14 @@ function setupResources() {
      */
     function _loadPlugins(settings, tree, section, plugins) {
 
-        var pluginKeys = Object.keys(plugins);
+        let pluginKeys = Object.keys(plugins);
 
         pluginKeys.sort(function (a, b) {
 
-            var ai = plugins[a].index || 99999;
-            var bi = plugins[b].index || 99999;
-            var an = plugins[a].name || a;
-            var bn = plugins[b].name || b;
+            let ai = plugins[a].index || 99999;
+            let bi = plugins[b].index || 99999;
+            let an = plugins[a].name || a;
+            let bn = plugins[b].name || b;
 
             if (an === 'Plugin') {
                 an = a;
@@ -250,18 +250,18 @@ function setupResources() {
                 bn = b;
             }
 
-            var cmpi = ai - bi;
+            let cmpi = ai - bi;
             if (cmpi == 0) {
                 return an.localeCompare(bn);
             }
             return cmpi;
         });
 
-        for (var i = 0; i < pluginKeys.length; i++) {
+        for (let i = 0; i < pluginKeys.length; i++) {
 
-            var pluginKey = pluginKeys[i];
-            var plugin = tree[section][pluginKey];
-            var name = plugin.name || pluginKey;
+            let pluginKey = pluginKeys[i];
+            let plugin = tree[section][pluginKey];
+            let name = plugin.name || pluginKey;
 
             if (name == 'Plugin') {
                 name = pluginKey;
@@ -352,11 +352,11 @@ function setupResources() {
 
         Object.assign(HC.plugins.pattern_overlay, HC.plugins.pattern);
 
-        var sectionKeys = Object.keys(HC.plugins);
+        let sectionKeys = Object.keys(HC.plugins);
 
-        for (var pi = 0; pi < sectionKeys.length; pi++) {
+        for (let pi = 0; pi < sectionKeys.length; pi++) {
 
-            var section = sectionKeys[pi];
+            let section = sectionKeys[pi];
 
             // create plugin namespaces to work in
             HC.Shape.prototype.injected.plugins[section] = {};
@@ -372,9 +372,9 @@ function setupResources() {
      * @private
      */
     function _loadRhythms(settings) {
-        var speeds = HC.Beatkeeper.initSpeeds();
+        let speeds = HC.Beatkeeper.initSpeeds();
         settings.rhythm = {};
-        for (var key in speeds) {
+        for (let key in speeds) {
             if (speeds[key].visible !== false) {
                 settings.rhythm[key] = key;
             }
@@ -387,11 +387,11 @@ function setupResources() {
      * @private
      */
     function _loadShaderSettings(values) {
-        var settings = {};
-        var keys = Object.keys(values);
-        for (var i = 0; i < keys.length; i++) {
-            var key = keys[i];
-            var plug = HC.plugins.shaders[key];
+        let settings = {};
+        let keys = Object.keys(values);
+        for (let i = 0; i < keys.length; i++) {
+            let key = keys[i];
+            let plug = HC.plugins.shaders[key];
             settings[key] = plug.settings || {};
         }
 

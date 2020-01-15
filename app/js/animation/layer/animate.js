@@ -4,8 +4,8 @@
  */
 HC.Layer.prototype.animateShape = function (shape) {
 
-    var duration = this.getShapeRhythmPlugin();
-    var delay = this.getShapeDelayPlugin();
+    let duration = this.getShapeRhythmPlugin();
+    let delay = this.getShapeDelayPlugin();
 
     // wait until delay is over
     if (!delay.finished(shape)) {
@@ -56,13 +56,13 @@ HC.Layer.prototype.animate = function (hook) {
 
     this.doCameraMode();
 
-    var materialColor = this.doMaterialMap();
+    let materialColor = this.doMaterialMap();
 
     this.animateShape(this.shape);
     this.doPatternRotation(); // preset current pattern euler from layer's shape rotation
 
-    for (var i = 0; i < this.shapes.length; i++) {
-        var shape = this.shapes[i];
+    for (let i = 0; i < this.shapes.length; i++) {
+        let shape = this.shapes[i];
 
         this.animateShape(shape, true);
     }

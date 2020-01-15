@@ -1,58 +1,112 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-
-// todo ES5
-(function () {
-
+{
     /**
-     *
-     * @param renderer
-     * @param index
-     * @constructor
+     * 
+     * @type {HC.Layer}
      */
-    HC.Layer = function (renderer, index) {
-        this.renderer = renderer;
-        this.index = index;
-        this.preset = false;
-        this.settings = false;
-        this.controlSets = false;
-        this.lights = false;
-        this.ambientLight = false;
-        this.shapes = false;
-        this.shape = false;
-        this.plugins = {};
+    HC.Layer = class Layer {
 
-        this.tween = new TWEEN.Group();
-        this.lastUpdate = 0;
-        this._rotation = false;
-        this._shapes = false;
-        this._lighting = false;
-        this._background = false;
-        this._layer = new THREE.Scene();
-        this._layer.name = '_layer' + index;
+        /**
+         * @type {HC.Renderer}
+         */
+        renderer;
 
-        var three = renderer.three;
+        /**
+         * @type {number}
+         */
+        index;
 
-        this.three = {
-            renderer: three.renderer,
-            target: three.target,
-            scene: three.scene,
-            camera: new THREE.PerspectiveCamera(50, 1, 0.1, 500000)
-        };
-        this._composer = new THREE.EffectComposer(this.three.renderer, this.three.target);
-        this._composer.addPass(new THREE.RenderPass(this.three.scene, this.three.camera));
+        /**
+         *
+         * @type {boolean}
+         */
+        preset = false;
+        settings = false;
 
-        this.resetSizes(renderer.resolution);
-    };
+        /**
+         * @type {Object.<string, HC.ControlSet>}
+         */
+        controlSets;
+        lights = false;
+        ambientLight = false;
+        shapes = false;
+        shape = false;
 
-    HC.Layer.prototype = {
+        /**
+         *
+         * @type {Object.<string, HC.Plugin>}
+         */
+        plugins = {};
+
+        /**
+         *
+         * @type {number}
+         */
+        lastUpdate = 0;
+
+        /**
+         *
+         * @type {THREE.Group}
+         * @private
+         */
+        _rotation;
+        _shapes = false;
+        _lighting = false;
+        _background = false;
+
+        /**
+         * @type {Object.<string, *>}
+         */
+        three;
+
+        /**
+         * @type {THREE.EffectComposer}
+         */
+        _composer;
+
+        /**
+         * @type {TWEEN.Group}
+         */
+        tween;
+
+        /**
+         * @type {THREE.Scene}
+         */
+        _layer;
+
+        /**
+         *
+         * @param renderer
+         * @param index
+         */
+        constructor (renderer, index) {
+            this.renderer = renderer;
+            this.index = index;
+
+            this.tween = new TWEEN.Group();
+            this._layer = new THREE.Scene();
+            this._layer.name = '_layer' + index;
+
+            let three = renderer.three;
+
+            this.three = {
+                renderer: three.renderer,
+                target: three.target,
+                scene: three.scene,
+                camera: new THREE.PerspectiveCamera(50, 1, 0.1, 500000)
+            };
+            this._composer = new THREE.EffectComposer(this.three.renderer, this.three.target);
+            this._composer.addPass(new THREE.RenderPass(this.three.scene, this.three.camera));
+
+            this.resetSizes(renderer.resolution);
+        }
 
         /**
          *
          */
-        initRotator: function () {
-
+        initRotator() {
             if (this._rotation) {
                 this._layer.remove(this._rotation);
                 this._rotation.traverse(threeDispose);
@@ -68,16 +122,16 @@
 
             this._rotation.add(this._shapes);
             this._layer.add(this._rotation);
-        },
+        }
 
         /**
          *
          * @param resolution
          */
-        initBoundaries: function (resolution) {
+        initBoundaries(resolution) {
 
-            var width = resolution.x;
-            var height = resolution.y;
+            let width = resolution.x;
+            let height = resolution.y;
 
             this._resolution = {
                 full: new THREE.Vector2(width, height),
@@ -88,59 +142,59 @@
 
             this._resolution.full.aspect = resolution.aspect;
             this.three.camera.aspect = resolution.aspect;
-        },
+        }
 
         /**
          *
          * @param variant
-         * @returns {*}
+         * @returns {Vector2|*}
          */
-        resolution: function (variant) {
+        resolution(variant) {
 
             if (variant && variant in this._resolution) {
                 return this._resolution[variant];
             }
 
             return this._resolution.full;
-        },
+        }
 
         /**
          *
          */
-        fullReset: function () {
+        fullReset() {
             this.reloadPlugins();
             this.resetShapes();
             this.resetLighting();
             this.resetBackground();
             this.updateShaders();
             this.updateShaderPasses();
-        },
+        }
 
         /**
          *
          * @param resolution
          */
-        resetSizes: function (resolution) {
+        resetSizes(resolution) {
 
             this.initBoundaries(resolution);
 
             if (this._composer) {
                 this._composer.setSize(this.resolution().x, this.resolution().y);
             }
-        },
+        }
 
         /**
          *
          */
-        resetShapes: function () {
+        resetShapes() {
 
             this.resetPlugins();
             this.initRotator();
             this.resetAnimation();
 
-            var sgp = this.getShapeGeometryPlugin();
+            let sgp = this.getShapeGeometryPlugin();
             if (sgp)sgp.reset();
-            var smp = this.getShapeModifierPlugin();
+            let smp = this.getShapeModifierPlugin();
             if (smp)smp.reset();
 
             this.shapes = [];
@@ -148,23 +202,23 @@
 
             this.shape = this.nextShape(-1, true);
 
-            for (var i = 0; i < this.settings.pattern_shapes; i++) {
+            for (let i = 0; i < this.settings.pattern_shapes; i++) {
 
-                var shape = this.nextShape(i);
+                let shape = this.nextShape(i);
 
                 this.shapes.push(shape);
                 this.shapeCache.push([]);
 
                 this.addShape(shape);
             }
-        },
+        }
 
         /**
          *
          */
-        dispose: function () {
+        dispose() {
 
-            var sc = this.three.scene;
+            let sc = this.three.scene;
             this.settings = false;
             this.controlSets = false;
             this.shapes = false;
@@ -187,41 +241,41 @@
             }
 
             this.resetAnimation();
-        },
+        }
 
         /**
          *
          * @returns {boolean}
          */
-        isVisible: function () {
+        isVisible() {
             return !!this._layer.parent;
-        },
+        }
 
         /**
          *
          */
-        resetAnimation: function () {
+        resetAnimation() {
             if (this.tween) {
                 this.tween.removeAll();
             }
             this.lastUpdate = 0;
             // this.tween = new TWEEN.Group();
-        },
+        }
 
         /**
          *
          * @returns {*}
          */
-        updateShaders: function () {
-            var shaders = null;
-            var li = 0;
+        updateShaders() {
+            let shaders = null;
+            let li = 0;
 
-            for (var key in this.settings.shaders) {
-                var sh = this.settings.shaders[key];
+            for (let key in this.settings.shaders) {
+                let sh = this.settings.shaders[key];
 
                 if (sh && sh.apply) {
 
-                    var plugin = this.getShaderPlugin(key);
+                    let plugin = this.getShaderPlugin(key);
                     if (plugin) {
                         plugin.create();
                         plugin.updateResolution();
@@ -245,7 +299,7 @@
             }
 
             if (shaders) {
-                for (var i = 0; i < shaders.length; i++) {
+                for (let i = 0; i < shaders.length; i++) {
                     if (!shaders[i]) {
                         shaders.splice(i, 1);
                         i--;
@@ -256,26 +310,26 @@
             this.shaders(shaders);
 
             return shaders;
-        },
+        }
 
         /**
          *
          * @returns {*}
          */
-        updateShaderPasses: function () {
-            var shaders = null;
+        updateShaderPasses() {
+            let shaders = null;
             if (cm) {
                 let passes = cm.get(this.index, 'passes');
                 let shds = passes.getShaderPasses();
 
-                for (var index in shds) {
+                for (let index in shds) {
 
-                    var shader = passes.getShader(index);
+                    let shader = passes.getShader(index);
 
                     if (shader && shader.apply) {
-                        var name = passes.getShaderName(index);
-                        var key = passes.getShaderPassKey(index);
-                        var plugin = this.getShaderPassPlugin(name, key, shader);
+                        let name = passes.getShaderName(index);
+                        let key = passes.getShaderPassKey(index);
+                        let plugin = this.getShaderPassPlugin(name, key, shader);
                         if (plugin) {
                             plugin.create();
                             plugin.updateResolution();
@@ -292,20 +346,20 @@
             this.shaders(shaders);
 
             return shaders;
-        },
+        }
 
         /**
          *
          */
-        pause: function () {
+        pause() {
             this.lastUpdate = animation.now;
-        },
+        }
 
         /**
          *
          */
-        resume: function () {
+        resume() {
             this.lastUpdate = animation.now - this.lastUpdate;
         }
     }
-})();
+}

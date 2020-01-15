@@ -348,21 +348,21 @@ HC.Layer.prototype.getShapeDirection = function (shape) {
  *
  */
 HC.Layer.prototype.resetPlugins = function () {
-    var pluginKeys = Object.keys(HC.plugins);
+    let pluginKeys = Object.keys(HC.plugins);
 
-    for (var pi = 0; pi < pluginKeys.length; pi++) {
+    for (let pi = 0; pi < pluginKeys.length; pi++) {
 
-        var plugin = pluginKeys[pi];
-        var items = HC.plugins[plugin];
+        let plugin = pluginKeys[pi];
+        let items = HC.plugins[plugin];
 
         this.plugins[plugin] = this.plugins[plugin] || {};
 
-        var keys = Object.keys(items);
-        for (var i = 0; i < keys.length; i++) {
-            var key = keys[i];
+        let keys = Object.keys(items);
+        for (let i = 0; i < keys.length; i++) {
+            let key = keys[i];
 
             if (plugin in this.plugins && key in this.plugins[plugin]) {
-                var plug = this.getPlugin(plugin, key);
+                let plug = this.getPlugin(plugin, key);
                 if (plug.reset) {
                     plug.reset();
                 }
@@ -376,21 +376,21 @@ HC.Layer.prototype.resetPlugins = function () {
  */
 HC.Layer.prototype.reloadPlugins = function () {
 
-    var pluginKeys = Object.keys(HC.plugins);
+    let pluginKeys = Object.keys(HC.plugins);
 
-    for (var pi = 0; pi < pluginKeys.length; pi++) {
+    for (let pi = 0; pi < pluginKeys.length; pi++) {
 
-        var plugin = pluginKeys[pi];
-        var items = HC.plugins[plugin];
+        let plugin = pluginKeys[pi];
+        let items = HC.plugins[plugin];
 
         this.plugins[plugin] = this.plugins[plugin] || {};
 
-        var keys = Object.keys(items);
-        for (var i = 0; i < keys.length; i++) {
-            var key = keys[i];
+        let keys = Object.keys(items);
+        for (let i = 0; i < keys.length; i++) {
+            let key = keys[i];
 
             if (plugin in this.plugins && key in this.plugins[plugin]) {
-                var plug = this.getPlugin(plugin, key);
+                let plug = this.getPlugin(plugin, key);
 
                 if (plug.reset) {
                     plug.reset();
@@ -405,7 +405,7 @@ HC.Layer.prototype.reloadPlugins = function () {
                     plug.dispose();
                 }
             }
-            var instance = this.loadPlugin(plugin, key);
+            let instance = this.loadPlugin(plugin, key);
             instance.construct(this, this.settings, plugin, key);
             instance.setControlSets(this.controlSets);
             // instance.construct(this, this.controlSets, plugin, key);

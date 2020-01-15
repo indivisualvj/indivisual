@@ -6,9 +6,9 @@
  */
 HC.Layer.prototype.shapeColor = function (random, complementary) {
 
-    var hex = '';
-    var index = Math.floor(this.shapes.length / 2);
-    var plugin = this.getMaterialMap();
+    let hex = '';
+    let index = Math.floor(this.shapes.length / 2);
+    let plugin = this.getMaterialMap();
     if (plugin.map && plugin.map.image && plugin.map.image._color) {
         hex = plugin.map.image._color;
 
@@ -18,8 +18,8 @@ HC.Layer.prototype.shapeColor = function (random, complementary) {
             index = randomInt(0, this.shapes.length - 1);
         }
 
-        var shape = this.shapes[index];
-        var hsl = shape.color;
+        let shape = this.shapes[index];
+        let hsl = shape.color;
         if (complementary) {
             hsl = hslComplementary(hsl);
         }
@@ -41,7 +41,7 @@ HC.Layer.prototype.shapeSize = function (multiplier) {
      */
     if (this._shapeSize != this.settings.shape_sizedivider) {
         this._shapeSize = this.settings.shape_sizedivider;
-        var preset = this.resolution().x / this._shapeSize;
+        let preset = this.resolution().x / this._shapeSize;
         this._shapeSizePixels = preset;
     }
     return this._shapeSizePixels * (multiplier || 1);

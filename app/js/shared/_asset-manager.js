@@ -1,7 +1,6 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-var HC = HC || {};
 {
 
     let inst;
@@ -121,9 +120,9 @@ var HC = HC || {};
          * @private
          */
         _filter(source, regexp) {
-            var filtered = {};
-            for (var i in source) {
-                var f = source[i];
+            let filtered = {};
+            for (let i in source) {
+                let f = source[i];
 
                 if (!regexp || !f.name.match(regexp)) {
                     filtered[f.name] = f.name;
@@ -142,8 +141,8 @@ var HC = HC || {};
          * @private
          */
         _add(source, nu, key) {
-            for (var i in nu) {
-                var f = nu[i];
+            for (let i in nu) {
+                let f = nu[i];
                 source[key ? f[key] : i] = key ? f[key] : f;
             }
 
@@ -189,8 +188,8 @@ var HC = HC || {};
 
                 let order = ['posx', 'px', 'negx', 'nx', 'posy', 'py', 'negy', 'ny', 'posz', 'pz', 'negz', 'nz'];
                 images.sort(function (a, b) {
-                    var na = a.replace(/\.[^/.]+$/, "");
-                    var nb = b.replace(/\.[^/.]+$/, "");
+                    let na = a.replace(/\.[^/.]+$/, "");
+                    let nb = b.replace(/\.[^/.]+$/, "");
 
                     let ia = order.indexOf(na);
                     let ib = order.indexOf(nb);
@@ -271,7 +270,7 @@ var HC = HC || {};
          */
         loadMaterialMap(target, path, callback, error) {
             let _assign = function (to, from) {
-                var keys = Object.keys(from);
+                let keys = Object.keys(from);
                 for (let k in keys) {
                     let key = keys[k];
                     if (key in to) {

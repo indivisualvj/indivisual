@@ -30,8 +30,6 @@ DEG = 180 / Math.PI;
 SQUARE_DIAMETER = (Math.sqrt(2 * 2 + 2 * 2) / 2);
 ANTIALIAS = true;
 
-let HC = HC || {};
-
 HC.now = window.performance.now.bind(window.performance);
 if (TWEEN) {
     TWEEN.now = HC.now;
@@ -41,9 +39,9 @@ if (TWEEN) {
  *
  * @type {HC.AssetManager}
  */
-let assetman = new HC.AssetManager();
+assetman = new HC.AssetManager();
 
-let statics = {};
+statics = {};
 
 /**
  *

@@ -59,6 +59,7 @@
             Vue.config.debug = DEBUG;
             Vue.component('item', {
                 template: '#itemtpl',
+                owner: this.owner,
                 props: {
                     item: Object
                 },
@@ -238,237 +239,35 @@
         },
 
         loadPreset: function () {
-// todo PresetManager?
-            controller.explorer.setPreset(statics.ControlSettings.layer, false);
-            controller.explorer.setPreset(statics.ControlSettings.layer, this.item);
-
-            if (this.item.type == 'preset') {
-                // load default
-                cm.setLayerProperties(statics.ControlSettings.layer, false);
-                requestAnimationFrame(function () {
-                    controller.updatePreset(false, cm.prepareLayer(statics.ControlSettings.layer));
-                });
-
-            } else {
-                // load preset
-                messaging.load(STORAGE_DIR, this.item.dir, this.item.name, function (data) {
-                    requestAnimationFrame(function () {
-
-                        if (statics.ctrlKey) { //load shaders into present presets
-                            controller.transferShaderPasses(data.dir + '/' + data.name, JSON.parse(data.contents));
-
-                        } else {
-                            // load the preset
-
-                            HC.clearLog();
-
-                            let key = data.dir + '/' + data.name;
-                            let contents = JSON.parse(data.contents);
-
-                            // if (contents.info && contents.info.tutorial && Object.keys(contents.info.tutorial).length) {
-                            //     new HC.ScriptProcessor(key, Object.create(contents.info.tutorial)).log();
-                            // }
-                            controller.updatePreset(key, contents);
-                            controller.explorer.setLoaded(statics.ControlSettings.layer, true);
-                        }
-                    });
-                });
-            }
+            controller.presetman.loadPreset(this);
         },
 
         loadPresets: function () {
-            let children = this.item.children;
-            let dflt = [];
-
-            for (let i = 0; dflt.length < statics.ControlValues.layer.length && i < children.length; i++) {
-                let child = children[i];
-                if (!child.name.match(/^_.+/)) {
-                    dflt.push(child);
-                }
-            }
-
-            if (!statics.shiftKey) {
-                controller.explorer.resetPresets();
-            }
-
-            let di = 0;
-
-            HC.clearLog();
-
-            for (let i = 0; i < statics.ControlValues.layer.length; i++) {
-                if (statics.shiftKey) { // shift means append presets to free layers. no overwrite.
-                    if (cm.isDefault(i)) {
-                        continue;
-                    }
-                }
-
-                if (!layerShuffleable(i)) {
-                    continue;
-                }
-
-                if (di < dflt.length) {
-
-                    let load = function (child, i, di) {
-
-                        controller.explorer.setPreset(i, child);
-
-                        messaging.load(STORAGE_DIR, child.dir, child.name, function (data) {
-
-                            requestAnimationFrame(function () {
-
-                                controller.updateControl('layer', i, true, true);
-                                let key = data.dir + '/' + data.name;
-                                let contents = JSON.parse(data.contents);
-                                controller.updatePreset(key, contents);
-
-                                if (di == dflt.length - 1) {
-                                    controller.updateControl('layer', 0, true, true);
-                                }
-                            });
-                        });
-                    };
-
-                    load(dflt[di], i, di++);
-
-                } else {
-                    cm.setLayerProperties(i, false);
-                    controller.updatePreset('default', cm.prepareLayer(i), i);
-                }
-            }
+            controller.presetman.loadPresets(this);
         },
 
         savePresets: function () {
-
-            let model = this.item;
-
-            for (let i = 0; i < model.children.length; i++) {
-                let child = model.children[i];
-                let layer = child.layer - 1;
-
-                if (layer >= 0 && child.changed) {
-                    let save = function (layer, child) {
-                        let settings = cm.prepareLayer(layer);
-                        messaging.save(STORAGE_DIR, child.dir, child.name, settings, function (result) {
-                            HC.log(result);
-                            controller.explorer.setChanged(layer, false);
-                        }, '');
-                    };
-
-                    save(layer, child);
-                }
-            }
+            controller.presetman.savePresets(this);
         },
 
         savePreset: function () {
-
-            let model = this.item;
-
-            let settings = cm.prepareLayer(statics.ControlSettings.layer);
-            messaging.save(STORAGE_DIR, this.item.dir, this.item.name, settings, function (result) {
-                HC.log(result);
-                controller.explorer.setPreset(statics.ControlSettings.layer, false);
-                controller.explorer.setPreset(statics.ControlSettings.layer, model);
-                controller.explorer.setLoaded(statics.ControlSettings.layer, true);
-
-            });
+            controller.presetman.savePreset(this);
         },
 
         deletePreset: function () {
-            messaging.delete(STORAGE_DIR, this.item.dir, this.item.name, (result) => {
-                HC.log(result);
-                let ind = this.$parent.item.children.indexOf(this.item);
-                this.$parent.item.children.splice(ind, 1);
-            });
+            controller.presetman.deletePreset(this);
         },
 
         renameItem: function () {
-            let name = this.item.name;
-            let split = name.split('.');
-            let suffix = '';
-            if (split.length > 1) {
-                name = split[0];
-                suffix = '.' + split[1];
-            }
-            let input = prompt('Please specify a name', name);
-            if (input) {
-                name = input;
-                if (suffix) {
-                    name += suffix;
-                }
-
-            } else {
-                return;
-            }
-
-            messaging.rename(STORAGE_DIR, this.item.dir, this.item.name, name, (result) => {
-                HC.log(result);
-                let children = this.item.children;
-                let odir = this.item.name;
-                for (let i = 0; i < children.length; i++) {
-                    let dir = children[i].dir;
-                    dir = dir.slice(-0, -odir.length);
-                    children[i].dir = dir + name;
-                }
-                this.item.name = name;
-            });
+            controller.presetman.renameItem(this);
         },
 
         newPreset: function () {
-
-            let model = this.item;
-
-            let name = model.children.length;
-
-            let input = prompt('Please specify a name', name);
-            if (input) {
-                name = input;
-
-            } else {
-                return;
-            }
-
-            let nu = {
-                type: 'file',
-                loaded: false,
-                layer: '',
-                changed: '',
-                dir: model.name,
-                name: name + '.json',
-                settings: cm.getLayerProperties(statics.ControlSettings.layer),
-                children: []
-            };
-
-            messaging.save(STORAGE_DIR, nu.dir, nu.name, nu.settings, function (result) {
-                HC.log(result);
-                model.children.unshift(nu);
-                controller.explorer.setPreset(statics.ControlSettings.layer, false);
-                controller.explorer.setPreset(statics.ControlSettings.layer, nu);
-                controller.explorer.setLoaded(statics.ControlSettings.layer, true);
-            }, '');
+            controller.presetman.newPreset(this);
         },
 
         newFolder: function () {
-            let name = '__NEW__';
-
-            let input = prompt('Please specify a name', name);
-            if (input) {
-                name = input;
-
-            } else {
-                return;
-            }
-
-            let nu = {
-                type: 'folder',
-                dir: '',
-                name: name,
-                visible: true,
-                children: []
-            };
-            messaging.mkdir(STORAGE_DIR, name, false, (result) => {
-                HC.log(result);
-                this.item.children.splice(1, 0, nu);
-            });
+            controller.presetman.newFolder(this);
         }
     };
 

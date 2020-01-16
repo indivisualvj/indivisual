@@ -112,6 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 statics.DataSettings = new HC.Settings({});
 
                 controller.explorer = new HC.Explorer(controller, statics); // todo lets have utilities classes have owners instead calling eg. controller directly
+                controller.presetman = new HC.PresetManager(controller);
 
                 beatkeeper = new HC.Beatkeeper();
 
@@ -190,6 +191,11 @@ document.addEventListener('DOMContentLoaded', function () {
          * @type {HC.Explorer}
          */
         explorer;
+
+        /**
+         * @type {HC.PresetManager}
+         */
+        presetman;
 
         /**
          *

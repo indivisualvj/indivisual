@@ -777,7 +777,7 @@ select option {
     box-shadow: 0px 0px 0px 1px #2fa1d6; /*rgba(255, 10, 10, 0.7);*/
 }
 
-.dg li .scrollx {
+.scrollx {
     position: relative;
     width: 98.5%;
     overflow-x: auto !important;
@@ -819,7 +819,7 @@ select option {
     margin-left: -50%;
     height: 100%;
 }
-/* [role="button"] */
+
 .guify-component-container {
     clear: both !important;
     width: 99%;

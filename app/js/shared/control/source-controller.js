@@ -196,9 +196,9 @@ HC.SourceController = HC.SourceController || {};
 {
     /**
      *
-     * @type {HC.SourceController.sequences}
+     * @type {HC.SourceController.sequence}
      */
-    HC.SourceController.sequences = class sequences extends HC.ControlSet {
+    HC.SourceController.sequence = class sequence extends HC.ControlSet {
         static index = 20;
 
         settings = {
@@ -206,22 +206,27 @@ HC.SourceController = HC.SourceController || {};
             sequence0_overlay: 'off',
             sequence0_brightness: 1.0,
             sequence0_blendmode: '0',
+            sequence0_clip: false,
             sequence1_input: 'off',
             sequence1_overlay: 'off',
             sequence1_brightness: 1.0,
             sequence1_blendmode: '0',
+            sequence1_clip: false,
             sequence2_input: 'off',
             sequence2_overlay: 'off',
             sequence2_brightness: 1.0,
             sequence2_blendmode: '0',
+            sequence2_clip: false,
             sequence3_input: 'off',
             sequence3_overlay: 'off',
             sequence3_brightness: 1.0,
             sequence3_blendmode: '0',
+            sequence3_clip: false,
             sequence4_input: 'off',
             sequence4_overlay: 'off',
             sequence4_brightness: 1.0,
             sequence4_blendmode: '0',
+            sequence4_clip: false,
             sequence0_jump: false,
             sequence1_jump: false,
             sequence2_jump: false,
@@ -305,6 +310,11 @@ HC.SourceController = HC.SourceController || {};
             sequence2_jump: ['hidden'],
             sequence3_jump: ['hidden'],
             sequence4_jump: ['hidden'],
+            sequence0_clip: ['display'],
+            sequence1_clip: ['display'],
+            sequence2_clip: ['display'],
+            sequence3_clip: ['display'],
+            sequence4_clip: ['display'],
             sequence0_audio: ['hidden'],
             sequence1_audio: ['hidden'],
             sequence2_audio: ['hidden'],
@@ -483,9 +493,9 @@ HC.SourceController = HC.SourceController || {};
 {
     /**
      *
-     * @type {HC.SourceController.samples}
+     * @type {HC.SourceController.sample}
      */
-    HC.SourceController.samples = class samples extends HC.ControlSet {
+    HC.SourceController.sample = class sample extends HC.ControlSet {
         static index = 40;
 
         settings = {

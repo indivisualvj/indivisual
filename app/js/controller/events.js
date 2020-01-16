@@ -131,7 +131,7 @@ HC.Controller.prototype.initKeyboard = function () {
 
                 } else {
 
-                    if (!child.getMnemonic() && gi < keys.length) {
+                    if (!child.isDisplay() && !child.getMnemonic() && gi < keys.length) {
                         let key = keys.charAt(gi++);
                         child.setMnemonic(key);
                     }

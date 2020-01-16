@@ -277,7 +277,7 @@
 
                 let recordKey = getSampleRecordKey(target.index);
 
-                if (statics.SourceSettings.contains(recordKey)) { // sample
+                if (statics.SourceSettings[recordKey]) { // sample
                     animation.updateSource(recordKey, false, true, true, false);
 
                 } else { // video

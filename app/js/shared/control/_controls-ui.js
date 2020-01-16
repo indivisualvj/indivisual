@@ -15,11 +15,6 @@
         controlSet;
 
         /**
-         * @type {Folder}
-         */
-        folder;
-
-        /**
          *
          * @param controlSet
          */
@@ -30,7 +25,7 @@
         /**
          *
          * @param key
-         * @param dir
+         * @param control
          * @param datasource
          * @private
          */
@@ -88,6 +83,11 @@
          * @type {HC.Guify}
          */
         gui;
+
+        /**
+         * @type {HC.GuifyFolder}
+         */
+        folder;
 
         /**
          *
@@ -193,12 +193,20 @@
                 label: name,
                 object: props,
                 property: key,
+                // key: key,
                 onChange: this.onChange,
                 set: this.controlSet.className(),
                 initial: props[key]
             };
 
-            if (typeof value == 'function') {
+            if (types[types.length - 1] == 'display') {
+                config.type = 'display';
+                // config.label = '';
+                delete config.onChange;
+                // delete config.property;
+                delete config.object;
+
+            } else if (typeof value == 'function') {
                 config.type = 'button';
                 config.action = value;
                 delete config.onChange;

@@ -92,6 +92,21 @@
             return this.getComponent().opts.label;
         }
 
+        /**
+         *
+         * @returns {*}
+         */
+        getType() {
+            return this.getComponent().opts.type;
+        }
+
+        /**
+         *
+         * @returns {boolean}
+         */
+        isDisplay() {
+            return this.getType() === 'display';
+        }
 
         /**
          *

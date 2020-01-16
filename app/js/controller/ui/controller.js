@@ -15,6 +15,7 @@
             opts.folder = parent.getComponent();
             this.component = this.gui.Register(opts);
 
+            this.getContainer().setAttribute('data-id', this.getProperty());
             if (opts.dataClass) {
                 this.getContainer().setAttribute('data-class', opts.dataClass);
             }

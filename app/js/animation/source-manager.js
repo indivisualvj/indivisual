@@ -202,13 +202,13 @@
          * @param sample
          */
         initSample(sample) {
-            let enabledKey = getSampleEnabledKey(sample.index);
-            let recordKey = getSampleRecordKey(sample.index);
+            let thumbKey = getSampleThumbKey(sample.index);
 
             listener.register('sample.init.start', sample.id, function (target) {
-                messaging.emitAttr('[data-id="' + enabledKey + '"]', 'data-color', 'red');
-                messaging.emitAttr('[data-id="' + enabledKey + '"]', 'style', '');
-                messaging.emitAttr('[data-id="' + enabledKey + '"]', 'data-label', '...');
+                // todo send data to place sample in samples area
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'yellow');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'style', '');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', 'initializing');
                 messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {delay: 50});
 
                 let conf = {DataSettings: {}};
@@ -217,18 +217,19 @@
             });
 
             listener.register('sample.init.progress', sample.id, function (target) {
-                let key = getSampleEnabledKey(sample.index);
-                messaging.emitAttr('[data-id="' + key + '"]', 'data-label', target.pointer + '/' + target.frameCount);
-                messaging.emitAttr('[data-id="' + key + '"]', 'data-color', 'red');
+                // todo emit data to be shown in samples area
+                let progress = target.pointer / target.frameCount * 100;
+                let msg = 'preparing';
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', msg);
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-progress', progress);
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'yellow');
             });
 
             listener.register('sample.init.reset', sample.id, function (target) {
-                messaging.emitAttr('[data-id="' + enabledKey + '"]', 'data-color', '');
-                messaging.emitAttr('[data-id="' + enabledKey + '"]', 'style', '');
-                messaging.emitAttr('[data-id="' + enabledKey + '"]', 'data-label', '');
-                messaging.emitAttr('[data-id="' + recordKey + '"]', 'data-color', '');
-                messaging.emitAttr('[data-id="' + recordKey + '"]', 'style', '');
-                messaging.emitAttr('[data-id="' + recordKey + '"]', 'data-label', '');
+                // todo send data to place sample in samples area
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', '');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'style', '');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', '');
                 messaging.emitMidi('off', MIDI_ROW_ONE[target.index]);
                 messaging.emitMidi('off', MIDI_SAMPLE_FEEDBACK);
 
@@ -238,10 +239,11 @@
             });
 
             listener.register('sample.init.end', sample.id, function (target) {
+                // todo send data to place sample in samples area
                 animation.powersave = false;
-                messaging.emitAttr('[data-id="' + enabledKey + '"]', 'data-color', 'green');
-                messaging.emitAttr('[data-id="' + enabledKey + '"]', 'style', '');
-                messaging.emitAttr('[data-id="' + enabledKey + '"]', 'data-label', 'ready');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'green');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'style', '');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', 'ready to record');
                 messaging.emitMidi('off', MIDI_ROW_ONE[target.index]);
                 messaging.emitMidi('off', MIDI_SAMPLE_FEEDBACK);
                 let conf = {DataSettings: {}};
@@ -250,13 +252,18 @@
             });
 
             listener.register('sample.render.start', sample.id, function (target) {
-                messaging.emitAttr('[data-id="' + recordKey + '"]', 'data-color', 'red');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'red');
                 messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {timeout: beatkeeper.getSpeed('eight').duration});
                 messaging.emitMidi('glow', MIDI_SAMPLE_FEEDBACK);
             });
 
             listener.register('sample.render.progress', sample.id, function (target) {
-                messaging.emitAttr('[data-id="' + recordKey + '"]', 'data-label', (target.counter) + ' (' + animation.fps + 'fps)');
+
+                let progress = target.counter / target.beats * 100;
+
+                let msg = 'recording' + ' (' + animation.fps + 'fps)';
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', msg);
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-progress', progress);
                 let conf = {
                     timeout: beatkeeper.getSpeed('eight').duration,
                     times: 2
@@ -266,8 +273,9 @@
 
             listener.register('sample.render.error', sample.id, function (target) {
                 animation.powersave = false;
-                messaging.emitAttr('[data-id="' + recordKey + '"]', 'data-color', 'yellow');
-                messaging.emitAttr('[data-id="' + recordKey + '"]', 'data-label', '!error');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-progress', '');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'red');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', '[ERROR!]');
                 messaging.emitMidi('glow', MIDI_ROW_ONE[sample.index], {timeout: 500, times: 3});
                 messaging.emitMidi('glow', MIDI_SAMPLE_FEEDBACK, {timeout: 500, times: 3});
             });
@@ -290,8 +298,9 @@
                 sourceman.storeSample(target.index, target.id, resolution, true);
                 // }
 
-                messaging.emitAttr('[data-id="' + recordKey + '"]', 'data-color', 'yellow');
-                messaging.emitAttr('[data-id="' + recordKey + '"]', 'data-label', '...');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-progress', '');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'yellow');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', 'loading thumbs');
                 messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {delay: 50});
                 messaging.emitMidi('off', MIDI_SAMPLE_FEEDBACK);
             });

@@ -206,27 +206,22 @@ HC.SourceController = HC.SourceController || {};
             sequence0_overlay: 'off',
             sequence0_brightness: 1.0,
             sequence0_blendmode: '0',
-            sequence0_clip: false,
             sequence1_input: 'off',
             sequence1_overlay: 'off',
             sequence1_brightness: 1.0,
             sequence1_blendmode: '0',
-            sequence1_clip: false,
             sequence2_input: 'off',
             sequence2_overlay: 'off',
             sequence2_brightness: 1.0,
             sequence2_blendmode: '0',
-            sequence2_clip: false,
             sequence3_input: 'off',
             sequence3_overlay: 'off',
             sequence3_brightness: 1.0,
             sequence3_blendmode: '0',
-            sequence3_clip: false,
             sequence4_input: 'off',
             sequence4_overlay: 'off',
             sequence4_brightness: 1.0,
             sequence4_blendmode: '0',
-            sequence4_clip: false,
             sequence0_jump: false,
             sequence1_jump: false,
             sequence2_jump: false,
@@ -310,11 +305,6 @@ HC.SourceController = HC.SourceController || {};
             sequence2_jump: ['hidden'],
             sequence3_jump: ['hidden'],
             sequence4_jump: ['hidden'],
-            sequence0_clip: ['display'],
-            sequence1_clip: ['display'],
-            sequence2_clip: ['display'],
-            sequence3_clip: ['display'],
-            sequence4_clip: ['display'],
             sequence0_audio: ['hidden'],
             sequence1_audio: ['hidden'],
             sequence2_audio: ['hidden'],
@@ -517,9 +507,21 @@ HC.SourceController = HC.SourceController || {};
             sample5_enabled: false,
             sample5_record: false,
             sample5_beats: 8,
+            sample0_load: false,
+            sample1_load: false,
+            sample2_load: false,
+            sample3_load: false,
+            sample4_load: false,
+            sample5_load: false,
         };
 
         types = {
+            sample0_load: ['hidden'],
+            sample1_load: ['hidden'],
+            sample2_load: ['hidden'],
+            sample3_load: ['hidden'],
+            sample4_load: ['hidden'],
+            sample5_load: ['hidden'],
 
         };
 
@@ -552,12 +554,6 @@ HC.SourceController = HC.SourceController || {};
             // sample4_store: ['quint'],
             // sample5_store: ['quint'],
             //
-            // sample0_load: ['quint'],
-            // sample1_load: ['quint'],
-            // sample2_load: ['quint'],
-            // sample3_load: ['quint'],
-            // sample4_load: ['quint'],
-            // sample5_load: ['quint'],
             //
             // sample0_reset: ['quarter'],
             // sample1_reset: ['quarter'],
@@ -611,6 +607,268 @@ HC.SourceController = HC.SourceController || {};
          */
         onChange(value) {
             controller.updateSource(this.property, value, true, true, false);
+        }
+    }
+}
+
+{
+    /**
+     *
+     * @type {HC.SourceControllerClip}
+     */
+    HC.SourceControllerClip = class SourceControllerClip {
+
+        /**
+         * @type {number}
+         */
+        index;
+
+        /**
+         * @type {HTMLElement}
+         */
+        clipNode;
+
+        /**
+         * @type {HTMLElement}
+         */
+        thumbsNode;
+
+        /**
+         * @type {HTMLElement}
+         */
+        indicatorNode;
+
+        sample;
+
+        enabled = false;
+
+        /**
+         *
+         * @param index
+         */
+        constructor(index) {
+            this.index = index;
+
+            this.init();
+        }
+
+        init() {
+            let el = document.getElementById('sequences');
+            let sequenceKey = 'sequence' + this.index;
+            this.clipNode = document.createElement('div');
+            this.clipNode.id = sequenceKey + '_clip';
+            this.clipNode.setAttribute('data-title', sequenceKey);
+            this.clipNode.setAttribute('class', 'sequence control');
+
+            this.thumbsNode  = document.createElement('div');
+            this.thumbsNode.setAttribute('class', 'thumbs');
+            this.clipNode.appendChild(this.thumbsNode);
+
+            this.indicatorNode = document.createElement('div');
+            this.indicatorNode.setAttribute('class', 'indicator');
+            this.clipNode.appendChild(this.indicatorNode);
+
+            el.appendChild(this.clipNode);
+
+            window.addEventListener('resize', this._onResize);
+
+            this._onResize();
+
+            this.setVisible(false);
+        }
+
+        /**
+         *
+         * @param sample
+         * @param enabled
+         * @param data
+         */
+        update(sample, enabled, data) {
+
+            let clip = this;
+            let clipSample = clip.sample;
+            let clipEnabled = clip.enabled;
+            clip.sample = sample;
+            clip.enabled = enabled;
+
+            this.setVisible(enabled);
+
+            if (data) {
+                clip.clipNode.setAttribute('data-color', 'green');
+
+                if (clipEnabled != enabled || clipSample != sample) {
+                    clip.thumbsNode.innerHTML = '';
+
+                } else {
+                    return;
+                }
+
+                let thumbs = data.thumbs;
+                let max = 24;
+
+                for (let i = 0; i < thumbs.length && i < max; i++) {
+
+                    let frameIndex = data.thumbs[i]._index;
+
+                    let img = data.thumbs[i].cloneNode();
+                    let div = document.createElement('div');
+                    div.setAttribute('class', 'thumb');
+                    div.setAttribute('data-index', frameIndex);
+
+                    div.appendChild(img);
+
+                    clip.thumbsNode.appendChild(div);
+
+                }
+
+            } else {
+                clip.clipNode.setAttribute('data-color', 'red');
+                clip.thumbsNode.innerHTML = '';
+            }
+        }
+
+        /**
+         *
+         * @param v
+         */
+        setVisible(v) {
+            if (v) {
+                this.clipNode.style.display = '';
+
+            } else {
+                this.clipNode.style.display = 'none';
+            }
+        }
+
+        /**
+         *
+         * @param data
+         */
+        updateIndicator(data) {
+            let indicatorNode = this.indicatorNode;
+            if (indicatorNode) {
+                let left = 0;
+                let width = 0;
+                let beats = 0;
+                if (data) {
+                    let start = getSequenceStart(this.index);
+                    let end = getSequenceEnd(this.index);
+                    let frames = data.frames;
+                    let sequence = {
+                        start: 0,
+                        end: 0,
+                        length: 0
+                    };
+                    applySequenceSlice(sequence, frames, start, end);
+
+                    let frameDuration = data.duration / frames;
+                    let beatDuration = data.duration / data.beats;
+                    let sliceDuration = sequence.length * frameDuration;
+                    beats = sliceDuration / beatDuration;
+                    width = sequence.length / frames * 100;
+                    left = sequence.start / frames * 100;
+                }
+
+                indicatorNode.setAttribute('data-label', beats.toFixed(2));
+                indicatorNode.style.left = left + '%';
+                indicatorNode.style.width = (width - .5) + '%';
+            }
+        }
+
+        /**
+         *
+         * @private
+         */
+        _onResize() {
+            let el = this.clipNode;
+            let ow = el.clientWidth;
+            let nh = (ow / 5 * 9 / 16);
+            el.style.height = nh + 'px';
+        }
+    }
+}
+
+{
+    /**
+     *
+     * @type {HC.SourceControllerThumb}
+     */
+    HC.SourceControllerThumb = class SourceControllerThumb {
+
+        /**
+         * @type {HTMLElement}
+         */
+        node;
+
+        /**
+         * @type {number}
+         */
+        index;
+
+        constructor(index) {
+            this.index = index;
+
+            this.init();
+        }
+
+        init() {
+            let el = document.getElementById('samples');
+
+            this.node = document.createElement('div');
+            this.node.id = 'sample' + this.index + '_thumb';
+            this.node.setAttribute('class', 'sample control');
+
+            el.appendChild(this.node);
+
+            window.addEventListener('resize', this._onResize);
+
+            this._onResize();
+
+            let mo = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.attributeName == 'data-progress') {
+                        this.setProgress(mutation.target.getAttribute(mutation.attributeName));
+                    }
+                });
+            });
+
+            mo.observe(this.node, {attributes: true});
+        }
+
+        update(data) {
+            let enabled = getSampleEnabledBySample(this.index) && (data != false);
+            if (enabled) {
+                let src = data.thumbs[Math.round(data.thumbs.length / 2)].src;
+                this.node.style.backgroundImage = 'url(' + src + ')';
+                this.node.style.backgroundPositionX = 'center';
+                this.node.style.backgroundPositionY = 'center';
+                this.node.style.backgroundSize = '50%';
+                this.node.setAttribute('data-color', 'green');
+                this.node.setAttribute('data-label', 'ready to play');
+
+            } else {
+                this.node.style.backgroundImage = '';
+            }
+        }
+
+        setProgress(prc) {
+            if (!prc || prc < 0 || prc > 100) {
+                this.node.style.background = '';
+            } else {
+                let bg = 'linear-gradient(90deg, #2fa1d6, #2fa1d6 ' + prc + '%, black, black 0%)';
+                this.node.style.background = bg;
+            }
+        }
+
+        /**
+         *
+         * @private
+         */
+        _onResize() {
+            let el = document.getElementById('samples');
+            let ow = el.clientWidth;
+            let nh = (ow / 5 * 9 / 16);
+            el.style.height = nh + 'px';
         }
     }
 }

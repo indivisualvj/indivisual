@@ -65,7 +65,7 @@
         }
 
         on(event, callback) {
-            let that = this;
+            let that = this; // todo eliminate that?
 
             this.socket.on(event, function (data) {
                 callback(data, that);

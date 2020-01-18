@@ -64,6 +64,16 @@ function getSequenceKey(i) {
  * @param i
  * @returns {string}
  */
+function getSequenceClipKey(i) {
+    return getSequenceKey(i) + '_clip';
+
+}
+
+/**
+ *
+ * @param i
+ * @returns {string}
+ */
 function getSampleKey(i) {
     //return i;
     return 'sample' + i;
@@ -105,6 +115,15 @@ function getSequenceOverlay(i) {
  */
 function getSampleEnabledKey(i) {
     return getSampleKey(i) + '_enabled';
+}
+
+/**
+ *
+ * @param i
+ * @returns {string}
+ */
+function getSampleThumbKey(i) {
+    return getSampleKey(i) + '_thumb';
 }
 
 /**

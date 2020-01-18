@@ -105,6 +105,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     HC.SourceControllerUi,
                     controller.sourceSettingsGui
                 );
+                controller.initClips();
+                controller.initThumbs();
 
                 controller.addAnimationControllers(cm.getGlobalProperties());
                 controller.addPassesFolder(HC.ShaderPassUi.onPasses);
@@ -141,6 +143,17 @@ document.addEventListener('DOMContentLoaded', function () {
          * @type {HC.Guify[]}
          */
         guis;
+
+        /**
+         * @type {HC.SourceControllerClip[]}
+         */
+        clips;
+
+        /**
+         * @type {HC.SourceControllerThumb[]}
+         */
+        thumbs;
+
         /**
          * @type {HC.Guify}
          */

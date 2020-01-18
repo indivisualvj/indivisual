@@ -55,7 +55,7 @@ body {
     border-radius: 3px;
 
     margin-bottom: 6px;
-    padding: 3px;
+    padding: 0.25%;
 }
 
 .metalback {
@@ -158,7 +158,7 @@ body {
 #explorer .dg .property-name {
 }
 
-.actions {
+div.actions {
     position: absolute;
     right: 0;
     top: 0;
@@ -177,7 +177,7 @@ body {
     width: 14px;
     height: 19px;
     padding: 3px;
-    margin: 2px 0 0 2px;
+    margin: 0 0 0 2px;
     border-radius: 2px;
     cursor: pointer;
     background-repeat: no-repeat;
@@ -395,14 +395,16 @@ pre .orange {
 [data-label]:after {
     position: absolute;
     content: attr(data-label);
+    color: #ffffff;
     background: #232323;
     line-height: 18px;
     border-radius: 3px;
     border: 1px solid #565656;
     padding: 0 4px;
-    top: 5px;
-    right: 1px;
+    top: 4px;
+    right: 4px;
     font-size: 12px;
+    font-family: Hack, monospace;
 }
 
 [data-mnemonic] {
@@ -777,12 +779,51 @@ select option {
     box-shadow: 0px 0px 0px 1px #2fa1d6; /*rgba(255, 10, 10, 0.7);*/
 }
 
-.scrollx {
+#samples {
+    width: 106%;
+    box-sizing: content-box;
+    margin-bottom: 8px;
+}
+
+#samples .sample {
     position: relative;
-    width: 98.5%;
-    overflow-x: auto !important;
-    height: 60px;
-    max-height: 60px;
+    display: inline-block;
+    box-sizing: border-box;
+    width: 15%;
+    height: 100%;
+    margin-right: 5px;
+}
+
+#samples .sample[data-label]:after {
+    font-size: 11px;
+}
+
+#sequences {
+
+}
+
+#sequences .sequence {
+    position: relative;
+    width: 100%;
+    height: 18%;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+#sequences .sequence[data-title]:before {
+    content: attr(data-title);
+    color: #ffffff;
+    background: #232323;
+    line-height: 18px;
+    border-radius: 3px;
+    border: 1px solid #565656;
+    padding: 0 4px;
+    bottom: 4px;
+    left: 4px;
+    font-size: 11px;
+    font-family: Hack, monospace;
+    position: absolute;
+    z-index: 1;
 }
 
 .thumbs {
@@ -804,6 +845,10 @@ select option {
     outline: 1000px solid rgba(0,0,0, 0.6);
 }
 
+.indicator[data-label]:after {
+    font-size: 11px;
+}
+
 .thumb {
     position: relative;
     display: inline-block;
@@ -811,7 +856,6 @@ select option {
     height: 100%;
     overflow: hidden;
     outline: 1px solid #efefef;
-    cursor: pointer;
 }
 
 .thumb img {

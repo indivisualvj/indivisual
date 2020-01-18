@@ -540,27 +540,18 @@ HC.Controller.prototype.updateThumbs = function () {
 
     for (let i = 0; i < statics.SourceValues.sample.length; i++) {
         let sampleKey = getSampleKey(i);
-        let enabledKey = getSampleEnabledKey(i);
-        let sampleNode = document.querySelector('[data-id="' + enabledKey + '"]');
 
         let data = false;
         if (sampleKey in statics.DataSettings) {
             data = statics.DataSettings[sampleKey];
         }
 
-        let enabled = getSampleEnabledBySample(i) && (data != false);
-        if (enabled) {
-            let src = data.thumbs[Math.round(data.thumbs.length / 2)].src;
-            sampleNode.setAttribute('style', 'background: url(' + src + ') center center; background-size: 50%')
-
-        } else {
-            sampleNode.removeAttribute('style');
-        }
+        this.thumbs[i].update(data);
     }
 };
 
 /**
- * 
+ *  todo guify
  * @param index
  */
 HC.Controller.prototype.loadClip = function (index) {
@@ -570,14 +561,6 @@ HC.Controller.prototype.loadClip = function (index) {
         let data = {data: {DataSettings: {}}};
         data.data.DataSettings[getSampleKey(sample.index)] = sample._clip;
         this.updateData(data);
-
-        let recordKey = getSampleRecordKey(sample.index);
-        data = {query: '[data-id="' + recordKey + '"]', key: 'data-color', value: 'green'};
-        messaging.onAttr(data);
-        data = {query: '[data-id="' + recordKey + '"]', key: 'data-label', value: ''};
-        messaging.onAttr(data);
-        data = {command: 'off', data: MIDI_ROW_ONE[sample.index]};
-        messaging.onMidi(data);
     });
 };
 
@@ -586,116 +569,60 @@ HC.Controller.prototype.loadClip = function (index) {
  * @param seq
  */
 HC.Controller.prototype.updateIndicator = function (seq) {
+
+    let clip = this.clips[seq];
+
     let sample = getSampleBySequence(seq);
     let sampleKey = getSampleKey(sample);
     let data = false;
     if (sampleKey in statics.DataSettings) {
         data = statics.DataSettings[sampleKey];
     }
-    let sequenceKey = getSequenceKey(seq);
-    let indicatorKey = sequenceKey + '_indicator';
-    let indicatorNode = document.getElementById(indicatorKey);
-    if (indicatorNode) {
-        let left = 0;
-        let width = 0;
-        let beats = 0;
-        if (data) {
-            let start = getSequenceStart(seq);
-            let end = getSequenceEnd(seq);
-            let frames = data.frames;
-            let sequence = {
-                start: 0,
-                end: 0,
-                length: 0
-            };
-            applySequenceSlice(sequence, frames, start, end);
 
-            let frameDuration = data.duration / frames;
-            let beatDuration = data.duration / data.beats;
-            let sliceDuration = sequence.length * frameDuration;
-            beats = sliceDuration / beatDuration;
-            width = sequence.length / frames * 100;
-            left = sequence.start / frames * 100;
-        }
+    clip.updateIndicator(data);
 
-        indicatorNode.setAttribute('data-label', beats.toFixed(2));
-        indicatorNode.style.left = left + '%';
-        indicatorNode.style.width = (width - .5) + '%';
+};
+
+/**
+ *
+ * @param seq
+ */
+HC.Controller.prototype.updateClip = function (seq) {
+
+    let clip = this.clips[seq];
+
+    let sample = getSampleBySequence(seq);
+    let sampleKey = getSampleKey(sample);
+
+    let data = false;
+    if (sampleKey in statics.DataSettings) {
+        data = statics.DataSettings[sampleKey];
+    }
+
+    let enabled = getSampleEnabledBySequence(seq) && (data != false);
+
+    clip.update(sample, enabled, data);
+};
+
+/**
+ * 
+ */
+HC.Controller.prototype.initClips = function () {
+
+    this.clips = [];
+    for (let seq = 0; seq < statics.SourceValues.sequence.length; seq++) {
+        this.clips.push(new HC.SourceControllerClip(seq));
     }
 
 };
 
 /**
- * todo guify
- * @param seq
+ *
  */
-HC.Controller.prototype.updateClip = function (seq) {
+HC.Controller.prototype.initThumbs = function () {
 
-    var sequenceKey = getSequenceKey(seq);
-    var sample = getSampleBySequence(seq);
-    var sampleKey = getSampleKey(sample);
-    var clipKey = sequenceKey + '_clip';
-    var clipNode = document.querySelector('[data-id="' + clipKey + '"]');
-    var clipClipNode = document.getElementById(clipKey + '_clip');
-    var indicatorKey = sequenceKey + '_indicator';
-    var indicatorNode = document.getElementById(indicatorKey);
-
-    var data = false;
-    if (sampleKey in statics.DataSettings) {
-        data = statics.DataSettings[sampleKey];
-    }
-
-    var enabled = getSampleEnabledBySequence(seq) && (data != false);
-
-    if (!clipClipNode) {
-        clipNode.innerHTML = '';
-        clipNode.setAttribute('class', 'scrollx');
-        clipClipNode = document.createElement('div');
-        clipClipNode.setAttribute('class', 'thumbs');
-
-        clipNode.appendChild(clipClipNode);
-
-        indicatorNode = document.createElement('div');
-        indicatorNode.id = indicatorKey;
-        indicatorNode.setAttribute('class', 'indicator');
-        clipNode.appendChild(indicatorNode);
-    }
-
-    var clipSample = parseInt(clipClipNode.getAttribute('data-sample'));
-    var clipEnabled = clipClipNode.getAttribute('data-enabled') === 'true';
-    // clipClipNode.setAttribute('data-sample', sample);
-    // clipClipNode.setAttribute('data-enabled', enabled);
-
-    if (data) {
-        // firstNode.setAttribute('data-color', 'green');
-
-        if (clipEnabled != enabled || clipSample != sample) {
-            clipClipNode.innerHTML = '';
-
-        } else {
-            return;
-        }
-
-        var thumbs = data.thumbs;
-        var max = 24;
-
-        for (var i = 0; i < thumbs.length && i < max; i++) {
-
-            var frameIndex = data.thumbs[i]._index;
-
-            var img = data.thumbs[i].cloneNode();
-            var div = document.createElement('div');
-            div.setAttribute('class', 'thumb');
-            div.setAttribute('data-index', frameIndex);
-
-            div.appendChild(img);
-
-            clipClipNode.appendChild(div);
-
-        }
-
-    } else {
-        // firstNode.setAttribute('data-color', 'red');
-        clipClipNode.innerHTML = '';
+    this.thumbs = [];
+    for (let seq = 0; seq < statics.SourceValues.sample.length; seq++) {
+        this.thumbs.push(new HC.SourceControllerThumb(seq));
     }
 };

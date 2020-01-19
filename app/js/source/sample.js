@@ -1,26 +1,36 @@
-(function () {
-    /**
-     * todo ES6
-     * @param index
-     * @constructor
-     */
-    HC.Sample = function (index) {
-        this.index = index;
-        this.id = 'sample' + index;
-        this.enabled = false;
-        this.record = false;
-        this.pointer = 0;
-        this.initialized = false;
-        this.initializing = false;
-        this.started = false;
-        this.complete = false;
-        this.counter = 0;
-        this.frames = false;
-        this.length = 0;
-        this.beats = 4;
-    };
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
 
-    HC.Sample.prototype = {
+{
+    /**
+     * 
+     * @type {HC.Sample}
+     */
+    HC.Sample = class Sample {
+
+        index;
+        id;
+        enabled = false;
+        record = false;
+        pointer = 0;
+        initialized = false;
+        initializing = false;
+        started = false;
+        complete = false;
+        counter = 0;
+        frames = false;
+        length = 0;
+        beats = 4;
+        
+        /**
+         * 
+         * @param index
+         */
+        constructor(index) {
+            this.index = index;
+            this.id = 'sample' + index;
+        }
 
         /**
          *
@@ -28,18 +38,18 @@
          * @param width
          * @param height
          */
-        update: function (speed, width, height) {
-            var enabled = statics.SourceSettings[getSampleEnabledKey(this.index)];
-            var record = statics.SourceSettings[getSampleRecordKey(this.index)];
-            var beats = statics.SourceSettings[getSampleBeatKey(this.index)];
+        update(speed, width, height) {
+            let enabled = statics.SourceSettings[getSampleEnabledKey(this.index)];
+            let record = statics.SourceSettings[getSampleRecordKey(this.index)];
+            let beats = statics.SourceSettings[getSampleBeatKey(this.index)];
 
-            var checkEnabled = this.enabled != enabled;
-            var checkBeats = this.beats != beats;
-            var checkFrames = (!this.frames) || this.frames.length == 0;
-            var checkWidth = this.width != width;
-            var checkHeight = this.height != height;
+            let checkEnabled = this.enabled != enabled;
+            let checkBeats = this.beats != beats;
+            let checkFrames = (!this.frames) || this.frames.length == 0;
+            let checkWidth = this.width != width;
+            let checkHeight = this.height != height;
 
-            var needsUpdate = checkBeats || checkFrames || checkWidth || checkHeight;
+            let needsUpdate = checkBeats || checkFrames || checkWidth || checkHeight;
 
             this.speed = speed;
             this.width = width;
@@ -56,28 +66,28 @@
                 listener.fireEventId('sample.init.reset', this.id, this);
             }
 
-        },
+        }
 
         /**
          *
          * @returns {boolean|*}
          */
-        isReady: function () {
+        isReady() {
             return this.enabled && this.initialized && this.complete && this.frames;
-        },
+        }
 
         /**
          *
          * @param i
          * @returns {*}
          */
-        getFrame: function (i) {
+        getFrame(i) {
             if (this.isReady() && i > -1 && i < this.frames.length) {
                 return this.frames[i];
             }
 
             return false;
-        },
+        }
 
         /**
          *
@@ -85,7 +95,7 @@
          * @param reset
          * @private
          */
-        _init: function (speed, reset) {
+        _init(speed, reset) {
             this.initializing = false;
             this.initialized = false;
             this.pointer = 0;
@@ -100,20 +110,20 @@
                 this.duration = Math.ceil(60000 / speed);
                 this.length = this.beats * this.duration;
 
-                var fps = statics.DisplaySettings.fps * 1.25;
-                var frames = IS_MONITOR ? 0 : Math.ceil(this.length / 1000 * fps);
+                let fps = statics.DisplaySettings.fps * 1.25;
+                let frames = IS_MONITOR ? 0 : Math.ceil(this.length / 1000 * fps);
 
                 this.__init(frames);
             }
-        },
+        }
 
         /**
          *
          * @param frames
          * @private
          */
-        __init: function (frames) {
-            var inst = this;
+        __init(frames) {
+            let inst = this;
 
             if (this.frames.length > frames) {
                 this.frames.splice(frames, this.frames.length - frames);
@@ -122,9 +132,9 @@
             this.frameCount = frames;
             animation.powersave = true;
 
-            var _init = function (i) {
+            let _init = function (i) {
                 if (inst.initializing) {
-                    var cv = document.createElement('canvas');
+                    let cv = document.createElement('canvas');
                     cv.id = inst.id + '_' + i;
                     cv.ctx = cv.getContext('2d');
                     inst.frames.push(cv);
@@ -161,12 +171,12 @@
                 inst.initializing = true;
                 _init(0);
             });
-        },
+        }
 
         /**
          *
          */
-        finish: function () {
+        finish() {
 
             if (this.pointer < this.frames.length / 2) {
                 this.started = false;
@@ -186,37 +196,37 @@
                 listener.fireEventId('sample.render.end', this.id, this);
 
             }
-        },
+        }
 
         /**
          *
          * @param callback
          * @returns {boolean|*}
          */
-        clip: function (callback) {
+        clip(callback) {
             if (!this._clip) {
-                var inst = this;
+                let inst = this;
                 inst._clip = {id: inst.id, ready: false, thumbs: [], frames: 0, beats: 0, duration: 0};
 
-                var file = filePath(SAMPLE_DIR, inst.id);
+                let file = filePath(SAMPLE_DIR, inst.id);
 
                 messaging.files(file, function (files) {
 
-                    var loaded = 0;
-                    var frameCount = files.length;
-                    var step = frameCount / 16;
-                    var seconds = frameCount / 60;
+                    let loaded = 0;
+                    let frameCount = files.length;
+                    let step = frameCount / 16;
+                    let seconds = frameCount / 60;
                     inst._clip.frames = frameCount;
                     inst._clip.duration = Math.ceil(60000 / statics.ControlSettings.tempo);
                     inst._clip.beats = Math.ceil(seconds * 1000 / inst._clip.duration);
 
-                    var index = 0;
+                    let index = 0;
 
-                    for (var i = 0; i < frameCount; i += step) {
-                        var ri = Math.floor(i);
-                        var file = files[ri];
+                    for (let i = 0; i < frameCount; i += step) {
+                        let ri = Math.floor(i);
+                        let file = files[ri];
                         file = filePath(SAMPLE_DIR, inst.id, ri + '.png');
-                        var image = new Image();
+                        let image = new Image();
                         image.src = file;
                         image._index = index++;
 
@@ -238,7 +248,7 @@
                 });
             }
             return this._clip;
-        },
+        }
 
         /**
          *
@@ -247,19 +257,19 @@
          * @param width
          * @param height
          */
-        load: function (name, width, height) {
+        load(name, width, height) {
 
             this.width = width;
             this.height = height;
 
-            var file = filePath(SAMPLE_DIR, name);
-            var loaded = 0;
-            var inst = this;
+            let file = filePath(SAMPLE_DIR, name);
+            let loaded = 0;
+            let inst = this;
 
             messaging._emit({action: 'files', file: file}, function (files) {
 
-                var frameCount = files.length;
-                var seconds = frameCount / 60;
+                let frameCount = files.length;
+                let seconds = frameCount / 60;
                 inst.enabled = true;
                 inst.initialized = true;
                 inst.duration = Math.ceil(60000 / statics.ControlSettings.tempo);
@@ -268,10 +278,10 @@
                 inst.frameCount = frameCount;
                 inst.frames = [];
 
-                for (var i = 0; i < frameCount; i++) {
-                    var file = files[i];
+                for (let i = 0; i < frameCount; i++) {
+                    let file = files[i];
                     file = filePath(SAMPLE_DIR, name, i + '.png');
-                    var image = new Image();
+                    let image = new Image();
                     inst.frames.push(image);
                     image.src = file;
                     image._index = i;
@@ -281,8 +291,8 @@
                     };
                     image.onload = function () {
 
-                        var canvas = document.createElement('canvas');
-                        var ctx = canvas.getContext('2d');
+                        let canvas = document.createElement('canvas');
+                        let ctx = canvas.getContext('2d');
                         canvas.width = this.width;
                         canvas.height = this.height;
                         ctx.drawImage(this, 0, 0, this.width, this.height);
@@ -301,7 +311,7 @@
                     };
                 }
             });
-        },
+        }
 
         /**
          *
@@ -309,30 +319,29 @@
          * @param speed
          * @param color
          */
-        render: function (image, speed, color) {
+        render(image, speed, color) {
 
             renderSample(this, image, speed, color);
 
-        },
+        }
 
         /**
          *
          */
-        reset: function () {
+        reset() {
 
-        },
+        }
 
         /**
          *
          * @returns {number}
          */
-        last: function () {
+        last() {
             if (this.frames && this.frames.length > 0) {
                 return this.frames.length - 1;
             }
 
             return 0;
         }
-    };
-
-}());
+    }
+}

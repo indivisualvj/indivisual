@@ -728,6 +728,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
                 } else if (item.match(/_(load)/)) {
+                    let smp = numberExtract(item, 'sample');
                     this.loadClip(smp);
                 }
 

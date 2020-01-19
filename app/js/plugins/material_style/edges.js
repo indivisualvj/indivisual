@@ -15,7 +15,7 @@
                 shape.mesh.name = 'original';
                 params.original = shape.mesh;
 
-                shape.setMesh(mesh); // todo why does transform work when first shape ist not a lined but the others?
+                shape.setMesh(mesh); // question why does transform work when first shape ist not a lined but the others?
             }
 
             if (!this.active[shape.index]) {

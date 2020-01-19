@@ -922,7 +922,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         * todo push even if monitor is enabled? how do it nicely?
+         * question push even if monitor is enabled? how do it nicely?
          */
         syncLayers() {
             for (let layer in cm.layers) {

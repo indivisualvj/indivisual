@@ -843,6 +843,7 @@ select option {
     border-left: 4px solid greenyellow;
     border-right: 4px solid orangered;
     outline: 1000px solid rgba(0,0,0, 0.6);
+    box-sizing: border-box;
 }
 
 .indicator[data-label]:after {

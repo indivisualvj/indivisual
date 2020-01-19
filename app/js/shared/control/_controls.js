@@ -222,13 +222,13 @@ HC.controls = HC.controls || {};
          */
         validate(key, value) {
             let type = typeof value;
-            // _check if string contains float and then convert
-            if (type == 'string') {
-                let f = parseFloat(value);
-                if (f && f.toString().length == value.length) {
-                    value = f;
-                }
-            }
+            // // _check if string contains float and then convert
+            // if (type == 'string') {
+            //     let f = parseFloat(value);
+            //     if (f && f.toString().length == value.length) {
+            //         value = f;
+            //     }
+            // }
 
             // avoid values to be overwritten by wrong type
             if (key in this.properties) {
@@ -236,7 +236,15 @@ HC.controls = HC.controls || {};
                 let otype = typeof org;
 
                 if (otype !== type) {
-                    value = org;
+                    // _check if string contains float and then convert
+                    if (otype == 'number' && type == 'string') {
+                        let f = parseFloat(value);
+                        if (f && f.toString().length == value.length) {
+                            value = f;
+                        }
+                    } else {
+                        value = org;
+                    }
                 }
             }
 

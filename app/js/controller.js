@@ -725,6 +725,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (!value) { // set record to false if enabled == false
                         let smp = numberExtract(item, 'sample');
                         this.updateSource(getSampleRecordKey(smp), false, true, true, false);
+
+                        let seq = false;
+                        while ((seq = getSequenceBySample(smp)) !== false) {
+                            let key = getSequenceSampleKey(seq);
+                            this.updateSource(key, 'off', true, true, false);
+
+                        }
                     }
 
                 } else if (item.match(/_(load)/)) {
@@ -847,7 +854,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         * todo guify
+         *
          * @param item
          * @param value
          */
@@ -878,7 +885,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         * todo guify
+         *
          * @param item
          * @param value
          */

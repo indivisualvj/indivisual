@@ -534,7 +534,7 @@ HC.Controller.prototype.updateValuesChanged = function (folder) {
 };
 
 /**
- *  todo guify
+ *
  */
 HC.Controller.prototype.updateThumbs = function () {
 
@@ -551,7 +551,7 @@ HC.Controller.prototype.updateThumbs = function () {
 };
 
 /**
- *  todo guify
+ *
  * @param index
  */
 HC.Controller.prototype.loadClip = function (index) {

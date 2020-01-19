@@ -125,18 +125,10 @@
                 if (sequence.sample) {
 
                     let _indicator = function (sequence) {
-                        let type = [0, 0, 1];
-                        if (sequence.sample) {
-                            type[1] = sequence.sample.last();
-                            type[2] = round(sequence.sample.last() / 50, 0);
-                        }
-                        // let conf = {SourceTypes: {}};
-                        // conf.SourceTypes[getSequenceStartKey(sequence.index)] = type;
-                        // conf.SourceTypes[getSequenceEndKey(sequence.index)] = type;
-                        // messaging.emitData(sequence.sample.id, conf);
+                        let end = sequence.sample.last();
 
                         animation.updateSource(getSequenceStartKey(sequence.index), 0, false, true);
-                        animation.updateSource(getSequenceEndKey(sequence.index), type[1], false, true);
+                        animation.updateSource(getSequenceEndKey(sequence.index), end, false, true);
                     };
 
                     if (os != sequence.sample) {
@@ -145,9 +137,9 @@
                 }
                 this.updateSample(smp);
 
-                let ovrly = parseInt(statics.SourceSettings[sequence.id + '_overlay']);
-                if (ovrly >= 0) {
-                    sequence.overlay = this.getSequence(ovrly);
+                let overlay = parseInt(statics.SourceSettings[sequence.id + '_overlay']);
+                if (overlay >= 0) {
+                    sequence.overlay = this.getSequence(overlay);
 
                 } else {
                     sequence.overlay = false;
@@ -205,7 +197,6 @@
             let thumbKey = getSampleThumbKey(sample.index);
 
             listener.register('sample.init.start', sample.id, function (target) {
-                // todo send data to place sample in samples area
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'yellow');
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'style', '');
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', 'initializing');
@@ -217,7 +208,6 @@
             });
 
             listener.register('sample.init.progress', sample.id, function (target) {
-                // todo emit data to be shown in samples area
                 let progress = target.pointer / target.frameCount * 100;
                 let msg = 'preparing';
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', msg);
@@ -226,7 +216,6 @@
             });
 
             listener.register('sample.init.reset', sample.id, function (target) {
-                // todo send data to place sample in samples area
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', '');
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'style', '');
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', '');
@@ -239,7 +228,6 @@
             });
 
             listener.register('sample.init.end', sample.id, function (target) {
-                // todo send data to place sample in samples area
                 animation.powersave = false;
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'green');
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'style', '');
@@ -323,8 +311,9 @@
                         for (let s = 0; s < this.sequences.length; s++) {
                             let seq = this.getSequence(s);
                             if (seq && seq.sample == sample) { // reset input to off if sample was disabled
-                                animation.updateSource(getSequenceSampleKey(s), 'off', true, true, false);
+                                // animation.updateSource(getSequenceSampleKey(s), 'off', true, true, false);
                                 warn = true;
+                                break;
                             }
                         }
 

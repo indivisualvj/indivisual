@@ -1,6 +1,6 @@
 (function () {
     /**
-     *
+     * todo ES6
      * @param index
      * @constructor
      */
@@ -199,12 +199,12 @@
                 inst._clip = {id: inst.id, ready: false, thumbs: [], frames: 0, beats: 0, duration: 0};
 
                 var file = filePath(SAMPLE_DIR, inst.id);
-                var loaded = 0;
 
                 messaging.files(file, function (files) {
 
+                    var loaded = 0;
                     var frameCount = files.length;
-                    var step = frameCount / 15;
+                    var step = frameCount / 16;
                     var seconds = frameCount / 60;
                     inst._clip.frames = frameCount;
                     inst._clip.duration = Math.ceil(60000 / statics.ControlSettings.tempo);
@@ -220,13 +220,15 @@
                         image.src = file;
                         image._index = index++;
 
+                        inst._clip.thumbs[image._index] = image;
+
                         image.onerror = function () {
                             //frameCount--;
                         };
                         image.onload = function () {
 
-                            inst._clip.thumbs[this._index] = this;
-                            loaded += step;
+                            // inst._clip.thumbs[this._index] = this;
+                            loaded += step; // see if next will bee too much
                             if (loaded >= frameCount) {
                                 inst._clip.ready = true;
                                 callback(inst);

@@ -405,7 +405,7 @@
                     }
                     break;
 
-                case 'volume':
+                case 'volume': // fixme no ...Types, no function...
                 case 'step':
                     if (types in (this.statics)) {
                         types = this.statics[types];

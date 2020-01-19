@@ -440,11 +440,7 @@ HC.SourceController = HC.SourceController || {};
                     updates[getSequenceStartKey(seq)] = 0;
 
                     let endKey = getSequenceEndKey(seq);
-                    if (endKey in this.types) {
-                        let type = this.types[endKey];
-                        let length = type[1];
-                        updates[endKey] = length;
-                    }
+                    updates[endKey] = 0;
 
                     controller.updateSources(updates, true, false, false);
                     messaging.emitSources(updates, true, true, false);
@@ -704,9 +700,8 @@ HC.SourceController = HC.SourceController || {};
                 }
 
                 let thumbs = data.thumbs;
-                let max = 24;
 
-                for (let i = 0; i < thumbs.length && i < max; i++) {
+                for (let i = 0; i < thumbs.length; i++) {
 
                     let frameIndex = data.thumbs[i]._index;
 
@@ -805,12 +800,19 @@ HC.SourceController = HC.SourceController || {};
          */
         index;
 
+        /**
+         *
+         * @param index
+         */
         constructor(index) {
             this.index = index;
 
             this.init();
         }
 
+        /**
+         *
+         */
         init() {
             let el = document.getElementById('samples');
 
@@ -824,7 +826,7 @@ HC.SourceController = HC.SourceController || {};
 
             this._onResize();
 
-            let mo = new MutationObserver((mutations) => {
+            let mo = new MutationObserver((mutations) => { // todo where to use this???!!!
                 mutations.forEach((mutation) => {
                     if (mutation.attributeName == 'data-progress') {
                         this.setProgress(mutation.target.getAttribute(mutation.attributeName));
@@ -835,6 +837,10 @@ HC.SourceController = HC.SourceController || {};
             mo.observe(this.node, {attributes: true});
         }
 
+        /**
+         *
+         * @param data
+         */
         update(data) {
             let enabled = getSampleEnabledBySample(this.index) && (data != false);
             if (enabled) {
@@ -851,6 +857,10 @@ HC.SourceController = HC.SourceController || {};
             }
         }
 
+        /**
+         *
+         * @param prc
+         */
         setProgress(prc) {
             if (!prc || prc < 0 || prc > 100) {
                 this.node.style.background = '';

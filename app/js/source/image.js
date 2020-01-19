@@ -1,18 +1,24 @@
-(function () {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+{
     /**
-     * todo ES6
-     * @param index
-     * @param file
-     * @constructor
+     *
+     * @type {HC.Image}
      */
-    HC.Image = function (index, file) {
-        this.index = index;
-        this.id = 'sample' + index;
-        this.file = file;
-        this.reset();
-    };
+    HC.Image = class Image {
 
-    HC.Image.prototype = {
+        /**
+         *
+         * @param index
+         * @param file
+         */
+        constructor(index, file) {
+            this.index = index;
+            this.id = 'sample' + index;
+            this.file = file;
+            this.reset();
+        }
 
         /**
          *
@@ -20,7 +26,7 @@
          * @param width
          * @param height
          */
-        update: function (speed, width, height) {
+        update(speed, width, height) {
 
             this.speed = speed;
             this.width = width;
@@ -33,33 +39,33 @@
             var crop = cropAtoB(this._width, this._height, this.width, this.height);
             this.readArea = crop.readArea;
             this.writeArea = crop.writeArea;
-        },
+        }
 
         /**
          *
          * @returns {boolean|*}
          */
-        isReady: function () {
+        isReady() {
             return this.enabled && this.initialized && this.complete && this.frames;
-        },
+        }
 
         /**
          *
          * @param i
          * @returns {*}
          */
-        getFrame: function (i) {
+        getFrame(i) {
             if (this.isReady() && i > -1 && i < this.frames.length) {
                 return this.frames[i];
             }
 
             return false;
-        },
+        }
 
         /**
          *
          */
-        init: function () {
+        init() {
             var file = this.file;
             var tag = document.createElement('img');
             tag.visible = true;
@@ -86,14 +92,14 @@
                 console.error(err);
                 listener.fireEventId('sample.render.error', this.id, this);
             }
-        },
+        }
 
         /**
          *
          * @param frames
          * @private
          */
-        _init: function (frames) {
+        _init(frames) {
             var inst = this;
             var _loop = function (i) {
                 if (inst.initializing) {
@@ -136,17 +142,17 @@
                 inst.initializing = true;
                 _loop(0);
             });
-        },
+        }
 
         /**
          *
          */
-        finish: function () {
+        finish() {
             this.complete = true;
             this.pointer = 0;
 
             listener.fireEventId('sample.render.end', this.id, this);
-        },
+        }
 
         /**
          *
@@ -154,7 +160,7 @@
          * @param speed
          * @param color
          */
-        render: function (image, speed, color) {
+        render(image, speed, color) {
 
             if (this.enabled && this.initialized && !this.complete) {
                 if (this.canvas && this.frames) {
@@ -203,12 +209,12 @@
                     listener.fireEventId('sample.render.error', this.id, this);
                 }
             }
-        },
+        }
 
         /**
          *
          */
-        reset: function () {
+        reset() {
             this.enabled = false;
             this.pointer = 0;
             this.initialized = false;
@@ -219,19 +225,18 @@
             this.frames = false;
             this.beats = 4;
             this.canvas = false;
-        },
+        }
 
         /**
          *
          * @returns {number}
          */
-        last: function () {
+        last() {
             if (this.frames && this.frames.length > 0) {
                 return this.frames.length - 1;
             }
 
             return 0;
         }
-    };
-
-}());
+    }
+}

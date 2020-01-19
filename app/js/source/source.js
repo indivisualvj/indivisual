@@ -1,22 +1,25 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-(function () {
+{
     /**
-     *  todo ES6
-     * @param instance
-     * @param width
-     * @param height
-     * @constructor
+     *
+     * @type {HC.Source}
      */
-    HC.Source = function (instance, width, height) {
-        this.instance = instance;
-        this.type = this.instance.type;
-        this.width = width;
-        this.height = height;
-    };
+    HC.Source = class Source {
 
-    HC.Source.prototype = {
+        /**
+         *
+         * @param instance
+         * @param width
+         * @param height
+         */
+        constructor(instance, width, height) {
+            this.instance = instance;
+            this.type = this.instance.type;
+            this.width = width;
+            this.height = height;
+        }
 
         /**
          *
@@ -24,18 +27,17 @@
          * @param passthrough
          * @returns {*|HTMLElement|*|boolean|*}
          */
-        current: function (fallback, passthrough) {
+        current(fallback, passthrough) {
             return this.instance.current(fallback, passthrough);
-        },
+        }
 
         /**
          *
          * @param reference
          * @returns {*}
          */
-        bounds: function (reference) {
+        bounds(reference) {
             return this.instance.bounds(reference);
         }
-
-    };
-}());
+    }
+}

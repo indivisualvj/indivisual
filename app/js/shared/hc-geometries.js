@@ -1,32 +1,36 @@
-(function () {
+{
     /**
-     * todo ES6
-     * @param edgeSize
-     * @param cornerRadius
-     * @param curveSegments
-     * @constructor
+     *
+     * @type {HC.RoundedRect}
      */
-    HC.RoundedRect = function (edgeSize, cornerRadius, curveSegments) {
-        edgeSize *= .95;
-        this.radius = new THREE.Vector2(edgeSize, edgeSize).length() * cornerRadius * 0.0025;
-        this.hw = edgeSize / 2;
-        this.hh = edgeSize / 2;
-        this.radius = Math.min(this.hw, this.radius);
-        this.corner = new THREE.Vector2(this.radius, this.radius).length();
-        this.curveSegments = curveSegments;
-    };
+    HC.RoundedRect = class RoundedRect {
 
-    HC.RoundedRect.prototype = {
         /**
          *
-         * @returns {Shape}
+         * @param edgeSize
+         * @param cornerRadius
+         * @param curveSegments
          */
-        create: function () {
-            var shape = new THREE.Shape();
-            var radius = this.radius;
-            var ninety = Math.PI / 2;
-            var hw = this.hw;
-            var hh = -this.hh;
+        constructor(edgeSize, cornerRadius, curveSegments) {
+            edgeSize *= .95;
+            this.radius = new THREE.Vector2(edgeSize, edgeSize).length() * cornerRadius * 0.0025;
+            this.hw = edgeSize / 2;
+            this.hh = edgeSize / 2;
+            this.radius = Math.min(this.hw, this.radius);
+            // this.corner = new THREE.Vector2(this.radius, this.radius).length();
+            this.curveSegments = curveSegments;
+        }
+
+        /**
+         *
+         * @returns {THREE.ShapeGeometry}
+         */
+        create() {
+            let shape = new THREE.Shape();
+            let radius = this.radius;
+            let ninety = Math.PI / 2;
+            let hw = this.hw;
+            let hh = -this.hh;
 
             // lowerleft
             shape.absarc(-hw + radius, hh + radius, radius, 180 * RAD, 270 * RAD);
@@ -41,174 +45,242 @@
             shape.absarc(-hw + radius, -hh - radius, radius, 90 * RAD, 180 * RAD);
             // shape.lineTo(-hw, hh-radius);
 
-            var geo = new THREE.ShapeGeometry(shape, this.curveSegments);
+            let geo = new THREE.ShapeGeometry(shape, this.curveSegments);
             return geo;
         }
     }
-})();
+}
 
-(function () { //  todo ES6
-    HC.DirectionalCircle = function (config) {
+{
+    /**
+     *
+     * @type {HC.DirectionalCircle}
+     */
+    HC.DirectionalCircle = class DirectionalCircle {
 
-        this._edges = config.edges;
-        this._radius = config.radius;
-        this._direction = config.direction;
-    };
+        /**
+         *
+         * @param config
+         */
+        constructor(config) {
+            this._edges = config.edges;
+            this._radius = config.radius;
+            this._direction = config.direction;
+        }
 
-    HC.DirectionalCircle.prototype = {
-        create: function () {
+        /**
+         *
+         * @returns {THREE.CircleGeometry}
+         */
+        create() {
 
-            var edges = this._edges;
-            var radius = this._radius;
-            var dir = this._direction;
-            var div = Math.PI * 0.5;
-            var hseg = -div + (div / edges) * dir;
+            let edges = this._edges;
+            let radius = this._radius;
+            let dir = this._direction;
+            let div = Math.PI * 0.5;
+            let hseg = -div + (div / edges) * dir;
 
-            var geo = new THREE.CircleGeometry(radius, edges, hseg);
+            let geo = new THREE.CircleGeometry(radius, edges, hseg);
             return geo;
         }
-    };
-})();
+    }
+}
 
 
-(function () { //  todo ES6
-    HC.DirectionalRing = function (config) {
+{
+    /**
+     *
+     * @type {HC.DirectionalRing}
+     */
+    HC.DirectionalRing = class DirectionalRing {
 
-        this.edges = config.edges;
-        this.innerRadius = config.innerRadius;
-        this.outerRadius = config.outerRadius;
-        this.direction = config.direction;
-    };
+        /**
+         *
+         * @param config
+         */
+        constructor(config) {
 
-    HC.DirectionalRing.prototype = {
-        create: function () {
+            this.edges = config.edges;
+            this.innerRadius = config.innerRadius;
+            this.outerRadius = config.outerRadius;
+            this.direction = config.direction;
+        }
 
-            var edges = this.edges;
-            var dir = this.direction;
-            var div = Math.PI * 0.5;
-            var hseg = -div + (div / edges) * dir;
+        /**
+         *
+         * @returns {THREE.RingGeometry}
+         */
+        create() {
 
-            var geo = new THREE.RingGeometry(this.innerRadius, this.outerRadius, edges, 1, hseg);
+            let edges = this.edges;
+            let dir = this.direction;
+            let div = Math.PI * 0.5;
+            let hseg = -div + (div / edges) * dir;
+
+            let geo = new THREE.RingGeometry(this.innerRadius, this.outerRadius, edges, 1, hseg);
             return geo;
         }
-    };
-})();
+    }
+}
 
 
-(function () {// todo ES6
-    HC.DirectionalShape = function (config) {
-        this._edges = config.edges;
-        this._radius = config.radius;
-        this._direction = config.direction;
-    };
+{
+    /**
+     *
+     * @type {HC.DirectionalShape}
+     */
+    HC.DirectionalShape = class DirectionalShape {
 
-    HC.DirectionalShape.prototype = {
-        create: function () {
-            var shape = new THREE.Shape();
-            var radius = this._radius;
-            var dir = this._direction;
-            var edges = this._edges;
-            var div = Math.PI * 0.5;
-            var hseg = (div / edges) * dir;
-            var step = Math.PI * 2 / edges;
+        /**
+         *
+         * @param config
+         */
+        constructor(config) {
+            this._edges = config.edges;
+            this._radius = config.radius;
+            this._direction = config.direction;
+        }
 
-            var x = Math.sin(hseg) * radius;
-            var y = Math.cos(hseg) * radius;
+        /**
+         *
+         * @returns {THREE.ShapeGeometry}
+         */
+        create() {
+            let shape = new THREE.Shape();
+            let radius = this._radius;
+            let dir = this._direction;
+            let edges = this._edges;
+            let div = Math.PI * 0.5;
+            let hseg = (div / edges) * dir;
+            let step = Math.PI * 2 / edges;
+
+            let x = Math.sin(hseg) * radius;
+            let y = Math.cos(hseg) * radius;
             shape.moveTo(x, -y);
 
-            for (var i = 0; i < edges; i++) {
+            for (let i = 0; i < edges; i++) {
                 x = Math.sin(step * i + hseg) * radius;
-                var y = Math.cos(step * i + hseg) * radius;
+                let y = Math.cos(step * i + hseg) * radius;
                 shape.lineTo(x, -y);
             }
-            var geometry = new THREE.ShapeGeometry(shape);
+            let geometry = new THREE.ShapeGeometry(shape);
             return geometry;
         }
     }
-})();
+}
 
-/**
- * todo ES6
- */
-(function () {
-    HC.Rect = function (config) {
+{
+    /**
+     *
+     * @type {HC.Rect}
+     */
+    HC.Rect = class Rect {
 
-        this._hw = config.width / 2;
-        this._hh = config.height / 2;
-    };
+        /**
+         *
+         * @param config
+         */
+        constructor(config) {
+            this._hw = config.width / 2;
+            this._hh = config.height / 2;
+        }
 
-    HC.Rect.prototype = {
-        create: function () {
+        /**
+         *
+         * @returns {THREE.ShapeGeometry}
+         */
+        create() {
 
-            var shape = new THREE.Shape();
+            let shape = new THREE.Shape();
             shape.moveTo(-this._hw, this._hh);
             shape.lineTo(this._hw, this._hh);
             shape.lineTo(this._hw, -this._hh);
             shape.lineTo(-this._hw, -this._hh);
             shape.lineTo(-this._hw, this._hh);
 
-            var geometry = new THREE.ShapeGeometry(shape);
+            let geometry = new THREE.ShapeGeometry(shape);
 
             return geometry;
         }
-    };
-})();
+    }
+}
 
-/**
- * todo ES6
- */
-(function () {
-    HC.RightTriangle = function (config) {
+{
+    /**
+     *
+     * @type {HC.RightTriangle}
+     */
+    HC.RightTriangle = class RightTriangle {
 
-        this._hw = config.width / 2;
-        this._hh = config.height / 2;
-    };
+        /**
+         *
+         * @param config
+         */
+        constructor(config) {
+            this._hw = config.width / 2;
+            this._hh = config.height / 2;
+        }
 
-    HC.RightTriangle.prototype = {
-        create: function () {
+        /**
+         *
+         * @returns {THREE.ShapeGeometry}
+         */
+        create() {
 
-            var shape = new THREE.Shape();
+            let shape = new THREE.Shape();
             shape.moveTo(-this._hw, this._hh);
             shape.lineTo(this._hw, this._hh);
             shape.lineTo(this._hw, -this._hh);
             shape.lineTo(-this._hw, this._hh);
 
-            var geometry = new THREE.ShapeGeometry(shape);
+            let geometry = new THREE.ShapeGeometry(shape);
 
             return geometry;
         }
-    };
-})();
+    }
+}
 
-/**
- * todo ES6
- */
-(function () {
-    HC.CustomGeometry = function () {
-    };
-    HC.CustomGeometry.prototype = {
-        fromString: function (vtcs, multiplier) {
+{
+    /**
+     *
+     * @type {HC.CustomGeometry}
+     */
+    HC.CustomGeometry = class CustomGeometry {
+
+        /**
+         *
+         */
+        constructor() {
+        }
+
+        /**
+         *
+         * @param vtcs
+         * @param multiplier
+         * @returns {THREE.Geometry}
+         */
+        fromString(vtcs, multiplier) {
 
             vtcs = vtcs
                 ? '[' + vtcs + ']'
                 : '[[' + (-1) + ',' + (1) + ',0],[' + (1) + ',' + (1) + ',0],[' + (1) + ',' + (-1) + ',0]]';
             vtcs = JSON.parse(vtcs);
 
-            var geometry = new THREE.Geometry();
+            let geometry = new THREE.Geometry();
 
-            for (var i = 0; i < vtcs.length; i++) {
-                var vtc = vtcs[i];
-                var vec = new THREE.Vector3(round(multiplier * vtc[0], 0), round(multiplier * vtc[1], 0), 0);
+            for (let i = 0; i < vtcs.length; i++) {
+                let vtc = vtcs[i];
+                let vec = new THREE.Vector3(round(multiplier * vtc[0], 0), round(multiplier * vtc[1], 0), 0);
                 geometry.vertices.push(vec);
                 if (i % 3 == 0) geometry.faces.push(new THREE.Face3(i + 0, i + 1, i + 2));
             }
 
             geometry.computeFaceNormals();
-            var n = geometry.faces;
-            for (var i = 0; i < n.length; i++) {
-                var face = n[i];
+            let n = geometry.faces;
+            for (let i = 0; i < n.length; i++) {
+                let face = n[i];
                 if (face.normal.z < 0) { // _check for twisted faces and twist
-                    var tmp = face.a;
+                    let tmp = face.a;
                     face.a = face.c;
                     face.c = tmp;
                 }
@@ -216,5 +288,5 @@
 
             return geometry;
         }
-    };
-})();
+    }
+}

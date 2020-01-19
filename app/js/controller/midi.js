@@ -4,7 +4,7 @@
 {
     /**
      *
-     * @type todo debug?: {HC.Midi}
+     * @type {HC.Midi}
      */
     HC.Midi = class Midi {
 
@@ -13,6 +13,9 @@
          */
         owner;
 
+        /**
+         * @type {MIDIAccess}
+         */
         midi;
         data;
         assignment;
@@ -67,7 +70,7 @@
                 navigator.requestMIDIAccess({
                     sysex: false,
                     software: true
-                }).then(this._onSuccess, this._onFailure);
+                }).then((e) => {this._onSuccess(e);}, (e) => {this._onFailure(e);});
             } else {
                 console.error("No MIDI support in your browser.");
             }
@@ -83,17 +86,17 @@
             this.midi = midiAccess; // this is our raw MIDI data, inputs, outputs, and sysex status
             console.log('MIDI access available');
 
-            let _updateControlSet = function (input, settings) {
+            let _updateControlSet = (input, settings) => {
                 let constants = settings.constants;
                 for (let c in constants) {
                     let co = constants[c];
-                    window[c] = co;
+                    window[c] = co; // todo do not put into window.
                 }
 
                 input.value._controlSet = settings;
             };
 
-            let _onStateChange = function () {
+            let _onStateChange = () => {
                 if (this.midi.onstatechange == null) return;
                 this.midi.onstatechange = null;
                 let inputs = this.midi.inputs.values();
@@ -119,14 +122,14 @@
                     }
 
                     console.log(name, input.value);
-                    input.value.onmidimessage = _onMessage;
+                    input.value.onmidimessage = (e) => {this._onMessage(e);};
 
                 }
                 if (!success) {
                     console.log('no MIDI devices connected');
                 }
 
-                setTimeout(function () {
+                setTimeout(() => {
                     this.midi.onstatechange = _onStateChange;
                 }, 2500);
             };
@@ -179,7 +182,7 @@
         _onMessage(message) {
             this.data = message.data; // this gives us our [command/channel, note, velocity] data.
 
-            let dataId = _dataId(this.data);
+            let dataId = this._dataId(this.data);
             if (this.data[2] == 127) {
                 this.midi_pressed[dataId] = this.data[2];
                 clearTimeout(this.midi_timeouts[dataId]);
@@ -197,7 +200,7 @@
                     let clocknow = message.timeStamp;
                     let diff = clocknow - this.clockfirst;
                     this.clockbpm = round(4 * 60 * 1000 / diff, 2);
-                    HC.log('this.clockbpm', this.clockbpm);
+                    HC.log('clock-bpm', this.clockbpm);
 
                     if (!this.statics.ControlSettings.peak_bpm_detect) { // tempo by MIDI clock
                         if (this.statics.ControlSettings.tempo != this.clockbpm) {
@@ -378,7 +381,7 @@
                 case 'select':
                     if (values in this.statics) {
                         values = this.statics[values];
-
+// todo missing: sequence blendmode
                         if (name in values) {
 
                             values = values[name];
@@ -405,7 +408,7 @@
                     }
                     break;
 
-                case 'volume': // fixme no ...Types, no function...
+                case 'volume':
                 case 'step':
                     if (types in (this.statics)) {
                         types = this.statics[types];
@@ -440,8 +443,8 @@
                 case 'function':
                     if (vel) {
                         func = settings[name];
-                        func.call(this.owner, name, value, true, true, false);
-                        this._showOSD(name, value, false);
+                        func.call(this.owner, name, true, true, true, false);
+                        this._showOSD(name, true, false);
 
                     } else {
                         this._hideOSD(name);
@@ -564,7 +567,7 @@
         _glow(dat, conf) {
             if (this.midi && dat) {
 
-                let key = _dataId(dat);
+                let key = this._dataId(dat);
                 let pressed = this.midi_pressed[key];
                 let glowing = this.midi_glow[key];
 
@@ -573,7 +576,7 @@
                     let noteon = [dat[0], dat[1], 126];
 
                     if (conf && conf.delay) { // start glowing after delay
-                        this.midi_timeouts[key] = setTimeout(function () {
+                        this.midi_timeouts[key] = setTimeout(() => {
                             this._send(noteon);
                         }, conf.delay);
 
@@ -582,11 +585,11 @@
                     }
 
                     if (conf && conf.timeout) { // stop glowing after timeout
-                        this.midi_timeouts[key] = setTimeout(function () {
+                        this.midi_timeouts[key] = setTimeout(() => {
                             this._off([dat[0], dat[1]], true);
                             if (conf.times) {
                                 conf.times--;
-                                this.midi_timeouts[key] = setTimeout(function () {
+                                this.midi_timeouts[key] = setTimeout(() => {
                                     this._glow(dat, conf)
                                 }, conf.timeout);
                             }
@@ -640,7 +643,7 @@
             if (this.midi && dat) {
                 let to = conf.duration / 24;
                 for (let i = 0; i < 24; i++) {
-                    setTimeout(function () {
+                    setTimeout(() => {
                         let clock = [dat[0], dat[1]];
 
                         this._send(clock);

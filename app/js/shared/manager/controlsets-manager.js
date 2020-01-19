@@ -126,7 +126,22 @@
         }
 
         /**
-         * fixme NOT a final solution!  drops rms by 1! rewrite all plugins and everything...
+         *
+         */
+        typesProxy() {
+
+            let proxy = {};
+
+            for (let set in this.controlSets) {
+                let cs = this.get(set);
+                proxy = {...proxy, ...cs.types};
+            }
+
+            return proxy;
+        }
+
+        /**
+         *
          * @param controlSets
          * @returns {Proxy}
          */
@@ -135,6 +150,18 @@
             let mappings = this.mappings();
 
             let proxy = new Proxy(this.controlSets, {
+
+                has(target, name) {
+                    let key = mappings[name];
+                    let set = target[key];
+
+                    if (set) {
+                        return true;
+                    }
+
+                    return false;
+                },
+
                 get(target, name, receiver) {
                     let key = mappings[name];
                     let set = target[key];

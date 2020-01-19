@@ -222,6 +222,21 @@
         }
 
         /**
+         *
+         */
+        static typesProxy(controlSets) {
+
+            let proxy = {};
+
+            for (let set in controlSets) {
+                let cs = controlSets[set];
+                proxy = {...proxy, ...cs.types};
+            }
+
+            return proxy;
+        }
+
+        /**
          * fixme NOT a final solution!  drops rms by 1! rewrite all plugins and everything...
          * @param controlSets
          * @returns {Proxy}
@@ -231,6 +246,18 @@
             let mappings = HC.LayeredControlSetsManager.mappings(controlSets);
 
             let proxy = new Proxy(controlSets, {
+
+                has(target, name) {
+                    let key = mappings[name];
+                    let set = target[key];
+
+                    if (set) {
+                        return true;
+                    }
+
+                    return false;
+                },
+
                 get(target, name, receiver) {
                     let key = mappings[name];
                     let set = target[key];

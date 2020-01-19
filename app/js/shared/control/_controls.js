@@ -221,28 +221,24 @@ HC.controls = HC.controls || {};
          * @returns {number}
          */
         validate(key, value) {
-            let type = typeof value;
-            // // _check if string contains float and then convert
-            // if (type == 'string') {
-            //     let f = parseFloat(value);
-            //     if (f && f.toString().length == value.length) {
-            //         value = f;
-            //     }
-            // }
-
             // avoid values to be overwritten by wrong type
             if (key in this.properties) {
                 let org = this.properties[key];
                 let otype = typeof org;
+                let type = typeof value;
 
                 if (otype !== type) {
-                    // _check if string contains float and then convert
-                    if (otype == 'number' && type == 'string') {
-                        let f = parseFloat(value);
-                        if (f && f.toString().length == value.length) {
-                            value = f;
-                        }
+                    // cast to whatever
+                    if (type == 'string' && otype != 'string') {
+                        value = parse(value);
+
+                        // cast to string
+                    } else if (type != 'string' && otype == 'string') {
+                        value = value.toString();
+
+                        // fallback to original
                     } else {
+
                         value = org;
                     }
                 }

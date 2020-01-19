@@ -36,7 +36,7 @@
             });
             this.component = this.gui;
 
-            this.gui.container.style.zIndex = 998;
+            this.gui.container.style.zIndex = 99;
         }
 
         /**

@@ -77,7 +77,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 let controlSets = HC.Statics.initControlControlSets();
                 statics.ControlSettingsManager = new HC.ControlSetsManager(controlSets);
-                statics.ControlSettings = statics.ControlSettingsManager.settingsProxy(); // fixme not a final solution
+                statics.ControlSettings = statics.ControlSettingsManager.settingsProxy();
+                statics.ControlTypes = statics.ControlSettingsManager.typesProxy();
 
                 controller.addGuifyControllers(
                     controlSets,
@@ -87,7 +88,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 controlSets = HC.Statics.initDisplayControlSets();
                 statics.DisplaySettingsManager = new HC.ControlSetsManager(controlSets);
-                statics.DisplaySettings = statics.DisplaySettingsManager.settingsProxy(); // fixme not a final solution
+                statics.DisplaySettings = statics.DisplaySettingsManager.settingsProxy();
+                statics.DisplayTypes = statics.DisplaySettingsManager.typesProxy();
 
                 controller.addGuifyDisplayControllers(
                     HC.DisplayController,
@@ -98,7 +100,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 controlSets = HC.Statics.initSourceControlSets();
                 statics.SourceSettingsManager = new HC.ControlSetsManager(controlSets);
-                statics.SourceSettings = statics.SourceSettingsManager.settingsProxy(); // fixme not a final solution
+                statics.SourceSettings = statics.SourceSettingsManager.settingsProxy();
+                statics.SourceTypes = statics.SourceSettingsManager.typesProxy();
 
                 controller.addGuifyControllers(
                     controlSets,
@@ -125,6 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 controller.initKeyboard();
                 controller.initLogEvents();
                 controller.midi = new HC.Midi(controller, statics);
+                controller.midi.init();
 
                 onResize();
             });

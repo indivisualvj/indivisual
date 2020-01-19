@@ -36,7 +36,7 @@
                 this.init();
             }
 
-            var crop = cropAtoB(this._width, this._height, this.width, this.height);
+            let crop = cropAtoB(this._width, this._height, this.width, this.height);
             this.readArea = crop.readArea;
             this.writeArea = crop.writeArea;
         }
@@ -66,22 +66,22 @@
          *
          */
         init() {
-            var file = this.file;
-            var tag = document.createElement('img');
+            let file = this.file;
+            let tag = document.createElement('img');
             tag.visible = true;
             tag.id = this.id;
             tag.setAttribute('src', file);
 
             this.canvas = tag;
 
-            var meta = parseFileMeta(this.file);
+            let meta = parseFileMeta(this.file);
             this._width = meta.resolution.x;
             this._height = meta.resolution.y;
             this._tempo = meta.tempo;
             this.fps = meta.fps;
 
             this.duration = Math.ceil(60000 / this._tempo);
-            var inst = this;
+            let inst = this;
             tag.onload = function () {
                 inst.beats = 1;
                 inst.frames = [];
@@ -100,15 +100,15 @@
          * @private
          */
         _init(frames) {
-            var inst = this;
-            var _loop = function (i) {
+            let inst = this;
+            let _loop = function (i) {
                 if (inst.initializing) {
 
                     if (inst.fps < 45 && i % 2 == 1) {
                         inst.frames.push(inst.frames[i - 1]);
 
                     } else {
-                        var cv = document.createElement('canvas');
+                        let cv = document.createElement('canvas');
                         cv.id = inst.id + '_' + i;
                         cv.ctx = cv.getContext('2d');
                         inst.frames.push(cv);
@@ -176,22 +176,22 @@
                             this.finish();
                         }
                         if (!this.complete) {
-                            var target = this.frames[this.pointer];
+                            let target = this.frames[this.pointer];
                             if (target) {
                                 if (this.fps < 45 && this.pointer % 2 == 1) {
                                     this.frames[this.pointer] = this.frames[this.pointer - 1];
 
                                 } else {
 
-                                    var frameDuration = 1000 / statics.DisplaySettings.fps;
-                                    var progress = this.pointer * frameDuration;
-                                    var allover = progress / this.duration;
-                                    var prc = allover - Math.floor(allover);
+                                    let frameDuration = 1000 / statics.DisplaySettings.fps;
+                                    let progress = this.pointer * frameDuration;
+                                    let allover = progress / this.duration;
+                                    let prc = allover - Math.floor(allover);
 
                                     target._color = color;
                                     target.progress = allover;
                                     target.prc = prc;
-                                    var ctx = target.ctx;
+                                    let ctx = target.ctx;
                                     ctx.clearRect(0, 0, this.width, this.height);
                                     ctx.drawImage(
                                         this.canvas,

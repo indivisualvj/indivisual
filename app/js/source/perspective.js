@@ -1,31 +1,37 @@
-(function () {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+{
     /**
-     * todo ES6
-     * @param index
-     * @constructor
+     *
+     * @type {HC.Perspective}
      */
-    HC.Perspective = function (index) {
-        this.type = 'Perspective';
-        this.index = index;
-        this.id = this.type + this.index;
-        this._bounds = false;
-        this._last = 0;
-        this.renderer = new THREE.WebGLRenderer({alpha: true, antialias: ANTIALIAS});
-        this.renderer.view = this.renderer.domElement;
-        this.renderer.view.id = this.id;
-    };
+    HC.Perspective = class Perspective {
 
-    HC.Perspective.prototype = {
+        /**
+         *
+         * @param index
+         */
+        constructor(index) {
+            this.type = 'Perspective';
+            this.index = index;
+            this.id = this.type + this.index;
+            this._bounds = false;
+            this._last = 0;
+            this.renderer = new THREE.WebGLRenderer({alpha: true, antialias: ANTIALIAS});
+            this.renderer.view = this.renderer.domElement;
+            this.renderer.view.id = this.id;
+        }
 
         /**
          *
          * @param width
          * @param height
          */
-        update: function (width, height) {
-            var checkWidth = this.width != width;
-            var checkHeight = this.height != height;
-            var needsUpdate = checkWidth || checkHeight;
+        update(width, height) {
+            let checkWidth = this.width != width;
+            let checkHeight = this.height != height;
+            let needsUpdate = checkWidth || checkHeight;
             this.width = width;
             this.height = height;
             this.renderer.setSize(this.width, this.height);
@@ -33,56 +39,56 @@
             if (needsUpdate) {
                 this.init();
             }
-        },
+        }
 
         /**
          *
          */
-        init: function () {
+        init() {
 
-        },
+        }
 
         /**
          *
          * @param reference
          * @returns {*}
          */
-        bounds: function (reference) {
+        bounds(reference) {
             return reference;
-        },
+        }
 
         /**
          *
          * @returns {*}
          */
-        brightness: function () {
+        brightness() {
             return displayman.brightness();
-        },
+        }
 
         /**
          *
          * @param fallback
          * @returns {*}
          */
-        current: function (fallback) {
+        current(fallback) {
             if (this._last == animation.now) {
                 return this.renderer.view;
             }
 
             return fallback;
-        },
+        }
 
         /**
          *
          */
-        next: function () {
+        next() {
 
             if (this._last != animation.now) {
-                var key = 'perspective' + this.index;
-                var layer = renderer.currentLayer;
-                var three = layer.three;
-                var cam = renderer.three[key];
-                var lcam = three.camera;
+                let key = 'perspective' + this.index;
+                let layer = renderer.currentLayer;
+                let three = layer.three;
+                let cam = renderer.three[key];
+                let lcam = three.camera;
                 cam.position.x = lcam.position.x;
                 cam.position.y = lcam.position.y;
                 cam.position.z = lcam.position.z;
@@ -99,7 +105,5 @@
                 this._last = animation.now;
             }
         }
-
-    };
-
-}());
+    }
+}

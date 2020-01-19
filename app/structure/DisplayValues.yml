@@ -32,12 +32,7 @@ display:
   - 14
   - 15
 
-video:
-  - 0
-  - 1
-  - 2
-  - 3
-  - 4
+video: {}
 
 display_visibility:
   visible: visible

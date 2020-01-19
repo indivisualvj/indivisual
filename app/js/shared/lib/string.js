@@ -81,7 +81,7 @@ function numberExtract(item, prefix) {
         return i;
     }
 
-    return item;
+    return undefined; // todo does it still work with all use cases?
 }
 
 /**

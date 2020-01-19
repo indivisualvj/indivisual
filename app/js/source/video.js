@@ -1,12 +1,14 @@
 (function () {
     /**
-     *
+     * todo ES6
+     * todo create Sample from video by drag&drop to smp element or by load sample button in samples
      * @param index
      * @param file
      * @constructor
      */
     HC.Video = function (index, file) {
         this.index = index;
+        this.type = 'video';
         this.id = 'sample' + index;
         this.file = file;
         this.reset();

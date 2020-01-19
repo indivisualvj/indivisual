@@ -309,7 +309,6 @@ HC.DisplayController = HC.DisplayController || {};
             display_static: false,
             display_noborder: false,
             display_transparent: false,
-            display_video: 0,
             display_smearing: 0.0
         };
 
@@ -329,7 +328,6 @@ HC.DisplayController = HC.DisplayController || {};
             display_static: false,
             display_transparent: false,
             display_noborder: false,
-            display_video: 0,
             display_smearing: 0.0
         };
 
@@ -341,19 +339,16 @@ HC.DisplayController = HC.DisplayController || {};
             display_static: ['quarter', 'clear'],
             display_transparent: ['quarter'],
             display_noborder: ['quarter'],
-            display_video: ['half', 'clear'],
-            display_smearing: ['half']
+            // display_smearing: ['half']
         };
 
         values = {
-            display_video: 0
         };
 
         parents = {
             display_static: '',
             display_noborder: '',
             display_transparent: '',
-            display_video: '',
             display_smearing: ''
         };
 
@@ -366,7 +361,6 @@ HC.DisplayController = HC.DisplayController || {};
                 this._create('settings', i, this.members.settings);
                 this._create('types', i, this.members.types);
                 this._create('styles', i, this.members.styles);
-                this._create('values', i, this.members.values, pluggedValues.video);
                 this._create('parents', i, this.members.parents, this.prefix + i);
             }
         }

@@ -16,7 +16,6 @@
             this.perspectives = new Array(3);
             this.samples = config.sample;
             this.sequences = config.sequence;
-            this.videos = config.video;
             this.colors = [];
         }
 
@@ -51,12 +50,6 @@
                         sq = statics.SourceSettings[display.id + '_sequence'];
                         source = new HC.Source(this.getPerspective(sq), display.width(), display.height());
                         this.updatePerspective(sq);
-                        break;
-
-                    case 'video':
-                        sq = statics.DisplaySettings[display.id + '_video'];
-                        source = new HC.Source(this.getVideo(sq), display.width(), display.height());
-                        this.updateVideo(sq);
                         break;
 
                     case 'display':
@@ -162,17 +155,8 @@
                 if (i < statics.SourceValues.sample.length) {
                     sample = new HC.Sample(i);
 
-                } else if (i < iKeys.length && i in statics.SourceValues.input) {
-                    let file = statics.SourceValues.input[i];
-
-                    if (assetman.getVideo(file)) {
-                        let path = filePath(VIDEO_DIR, file);
-                        sample = new HC.Video(i, path);
-
-                    } else {
-                        let path = filePath(IMAGE_DIR, file);
-                        sample = new HC.Image(i, path);
-                    }
+                } else {
+                    return;
                 }
 
                 if (!sample) {
@@ -276,9 +260,6 @@
                 if (statics.SourceSettings[recordKey]) { // sample
                     animation.updateSource(recordKey, false, true, true, false);
 
-                } else { // video
-                    let seq = getSequenceBySample(target.index);
-                    sourceman.updateSequence(seq, true);
                 }
 
                 // if (IS_ANIMATION) {
@@ -386,20 +367,6 @@
          * @param i
          * @returns {*}
          */
-        getVideo(i) {
-
-            if (!this.videos[i]) {
-                this.videos[i] = new HC.Video(i);
-            }
-
-            return this.videos[i];
-        }
-
-        /**
-         *
-         * @param i
-         * @returns {*}
-         */
         getDisplay(i) {
             return displayman.getDisplay(i);
         }
@@ -428,17 +395,6 @@
             }
 
             return this.lighting;
-        }
-
-        /**
-         *
-         * @param i
-         */
-        updateVideo(i) {
-            let video = this.getVideo(i);
-            if (video) {
-                video.update(statics.ControlSettings.tempo, 1280, 720);
-            }
         }
 
         /**
@@ -473,40 +429,6 @@
             let color = this.getColor(i);
             if (color) {
                 color.update(this.width, this.height);
-            }
-        }
-
-        /**
-         *
-         * @param speed
-         */
-        updateVideos(speed) {
-            for (let i = 0; i < this.videos.length; i++) {
-                if (this.videos[i]) {
-                    this.videos[i].update(speed, false, false);
-                }
-            }
-        }
-
-        /**
-         *
-         */
-        startVideos() {
-            for (let i = 0; i < this.videos.length; i++) {
-                if (this.videos[i]) {
-                    this.videos[i].canvas.play();
-                }
-            }
-        }
-
-        /**
-         *
-         */
-        stopVideos() {
-            for (let i = 0; i < this.videos.length; i++) {
-                if (this.videos[i]) {
-                    this.videos[i].canvas.pause();
-                }
             }
         }
 

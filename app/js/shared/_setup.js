@@ -169,14 +169,7 @@ function setupResources() {
             file: VIDEO_DIR,
             callback: function (files, finished) {
 
-                let videos = assetman.addVideos(files, 'name');
-
-                // add videos into source values by index
-                let keys = Object.keys(statics.SourceValues.input);
-                let index = keys.length;
-                for (let i in videos) {
-                    statics.SourceValues.input[index++] = i;
-                }
+                assetman.addVideos(files, 'name');
 
                 finished();
             }
@@ -191,15 +184,6 @@ function setupResources() {
                 for (let i in images) {
                     statics.AnimationValues.material_input[i] = i;
                     statics.AnimationValues.background_input[i] = i;
-                }
-
-                // add images into source values by index
-                let keys = Object.keys(statics.SourceValues.input);
-                let index = keys.length;
-                for (let i in images) {
-                    if (!i.match(/^.+\.mat$/)) {
-                        statics.SourceValues.input[index++] = i;
-                    }
                 }
 
                 finished();

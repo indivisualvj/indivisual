@@ -666,9 +666,7 @@ HC.SourceController = HC.SourceController || {};
 
             el.appendChild(this.clipNode);
 
-            window.addEventListener('resize', this._onResize);
-
-            this._onResize();
+            window.addEventListener('resize', this._onResize());
 
             this.setVisible(false);
         }
@@ -729,6 +727,7 @@ HC.SourceController = HC.SourceController || {};
         setVisible(v) {
             if (v) {
                 this.clipNode.style.display = '';
+                this._onResize();
 
             } else {
                 this.clipNode.style.display = 'none';
@@ -775,10 +774,16 @@ HC.SourceController = HC.SourceController || {};
          * @private
          */
         _onResize() {
-            let el = this.clipNode;
-            let ow = el.clientWidth;
-            let nh = (ow / 5 * 9 / 16);
-            el.style.height = nh + 'px';
+            let func = (e) => {
+                let el = this.clipNode;
+                let ow = el.clientWidth;
+                let nh = (ow / 5 * 9 / 16);
+                el.style.height = nh + 'px';
+            };
+
+            func();
+
+            return func;
         }
     }
 }

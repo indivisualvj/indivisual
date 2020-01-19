@@ -42,7 +42,6 @@ source:
   animation: animation
   sequence: sequence
   perspective: perspective
-#  video: video
 #  camera: camera
   display: display
   black: black

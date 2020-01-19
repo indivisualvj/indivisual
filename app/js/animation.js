@@ -109,8 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 sourceman = new HC.SourceManager({
                     sequence: new Array(statics.SourceValues.sequence.length),
-                    sample: new Array(statics.SourceValues.sample.length),
-                    video: new Array(statics.DisplayValues.video.length)
+                    sample: new Array(statics.SourceValues.sample.length)
                 });
                 sourceman.resize(renderer.getResolution());
 
@@ -272,13 +271,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             } else {
                 this.pause();
-            }
-
-            if (statics.ControlSettings.play) {
-                sourceman.startVideos();
-
-            } else {
-                sourceman.stopVideos();
             }
         }
 
@@ -703,9 +695,9 @@ document.addEventListener('DOMContentLoaded', function () {
                             renderer.nextLayer = renderer.layers[value];
                             break;
 
-                        case 'tempo':
-                            sourceman.updateVideos(value);
-                            break;
+                        // case 'tempo':
+                        //
+                        //     break;
 
                         case 'monitor':
                             if (!IS_MONITOR) {

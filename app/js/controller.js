@@ -710,15 +710,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             value = statics.SourceSettingsManager.updateItem(item, value);
 
-            if (forward) {
-                let data = {};
-                data[item] = value;
-                messaging.emitSources(data, true, false, force);
-            }
-
             if (display !== false) {
 
-                if (item.match(/_(start|end|input|sequence|source)/)) {
+                if (item.match(/_(start|end|sequence|input|source)$/)) {
                     this.updateData();
 
                 } else if (item.match(/_(enabled)/)) {
@@ -730,17 +724,21 @@ document.addEventListener('DOMContentLoaded', function () {
                         while ((seq = getSequenceBySample(smp)) !== false) {
                             let key = getSequenceSampleKey(seq);
                             this.updateSource(key, 'off', true, true, false);
-
                         }
                     }
 
                 } else if (item.match(/_(load)/)) {
-                    this.loadClip(numberExtract(item, 'sample'));
+                    this.loadClip(smp);
                 }
 
                 this.updateUi(this.sourceSettingsGui);
             }
 
+            if (forward) {
+                let data = {};
+                data[item] = value;
+                messaging.emitSources(data, true, false, force);
+            }
         }
 
         /**
@@ -765,6 +763,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (statics.SourceValues && statics.SourceValues.sequence) {
                 for (let seq = 0; seq < statics.SourceValues.sequence.length; seq++) {
+
+                    // set sequence inputs without enabled sample to off
+                    if (getSampleEnabledBySequence(seq) === false) {
+                        let key = getSequenceSampleKey(seq);
+                        setTimeout(() => {
+                            this.updateSource(key, 'off', false, true);
+                        }, 125);
+                    }
 
                     let _trigger = (_seq) => {
 
@@ -916,7 +922,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         *
+         * todo push even if monitor is enabled? how do it nicely?
          */
         syncLayers() {
             for (let layer in cm.layers) {

@@ -1,4 +1,14 @@
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
 (function () {
+    /**
+     *  todo ES6
+     * @param instance
+     * @param width
+     * @param height
+     * @constructor
+     */
     HC.Source = function (instance, width, height) {
         this.instance = instance;
         this.type = this.instance.type;

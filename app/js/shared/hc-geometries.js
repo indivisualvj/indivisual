@@ -1,6 +1,6 @@
 (function () {
     /**
-     *
+     * todo ES6
      * @param edgeSize
      * @param cornerRadius
      * @param curveSegments
@@ -47,7 +47,7 @@
     }
 })();
 
-(function () {
+(function () { //  todo ES6
     HC.DirectionalCircle = function (config) {
 
         this._edges = config.edges;
@@ -71,7 +71,7 @@
 })();
 
 
-(function () {
+(function () { //  todo ES6
     HC.DirectionalRing = function (config) {
 
         this.edges = config.edges;
@@ -95,7 +95,7 @@
 })();
 
 
-(function () {
+(function () {// todo ES6
     HC.DirectionalShape = function (config) {
         this._edges = config.edges;
         this._radius = config.radius;
@@ -128,7 +128,7 @@
 })();
 
 /**
- *
+ * todo ES6
  */
 (function () {
     HC.Rect = function (config) {
@@ -155,7 +155,7 @@
 })();
 
 /**
- *
+ * todo ES6
  */
 (function () {
     HC.RightTriangle = function (config) {
@@ -181,7 +181,7 @@
 })();
 
 /**
- *
+ * todo ES6
  */
 (function () {
     HC.CustomGeometry = function () {

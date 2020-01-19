@@ -5,7 +5,7 @@
 (function () {
 
     /**
-     *
+     * todo ES6
      * @constructor
      */
     HC.AudioAnalyser = function () {

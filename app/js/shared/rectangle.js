@@ -1,7 +1,10 @@
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
 (function () {
 
     /**
-     *
+     *  todo ES6
      * @param x
      * @param y
      * @param width

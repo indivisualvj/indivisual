@@ -4,7 +4,7 @@
 
 (function () {
     /**
-     *
+     * todo ES6
      * @param prefix
      * @param canvas
      * @param type

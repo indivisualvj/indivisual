@@ -1,6 +1,6 @@
 (function () {
     /**
-     *
+     * todo ES6
      * @param index
      * @constructor
      */

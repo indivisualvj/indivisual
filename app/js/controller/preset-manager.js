@@ -97,7 +97,7 @@
 
                 if (di < dflt.length) {
 
-                    let load = function (child, i, di) {
+                    let load = (child, i, di) => {
 
                         this.owner.explorer.setPreset(i, child);
 

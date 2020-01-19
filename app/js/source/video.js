@@ -1,20 +1,25 @@
-(function () {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+{
     /**
-     * todo ES6
      * todo create Sample from video by drag&drop to smp element or by load sample button in samples
-     * @param index
-     * @param file
-     * @constructor
+     * @type {HC.Video}
      */
-    HC.Video = function (index, file) {
-        this.index = index;
-        this.type = 'video';
-        this.id = 'sample' + index;
-        this.file = file;
-        this.reset();
-    };
+    HC.Video = class Video {
 
-    HC.Video.prototype = {
+        /**
+         * 
+         * @param index
+         * @param file
+         */
+        constructor(index, file) {
+            this.index = index;
+            this.type = 'video';
+            this.id = 'sample' + index;
+            this.file = file;
+            this.reset();
+        }
 
         /**
          *
@@ -22,7 +27,7 @@
          * @param width
          * @param height
          */
-        update: function (speed, width, height) {
+        update(speed, width, height) {
 
             this.speed = speed;
             this.width = width;
@@ -32,41 +37,41 @@
                 this.init();
             }
 
-            var crop = cropAtoB(this._width, this._height, this.width, this.height);
+            let crop = cropAtoB(this._width, this._height, this.width, this.height);
             this.readArea = crop.readArea;
             this.writeArea = crop.writeArea;
-        },
+        }
 
         /**
          *
          * @returns {boolean|*}
          */
-        isReady: function () {
+        isReady() {
             return this.enabled && this.initialized && this.complete && this.frames;
-        },
+        }
 
         /**
          *
          * @param i
          * @returns {*}
          */
-        getFrame: function (i) {
+        getFrame(i) {
             if (this.isReady() && i > -1 && i < this.frames.length) {
                 return this.frames[i];
             }
 
             return false;
-        },
+        }
 
         /**
          *
          */
-        init: function () {
-            var file = this.file;
-            var tag = document.createElement('video');
+        init() {
+            let file = this.file;
+            let tag = document.createElement('video');
             tag.visible = true;
             tag.id = this.id;
-            var source = document.createElement('source');
+            let source = document.createElement('source');
 
             tag.setAttribute('muted', '');
             tag.preload = 'auto';
@@ -76,7 +81,7 @@
             document.body.appendChild(tag);
             this.canvas = tag;
 
-            var meta = parseFileMeta(this.file);
+            let meta = parseFileMeta(this.file);
             this._width = meta.resolution.x;
             this._height = meta.resolution.y;
             this._tempo = meta.tempo;
@@ -84,13 +89,13 @@
 
             this.duration = Math.ceil(60000 / this._tempo);
 
-            var inst = this;
+            let inst = this;
             tag.onloadedmetadata = function () {
-                var milliseconds = tag.duration * 1000;
-                var frameDuration = 1000 / statics.DisplaySettings.fps;
+                let milliseconds = tag.duration * 1000;
+                let frameDuration = 1000 / statics.DisplaySettings.fps;
 
-                var maxFrames = inst.duration * 32 / 1000 * statics.DisplaySettings.fps;
-                var frames = Math.min(maxFrames, Math.ceil(milliseconds / frameDuration));
+                let maxFrames = inst.duration * 32 / 1000 * statics.DisplaySettings.fps;
+                let frames = Math.min(maxFrames, Math.ceil(milliseconds / frameDuration));
                 milliseconds = frameDuration * frames;
                 inst.beats = Math.floor(milliseconds / inst.duration);
                 inst.frames = [];
@@ -104,23 +109,23 @@
                 console.error(err);
                 listener.fireEventId('sample.render.error', this.id, this);
             }
-        },
+        }
 
         /**
          *
          * @param frames
          * @private
          */
-        _init: function (frames) {
-            var inst = this;
-            var _loop = function (i) {
+        _init(frames) {
+            let inst = this;
+            let _loop = function (i) {
                 if (inst.initializing) {
 
                     if (inst.fps < 45 && i % 2 == 1) {
                         inst.frames.push(inst.frames[i - 1]);
 
                     } else {
-                        var cv = document.createElement('canvas');
+                        let cv = document.createElement('canvas');
                         cv.id = inst.id + '_' + i;
                         cv.ctx = cv.getContext('2d');
                         inst.frames.push(cv);
@@ -154,18 +159,18 @@
                 inst.initializing = true;
                 _loop(0);
             });
-        },
+        }
 
         /**
          *
          */
-        finish: function () {
+        finish() {
             this.canvas.pause();
             this.complete = true;
             this.pointer = 0;
 
             listener.fireEventId('sample.render.end', this.id, this);
-        },
+        }
 
         /**
          *
@@ -173,7 +178,7 @@
          * @param speed
          * @param color
          */
-        render: function (image, speed, color) {
+        render(image, speed, color) {
 
             if (this.enabled && this.initialized && !this.complete) {
                 if (image && this.frames) {
@@ -195,7 +200,7 @@
                         }
 
                         if (!this.complete) {
-                            var target = this.frames[this.pointer];
+                            let target = this.frames[this.pointer];
                             if (target) {
                                 if (this.fps < 45 && this.pointer % 2 == 1) {
                                     this.frames[this.pointer] = this.frames[this.pointer - 1];
@@ -205,15 +210,15 @@
                                      * genauer aber weniger dynamik da beim rendern prc werte aus
                                      * progress bei beatkorrektur würfeln
                                      */
-                                    //var frameDuration = 1000 / statics.DisplaySettings.fps;
-                                    //var progress = this.pointer * frameDuration;
-                                    //var allover = progress / this.duration;
-                                    //var prc = allover - Math.floor(allover);
+                                    //let frameDuration = 1000 / statics.DisplaySettings.fps;
+                                    //let progress = this.pointer * frameDuration;
+                                    //let allover = progress / this.duration;
+                                    //let prc = allover - Math.floor(allover);
 
                                     target._color = color;
                                     target.progress = this.counter + speed.prc;
                                     target.prc = speed.prc;
-                                    var ctx = target.ctx;
+                                    let ctx = target.ctx;
                                     ctx.clearRect(0, 0, this.width, this.height);
                                     ctx.drawImage(
                                         this.canvas,
@@ -231,12 +236,12 @@
                     //listener.fireEventId('sample.render.error', this.id, this);
                 }
             }
-        },
+        }
 
         /**
          *
          */
-        reset: function () {
+        reset() {
             this.enabled = false;
             this.pointer = 0;
             this.initialized = false;
@@ -252,19 +257,19 @@
             }
 
             this.canvas = false;
-        },
+        }
 
         /**
          *
          * @returns {number}
          */
-        last: function () {
+        last() {
             if (this.frames && this.frames.length > 0) {
                 return this.frames.length - 1;
             }
 
             return 0;
         }
-    };
+    }
 
-}());
+}

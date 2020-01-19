@@ -381,7 +381,7 @@
                 case 'select':
                     if (values in this.statics) {
                         values = this.statics[values];
-// todo missing: sequence blendmode
+
                         if (name in values) {
 
                             values = values[name];

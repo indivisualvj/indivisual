@@ -56,7 +56,7 @@
 
                 e.stopPropagation();
 
-                if (valueComponent.nodeName === 'INPUT') {
+                if (valueComponent.nodeName === 'INPUT') { // todo checkout and make nicer
                     if (e.keyCode == 27) { // ESCAPE
                         this.focus();
                         valueComponent.blur();

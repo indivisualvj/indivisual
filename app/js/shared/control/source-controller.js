@@ -395,6 +395,10 @@ HC.SourceController = HC.SourceController || {};
             sequence4_brightness: ['half', 'clear'],
         };
 
+        values = {
+
+        };
+
         init(pluggedValues) {
             this.createSettings(pluggedValues);
             super.init(pluggedValues);

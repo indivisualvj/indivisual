@@ -142,6 +142,19 @@
 
         /**
          *
+         */
+        valuesProxy(proxy) {
+
+            for (let set in this.controlSets) {
+                let cs = this.get(set);
+                proxy = {...proxy, ...cs.values};
+            }
+
+            return proxy;
+        }
+
+        /**
+         *
          * @param controlSets
          * @returns {Proxy}
          */

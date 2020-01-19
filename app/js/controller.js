@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 statics.ControlSettingsManager = new HC.ControlSetsManager(controlSets);
                 statics.ControlSettings = statics.ControlSettingsManager.settingsProxy();
                 statics.ControlTypes = statics.ControlSettingsManager.typesProxy();
+                statics.ControlValues = statics.ControlSettingsManager.valuesProxy(statics.ControlValues);
 
                 controller.addGuifyControllers(
                     controlSets,
@@ -90,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 statics.DisplaySettingsManager = new HC.ControlSetsManager(controlSets);
                 statics.DisplaySettings = statics.DisplaySettingsManager.settingsProxy();
                 statics.DisplayTypes = statics.DisplaySettingsManager.typesProxy();
+                statics.DisplayValues = statics.DisplaySettingsManager.valuesProxy(statics.DisplayValues);
 
                 controller.addGuifyDisplayControllers(
                     HC.DisplayController,
@@ -102,6 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 statics.SourceSettingsManager = new HC.ControlSetsManager(controlSets);
                 statics.SourceSettings = statics.SourceSettingsManager.settingsProxy();
                 statics.SourceTypes = statics.SourceSettingsManager.typesProxy();
+                statics.SourceValues = statics.SourceSettingsManager.valuesProxy(statics.SourceValues);
 
                 controller.addGuifyControllers(
                     controlSets,

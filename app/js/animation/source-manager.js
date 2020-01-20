@@ -118,10 +118,18 @@
                 if (sequence.sample) {
 
                     let _indicator = function (sequence) {
-                        let end = sequence.sample.last();
+                        let type = [0, 0, 1];
+                        if (sequence.sample) {
+                            type[1] = sequence.sample.last();
+                            type[2] = round(sequence.sample.last() / 50, 0);
+                        }
+                        let conf = {SourceTypes: {}};
+                        conf.SourceTypes[getSequenceStartKey(sequence.index)] = type;
+                        conf.SourceTypes[getSequenceEndKey(sequence.index)] = type;
+                        messaging.emitData(sequence.sample.id, conf);
 
                         animation.updateSource(getSequenceStartKey(sequence.index), 0, false, true);
-                        animation.updateSource(getSequenceEndKey(sequence.index), end, false, true);
+                        animation.updateSource(getSequenceEndKey(sequence.index), type[1], false, true);
                     };
 
                     if (os != sequence.sample) {

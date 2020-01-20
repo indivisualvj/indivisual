@@ -111,6 +111,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     HC.SourceControllerUi,
                     controller.sourceSettingsGui
                 );
+
+                controller.addConfigurationSettings();
+
                 controller.initClips();
                 controller.initThumbs();
 
@@ -177,6 +180,12 @@ document.addEventListener('DOMContentLoaded', function () {
          * @type {HC.Guify}
          */
         animationSettingsGui;
+
+        /**
+         * @type {HC.Guify}
+         */
+        configurationSettingsGui;
+
         /**
          *
          * @type {{}}
@@ -230,10 +239,11 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         init() {
             // todo evtl doch das? https://github.com/automat/controlkit.js
-            this.controlSettingsGui = new HC.Guify('ControlSettings', true);
+            this.controlSettingsGui = new HC.Guify('ControlSettings', {open: true});
             this.displaySettingsGui = new HC.Guify('DisplaySettings');
             this.sourceSettingsGui = new HC.Guify('SourceSettings');
             this.animationSettingsGui = new HC.Guify('AnimationSettings');
+            this.configurationSettingsGui = new HC.Guify('ConfigurationSettings');
 
             this.guis = [
                 this.controlSettingsGui,

@@ -407,7 +407,7 @@
                         }
                     }
                     break;
-// todo sequence start/end not working updated types missing
+
                 case 'volume':
                 case 'step':
                     if (types in (this.statics)) {

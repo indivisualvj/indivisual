@@ -453,11 +453,12 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         postStatus(detectedSpeed) {
 
-            let color = detectedSpeed ? 'green' : (audio.peakReliable ? 'yellow' : 'red');
-            messaging.emitAttr('#sync', 'data-color', color);
-
             if (statics.ControlSettings.beat) {
                 let speed = beatkeeper.getDefaultSpeed();
+                let color = detectedSpeed ? 'green' : (audio.peakReliable ? 'yellow' : '');
+
+                messaging.emitAttr('#beat', 'color', color, '', speed.duration);
+
                 let btk = ['bpm:' + beatkeeper.bpm,
                     'b:' + speed.beats,
                     'd:' + speed.duration.toFixed(0),
@@ -466,11 +467,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 messaging.emitAttr('#beat', 'data-label', btk.join(' / '));
 
-                let vo = round(audio.avgVolume, 2) + '';
-                messaging.emitAttr('#audio', 'data-mnemonic', vo);
-
                 if (audioman.isActive()) {
                     let au = [
+                        round(audio.avgVolume, 2) + '',
                         audio.peakBPM.toFixed(2),
                     ];
                     messaging.emitAttr('#audio', 'data-label', au.join(' / '));

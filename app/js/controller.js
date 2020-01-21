@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 );
 
                 controller.addConfigurationSettings();
-
+                controller.initStatusBar();
                 controller.initClips();
                 controller.initThumbs();
 

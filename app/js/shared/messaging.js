@@ -65,10 +65,8 @@
         }
 
         on(event, callback) {
-            let that = this; // todo eliminate that?
-
-            this.socket.on(event, function (data) {
-                callback(data, that);
+            this.socket.on(event, (data) => {
+                callback(data, this);
             });
         }
 
@@ -157,7 +155,7 @@
          *
          * @param data
          */
-        onAttr(data) {
+        onAttr(data, that) {
             let key = data.query.replace(/[^a-z0-9]+/gi, '') + data.key;
 
             requestAnimationFrame(() => {
@@ -174,11 +172,11 @@
 
                     if (data.resetValue != undefined) {
 
-                        if (this.timeouts[key]) {
-                            clearTimeout(this.timeouts[key]);
+                        if (that.timeouts[key]) {
+                            clearTimeout(that.timeouts[key]);
                         }
 
-                        this.timeouts[key] = setTimeout(() => {
+                        that.timeouts[key] = setTimeout(() => {
 
                             if (data.resetValue == '') {
                                 elem.removeAttribute(data.key);
@@ -186,7 +184,7 @@
                             } else {
                                 elem.setAttribute(data.key, data.resetValue);
                             }
-                            delete this.timeouts[key];
+                            delete that.timeouts[key];
                         }, data.timeout ? data.timeout : 125);
                     }
                 }
@@ -242,7 +240,7 @@
          * @param value
          * @param resetValue
          */
-        emitAttr(query, key, value, resetValue) {
+        emitAttr(query, key, value, resetValue, timeout) {
             let config = {
                 action: 'attr',
                 query: query,
@@ -250,6 +248,11 @@
                 value: value,
                 resetValue: resetValue
             };
+
+            if (timeout) {
+                config.timeout = timeout;
+            }
+
             this._emit(config);
         }
 

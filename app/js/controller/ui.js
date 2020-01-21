@@ -91,6 +91,30 @@ HC.Controller.prototype.addConfigurationSettings = function () {
     }
 };
 
+HC.Controller.prototype.initStatusBar = function () {
+
+    let ctrls = {
+        play: {
+            dataClass: 'quarter'
+        },
+        beat: {
+
+        },
+        sync: {
+
+        },
+        audio: {
+
+        },
+        layer: {
+
+        },
+        layers: {
+
+        }
+    };
+};
+
 /**
  *
  * @param submit

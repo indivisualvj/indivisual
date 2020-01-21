@@ -12,7 +12,9 @@
         constructor(parent, opts) {
             super(parent.gui);
             this.parent = parent;
-            opts.folder = parent.getComponent();
+            if (!(parent instanceof HC.Guify)) {
+                opts.folder = parent.getComponent();
+            }
             this.component = this.gui.Register(opts);
 
             this.getContainer().setAttribute('data-id', this.getProperty());

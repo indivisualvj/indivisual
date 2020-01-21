@@ -96,7 +96,7 @@
         /**
          *
          * @param opts {{}|HC.GuifyController}
-         * @returns {Controller}
+         * @returns {HC.GuifyController}
          */
         addController(opts) {
 

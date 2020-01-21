@@ -51,33 +51,36 @@
                 return;
             }
 
-            valueComponent.addEventListener('keydown', function (e) {
+            valueComponent.addEventListener('keydown', (e) => {
                 if (e.ctrlKey && (e.shiftKey || e.altKey)) {
                     return;
                 }
 
-                e.stopPropagation();
+                // e.stopPropagation();
 
-                if (valueComponent.nodeName === 'INPUT') { // todo checkout and make nicer
+                if (valueComponent.nodeName === 'INPUT') {
                     if (e.keyCode == 27) { // ESCAPE
-                        this.focus();
                         valueComponent.blur();
-                        this.focus();
-                        valueComponent.blur();
+                        // e.preventDefault();
+                        // e.stopPropagation();
+
+                    } else if (e.keyCode == 13) {
                         e.preventDefault();
                         e.stopPropagation();
-
-                    } else if (e.keyCode == 9) { // TAB
-                        e.preventDefault();
-                        e.stopPropagation();
-
+                        valueComponent.blur();
+                        valueComponent.focus();
                     }
+                    // else if (e.keyCode == 9) { // TAB
+                    //     e.preventDefault();
+                    //     e.stopPropagation();
+                    //
+                    // }
 
                 } else if (valueComponent.nodeName === 'SELECT') {
                     if (e.keyCode == 8 || e.keyCode == 27) { // BACKSPACE | ESCAPE
-                        this.focus();
+                        valueComponent.focus();
                         valueComponent.blur();
-                        this.focus();
+                        valueComponent.focus();
                         valueComponent.blur();
                         e.preventDefault();
                         e.stopPropagation();

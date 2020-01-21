@@ -410,14 +410,6 @@ pre .orange {
     color: #e61d5f !important;
 }
 
-[data-changed] > div > .c .slider .slider-fg {
-    background: #e61d5f !important;
-}
-
-[data-changed] > div > .c .slider:hover .slider-fg {
-    background: #e61d5f !important;
-}
-
 [data-changed] label,
 [data-changed] input {
     color: #e61d5f !important;
@@ -425,6 +417,11 @@ pre .orange {
 
 [data-changed] select {
     color: #e61d5f !important;
+}
+
+[data-changed] select:hover {
+    color: white !important;
+    /*background-color: #1a1a1a !important;*/
 }
 
 .guify-component-container[data-changed] > div > div {

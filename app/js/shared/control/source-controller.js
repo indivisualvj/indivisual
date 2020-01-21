@@ -601,12 +601,14 @@ HC.SourceController = HC.SourceController || {};
      * @type {HC.SourceControllerUi}
      */
     HC.SourceControllerUi = class SourceControllerUi extends HC.ControlSetGuifyUi {
+
         /**
          *
          * @param value
+         * @param that
          */
-        onChange(value) {
-            controller.updateSource(this.property, value, true, true, false);
+        onChange(value, that) {
+            controller.updateSource(that.getProperty(), value, true, true, false);
         }
     }
 }

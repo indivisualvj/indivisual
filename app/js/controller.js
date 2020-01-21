@@ -63,7 +63,9 @@ document.addEventListener('DOMContentLoaded', function () {
     messaging = new HC.Messaging(controller);
     messaging.connect(function (reconnect) {
 
-        document.getElementById(_MONITOR).setAttribute('src', 'monitor.html#' + messaging.sid);
+        setTimeout(() => {
+            document.getElementById(_MONITOR).setAttribute('src', 'monitor.html#' + messaging.sid);
+        }, 250);
 
         HC.log(controller.name, 'connected', true, true);
 

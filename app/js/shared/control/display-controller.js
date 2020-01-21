@@ -373,12 +373,14 @@ HC.DisplayController = HC.DisplayController || {};
      * @type {HC.DisplayControllerUi}
      */
     HC.DisplayControllerUi = class DisplayControllerUi extends HC.ControlSetGuifyUi {
+
         /**
          *
          * @param value
+         * @param that
          */
-        onChange(value) {
-            controller.updateDisplay(this.property, value, true, true, false);
+        onChange(value, that) {
+            controller.updateDisplay(that.getProperty(), value, true, true, false);
         }
     }
 }

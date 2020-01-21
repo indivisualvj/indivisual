@@ -302,14 +302,14 @@
                 }
             },
             {
-                "bloom": {
+                "noise": {
                     "apply": true,
                     "random": false,
-                    "strength": {
-                        "value": 1.5,
+                    "smoothness": {
+                        "value": 0.02,
                         "_type": [
                             0,
-                            3,
+                            32,
                             0.01
                         ],
                         "audio": false,
@@ -317,29 +317,68 @@
                         "oscillate": "off"
                     },
                     "threshold": {
+                        "value": 1,
+                        "_type": [
+                            0.5,
+                            2,
+                            0.01
+                        ],
+                        "audio": false,
+                        "stepwise": false,
+                        "oscillate": "off"
+                    }
+                }
+            },
+            {
+                "film": {
+                    "apply": true,
+                    "random": false,
+                    "time": {
+                        "value": 1,
+                        "_type": [
+                            -10,
+                            10,
+                            0.01
+                        ],
+                        "audio": false,
+                        "stepwise": false,
+                        "oscillate": 0.15
+                    },
+                    "scanlines": {
+                        "value": 512,
+                        "_type": [
+                            1,
+                            1024,
+                            1
+                        ],
+                        "audio": false,
+                        "stepwise": false,
+                        "oscillate": "off"
+                    },
+                    "scanlines_intensity": {
+                        "value": 0.05,
+                        "_type": [
+                            0,
+                            5,
+                            0.01
+                        ],
+                        "audio": false,
+                        "stepwise": false,
+                        "oscillate": "off"
+                    },
+                    "noise": {
                         "value": 0.5,
                         "_type": [
                             0,
-                            1,
+                            5,
                             0.01
                         ],
                         "audio": false,
                         "stepwise": false,
                         "oscillate": "off"
                     },
-                    "radius": {
-                        "value": 0,
-                        "_type": [
-                            0,
-                            1,
-                            0.01
-                        ],
-                        "audio": false,
-                        "stepwise": false,
-                        "oscillate": "off"
-                    },
-                    "opacify": {
-                        "value": true
+                    "grayscale": {
+                        "value": false
                     }
                 }
             }

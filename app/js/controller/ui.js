@@ -142,6 +142,11 @@ HC.Controller.prototype.addShaderPassController = function (key, controller, par
     let folder = parent.addFolder(key);
     let sh = controller.getShader();
     this.addShaderController(folder, false, sh, controller.name, controller);
+
+    let clear = document.createElement('div');
+    clear.classList.add('guify-component-container');
+    clear.classList.add('clear');
+    folder.getFolderContainer().appendChild(clear);
 };
 
 
@@ -165,15 +170,18 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
 
         let label = skey;
 
-        let opts = {
-            label: label,
-            onChange: submit,
-            folder: folder,
-            property: skey,
-            object: sh
+        let _opts = function (label, onChange, folder, property, object) {
+            return {
+                label: label,
+                onChange: onChange,
+                folder: folder,
+                property: property,
+                object: object,
+                cssClasses: 'clear'
+            };
         };
 
-        opts.cssClasses = 'clear';
+        let opts = _opts(label, submit, folder, skey, sh);
 
         switch(skey) {
             case 'apply':
@@ -205,9 +213,10 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                 let stepwise = ('stepwise' in shs) ? shs['stepwise'] : null;
                 let oscillate = ('oscillate' in shs) ? shs['oscillate'] : null;
 
-                opts.object = shs;
-
                 label = (key ? (key + '_') : '') + skey;
+
+                opts = _opts(label, submit, folder, 'value', shs);
+
                 let min, max, step;
                 if (range) {
                     min = range[0];
@@ -215,7 +224,6 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                     step = range[2];
 
                     opts.type = 'range';
-                    opts.property = 'value';
                     opts.min = min;
                     opts.max = max;
                     opts.step = step;
@@ -225,8 +233,6 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                 } else {
                     let type = typeof v;
                     opts.type = type==='number' ? 'range' : type==='boolean' ? 'checkbox' : 'text';
-                    opts.property = 'value';
-                    opts.object = shs;
 
                     folder.addController(opts);
                 }
@@ -234,11 +240,10 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                 if (audio !== null) {
                     let _label = skey + '_audio';
 
+                    opts = _opts(_label, submit, folder, 'audio', shs);
                     opts.type = 'checkbox';
-                    opts.label = _label;
-                    opts.property = 'audio';
-                    opts.cssClasses = 'clear';
                     opts.dataClass = 'quarter';
+                    opts.cssClasses = 'clear';
 
                     folder.addController(opts);
                 }
@@ -246,9 +251,8 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                 if (stepwise !== null) {
                     let _label = skey + '_stepwise';
 
+                    opts = _opts(_label, submit, folder, 'stepwise', shs);
                     opts.type = 'checkbox';
-                    opts.label = _label;
-                    opts.property = 'stepwise';
                     opts.dataClass = 'quarter';
                     opts.cssClasses = 'noclear';
 
@@ -257,11 +261,9 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
 
                 if (oscillate !== null) {
                     let _label = skey + '_oscillate';
-                    opts.label = _label;
+                    opts = _opts(_label, submit, folder, 'oscillate', shs);
                     opts.type = 'select';
-                    opts.property = 'oscillate';
                     opts.options = statics.AnimationValues.oscillate;
-                    opts.onChange = submit;
                     opts.dataClass = 'half';
                     opts.cssClasses = 'noclear';
 

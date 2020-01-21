@@ -151,13 +151,15 @@ HC.ControlController = HC.ControlController || {};
      * @type {HC.ControlControllerUi}
      */
     HC.ControlControllerUi = class ControlControllerUi extends HC.ControlSetGuifyUi {
+
         /**
          *
          * @param value
+         * @param that
          */
-        onChange(value) {
+        onChange(value, that) {
             // fixme all input type text fire on input but must fire on change (focus lost/blur)
-            controller.updateControl(this.property, value, true, true, false);
+            controller.updateControl(that.getProperty(), value, true, true, false);
         }
     }
 }

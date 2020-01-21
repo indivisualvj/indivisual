@@ -263,11 +263,13 @@
         /**
          *
          * @param value
+         * @param that
          */
-        onChange(value) {
+        onChange(value, that) {
             let data = {};
-            data[this.set] = {};
-            data[this.set][this.property] = value;
+            let set = that.getParent().getKey();
+            data[set] = {};
+            data[set][that.getProperty()] = value;
 
             controller.updateSetting(
                 statics.ControlSettings.layer,
@@ -277,7 +279,7 @@
                 false
             );
 
-            HC.log(this.set + '/' + this.property, value);
+            HC.log(set + '/' + that.getProperty(), value);
 
         }
     }
@@ -329,9 +331,10 @@
         /**
          *
          * @param v
+         * @param that
          */
-        onChange(v) {
-            if (this.property == 'apply' && v === false) {
+        onChange(v, that) {
+            if (that.getProperty() == 'apply' && v === false) {
                 controller.cleanShaderPasses();
                 controller.updateUiPasses();
             }
@@ -340,8 +343,7 @@
             let data = {passes: {shaders: passes.getShaderPasses()}};
             messaging.emitSettings(statics.ControlSettings.layer, data, false, false, false);
 
-            let name = this.__gui ? this.__gui.name : this.property;
-            HC.log(name + '/' + this.property, v);
+            HC.log(that.getParent().getLabel() + '/' + that.getLabel(), v);
         }
 
         /**
@@ -355,19 +357,27 @@
         /**
          *
          * @param v
+         * @param that
          */
-        static onPasses(v) {
+        static onPasses(v, that) {
 
             if (v !== null && v in statics.Passes) {
                 let name = statics.Passes[v];
-                let ctrl = new HC.ShaderPassUi(name);
-                let sh = JSON.copy(statics.ShaderSettings[name]);
-                ctrl.init(sh);
+                if (name !== null) {
 
-                controller.addShaderPass(
-                    statics.ControlSettings.layer,
-                    ctrl
-                );
+                    setTimeout(() => {
+                        that.setValue(0);
+                    }, 125);
+
+                    let ctrl = new HC.ShaderPassUi(name);
+                    let sh = JSON.copy(statics.ShaderSettings[name]);
+                    ctrl.init(sh);
+
+                    controller.addShaderPass(
+                        statics.ControlSettings.layer,
+                        ctrl
+                    );
+                }
             }
         }
     }

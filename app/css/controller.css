@@ -35,14 +35,12 @@ body {
     overflow-y: auto;
 }
 
-.noitem {
-    position: relative;
-    overflow-y: auto;
-    max-height: 100vh;
-}
-
 .item:focus {
     box-shadow: 0 0 1px 2px #44abda;
+}
+
+.scrolly {
+    overflow-y: auto;
 }
 
 .fixed {
@@ -51,6 +49,7 @@ body {
 
 .fh {
     overflow: visible;
+    max-height: 98vh;
 }
 
 .control {
@@ -213,12 +212,10 @@ div.actions {
     width: 70%;
 }
 
-#Status {
-    margin-top: 6px;
-    /*padding-bottom: 6px;*/
+#status {
 }
 
-#Status div {
+#status div {
     position: relative;
     height: 30px;
     line-height: 30px;
@@ -410,6 +407,11 @@ pre .orange {
     color: #e61d5f !important;
 }
 
+input:focus, select:focus {
+    outline: none;
+    box-shadow: 0 0 2px 1px #e61d5f;
+}
+
 [data-changed] label,
 [data-changed] input {
     color: #e61d5f !important;
@@ -421,7 +423,17 @@ pre .orange {
 
 [data-changed] select:hover {
     color: white !important;
-    /*background-color: #1a1a1a !important;*/
+}
+
+.guify-main {
+    transition: all 500ms;
+    opacity: 1;
+    box-sizing: border-box;
+    min-height: 25px;
+}
+
+.guify-main:empty {
+    opacity: 0;
 }
 
 .guify-component-container[data-changed] > div > div {

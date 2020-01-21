@@ -15,6 +15,15 @@
             if (!(parent instanceof HC.Guify)) {
                 opts.folder = parent.getComponent();
             }
+
+            if (opts.onChange) {
+                let onChange = opts.onChange;
+                let that = this;
+                opts.onChange = function (v) {
+                    onChange(v, that);
+                }
+            }
+
             this.component = this.gui.Register(opts);
 
             this.getContainer().setAttribute('data-id', this.getProperty());
@@ -116,6 +125,8 @@
 
             window.addEventListener('mousemove', (e) => {
                 if (active) {
+                    e.preventDefault();
+                    e.stopPropagation();
                     let dy = e.movementY;
                     if (dy < 0) { // todo make it depend on screen resolution
                         this.incrementValue();

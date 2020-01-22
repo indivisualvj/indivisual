@@ -19,10 +19,10 @@
 
         /**
          *
-         * @param inst
+         * @param item
+         * @param ctrl
          */
-        loadPreset(inst) {
-            let item = inst.item;
+        loadPreset(item, ctrl) {
             this.owner.explorer.setPreset(statics.ControlSettings.layer, false);
             this.owner.explorer.setPreset(statics.ControlSettings.layer, item);
 
@@ -62,10 +62,10 @@
 
         /**
          *
-         * @param inst
+         * @param item
+         * @param ctrl
          */
-        loadPresets(inst) {
-            let item = inst.item;
+        loadPresets(item, ctrl) {
             let children = item.children;
             let dflt = [];
 
@@ -128,10 +128,10 @@
 
         /**
          *
-         * @param inst
+         * @param item
+         * @param ctrl
          */
-        savePresets(inst) {
-            let item = inst.item;
+        savePresets(item, ctrl) {
             for (let i = 0; i < item.children.length; i++) {
                 let child = item.children[i];
                 let layer = child.layer - 1;
@@ -152,10 +152,10 @@
 
         /**
          *
-         * @param inst
+         * @param item
+         * @param ctrl
          */
-        savePreset(inst) {
-            let item = inst.item;
+        savePreset(item, ctrl) {
             let settings = cm.prepareLayer(statics.ControlSettings.layer);
             messaging.save(STORAGE_DIR, item.dir, item.name, settings, (result) => {
                 HC.log(result);
@@ -168,10 +168,10 @@
 
         /**
          *
-         * @param inst
+         * @param item
+         * @param ctrl
          */
-        newPreset(inst) {
-            let item = inst.item;
+        newPreset(item, ctrl) {
             let name = item.children.length;
 
             let input = prompt('Please specify a name', name);
@@ -195,7 +195,7 @@
 
             messaging.save(STORAGE_DIR, nu.dir, nu.name, nu.settings, (result) => {
                 HC.log(result);
-                item.children.unshift(nu);
+                ctrl.addPreset(nu);
                 this.owner.explorer.setPreset(statics.ControlSettings.layer, false);
                 this.owner.explorer.setPreset(statics.ControlSettings.layer, nu);
                 this.owner.explorer.setLoaded(statics.ControlSettings.layer, true);
@@ -204,22 +204,22 @@
 
         /**
          *
-         * @param inst
+         * @param item
+         * @param ctrl
          */
-        deletePreset(inst) {
-            let item = inst.item;
+        deletePreset(item, ctrl) {
             messaging.delete(STORAGE_DIR, item.dir, item.name, (result) => {
                 HC.log(result);
-                let ind = inst.$parent.item.children.indexOf(item);
-                inst.$parent.item.children.splice(ind, 1);
+                ctrl.remove();
             });
         }
 
         /**
          *
-         * @param inst
+         * @param item
+         * @param ctrl
          */
-        newFolder(inst) {
+        newFolder(item, ctrl) {
             let name = '__NEW__';
 
             let input = prompt('Please specify a name', name);
@@ -239,16 +239,17 @@
             };
             messaging.mkdir(STORAGE_DIR, name, false, (result) => {
                 HC.log(result);
-                inst.item.children.splice(1, 0, nu);
+                item.addFolder(name, false);
             });
         }
 
         /**
          *
-         * @param inst
+         * @param item
+         * @param ctrl
          */
-        renameItem(inst) {
-            let name = inst.item.name;
+        renameItem(item, ctrl) {
+            let name = item.name;
             let split = name.split('.');
             let suffix = '';
             if (split.length > 1) {
@@ -266,16 +267,17 @@
                 return;
             }
 
-            messaging.rename(STORAGE_DIR, inst.item.dir, inst.item.name, name, (result) => {
+            messaging.rename(STORAGE_DIR, item.dir, item.name, name, (result) => {
                 HC.log(result);
-                let children = inst.item.children;
-                let odir = inst.item.name;
+                // todo rename folder/item? no remove and reload!
+                let children = item.children;
+                let odir = item.name;
                 for (let i = 0; i < children.length; i++) {
                     let dir = children[i].dir;
                     dir = dir.slice(-0, -odir.length);
                     children[i].dir = dir + name;
                 }
-                inst.item.name = name;
+                item.name = name;
             });
         }
     }

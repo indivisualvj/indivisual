@@ -31,7 +31,10 @@
                 this.getContainer().setAttribute('data-class', opts.dataClass);
             }
             if (opts.cssClasses) {
-                this.getContainer().classList.add(opts.cssClasses);
+                let classes = opts.cssClasses.split(' ');
+                for (let c in classes) {
+                    this.getContainer().classList.add(classes[c]);
+                }
             }
 
             this.initEvents();

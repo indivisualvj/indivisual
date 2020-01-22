@@ -118,7 +118,6 @@ HC.Controller.prototype.initStatusBar = function () {
 /**
  *
  * @param submit
- * @returns {*|dat.gui.GUI}
  */
 HC.Controller.prototype.addPassesFolder = function (submit) {
 

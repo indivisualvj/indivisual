@@ -75,7 +75,7 @@
 
                 let pm = randomInt(80, 110);
                 if (speed.progress > speed.duration - pm
-                    || (beatkeeper.rhythmSlow(this.settings.rhythm) // todo rhythmSlow WOOT
+                    || (beatkeeper.rhythmSlow(this.settings.rhythm) // rhythmSlow WOOT but that's funky as fuck
                         && speed.progress > speed.duration / 2 - pm
                         && speed.progress < speed.duration / 2)
                 ) {

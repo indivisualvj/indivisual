@@ -57,10 +57,10 @@ body {
     border-right: 1px solid #373a3b;
     border-bottom: 1px solid #2a2d2e;
     border-left: 1px solid #373a3b;
-    border-radius: 2px;
+    border-radius: 1px;
 
     margin-bottom: 6px;
-    padding: 0.25%;
+    padding: 0;
 }
 
 .metalback {
@@ -100,7 +100,7 @@ body {
     width: 100%;
     height: 25vw;
     margin: 0 0 4px 0;
-
+    padding: 1px;
     max-height: 328px;
 }
 
@@ -305,8 +305,8 @@ pre .orange {
 }
 
 .guify-container_be6yU[data-mnemonic]:before {
-    top: 5px;
-    left: 56px;
+    top: 3px;
+    left: 40px;
 }
 
 .guify-component-container[data-mnemonic]:before {
@@ -507,18 +507,19 @@ input:focus, select:focus {
 }
 
 #samples {
-    width: 106%;
+    width: 100%;
     box-sizing: content-box;
     margin-bottom: 8px;
+    white-space: nowrap;
 }
 
 #samples .sample {
     position: relative;
     display: inline-block;
     box-sizing: border-box;
-    width: 15%;
+    width: 15.84%;
     height: 100%;
-    margin-right: 5px;
+    margin-right: 1%;
 }
 
 #samples .sample[data-label]:after {
@@ -651,6 +652,12 @@ input:focus, select:focus {
     border-left: 1px solid #2fa1d6 !important;
 }
 
+.guify-bar-title_mw3pS {
+    box-sizing: border-box;
+    top: 1px;
+    padding-left: 50px;
+    text-align: left !important;
+}
 
 .guify-folder_1FExAJ div {
     font-weight: bold;

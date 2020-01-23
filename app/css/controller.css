@@ -286,7 +286,7 @@ pre .orange {
     padding: 0 4px;
     top: 4px;
     right: 4px;
-    font-size: 12px;
+    white-space: pre-wrap;
 }
 
 [data-mnemonic]:before {
@@ -510,6 +510,11 @@ input:focus, select:focus {
     margin-right: 1%;
 }
 
+#samples [data-label]:after {
+    max-width: 90%;
+    background: rgba(35, 35, 35, 0.5);
+}
+
 #sequences {
 
 }
@@ -535,6 +540,11 @@ input:focus, select:focus {
     position: absolute;
     z-index: 1;
 }
+
+#sequences [data-label]:after {
+    background: rgba(35, 35, 35, 0.5);
+}
+
 
 .thumbs {
     position: relative;

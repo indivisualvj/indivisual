@@ -16,7 +16,7 @@
             background_input: 'none',
             background_volume: 1,
             background_volume_oscillate: 'off',
-            // background_mapping: todo background_mapping,
+            // background_mapping: ,
             background_wraps: 'ClampToEdgeWrapping',
             background_wrapt: 'ClampToEdgeWrapping',
             background_repeatx: 1.0,

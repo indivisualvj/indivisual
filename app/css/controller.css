@@ -58,8 +58,7 @@ body {
     border-bottom: 1px solid #2a2d2e;
     border-left: 1px solid #373a3b;
     border-radius: 1px;
-
-    margin-bottom: 6px;
+    margin-bottom: 1px;
     padding: 0;
 }
 
@@ -154,6 +153,11 @@ body {
 
 #Presets {
     white-space: nowrap;
+}
+
+.guify-folder_1FExAJ .actions {
+    position: absolute;
+    right: -20%;
 }
 
 div.actions {
@@ -306,7 +310,7 @@ pre .orange {
 
 .guify-container_be6yU[data-mnemonic]:before {
     top: 3px;
-    left: 40px;
+    left: 8%;
 }
 
 .guify-component-container[data-mnemonic]:before {
@@ -654,13 +658,14 @@ input:focus, select:focus {
 
 .guify-bar-title_mw3pS {
     box-sizing: border-box;
-    top: 1px;
-    padding-left: 50px;
+    top: 1px !important;
+    padding-left: 10%;
     text-align: left !important;
 }
 
 .guify-folder_1FExAJ div {
     font-weight: bold;
+    font-size: 12px !important
 }
 
 .guify-button_1S84xL {

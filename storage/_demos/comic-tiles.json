@@ -342,7 +342,7 @@
                         ],
                         "audio": false,
                         "stepwise": false,
-                        "oscillate": 0.15
+                        "oscillate": "timestamp"
                     },
                     "scanlines": {
                         "value": 512,

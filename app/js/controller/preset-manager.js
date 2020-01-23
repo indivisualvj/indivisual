@@ -195,7 +195,7 @@
 
             messaging.save(STORAGE_DIR, nu.dir, nu.name, nu.settings, (result) => {
                 HC.log(result);
-                ctrl.addPreset(nu);
+                ctrl.addPreset(nu, this);
                 this.owner.explorer.setPreset(statics.ControlSettings.layer, false);
                 this.owner.explorer.setPreset(statics.ControlSettings.layer, nu);
                 this.owner.explorer.setLoaded(statics.ControlSettings.layer, true);
@@ -269,7 +269,7 @@
 
             messaging.rename(STORAGE_DIR, item.dir, item.name, name, (result) => {
                 HC.log(result);
-                // todo rename folder/item? no remove and reload!
+                // todo rename folder/item? remove and reload!
                 let children = item.children;
                 let odir = item.name;
                 for (let i = 0; i < children.length; i++) {

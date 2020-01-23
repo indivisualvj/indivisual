@@ -37,7 +37,31 @@
          *
          */
         finishLayout(data, owner) {
-            // todo add actions add/loadall/saveall/rename
+
+            if (!data.default) {
+                let container = this.getComponent().container;
+                container.style.width = '79%';
+                let actions = document.createElement('div');
+                actions.classList.add('actions');
+                actions.innerHTML =
+                    '<div class="new"></div>' +
+                    '<div class="fill"></div>' +
+                    '<div class="save"></div>' +
+                    '<div class="rename"></div>';
+                actions.childNodes.item(0).addEventListener('click', (e) => {
+                    owner.newPreset(data, this);
+                });
+                actions.childNodes.item(1).addEventListener('click', (e) => {
+                    owner.loadPresets(data, this);
+                });
+                actions.childNodes.item(2).addEventListener('click', (e) => {
+                    owner.savePresets(data, this);
+                });
+                actions.childNodes.item(3).addEventListener('click', (e) => {
+                    owner.renameItem(data, this);
+                });
+                container.appendChild(actions);
+            }
 
             let clear = document.createElement('div');
             clear.classList.add('guify-component-container');
@@ -80,6 +104,8 @@
      */
     HC.GuifyExplorerPreset = class GuifyExplorerPreset extends HC.GuifyController {
 
+        actions = [];
+
         /**
          *
          * @param parent
@@ -90,9 +116,23 @@
         constructor(parent, opts, data, owner) {
             super(parent, opts);
 
-            this.addActions(data, owner);
+            if (!data.default) {
+                this.addActions(data, owner);
+            }
         }
 
+        remove() {
+            super.remove();
+            for (let i in this.actions) {
+                this.actions[i].remove();
+            }
+        }
+
+        /**
+         *
+         * @param data
+         * @param owner
+         */
         addActions(data, owner) {
             let opts = {
                 type: 'button',
@@ -101,7 +141,7 @@
                 dataClass: 'five',
                 action: (ctrl) => {owner.savePreset(data, this)}
             };
-            this.parent.addController(opts);
+            this.actions.push(this.parent.addController(opts));
 
             opts = {
                 type: 'button',
@@ -110,7 +150,7 @@
                 dataClass: 'five',
                 action: (ctrl) => {owner.renameItem(data, this)}
             };
-            this.parent.addController(opts);
+            this.actions.push(this.parent.addController(opts));
 
             opts = {
                 type: 'button',
@@ -119,7 +159,7 @@
                 dataClass: 'five',
                 action: (ctrl) => {owner.deletePreset(data, this)}
             };
-            this.parent.addController(opts);
+            this.actions.push(this.parent.addController(opts));
         }
     }
 }

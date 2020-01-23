@@ -28,6 +28,9 @@ body {
     user-select: none;
 
     overflow: hidden;
+
+    font-family: Hack, monospace !important;
+    font-size: 11px !important;
 }
 
 .item {
@@ -140,7 +143,6 @@ body {
 
 .expandable:hover::after, .expandable[fixed]::after {
     content: ' click to expand/reduce';
-    font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
     font-size: 10px;
     font-weight: bold;
     color: #2fa1d6;
@@ -151,57 +153,46 @@ body {
     z-index: 1;
 }
 
-#Presets {
-    white-space: nowrap;
-}
-
-.guify-folder_1FExAJ .actions {
+.actions {
     position: absolute;
-    right: -20%;
-}
-
-div.actions {
-    position: absolute;
-    right: 0;
-    top: 0;
+    right: 4px;
+    top: 2px;
     display: block;
     height: 25px;
-    font-size: 12px;
-}
-
-#AnimationSettings .actions {
-    top: 2px;
 }
 
 .actions div {
-    background-size: 14px;
+    background-size: 12px;
     display: inline-block;
     width: 14px;
-    height: 19px;
+    height: 14px;
     padding: 3px;
     margin: 0 0 0 2px;
     border-radius: 2px;
     cursor: pointer;
     background-repeat: no-repeat;
     background-position: center;
+    filter: brightness(75%);
 }
 
-.actions div:hover {
-    background-color: #2379a1;
+.actions div:hover,
+.actions div.selected {
+    filter: brightness(200%);
+    background-size: 18px
 }
 
-#AnimationSettings .actions div {
-    margin-top: 0;
-    height: 15px;
+.guify-component-container:hover .actions div {
+    filter: brightness(0);
 }
 
-
-#AnimationSettings .actions div:hover,
-#AnimationSettings .actions div.selected {
-    background-color: #e61d5f;
+.preset .actions {
+    top: 0;
+    height: 20px;
 }
 
-#status {
+.preset:hover button {
+    color: rgb(235, 235, 235);
+    background-color: rgb(112, 112, 112);
 }
 
 #status div {
@@ -214,18 +205,24 @@ div.actions {
     text-align: left;
 }
 
+button {
+    font-size: 11px;
+}
+
+pre {
+    font-family: Hack, monospace;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
 pre#log {
     display: block;
     width: 100%;
     height: 100%;
-    padding: 2px;
+    padding: 0.5%;
     margin: 0;
-    box-sizing: border-box;
-
     color: #2fd62f;
-    font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
-    font-size: 12px;
-    overflow-y: auto;
+
 }
 
 pre#osd {
@@ -240,17 +237,14 @@ pre#osd {
     height: 20vw;
     padding: 0.5%;
     border: 6px solid rgba(68, 171, 218, 0.5);
-    border-radius: 3px;
+    border-radius: 1px;
     margin: -10vw 0 0 -15vw;
-    box-sizing: border-box;
+
     background: rgba(0, 0, 0, 0.8);
     color: #44abda;
-    font-family: Consolas,Monaco,Lucida Console,Liberation Mono,DejaVu Sans Mono,Bitstream Vera Sans Mono,Courier New, monospace;
     font-size: 16px;
-    overflow-y: auto;
     z-index: 100;
     pointer-events: none;
-    -webkit-transition: opacity 0.15s;
     transition: opacity 0.15s;
 }
 
@@ -287,13 +281,12 @@ pre .orange {
     color: #ffffff;
     background: #232323;
     line-height: 18px;
-    border-radius: 3px;
+    border-radius: 2px;
     border: 1px solid #565656;
     padding: 0 4px;
     top: 4px;
     right: 4px;
     font-size: 12px;
-    font-family: Hack, monospace;
 }
 
 [data-mnemonic]:before {
@@ -305,7 +298,6 @@ pre .orange {
     font-size: 10px;
     font-weight: bold;
     z-index: 1;
-    font-family: Hack, monospace;
 }
 
 .guify-container_be6yU[data-mnemonic]:before {
@@ -321,14 +313,6 @@ pre .orange {
 .guify-component-container[role="button"][data-mnemonic]:before {
     top: 7px;
     left: -8px;
-}
-
-.folder[data-mnemonic]:before {
-    top: 2px;
-    left: 3px;
-    color: #e61d5f;
-    font-weight: bold;
-    font-size: 11px;
 }
 
 [data-changed] {
@@ -526,10 +510,6 @@ input:focus, select:focus {
     margin-right: 1%;
 }
 
-#samples .sample[data-label]:after {
-    font-size: 11px;
-}
-
 #sequences {
 
 }
@@ -547,13 +527,11 @@ input:focus, select:focus {
     color: #ffffff;
     background: #232323;
     line-height: 18px;
-    border-radius: 3px;
+    border-radius: 2px;
     border: 1px solid #565656;
     padding: 0 4px;
     bottom: 4px;
     left: 4px;
-    font-size: 11px;
-    font-family: Hack, monospace;
     position: absolute;
     z-index: 1;
 }
@@ -576,10 +554,6 @@ input:focus, select:focus {
     border-right: 4px solid orangered;
     outline: 1000px solid rgba(0,0,0, 0.6);
     box-sizing: border-box;
-}
-
-.indicator[data-label]:after {
-    font-size: 11px;
 }
 
 .thumb {
@@ -663,11 +637,6 @@ input:focus, select:focus {
     text-align: left !important;
 }
 
-.guify-folder_1FExAJ div {
-    font-weight: bold;
-    font-size: 12px !important
-}
-
 .guify-button_1S84xL {
     width: calc(100%) !important;
 }
@@ -734,34 +703,12 @@ input[type=checkbox].guify-checkbox_hxzak + label {
     }
 
     [data-label]:after {
-        position: absolute;
-        content: attr(data-label);
-        background: #232323;
         line-height: 13px;
-        border-radius: 3px;
-        border: 1px solid #565656;
-        padding: 0 4px;
         top: 1px;
         right: 1px;
         font-size: 10px;
     }
 
-}
-
-.action {
-    background-size: 14px;
-    display: inline-block;
-    width: 20px;
-    border-radius: 2px;
-    background-repeat: no-repeat;
-    background-position: center;
-}
-
-.action button {
-    background-image: inherit;
-    background-size: inherit;
-    background-repeat: inherit;
-    background-position: inherit;
 }
 
 .sync {

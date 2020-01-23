@@ -240,8 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         init() {
-            // todo evtl doch das? https://github.com/automat/controlkit.js
-            this.controlSettingsGui = new HC.Guify('ControlSettings', {open: true});
+            this.controlSettingsGui = new HC.Guify('ControlSettings', true);
             this.displaySettingsGui = new HC.Guify('DisplaySettings');
             this.sourceSettingsGui = new HC.Guify('SourceSettings');
             this.animationSettingsGui = new HC.Guify('AnimationSettings');

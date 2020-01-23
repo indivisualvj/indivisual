@@ -123,7 +123,7 @@
          * @param parent
          * @returns {guify}
          */
-        addFolder() {
+        addFolder(shareListener) {
             let key = this.controlSet.className();
             let name = this.controlSet.name();
 
@@ -131,7 +131,9 @@
             this.folder.setKey(key);
             this._styleFolder(this.folder, key, 'green');
 
-            this._addShareListener(key, this.folder, false);
+            if (shareListener === true) {
+                this._addShareListener(key, this.folder, false);
+            }
 
             return this.folder;
         }

@@ -40,7 +40,6 @@
 
             if (!data.default) {
                 let container = this.getComponent().container;
-                container.style.width = '79%';
                 let actions = document.createElement('div');
                 actions.classList.add('actions');
                 actions.innerHTML =
@@ -49,15 +48,19 @@
                     '<div class="save"></div>' +
                     '<div class="rename"></div>';
                 actions.childNodes.item(0).addEventListener('click', (e) => {
+                    e.preventDefault(); e.stopPropagation();
                     owner.newPreset(data, this);
                 });
                 actions.childNodes.item(1).addEventListener('click', (e) => {
+                    e.preventDefault(); e.stopPropagation();
                     owner.loadPresets(data, this);
                 });
                 actions.childNodes.item(2).addEventListener('click', (e) => {
+                    e.preventDefault(); e.stopPropagation();
                     owner.savePresets(data, this);
                 });
                 actions.childNodes.item(3).addEventListener('click', (e) => {
+                    e.preventDefault(); e.stopPropagation();
                     owner.renameItem(data, this);
                 });
                 container.appendChild(actions);
@@ -83,8 +86,6 @@
                 label: data.name,
                 loaded: data.loaded,
                 layer: data.layer,
-                cssClasses: 'clear',
-                dataClass: 'eighty',
                 action: (ctrl) => {owner.loadPreset(data, this)}
             };
 
@@ -104,7 +105,6 @@
      */
     HC.GuifyExplorerPreset = class GuifyExplorerPreset extends HC.GuifyController {
 
-        actions = [];
 
         /**
          *
@@ -121,45 +121,35 @@
             }
         }
 
-        remove() {
-            super.remove();
-            for (let i in this.actions) {
-                this.actions[i].remove();
-            }
-        }
-
         /**
          *
          * @param data
          * @param owner
          */
         addActions(data, owner) {
-            let opts = {
-                type: 'button',
-                label: '',
-                cssClasses: 'save action noclear',
-                dataClass: 'five',
-                action: (ctrl) => {owner.savePreset(data, this)}
-            };
-            this.actions.push(this.parent.addController(opts));
-
-            opts = {
-                type: 'button',
-                label: '',
-                cssClasses: 'rename action noclear',
-                dataClass: 'five',
-                action: (ctrl) => {owner.renameItem(data, this)}
-            };
-            this.actions.push(this.parent.addController(opts));
-
-            opts = {
-                type: 'button',
-                label: '',
-                cssClasses: 'delete action noclear',
-                dataClass: 'five',
-                action: (ctrl) => {owner.deletePreset(data, this)}
-            };
-            this.actions.push(this.parent.addController(opts));
+            let container = this.getContainer();
+            container.classList.add('preset');
+            if (!data.default) {
+                let actions = document.createElement('div');
+                actions.classList.add('actions');
+                actions.innerHTML =
+                    '<div class="save"></div>' +
+                    '<div class="rename"></div>' +
+                    '<div class="delete"></div>';
+                actions.childNodes.item(0).addEventListener('click', (e) => {
+                    e.preventDefault(); e.stopPropagation();
+                    owner.savePreset(data, this)
+                });
+                actions.childNodes.item(1).addEventListener('click', (e) => {
+                    e.preventDefault(); e.stopPropagation();
+                    owner.renameItem(data, this);
+                });
+                actions.childNodes.item(2).addEventListener('click', (e) => {
+                    e.preventDefault(); e.stopPropagation();
+                    owner.deletePreset(data, this);
+                });
+                container.appendChild(actions);
+            }
         }
     }
 }

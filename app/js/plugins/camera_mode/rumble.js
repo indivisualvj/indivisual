@@ -12,7 +12,7 @@
 
         apply(peak) {
             let layer = this.layer;
-            let speed = beatkeeper.getDefaultSpeed();
+            let speed = beatKeeper.getDefaultSpeed();
             let params = this.params;
 
             if (params.multiplier === false) {

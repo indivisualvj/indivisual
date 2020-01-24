@@ -196,7 +196,7 @@
          */
         current(fallback, passthrough) {
 
-            this.next(beatkeeper.getDefaultSpeed());
+            this.next(beatKeeper.getDefaultSpeed());
 
             let image = fallback;
             if (this.sample) {
@@ -318,10 +318,10 @@
 
             let prcb = speed;
             if (this.speedup) {
-                prcb = beatkeeper.getSpeed('eight');
+                prcb = beatKeeper.getSpeed('eight');
 
             } else if (this.speeddown) {
-                prcb = beatkeeper.getSpeed('half');
+                prcb = beatKeeper.getSpeed('half');
             }
 
             if (prcb.starting()) {
@@ -382,10 +382,10 @@
             this._pointer++;
 
             if (this.speedup) {
-                beat = beatkeeper.getSpeed('sixteen');
+                beat = beatKeeper.getSpeed('sixteen');
 
             } else if (this.speeddown) {
-                beat = beatkeeper.getSpeed('full');
+                beat = beatKeeper.getSpeed('full');
             }
 
             while (frame && frame.prc < beat.prc) {
@@ -468,7 +468,7 @@
          * OscillatePlugin workaround...
          */
         getCurrentSpeed() {
-            return beatkeeper.getSpeed('half');
+            return beatKeeper.getSpeed('half');
         }
     }
 }

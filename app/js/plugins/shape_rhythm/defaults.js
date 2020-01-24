@@ -15,7 +15,7 @@
         static name = 'double';
 
         apply(shape) {
-            this.params(shape).speed = beatkeeper.getSpeed('double');
+            this.params(shape).speed = beatKeeper.getSpeed('double');
         }
     }
 }
@@ -25,7 +25,7 @@
         static name = 'full';
 
         apply(shape) {
-            this.params(shape).speed = beatkeeper.getSpeed('full');
+            this.params(shape).speed = beatKeeper.getSpeed('full');
         }
     }
 }
@@ -35,7 +35,7 @@
         static name = 'half';
 
         apply(shape) {
-            this.params(shape).speed = beatkeeper.getSpeed('half');
+            this.params(shape).speed = beatKeeper.getSpeed('half');
         }
     }
 }
@@ -45,7 +45,7 @@
         static name = 'quarter';
 
         apply(shape) {
-            this.params(shape).speed = beatkeeper.getSpeed('quarter');
+            this.params(shape).speed = beatKeeper.getSpeed('quarter');
         }
     }
 }

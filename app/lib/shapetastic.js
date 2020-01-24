@@ -1,3 +1,7 @@
+/**
+ * inspired by maptastic
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
 var Shapetastic = function(inst) {
 
     var ctx = inst.canvas.ctx;

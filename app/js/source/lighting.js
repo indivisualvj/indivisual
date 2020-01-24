@@ -86,7 +86,7 @@
 
                 this.canvas.ctx.clearRect(0, 0, 4 * this.pixel.length * this.scale, 1 * this.scale);
 
-                let speed = beatkeeper.getSpeed(statics.SourceSettings.lighting_speed);
+                let speed = beatKeeper.getSpeed(statics.SourceSettings.lighting_speed);
                 let redo = speed.starting();
                 if (redo) {
                     this.shuffleCounter++;
@@ -116,7 +116,7 @@
          */
         updateLight(i, color) {
 
-            let speed = beatkeeper.getSpeed(statics.SourceSettings.lighting_speed);
+            let speed = beatKeeper.getSpeed(statics.SourceSettings.lighting_speed);
             let redo = speed.starting();
             let m = this.lighting_type;
 

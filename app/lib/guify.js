@@ -3404,7 +3404,7 @@ var Range = function (_EventEmitter) {
         _this.opts = opts;
 
         _this.container = __webpack_require__(2)(root, opts.label, theme);
-        __webpack_require__(5)(_this.container, opts.label, theme);
+        _this.label = __webpack_require__(5)(_this.container, opts.label, theme);
 
         if (!!opts.step && !!opts.steps) {
             throw new Error('Cannot specify both step and steps. Got step = ' + opts.step + ', steps = ', opts.steps);
@@ -4103,12 +4103,13 @@ var Button = function (_EventEmitter) {
         _this.opts = opts;
 
         _this.container = __webpack_require__(2)(root, opts.label, theme);
-        __webpack_require__(5)(_this.container, '', theme);
+        // require('./partials/label')(this.container, '', theme)
 
         var input = _this.container.appendChild(document.createElement('button'));
         input.className = styles['guify-button'];
 
         input.textContent = opts.label;
+        _this.label = input;
 
         input.addEventListener('click', opts.action);
 
@@ -4184,7 +4185,7 @@ var Checkbox = function (_EventEmitter) {
         _this.opts = opts;
 
         _this.container = __webpack_require__(2)(root, opts.label, theme);
-        __webpack_require__(5)(_this.container, opts.label, theme);
+        _this.label = __webpack_require__(5)(_this.container, opts.label, theme);
 
         _this.input = _this.container.appendChild(document.createElement('input'));
         _this.input.id = 'checkbox-' + opts.property + uuid;
@@ -4290,7 +4291,7 @@ var Select = function (_EventEmitter) {
         var i, downTriangle, upTriangle, key, option, el, keys;
 
         _this.container = __webpack_require__(2)(root, opts.label, theme);
-        __webpack_require__(5)(_this.container, opts.label, theme);
+        _this.label = __webpack_require__(5)(_this.container, opts.label, theme);
 
         _this.input = document.createElement('select');
         _this.input.className = styles['guify-select-dropdown'];
@@ -4440,7 +4441,7 @@ var Text = function (_EventEmitter) {
         _this.opts = opts;
 
         _this.container = __webpack_require__(2)(root, opts.label, theme);
-        __webpack_require__(5)(_this.container, opts.label, theme);
+        _this.label = __webpack_require__(5)(_this.container, opts.label, theme);
 
         _this.input = _this.container.appendChild(document.createElement('input'));
         _this.input.type = 'text';
@@ -4468,20 +4469,19 @@ var Text = function (_EventEmitter) {
             _this.emit('initialized', _this.input.value);
         });
 
-        _this.input.oninput = function (data) {}
-        // this.emit('input', data.target.value)
-
+        _this.input.oninput = function (data) {
+            _this.emit('input', data.target.value);
+        };
 
         // Gain focus
-        ;_this.input.addEventListener('focus', function () {
+        _this.input.addEventListener('focus', function () {
             (0, _domCss2.default)(_this.input, { outline: 'none' });
             _this.focused = true;
         });
 
         // Lose focus
-        _this.input.addEventListener('blur', function (data) {
+        _this.input.addEventListener('blur', function () {
             _this.focused = false;
-            _this.emit('input', data.target.value);
         });
         return _this;
     }
@@ -4560,7 +4560,7 @@ var Color = function (_EventEmitter) {
         opts.initial = opts.initial || '#123456';
 
         _this.container = __webpack_require__(2)(root, opts.label, theme);
-        __webpack_require__(5)(_this.container, opts.label, theme);
+        _this.label = __webpack_require__(5)(_this.container, opts.label, theme);
 
         var icon = _this.container.appendChild(document.createElement('span'));
         icon.className = 'guify-color-' + uuid;
@@ -6101,7 +6101,7 @@ var Display = function () {
 
         this.container = __webpack_require__(2)(root, opts.label, theme);
 
-        __webpack_require__(5)(this.container, opts.label, theme);
+        this.label = __webpack_require__(5)(this.container, opts.label, theme);
 
         this.text = this.container.appendChild(document.createElement('div'));
         (0, _domCss2.default)(this.text, {
@@ -6192,7 +6192,7 @@ var Interval = function (_EventEmitter) {
         _this.opts = opts;
 
         _this.container = __webpack_require__(2)(root, opts.label, theme);
-        __webpack_require__(5)(_this.container, opts.label, theme);
+        _this.label = __webpack_require__(5)(_this.container, opts.label, theme);
 
         if (!!opts.step && !!opts.steps) {
             throw new Error('Cannot specify both step and steps. Got step = ' + opts.step + ', steps = ', opts.steps);

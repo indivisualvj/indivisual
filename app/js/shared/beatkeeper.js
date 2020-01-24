@@ -5,9 +5,9 @@
 {
     /**
      *
-     * @type {HC.Beatkeeper}
+     * @type {HC.BeatKeeper}
      */
-    HC.Beatkeeper = class Beatkeeper {
+    HC.BeatKeeper = class BeatKeeper {
 
         beatStartTime = 0;
         firstTrigger = false;
@@ -21,7 +21,7 @@
          *
          * @type {Object.<string, HC.Speed>}
          */
-        speeds = HC.Beatkeeper.initSpeeds();
+        speeds = HC.BeatKeeper.initSpeeds();
 
         /**
          *

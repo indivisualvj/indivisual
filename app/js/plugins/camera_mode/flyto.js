@@ -20,7 +20,7 @@
             let distance = pos.distanceTo(shared.targetLook);
 
             if (distance > layer.shapeSize(shared.shape.size()) * 3) {
-                let speed = beatkeeper.getSpeed('full');
+                let speed = beatKeeper.getSpeed('full');
                 let prog = animation.getFrameDurationPercent(speed.duration, .75);
 
                 cam.translateZ(-prog * distance / 2);

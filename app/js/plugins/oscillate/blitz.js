@@ -46,7 +46,7 @@
         apply(key) {
             let pa = this.params(key);
 
-            let speed = beatkeeper.getSpeed('full');
+            let speed = beatKeeper.getSpeed('full');
 
             if (pa > 0) {
                 pa = Math.max(0, pa - (1 / animation.diff) * 0.65);
@@ -68,7 +68,7 @@
         apply(key) {
             let pa = this.params(key);
 
-            let speed = beatkeeper.getSpeed('half');
+            let speed = beatKeeper.getSpeed('half');
 
             if (pa > 0) {
                 pa = Math.max(0, pa - (1 / animation.diff) * 0.65);
@@ -89,8 +89,8 @@
 
         apply(key) {
             let pa = this.params(key);
-            // todo plugins should have owners also -> this.owner.beatkeeper
-            let speed = beatkeeper.getSpeed('quarter');
+            // todo plugins should have owners also -> this.owner.beatKeeper
+            let speed = beatKeeper.getSpeed('quarter');
 
             if (pa > 0) {
                 pa = Math.max(0, pa - (1 / animation.diff) * 1.3);
@@ -112,7 +112,7 @@
         apply(key) {
             let pa = this.params(key);
 
-            let speed = beatkeeper.getSpeed('eight');
+            let speed = beatKeeper.getSpeed('eight');
 
             if (pa > 0) {
                 pa = Math.max(0, pa - (1 / animation.diff) * 2.6);

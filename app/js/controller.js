@@ -7,17 +7,12 @@
  * @type {HC.Messaging}
  */
 let messaging;
+
 /**
  *
  * @type {HC.Controller}
  */
 let controller;
-
-/**
- *
- * @type {HC.Beatkeeper}
- */
-let beatkeeper;
 
 /**
  *
@@ -61,7 +56,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     controller = new HC.Controller(G_INSTANCE);
     messaging = new HC.Messaging(controller);
-    messaging.connect(function (reconnect) {
+
+    messaging.connect(function (reconnect, controller) {
 
         setTimeout(() => {
             document.getElementById(_MONITOR).setAttribute('src', 'monitor.html#' + messaging.sid);
@@ -74,65 +70,10 @@ document.addEventListener('DOMContentLoaded', function () {
             loadResources(setupResources(), function () {
 
                 cm = new HC.LayeredControlSetsManager([], statics.AnimationValues);
-
-                controller.init();
-
-                let controlSets = HC.Statics.initControlControlSets();
-                statics.ControlSettingsManager = new HC.ControlSetsManager(controlSets);
-                statics.ControlSettings = statics.ControlSettingsManager.settingsProxy();
-                statics.ControlTypes = statics.ControlSettingsManager.typesProxy();
-                statics.ControlValues = statics.ControlSettingsManager.valuesProxy(statics.ControlValues);
-
-                controller.addGuifyControllers(
-                    controlSets,
-                    HC.ControlControllerUi,
-                    controller.controlSettingsGui
-                );
-
-                controlSets = HC.Statics.initDisplayControlSets();
-                statics.DisplaySettingsManager = new HC.ControlSetsManager(controlSets);
-                statics.DisplaySettings = statics.DisplaySettingsManager.settingsProxy();
-                statics.DisplayTypes = statics.DisplaySettingsManager.typesProxy();
-                statics.DisplayValues = statics.DisplaySettingsManager.valuesProxy(statics.DisplayValues);
-
-                controller.addGuifyDisplayControllers(
-                    HC.DisplayController,
-                    controlSets,
-                    HC.DisplayControllerUi,
-                    controller.displaySettingsGui
-                );
-
-                controlSets = HC.Statics.initSourceControlSets();
-                statics.SourceSettingsManager = new HC.ControlSetsManager(controlSets);
-                statics.SourceSettings = statics.SourceSettingsManager.settingsProxy();
-                statics.SourceTypes = statics.SourceSettingsManager.typesProxy();
-                statics.SourceValues = statics.SourceSettingsManager.valuesProxy(statics.SourceValues);
-
-                controller.addGuifyControllers(
-                    controlSets,
-                    HC.SourceControllerUi,
-                    controller.sourceSettingsGui
-                );
-
-                controller.addConfigurationSettings();
-                controller.initStatusBar();
-                controller.initClips();
-                controller.initThumbs();
-
-                controller.addAnimationControllers(cm.getGlobalProperties());
-                controller.addPassesFolder(HC.ShaderPassUi.onPasses);
-
                 statics.DataSettings = new HC.Settings({});
 
-                controller.explorer = new HC.Explorer(controller, statics); // todo lets have utilities classes have owners instead calling eg. controller directly
-                controller.presetman = new HC.PresetManager(controller);
-
-                beatkeeper = new HC.Beatkeeper();
-
-                messaging.sync(function (data) {
-                    controller.loadSession(data);
-                });
-
+                controller.init();
+                controller.loadSession();
                 controller.initKeyboard();
                 controller.initLogEvents();
                 controller.midi = new HC.Midi(controller, statics);
@@ -218,15 +159,14 @@ document.addEventListener('DOMContentLoaded', function () {
         midi;
 
         /**
-         *
-         * @type {HC.Explorer}
+         * @type {HC.Messaging}
          */
-        explorer;
+        messaging;
 
         /**
-         * @type {HC.PresetManager}
+         * @type {HC.BeatKeeper}
          */
-        presetman;
+        beatKeeper;
 
         /**
          *
@@ -251,43 +191,98 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.displaySettingsGui,
                 this.sourceSettingsGui,
                 this.animationSettingsGui,
-            ]
+            ];
+            this.beatKeeper = new HC.BeatKeeper();
+            this.explorer = new HC.Explorer(this, statics); // todo lets have utilities classes have owners instead calling eg. controller directly
+
+            let controlSets = HC.Statics.initControlControlSets();
+            statics.ControlSettingsManager = new HC.ControlSetsManager(controlSets);
+            statics.ControlSettings = statics.ControlSettingsManager.settingsProxy();
+            statics.ControlTypes = statics.ControlSettingsManager.typesProxy();
+            statics.ControlValues = statics.ControlSettingsManager.valuesProxy(statics.ControlValues);
+
+            this.addGuifyControllers(
+                controlSets,
+                HC.ControlControllerUi,
+                this.controlSettingsGui
+            );
+
+            let displaySets = HC.Statics.initDisplayControlSets();
+            statics.DisplaySettingsManager = new HC.ControlSetsManager(displaySets);
+            statics.DisplaySettings = statics.DisplaySettingsManager.settingsProxy();
+            statics.DisplayTypes = statics.DisplaySettingsManager.typesProxy();
+            statics.DisplayValues = statics.DisplaySettingsManager.valuesProxy(statics.DisplayValues);
+
+            this.addGuifyDisplayControllers(
+                HC.DisplayController,
+                displaySets,
+                HC.DisplayControllerUi,
+                this.displaySettingsGui
+            );
+
+            let sourceSets = HC.Statics.initSourceControlSets();
+            statics.SourceSettingsManager = new HC.ControlSetsManager(sourceSets);
+            statics.SourceSettings = statics.SourceSettingsManager.settingsProxy();
+            statics.SourceTypes = statics.SourceSettingsManager.typesProxy();
+            statics.SourceValues = statics.SourceSettingsManager.valuesProxy(statics.SourceValues);
+
+            this.addGuifyControllers(
+                sourceSets,
+                HC.SourceControllerUi,
+                this.sourceSettingsGui
+            );
+
+            this.addConfigurationSettings();
+            this.initStatusBar();
+            this.initClips();
+            this.initThumbs();
+
+            this.addAnimationControllers(cm.getGlobalProperties());
+            this.addPassesFolder(HC.ShaderPassUi.onPasses);
         }
 
         /**
          *
-         * @param session
+         * @param {HC.Messaging} messaging
          */
-        loadSession(session) {
+        setMessaging(messaging) {
+            this.messaging = messaging;
+        }
 
-            if ('controls' in session) {
-                HC.log('controls', 'synced');
-                let controls = session.controls;
-                this.updateControls(controls, true, false, true);
-            }
-            if ('displays' in session) {
-                HC.log('displays', 'synced');
-                let displays = session.displays;
-                this.updateDisplays(displays, true, false, true);
-            }
-            if ('sources' in session) {
-                HC.log('sources', 'synced');
-                let sources = session.sources;
-                this.updateSources(sources, true, false, true);
-            }
-            if ('settings' in session) {
-                HC.log('settings', 'synced');
-                let settings = session.settings;
-                for (let k in settings) {
-                    this.updateSettings(k, settings[k], true, false, true);
+        /**
+         *
+         */
+        loadSession() {
+            this.messaging.sync((session) => {
+                if ('controls' in session) {
+                    HC.log('controls', 'synced');
+                    let controls = session.controls;
+                    this.updateControls(controls, true, false, true);
                 }
-            }
-            if ('data' in session) {
-                HC.log('data', 'synced');
-                this.updateData();
-            }
+                if ('displays' in session) {
+                    HC.log('displays', 'synced');
+                    let displays = session.displays;
+                    this.updateDisplays(displays, true, false, true);
+                }
+                if ('sources' in session) {
+                    HC.log('sources', 'synced');
+                    let sources = session.sources;
+                    this.updateSources(sources, true, false, true);
+                }
+                if ('settings' in session) {
+                    HC.log('settings', 'synced');
+                    let settings = session.settings;
+                    for (let k in settings) {
+                        this.updateSettings(k, settings[k], true, false, true);
+                    }
+                }
+                if ('data' in session) {
+                    HC.log('data', 'synced');
+                    this.updateData();
+                }
 
-            this.updateControl('layer', statics.ControlSettings.layer, true, false, false);
+                this.updateControl('layer', statics.ControlSettings.layer, true, false, false);
+            });
         }
 
         /**
@@ -408,10 +403,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.updateSettings(i, data, true, false, true);
 
                 if (cm.layers[i]._preset) {
-                    controller.explorer.setChanged(i, true);
+                    this.explorer.setChanged(i, true);
                 }
 
-                messaging.emitSettings(i, data, false, false, true);
+                this.messaging.emitSettings(i, data, false, false, true);
 
             }
         }
@@ -444,12 +439,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 this.updateSettings(i, data, false, false, true);
 
-                if (cm.layers[i]._preset) {
-                    controller.explorer.setChanged(i, true);
-                }
-
-                messaging.emitSettings(i, data, false, false, true);
-                // messaging.emitSettings(i, data, false, false, true);
+                this.explorer.setChanged(i, true);
+                this.messaging.emitSettings(i, data, false, false, true);
             }
         }
 
@@ -565,13 +556,13 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (forward) {
-                messaging.emitSettings(layer, data, display, false, false);
+                this.messaging.emitSettings(layer, data, display, false, false);
             }
 
             if (display !== false) {
                 this.explainPlugin(property, value);
                 this.updateUi(this.animationSettingsGui);
-                controller.explorer.setChanged(statics.ControlSettings.layer, true);
+                this.explorer.setChanged(statics.ControlSettings.layer, true);
             }
         }
 
@@ -589,7 +580,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.updateUi(this.animationSettingsGui);
 
             let data = {passes: {shaders: passes.getShaderPasses()}};
-            messaging.emitSettings(layer, data, false, false, false);
+            this.messaging.emitSettings(layer, data, false, false, false);
         }
 
         /**
@@ -626,7 +617,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // if (statics.ControlSettings) {
 
                 if (item == 'beat') {
-                    value = beatkeeper.trigger(value, true, statics.ControlSettings.tempo, false);
+                    value = this.beatKeeper.trigger(value, true, statics.ControlSettings.tempo, false);
                 }
 
             let tValue = value;
@@ -645,7 +636,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         value: value + 1
                     };
 
-                    messaging.onAttr(config);
+                    this.messaging.onAttr(config);
 
                 } else if (item == 'reset') {
                     if (force) {
@@ -659,7 +650,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     let data = {};
                     data[item] = value;
-                    messaging.emitControls(data, true, false, force);
+                    this.messaging.emitControls(data, true, false, force);
                 }
 
                 if (display !== false) {
@@ -703,7 +694,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (forward) {
                 let data = {};
                 data[item] = value;
-                messaging.emitDisplays(data, true, false, force);
+                this.messaging.emitDisplays(data, true, false, force);
             }
 
             if (display !== false) {
@@ -756,7 +747,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (forward) {
                 let data = {};
                 data[item] = value;
-                messaging.emitSources(data, true, false, force);
+                this.messaging.emitSources(data, true, false, force);
             }
         }
 
@@ -875,7 +866,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
             this.updateSources(updates, true, false, false);
-            messaging.emitSources(updates, true, true, false);
+            this.messaging.emitSources(updates, true, true, false);
         }
 
         /**
@@ -906,7 +897,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
             this.updateSources(updates, true, false, false);
-            messaging.emitSources(updates, true, true, false);
+            this.messaging.emitSources(updates, true, true, false);
         }
 
         /**
@@ -937,7 +928,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
             this.updateSources(updates, true, false, false);
-            messaging.emitSources(updates, true, true, false);
+            this.messaging.emitSources(updates, true, true, false);
         }
 
         /**
@@ -965,7 +956,7 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         pushSources() {
-            messaging.emitSources(statics.SourceSettings, true, true, false);
+            this.messaging.emitSources(statics.SourceSettings, true, true, false);
         }
 
         /**
@@ -976,7 +967,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let settings = cm.prepareLayer(layer);
 
             if (settings) {
-                messaging.emitSettings(layer, settings, true, false, true);
+                this.messaging.emitSettings(layer, settings, true, false, true);
             }
         }
 
@@ -1013,7 +1004,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 data.info.tutorial = {}; // fixme tutorial will be deleted on savePreset
             }
 
-            messaging.emitSettings(layer, data, false, false, true);
+            this.messaging.emitSettings(layer, data, false, false, true);
         }
 
         /**
@@ -1052,7 +1043,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         controller.explorer.setChanged(i, true);
                     }
 
-                    messaging.emitSettings(i, cm.prepareLayer(i), false, false, true);
+                    this.messaging.emitSettings(i, cm.prepareLayer(i), false, false, true);
                 }
             }
         }
@@ -1079,7 +1070,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 value: preset.join('|')
             };
 
-            messaging.onAttr(config);
+            this.messaging.onAttr(config);
         }
 
         /**

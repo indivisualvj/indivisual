@@ -354,7 +354,7 @@ function setupResources() {
      * @private
      */
     function _loadRhythms(settings) {
-        let speeds = HC.Beatkeeper.initSpeeds();
+        let speeds = HC.BeatKeeper.initSpeeds();
         settings.rhythm = {};
         for (let key in speeds) {
             if (speeds[key].visible !== false) {

@@ -24,9 +24,9 @@ let animation;
 let renderer;
 /**
  *
- * @type {HC.Beatkeeper}
+ * @type {HC.BeatKeeper}
  */
-let beatkeeper;
+let beatKeeper;
 /**
  * @type {HC.AudioAnalyser}
  */
@@ -60,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
     animation = new HC.Animation(G_INSTANCE);
     messaging = new HC.Messaging(animation);
 
-    messaging.connect(function (reconnect) {
+    messaging.connect(function (reconnect, animation) {
 
         HC.log(animation.name, 'connected', true, true);
 
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 listener = new HC.Listener();
                 audioman = new HC.AudioManager();
                 audio = new HC.AudioAnalyser(audioman.audioContext);
-                beatkeeper = new HC.Beatkeeper();
+                beatKeeper = new HC.BeatKeeper();
 
                 renderer = new HC.Renderer({
                     layers: new Array(statics.ControlValues.layer.length)
@@ -90,14 +90,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
                         if (DEBUG) {
                             for (let i in MIDI_ROW_ONE) { // glContext messed up... make that clear
-                                messaging.emitMidi('glow', MIDI_ROW_ONE[i], {timeout: 500, times: 15});
-                                messaging.emitMidi('glow', MIDI_ROW_TWO[i], {timeout: 500, times: 15});
+                                animation.messaging.emitMidi('glow', MIDI_ROW_ONE[i], {timeout: 500, times: 15});
+                                animation.messaging.emitMidi('glow', MIDI_ROW_TWO[i], {timeout: 500, times: 15});
+                                animation.messaging.emitAttr('#play', 'data-color', 'red');
                             }
 
                         } else {
                             window.location.reload(true);
                         }
                     });
+
+                    animation.messaging.emitAttr('#play', 'data-color', '');
                 }
 
                 cm = new HC.LayeredControlSetsManager(renderer.layers, statics.AnimationValues);
@@ -120,20 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     sourceman.renderPerspectives();
                 };
 
-                let callback = function (data) {
-                    animation.loadSession(data);
-
-                    if (IS_MONITOR) {
-                        new HC.Monitor().init(function () {
-                            displayman.updateDisplay(0);
-                            new HC.Animation.ResizeListener().init();
-                        });
-                    } else {
-                        new HC.Animation.ResizeListener().init();
-                    }
-                };
-
-                messaging.sync(callback);
+                animation.loadSession();
             });
         }
     });
@@ -145,6 +135,11 @@ document.addEventListener('DOMContentLoaded', function () {
      * @type {HC.Animation}
      */
     HC.Animation = class Animation {
+
+        /**
+         * @type {HC.Messaging}
+         */
+        messaging;
 
         ready = false;
 
@@ -177,12 +172,20 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
+        /**
+         *
+         * @param {HC.Messaging} messaging
+         */
+        setMessaging(messaging) {
+            this.messaging = messaging;
+        }
+
         animate() {
 
             /**
              * do general stuff
              */
-            let speed = beatkeeper.getDefaultSpeed();
+            let speed = beatKeeper.getDefaultSpeed();
 
             if (IS_ANIMATION && speed.starting()) {
 
@@ -192,12 +195,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     if (statics.ControlSettings.peak_bpm_detect && audio.peakReliable) {
 
-                        detectedSpeed = beatkeeper.speedByPeakBpm(audio.firstPeak, audio.peakBPM, statics.ControlSettings.tempo);
+                        detectedSpeed = beatKeeper.speedByPeakBpm(audio.firstPeak, audio.peakBPM, statics.ControlSettings.tempo);
 
                         if (detectedSpeed) {
                             audio.peakReliable = false;
-                            messaging.emitLog('peakBPM', detectedSpeed);
-                            animation.updateControl('tempo', detectedSpeed, true, true);
+                            this.messaging.emitLog('peakBPM', detectedSpeed);
+                            this.updateControl('tempo', detectedSpeed, true, true);
                         }
                     }
 
@@ -213,7 +216,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     volume: statics.ControlSettings.volume,
                     // resetPeakCountAfter: statics.ControlSettings.shuffle_every,
                     tempo: statics.ControlSettings.tempo,
-                    minDiff: beatkeeper.getSpeed('sixteen').duration,
+                    minDiff: beatKeeper.getSpeed('sixteen').duration,
                     now: this.now,
                     thickness: renderer.currentLayer.settings.audio_thickness
                 };
@@ -224,7 +227,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (audio.peak) {
-                messaging.emitMidi('glow', MIDI_PEAK_FEEDBACK, {timeout: 125});
+                this.messaging.emitMidi('glow', MIDI_PEAK_FEEDBACK, {timeout: 125});
 
                 listener.fireEvent('audio.peak', audio);
             }
@@ -284,7 +287,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (this.lastUpdate) {
                 this.lastUpdate = animation.now - this.lastUpdate;
             }
-            beatkeeper.play();
+            beatKeeper.play();
             renderer.resumeLayers();
 
             let render = () => {
@@ -294,9 +297,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     this.updateRuntime();
 
-                    beatkeeper.updateSpeeds(this.diff, statics.ControlSettings.tempo);
+                    beatKeeper.updateSpeeds(this.diff, statics.ControlSettings.tempo);
 
-                    if (beatkeeper.getSpeed('sixteen').starting()) {
+                    if (beatKeeper.getSpeed('sixteen').starting()) {
                         this.doNotDisplay = false;
 
                     } else if (statics.DisplaySettings.fps < 46) {
@@ -326,7 +329,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 } else {
                     renderer.pauseLayers();
-                    beatkeeper.stop();
+                    beatKeeper.stop();
                 }
             };
 
@@ -361,7 +364,7 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         fakeAudio() {
-            let speed = beatkeeper.getSpeed('half');
+            let speed = beatKeeper.getSpeed('half');
             audio.volume = Math.random();
             audio.volumes = new Array(audio.binCount).fill(0).map(Math.random);
             if (speed.progress <= 0) {
@@ -454,102 +457,115 @@ document.addEventListener('DOMContentLoaded', function () {
         postStatus(detectedSpeed) {
 
             if (statics.ControlSettings.beat) {
-                let speed = beatkeeper.getDefaultSpeed();
+                let speed = beatKeeper.getDefaultSpeed();
                 let color = detectedSpeed ? 'green' : (audio.peakReliable ? 'yellow' : '');
 
-                messaging.emitAttr('#beat', 'color', color, '', speed.duration);
+                this.messaging.emitAttr('#beat', 'color', color, '', speed.duration);
 
-                let btk = ['bpm:' + beatkeeper.bpm,
+                let btk = ['bpm:' + beatKeeper.bpm,
                     'b:' + speed.beats,
                     'd:' + speed.duration.toFixed(0),
-                    'p:' + beatkeeper.speeds.quarter.pitch.toFixed(0)
+                    'p:' + beatKeeper.speeds.quarter.pitch.toFixed(0)
                 ];
 
-                messaging.emitAttr('#beat', 'data-label', btk.join(' / '));
+                this.messaging.emitAttr('#beat', 'data-label', btk.join(' / '));
 
                 if (audioman.isActive()) {
                     let au = [
                         round(audio.avgVolume, 2) + '',
                         audio.peakBPM.toFixed(2),
                     ];
-                    messaging.emitAttr('#audio', 'data-label', au.join(' / '));
+                    this.messaging.emitAttr('#audio', 'data-label', au.join(' / '));
                 }
                 //messaging.emitAttr('#beat', 'data-color', 'red', 'green');<
-                messaging.emitMidi('glow', MIDI_BEAT_FEEDBACK, {timeout: 125});
+                this.messaging.emitMidi('glow', MIDI_BEAT_FEEDBACK, {timeout: 125});
                 if (detectedSpeed) {
-                    messaging.emitMidi('glow', MIDI_PEAKBPM_FEEDBACK, {timeout: 15000 / detectedSpeed, times: 8});
+                    this.messaging.emitMidi('glow', MIDI_PEAKBPM_FEEDBACK, {timeout: 15000 / detectedSpeed, times: 8});
                 }
                 if (statics.DisplaySettings.display_speed == 'midi') {
-                    messaging.emitMidi('clock', MIDI_CLOCK_NEXT, {duration: beatkeeper.getDefaultSpeed().duration});
+                    this.messaging.emitMidi('clock', MIDI_CLOCK_NEXT, {duration: beatKeeper.getDefaultSpeed().duration});
                 }
 
-                if (beatkeeper.getSpeed('half').starting()) {
+                if (beatKeeper.getSpeed('half').starting()) {
                     for (let i = 0; i < statics.SourceValues.sequence.length; i++) {
                         let parent = getSequenceHasParent(i);
                         let use = getSampleBySequence(i);
                         if (parent) {
-                            messaging.emitMidi('glow', MIDI_ROW_TWO[i], {timeout: 125});
+                            this.messaging.emitMidi('glow', MIDI_ROW_TWO[i], {timeout: 125});
                         }
                         if (use != 'off') {
-                            messaging.emitMidi('glow', MIDI_ROW_ONE[use], {timeout: 125});
+                            this.messaging.emitMidi('glow', MIDI_ROW_ONE[use], {timeout: 125});
                         }
                     }
                 }
             }
 
-            messaging.emitAttr('#layers', 'data-mnemonic', (renderer.currentLayer.index + 1));
+            this.messaging.emitAttr('#layers', 'data-mnemonic', (renderer.currentLayer.index + 1));
 
             if (animation.stats) {
                 let state = (animation.powersave ? 'i' : '') + (animation.offline ? 'o' : '');
                 let vals = [
                     'fps:' + animation.fps + state,
                     'rms:' + animation.rmsAverage()];
-                messaging.emitAttr('#play', 'data-label', vals.join(' / '));
+                this.messaging.emitAttr('#play', 'data-label', vals.join(' / '));
             }
         }
 
         /**
          *
-         * @param session
          */
-        loadSession(session) {
+        loadSession() {
 
-            if ('displays' in session) {
-                HC.log('displays', 'synced');
-                let displays = session.displays;
-                this.updateDisplays(displays, true, false, true);
-            }
+            let callback = (session) => {
 
-            if ('sources' in session) {
-                HC.log('sources', 'synced');
-                let sources = session.sources;
-                this.updateSources(sources, true, false, true);
-            }
-
-            if ('settings' in session) {
-                HC.log('settings', 'synced');
-                let settings = session.settings;
-                for (let k in settings) {
-                    this.updateSettings(k, settings[k], true, false, true);
+                if ('displays' in session) {
+                    HC.log('displays', 'synced');
+                    let displays = session.displays;
+                    this.updateDisplays(displays, true, false, true);
                 }
-            }
 
-            // if ('settings' in session) {
-            //     HC.log('settings', 'synced');
-            //     let settings = session.settings;
-            //     for (let k in settings) {
-            //         this.updateSettings(k, settings[k], true, false, true);
-            //     }
-            // }
+                if ('sources' in session) {
+                    HC.log('sources', 'synced');
+                    let sources = session.sources;
+                    this.updateSources(sources, true, false, true);
+                }
 
-            if ('controls' in session) {
-                HC.log('controls', 'synced');
-                let controls = session.controls;
-                this.updateControls(controls, true, false, true);
-            }
+                if ('settings' in session) {
+                    HC.log('settings', 'synced');
+                    let settings = session.settings;
+                    for (let k in settings) {
+                        this.updateSettings(k, settings[k], true, false, true);
+                    }
+                }
 
-            sourceman.updateSequences();
-            this.fullReset(true);
+                // if ('settings' in session) {
+                //     HC.log('settings', 'synced');
+                //     let settings = session.settings;
+                //     for (let k in settings) {
+                //         this.updateSettings(k, settings[k], true, false, true);
+                //     }
+                // }
+
+                if ('controls' in session) {
+                    HC.log('controls', 'synced');
+                    let controls = session.controls;
+                    this.updateControls(controls, true, false, true);
+                }
+
+                sourceman.updateSequences();
+                this.fullReset(true);
+
+                if (IS_MONITOR) {
+                    new HC.Monitor().init(function () {
+                        displayman.updateDisplay(0);
+                        new HC.Animation.ResizeListener().init();
+                    });
+                } else {
+                    new HC.Animation.ResizeListener().init();
+                }
+            };
+
+            this.messaging.sync(callback);
         }
 
         /**
@@ -637,7 +653,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (forward === true) {
-                messaging.emitSettings(layerIndex, data, true, false, force);
+                this.messaging.emitSettings(layerIndex, data, true, false, force);
             }
 
             listener.fireEvent('animation.updateSetting', {layer: layer, item: property, value: value});
@@ -657,7 +673,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // if (statics.ControlSettings) {
 
                 if (item == 'beat') {
-                    value = beatkeeper.trigger(value, true, statics.ControlSettings.tempo, true);
+                    value = beatKeeper.trigger(value, true, statics.ControlSettings.tempo, true);
 
                 } else if (item == 'session' && value != _HASH) {
                     document.location.hash = value;
@@ -672,7 +688,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (forward === true) {
                     let data = {};
                     data[item] = value;
-                    messaging.emitControls(data, true, false, force);
+                    this.messaging.emitControls(data, true, false, force);
                 }
 
                 if (display) {
@@ -680,7 +696,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         case 'reset':
                             if (renderer) {
                                 if (force) {
-                                    beatkeeper.reset();
+                                    beatKeeper.reset();
                                     this.fullReset(false);
 
                                 } else {
@@ -737,7 +753,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (forward === true) {
                 let data = {};
                 data[item] = value;
-                messaging.emitSources(data, true, false, force);
+                this.messaging.emitSources(data, true, false, force);
             }
 
             if (display) {
@@ -833,7 +849,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (forward === true) {
                     var data = {};
                     data[item] = value;
-                    messaging.emitDisplays(data, true, false, force);
+                    this.messaging.emitDisplays(data, true, false, force);
                 }
 
                 if (display) {
@@ -956,7 +972,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         * Keep in mind: If durations in HC.Beatkeeper.speeds change due to pitching, this will not return usable values for smooth animations.
+         * Keep in mind: If durations in HC.BeatKeeper.speeds change due to pitching, this will not return usable values for smooth animations.
          * @param duration
          * @param divider
          * @returns {number}

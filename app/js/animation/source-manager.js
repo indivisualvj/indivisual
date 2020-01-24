@@ -233,7 +233,7 @@
 
             listener.register('sample.render.start', sample.id, function (target) {
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'red');
-                messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {timeout: beatkeeper.getSpeed('eight').duration});
+                messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {timeout: beatKeeper.getSpeed('eight').duration});
                 messaging.emitMidi('glow', MIDI_SAMPLE_FEEDBACK);
             });
 
@@ -245,7 +245,7 @@
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', msg);
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-progress', progress);
                 let conf = {
-                    timeout: beatkeeper.getSpeed('eight').duration,
+                    timeout: beatKeeper.getSpeed('eight').duration,
                     times: 2
                 };
                 messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], conf);
@@ -491,7 +491,7 @@
          * @param progress
          */
         renderSamples() {
-            let speed = beatkeeper.getDefaultSpeed();
+            let speed = beatKeeper.getDefaultSpeed();
             for (let i = 0; i < this.samples.length; i++) {
                 let sample = this.samples[i];
                 if (sample && sample.record && sample.enabled && sample.initialized && !sample.complete) {

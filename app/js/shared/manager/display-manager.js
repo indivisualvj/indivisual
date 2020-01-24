@@ -674,7 +674,7 @@
                 }
 
             } else {
-                speed = beatkeeper.getSpeed(ds);
+                speed = beatKeeper.getSpeed(ds);
             }
 
             if (speed) {
@@ -690,7 +690,7 @@
          * @returns {boolean}
          */
         borderSpeed() {
-            let speed = beatkeeper.getSpeed(statics.DisplaySettings.border_speed);
+            let speed = beatKeeper.getSpeed(statics.DisplaySettings.border_speed);
             return speed;
         }
 
@@ -725,7 +725,7 @@
          * @returns {number}
          */
         flashTimeoutInFrames(speed) {
-            let timeout = beatkeeper.getSpeed(speed).duration / 2;
+            let timeout = beatKeeper.getSpeed(speed).duration / 2;
             let count = Math.round((timeout / animation.duration) / 2);
             return count;
         }

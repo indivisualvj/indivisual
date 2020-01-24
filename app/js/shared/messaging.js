@@ -82,11 +82,13 @@
 
             this.socket.once('connect', () => {
                 this._join();
-                callback(false);
+                this.program.setMessaging(this);
+                callback(false, this.program);
 
                 this.socket.on('connect', () => {
                     this._join();
-                    callback(true);
+                    this.program.setMessaging(this);
+                    callback(true, this.program);
                 });
             });
         }

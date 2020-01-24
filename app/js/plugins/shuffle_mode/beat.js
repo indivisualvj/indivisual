@@ -5,7 +5,7 @@
         beats = 0;
 
         apply() {
-            this.beats += (beatkeeper.getDefaultSpeed().prc==0?1:0);
+            this.beats += (beatKeeper.getDefaultSpeed().prc==0?1:0);
             let every = this.settings.shuffle_every;
 
             if (this.beats >= every) {

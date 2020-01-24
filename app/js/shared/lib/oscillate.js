@@ -36,7 +36,7 @@ HC.Osci = {
      */
     reverse(offset, settings) {
         let bpm = 180 / statics.ControlSettings.tempo * 1000;
-        let div = beatkeeper.getSpeed(settings.rhythm).divider / 8;
+        let div = beatKeeper.getSpeed(settings.rhythm).divider / 8;
         let progress = Math.PI * animation.last / (bpm * settings.osci1_period);
         progress *= div;
 
@@ -107,7 +107,7 @@ HC.Osci = {
         let p = 1;
 
         let bpm = 60000 / statics.ControlSettings.tempo;
-        let div = beatkeeper.rhythmDivider(settings.rhythm) / 2;
+        let div = beatKeeper.rhythmDivider(settings.rhythm) / 2;
         func = func || Math.sin;
         progress = progress || Math.PI * animation.now;
 

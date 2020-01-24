@@ -7,8 +7,16 @@
      * @type {HC.GuifyExplorer}
      */
     HC.GuifyExplorer = class GuifyExplorer extends HC.Guify {
-        constructor(id, open) {
+
+        /**
+         *
+         * @param id
+         * @param open
+         * @param {HC.Explorer} explorer
+         */
+        constructor(id, open, explorer) {
             super(id, open);
+            this.finishLayout(explorer);
         }
 
         /**
@@ -23,6 +31,31 @@
 
             return folder;
         }
+
+        /**
+         *
+         * @param {HC.Explorer} explorer
+         */
+        finishLayout(explorer) {
+
+            let container = this.getComponent().bar.element;
+            let actions = document.createElement('div');
+            actions.classList.add('actions');
+            actions.innerHTML =
+                '<div class="new"></div>' +
+                '<div class="reset"></div>';
+            actions.childNodes.item(0).addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                explorer.presetMan.newFolder(this);
+            });
+            actions.childNodes.item(1).addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                explorer.reload();
+            });
+            container.appendChild(actions);
+        }
     }
 }
 
@@ -35,8 +68,10 @@
 
         /**
          *
+         * @param data
+         * @param {HC.PresetManager} owner
          */
-        finishLayout(data, owner) {
+        finishLayout(data, presetMan) {
 
             if (!data.default) {
                 let container = this.getComponent().container;
@@ -49,19 +84,24 @@
                     '<div class="rename"></div>';
                 actions.childNodes.item(0).addEventListener('click', (e) => {
                     e.preventDefault(); e.stopPropagation();
-                    owner.newPreset(data, this);
+                    presetMan.newPreset(this);
                 });
                 actions.childNodes.item(1).addEventListener('click', (e) => {
                     e.preventDefault(); e.stopPropagation();
-                    owner.loadPresets(data, this);
+                    if (e.shiftKey) {
+                        presetMan.appendPresets(this);
+
+                    } else {
+                        presetMan.loadPresets(this);
+                    }
                 });
                 actions.childNodes.item(2).addEventListener('click', (e) => {
                     e.preventDefault(); e.stopPropagation();
-                    owner.savePresets(data, this);
+                    presetMan.savePresets(this);
                 });
                 actions.childNodes.item(3).addEventListener('click', (e) => {
                     e.preventDefault(); e.stopPropagation();
-                    owner.renameItem(data, this);
+                    presetMan.renameItem(this);
                 });
                 container.appendChild(actions);
             }
@@ -76,20 +116,17 @@
          *
          * @param opts
          * @param data
-         * @param owner
+         * @param {HC.PresetManager} presetMan
          * @returns {HC.GuifyExplorerPreset}
          */
-        addPreset(data, owner) {
+        addPreset(data, presetMan) {
 
             let opts = {
                 type: 'button',
-                label: data.name,
-                loaded: data.loaded,
-                layer: data.layer,
-                action: (ctrl) => {owner.loadPreset(data, this)}
+                label: data.name
             };
 
-            let controller = new HC.GuifyExplorerPreset(this, opts, data, owner);
+            let controller = new HC.GuifyExplorerPreset(this, opts, presetMan);
 
             this.children[controller.getLabel()] = controller;
 
@@ -105,51 +142,92 @@
      */
     HC.GuifyExplorerPreset = class GuifyExplorerPreset extends HC.GuifyController {
 
-
         /**
          *
          * @param parent
          * @param opts
-         * @param data
-         * @param owner
+         * @param {HC.PresetManager} presetMan
          */
-        constructor(parent, opts, data, owner) {
+        constructor(parent, opts, presetMan) {
+
+            opts.action = () => {presetMan.loadPreset(this)};
+
             super(parent, opts);
 
-            if (!data.default) {
-                this.addActions(data, owner);
+            if (opts.label !== '_default') {
+                this.finishLayout(presetMan);
             }
         }
 
         /**
          *
-         * @param data
-         * @param owner
+         * @param info
          */
-        addActions(data, owner) {
+        setInfo(info) {
+            if (info !== null) {
+                this.getComponent().label.setAttribute('data-label', info);
+
+            } else {
+                this.getComponent().label.removeAttribute('data-label');
+            }
+        }
+
+        /**
+         *
+         * @returns {string}
+         */
+        getInfo() {
+            return this.getComponent().label.getAttribute('data-label');
+        }
+
+        /**
+         *
+         * @param info
+         */
+        setChanged(info) {
+            if (info !== null) {
+                this.getComponent().label.setAttribute('data-mnemonic', info);
+
+            } else {
+                this.getComponent().label.removeAttribute('data-mnemonic');
+            }
+        }
+
+        /**
+         *
+         * @returns {string}
+         */
+        getChanged() {
+            return this.getComponent().label.getAttribute('data-mnemonic');
+        }
+
+        /**
+         *
+         * @param {HC.PresetManager} presetMan
+         */
+        finishLayout(presetMan) {
             let container = this.getContainer();
             container.classList.add('preset');
-            if (!data.default) {
-                let actions = document.createElement('div');
-                actions.classList.add('actions');
-                actions.innerHTML =
-                    '<div class="save"></div>' +
-                    '<div class="rename"></div>' +
-                    '<div class="delete"></div>';
-                actions.childNodes.item(0).addEventListener('click', (e) => {
-                    e.preventDefault(); e.stopPropagation();
-                    owner.savePreset(data, this)
-                });
-                actions.childNodes.item(1).addEventListener('click', (e) => {
-                    e.preventDefault(); e.stopPropagation();
-                    owner.renameItem(data, this);
-                });
-                actions.childNodes.item(2).addEventListener('click', (e) => {
-                    e.preventDefault(); e.stopPropagation();
-                    owner.deletePreset(data, this);
-                });
-                container.appendChild(actions);
-            }
+
+            let actions = document.createElement('div');
+            actions.classList.add('actions');
+            actions.innerHTML =
+                '<div class="save"></div>' +
+                '<div class="rename"></div>' +
+                '<div class="delete"></div>';
+            actions.childNodes.item(0).addEventListener('click', (e) => {
+                e.preventDefault(); e.stopPropagation();
+                presetMan.savePreset(this);
+            });
+            actions.childNodes.item(1).addEventListener('click', (e) => {
+                e.preventDefault(); e.stopPropagation();
+                presetMan.renameItem(this);
+            });
+            actions.childNodes.item(2).addEventListener('click', (e) => {
+                e.preventDefault(); e.stopPropagation();
+                presetMan.deletePreset(this);
+            });
+            container.appendChild(actions);
         }
     }
 }

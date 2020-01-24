@@ -75,13 +75,7 @@
          *
          */
         remove() {
-            if (this.getParent()) {
-                this.getComponent().Remove();
-
-                return true;
-            }
-
-            return false;
+            this.getComponent().Remove();
         }
 
         /**
@@ -89,7 +83,15 @@
          * @returns {string}
          */
         getLabel() {
-            return this.getComponent().opts.label;
+            return this.getComponent().label.textContent;
+        }
+
+        /**
+         *
+         * @param label
+         */
+        setLabel(label) {
+            this.getComponent().label.textContent = label;
         }
 
         /**

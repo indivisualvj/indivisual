@@ -16,7 +16,7 @@
 
         apply(peak, setPosition) {
             let layer = this.layer;
-            let speed = beatkeeper.getSpeed('double');
+            let speed = beatKeeper.getSpeed('double');
             let cam = layer.getCamera();
 
             let dd = layer.cameraDefaultDistance();

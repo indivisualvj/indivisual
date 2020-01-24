@@ -140,7 +140,7 @@ HC.Layer.prototype.random2dPosition = function (depthMultiplier, reduce) {
  * @returns {*|boolean}
  */
 HC.Layer.prototype.getCurrentSpeed = function () {
-    return beatkeeper.getSpeed(this.settings.rhythm);
+    return beatKeeper.getSpeed(this.settings.rhythm);
 };
 
 /**

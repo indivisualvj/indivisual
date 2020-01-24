@@ -7,10 +7,11 @@
      * @type {HC.Explorer}
      */
     HC.Explorer = class Explorer {
+
         /**
          * @type {HC.Controller}
          */
-        owner;
+        controller;
 
         statics;
 
@@ -18,6 +19,16 @@
          * @type {HC.GuifyExplorer}
          */
         gui;
+
+        /**
+         * @type {HC.PresetManager}
+         */
+        presetMan;
+
+        /**
+         * @type {HC.Messaging}
+         */
+        messaging;
 
         /**
          *
@@ -43,29 +54,24 @@
 
         /**
          *
-         * @param owner
+         * @param {HC.Controller} controller
          * @param settings
          */
-        constructor(owner, settings) {
-            this.owner = owner; // todo use it!
+        constructor(controller, settings) {
+            this.controller = controller; // todo use it!
+            this.messaging = controller.messaging;
             this.statics = settings; // todo use it!
+            this.presetMan = new HC.PresetManager(this, this.messaging);
 
-            this.init();
+            this.gui = new HC.GuifyExplorer('Presets', true, this);
             this.load();
-        }
-
-        /**
-         *
-         */
-        init() {
-            this.gui = new HC.GuifyExplorer('Presets', true);
         }
 
         /**
          * 
          */
         load() {
-            messaging.files(STORAGE_DIR, (data) => {
+            this.messaging.files(STORAGE_DIR, (data) => {
                 let _insert = (children, parent) => {
                     for (let k in children) {
                         let child = children[k];
@@ -73,10 +79,10 @@
                         if (child.type == 'folder') {
                             let folder = parent.addFolder(child.name, false);
                             _insert(child.children, folder);
-                            folder.finishLayout(child, this.owner.presetman);
+                            folder.finishLayout(child, this.presetMan);
 
                         } else {
-                            parent.addPreset(child, this.owner.presetman);
+                            parent.addPreset(child, this.presetMan);
 
                         }
                     }
@@ -84,6 +90,18 @@
                 _insert(this.default, this.gui);
                 _insert(data, this.gui);
             });
+        }
+
+        /**
+         *
+         */
+        reload() {
+            for (let k in this.gui.children) {
+                let child = this.gui.children[k];
+                child.remove();
+            }
+
+            this.load();
         }
 
         /**
@@ -110,8 +128,10 @@
          * @param changed
          */
         setChanged(layer, changed) {
-            let l = cm.getLayer(layer);
-
+            let ctrls = this.gui.getContainer().querySelectorAll('[data-label="' + (layer+1) + '"]');
+            ctrls.forEach((ctrl) => {
+                ctrl.setAttribute('data-mnemonic', changed ? '!' : null);
+            });
         }
 
         /**

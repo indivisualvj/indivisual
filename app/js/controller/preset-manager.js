@@ -5,41 +5,46 @@
     HC.PresetManager = class PresetManager {
 
         /**
-         * @type {HC.Controller}
+         * @type {HC.Explorer}
          */
-        owner;
+        explorer;
+
+        /**
+         * @type {HC.Messaging}
+         */
+        filesystem;
 
         /**
          * 
-         * @param owner
+         * @param {HC.Explorer} explorer
+         * @param {HC.Messaging} filesystem
          */
-        constructor(owner) {
-            this.owner = owner;
+        constructor(explorer, filesystem) {
+            this.explorer = explorer;
+            this.filesystem = filesystem;
         }
 
         /**
          *
-         * @param item
-         * @param ctrl
+         * @param {HC.GuifyExplorerPreset} ctrl
          */
-        loadPreset(item, ctrl) {
-            this.owner.explorer.setPreset(statics.ControlSettings.layer, false);
-            this.owner.explorer.setPreset(statics.ControlSettings.layer, item);
+        loadPreset(ctrl) {
+            // fixme use attr observer to handle duplicate layer info
 
-            if (item.type == 'preset') {
+            if (ctrl.getLabel() == '_default') {
                 // load default
                 cm.setLayerProperties(statics.ControlSettings.layer, false);
                 requestAnimationFrame(() => {
-                    this.owner.updatePreset(false, cm.prepareLayer(statics.ControlSettings.layer));
+                    this.explorer.controller.updatePreset(false, cm.prepareLayer(statics.ControlSettings.layer));
                 });
 
             } else {
                 // load preset
-                messaging.load(STORAGE_DIR, item.dir, item.name, (data) => {
+                this.filesystem.load(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (data) => {
                     requestAnimationFrame(() => {
 
                         if (statics.ctrlKey) { //load shaders into present presets
-                            this.owner.transferShaderPasses(data.dir + '/' + data.name, JSON.parse(data.contents));
+                            this.explorer.controller.transferShaderPasses(data.dir + '/' + data.name, JSON.parse(data.contents));
 
                         } else {
                             // load the preset
@@ -49,11 +54,9 @@
                             let key = data.dir + '/' + data.name;
                             let contents = JSON.parse(data.contents);
 
-                            // if (contents.info && contents.info.tutorial && Object.keys(contents.info.tutorial).length) {
-                            //     new HC.ScriptProcessor(key, Object.create(contents.info.tutorial)).log();
-                            // }
-                            this.owner.updatePreset(key, contents);
-                            this.owner.explorer.setLoaded(statics.ControlSettings.layer, true);
+
+                            this.explorer.controller.updatePreset(key, contents);
+                            ctrl.setInfo(statics.ControlSettings.layer + 1);
                         }
                     });
                 });
@@ -62,86 +65,35 @@
 
         /**
          *
-         * @param item
-         * @param ctrl
+         * @param {HC.GuifyExplorerFolder} folder
          */
-        loadPresets(item, ctrl) {
-            let children = item.children;
-            let dflt = [];
-
-            for (let i = 0; dflt.length < statics.ControlValues.layer.length && i < children.length; i++) {
-                let child = children[i];
-                if (!child.name.match(/^_.+/)) {
-                    dflt.push(child);
-                }
-            }
-
-            if (!statics.shiftKey) {
-                this.owner.explorer.resetPresets();
-            }
-
-            let di = 0;
-
-            HC.clearLog();
-
-            for (let i = 0; i < statics.ControlValues.layer.length; i++) {
-                if (statics.shiftKey) { // shift means append presets to free layers. no overwrite.
-                    if (cm.isDefault(i)) {
-                        continue;
-                    }
-                }
-
-                if (!layerShuffleable(i)) {
-                    continue;
-                }
-
-                if (di < dflt.length) {
-
-                    let load = (child, i, di) => {
-
-                        this.owner.explorer.setPreset(i, child);
-
-                        messaging.load(STORAGE_DIR, child.dir, child.name, (data) => {
-
-                            requestAnimationFrame(() => {
-
-                                this.owner.updateControl('layer', i, true, true);
-                                let key = data.dir + '/' + data.name;
-                                let contents = JSON.parse(data.contents);
-                                this.owner.updatePreset(key, contents);
-
-                                if (di == dflt.length - 1) {
-                                    this.owner.updateControl('layer', 0, true, true);
-                                }
-                            });
-                        });
-                    };
-
-                    load(dflt[di], i, di++);
-
-                } else {
-                    cm.setLayerProperties(i, false);
-                    this.owner.updatePreset('default', cm.prepareLayer(i), i);
-                }
-            }
+        loadPresets(folder) {
+            // fixme INSERT CODE!
         }
 
         /**
          *
-         * @param item
-         * @param ctrl
+         * @param {HC.GuifyExplorerFolder} folder
          */
-        savePresets(item, ctrl) {
-            for (let i = 0; i < item.children.length; i++) {
-                let child = item.children[i];
-                let layer = child.layer - 1;
+        appendPresets(folder) {
+            // fixme INSERT CODE!
+        }
 
-                if (layer >= 0 && child.changed) {
+        /**
+         *
+         * @param {HC.GuifyExplorerFolder} ctrl
+         */
+        savePresets(ctrl) {
+            for (let k in ctrl.children) {
+                let child = ctrl.children[k];
+                let layer = parseInt(child.getInfo()) - 1;
+
+                if (layer >= 0 && child.getChanged()) { // fixme solution!
                     let save = (layer, child) => {
                         let settings = cm.prepareLayer(layer);
-                        messaging.save(STORAGE_DIR, child.dir, child.name, settings, (result) => {
+                        this.filesystem.save(STORAGE_DIR, ctrl.getLabel(), child.getLabel(), settings, (result) => {
                             HC.log(result);
-                            this.owner.explorer.setChanged(layer, false);
+                            child.setInfo(null);
                         }, '');
                     };
 
@@ -152,63 +104,46 @@
 
         /**
          *
-         * @param item
-         * @param ctrl
+         * @param {HC.GuifyExplorerPreset} ctrl
          */
-        savePreset(item, ctrl) {
+        savePreset(ctrl) {
             let settings = cm.prepareLayer(statics.ControlSettings.layer);
-            messaging.save(STORAGE_DIR, item.dir, item.name, settings, (result) => {
+            this.filesystem.save(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), settings, (result) => {
                 HC.log(result);
-                this.owner.explorer.setPreset(statics.ControlSettings.layer, false);
-                this.owner.explorer.setPreset(statics.ControlSettings.layer, item);
-                this.owner.explorer.setLoaded(statics.ControlSettings.layer, true);
-
+                ctrl.setChanged(null);
             });
         }
 
         /**
          *
-         * @param item
-         * @param ctrl
+         * @param {HC.GuifyExplorerFolder} ctrl
          */
-        newPreset(item, ctrl) {
-            let name = item.children.length;
+        newPreset(ctrl) {
+            let name = Object.keys(ctrl.children).length.toString();
 
             let input = prompt('Please specify a name', name);
             if (input) {
                 name = input;
+                let nu = {
+                    type: 'file',
+                    dir: ctrl.getLabel(),
+                    name: name + '.json',
+                    settings: cm.prepareLayer(statics.ControlSettings.layer)
+                };
 
-            } else {
-                return;
+                this.filesystem.save(STORAGE_DIR, nu.dir, nu.name, nu.settings, (result) => {
+                    HC.log(result);
+                    ctrl.addPreset(nu, this);
+                }, '');
             }
-
-            let nu = {
-                type: 'file',
-                loaded: false,
-                layer: '',
-                changed: '',
-                dir: item.name,
-                name: name + '.json',
-                settings: cm.prepareLayer(statics.ControlSettings.layer),
-                children: []
-            };
-
-            messaging.save(STORAGE_DIR, nu.dir, nu.name, nu.settings, (result) => {
-                HC.log(result);
-                ctrl.addPreset(nu, this);
-                this.owner.explorer.setPreset(statics.ControlSettings.layer, false);
-                this.owner.explorer.setPreset(statics.ControlSettings.layer, nu);
-                this.owner.explorer.setLoaded(statics.ControlSettings.layer, true);
-            }, '');
         }
 
         /**
          *
-         * @param item
-         * @param ctrl
+         * @param {HC.GuifyExplorerPreset} ctrl
          */
-        deletePreset(item, ctrl) {
-            messaging.delete(STORAGE_DIR, item.dir, item.name, (result) => {
+        deletePreset(ctrl) {
+            this.filesystem.delete(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (result) => {
                 HC.log(result);
                 ctrl.remove();
             });
@@ -216,40 +151,27 @@
 
         /**
          *
-         * @param item
-         * @param ctrl
+         * @param {HC.GuifyExplorer} ctrl
          */
-        newFolder(item, ctrl) {
+        newFolder(ctrl) {
             let name = '__NEW__';
 
             let input = prompt('Please specify a name', name);
             if (input) {
                 name = input;
-
-            } else {
-                return;
+                this.filesystem.mkdir(STORAGE_DIR, name, false, (result) => {
+                    HC.log(result);
+                    ctrl.addFolder(name);
+                });
             }
-
-            let nu = {
-                type: 'folder',
-                dir: '',
-                name: name,
-                visible: true,
-                children: []
-            };
-            messaging.mkdir(STORAGE_DIR, name, false, (result) => {
-                HC.log(result);
-                item.addFolder(name, false);
-            });
         }
 
         /**
          *
-         * @param item
-         * @param ctrl
+         * @param {HC.GuifyItem} ctrl
          */
-        renameItem(item, ctrl) {
-            let name = item.name;
+        renameItem(ctrl) {
+            let name = ctrl.getLabel();
             let split = name.split('.');
             let suffix = '';
             if (split.length > 1) {
@@ -262,23 +184,12 @@
                 if (suffix) {
                     name += suffix;
                 }
+                this.filesystem.rename(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), name, (result) => {
+                    HC.log(result);
+                    ctrl.setLabel(name);
+                });
 
-            } else {
-                return;
             }
-
-            messaging.rename(STORAGE_DIR, item.dir, item.name, name, (result) => {
-                HC.log(result);
-                // todo rename folder/item? remove and reload!
-                let children = item.children;
-                let odir = item.name;
-                for (let i = 0; i < children.length; i++) {
-                    let dir = children[i].dir;
-                    dir = dir.slice(-0, -odir.length);
-                    children[i].dir = dir + name;
-                }
-                item.name = name;
-            });
         }
     }
 }

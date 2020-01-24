@@ -40,7 +40,7 @@
         static index = 40;
 
         apply(key) {
-            let speed = beatkeeper.getSpeed('hexa');
+            let speed = beatKeeper.getSpeed('hexa');
             return this.activate(key, HC.Osci.sinInOut(speed.prc));
         }
     }
@@ -51,7 +51,7 @@
         static index = 40;
 
         apply(key) {
-            let speed = beatkeeper.getSpeed('hexa');
+            let speed = beatKeeper.getSpeed('hexa');
             return this.activate(key, HC.Osci.sinInOut(speed.prc, .5));
         }
     }
@@ -62,7 +62,7 @@
         static index = 40;
 
         apply(key) {
-            let speed = beatkeeper.getSpeed('32');
+            let speed = beatKeeper.getSpeed('32');
             return this.activate(key, HC.Osci.sinInOut(speed.prc, .5));
         }
     }
@@ -73,7 +73,7 @@
         static index = 40;
 
         apply(key) {
-            let speed = beatkeeper.getSpeed('full');
+            let speed = beatKeeper.getSpeed('full');
             return this.activate(key, HC.Osci.sinus(speed.prc));
         }
     }

@@ -57,7 +57,15 @@
          * @returns {string}
          */
         getLabel() {
-            return this.gui.opts.title;
+            return this.gui.bar.element.textContent;
+        }
+
+        /**
+         *
+         * @param label
+         */
+        setLabel(label) {
+            this.gui.bar.element.textContent = label;
         }
 
         /**
@@ -77,6 +85,12 @@
          */
         setOpen(exp) {
             this.gui.panel.SetVisible(exp);
+        }
+
+        /**
+         *
+         */
+        remove() {
         }
     }
 }

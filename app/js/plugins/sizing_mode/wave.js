@@ -7,7 +7,7 @@
         apply(shape) {
             let layer = this.layer;
             if (this.isFirstShape(shape)) {
-                let dur = beatkeeper.getDefaultSpeed().duration;
+                let dur = beatKeeper.getDefaultSpeed().duration;
                 let step = 45 / dur;
                 this.angle += animation.diff * step;
 

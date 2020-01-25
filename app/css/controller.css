@@ -89,12 +89,7 @@ body {
 
 .w55p {
     width: 55%;
-    max-width: 756px;
-}
-
-.w60p {
-    width: 60%;
-    max-width: 756px;
+    max-width: 768px;
 }
 
 #monitor {
@@ -244,7 +239,7 @@ pre#log {
     display: block;
     width: 100%;
     height: 100%;
-    padding: 0.5%;
+    padding: 0.15vw;
     margin: 0;
     color: #2fd62f;
 
@@ -260,7 +255,7 @@ pre#osd {
     max-width: 640px;
     min-width: 310px;
     height: 20vw;
-    padding: 0.5%;
+    padding: 0.1vw;
     border: 6px solid rgba(68, 171, 218, 0.5);
     border-radius: 1px;
     margin: -10vw 0 0 -15vw;

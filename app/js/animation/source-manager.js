@@ -9,10 +9,34 @@
     HC.SourceManager = class SourceManager {
 
         /**
-         *
+         * @type {HC.Animation}
+         */
+        animation;
+        
+        /**
+         * @type {HC.DisplayManager}
+         */
+        displayManager;
+
+        /**
+         * @type {HC.BeatKeeper}
+         */
+        beatKeeper;
+
+        /**
+         * @type {HC.Renderer}
+         */
+        renderer;
+
+        /**
+         * @param {HC.Animation} animation
          * @param config
          */
-        constructor(config) {
+        constructor(animation, config) {
+            this.animation = animation;
+            this.displayManager = animation.displayman;
+            this.beatKeeper = animation.beatKeeper;
+            this.renderer = animation.renderer;
             this.perspectives = new Array(3);
             this.samples = config.sample;
             this.sequences = config.sequence;
@@ -37,7 +61,7 @@
 
                     case 'animation':
                     default:
-                        source = new HC.Source(renderer, renderer.resolution.x, renderer.resolution.y);
+                        source = new HC.Source(this.renderer, this.renderer.resolution.x, this.renderer.resolution.y);
                         break;
 
                     case 'sequence':
@@ -117,7 +141,7 @@
 
                 if (sequence.sample) {
 
-                    let _indicator = function (sequence) {
+                    let _indicator = (sequence) => {
                         let type = [0, 0, 1];
                         if (sequence.sample) {
                             type[1] = sequence.sample.last();
@@ -128,8 +152,8 @@
                         conf.SourceTypes[getSequenceEndKey(sequence.index)] = type;
                         messaging.emitData(sequence.sample.id, conf);
 
-                        animation.updateSource(getSequenceStartKey(sequence.index), 0, false, true);
-                        animation.updateSource(getSequenceEndKey(sequence.index), type[1], false, true);
+                        this.animation.updateSource(getSequenceStartKey(sequence.index), 0, false, true);
+                        this.animation.updateSource(getSequenceEndKey(sequence.index), type[1], false, true);
                     };
 
                     if (os != sequence.sample) {
@@ -219,8 +243,8 @@
                 messaging.emitData(target.id, conf);
             });
 
-            listener.register('sample.init.end', sample.id, function (target) {
-                animation.powersave = false;
+            listener.register('sample.init.end', sample.id, (target) => {
+                this.animation.powersave = false;
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'green');
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'style', '');
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', 'ready to record');
@@ -231,17 +255,17 @@
                 messaging.emitData(target.id, conf);
             });
 
-            listener.register('sample.render.start', sample.id, function (target) {
+            listener.register('sample.render.start', sample.id, (target) => {
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'red');
                 messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {timeout: beatKeeper.getSpeed('eight').duration});
                 messaging.emitMidi('glow', MIDI_SAMPLE_FEEDBACK);
             });
 
-            listener.register('sample.render.progress', sample.id, function (target) {
+            listener.register('sample.render.progress', sample.id, (target) => {
 
                 let progress = target.counter / target.beats * 100;
 
-                let msg = 'recording' + ' (' + animation.fps + 'fps)';
+                let msg = 'recording' + ' (' + this.animation.fps + 'fps)';
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', msg);
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-progress', progress);
                 let conf = {
@@ -251,8 +275,8 @@
                 messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], conf);
             });
 
-            listener.register('sample.render.error', sample.id, function (target) {
-                animation.powersave = false;
+            listener.register('sample.render.error', sample.id, (target) => {
+                this.animation.powersave = false;
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-progress', '');
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'red');
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', '[ERROR!]');
@@ -260,19 +284,19 @@
                 messaging.emitMidi('glow', MIDI_SAMPLE_FEEDBACK, {timeout: 500, times: 3});
             });
 
-            listener.register('sample.render.end', sample.id, function (target) {
-                animation.powersave = false;
+            listener.register('sample.render.end', sample.id, (target) => {
+                this.animation.powersave = false;
 
                 let recordKey = getSampleRecordKey(target.index);
 
                 if (statics.SourceSettings[recordKey]) { // sample
-                    animation.updateSource(recordKey, false, true, true, false);
+                    this.animation.updateSource(recordKey, false, true, true, false);
 
                 }
 
                 // if (IS_ANIMATION) {
                 let resolution = 630 / target.width;
-                sourceman.storeSample(target.index, target.id, resolution, true);
+                this.storeSample(target.index, target.id, resolution, true);
                 // }
 
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-progress', '');
@@ -300,7 +324,6 @@
                         for (let s = 0; s < this.sequences.length; s++) {
                             let seq = this.getSequence(s);
                             if (seq && seq.sample == sample) { // reset input to off if sample was disabled
-                                // animation.updateSource(getSequenceSampleKey(s), 'off', true, true, false);
                                 warn = true;
                                 break;
                             }
@@ -338,7 +361,7 @@
                             messaging.emitAttr('[data-id="' + key + '"]', 'data-color', '');
 
                             if (load) {
-                                animation.updateSource(getSampleLoadKey(sample.index), sample.id, false, true, false);
+                                this.animation.updateSource(getSampleLoadKey(sample.index), sample.id, false, true, false);
                             }
                         });
                         storeSample(sample, name, resolution);
@@ -376,7 +399,7 @@
          * @returns {*}
          */
         getDisplay(i) {
-            return displayman.getDisplay(i);
+            return this.displayManager.getDisplay(i);
         }
 
         /**
@@ -412,7 +435,7 @@
          */
         getPerspective(i) {
             if (!this.perspectives[i]) {
-                this.perspectives[i] = new HC.Perspective(i);
+                this.perspectives[i] = new HC.Perspective(this.animation, i);
             }
 
             return this.perspectives[i];
@@ -444,8 +467,8 @@
          *
          */
         updateSources() {
-            for (let i = 0; i < displayman.displays.length; i++) {
-                this.updateSource(displayman.getDisplay(i));
+            for (let i = 0; i < this.displayManager.displays.length; i++) {
+                this.updateSource(this.displayManager.getDisplay(i));
             }
         }
 
@@ -478,8 +501,8 @@
          *
          */
         renderPerspectives() {
-            for (let i = 0; i < displayman.displays.length; i++) {
-                let dsp = displayman.displays[i];
+            for (let i = 0; i < this.displayManager.displays.length; i++) {
+                let dsp = this.displayManager.displays[i];
                 if (dsp && dsp.visible && getDisplaySource(i) == 'perspective') {
                     this.getPerspective(getDisplaySequence(i)).next();
                 }
@@ -495,7 +518,7 @@
             for (let i = 0; i < this.samples.length; i++) {
                 let sample = this.samples[i];
                 if (sample && sample.record && sample.enabled && sample.initialized && !sample.complete) {
-                    sample.render(renderer.current(), speed, renderer.currentColor());
+                    sample.render(this.renderer.current(), speed, this.renderer.currentColor());
                 }
             }
         }

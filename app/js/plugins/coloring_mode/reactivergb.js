@@ -25,7 +25,7 @@
                 }
 
                 v = (!sync ? fbdv : audio.volume);
-                m1 = (audioman.isActive() ? 8 : 2);
+                m1 = (messaging.program.audioManager.isActive() ? 8 : 2);
             }
 
             let prc;

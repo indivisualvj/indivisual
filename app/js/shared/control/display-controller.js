@@ -34,7 +34,7 @@ HC.DisplayController = HC.DisplayController || {};
                         updates[key] = statics.DisplaySettings[okey];
                     }
                 }
-                controller.updateDisplays(updates, true, true, true);
+                messaging.program.updateDisplays(updates, true, true, true);
                 messaging.emitDisplays(updates, true, false, true);
             },
             mask_reset: function () {
@@ -47,7 +47,7 @@ HC.DisplayController = HC.DisplayController || {};
                         updates[key] = statics.DisplaySettingsManager.get('video.displayN').getDefault(key);
                     }
                 }
-                controller.updateDisplays(updates, true, true, true);
+                messaging.program.updateDisplays(updates, true, true, true);
                 messaging.emitDisplays(updates, true, false, true);
             },
             auto: function () {
@@ -279,13 +279,13 @@ HC.DisplayController = HC.DisplayController || {};
             border: 0,
             border_color: '#ffffff',
             trigger_display_visibility: function () {
-                controller.updateDisplay('trigger_display_visibility', true, true, true, false);
+                messaging.program.updateDisplay('trigger_display_visibility', true, true, true, false);
             },
             force_display_visibility: function () {
-                controller.updateDisplay('force_display_visibility', true, true, true, false);
+                messaging.program.updateDisplay('force_display_visibility', true, true, true, false);
             },
             reset_display_visibility: function () {
-                controller.updateDisplay('reset_display_visibility', true, true, true, false);
+                messaging.program.updateDisplay('reset_display_visibility', true, true, true, false);
             }
         };
 
@@ -380,7 +380,7 @@ HC.DisplayController = HC.DisplayController || {};
          * @param that
          */
         onChange(value, that) {
-            controller.updateDisplay(that.getProperty(), value, true, true, false);
+            messaging.program.updateDisplay(that.getProperty(), value, true, true, false);
         }
     }
 }

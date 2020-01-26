@@ -11,7 +11,7 @@
         /**
          * @type {HC.Controller}
          */
-        owner;
+        controller;
 
         /**
          * @type {MIDIAccess}
@@ -55,10 +55,10 @@
 
         /**
          *
-         * @param owner
+         * @param {HC.Controller} controller
          */
-        constructor(owner, settings) {
-            this.owner = owner;
+        constructor(controller, settings) {
+            this.controller = controller;
             this.statics = settings;
 
         }
@@ -204,7 +204,7 @@
 
                     if (!this.statics.ControlSettings.peak_bpm_detect) { // tempo by MIDI clock
                         if (this.statics.ControlSettings.tempo != this.clockbpm) {
-                            controller.updateControl('tempo', this.clockbpm, true, true, false);
+                            this.controller.updateControl('tempo', this.clockbpm, true, true, false);
                         }
                     }
 
@@ -261,8 +261,8 @@
                         let func = 'update' + id.section;
                         let name = shift + id.name;
 
-                        if (func in this.owner) {
-                            func = this.owner[func];
+                        if (func in this.controller) {
+                            func = this.controller[func];
                             if (settings in this.statics) {
                                 settings = this.statics[settings];
                                 if (!(name in settings) && id.name in settings) {
@@ -402,7 +402,7 @@
                             value = !isNaN(parseInt(value)) ? parseInt(value) : value;
                             let display = values[value];
 
-                            func.call(this.owner, name, value, true, true, false);
+                            func.call(this.controller, name, value, true, true, false);
                             this._showOSD(name, display, OSD_TIMEOUT);
                         }
                     }
@@ -432,7 +432,7 @@
 
                             let value = Math.max(min, Math.min(max, next));
 
-                            func.call(this.owner, name, round(value, 3), true, true, false);
+                            func.call(this.controller, name, round(value, 3), true, true, false);
                             this._showOSD(name, value, OSD_TIMEOUT, id);
 
                             //this.data = [step, timestamp, diff];
@@ -443,7 +443,7 @@
                 case 'function':
                     if (vel) {
                         func = settings[name];
-                        func.call(this.owner, name, true, true, true, false);
+                        func.call(this.controller, name, true, true, true, false);
                         this._showOSD(name, true, false);
 
                     } else {
@@ -456,7 +456,7 @@
                         let current = settings[name];
                         let value = !current;
 
-                        func.call(this.owner, name, value, true, true, false);
+                        func.call(this.controller, name, value, true, true, false);
                         this._showOSD(name, value, false);
 
                     } else {
@@ -469,7 +469,7 @@
 
                         let step = vel - 64;
                         let value = step > -1 ? true : false;
-                        func.call(this.owner, name, value, true, true, false);
+                        func.call(this.controller, name, value, true, true, false);
                         this._showOSD(name, value, OSD_TIMEOUT, id);
 
                     } else {
@@ -479,7 +479,7 @@
 
                 case 'push':
                     let value = vel > 0;
-                    func.call(this.owner, name, value, true, true, false);
+                    func.call(this.controller, name, value, true, true, false);
                     if (value) {
                         this._showOSD(name, value, false);
 
@@ -492,7 +492,7 @@
                     if (vel) {
                         let value = id.value;
 
-                        func.call(this.owner, name, value, true, true, false);
+                        func.call(this.controller, name, value, true, true, false);
                         this._showOSD(name, value, false);
 
                     } else {
@@ -516,7 +516,7 @@
                 return;
             }
 
-            this.owner.showOSD(name, value, timeout, ((id && id.options && id.options.color) ? id.options.color : false));
+            this.controller.showOSD(name, value, timeout, ((id && id.options && id.options.color) ? id.options.color : false));
         }
 
         /**
@@ -610,7 +610,7 @@
          * @private
          */
         _hideOSD(name) {
-            this.owner.showOSD(name, undefined, 50);
+            this.controller.showOSD(name, undefined, 50);
         }
 
         /**

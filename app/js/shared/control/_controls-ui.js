@@ -41,11 +41,11 @@
             sy.addEventListener('click', function (e) {
 
                 if (sy.classList.contains('selected')) {
-                    controller.setSynchronized(key, false);
+                    messaging.program.setSynchronized(key, false);
                     sy.setAttribute('class', 'sync');
 
                 } else {
-                    controller.setSynchronized(key, true);
+                    messaging.program.setSynchronized(key, true);
                     sy.setAttribute('class', 'sync selected');
                 }
 
@@ -60,7 +60,7 @@
 
             sh.addEventListener('click', function (e) {
                 // share to all layers
-                controller.shareSettings(key, datasource);
+                messaging.program.shareSettings(key, datasource);
                 e.preventDefault();
                 e.stopPropagation();
             });
@@ -273,7 +273,7 @@
             data[set] = {};
             data[set][that.getProperty()] = value;
 
-            controller.updateSetting(
+            messaging.program.updateSetting(
                 statics.ControlSettings.layer,
                 data,
                 true,
@@ -337,8 +337,8 @@
          */
         onChange(v, that) {
             if (that.getProperty() == 'apply' && v === false) {
-                controller.cleanShaderPasses();
-                controller.updateUiPasses();
+                messaging.program.cleanShaderPasses();
+                messaging.program.updateUiPasses();
             }
 
             let passes = cm.get(statics.ControlSettings.layer, 'passes');
@@ -375,7 +375,7 @@
                     let sh = JSON.copy(statics.ShaderSettings[name]);
                     ctrl.init(sh);
 
-                    controller.addShaderPass(
+                    messaging.program.addShaderPass(
                         statics.ControlSettings.layer,
                         ctrl
                     );

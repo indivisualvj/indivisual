@@ -51,7 +51,7 @@ HC.plugins.shaders = HC.plugins.shaders || {};
             settings = settings || this.__proto__.constructor.settings;
 
             if (properties.random) {
-                if ((audioman.isActive() && audio.peak && randomBool(3)) || (this.layer.getCurrentSpeed().prc == 0 && randomBool())) {
+                if ((messaging.program.audioManager.isActive() && audio.peak && randomBool(3)) || (this.layer.getCurrentSpeed().prc == 0 && randomBool())) {
                     glsh.enabled = !glsh.enabled;
                 }
             } else {
@@ -103,7 +103,7 @@ HC.plugins.shaders = HC.plugins.shaders || {};
                                 }
                             }
 
-                            if (audioman.isActive() && sProperty.audio) {
+                            if (messaging.program.audioManager.isActive() && sProperty.audio) {
 
                                 if (sSetting._type && isInteger(sSetting._type[2])) {
 

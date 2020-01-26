@@ -144,7 +144,7 @@
             if (speed.progress < 1) { //
                 params.velocity *= -1;
 
-            } else if (audioman.isActive()) {
+            } else if (messaging.program.audioManager.isActive()) {
                 if (audio.peak) {
                     params.volume = this.settings.pattern_sync == false
                         ? shape.shapeVolume() : audio.volume;

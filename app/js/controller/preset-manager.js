@@ -5,6 +5,11 @@
     HC.PresetManager = class PresetManager {
 
         /**
+         * @type {HC.Controller}
+         */
+        controller;
+
+        /**
          * @type {HC.Explorer}
          */
         explorer;
@@ -16,12 +21,13 @@
 
         /**
          * 
+         * @param {HC.Controller} controller
          * @param {HC.Explorer} explorer
-         * @param {HC.Messaging} filesystem
          */
-        constructor(explorer, filesystem) {
+        constructor(controller, explorer) {
+            this.controller = controller;
             this.explorer = explorer;
-            this.filesystem = filesystem;
+            this.filesystem = controller.messaging;
         }
 
         /**
@@ -34,7 +40,7 @@
                 cm.setLayerProperties(statics.ControlSettings.layer, false);
                 requestAnimationFrame(() => {
                     this.explorer.resetPreset(statics.ControlSettings.layer + 1);
-                    this.explorer.controller.updatePreset(false, cm.prepareLayer(statics.ControlSettings.layer));
+                    this.controller.updatePreset(false, cm.prepareLayer(statics.ControlSettings.layer));
                 });
 
             } else {
@@ -43,7 +49,7 @@
                     requestAnimationFrame(() => {
 
                         if (statics.ctrlKey) { //load shaders into present presets
-                            this.explorer.controller.transferShaderPasses(data.dir + '/' + data.name, JSON.parse(data.contents));
+                            this.controller.transferShaderPasses(data.dir + '/' + data.name, JSON.parse(data.contents));
 
                         } else {
                             // load the preset
@@ -53,7 +59,7 @@
                             let key = data.dir + '/' + data.name;
                             let contents = JSON.parse(data.contents);
 
-                            this.explorer.controller.updatePreset(key, contents);
+                            this.controller.updatePreset(key, contents);
                             let layer = statics.ControlSettings.layer + 1;
                             this.explorer.resetPreset(layer);
                             ctrl.setInfo(layer);
@@ -93,7 +99,7 @@
                     di++;
 
                 } else {
-                    this.explorer.controller.updatePreset(false, cm.prepareLayer(statics.ControlSettings.layer));
+                    this.controller.updatePreset(false, cm.prepareLayer(statics.ControlSettings.layer));
                 }
             }
         }
@@ -130,7 +136,7 @@
                     di++;
 
                 } else {
-                    this.explorer.controller.updatePreset(false, cm.prepareLayer(statics.ControlSettings.layer));
+                    this.controller.updatePreset(false, cm.prepareLayer(statics.ControlSettings.layer));
                 }
             }
         }
@@ -150,13 +156,13 @@
 
                 requestAnimationFrame(() => {
 
-                    this.explorer.controller.updateControl('layer', i, true, true); // todo why have to set?
+                    this.controller.updateControl('layer', i, true, true); // todo why have to set?
                     let key = data.dir + '/' + data.name;
                     let contents = JSON.parse(data.contents);
-                    this.explorer.controller.updatePreset(key, contents);
+                    this.controller.updatePreset(key, contents);
 
                     if (last) {
-                        this.explorer.controller.updateControl('layer', 0, true, true);
+                        this.controller.updateControl('layer', 0, true, true);
                     }
                 });
             });

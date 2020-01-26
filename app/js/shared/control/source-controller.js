@@ -51,34 +51,34 @@ HC.SourceController = HC.SourceController || {};
             group0: '',
             group1: '',
             g0animation: function () {
-                controller.setAllDisplaysTo('source', 'animation', 'group0');
+                messaging.program.setAllDisplaysTo('source', 'animation', 'group0');
             },
             g0sequence: function () {
-                controller.setAllDisplaysTo('source', 'sequence', 'group0');
+                messaging.program.setAllDisplaysTo('source', 'sequence', 'group0');
             },
             g0perspective: function () {
-                controller.setAllDisplaysTo('source', 'perspective', 'group0');
+                messaging.program.setAllDisplaysTo('source', 'perspective', 'group0');
             },
             g0black: function () {
-                controller.setAllDisplaysTo('source', 'black', 'group0');
+                messaging.program.setAllDisplaysTo('source', 'black', 'group0');
             },
             g0offline: function () {
-                controller.setAllDisplaysTo('source', 'offline', 'group0');
+                messaging.program.setAllDisplaysTo('source', 'offline', 'group0');
             },
             g1animation: function () {
-                controller.setAllDisplaysTo('source', 'animation', 'group1');
+                messaging.program.setAllDisplaysTo('source', 'animation', 'group1');
             },
             g1sequence: function () {
-                controller.setAllDisplaysTo('source', 'sequence', 'group1');
+                messaging.program.setAllDisplaysTo('source', 'sequence', 'group1');
             },
             g1perspective: function () {
-                controller.setAllDisplaysTo('source', 'perspective', 'group1');
+                messaging.program.setAllDisplaysTo('source', 'perspective', 'group1');
             },
             g1black: function () {
-                controller.setAllDisplaysTo('source', 'black', 'group1');
+                messaging.program.setAllDisplaysTo('source', 'black', 'group1');
             },
             g1offline: function () {
-                controller.setAllDisplaysTo('source', 'offline', 'group1');
+                messaging.program.setAllDisplaysTo('source', 'offline', 'group1');
             }
         };
 
@@ -170,22 +170,22 @@ HC.SourceController = HC.SourceController || {};
          */
         appendSeqButtons() {
             this.settings.seq_0 = function () {
-                controller.setAllDisplaysTo('sequence', 0);
+                messaging.program.setAllDisplaysTo('sequence', 0);
             };
             this.settings.seq_1 = function () {
-                controller.setAllDisplaysTo('sequence', 1);
+                messaging.program.setAllDisplaysTo('sequence', 1);
             };
             this.settings.seq_2 = function () {
-                controller.setAllDisplaysTo('sequence', 2);
+                messaging.program.setAllDisplaysTo('sequence', 2);
             };
             this.settings.seq_3 = function () {
-                controller.setAllDisplaysTo('sequence', 3);
+                messaging.program.setAllDisplaysTo('sequence', 3);
             };
             this.settings.seq_4 = function () {
-                controller.setAllDisplaysTo('sequence', 4);
+                messaging.program.setAllDisplaysTo('sequence', 4);
             };
             this.settings.seq_inc = function () {
-                controller.setAllDisplaysTo('sequence', false);
+                messaging.program.setAllDisplaysTo('sequence', false);
             };
 
 
@@ -446,7 +446,7 @@ HC.SourceController = HC.SourceController || {};
                     let endKey = getSequenceEndKey(seq);
                     updates[endKey] = 0;
 
-                    controller.updateSources(updates, true, false, false);
+                    messaging.program.updateSources(updates, true, false, false);
                     messaging.emitSources(updates, true, true, false);
                 };
             };
@@ -466,7 +466,7 @@ HC.SourceController = HC.SourceController || {};
                     updates[key + '_blendmode'] = this.values[key + '_blendmode'];
                     updates[key + '_osci'] = this.values[key + '_osci'];
 
-                    controller.updateSources(updates, true, false, false);
+                    messaging.program.updateSources(updates, true, false, false);
                     messaging.emitSources(updates, true, true, false);
                 };
             };
@@ -608,7 +608,7 @@ HC.SourceController = HC.SourceController || {};
          * @param that
          */
         onChange(value, that) {
-            controller.updateSource(that.getProperty(), value, true, true, false);
+            messaging.program.updateSource(that.getProperty(), value, true, true, false);
         }
     }
 }

@@ -8,11 +8,6 @@
  */
 let messaging;
 
-/**
- *
- * @type {HC.Controller}
- */
-let controller;
 
 /**
  *
@@ -54,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     window.addEventListener('resize', onResize);
 
-    controller = new HC.Controller(G_INSTANCE);
+    let controller = new HC.Controller(G_INSTANCE);
     messaging = new HC.Messaging(controller);
 
     messaging.connect(function (reconnect, controller) {
@@ -90,7 +85,7 @@ document.addEventListener('DOMContentLoaded', function () {
      *
      * @type {HC.Controller}
      */
-    HC.Controller = class Controller {
+    HC.Controller = class Controller extends HC.Messageable {
 
         /**
          * @type {HC.Guify[]}
@@ -142,11 +137,6 @@ document.addEventListener('DOMContentLoaded', function () {
         thumbTimeouts = [];
 
         /**
-         * @type {string}
-         */
-        name;
-
-        /**
          *
          * @type {boolean}
          */
@@ -173,7 +163,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param name
          */
         constructor(name) {
-            this.name = name;
+            super(name);
         }
 
         /**
@@ -425,15 +415,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
             for (let i = 0; i < statics.ControlValues.layer.length; i++) {
                 if (i == statics.ControlSettings.layer) {
-                    console.log('currentlayer');
                     continue;
                 }
                 if (cm.isDefault(i)) {
-                    console.log('isdefault');
                     continue;
                 }
                 if (layerShuffleable(i) != layerShuffleable(statics.ControlSettings.layer)) {
-                    console.log('not same kind of shuffleable');
                     continue;
                 }
 
@@ -626,8 +613,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (item == 'layer') {
                     this.updateSettings(value, cm.prepareLayer(value), true, false, true);
 
-                    controller.explorer.resetLoaded();
-                    controller.explorer.setLoaded(value, true);
+                    this.explorer.resetLoaded();
+                    this.explorer.setLoaded(value, true);
 
                     let config = {
                         action: 'attr',
@@ -768,7 +755,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     }
                 }
-                controller.updateUi(this.sourceSettingsGui);
+                this.updateUi(this.sourceSettingsGui);
             }
 
             if (statics.SourceValues && statics.SourceValues.sequence) {
@@ -999,7 +986,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             data = cm.prepareLayer(layer);
             if (cm.get(layer, 'info').hasTutorial()) {
-                new HC.ScriptProcessor(name, Object.create(data.info.tutorial)).log();
+                new HC.ScriptProcessor(this, name, Object.create(data.info.tutorial)).log();
 
                 data.info.tutorial = {}; // fixme tutorial will be deleted on savePreset
             }
@@ -1040,7 +1027,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
                     if (cm.layers[i]._preset) {
-                        controller.explorer.setChanged(i+1, true);
+                        this.explorer.setChanged(i+1, true);
                     }
 
                     this.messaging.emitSettings(i, cm.prepareLayer(i), false, false, true);
@@ -1084,7 +1071,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (cs) {
                     cs.reset();
                     let data = cs.prepare();
-                    controller.updateSetting(statics.ControlSettings.layer, data, true, true, false);
+                    this.updateSetting(statics.ControlSettings.layer, data, true, true, false);
                 }
             }
         }

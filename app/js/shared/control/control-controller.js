@@ -56,27 +56,27 @@ HC.ControlController = HC.ControlController || {};
                 if (statics.shiftKey || statics.ctrlKey) {
                     // sm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
                     cm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
-                    controller.syncLayers();
-                    controller.updateControl('reset', true, true, true, true);
-                    controller.explorer.resetPresets();
-                    controller.updateControl('layer', statics.ControlSettings.layer, true, false, false);
+                    messaging.program.syncLayers();
+                    messaging.program.updateControl('reset', true, true, true, true);
+                    messaging.program.explorer.resetPresets();
+                    messaging.program.updateControl('layer', statics.ControlSettings.layer, true, false, false);
 
                 } else {
-                    controller.updateControl('reset', true, true, true, false);
+                    messaging.program.updateControl('reset', true, true, true, false);
                 }
             },
 
             monitor: false,
             push_layers: function () {
-                controller.syncLayers();
+                messaging.program.syncLayers();
             },
             push_sources: function () {
-                controller.pushSources();
+                messaging.program.pushSources();
             },
             rst_shaders: function () {
                 cm.update(statics.ControlSettings.layer, 'passes', 'shaders', []);
                 let data = cm.get(statics.ControlSettings.layer, 'passes').prepare();
-                controller.updateSettings(statics.ControlSettings.layer, data, false, false, true);
+                messaging.program.updateSettings(statics.ControlSettings.layer, data, false, false, true);
                 messaging.emitSettings(statics.ControlSettings.layer, data, false, false, true);
             },
             debug: false,
@@ -124,13 +124,13 @@ HC.ControlController = HC.ControlController || {};
 
         events = {
             play: (inst) => { return new HC.KeyEvent('keyup', [32], (e) => {
-                controller.updateControl('play', !statics.ControlSettings.play, true, true, false);
+                messaging.program.updateControl('play', !statics.ControlSettings.play, true, true, false);
             }, 'spc')},
             reset: (inst) => { return new HC.KeyEvent('keyup', [46], (e) => {
                 inst.settings.reset();
             }, 'del')},
             monitor: (inst) => { return new HC.KeyEvent('keyup', [36], (e) => {
-                controller.updateControl('monitor', !statics.ControlSettings.monitor, true, true, false);
+                messaging.program.updateControl('monitor', !statics.ControlSettings.monitor, true, true, false);
             }, 'hm')},
             push_layers: (inst) => { return new HC.KeyEvent('keyup', [35], (e) => {
                 inst.settings.push_layers();
@@ -158,7 +158,7 @@ HC.ControlController = HC.ControlController || {};
          * @param that
          */
         onChange(value, that) {
-            controller.updateControl(that.getProperty(), value, true, true, false);
+            messaging.program.updateControl(that.getProperty(), value, true, true, false);
         }
     }
 }

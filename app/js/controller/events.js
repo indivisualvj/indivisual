@@ -140,18 +140,18 @@ HC.Controller.prototype.initKeyboard = function () {
         }
     };
 
-    setMnemonics(controller.controlSettingsGui);
-    setMnemonics(controller.displaySettingsGui);
-    setMnemonics(controller.sourceSettingsGui);
-    setMnemonics(controller.animationSettingsGui);
+    setMnemonics(this.controlSettingsGui);
+    setMnemonics(this.displaySettingsGui);
+    setMnemonics(this.sourceSettingsGui);
+    setMnemonics(this.animationSettingsGui);
 
-    window.addEventListener('keyup', function (e) {
+    window.addEventListener('keyup', (e) => {
         statics.ctrlKey = e.ctrlKey;
         statics.altKey = e.altKey;
         statics.shiftKey = e.shiftKey;
     });
 
-    window.addEventListener('keydown', function (e) {
+    window.addEventListener('keydown', (e) => {
 
         statics.ctrlKey = e.ctrlKey;
         statics.altKey = e.altKey;
@@ -166,14 +166,14 @@ HC.Controller.prototype.initKeyboard = function () {
         }
 
         if (e.keyCode == 8) { // BACKSPACE = close folders
-            var open = controller.nextOpenFolder();
+            var open = this.nextOpenFolder();
             if (!(open instanceof HC.Guify)) {
-                controller.closeAll(open);
-                controller.scrollToControl(open);
+                this.closeAll(open);
+                this.scrollToControl(open);
 
             } else {
-                let open = controller.closeAll();
-                controller.scrollToControl(open);
+                let open = this.closeAll();
+                this.scrollToControl(open);
             }
             e.preventDefault();
             e.stopPropagation();
@@ -190,7 +190,7 @@ HC.Controller.prototype.initKeyboard = function () {
                 val += 10;
             }
 
-            controller.updateControl('layer', val, true, true);
+            this.updateControl('layer', val, true, true);
             return;
         }
 
@@ -201,7 +201,7 @@ HC.Controller.prototype.initKeyboard = function () {
             e.preventDefault();
             e.stopPropagation();
 
-            controller.toggleByKey(ci, char, e.shiftKey);
+            this.toggleByKey(ci, char, e.shiftKey);
         }
     });
 };

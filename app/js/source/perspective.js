@@ -9,10 +9,28 @@
     HC.Perspective = class Perspective {
 
         /**
+         * @type {HC.Animation}
+         */
+        animation;
+
+        /**
+         * @type {HC.DisplayManager}
+         */
+        displayManager;
+
+        /**
+         * @type {HC.Renderer}
+         */
+        renderer;
+
+        /**
          *
+         * @param {HC.Animation} animation
          * @param index
          */
-        constructor(index) {
+        constructor(animation, index) {
+            this.animation = animation;
+            this.displayManager = animation.displayman;
             this.type = 'Perspective';
             this.index = index;
             this.id = this.type + this.index;
@@ -62,7 +80,7 @@
          * @returns {*}
          */
         brightness() {
-            return displayman.brightness();
+            return this.displayManager.brightness();
         }
 
         /**
@@ -71,7 +89,7 @@
          * @returns {*}
          */
         current(fallback) {
-            if (this._last == animation.now) {
+            if (this._last == this.animation.now) {
                 return this.renderer.view;
             }
 
@@ -83,11 +101,11 @@
          */
         next() {
 
-            if (this._last != animation.now) {
+            if (this._last != this.animation.now) {
                 let key = 'perspective' + this.index;
-                let layer = renderer.currentLayer;
+                let layer = this.animation.renderer.currentLayer;
                 let three = layer.three;
-                let cam = renderer.three[key];
+                let cam = this.animation.renderer.three[key];
                 let lcam = three.camera;
                 cam.position.x = lcam.position.x;
                 cam.position.y = lcam.position.y;
@@ -102,7 +120,7 @@
 
                 this.renderer.render(three.scene, cam);
 
-                this._last = animation.now;
+                this._last = this.animation.now;
             }
         }
     }

@@ -134,13 +134,13 @@ HC.Controller.prototype.addPassesFolder = function (submit) {
 
 /**
  *
- * @param controller
+ * @param control
  * @param parent
  */
-HC.Controller.prototype.addShaderPassController = function (key, controller, parent) {
+HC.Controller.prototype.addShaderPassController = function (key, control, parent) {
     let folder = parent.addFolder(key);
-    let sh = controller.getShader();
-    this.addShaderController(folder, false, sh, controller.name, controller);
+    let sh = control.getShader();
+    this.addShaderController(folder, false, sh, control.name, control);
 
     let clear = document.createElement('div');
     clear.classList.add('guify-component-container');
@@ -155,13 +155,13 @@ HC.Controller.prototype.addShaderPassController = function (key, controller, par
  * @param key
  * @param sh
  * @param parent
- * @param controller
+ * @param control
  */
-HC.Controller.prototype.addShaderController = function (folder, key, sh, parent, controller) {
+HC.Controller.prototype.addShaderController = function (folder, key, sh, parent, control) {
 
-    controller = controller || new HC.ShaderPassUi(parent);
-    let shi = controller.getInitialSettings() || {}; // fallback 4 cleaned settings from storage
-    let submit = controller.onChange;
+    control = control || new HC.ShaderPassUi(parent);
+    let shi = control.getInitialSettings() || {}; // fallback 4 cleaned settings from storage
+    let submit = control.onChange;
 
     for (let skey in sh) {
         let shs = sh[skey];
@@ -270,7 +270,7 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                 }
 
             } else { // go deeper
-                this.addShaderController(folder, skey, shs, parent, controller);
+                this.addShaderController(folder, skey, shs, parent, control);
             }
         }
     }
@@ -379,7 +379,7 @@ HC.Controller.prototype.explainPlugin = function (item, value, tree) {
             var desc = proto.tutorial;
             if (desc) {
                 var key = item + '.' + value;
-                new HC.ScriptProcessor(key, desc).log();
+                new HC.ScriptProcessor(this, key, desc).log();
             }
         }
     }

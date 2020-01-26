@@ -5,17 +5,17 @@
             activate: {
                 text: 'Accelerates shapes on Z-Axis towards the Camera. To make it work perfectly, set pattern_overlay_volume to 1.0',
                 action: function () {
-                    controller.closeAll();
-                    controller.animationSettingsGui.getChild('pattern').setOpen(true);
-                    controller.updateSetting(statics.ControlSettings.layer, {pattern:{pattern_overlay_volume: 1}}, true, true);
+                    messaging.program.closeAll();
+                    messaging.program.animationSettingsGui.getChild('pattern').setOpen(true);
+                    messaging.program.updateSetting(statics.ControlSettings.layer, {pattern:{pattern_overlay_volume: 1}}, true, true);
                 }
             },
             invert: {
                 text: 'To invert movement, twist the layer by 180°',
                 action: function () {
-                    controller.closeAll();
-                    controller.animationSettingsGui.getChild('layer').setOpen(true);
-                    controller.updateSetting(statics.ControlSettings.layer, {layer:{layer_rotationy: 180}}, true, true);
+                    messaging.program.closeAll();
+                    messaging.program.animationSettingsGui.getChild('layer').setOpen(true);
+                    messaging.program.updateSetting(statics.ControlSettings.layer, {layer:{layer_rotationy: 180}}, true, true);
                 }
             }
         };

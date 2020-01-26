@@ -17,7 +17,7 @@
                             material_shininess: 50
                         }
                     };
-                    controller.updateSettings(statics.ControlSettings.layer, data, true, false, true);
+                    messaging.program.updateSettings(statics.ControlSettings.layer, data, true, false, true);
                     messaging.emitSettings(statics.ControlSettings.layer, data, true, true, true);
                 }
             }

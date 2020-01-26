@@ -20,10 +20,33 @@
         };
 
         /**
-         *
+         * @type {HC.Animation}
+         */
+        animation;
+
+        /**
+         * @type {HC.DisplayManager}
+         */
+        displayManager;
+
+        /**
+         * @type {HC.BeatKeeper}
+         */
+        beatKeeper;
+
+        /**
+         * @type {HC.Renderer}
+         */
+        renderer;
+
+        /**
+         * @param {HC.Animation} animation
          * @param config
          */
-        constructor(config) {
+        constructor(animation, config) {
+            this.animation = animation;
+            this.beatKeeper = animation.beatKeeper;
+            this.renderer = animation.renderer;
             this.displays = config.display;
             this.width = 1280;
             this.height = 720;
@@ -66,10 +89,10 @@
             if (this.mappingTimeouts[id]) {
                 clearTimeout(this.mappingTimeouts[id]);
             }
-            if (animation) {
+            if (this.animation) {
                 let f = (id, mapping) => {
                     this.mappingTimeouts[id] = setTimeout(() => {
-                        animation.updateDisplay(id + '_mapping', JSON.stringify(mapping), false, true, false);
+                        this.animation.updateDisplay(id + '_mapping', JSON.stringify(mapping), false, true, false);
                         this.mappingTimeouts[id] = false;
                     }, 125);
                 };
@@ -83,14 +106,14 @@
         initCliptastic() {
 
             let maskTimeouts = [];
-            let onMask = function (id, mask) {
+            let onMask = (id, mask) => {
                 if (maskTimeouts[id]) {
                     clearTimeout(maskTimeouts[id]);
                 }
-                if (animation) {
+                if (this.animation) {
                     let f = (id, mask) => {
-                        maskTimeouts[id] = setTimeout(function () {
-                            animation.updateDisplay(id, JSON.stringify(mask), true, true, false);
+                        maskTimeouts[id] = setTimeout(() => {
+                            this.animation.updateDisplay(id, JSON.stringify(mask), true, true, false);
                             maskTimeouts[id] = false;
                         }, 125);
                     };
@@ -98,7 +121,7 @@
                 }
             };
             return Cliptastic({
-                onchange: function (e) {
+                onchange: (e) => {
                     if (e && 'element' in e) {
                         let element = e.element;
                         let id = element.id;
@@ -336,7 +359,7 @@
 
                 if (color == '') {
                     let canvas = display.getSource() ? display.getSource().current() : false;
-                    color = (canvas && canvas._color) ? canvas._color : renderer.currentLayer.shapeColor(false);
+                    color = (canvas && canvas._color) ? canvas._color : this.renderer.currentLayer.shapeColor(false);
                 }
 
                 display.drawBorder(lw, color, mode, speed);
@@ -395,7 +418,7 @@
          */
         renderDisplays() {
             let visibleIndex = 0;
-            let fallback = renderer.current();
+            let fallback = this.renderer.current();
 
             for (let i = 0; i < this.displays.length; i++) {
                 let display = this.displays[i];
@@ -665,7 +688,7 @@
                 }
 
             } else if (ds == 'layer') {
-                if (renderer.layerSwitched) {
+                if (this.renderer.layerSwitched) {
                     speed = {prc: 0};
                     statics.DisplaySettings.force_display_visibility = true;
 
@@ -674,7 +697,7 @@
                 }
 
             } else {
-                speed = beatKeeper.getSpeed(ds);
+                speed = this.beatKeeper.getSpeed(ds);
             }
 
             if (speed) {
@@ -690,7 +713,7 @@
          * @returns {boolean}
          */
         borderSpeed() {
-            let speed = beatKeeper.getSpeed(statics.DisplaySettings.border_speed);
+            let speed = this.beatKeeper.getSpeed(statics.DisplaySettings.border_speed);
             return speed;
         }
 
@@ -725,8 +748,8 @@
          * @returns {number}
          */
         flashTimeoutInFrames(speed) {
-            let timeout = beatKeeper.getSpeed(speed).duration / 2;
-            let count = Math.round((timeout / animation.duration) / 2);
+            let timeout = this.beatKeeper.getSpeed(speed).duration / 2;
+            let count = Math.round((timeout / this.animation.duration) / 2);
             return count;
         }
 

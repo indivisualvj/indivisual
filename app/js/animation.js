@@ -7,11 +7,7 @@
  * @type {HC.Messaging}
  */
 let messaging;
-/**
- *
- * @type {HC.AudioManager}
- */
-let audioman;
+
 /**
  *
  * @type {HC.Animation}
@@ -75,13 +71,18 @@ document.addEventListener('DOMContentLoaded', function () {
                 statics.ControlSettings = statics.ControlSettingsManager.settingsProxy();
 
                 listener = new HC.Listener();
-                audioman = new HC.AudioManager();
+                animation.listener = listener;
+                let audioman = new HC.AudioManager();
+                animation.audioManager = audioman;
                 audio = new HC.AudioAnalyser(audioman.audioContext);
+                animation.audioAnalyser = audio;
                 beatKeeper = new HC.BeatKeeper();
+                animation.beatKeeper = beatKeeper;
 
                 renderer = new HC.Renderer({
                     layers: new Array(statics.ControlValues.layer.length)
                 });
+                animation.renderer = renderer;
 
                 if (IS_ANIMATION) {
                     listener.register('webglcontextlost', animation.name, function () {
@@ -105,16 +106,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 cm = new HC.LayeredControlSetsManager(renderer.layers, statics.AnimationValues);
 
-                displayman = new HC.DisplayManager({
+                displayman = new HC.DisplayManager(animation, {
                     display: new Array(statics.DisplayValues.display.length)
                 });
                 displayman.resize(renderer.getResolution());
+                animation.displayman = displayman;
 
-                sourceman = new HC.SourceManager({
+                sourceman = new HC.SourceManager(animation, {
                     sequence: new Array(statics.SourceValues.sequence.length),
                     sample: new Array(statics.SourceValues.sample.length)
                 });
                 sourceman.resize(renderer.getResolution());
+                animation.sourceman = sourceman;
 
                 new HC.Animation.KeyboardListener().init();
                 new HC.Animation.EventListener().init();
@@ -134,17 +137,52 @@ document.addEventListener('DOMContentLoaded', function () {
      *
      * @type {HC.Animation}
      */
-    HC.Animation = class Animation {
+    HC.Animation = class Animation extends HC.Messageable {
 
         /**
          * @type {HC.Messaging}
          */
         messaging;
 
-        ready = false;
+        /**
+         *
+         * @type {HC.SourceManager}
+         */
+        sourceman;
+
+        /**
+         * @type {HC.AudioManager}
+         */
+        audioManager;
+
+        /**
+         * @type {HC.AudioAnalyser}
+         */
+        audioAnalyser;
+
+        /**
+         * @type {HC.DisplayManager}
+         */
+        displayman;
+
+        /**
+         * @type {HC.BeatKeeper}
+         */
+        beatKeeper;
+
+        /**
+         * @type {HC.Listener}
+         */
+        listener;
+
+        /**
+         * @type {HC.Renderer}
+         */
+        renderer;
+
 
         constructor(name) {
-            this.name = name;
+            super(name);
             this.now = HC.now();
             this.last = this.now;
             this.running = false;
@@ -185,20 +223,20 @@ document.addEventListener('DOMContentLoaded', function () {
             /**
              * do general stuff
              */
-            let speed = beatKeeper.getDefaultSpeed();
+            let speed = this.beatKeeper.getDefaultSpeed();
 
             if (IS_ANIMATION && speed.starting()) {
 
                 let detectedSpeed = false;
 
-                if (audioman.isActive()) {
+                if (this.audioManager.isActive()) {
 
-                    if (statics.ControlSettings.peak_bpm_detect && audio.peakReliable) {
+                    if (statics.ControlSettings.peak_bpm_detect && this.audioAnalyser.peakReliable) {
 
-                        detectedSpeed = beatKeeper.speedByPeakBpm(audio.firstPeak, audio.peakBPM, statics.ControlSettings.tempo);
+                        detectedSpeed = this.beatKeeper.speedByPeakBpm(this.audioAnalyser.firstPeak, this.audioAnalyser.peakBPM, statics.ControlSettings.tempo);
 
                         if (detectedSpeed) {
-                            audio.peakReliable = false;
+                            this.audioAnalyser.peakReliable = false;
                             this.messaging.emitLog('peakBPM', detectedSpeed);
                             this.updateControl('tempo', detectedSpeed, true, true);
                         }
@@ -210,26 +248,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.postStatus(detectedSpeed);
             }
 
-            if (audioman.isActive()) {
+            if (this.audioManager.isActive()) {
                 let config = {
-                    useWaveform: renderer.currentLayer.settings.audio_usewaveform,
+                    useWaveform: this.renderer.currentLayer.settings.audio_usewaveform,
                     volume: statics.ControlSettings.volume,
                     // resetPeakCountAfter: statics.ControlSettings.shuffle_every,
                     tempo: statics.ControlSettings.tempo,
-                    minDiff: beatKeeper.getSpeed('sixteen').duration,
+                    minDiff: this.beatKeeper.getSpeed('sixteen').duration,
                     now: this.now,
-                    thickness: renderer.currentLayer.settings.audio_thickness
+                    thickness: this.renderer.currentLayer.settings.audio_thickness
                 };
-                audio.update(config);
+                this.audioAnalyser.update(config);
 
             } else {
                 this.fakeAudio();
             }
 
-            if (audio.peak) {
+            if (this.audioAnalyser.peak) {
                 this.messaging.emitMidi('glow', MIDI_PEAK_FEEDBACK, {timeout: 125});
 
-                listener.fireEvent('audio.peak', audio);
+                listener.fireEvent('audio.peak', this.audioAnalyser);
             }
 
             /**
@@ -242,10 +280,10 @@ document.addEventListener('DOMContentLoaded', function () {
             if (IS_ANIMATION) {
                 this.doShuffle();
             }
-            renderer.switchLayer(IS_MONITOR);
+            this.renderer.switchLayer(IS_MONITOR);
 
             let hook = this.doNotDisplay ? false : this._perspectiveHook;
-            renderer.animate(hook);
+            this.renderer.animate(hook);
 
         }
 
@@ -254,10 +292,10 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         render() {
             if (IS_ANIMATION) {
-                sourceman.render();
+                this.sourceman.render();
             }
             if (!this.doNotDisplay) {
-                displayman.render();
+                this.displayman.render();
             }
         }
 
@@ -285,10 +323,10 @@ document.addEventListener('DOMContentLoaded', function () {
             this.running = true;
 
             if (this.lastUpdate) {
-                this.lastUpdate = animation.now - this.lastUpdate;
+                this.lastUpdate = this.now - this.lastUpdate;
             }
-            beatKeeper.play();
-            renderer.resumeLayers();
+            this.beatKeeper.play();
+            this.renderer.resumeLayers();
 
             let render = () => {
                 if (this.running) {
@@ -297,9 +335,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     this.updateRuntime();
 
-                    beatKeeper.updateSpeeds(this.diff, statics.ControlSettings.tempo);
+                    this.beatKeeper.updateSpeeds(this.diff, statics.ControlSettings.tempo);
 
-                    if (beatKeeper.getSpeed('sixteen').starting()) {
+                    if (this.beatKeeper.getSpeed('sixteen').starting()) {
                         this.doNotDisplay = false;
 
                     } else if (statics.DisplaySettings.fps < 46) {
@@ -328,8 +366,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
                 } else {
-                    renderer.pauseLayers();
-                    beatKeeper.stop();
+                    this.renderer.pauseLayers();
+                    this.beatKeeper.stop();
                 }
             };
 
@@ -364,35 +402,33 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         fakeAudio() {
-            let speed = beatKeeper.getSpeed('half');
-            audio.volume = Math.random();
-            audio.volumes = new Array(audio.binCount).fill(0).map(Math.random);
+            let speed = this.beatKeeper.getSpeed('half');
+            this.audioAnalyser.volume = Math.random();
+            this.audioAnalyser.volumes = new Array(this.audioAnalyser.binCount).fill(0).map(Math.random);
             if (speed.progress <= 0) {
-                audio.peak = true;
-                // audio.peakCount += speed.beats;
-                //
-                // if (audio.peakCount > statics.ControlSettings.shuffle_every) { // doubled due to audio off
-                //     audio.peakCount = 0;
-                // }
+                this.audioAnalyser.peak = true;
 
             } else {
-                audio.peak = false;
+                this.audioAnalyser.peak = false;
             }
         }
 
+        /**
+         *
+         */
         updateAudio() {
-            audio.reset();
+            this.audioAnalyser.reset();
             let value = statics.ControlSettings.audio;
             if (value) {
-                audioman.stop();
-                audioman.initPlugin(value, function (source) {
-                    let analyser = audio.createAnalyser(audioman.context);
+                this.audioManager.stop();
+                this.audioManager.initPlugin(value, (source) => {
+                    let analyser = this.audioAnalyser.createAnalyser(this.audioManager.context);
                     source.connect(analyser);
-                    audioman.start();
+                    this.audioManager.start();
                 });
 
             } else {
-                audioman.stop();
+                this.audioManager.stop();
             }
         }
 
@@ -401,30 +437,30 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         autoVolume() {
             let gain = 0;
-            if (audio.avgVolume < 0.10) {
+            if (this.audioAnalyser.avgVolume < 0.10) {
                 gain += 0.1;
 
-            } else if (audio.avgVolume < 0.20) {
+            } else if (this.audioAnalyser.avgVolume < 0.20) {
                 gain += 0.05;
 
-            } else if (audio.avgVolume < 0.26) {
+            } else if (this.audioAnalyser.avgVolume < 0.26) {
                 gain += 0.005;
 
-            } else if (audio.avgVolume > 0.46) {
+            } else if (this.audioAnalyser.avgVolume > 0.46) {
                 gain -= 0.1;
 
-            } else if (audio.avgVolume > 0.36) {
+            } else if (this.audioAnalyser.avgVolume > 0.36) {
                 gain -= 0.05;
 
-            } else if (audio.avgVolume > 0.30) {
+            } else if (this.audioAnalyser.avgVolume > 0.30) {
                 gain -= 0.005;
             }
 
             if (gain !== 0) {
-                //console.log('gain', [audio.volume, audio.avgVolume, gain]);
+                //console.log('gain', [this.audioAnalyser.volume, this.audioAnalyser.avgVolume, gain]);
                 let vo = Math.min(2, Math.max(0.5, statics.ControlSettings.volume + gain));
                 // statics.ControlSettings.volume = vo;
-                animation.updateControl('volume', vo, false, false, false);
+                this.updateControl('volume', vo, false, false, false);
             }
         }
 
@@ -457,23 +493,23 @@ document.addEventListener('DOMContentLoaded', function () {
         postStatus(detectedSpeed) {
 
             if (statics.ControlSettings.beat) {
-                let speed = beatKeeper.getDefaultSpeed();
-                let color = detectedSpeed ? 'green' : (audio.peakReliable ? 'yellow' : '');
+                let speed = this.beatKeeper.getDefaultSpeed();
+                let color = detectedSpeed ? 'green' : (this.audioAnalyser.peakReliable ? 'yellow' : '');
 
                 this.messaging.emitAttr('#beat', 'color', color, '', speed.duration);
 
-                let btk = ['bpm:' + beatKeeper.bpm,
+                let btk = ['bpm:' + this.beatKeeper.bpm,
                     'b:' + speed.beats,
                     'd:' + speed.duration.toFixed(0),
-                    'p:' + beatKeeper.speeds.quarter.pitch.toFixed(0)
+                    'p:' + this.beatKeeper.speeds.quarter.pitch.toFixed(0)
                 ];
 
                 this.messaging.emitAttr('#beat', 'data-label', btk.join(' / '));
 
-                if (audioman.isActive()) {
+                if (this.audioManager.isActive()) {
                     let au = [
-                        round(audio.avgVolume, 2) + '',
-                        audio.peakBPM.toFixed(2),
+                        round(this.audioAnalyser.avgVolume, 2) + '',
+                        this.audioAnalyser.peakBPM.toFixed(2),
                     ];
                     this.messaging.emitAttr('#audio', 'data-label', au.join(' / '));
                 }
@@ -483,10 +519,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.messaging.emitMidi('glow', MIDI_PEAKBPM_FEEDBACK, {timeout: 15000 / detectedSpeed, times: 8});
                 }
                 if (statics.DisplaySettings.display_speed == 'midi') {
-                    this.messaging.emitMidi('clock', MIDI_CLOCK_NEXT, {duration: beatKeeper.getDefaultSpeed().duration});
+                    this.messaging.emitMidi('clock', MIDI_CLOCK_NEXT, {duration: this.beatKeeper.getDefaultSpeed().duration});
                 }
 
-                if (beatKeeper.getSpeed('half').starting()) {
+                if (this.beatKeeper.getSpeed('half').starting()) {
                     for (let i = 0; i < statics.SourceValues.sequence.length; i++) {
                         let parent = getSequenceHasParent(i);
                         let use = getSampleBySequence(i);
@@ -500,13 +536,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            this.messaging.emitAttr('#layers', 'data-mnemonic', (renderer.currentLayer.index + 1));
+            this.messaging.emitAttr('#layers', 'data-mnemonic', (this.renderer.currentLayer.index + 1));
 
-            if (animation.stats) {
-                let state = (animation.powersave ? 'i' : '') + (animation.offline ? 'o' : '');
+            if (this.stats) {
+                let state = (this.powersave ? 'i' : '') + (this.offline ? 'o' : '');
                 let vals = [
-                    'fps:' + animation.fps + state,
-                    'rms:' + animation.rmsAverage()];
+                    'fps:' + this.fps + state,
+                    'rms:' + this.rmsAverage()];
                 this.messaging.emitAttr('#play', 'data-label', vals.join(' / '));
             }
         }
@@ -552,12 +588,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.updateControls(controls, true, false, true);
                 }
 
-                sourceman.updateSequences();
+                this.sourceman.updateSequences();
                 this.fullReset(true);
 
                 if (IS_MONITOR) {
-                    new HC.Monitor().init(function () {
-                        displayman.updateDisplay(0);
+                    new HC.Monitor().init(() => {
+                        this.displayman.updateDisplay(0);
                         new HC.Animation.ResizeListener().init();
                     });
                 } else {
@@ -573,9 +609,9 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param keepsettings
          */
         fullReset(keepsettings) {
-            renderer.fullReset(keepsettings);
-            sourceman.resize(renderer.getResolution());
-            displayman.resize(renderer.getResolution());
+            this.renderer.fullReset(keepsettings);
+            this.sourceman.resize(this.renderer.getResolution());
+            this.displayman.resize(this.renderer.getResolution());
         }
 
         /**
@@ -593,7 +629,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // if (!renderer)return;
 
             let layerIndex = layer;
-            layer = renderer.layers[layer];
+            layer = this.renderer.layers[layer];
 
             let updated = cm.updateData(layer, data);
             let property;
@@ -608,7 +644,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // complete layer reset:
                 case 'shape_sizedivider':
                 case 'pattern_shapes':
-                    renderer.resetLayer(layer);
+                    this.renderer.resetLayer(layer);
                     break;
 
                 // shader reset
@@ -670,71 +706,61 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateControl(item, value, display, forward, force) {
 
-            // if (statics.ControlSettings) {
+            if (item == 'beat') {
+                value = this.beatKeeper.trigger(value, true, statics.ControlSettings.tempo, true);
 
-                if (item == 'beat') {
-                    value = beatKeeper.trigger(value, true, statics.ControlSettings.tempo, true);
+            } else if (item == 'session' && value != _HASH) {
+                document.location.hash = value;
+                setTimeout(function () {
+                    document.location.reload();
+                }, 250);
+                return;
+            }
 
-                } else if (item == 'session' && value != _HASH) {
-                    document.location.hash = value;
-                    setTimeout(function () {
-                        document.location.reload();
-                    }, 250);
-                    return;
-                }
+            value = statics.ControlSettingsManager.updateItem(item, value);
 
-                value = statics.ControlSettingsManager.updateItem(item, value);
+            if (forward === true) {
+                let data = {};
+                data[item] = value;
+                this.messaging.emitControls(data, true, false, force);
+            }
 
-                if (forward === true) {
-                    let data = {};
-                    data[item] = value;
-                    this.messaging.emitControls(data, true, false, force);
-                }
+            if (display) {
+                switch (item) {
+                    case 'reset':
+                        if (this.renderer) {
+                            if (force) {
+                                this.beatKeeper.reset();
+                                this.fullReset(false);
 
-                if (display) {
-                    switch (item) {
-                        case 'reset':
-                            if (renderer) {
-                                if (force) {
-                                    beatKeeper.reset();
-                                    this.fullReset(false);
-
-                                } else {
-                                    renderer.resetLayer(renderer.currentLayer);
-                                }
+                            } else {
+                                this.renderer.resetLayer(this.renderer.currentLayer);
                             }
+                        }
+                        break;
+
+                    case 'layer':
+                        // audio.peakCount = 0; // disable shuffle for [shuffle every] count of peaks
+                        this.renderer.nextLayer = this.renderer.layers[value];
+                        break;
+
+                    // case 'tempo':
+                    //
+                    //     break;
+
+                    case 'monitor':
+                        if (!IS_MONITOR) {
                             break;
+                        }
+                    case 'play':
+                        this.updatePlay();
+                        break;
 
-                        case 'layer':
-                            // audio.peakCount = 0; // disable shuffle for [shuffle every] count of peaks
-                            renderer.nextLayer = renderer.layers[value];
-                            break;
-
-                        // case 'tempo':
-                        //
-                        //     break;
-
-                        case 'monitor':
-                            if (!IS_MONITOR) {
-                                break;
-                            }
-                        case 'play':
-                            this.updatePlay();
-                            break;
-
-                        case 'audio':
-                            this.updateAudio();
-                            break;
-
-                        case 'shuffle':
-                            if (value) {
-                                this.shuffleLayer(false);
-                            }
-                            break;
-
-                    }
+                    case 'audio':
+                        this.updateAudio();
+                        break;
                 }
-            // }
+            }
         }
 
         /**
@@ -766,43 +792,43 @@ document.addEventListener('DOMContentLoaded', function () {
                 // } else
                 if (item.match(/^sample\d+_load/) && value) {
                     if (IS_MONITOR || display) {
-                        sourceman.loadSample(numberExtract(item, 'sample'), value);
+                        this.sourceman.loadSample(numberExtract(item, 'sample'), value);
                     }
                     this.updateSource(item, false, false, true, false);
 
                 } else if (item.match(/^sample\d+_/)) {
-                    sourceman.updateSample(numberExtract(item, 'sample'));
+                    this.sourceman.updateSample(numberExtract(item, 'sample'));
                     action = true;
 
                 } else if (item.match(/^sequence\d+_/)) {
-                    sourceman.updateSequence(numberExtract(item, 'sequence'));
+                    this.sourceman.updateSequence(numberExtract(item, 'sequence'));
                     action = true;
 
                 } else if (item.match(/display\d+_source/)) {
-                    var display = displayman.getDisplay(numberExtract(item, 'display'));
-                    sourceman.updateSource(display);
+                    var display = this.displayman.getDisplay(numberExtract(item, 'display'));
+                    this.sourceman.updateSource(display);
 
                     if (display && display.isFixedSize()) {
-                        displayman.updateDisplay(display.index, false);
+                        this.displayman.updateDisplay(display.index, false);
                     }
 
                     action = true;
 
                 } else if (item.match(/display\d+_sequence/)) {
-                    sourceman.updateSource(displayman.getDisplay(numberExtract(item, 'display')));
+                    this.sourceman.updateSource(this.displayman.getDisplay(numberExtract(item, 'display')));
                     action = true;
 
                 } else if (item.match(/^lighting_(lights|scale)/)) {
-                    displayman.updateDisplays();
+                    this.displayman.updateDisplays();
                     action = true;
 
                 } else if (item.match(/^lighting_(mode|color)/)) {
-                    sourceman.getLighting(0).update();
+                    this.sourceman.getLighting(0).update();
                     action = true;
                 }
 
                 if (action) {
-                    animation.offline = false;
+                    this.offline = false;
                 }
             }
         }
@@ -837,7 +863,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (item.match(/^display\d+_\d/)) { // resize
                 if (value) {
-                    displayman.centerDisplay(numberExtract(item, 'display'), value);
+                    this.displayman.centerDisplay(numberExtract(item, 'display'), value);
                     this.updateDisplay(item, false, display, true);
                 }
                 statics.DisplaySettingsManager.updateItem(item, value);
@@ -861,17 +887,17 @@ document.addEventListener('DOMContentLoaded', function () {
                         case 'mapping':
                         case 'clip_context':
                         case 'background':
-                            displayman.updateDisplays();
+                            this.displayman.updateDisplays();
                             break;
 
                         case 'brightness':
-                            displayman.brightness(value);
+                            this.displayman.brightness(value);
                             break;
 
                         case 'display_visibility':
                         case 'border_mode':
-                            displayman.settings.visibility.random = false;
-                            displayman.settings.border.random = false;
+                            this.displayman.settings.visibility.random = false;
+                            this.displayman.settings.border.random = false;
                             break;
                     }
                 }
@@ -881,14 +907,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     var i = numberExtract(item, 'display');
 
                     if (item.match(/_mask$/)) { // mask
-                        displayman.updateDisplay(i, 'mask');
+                        this.displayman.updateDisplay(i, 'mask');
 
                     } else if (item.match(/_mapping/)) { // mapping
-                        displayman.updateDisplay(i, 'mapping'); // avoid removing/adding maptastic layer
+                        this.displayman.updateDisplay(i, 'mapping'); // avoid removing/adding maptastic layer
 
                     } else { // anything else
-                        displayman.updateDisplay(i);
-                        animation.offline = false;
+                        this.displayman.updateDisplay(i);
+                        this.offline = false;
                     }
                 }
             }
@@ -906,7 +932,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (force) {
                 cm.updateData(layer, data);
 
-                renderer.resetLayer(layer);
+                this.renderer.resetLayer(layer);
 
             } else {
                 for (var k in data) {
@@ -944,7 +970,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 for (var k in data) {
                     statics.DisplaySettingsManager.updateItem(k, data[k]);
                 }
-                displayman.reset();
+                this.displayman.reset();
                 // this.fullReset(true);
 
             } else {
@@ -990,7 +1016,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (result !== false) {
                 result = plugin.after();
                 if (result !== false) {
-                    renderer.nextLayer = renderer.layers[result];
+                    this.renderer.nextLayer = this.renderer.layers[result];
                 }
             }
         }

@@ -195,7 +195,7 @@ function getSequenceHasParent(i) {
 
     var material = statics.SourceValues.material_map[statics.SourceSettings.material_map];
     var key = getSequenceKey(i);
-    if (material == key && renderer) {
+    if (material == key && messaging.program.renderer) {
         return true;
     }
 

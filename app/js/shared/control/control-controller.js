@@ -158,7 +158,6 @@ HC.ControlController = HC.ControlController || {};
          * @param that
          */
         onChange(value, that) {
-            // fixme all input type text fire on input but must fire on change (focus lost/blur)
             controller.updateControl(that.getProperty(), value, true, true, false);
         }
     }

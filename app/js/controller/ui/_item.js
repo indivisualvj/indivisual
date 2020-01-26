@@ -73,6 +73,14 @@
 
         /**
          *
+         * @returns {boolean}
+         */
+        getVisible() {
+            return this.getComponent().container.style.display !== 'none';
+        }
+
+        /**
+         *
          */
         remove() {
             this.getComponent().Remove();

@@ -73,20 +73,7 @@
                 if (valueComponent.nodeName === 'INPUT') {
                     if (e.keyCode == 27) { // ESCAPE
                         valueComponent.blur();
-                        // e.preventDefault();
-                        // e.stopPropagation();
-
-                    } else if (e.keyCode == 13) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        valueComponent.blur();
-                        valueComponent.focus();
                     }
-                    // else if (e.keyCode == 9) { // TAB
-                    //     e.preventDefault();
-                    //     e.stopPropagation();
-                    //
-                    // }
 
                 } else if (valueComponent.nodeName === 'SELECT') {
                     if (e.keyCode == 8 || e.keyCode == 27) { // BACKSPACE | ESCAPE
@@ -243,9 +230,12 @@
         /**
          *
          */
-        catchFocus() {
+        triggerComponent() {
             if (this.getComponent().opts.type == 'checkbox') {
                 this.toggleValue();
+
+            } else if (this.getComponent().opts.type == 'button') {
+                this.getComponent().button.click();
 
             } else {
                 let elem = this.getComponent().valueComponent || this.getComponent().input;
@@ -259,7 +249,8 @@
          *
          */
         mnemonicAction() {
-            this.catchFocus();
+            this.triggerComponent();
         }
     }
 }
+

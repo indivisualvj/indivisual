@@ -33,8 +33,17 @@
                 opacity: 1,
                 root: document.getElementById(name),
                 open: open,
-                search: (value) => {
-                    this.filterTree(value);
+                search: {
+                    filter: (value) => {
+                        this.filterTree(value);
+                    },
+                    delay: 175,
+                    action: () => {
+                        let ctrl = this.findFirstVisibleControl();
+                        if (ctrl) {
+                            ctrl.triggerComponent();
+                        }
+                    }
                 }
             });
             this.component = this.gui;

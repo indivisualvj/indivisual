@@ -4111,6 +4111,7 @@ var Button = function (_EventEmitter) {
 
         input.textContent = opts.label;
         _this.label = input;
+        _this.button = input;
 
         input.addEventListener('click', opts.action);
 
@@ -4336,7 +4337,7 @@ var Select = function (_EventEmitter) {
         _this.container.appendChild(_this.input);
 
         _this.input.onchange = function (data) {
-            _this.emit('input', _this.opts.options[data.target.value]);
+            _this.emit('input', data.target.value);
         };
 
         // Style the arrows based on mouse / focus behavior (and unfocus on mouse leave).
@@ -4470,12 +4471,16 @@ var Text = function (_EventEmitter) {
             _this.emit('initialized', _this.input.value);
         });
 
-        _this.input.oninput = function (data) {}
-        // this.emit('input', data.target.value)
+        _this.input.oninput = function (data) {
+            // this.emit('input', data.target.value)
+        };
 
+        _this.input.onchange = function (data) {
+            _this.emit('input', data.target.value);
+        };
 
         // Gain focus
-        ;_this.input.addEventListener('focus', function () {
+        _this.input.addEventListener('focus', function () {
             (0, _domCss2.default)(_this.input, { outline: 'none' });
             _this.focused = true;
         });
@@ -6595,8 +6600,25 @@ var MenuBar = exports.MenuBar = function (_EventEmitter) {
                     _this.input.value = 'search';
                 }
             };
+            var timeout = void 0;
+            var delay = opts.search.delay || 0;
             _this.input.oninput = function (e) {
-                opts.search(_this.input.value);
+                if (timeout) {
+                    clearTimeout(timeout);
+                }
+
+                timeout = setTimeout(function () {
+                    opts.search.filter(_this.input.value);
+                    timeout = false;
+                }, delay);
+            };
+            _this.input.onchange = function (e) {
+                if (timeout) {
+                    clearTimeout(timeout);
+                    timeout = false;
+                    opts.search.filter(_this.input.value);
+                }
+                opts.search.action(e);
             };
         }
 

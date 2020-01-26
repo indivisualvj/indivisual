@@ -58,9 +58,9 @@
          * @param settings
          */
         constructor(controller, settings) {
-            this.controller = controller; // todo use it!
+            this.controller = controller;
             this.messaging = controller.messaging;
-            this.statics = settings; // todo use it!
+            this.statics = settings;
             this.presetMan = new HC.PresetManager(this, this.messaging);
 
             this.gui = new HC.GuifyExplorer('Presets', true, this);
@@ -96,8 +96,6 @@
          *
          */
         reload() {
-
-            // fixme does not remove open folder items
             for (let k in this.gui.children) {
                 let child = this.gui.children[k];
                 child.remove();
@@ -134,7 +132,7 @@
         }
 
         /**
-         * fixme wenever preset is loaded its status is set to changed by guify colorpicker
+         *
          * @param layer
          * @param changed
          */

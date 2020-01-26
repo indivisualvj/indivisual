@@ -162,11 +162,8 @@
          *
          */
         remove() {
-            if (super.remove()) {
-                for (let k in this.children) {
-                    this.getChild(k).remove();
-                }
-            }
+            super.remove();
+            this.removeChildren();
         }
 
         /**
@@ -174,7 +171,7 @@
          * @param key
          */
         removeChild(key) {
-            this.children[key].remove();
+            this.getChild(key).remove();
             delete this.children[key];
         }
 
@@ -217,6 +214,27 @@
 
         /**
          *
+         * @returns {HC.GuifyController}
+         */
+        findFirstVisibleControl() {
+            for (let k in this.children) {
+                let child = this.getChild(k);
+
+                if (child instanceof HC.GuifyFolder) {
+                    child = child.findFirstVisibleControl();
+                    if (child) {
+                        return child;
+                    }
+                } else {
+                    if (child.getVisible()) {
+                        return child;
+                    }
+                }
+            }
+        }
+
+        /**
+         *
          * @param property
          * @param parent
          * @return {*|boolean|HC.GuifyFolder|boolean}
@@ -228,7 +246,7 @@
                 let child = parent.getChild(k);
 
                 if (child instanceof HC.GuifyFolder) {
-                    child = this.findControlByProperty(property, child);
+                    child = this.findControlByProperty(property, child); // fixme unnecessary child has this func too!
                     if (child) {
                         return child;
                     }
@@ -243,7 +261,7 @@
         }
 
         /**
-         * fixme presets gone after reset (search "")
+         *
          * @param value
          * @returns {boolean}
          */
@@ -251,22 +269,24 @@
             let found = false;
             let reset = value ? false : true;
             let regExp = new RegExp(value);
+
             for (let k in this.children) {
                 let child = this.getChild(k);
 
                 if (child instanceof HC.GuifyFolder) {
-                    if (!reset && child.filterTree(value)) {
+                    if (child.filterTree(value) && !reset) {
                         child.setVisible(true);
                         child.setOpen(true);
                         found = true;
+
                     } else {
-                        child.setOpen(reset);
+                        child.setOpen(false);
                         child.setVisible(reset);
                     }
 
                 } else if (!reset && regExp.test(child.getProperty())) {
-                    child.setVisible(true);
-                    found = true;
+                        child.setVisible(true);
+                        found = true;
 
                 } else {
                     child.setVisible(reset);

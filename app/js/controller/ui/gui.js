@@ -32,10 +32,13 @@
                 panelMode: 'inner',
                 opacity: 1,
                 root: document.getElementById(name),
-                open: open
+                open: open,
+                search: (value) => {
+                    this.filterTree(value);
+                }
             });
             this.component = this.gui;
-
+            this.gui.bar.input.classList.add('search');
             this.gui.container.style.zIndex = 99;
         }
 

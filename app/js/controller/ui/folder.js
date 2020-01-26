@@ -243,6 +243,40 @@
         }
 
         /**
+         * fixme presets gone after reset (search "")
+         * @param value
+         * @returns {boolean}
+         */
+        filterTree(value) {
+            let found = false;
+            let reset = value ? false : true;
+            let regExp = new RegExp(value);
+            for (let k in this.children) {
+                let child = this.getChild(k);
+
+                if (child instanceof HC.GuifyFolder) {
+                    if (!reset && child.filterTree(value)) {
+                        child.setVisible(true);
+                        child.setOpen(true);
+                        found = true;
+                    } else {
+                        child.setOpen(reset);
+                        child.setVisible(reset);
+                    }
+
+                } else if (!reset && regExp.test(child.getProperty())) {
+                    child.setVisible(true);
+                    found = true;
+
+                } else {
+                    child.setVisible(reset);
+                }
+            }
+            this.setOpen(found);
+            return found;
+        }
+
+        /**
          *
          * @return {boolean}
          */

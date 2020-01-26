@@ -29,12 +29,11 @@
          * @param {HC.GuifyExplorerPreset} ctrl
          */
         loadPreset(ctrl) {
-            // fixme use attr observer to handle duplicate layer info
-
             if (ctrl.getLabel() == '_default') {
                 // load default
                 cm.setLayerProperties(statics.ControlSettings.layer, false);
                 requestAnimationFrame(() => {
+                    this.explorer.resetPreset(statics.ControlSettings.layer + 1);
                     this.explorer.controller.updatePreset(false, cm.prepareLayer(statics.ControlSettings.layer));
                 });
 
@@ -54,9 +53,10 @@
                             let key = data.dir + '/' + data.name;
                             let contents = JSON.parse(data.contents);
 
-
                             this.explorer.controller.updatePreset(key, contents);
-                            ctrl.setInfo(statics.ControlSettings.layer + 1);
+                            let layer = statics.ControlSettings.layer + 1;
+                            this.explorer.resetPreset(layer);
+                            ctrl.setInfo(layer);
                         }
                     });
                 });
@@ -68,7 +68,34 @@
          * @param {HC.GuifyExplorerFolder} folder
          */
         loadPresets(folder) {
-            // fixme INSERT CODE!
+            let children = Object.keys(folder.children);
+            let dflt = [];
+            let layers = statics.ControlValues.layer;
+
+            for (let i = 0; dflt.length < layers.length && i < children.length; i++) {
+                let child = folder.getChild(children[i]);
+                if (!child.getLabel().match(/^_.+/)) {
+                    dflt.push(child);
+                }
+            }
+            this.explorer.resetPresets();
+
+            HC.clearLog();
+
+            let di = 0;
+            for (let i = 0; i < layers.length; i++) {
+                if (!layerShuffleable(i)) {
+                    continue;
+                }
+
+                if (di < dflt.length) {
+                    this._loadPreset(dflt[di], i, di, di == dflt.length - 1);
+                    di++;
+
+                } else {
+                    this.explorer.controller.updatePreset(false, cm.prepareLayer(statics.ControlSettings.layer));
+                }
+            }
         }
 
         /**
@@ -76,8 +103,64 @@
          * @param {HC.GuifyExplorerFolder} folder
          */
         appendPresets(folder) {
-            // fixme INSERT CODE!
+            let children = Object.keys(folder.children);
+            let dflt = [];
+            let layers = statics.ControlValues.layer;
+
+            for (let i = 0; dflt.length < layers.length && i < children.length; i++) {
+                let child = folder.getChild(children[i]);
+                if (!child.getLabel().match(/^_.+/)) {
+                    dflt.push(child);
+                }
+            }
+
+            HC.clearLog();
+
+            let di = 0;
+            for (let i = 0; i < layers.length; i++) {
+                if (!cm.isDefault(i)) {
+                    continue;
+                }
+                if (!layerShuffleable(i)) {
+                    continue;
+                }
+
+                if (di < dflt.length) {
+                    this._loadPreset(dflt[di], i, di, di == dflt.length - 1);
+                    di++;
+
+                } else {
+                    this.explorer.controller.updatePreset(false, cm.prepareLayer(statics.ControlSettings.layer));
+                }
+            }
         }
+
+        /**
+         *
+         * @param {HC.GuifyExplorerPreset} child
+         * @param i
+         * @param di
+         * @private
+         */
+        _loadPreset(child, i, di, last) {
+
+            child.setInfo(i+1);
+
+            this.filesystem.load(STORAGE_DIR, child.getParent().getLabel(), child.getLabel(), (data) => {
+
+                requestAnimationFrame(() => {
+
+                    this.explorer.controller.updateControl('layer', i, true, true); // todo why have to set?
+                    let key = data.dir + '/' + data.name;
+                    let contents = JSON.parse(data.contents);
+                    this.explorer.controller.updatePreset(key, contents);
+
+                    if (last) {
+                        this.explorer.controller.updateControl('layer', 0, true, true);
+                    }
+                });
+            });
+        };
 
         /**
          *
@@ -88,7 +171,7 @@
                 let child = ctrl.children[k];
                 let layer = parseInt(child.getInfo()) - 1;
 
-                if (layer >= 0 && child.getChanged()) { // fixme solution!
+                if (layer >= 0 && child.getChanged()) {
                     let save = (layer, child) => {
                         let settings = cm.prepareLayer(layer);
                         this.filesystem.save(STORAGE_DIR, ctrl.getLabel(), child.getLabel(), settings, (result) => {

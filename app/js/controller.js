@@ -403,7 +403,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.updateSettings(i, data, true, false, true);
 
                 if (cm.layers[i]._preset) {
-                    this.explorer.setChanged(i, true);
+                    this.explorer.setChanged(i+1, true);
                 }
 
                 this.messaging.emitSettings(i, data, false, false, true);
@@ -439,7 +439,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 this.updateSettings(i, data, false, false, true);
 
-                this.explorer.setChanged(i, true);
+                this.explorer.setChanged(i+1, true);
                 this.messaging.emitSettings(i, data, false, false, true);
             }
         }
@@ -562,7 +562,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (display !== false) {
                 this.explainPlugin(property, value);
                 this.updateUi(this.animationSettingsGui);
-                this.explorer.setChanged(statics.ControlSettings.layer, true);
+                this.explorer.setChanged(statics.ControlSettings.layer+1, true);
             }
         }
 
@@ -1023,7 +1023,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (!('info' in data)) {
 
                         let shaders = {shaders: data.shaders};
-
+// fixme migration does not work?
                         this.migrateSettings0(i, shaders, true);
 
                     // example!
@@ -1040,7 +1040,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
                     if (cm.layers[i]._preset) {
-                        controller.explorer.setChanged(i, true);
+                        controller.explorer.setChanged(i+1, true);
                     }
 
                     this.messaging.emitSettings(i, cm.prepareLayer(i), false, false, true);

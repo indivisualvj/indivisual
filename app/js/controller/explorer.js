@@ -96,6 +96,8 @@
          *
          */
         reload() {
+
+            // fixme does not remove open folder items
             for (let k in this.gui.children) {
                 let child = this.gui.children[k];
                 child.remove();
@@ -106,20 +108,29 @@
 
         /**
          * 
-         * @param layer
-         * @param model
          */
-        setPreset(layer, model) {
+        resetPresets() {
+            let ctrls = this.gui.getContainer().querySelectorAll('[data-label]');
+            ctrls.forEach((ctrl) => {
+                ctrl.removeAttribute('data-label');
+            });
 
+            ctrls = this.gui.getContainer().querySelectorAll('[data-mnemonic]');
+            ctrls.forEach((ctrl) => {
+                ctrl.removeAttribute('data-mnemonic');
+            });
         }
 
         /**
-         * 
+         *
+         * @param layer
          */
-        resetPresets() {
-            for (let i = 0; i < statics.ControlValues.layer.length; i++) {
-                this.setPreset(i, false);
-            }
+        resetPreset(layer) {
+            let ctrls = this.gui.getContainer().querySelectorAll('[data-label="' + (layer) + '"]');
+            ctrls.forEach((ctrl) => {
+                ctrl.removeAttribute('data-label');
+                ctrl.removeAttribute('data-mnemonic');
+            });
         }
 
         /**
@@ -128,7 +139,7 @@
          * @param changed
          */
         setChanged(layer, changed) {
-            let ctrls = this.gui.getContainer().querySelectorAll('[data-label="' + (layer+1) + '"]');
+            let ctrls = this.gui.getContainer().querySelectorAll('[data-label="' + (layer) + '"]');
             ctrls.forEach((ctrl) => {
                 ctrl.setAttribute('data-mnemonic', changed ? '!' : null);
             });

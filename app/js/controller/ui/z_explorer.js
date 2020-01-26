@@ -39,6 +39,7 @@
         finishLayout(explorer) {
 
             let container = this.getComponent().bar.element;
+            this.getComponent().bar.input.style = 'left: unset; right: 50px;';
             let actions = document.createElement('div');
             actions.classList.add('actions');
             actions.innerHTML =

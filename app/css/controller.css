@@ -167,11 +167,6 @@ body {
     background-size: 18px
 }
 
-.guify-bar_mw3pS .actions {
-    right: 70px;
-    top: 4px;
-}
-
 .guify-component-container:hover .actions div {
     filter: brightness(0);
 }

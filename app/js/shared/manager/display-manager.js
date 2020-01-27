@@ -35,6 +35,11 @@
         renderer;
 
         /**
+         * @type {HC.AudioAnalyser}
+         */
+        audioAnalyser;
+
+        /**
          * @param {HC.Animation} animation
          * @param config
          */
@@ -42,6 +47,7 @@
             this.animation = animation;
             this.beatKeeper = animation.beatKeeper;
             this.renderer = animation.renderer;
+            this.audioAnalyser = animation.audioAnalyser;
             this.displays = config.display;
             this.width = 1280;
             this.height = 720;
@@ -217,7 +223,7 @@
             let visible = statics.DisplaySettings['display' + i + '_visible'];
             if (visible) {
                 if (!this.displays[i]) {
-                    this.displays[i] = new HC.Display(this, i);
+                    this.displays[i] = new HC.Display(this.animation, i);
                     this._addDisplay(i);
 
                     if (IS_SETUP) {
@@ -547,13 +553,13 @@
 
             switch (sv) {
                 case 'random':
-                    if ((speed === false && audio.peak) || speed === 0) {
+                    if ((speed === false && this.audioAnalyser.peak) || speed === 0) {
                         redo = 2;
                     }
                     break;
 
                 case 'randomoneon':
-                    if ((speed === false && audio.peak) || speed === 0) {
+                    if ((speed === false && this.audioAnalyser.peak) || speed === 0) {
                         if (index == 0) {
                             this.settings.visibility.index = randomInt(0, this.displayMap.length - 1);
                         }
@@ -562,7 +568,7 @@
                     break;
 
                 case 'randomoneoff':
-                    if ((speed === false && audio.peak) || speed === 0) {
+                    if ((speed === false && this.audioAnalyser.peak) || speed === 0) {
                         if (index == 0) {
                             this.settings.visibility.index = randomInt(0, this.displayMap.length - 1);
                         }
@@ -571,7 +577,7 @@
                     break;
 
                 case 'randomflash':
-                    if (!visible && ((speed === false && audio.peak) || speed === 0)) {
+                    if (!visible && ((speed === false && this.audioAnalyser.peak) || speed === 0)) {
                         redo = 3;
 
                     } else if (visible) {
@@ -583,7 +589,7 @@
                     break;
 
                 case 'randomblitz':
-                    if ((speed === false && audio.peak) || speed === 0) {
+                    if ((speed === false && this.audioAnalyser.peak) || speed === 0) {
                         redo = -5;
                     } else {
                         redo = -2;
@@ -591,7 +597,7 @@
                     break;
 
                 case 'randomsmear':
-                    if ((speed === false && audio.peak) || speed === 0) {
+                    if ((speed === false && this.audioAnalyser.peak) || speed === 0) {
                         redo = -4;
                     } else {
                         redo = -2;
@@ -720,7 +726,7 @@
          */
         visibilityStack(index, dir, speed) {
 
-            if (index == 0 && ((speed === false && audio.peak) || speed === 0)) {
+            if (index == 0 && ((speed === false && this.audioAnalyser.peak) || speed === 0)) {
 
                 let i = this.settings.visibility.index;
 

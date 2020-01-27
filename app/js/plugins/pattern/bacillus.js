@@ -23,10 +23,10 @@
             }
 
             let mpc =this.animation.diffPrc * 0.3;
-            let accelerator = audio.peak ? 3.5 : 2.5;
+            let accelerator = this.audioAnalyser.peak ? 3.5 : 2.5;
 
             params.velocity.x += mpc * avx;
-            params.velocity.x *= (audio.peak || speed.progress <= 0) ? accelerator * this.settings.pattern_padding : 0.90;
+            params.velocity.x *= (this.audioAnalyser.peak || speed.progress <= 0) ? accelerator * this.settings.pattern_padding : 0.90;
 
             // verlangsamen
             if (Math.abs(params.velocity.x) > prcp * 10) {
@@ -41,7 +41,7 @@
             }
 
             params.velocity.y += mpc * avy;
-            params.velocity.y *= (audio.peak || speed.progress <= 0) ? accelerator * this.settings.pattern_padding : 0.90;
+            params.velocity.y *= (this.audioAnalyser.peak || speed.progress <= 0) ? accelerator * this.settings.pattern_padding : 0.90;
 
             // verlangsamen
             if (Math.abs(params.velocity.y) > prcp * 10) {
@@ -56,7 +56,7 @@
             }
 
             params.velocity.z += mpc * avz;
-            params.velocity.z *= (audio.peak || speed.progress <= 0) ? accelerator * this.settings.pattern_padding : 0.90;
+            params.velocity.z *= (this.audioAnalyser.peak || speed.progress <= 0) ? accelerator * this.settings.pattern_padding : 0.90;
 
             // verlangsamen
             if (Math.abs(params.velocity.z) > prcp * 10) {

@@ -27,7 +27,7 @@ HC.Display.borderModes = {
 
     'randomline': function (ctx, points, pc, speed, prc) {
         ctx.beginPath();
-        if (((speed === false && audio.peak) || prc === 0) || !ctx.canvas._side) {
+        if (((speed === false && audio.peak) || prc === 0) || !ctx.canvas._side) { // todo eliminate audio call
             ctx.canvas._side = randomInt(1, pc - 1);
         }
         var s = (ctx.canvas._side - 1) * 2;

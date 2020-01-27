@@ -28,7 +28,7 @@
                 this.layer.setBackground(this.current(false));
             }
 
-            if ((audio.peak || speed.prc == 0 || randomInt(0, round(statics.DisplaySettings.fps * .75)) == 0)) {
+            if ((this.audioAnalyser.peak || speed.prc == 0 || randomInt(0, round(statics.DisplaySettings.fps * .75)) == 0)) {
                 if (randomBool(10)) {
                     this.backflash = hexToHsl(color || this.settings.background_color);
                     this.backflash.l = this.settings.background_volume > 0 ? 75 : 5;

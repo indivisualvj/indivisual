@@ -9,7 +9,7 @@
             if (pa > 0) {
                 pa = Math.max(0, pa - (1 /this.animation.diff) * 2.6);
 
-            } else if (audio.peak) {
+            } else if (this.audioAnalyser.peak) {
                 pa = (pa ? 0 : 1);
             }
 
@@ -29,7 +29,7 @@
             if (pa > 0) {
                 pa = Math.max(0, pa - (1 /this.animation.diff) * 1.1);
 
-            } else if (audio.peak) {
+            } else if (this.audioAnalyser.peak) {
                 pa = (pa ? 0 : 1);
             }
 

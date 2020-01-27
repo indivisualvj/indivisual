@@ -25,7 +25,7 @@
 
         apply(shape) {
             let pa = this.params(shape);
-            if (pa.state === undefined || (audio.peak && randomBool())) {
+            if (pa.state === undefined || (this.audioAnalyser.peak && randomBool())) {
                 pa.state = randomBool();
             }
 

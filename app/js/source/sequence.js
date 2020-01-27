@@ -19,6 +19,11 @@
         beatKeeper;
 
         /**
+         * @type {HC.AudioAnalyser}
+         */
+        audioAnalyser;
+
+        /**
          *
          * @param {HC.Animation} animation
          * @param index
@@ -26,6 +31,7 @@
         constructor(animation, index) {
             this.animation = animation;
             this.beatKeeper = animation.beatKeeper;
+            this.audioAnalyser = animation.audioAnalyser;
             this.type = 'sequence';
             this.index = index;
             this.id = this.type + this.index;
@@ -177,7 +183,7 @@
                 }
 
                 // autoflip flipa flip on peak if random hits
-                if (this.flipa && audio.peak && randomBool()) {
+                if (this.flipa && this.audioAnalyser.peak && randomBool()) {
                     this.flipx = randomBool() ? -1 : 1;
                     this.flipy = randomBool() ? -1 : 1;
                 }
@@ -360,7 +366,7 @@
             let s = Math.max(-0.75, Math.min(0.75, this.speed));
             let p = Math.max(-1.5, Math.min(1.5, this.speed));
 
-            if (audio.peak) {
+            if (this.audioAnalyser.peak) {
                 if (this._velocity < 2 * s) {
                     this._velocity = 4 * s;
                 }
@@ -419,11 +425,11 @@
 
             //let p = audio.volume - 0.25;
 
-            let p = (audio.volume - 0.28) * 10;
+            let p = (this.audioAnalyser.volume - 0.28) * 10;
             p = Math.min(1, Math.max(-1, p)); // kann aktuell stocken. wäre evtl was für jump+audio oder audio_judder
 
             if (this.jump) {
-                if (audio.peak && this._peak < 4) {
+                if (this.audioAnalyser.peak && this._peak < 4) {
                     this._peak = 8;
 
                 } else if (this._peak > 1) {

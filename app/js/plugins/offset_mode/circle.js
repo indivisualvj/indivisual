@@ -88,7 +88,7 @@
 
                 let reduce = params.multiplier > 0;
 
-                if (audio.peak || (this.settings.offset_sync && speed.prc <= 0)) {
+                if (this.audioAnalyser.peak || (this.settings.offset_sync && speed.prc <= 0)) {
                     reduce = true;
                     if (params.multiplier <= 0) {
                         params.multiplier = 1;

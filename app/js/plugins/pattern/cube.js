@@ -18,7 +18,7 @@
             if (this.settings.pattern_audio) {
                 let or = radius;
                 if (this.settings.pattern_sync) {
-                    radius *= audio.volume;
+                    radius *= this.audioAnalyser.volume;
                 } else {
                     radius *= shape.shapeVolume();
                 }

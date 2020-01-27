@@ -16,7 +16,7 @@ HC.plugins.coloring_mode = HC.plugins.coloring_mode || {};
             c.l *= this.settings.coloring_lum * 2;
 
             if (this.settings.coloring_audio && this.animation.audioManager.isActive()) {
-                let v = audio.volume;
+                let v = this.audioAnalyser.volume;
                 if (!this.settings.coloring_sync) {
                     v = shape.shapeVolume();
                 }

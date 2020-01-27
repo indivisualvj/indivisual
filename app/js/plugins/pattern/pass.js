@@ -25,7 +25,7 @@
                 if (this.layer.settings.pattern_sync) {
                     this.dir = -1;
 
-                } else if ((!peak && layer.getCurrentSpeed().prc == 0) || (peak && audio.peak)) {
+                } else if ((!peak && layer.getCurrentSpeed().prc == 0) || (peak && this.audioAnalyser.peak)) {
                     this.dir = randomBool() ? -1 : 1;
                 }
             }

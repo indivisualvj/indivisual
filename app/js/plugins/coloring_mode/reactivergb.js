@@ -24,7 +24,7 @@
                     }
                 }
 
-                v = (!sync ? fbdv : audio.volume);
+                v = (!sync ? fbdv : this.audioAnalyser.volume);
                 m1 = (this.animation.audioManager.isActive() ? 8 : 2);
             }
 

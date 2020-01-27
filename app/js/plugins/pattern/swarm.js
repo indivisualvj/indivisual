@@ -62,7 +62,7 @@
             let v = s * m;
             if (this.animation.audioManager.isActive() && this.settings.pattern_audio) {
                 if (this.settings.pattern_sync) {
-                    v *= audio.volume;
+                    v *= this.audioAnalyser.volume;
                 } else {
                     v *= shape.shapeVolume();
                 }
@@ -96,7 +96,7 @@
             params.shape = false;
 
             let dir = this.boundsCheck(shape);
-            if (dir.length() || this.shapeFollowers(shape) || (peak && audio.peak)) {
+            if (dir.length() || this.shapeFollowers(shape) || (peak && this.audioAnalyser.peak)) {
                 // shape is out of bounds or already followed: turn to point inbound
                 this.randPosition(params, shape);
 

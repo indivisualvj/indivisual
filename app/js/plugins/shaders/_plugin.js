@@ -51,7 +51,7 @@ HC.plugins.shaders = HC.plugins.shaders || {};
             settings = settings || this.__proto__.constructor.settings;
 
             if (properties.random) {
-                if ((this.animation.audioManager.isActive() && audio.peak && randomBool(3)) || (this.layer.getCurrentSpeed().prc == 0 && randomBool())) {
+                if ((this.animation.audioManager.isActive() && this.audioAnalyser.peak && randomBool(3)) || (this.layer.getCurrentSpeed().prc == 0 && randomBool())) {
                     glsh.enabled = !glsh.enabled;
                 }
             } else {
@@ -107,7 +107,7 @@ HC.plugins.shaders = HC.plugins.shaders || {};
 
                                 if (sSetting._type && isInteger(sSetting._type[2])) {
 
-                                    if (audio.peak && randomBool()) {
+                                    if (this.audioAnalyser.peak && randomBool()) {
                                         if (dependencies && dependencies[skey]) { // is in dependency
                                             let dpc = dependencies[skey];
 
@@ -139,7 +139,7 @@ HC.plugins.shaders = HC.plugins.shaders || {};
                                     }
 
                                 } else {
-                                    v *= audio.volume;
+                                    v *= this.audioAnalyser.volume;
                                 }
                             }
                         }

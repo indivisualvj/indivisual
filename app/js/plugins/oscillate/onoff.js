@@ -7,7 +7,7 @@
             let layer = this.layer;
             let pa = this.params(key);
 
-            if (audio.peak) {
+            if (this.audioAnalyser.peak) {
                 pa = (pa ? 0 : 1);
             }
 

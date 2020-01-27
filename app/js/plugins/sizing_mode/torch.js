@@ -12,7 +12,7 @@
 
             if (this.isFirstShape(shape)) {
                 let jump = 0.4 * this.animation.diff;
-                if (audio.peak) {
+                if (this.audioAnalyser.peak) {
                     jump *= 4;
                 }
                 this.mover.a += randomInt(-10, 10);

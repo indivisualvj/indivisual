@@ -95,7 +95,7 @@
         }
 
         shapeVolume() {
-            let i = this.index % audio.volumes.length;
+            let i = this.index % audio.volumes.length;  // todo eliminate audio call
             return audio.volumes[i];
         }
 

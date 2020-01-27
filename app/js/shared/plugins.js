@@ -44,6 +44,11 @@ HC.Shape.prototype.initPlugins = function () {
         beatKeeper;
 
         /**
+         * @type {HC.AudioAnalyser}
+         */
+        audioAnalyser;
+
+        /**
          * @type {HC.Layer}
          */
         layer;
@@ -68,6 +73,7 @@ HC.Shape.prototype.initPlugins = function () {
         construct(animation, layer, settings, tree, key) {
             this.animation = animation;
             this.beatKeeper = animation.beatKeeper;
+            this.audioAnalyser = animation.audioAnalyser;
             this.layer = layer;
             this.settings = settings;
             this.tree = tree;

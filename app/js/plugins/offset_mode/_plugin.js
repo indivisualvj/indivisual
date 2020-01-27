@@ -5,7 +5,7 @@ HC.plugins.offset_mode = HC.plugins.offset_mode || {};
             let layer = this.layer;
             if (this.settings.offset_audio && this.animation.audioManager.isActive()) {
                 let of = shape.offset();
-                let vo = audio.volume;
+                let vo = this.audioAnalyser.volume;
                 if (!this.settings.offset_sync) {
                     vo = shape.shapeVolume();
                 }

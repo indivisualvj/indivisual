@@ -10,6 +10,11 @@
     HC.Display = class Display {
 
         /**
+         * @type {HC.Animation}
+         */
+        animation;
+
+        /**
          * @type {HC.DisplayManager}
          */
         displayManager;
@@ -72,11 +77,12 @@
 
         /**
          * 
-         * @param {HC.DisplayManager} displayManager
+         * @param {HC.Animation} animation
          * @param index
          */
-        constructor(displayManager, index) {
-            this.displayManager = displayManager;
+        constructor(animation, index) {
+            this.animation = animation;
+            this.displayManager = animation.displayManager;
             this.index = index;
             this.id = 'display' + index;
             var canvas = document.createElement('canvas');
@@ -501,7 +507,7 @@
 
             var prc = false;
             if (speed === false) {
-                prc = audio.volume * 2;
+                prc = this.animation.audioAnalyser.volume * 2;
             } else {
                 prc = speed.prc;
             }

@@ -30,7 +30,7 @@
 
         apply(key) {
             let pa = this.params(key);
-            if (audio.peak && pa.velocity < 3) {
+            if (this.audioAnalyser.peak && pa.velocity < 3) {
                 pa.velocity = 4;
 
             } else if (pa.velocity > 1) {
@@ -48,7 +48,7 @@
         static index = 10;
 
         apply(key) {
-            return this.activate(key, Math.min(1, 2.5 * audio.volume));
+            return this.activate(key, Math.min(1, 2.5 * this.audioAnalyser.volume));
         }
     }
 }

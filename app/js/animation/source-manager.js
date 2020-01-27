@@ -257,7 +257,7 @@
 
             listener.register('sample.render.start', sample.id, (target) => {
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'red');
-                messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {timeout: beatKeeper.getSpeed('eight').duration});
+                messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {timeout: this.beatKeeper.getSpeed('eight').duration});
                 messaging.emitMidi('glow', MIDI_SAMPLE_FEEDBACK);
             });
 
@@ -269,7 +269,7 @@
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', msg);
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-progress', progress);
                 let conf = {
-                    timeout: beatKeeper.getSpeed('eight').duration,
+                    timeout: this.beatKeeper.getSpeed('eight').duration,
                     times: 2
                 };
                 messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], conf);
@@ -514,7 +514,7 @@
          * @param progress
          */
         renderSamples() {
-            let speed = beatKeeper.getDefaultSpeed();
+            let speed = this.beatKeeper.getDefaultSpeed();
             for (let i = 0; i < this.samples.length; i++) {
                 let sample = this.samples[i];
                 if (sample && sample.record && sample.enabled && sample.initialized && !sample.complete) {

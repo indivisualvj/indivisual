@@ -66,10 +66,17 @@
         layerSwitched = false;
 
         /**
+         * @type {HC.Animation}
+         */
+        animation;
+
+        /**
          *
+         * @param {HC.Animation} animation
          * @param config
          */
-        constructor(config) {
+        constructor(animation, config) {
+            this.animation = animation;
             this.layers = config.layers;
 
             this.initThreeJs();
@@ -81,7 +88,7 @@
          * @param keepSettings
          */
         fullReset(keepSettings) {
-            listener.removeEvent('renderer.render');
+            this.animation.listener.removeEvent('renderer.render');
             this.resize();
             this.initLayers(keepSettings);
             this.setLayer(0);
@@ -99,8 +106,8 @@
                 this.three.renderer.view = this.three.renderer.domElement;
                 this.three.renderer.view.id = 'threeWebGL';
 
-                this.three.renderer.view.addEventListener('webglcontextlost', function () {
-                    listener.fireEvent('webglcontextlost');
+                this.three.renderer.view.addEventListener('webglcontextlost', () => {
+                    this.animation.listener.fireEvent('webglcontextlost');
                 });
 
                 this.three.scene = new THREE.Scene();
@@ -331,7 +338,7 @@
          * @returns {*}
          */
         brightness() {
-            return displayman.brightness();
+            return this.animation.displayman.brightness();
         }
 
         /**
@@ -348,8 +355,8 @@
          */
         render() {
 
-            if (this._last != animation.now) {
-                listener.fireEvent('renderer.render', this);
+            if (this._last != this.animation.now) {
+                this.animation.listener.fireEvent('renderer.render', this);
 
                 this.three.scene.background = this.currentLayer._layer.background;
                 this.three.scene.fog = this.currentLayer._layer.fog;
@@ -362,7 +369,7 @@
                     this.three.renderer.render(this.three.scene, this.currentLayer.three.camera, this.three.target);
                 }
 
-                this._last = animation.now;
+                this._last = this.animation.now;
             }
         }
 

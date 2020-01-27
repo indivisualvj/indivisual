@@ -17,7 +17,7 @@ let animation;
  *
  * @type {HC.Renderer}
  */
-let renderer;
+// let renderer;
 /**
  *
  * @type {HC.BeatKeeper}
@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 beatKeeper = new HC.BeatKeeper();
                 animation.beatKeeper = beatKeeper;
 
-                renderer = new HC.Renderer({
+                let renderer = new HC.Renderer({
                     layers: new Array(statics.ControlValues.layer.length)
                 });
                 animation.renderer = renderer;
@@ -106,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 cm = new HC.LayeredControlSetsManager(renderer.layers, statics.AnimationValues);
 
-                displayman = new HC.DisplayManager(animation, {
+                let displayman = new HC.DisplayManager(animation, {
                     display: new Array(statics.DisplayValues.display.length)
                 });
                 displayman.resize(renderer.getResolution());

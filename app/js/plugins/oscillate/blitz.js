@@ -7,7 +7,7 @@
             let pa = this.params(key);
 
             if (pa > 0) {
-                pa = Math.max(0, pa - (1 / animation.diff) * 2.6);
+                pa = Math.max(0, pa - (1 /this.animation.diff) * 2.6);
 
             } else if (audio.peak) {
                 pa = (pa ? 0 : 1);
@@ -27,7 +27,7 @@
             let pa = this.params(key);
 
             if (pa > 0) {
-                pa = Math.max(0, pa - (1 / animation.diff) * 1.1);
+                pa = Math.max(0, pa - (1 /this.animation.diff) * 1.1);
 
             } else if (audio.peak) {
                 pa = (pa ? 0 : 1);
@@ -46,10 +46,10 @@
         apply(key) {
             let pa = this.params(key);
 
-            let speed = beatKeeper.getSpeed('full');
+            let speed = this.beatKeeper.getSpeed('full');
 
             if (pa > 0) {
-                pa = Math.max(0, pa - (1 / animation.diff) * 0.65);
+                pa = Math.max(0, pa - (1 /this.animation.diff) * 0.65);
 
             } else if (speed.prc == 0) {
                 pa = (pa ? 0 : 1);
@@ -68,10 +68,10 @@
         apply(key) {
             let pa = this.params(key);
 
-            let speed = beatKeeper.getSpeed('half');
+            let speed = this.beatKeeper.getSpeed('half');
 
             if (pa > 0) {
-                pa = Math.max(0, pa - (1 / animation.diff) * 0.65);
+                pa = Math.max(0, pa - (1 /this.animation.diff) * 0.65);
 
             } else if (speed.prc == 0) {
                 pa = (pa ? 0 : 1);
@@ -89,11 +89,11 @@
 
         apply(key) {
             let pa = this.params(key);
-            // todo plugins should have owners also -> this.owner.beatKeeper
-            let speed = beatKeeper.getSpeed('quarter');
+            // todo plugins should have owners also -> this.owner.this.beatKeeper
+            let speed = this.beatKeeper.getSpeed('quarter');
 
             if (pa > 0) {
-                pa = Math.max(0, pa - (1 / animation.diff) * 1.3);
+                pa = Math.max(0, pa - (1 / this.animation.diff) * 1.3);
 
             } else if (speed.prc == 0) {
                 pa = (pa ? 0 : 1);
@@ -112,10 +112,10 @@
         apply(key) {
             let pa = this.params(key);
 
-            let speed = beatKeeper.getSpeed('eight');
+            let speed = this.beatKeeper.getSpeed('eight');
 
             if (pa > 0) {
-                pa = Math.max(0, pa - (1 / animation.diff) * 2.6);
+                pa = Math.max(0, pa - (1 / this.animation.diff) * 2.6);
 
             } else if (speed.prc == 0) {
                 pa = (pa ? 0 : 1);

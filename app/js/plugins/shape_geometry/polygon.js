@@ -14,7 +14,7 @@
             circle: {
                 text: 'set number of edges to 32',
                 action: function () {
-                    messaging.program.updateSetting(statics.ControlSettings.layer, {shape:{shape_moda: 32}}, true, true);
+                    this.animation.updateSetting(statics.ControlSettings.layer, {shape:{shape_moda: 32}}, true, true);
                 }
             },
             hive: {
@@ -27,7 +27,7 @@
                             shape_modb: 2
                         },
                     };
-                    messaging.program.updateSettings(statics.ControlSettings.layer, data, true, false, true);
+                    this.animation.updateSettings(statics.ControlSettings.layer, data, true, false, true);
                     messaging.emitSettings(statics.ControlSettings.layer, data, true, true, true);
                 }
             }

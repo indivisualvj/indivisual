@@ -9,9 +9,19 @@
     HC.Layer = class Layer {
 
         /**
+         * @type {HC.Animation}
+         */
+        animation;
+
+        /**
          * @type {HC.Renderer}
          */
         renderer;
+
+        /**
+         * @type {HC.BeatKeeper}
+         */
+        beatKeeper;
 
         /**
          * @type {number}
@@ -78,10 +88,13 @@
 
         /**
          *
-         * @param renderer
+         * @param {HC.Animation} animation
+         * @param {HC.Renderer} renderer
          * @param index
          */
-        constructor (renderer, index) {
+        constructor (animation, renderer, index) {
+            this.animation = animation;
+            this.beatKeeper = animation.beatKeeper;
             this.renderer = renderer;
             this.index = index;
 
@@ -352,14 +365,14 @@
          *
          */
         pause() {
-            this.lastUpdate = animation.now;
+            this.lastUpdate = this.animation.now;
         }
 
         /**
          *
          */
         resume() {
-            this.lastUpdate = animation.now - this.lastUpdate;
+            this.lastUpdate = this.animation.now - this.lastUpdate;
         }
     }
 }

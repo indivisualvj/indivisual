@@ -18,7 +18,7 @@
 
             }
 
-            if (beatKeeper.getSpeed(this.settings.rhythm).prc == 0) {
+            if (this.beatKeeper.getSpeed(this.settings.rhythm).prc == 0) {
                 this.slice = {
                     index: randomInt(0, this.rubiks - 1),
                     axis: this.axes[randomInt(0, this.axes.length - 1)]

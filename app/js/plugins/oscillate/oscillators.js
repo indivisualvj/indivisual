@@ -4,7 +4,7 @@
         static index = 10;
 
         apply(key) {
-            return this.activate(key, (animation.now - beatKeeper.beatStartTime) / (60000 / statics.ControlSettings.tempo));
+            return this.activate(key, (this.animation.now - this.beatKeeper.beatStartTime) / (60000 / statics.ControlSettings.tempo));
         }
     }
 }
@@ -16,7 +16,7 @@
         apply(key) {
             let v = this.params(key);
 
-            v += 0.02 * animation.diffPrc;
+            v += 0.02 * this.animation.diffPrc;
             this.params(key, v);
             return this.activate(key, v);
         }
@@ -34,7 +34,7 @@
                 pa.velocity = 4;
 
             } else if (pa.velocity > 1) {
-                pa.velocity = Math.max(1, pa.velocity - animation.diff * 0.02);
+                pa.velocity = Math.max(1, pa.velocity - this.animation.diff * 0.02);
             }
 
             pa.progress += 0.02 * pa.velocity;

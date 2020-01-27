@@ -98,7 +98,7 @@
                 params.velocity *= 0.9;
             }
 
-            let frame = params.velocity * animation.diff / 350;
+            let frame = params.velocity * this.animation.diff / 350;
 
             shape.move(
                 params.initial.x * frame,
@@ -144,18 +144,18 @@
             if (speed.progress < 1) { //
                 params.velocity *= -1;
 
-            } else if (messaging.program.audioManager.isActive()) {
+            } else if (this.animation.audioManager.isActive()) {
                 if (audio.peak) {
                     params.volume = this.settings.pattern_sync == false
                         ? shape.shapeVolume() : audio.volume;
                     params.velocity *= -1;
 
                 } else if (params.volume > 0) {
-                    params.volume -= 0.00001 * animation.diff;
+                    params.volume -= 0.00001 * this.animation.diff;
                 }
             }
 
-            let frame = params.velocity * animation.diff / 250;
+            let frame = params.velocity * this.animation.diff / 250;
 
             shape.move(
                 params.initial.x * frame,

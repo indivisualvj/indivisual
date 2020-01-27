@@ -22,7 +22,7 @@
                 shape.position().copy(layer.random2dPosition(0), layer.shapeSize(1));
             }
 
-            let mpc = animation.diffPrc * 0.3;
+            let mpc =this.animation.diffPrc * 0.3;
             let accelerator = audio.peak ? 3.5 : 2.5;
 
             params.velocity.x += mpc * avx;

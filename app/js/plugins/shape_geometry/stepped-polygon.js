@@ -27,7 +27,7 @@
                         coloring:{coloring_opacity: .5},
                         material:{material_blending: 'NormalBlending'}
                     };
-                    messaging.program.updateSettings(statics.ControlSettings.layer, data, false, false, true);
+                    this.animation.updateSettings(statics.ControlSettings.layer, data, false, false, true);
                     messaging.emitSettings(statics.ControlSettings.layer, data, false, false, true);
                 },
             }

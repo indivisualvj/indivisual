@@ -15,7 +15,16 @@
         timeout = false;
         bpm = 0;
         tempo = 120;
+
+        /**
+         * @type {TWEEN.Group}
+         */
         tween;
+
+        /**
+         * @type {HC.Animation}
+         */
+        animation;
 
         /**
          *
@@ -25,8 +34,10 @@
 
         /**
          *
+         * @param {HC.Animation} animation
          */
-        constructor() {
+        constructor(animation) {
+            this.animation = animation;
             this.tween = new TWEEN.Group();
         }
 
@@ -48,7 +59,7 @@
                 let full = 60000 / this.tempo * 4;
                 let duration = full / speed.divider;
                 let beats = speed.beats;
-                let elapsed = animation.now - this.beatStartTime;
+                let elapsed = this.animation.now - this.beatStartTime;
                 let estimated = duration * beats;
                 let offset = elapsed - estimated;
 
@@ -196,7 +207,7 @@
             }
 
             this.tempo = tempo;
-            this.tween.update(animation.now, false);
+            this.tween.update(this.animation.now, false);
 
         }
 
@@ -209,7 +220,7 @@
             let unit = this.getDefaultSpeed();
             let duration = 60000 / speed;
             let beats = unit.beats;
-            let elapsed = animation.now - (this.beatStartTime);
+            let elapsed = this.animation.now - (this.beatStartTime);
             let estimated = duration * beats;
             let offset = elapsed - estimated;
             let offbeat = Math.abs(offset) > duration;
@@ -249,7 +260,7 @@
          *
          */
         reset() {
-            this.resetCounters(animation.now);
+            this.resetCounters(this.animation.now);
             this.resetTrigger();
         }
 

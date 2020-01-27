@@ -160,7 +160,7 @@
                     ol.dispose();
                 }
 
-                let l = new HC.Layer(this, i);
+                let l = new HC.Layer(this.animation, this, i);
 
                 l.preset = op;
                 l.controlSets = os || HC.LayeredControlSetsManager.initAll(statics.AnimationValues);

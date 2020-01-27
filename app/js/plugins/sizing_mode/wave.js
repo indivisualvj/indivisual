@@ -7,9 +7,9 @@
         apply(shape) {
             let layer = this.layer;
             if (this.isFirstShape(shape)) {
-                let dur = beatKeeper.getDefaultSpeed().duration;
+                let dur = this.beatKeeper.getDefaultSpeed().duration;
                 let step = 45 / dur;
-                this.angle += animation.diff * step;
+                this.angle += this.animation.diff * step;
 
                 if (this.angle > 360 || isNaN(this.angle)) {
                     this.angle = 0;

@@ -33,6 +33,19 @@ HC.Shape.prototype.initPlugins = function () {
      */
     HC.AnimationPlugin = class AnimationPlugin {
 
+        /**
+         * @type {HC.Animation}
+         */
+        animation;
+
+        /**
+         * @type {HC.BeatKeeper}
+         */
+        beatKeeper;
+
+        /**
+         * @type {HC.Layer}
+         */
         layer;
         settings;
         controlSets;
@@ -43,7 +56,18 @@ HC.Shape.prototype.initPlugins = function () {
             return this.layer.index + '.' + this.tree + '.' + this.key + (suffix!==undefined?'.' + suffix:'');
         }
 
-        construct(layer, settings, tree, key) {
+        /**
+         *
+         * @param {HC.Animation} animation
+         * @param {HC.Layer} layer
+         * @param settings
+         * @param tree
+         * @param key
+         * @returns {HC.AnimationPlugin}
+         */
+        construct(animation, layer, settings, tree, key) {
+            this.animation = animation;
+            this.beatKeeper = animation.beatKeeper;
             this.layer = layer;
             this.settings = settings;
             this.tree = tree;
@@ -115,7 +139,7 @@ HC.Shape.prototype.initPlugins = function () {
          * @param tween
          */
         tweenStart(tween) {
-            tween.start(animation.now - this.layer.lastUpdate);
+            tween.start(this.animation.now - this.layer.lastUpdate);
         }
 
         /**

@@ -7,7 +7,7 @@
             let layer = this.layer;
             let speed = layer.getShapeSpeed(shape);
             if (this.isFirstShape(shape)) {
-                this.angle += animation.diff / speed.duration * 90;
+                this.angle += this.animation.diff / speed.duration * 90;
             }
             let va = this.angle + 360 / layer.shapeCount() * shape.index;
 
@@ -63,10 +63,10 @@
                 params.rumble.z = 0;
                 params.multiplier = 0;
             }
-            params.angle += animation.diff / speed.duration * randomInt(-45, 45);
-            params.rumble.x += animation.diff / speed.duration * randomInt(-45, 45);
-            params.rumble.y += animation.diff / speed.duration * randomInt(-45, 45);
-            params.rumble.z += animation.diff / speed.duration * randomInt(-45, 45);
+            params.angle += this.animation.diff / speed.duration * randomInt(-45, 45);
+            params.rumble.x += this.animation.diff / speed.duration * randomInt(-45, 45);
+            params.rumble.y += this.animation.diff / speed.duration * randomInt(-45, 45);
+            params.rumble.z += this.animation.diff / speed.duration * randomInt(-45, 45);
 
             let va = params.angle;
 
@@ -98,7 +98,7 @@
 
                 // reduce
                 if (reduce) {
-                    params.multiplier -= 1.25 * animation.diff / speed.duration;
+                    params.multiplier -= 1.25 * this.animation.diff / speed.duration;
                     if (params.multiplier < 0) {
                         params.multiplier = 0;
                     }
@@ -108,9 +108,9 @@
 
             }
 
-            let w1 = multiplier * HC.Osci.wobble(params.rumble.x, sttngs);
-            let w2 = multiplier * HC.Osci.wobble(params.rumble.y, sttngs);
-            let w3 = multiplier * HC.Osci.wobble(params.rumble.z, sttngs);
+            let w1 = multiplier * HC.Osci.wobble(this.beatKeeper, params.rumble.x, sttngs);
+            let w2 = multiplier * HC.Osci.wobble(this.beatKeeper, params.rumble.y, sttngs);
+            let w3 = multiplier * HC.Osci.wobble(this.beatKeeper, params.rumble.z, sttngs);
 
             let m = layer.shapeSize(4);
 

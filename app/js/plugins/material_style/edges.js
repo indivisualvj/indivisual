@@ -22,7 +22,7 @@
                 this.active[shape.index] = true;
 
                 let inst = this;
-                messaging.program.listener.register('animation.updateSetting', this.id(shape.index), function (data) {
+                this.animation.listener.register('animation.updateSetting', this.id(shape.index), function (data) {
                     if (inst.layer == data.layer) {
                         switch (data.item) {
                             case inst.tree:
@@ -31,7 +31,7 @@
                                     params.mesh = false;
                                     shape.setMesh(params.original);
 
-                                    messaging.program.listener.removeId(inst.id(shape.index));
+                                    this.animation.listener.removeId(inst.id(shape.index));
                                 }
                                 break;
                         }
@@ -43,7 +43,7 @@
         reset() {
             if (this.active.length) {
                 this.active = [];
-                messaging.program.listener.removeLike(this.id());
+                this.animation.listener.removeLike(this.id());
             }
         }
     }
@@ -74,7 +74,7 @@
                 this.active[shape.index] = true;
 
                 let inst = this;
-                messaging.program.listener.register('animation.updateSetting', this.id(shape.index), function (data) {
+                this.animation.listener.register('animation.updateSetting', this.id(shape.index), function (data) {
                     if (inst.layer == data.layer) {
                         switch (data.item) {
                             case inst.tree:
@@ -83,7 +83,7 @@
                                     shape.setMesh(params.states[0]);
                                     params.states = false;
 
-                                    messaging.program.listener.removeId(inst.id(shape.index));
+                                    this.animation.listener.removeId(inst.id(shape.index));
                                 }
                                 break;
                         }
@@ -95,7 +95,7 @@
         reset() {
             if (this.active.length) {
                 this.active = [];
-                messaging.program.listener.removeLike(this.id());
+                this.animation.listener.removeLike(this.id());
             }
         }
     }

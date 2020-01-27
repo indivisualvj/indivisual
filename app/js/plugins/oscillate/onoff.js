@@ -25,7 +25,7 @@
             let layer = this.layer;
             let pa = this.params(key);
 
-            let speed = beatKeeper.getSpeed('half');
+            let speed = this.beatKeeper.getSpeed('half');
             if (speed.prc == 0) {
                 pa = (pa ? 0 : 1);
             }
@@ -44,7 +44,7 @@
             let layer = this.layer;
             let pa = this.params(key);
 
-            let speed = beatKeeper.getSpeed('full');
+            let speed = this.beatKeeper.getSpeed('full');
             if (speed.prc == 0) {
                 pa = (pa ? 0 : 1);
             }
@@ -63,7 +63,7 @@
             let layer = this.layer;
             let pa = this.params(key);
 
-            let speed = beatKeeper.getSpeed('double');
+            let speed = this.beatKeeper.getSpeed('double');
             if (speed.prc == 0) {
                 pa = (pa ? 0 : 1);
             }
@@ -82,7 +82,7 @@
             let layer = this.layer;
             let pa = this.params(key);
 
-            let speed = beatKeeper.getSpeed('quarter');
+            let speed = this.beatKeeper.getSpeed('quarter');
             if (speed.prc == 0) {
                 pa = (pa ? 0 : 1);
             }

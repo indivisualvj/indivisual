@@ -40,7 +40,7 @@
         static index = 40;
 
         apply(key) {
-            let speed = beatKeeper.getSpeed('hexa');
+            let speed = this.beatKeeper.getSpeed('hexa');
             return this.activate(key, HC.Osci.sinInOut(speed.prc));
         }
     }
@@ -51,7 +51,7 @@
         static index = 40;
 
         apply(key) {
-            let speed = beatKeeper.getSpeed('hexa');
+            let speed = this.beatKeeper.getSpeed('hexa');
             return this.activate(key, HC.Osci.sinInOut(speed.prc, .5));
         }
     }
@@ -62,7 +62,7 @@
         static index = 40;
 
         apply(key) {
-            let speed = beatKeeper.getSpeed('32');
+            let speed = this.beatKeeper.getSpeed('32');
             return this.activate(key, HC.Osci.sinInOut(speed.prc, .5));
         }
     }
@@ -73,7 +73,7 @@
         static index = 40;
 
         apply(key) {
-            let speed = beatKeeper.getSpeed('full');
+            let speed = this.beatKeeper.getSpeed('full');
             return this.activate(key, HC.Osci.sinus(speed.prc));
         }
     }
@@ -84,7 +84,7 @@
         static index = 40;
 
         apply(key) {
-            return this.activate(key, HC.Osci.wobble(0, this.settings));
+            return this.activate(key, HC.Osci.wobble(this.beatKeeper, 0, this.settings));
         }
     }
 }
@@ -105,7 +105,7 @@
         apply(key) {
             this.osci.osci1_period = this.settings.osci1_period;
             this.osci.rhythm = this.settings.rhythm;
-            return this.activate(key, HC.Osci.wobble(0, this.osci));
+            return this.activate(key, HC.Osci.wobble(this.beatKeeper, 0, this.osci));
 
         }
     }
@@ -127,7 +127,7 @@
         apply(key) {
             this.osci.osci2_period = this.settings.osci2_period;
             this.osci.rhythm = this.settings.rhythm;
-            return this.activate(key, HC.Osci.wobble(0, this.osci));
+            return this.activate(key, HC.Osci.wobble(this.beatKeeper, 0, this.osci));
 
         }
     }
@@ -149,7 +149,7 @@
             apply(key) {
                 this.osci.osci3_period = this.settings.osci3_period;
                 this.osci.rhythm = this.settings.rhythm;
-                return this.activate(key, HC.Osci.wobble(0, this.osci));
+                return this.activate(key, HC.Osci.wobble(this.beatKeeper, 0, this.osci));
 
             }
         }

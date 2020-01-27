@@ -7,7 +7,7 @@
             let layer = this.layer;
 
             if (this.isFirstShape(shape)) {
-                if (messaging.program.audioManager.isActive() && audio.peak) {
+                if (this.animation.audioManager.isActive() && audio.peak) {
                     this.invert = !this.invert;
                 }
             }

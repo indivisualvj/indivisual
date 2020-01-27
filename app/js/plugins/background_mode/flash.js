@@ -15,7 +15,7 @@
             if (this.backflash) {
                 let hsl = this.backflash;
 
-                hsl.l -= hsl.l * animation.getFrameDurationPercent(500, .125 * this.settings.background_volume);
+                hsl.l -= hsl.l * this.animation.getFrameDurationPercent(500, .125 * this.settings.background_volume);
                 if (hsl.l > 1 && hsl.l < 99) {
                     this.layer.setBackground(new THREE.Color(this.current(hslToHex(hsl))));
 

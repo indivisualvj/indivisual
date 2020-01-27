@@ -9,11 +9,11 @@ HC.Layer.prototype.animateShape = function (shape) {
 
     // wait until delay is over
     if (!delay.finished(shape)) {
-        delay.update(shape, animation.diff);
+        delay.update(shape, this.animation.diff);
 
         // wait until duration is over
     } else if (!duration.finished(shape)) {
-        duration.update(shape, animation.diff);
+        duration.update(shape, this.animation.diff);
 
         // reconfigure when finished
     } else {
@@ -47,7 +47,7 @@ HC.Layer.prototype.animate = function (hook) {
         this.resetShapes();
     }
 
-    this.tween.update(animation.now - this.lastUpdate, false);
+    this.tween.update(this.animation.now - this.lastUpdate, false);
 
     this.doOscillate(true);
 

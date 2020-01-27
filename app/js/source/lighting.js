@@ -11,12 +11,18 @@
         displayManager;
 
         /**
+         * @type {HC.BeatKeeper}
+         */
+        beatKeeper;
+
+        /**
          *
          * @param {HC.Animation} animation
          * @param index
          */
         constructor(animation, index) {
             this.displayManager = animation.displayManager;
+            this.beatKeeper = animation.beatKeeper;
             this.type = 'Lighting';
             this.index = index;
             this.id = this.type + this.index;
@@ -93,7 +99,7 @@
 
                 this.canvas.ctx.clearRect(0, 0, 4 * this.pixel.length * this.scale, 1 * this.scale);
 
-                let speed = beatKeeper.getSpeed(statics.SourceSettings.lighting_speed);
+                let speed = this.beatKeeper.getSpeed(statics.SourceSettings.lighting_speed);
                 let redo = speed.starting();
                 if (redo) {
                     this.shuffleCounter++;
@@ -123,7 +129,7 @@
          */
         updateLight(i, color) {
 
-            let speed = beatKeeper.getSpeed(statics.SourceSettings.lighting_speed);
+            let speed = this.beatKeeper.getSpeed(statics.SourceSettings.lighting_speed);
             let redo = speed.starting();
             let m = this.lighting_type;
 

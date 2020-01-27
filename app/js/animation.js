@@ -15,11 +15,6 @@ let messaging;
 let animation;
 
 /**
- *
- * @type {HC.BeatKeeper}
- */
-let beatKeeper;
-/**
  * @type {HC.AudioAnalyser}
  */
 let audio;
@@ -55,9 +50,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 animation.listener = listener;
                 let audioManager = new HC.AudioManager();
                 animation.audioManager = audioManager;
-                audio = new HC.AudioAnalyser(audioManager.audioContext);
+                audio = new HC.AudioAnalyser(animation);
                 animation.audioAnalyser = audio;
-                beatKeeper = new HC.BeatKeeper();
+                let beatKeeper = new HC.BeatKeeper(animation);
                 animation.beatKeeper = beatKeeper;
 
                 let renderer = new HC.Renderer(animation, {
@@ -100,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 sourceManager.resize(renderer.getResolution());
                 animation.sourceManager = sourceManager;
 
-                new HC.Animation.KeyboardListener().init();
+                new HC.Animation.KeyboardListener().init(animation);
                 new HC.Animation.EventListener().init();
 
                 animation._perspectiveHook = function () {
@@ -575,10 +570,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (IS_MONITOR) {
                     new HC.Monitor().init(() => {
                         this.displayManager.updateDisplay(0);
-                        new HC.Animation.ResizeListener().init(animation.displayManager);
+                        new HC.Animation.ResizeListener().init(this.displayManager);
                     });
                 } else {
-                    new HC.Animation.ResizeListener().init(animation.displayManager);
+                    new HC.Animation.ResizeListener().init(this.displayManager);
                 }
             };
 

@@ -16,7 +16,7 @@
 
         apply(peak, setPosition) {
             let layer = this.layer;
-            let speed = beatKeeper.getSpeed('double');
+            let speed = this.beatKeeper.getSpeed('double');
             let cam = layer.getCamera();
 
             let dd = layer.cameraDefaultDistance();
@@ -47,7 +47,7 @@
                 cam.quaternion.copy(this.quatFrom);
 
                 let distance = cam.position.distanceTo(this.targetLook);
-                let step = animation.getFrameDurationPercent(speed.duration, .25);
+                let step = this.animation.getFrameDurationPercent(speed.duration, .25);
                 let angle = cam.quaternion.angleTo(this.quatTo);
                 let m = Math.sqrt(angle + step);
 

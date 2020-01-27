@@ -13,7 +13,7 @@
             material.color = new THREE.Color();
 
             let inst = this;
-            messaging.program.listener.register('renderer.render', this.id(index), function (renderer) {
+            this.animation.listener.register('renderer.render', this.id(index), function (renderer) {
                 if (inst.layer.isVisible() && material.uniforms && material.uniforms.uTime) {
                     material.uniforms.uTime.value = inst.layer.getOscillatePlugin('timestamp').apply({value: 1});
                 }
@@ -25,7 +25,7 @@
         reset() {
             if (this.active) {
                 this.active = false;
-                messaging.program.listener.removeLike(this.id());
+                this.animation.listener.removeLike(this.id());
             }
         }
     }

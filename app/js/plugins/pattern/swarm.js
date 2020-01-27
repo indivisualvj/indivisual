@@ -12,13 +12,13 @@
             tween: false,
             timeout: false
         };
-
-        constructor(layer) {
-            super();
-            this.randshapes = this.randshapes(layer.shapeCount());
-        }
+        randshapes = false;
 
         before(shape) {
+            if (!this.randshapes) {
+                this.randshapes = this._randshapes(layer.shapeCount());
+            }
+
             let layer = this.layer;
             let params = this.params(shape);
             if (!params.targetLook) {
@@ -57,10 +57,10 @@
             shape.getWorldPosition(wp);
             let dist = wp.distanceTo(params.targetLook);
 
-            let s = 20 * this.settings.pattern_padding * animation.getFrameDurationPercent(speed.duration, .125 / 4);
+            let s = 20 * this.settings.pattern_padding * this.animation.getFrameDurationPercent(speed.duration, .125 / 4);
             let m = this.settings.pattern_limit ? 1 : Math.min(1, dist / layer.shapeSize(2));
             let v = s * m;
-            if (messaging.program.audioManager.isActive() && this.settings.pattern_audio) {
+            if (this.animation.audioManager.isActive() && this.settings.pattern_audio) {
                 if (this.settings.pattern_sync) {
                     v *= audio.volume;
                 } else {
@@ -134,7 +134,7 @@
             params.quatTo = new THREE.Quaternion().copy(cam.quaternion);
             cam.quaternion.copy(params.quatFrom);
 
-            let step = animation.getFrameDurationPercent(speed.duration, .25);
+            let step = this.animation.getFrameDurationPercent(speed.duration, .25);
             let angle = cam.quaternion.angleTo(params.quatTo);
             let m = Math.sqrt(angle + step * this.settings.pattern_padding);
 
@@ -146,7 +146,13 @@
             }
         }
 
-        randshapes(shapecount) {
+        /**
+         *
+         * @param shapecount
+         * @returns {HC.plugins.pattern.Plugin}
+         * @private
+         */
+        _randshapes(shapecount) {
             this.shapecount = shapecount;
             this.shapes = {};
 

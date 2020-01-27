@@ -25,7 +25,7 @@
                     let url = e.dataTransfer.getData('URL');
                     if (url && url.match(/https:\/\/soundcloud.com.+/)) {
                         HC.audio.soundcloud.dropEvent = e;
-                        animation.updateControl('audio', 'soundcloud', true, true, false);
+                        this.animation.updateControl('audio', 'soundcloud', true, true, false);
                     }
                 };
 

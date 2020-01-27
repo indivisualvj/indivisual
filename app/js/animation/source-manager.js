@@ -127,7 +127,7 @@
          */
         getSequence(i) {
             if (!this.sequences[i]) {
-                this.sequences[i] = new HC.Sequence(i);
+                this.sequences[i] = new HC.Sequence(this.animation, i);
             }
 
             return this.sequences[i];

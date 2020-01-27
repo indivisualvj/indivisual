@@ -106,9 +106,16 @@
         domainData;
 
         /**
-         * 
+         * @type {HC.Animation}
          */
-        constructor() {
+        animation;
+
+        /**
+         *
+         * @param {HC.Animation} animation
+         */
+        constructor(animation) {
+            this.animation = animation;
             this.peakThreshold = this.peakThresholdStart
         }
 
@@ -155,7 +162,7 @@
                 let v = fbdv * config.volume;
 
                 if (!useWaveform && config.thickness && last > v) {
-                    let reduce = (.1 - (.1 * config.thickness)) * animation.diffPrc;
+                    let reduce = (.1 - (.1 * config.thickness)) * this.animation.diffPrc;
                     v = Math.max(v, last - reduce);
                     this.volumes[i] = v;
 

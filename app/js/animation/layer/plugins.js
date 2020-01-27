@@ -406,7 +406,7 @@ HC.Layer.prototype.reloadPlugins = function () {
                 }
             }
             let instance = this.loadPlugin(plugin, key);
-            instance.construct(this, this.settings, plugin, key);
+            instance.construct(this.animation, this, this.settings, plugin, key);
             instance.setControlSets(this.controlSets);
             // instance.construct(this, this.controlSets, plugin, key);
             instance.inject();
@@ -421,7 +421,7 @@ HC.Layer.prototype.reloadPlugins = function () {
  * @param name
  */
 HC.Layer.prototype.loadPlugin = function (plugin, name) {
-    return new HC.plugins[plugin][name](this);
+    return new HC.plugins[plugin][name](this.animation, this);
 };
 
 /**

@@ -9,10 +9,23 @@
     HC.Sequence = class Sequence {
 
         /**
+         * @type {HC.Animation}
+         */
+        animation;
+
+        /**
+         * @type {HC.BeatKeeper}
+         */
+        beatKeeper;
+
+        /**
          *
+         * @param {HC.Animation} animation
          * @param index
          */
-        constructor(index) {
+        constructor(animation, index) {
+            this.animation = animation;
+            this.beatKeeper = animation.beatKeeper;
             this.type = 'sequence';
             this.index = index;
             this.id = this.type + this.index;
@@ -131,7 +144,7 @@
          */
         next(speed) {
 
-            if (this._last != animation.now) {
+            if (this._last != this.animation.now) {
 
                 let sample = this.sample;
 
@@ -171,7 +184,7 @@
 
                 this._dirty = true;
 
-                this._last = animation.now;
+                this._last = this.animation.now;
             }
         }
 
@@ -196,7 +209,7 @@
          */
         current(fallback, passthrough) {
 
-            this.next(beatKeeper.getDefaultSpeed());
+            this.next(this.beatKeeper.getDefaultSpeed());
 
             let image = fallback;
             if (this.sample) {
@@ -318,10 +331,10 @@
 
             let prcb = speed;
             if (this.speedup) {
-                prcb = beatKeeper.getSpeed('eight');
+                prcb = this.beatKeeper.getSpeed('eight');
 
             } else if (this.speeddown) {
-                prcb = beatKeeper.getSpeed('half');
+                prcb = this.beatKeeper.getSpeed('half');
             }
 
             if (prcb.starting()) {
@@ -353,7 +366,7 @@
                 }
 
             } else if (this._velocity > s) {
-                this._velocity = Math.max(s, this._velocity - animation.diff * 0.03 * s);
+                this._velocity = Math.max(s, this._velocity - this.animation.diff * 0.03 * s);
             }
 
             p = p * this._velocity;
@@ -382,10 +395,10 @@
             this._pointer++;
 
             if (this.speedup) {
-                beat = beatKeeper.getSpeed('sixteen');
+                beat = this.beatKeeper.getSpeed('sixteen');
 
             } else if (this.speeddown) {
-                beat = beatKeeper.getSpeed('full');
+                beat = this.beatKeeper.getSpeed('full');
             }
 
             while (frame && frame.prc < beat.prc) {
@@ -414,7 +427,7 @@
                     this._peak = 8;
 
                 } else if (this._peak > 1) {
-                    this._peak = Math.max(1, this._peak - animation.diff * 0.05);
+                    this._peak = Math.max(1, this._peak - this.animation.diff * 0.05);
 
                 }
                 p = Math.round(p * this._peak);
@@ -456,8 +469,8 @@
             for (let i = 0; i < keys.length; i++) {
                 let key = keys[i];
 
-                let instance = new HC.plugins[plugin][key](this);
-                instance.construct(this, {}, plugin, key);
+                let instance = new HC.plugins[plugin][key]();
+                instance.construct(this.animation, this, {}, plugin, key);
                 instance.inject();
 
                 this.oscillators[key] = instance;
@@ -468,7 +481,7 @@
          * OscillatePlugin workaround...
          */
         getCurrentSpeed() {
-            return beatKeeper.getSpeed('half');
+            return this.beatKeeper.getSpeed('half');
         }
     }
 }

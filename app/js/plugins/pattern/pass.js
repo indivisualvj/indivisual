@@ -35,7 +35,7 @@
 
             let dir = (gridPosition.y % 2 ? -1 : 1);
             dir = (this.layer.settings.pattern_limit ? 1 : dir) * this.dir;
-            let step = animation.diffPrc * dir * params.velocity * layer.resolution('relative').x;
+            let step = this.animation.diffPrc * dir * params.velocity * layer.resolution('relative').x;
             step *= this.settings.pattern_paddingx;
             shape.sceneObject().translateX(step);
 

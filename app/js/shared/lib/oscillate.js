@@ -30,21 +30,6 @@ HC.Osci = {
 
     /**
      *
-     * @param offset
-     * @param settings
-     * @returns {number}
-     */
-    reverse(offset, settings) {
-        let bpm = 180 / statics.ControlSettings.tempo * 1000;
-        let div = beatKeeper.getSpeed(settings.rhythm).divider / 8;
-        let progress = Math.PI * animation.last / (bpm * settings.osci1_period);
-        progress *= div;
-
-        return Math.sin(offset + progress);
-    },
-
-    /**
-     *
      * @param prc
      * @param add
      * @returns {*}
@@ -98,12 +83,13 @@ HC.Osci = {
 
     /**
      *
+     * @param beatKeeper
      * @param progress
      * @param settings
      * @param func
      * @returns {number}
      */
-    wobble(progress, settings, func) {
+    wobble(beatKeeper, progress, settings, func) {
         let p = 1;
 
         let bpm = 60000 / statics.ControlSettings.tempo;

@@ -8,7 +8,18 @@
      */
     HC.Color = class Color {
 
-        constructor(index) {
+        /**
+         * @type {HC.DisplayManager}
+         */
+        displayManager;
+
+        /**
+         *
+         * @param {HC.Animation} animation
+         * @param index
+         */
+        constructor(animation, index) {
+            this.displayManager = animation.displayManager;
             this.type = 'Color';
             this.index = index;
             this.id = this.type + this.index;
@@ -64,7 +75,7 @@
          * @returns {*}
          */
         brightness() {
-            return displayman.brightness();
+            return this.displayManager.brightness();
         }
 
         /**

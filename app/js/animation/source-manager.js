@@ -29,14 +29,20 @@
         renderer;
 
         /**
+         * @type {HC.Listener}
+         */
+        listener;
+
+        /**
          * @param {HC.Animation} animation
          * @param config
          */
         constructor(animation, config) {
             this.animation = animation;
-            this.displayManager = animation.displayman;
+            this.displayManager = animation.displayManager;
             this.beatKeeper = animation.beatKeeper;
             this.renderer = animation.renderer;
+            this.listener = animation.listener;
             this.perspectives = new Array(3);
             this.samples = config.sample;
             this.sequences = config.sequence;
@@ -185,7 +191,7 @@
                 let iKeys = Object.keys(statics.SourceValues.input);
                 let sample = false;
                 if (i < statics.SourceValues.sample.length) {
-                    sample = new HC.Sample(i);
+                    sample = new HC.Sample(this.animation, i);
 
                 } else {
                     return;
@@ -212,7 +218,7 @@
         initSample(sample) {
             let thumbKey = getSampleThumbKey(sample.index);
 
-            listener.register('sample.init.start', sample.id, function (target) {
+            this.listener.register('sample.init.start', sample.id, function (target) {
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'yellow');
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'style', '');
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', 'initializing');
@@ -223,7 +229,7 @@
                 messaging.emitData(target.id, conf);
             });
 
-            listener.register('sample.init.progress', sample.id, function (target) {
+            this.listener.register('sample.init.progress', sample.id, function (target) {
                 let progress = target.pointer / target.frameCount * 100;
                 let msg = 'preparing';
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', msg);
@@ -231,7 +237,7 @@
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'yellow');
             });
 
-            listener.register('sample.init.reset', sample.id, function (target) {
+            this.listener.register('sample.init.reset', sample.id, function (target) {
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', '');
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'style', '');
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', '');
@@ -243,7 +249,7 @@
                 messaging.emitData(target.id, conf);
             });
 
-            listener.register('sample.init.end', sample.id, (target) => {
+            this.listener.register('sample.init.end', sample.id, (target) => {
                 this.animation.powersave = false;
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'green');
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'style', '');
@@ -255,13 +261,13 @@
                 messaging.emitData(target.id, conf);
             });
 
-            listener.register('sample.render.start', sample.id, (target) => {
+            this.listener.register('sample.render.start', sample.id, (target) => {
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'red');
                 messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {timeout: this.beatKeeper.getSpeed('eight').duration});
                 messaging.emitMidi('glow', MIDI_SAMPLE_FEEDBACK);
             });
 
-            listener.register('sample.render.progress', sample.id, (target) => {
+            this.listener.register('sample.render.progress', sample.id, (target) => {
 
                 let progress = target.counter / target.beats * 100;
 
@@ -275,7 +281,7 @@
                 messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], conf);
             });
 
-            listener.register('sample.render.error', sample.id, (target) => {
+            this.listener.register('sample.render.error', sample.id, (target) => {
                 this.animation.powersave = false;
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-progress', '');
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'red');
@@ -284,7 +290,7 @@
                 messaging.emitMidi('glow', MIDI_SAMPLE_FEEDBACK, {timeout: 500, times: 3});
             });
 
-            listener.register('sample.render.end', sample.id, (target) => {
+            this.listener.register('sample.render.end', sample.id, (target) => {
                 this.animation.powersave = false;
 
                 let recordKey = getSampleRecordKey(target.index);
@@ -345,17 +351,17 @@
             if (sample) {
 
                 let dir = filePath(SAMPLE_DIR, name);
-                let callback = function () {
+                let callback = () => {
 
                     messaging._emit({action: 'unlinkall', dir: dir}, function (files) {
                         console.log('unlinkall', dir, files.length + ' files deleted');
 
-                        listener.register('sample.store.progress', sample.id, function (target) {
+                        this.listener.register('sample.store.progress', sample.id, function (target) {
                             let key = getSampleStoreKey(target.index);
                             messaging.emitAttr('[data-id="' + key + '"]', 'data-label', target.pointer + '/' + target.frames.length);
                             messaging.emitAttr('[data-id="' + key + '"]', 'data-color', 'red');
                         });
-                        listener.register('sample.store.end', sample.id, function (target) {
+                        this.listener.register('sample.store.end', sample.id, function (target) {
                             let key = getSampleStoreKey(target.index);
                             messaging.emitAttr('[data-id="' + key + '"]', 'data-label', '');
                             messaging.emitAttr('[data-id="' + key + '"]', 'data-color', '');
@@ -364,7 +370,7 @@
                                 this.animation.updateSource(getSampleLoadKey(sample.index), sample.id, false, true, false);
                             }
                         });
-                        storeSample(sample, name, resolution);
+                        this._storeSample(sample, name, resolution);
                     });
                 };
 
@@ -375,16 +381,71 @@
 
         /**
          *
+         * @param sample
+         * @param name
+         * @param resolution
+         * @private
+         */
+        _storeSample(sample, name, resolution) {
+            sample.pointer = 0;
+            var canvas = false;
+            var ctx = false;
+            if (resolution && resolution != 1.0) {
+                canvas = document.createElement('canvas');
+                canvas.width = sample.width * resolution;
+                canvas.height = sample.height * resolution;
+                ctx = canvas.getContext('2d');
+            }
+
+            var _mov = () => {
+
+                if (sample.isReady()) {
+                    this.animation.powersave = true;
+
+                    var frame = sample.frames[sample.pointer];
+                    if (ctx) {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(frame, 0, 0, frame.width, frame.height, 0, 0, canvas.width, canvas.height);
+                        frame = canvas;
+                    }
+                    var now = HC.now();
+                    var data = frame.toDataURL('image/png');
+                    var diff = HC.now() - now;
+
+                    messaging.sample(name, sample.pointer + '.png', data);
+                    sample.pointer++;
+
+                    if (sample.pointer % 5 == 0) {
+                        this.listener.fireEventId('sample.store.progress', sample.id, sample);
+                    }
+
+                    if (sample.pointer < sample.frames.length) {
+
+                        setTimeout(function () {
+                            requestAnimationFrame(_mov);
+                        }, this.animation.threadTimeout(diff / this.animation.duration));
+
+                    } else {
+                        this.animation.powersave = false;
+                        this.listener.fireEventId('sample.store.end', sample.id, sample);
+                    }
+                }
+            };
+            requestAnimationFrame(_mov);
+        }
+
+        /**
+         *
          */
         loadSample(i, name) {
             let sample = this.getSample(i);
             if (sample) {
-                listener.register('sample.load.progress', sample.id, function (target) {
+                this.listener.register('sample.load.progress', sample.id, function (target) {
                     let key = getSampleLoadKey(i);
                     messaging.emitAttr('[data-id="' + key + '"]', 'data-label', target.pointer + '/' + target.frames.length);
                     messaging.emitAttr('[data-id="' + key + '"]', 'data-color', 'red');
                 });
-                listener.register('sample.load.end', sample.id, function (target) {
+                this.listener.register('sample.load.end', sample.id, function (target) {
                     let key = getSampleLoadKey(i);
                     messaging.emitAttr('[data-id="' + key + '"]', 'data-label', '');
                     messaging.emitAttr('[data-id="' + key + '"]', 'data-color', '');
@@ -409,7 +470,7 @@
          */
         getColor(i) {
             if (!this.colors[i]) {
-                this.colors[i] = new HC.Color(i);
+                this.colors[i] = new HC.Color(this.animation, i);
             }
 
             return this.colors[i];
@@ -422,7 +483,7 @@
          */
         getLighting(i) {
             if (!this.lighting) {
-                this.lighting = new HC.Lighting(i);
+                this.lighting = new HC.Lighting(this.animation, i);
             }
 
             return this.lighting;

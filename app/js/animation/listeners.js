@@ -64,23 +64,23 @@
      */
     HC.Animation.ResizeListener = class ResizeListener {
 
-        init (hook) {
+        /**
+         *
+         * @param {HC.DisplayManager} displayManager
+         */
+        init (displayManager) {
             var onResize = function () {
                 for (var i = 0; i < statics.DisplayValues.display.length; i++) {
-                    var display = displayman.getDisplay(i);
+                    var display = displayManager.getDisplay(i);
                     if (display) {
                         if (!display.getMapping()) {
-                            displayman.centerDisplay(i, 1, true, false);
+                            displayManager.centerDisplay(i, 1, true, false);
                         }
                     }
                 }
             };
 
             window.addEventListener('resize', onResize);
-
-            if (hook) {
-                hook();
-            }
         }
     }
 }

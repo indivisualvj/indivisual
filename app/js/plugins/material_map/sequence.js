@@ -2,7 +2,7 @@
     HC.plugins.material_map.sequence = class Plugin extends HC.MaterialMapPlugin {
 
         apply(i) {
-            let seq = sourceman.getSequence(i);
+            let seq = messaging.program.sourceManager.getSequence(i);
             let image = seq.current(this.layer.renderer.current(), true);
 
             if (image) {

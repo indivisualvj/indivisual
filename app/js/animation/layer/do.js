@@ -378,7 +378,7 @@ HC.Layer.prototype.doCameraMode = function () {
     let plugin = this.getCameraModePlugin();
     this.doPlugin(plugin);
 
-    listener.fireEvent('layer.doCameraMode', this.getCamera());
+    this.renderer.listener.fireEvent('layer.doCameraMode', this.getCamera());
 };
 
 /**

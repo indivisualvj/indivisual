@@ -604,7 +604,7 @@ document.addEventListener('DOMContentLoaded', function () {
             // if (statics.ControlSettings) {
 
                 if (item == 'beat') {
-                    value = this.beatKeeper.trigger(value, true, statics.ControlSettings.tempo, false);
+                    value = this.beatKeeper.trigger(value);
                 }
 
             let tValue = value;

@@ -82,35 +82,31 @@
         }
 
         /**
-         * §
+         *
          * @param value
-         * @param override
-         * @param speed
          * @param forward
-         * @returns {boolean|*|statics.ControlSettings.beat}
+         * @returns {*}
          */
-        trigger(value, override, speed, forward) {
+        trigger(value) {
 
             if (this.timeout) { // following trigger
                 clearTimeout(this.timeout);
                 let diff = HC.now() - this.firstTrigger;
                 let bpm = this.triggerCounter / (diff / 60000);
 
-                statics.ControlSettings.beat = true;
                 this.triggerCounter++;
+
+                statics.ControlSettings.beat = true;
 
                 this.timeout = setTimeout(() => {
                     this.resetCounters(this.firstTrigger);
                     this.resetTrigger();
                 }, 1333);
 
-                if (forward) {
-                    statics.ControlSettings.tempo = bpm;
-                    messaging.emitControls({tempo: bpm}, true, false);
+                messaging.program.updateControl('tempo', bpm, true, false, false);
+                // statics.ControlSettings.tempo = bpm;
+                // messaging.emitControls({tempo: bpm}, true, false);
 
-                } else {
-                    messaging.emitControls({tempo: bpm}, true, false);
-                }
 
             } else { // first trigger
                 this.firstTrigger = HC.now();

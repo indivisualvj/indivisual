@@ -71,12 +71,25 @@
         animation;
 
         /**
+         * @type {HC.Listener}
+         */
+        listener;
+
+        /**
+         * @type {HC.BeatKeeper}
+         */
+        beatKeeper;
+
+
+        /**
          *
          * @param {HC.Animation} animation
          * @param config
          */
         constructor(animation, config) {
             this.animation = animation;
+            this.listener = animation.listener;
+            this.beatKeeper = animation.beatKeeper;
             this.layers = config.layers;
 
             this.initThreeJs();
@@ -88,7 +101,7 @@
          * @param keepSettings
          */
         fullReset(keepSettings) {
-            this.animation.listener.removeEvent('renderer.render');
+            this.listener.removeEvent('renderer.render');
             this.resize();
             this.initLayers(keepSettings);
             this.setLayer(0);
@@ -338,7 +351,7 @@
          * @returns {*}
          */
         brightness() {
-            return this.animation.displayman.brightness();
+            return this.animation.displayManager.brightness();
         }
 
         /**

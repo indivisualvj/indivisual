@@ -9,11 +9,24 @@
     HC.Video = class Video {
 
         /**
-         * 
+         * @type {HC.Animation}
+         */
+        animation;
+
+        /**
+         * @type {HC.Listener}
+         */
+        listener;
+
+        /**
+         *
+         * @param {HC.Animation} animation
          * @param index
          * @param file
          */
-        constructor(index, file) {
+        constructor(animation, index, file) {
+            this.animation = animation;
+            this.listener = animation.listener;
             this.index = index;
             this.type = 'video';
             this.id = 'sample' + index;
@@ -89,25 +102,24 @@
 
             this.duration = Math.ceil(60000 / this._tempo);
 
-            let inst = this;
-            tag.onloadedmetadata = function () {
+            tag.onloadedmetadata = () => {
                 let milliseconds = tag.duration * 1000;
                 let frameDuration = 1000 / statics.DisplaySettings.fps;
 
-                let maxFrames = inst.duration * 32 / 1000 * statics.DisplaySettings.fps;
+                let maxFrames = this.duration * 32 / 1000 * statics.DisplaySettings.fps;
                 let frames = Math.min(maxFrames, Math.ceil(milliseconds / frameDuration));
                 milliseconds = frameDuration * frames;
-                inst.beats = Math.floor(milliseconds / inst.duration);
-                inst.frames = [];
-                inst._init(frames);
+                this.beats = Math.floor(milliseconds / this.duration);
+                this.frames = [];
+                this._init(frames);
 
             };
-            tag.oncanplaythrough = function () {
-                inst.enabled = true;
+            tag.oncanplaythrough = () => {
+                this.enabled = true;
             };
-            tag.onabort = tag.onerror = function (err) {
+            tag.onabort = tag.onerror = (err) => {
                 console.error(err);
-                listener.fireEventId('sample.render.error', this.id, this);
+                this.listener.fireEventId('sample.render.error', this.id, this);
             }
         }
 
@@ -154,7 +166,7 @@
                 }
             };
 
-            listener.fireEventId('sample.init.start', inst.id, inst);
+            this.listener.fireEventId('sample.init.start', inst.id, inst);
             requestAnimationFrame(function () {
                 inst.initializing = true;
                 _loop(0);
@@ -169,7 +181,7 @@
             this.complete = true;
             this.pointer = 0;
 
-            listener.fireEventId('sample.render.end', this.id, this);
+            this.listener.fireEventId('sample.render.end', this.id, this);
         }
 
         /**
@@ -184,19 +196,19 @@
                 if (image && this.frames) {
                     if (!this.started) {
                         if (speed.starting()) {
-                            //listener.fireEventId('sample.render.start', this.id, this);
+                            //this.listener.fireEventId('sample.render.start', this.id, this);
                             this.started = true;
                             this.canvas.play();
                         }
                     }
                     if (this.started) {
-                        animation.powersave = true;
+                        this.animation.powersave = true;
                         if (this.pointer >= this.frames.length) {
                             this.finish();
 
                         } else {
                             this.counter++;
-                            //listener.fireEventId('sample.render.progress', this.id, this);
+                            //this.listener.fireEventId('sample.render.progress', this.id, this);
                         }
 
                         if (!this.complete) {
@@ -233,7 +245,7 @@
                         }
                     }
                 } else {
-                    //listener.fireEventId('sample.render.error', this.id, this);
+                    //this.listener.fireEventId('sample.render.error', this.id, this);
                 }
             }
         }

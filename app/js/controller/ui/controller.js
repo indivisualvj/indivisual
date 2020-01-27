@@ -176,8 +176,8 @@
          */
         toggleValue() {
             let v = this.getValue();
-            this.setValue(!v);
-            this.getComponent().emit('input', this.getValue());
+            // this.setValue(!v);
+            this.getComponent().emit('input', !v);
         }
 
         /**

@@ -9,7 +9,7 @@
 
             let inst = this;
 
-            listener.register('audio.peak', this.objectName, function (target) {
+            messaging.program.listener.register('audio.peak', this.objectName, function (target) {
                 inst.peaks++;
             });
         }

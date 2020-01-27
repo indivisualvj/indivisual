@@ -25,11 +25,6 @@
         animation;
 
         /**
-         * @type {HC.DisplayManager}
-         */
-        displayManager;
-
-        /**
          * @type {HC.BeatKeeper}
          */
         beatKeeper;
@@ -222,7 +217,7 @@
             let visible = statics.DisplaySettings['display' + i + '_visible'];
             if (visible) {
                 if (!this.displays[i]) {
-                    this.displays[i] = new HC.Display(i);
+                    this.displays[i] = new HC.Display(this, i);
                     this._addDisplay(i);
 
                     if (IS_SETUP) {
@@ -256,7 +251,7 @@
                 display.update(this.width, this.height, statics.DisplaySettings);
 
                 if (!mode) {
-                    sourceman.updateSource(display);
+                    this.animation.sourceManager.updateSource(display);
                     this.enableCliptastic(display, false);
                     display.updateMask();
                     this.enableCliptastic(display, !display.isFixedSize());

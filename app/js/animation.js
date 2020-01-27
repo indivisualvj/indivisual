@@ -13,11 +13,7 @@ let messaging;
  * @type {HC.Animation}
  */
 let animation;
-/**
- *
- * @type {HC.Renderer}
- */
-// let renderer;
+
 /**
  *
  * @type {HC.BeatKeeper}
@@ -27,21 +23,6 @@ let beatKeeper;
  * @type {HC.AudioAnalyser}
  */
 let audio;
-/**
- *
- * @type {HC.DisplayManager}
- */
-let displayman;
-/**
- *
- * @type {HC.SourceManager}
- */
-let sourceman;
-/**
- *
- * @type {HC.Listener}
- */
-let listener;
 /**
  *
  * @type {HC.LayeredControlSetsManager}
@@ -70,22 +51,22 @@ document.addEventListener('DOMContentLoaded', function () {
                 statics.ControlSettingsManager = new HC.ControlSetsManager(HC.Statics.initControlControlSets());
                 statics.ControlSettings = statics.ControlSettingsManager.settingsProxy();
 
-                listener = new HC.Listener();
+                let listener = new HC.Listener();
                 animation.listener = listener;
-                let audioman = new HC.AudioManager();
-                animation.audioManager = audioman;
-                audio = new HC.AudioAnalyser(audioman.audioContext);
+                let audioManager = new HC.AudioManager();
+                animation.audioManager = audioManager;
+                audio = new HC.AudioAnalyser(audioManager.audioContext);
                 animation.audioAnalyser = audio;
                 beatKeeper = new HC.BeatKeeper();
                 animation.beatKeeper = beatKeeper;
 
-                let renderer = new HC.Renderer({
+                let renderer = new HC.Renderer(animation, {
                     layers: new Array(statics.ControlValues.layer.length)
                 });
                 animation.renderer = renderer;
 
                 if (IS_ANIMATION) {
-                    listener.register('webglcontextlost', animation.name, function () {
+                    animation.listener.register('webglcontextlost', animation.name, function () {
                         // now reset...
                         HC.log('HC.Renderer', 'another context loss...', true, true);
 
@@ -106,24 +87,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 cm = new HC.LayeredControlSetsManager(renderer.layers, statics.AnimationValues);
 
-                let displayman = new HC.DisplayManager(animation, {
+                let displayManager = new HC.DisplayManager(animation, {
                     display: new Array(statics.DisplayValues.display.length)
                 });
-                displayman.resize(renderer.getResolution());
-                animation.displayman = displayman;
+                displayManager.resize(renderer.getResolution());
+                animation.displayManager = displayManager;
 
-                sourceman = new HC.SourceManager(animation, {
+                let sourceManager = new HC.SourceManager(animation, {
                     sequence: new Array(statics.SourceValues.sequence.length),
                     sample: new Array(statics.SourceValues.sample.length)
                 });
-                sourceman.resize(renderer.getResolution());
-                animation.sourceman = sourceman;
+                sourceManager.resize(renderer.getResolution());
+                animation.sourceManager = sourceManager;
 
                 new HC.Animation.KeyboardListener().init();
                 new HC.Animation.EventListener().init();
 
                 animation._perspectiveHook = function () {
-                    sourceman.renderPerspectives();
+                    sourceManager.renderPerspectives();
                 };
 
                 animation.loadSession();
@@ -148,7 +129,7 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          * @type {HC.SourceManager}
          */
-        sourceman;
+        sourceManager;
 
         /**
          * @type {HC.AudioManager}
@@ -163,7 +144,7 @@ document.addEventListener('DOMContentLoaded', function () {
         /**
          * @type {HC.DisplayManager}
          */
-        displayman;
+        displayManager;
 
         /**
          * @type {HC.BeatKeeper}
@@ -267,7 +248,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (this.audioAnalyser.peak) {
                 this.messaging.emitMidi('glow', MIDI_PEAK_FEEDBACK, {timeout: 125});
 
-                listener.fireEvent('audio.peak', this.audioAnalyser);
+                this.listener.fireEvent('audio.peak', this.audioAnalyser);
             }
 
             /**
@@ -292,10 +273,10 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         render() {
             if (IS_ANIMATION) {
-                this.sourceman.render();
+                this.sourceManager.render();
             }
             if (!this.doNotDisplay) {
-                this.displayman.render();
+                this.displayManager.render();
             }
         }
 
@@ -395,7 +376,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this._rmss += this.rms;
             this.last = this.now;
 
-            listener.fireEvent('animation.updateRuntime', this);
+            this.listener.fireEvent('animation.updateRuntime', this);
         }
 
         /**
@@ -588,16 +569,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.updateControls(controls, true, false, true);
                 }
 
-                this.sourceman.updateSequences();
+                this.sourceManager.updateSequences();
                 this.fullReset(true);
 
                 if (IS_MONITOR) {
                     new HC.Monitor().init(() => {
-                        this.displayman.updateDisplay(0);
-                        new HC.Animation.ResizeListener().init();
+                        this.displayManager.updateDisplay(0);
+                        new HC.Animation.ResizeListener().init(animation.displayManager);
                     });
                 } else {
-                    new HC.Animation.ResizeListener().init();
+                    new HC.Animation.ResizeListener().init(animation.displayManager);
                 }
             };
 
@@ -610,8 +591,8 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         fullReset(keepsettings) {
             this.renderer.fullReset(keepsettings);
-            this.sourceman.resize(this.renderer.getResolution());
-            this.displayman.resize(this.renderer.getResolution());
+            this.sourceManager.resize(this.renderer.getResolution());
+            this.displayManager.resize(this.renderer.getResolution());
         }
 
         /**
@@ -692,7 +673,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.messaging.emitSettings(layerIndex, data, true, false, force);
             }
 
-            listener.fireEvent('animation.updateSetting', {layer: layer, item: property, value: value});
+            this.listener.fireEvent('animation.updateSetting', {layer: layer, item: property, value: value});
         }
 
         /**
@@ -707,7 +688,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateControl(item, value, display, forward, force) {
 
             if (item == 'beat') {
-                value = this.beatKeeper.trigger(value, true, statics.ControlSettings.tempo, true);
+                value = this.beatKeeper.trigger(value);
 
             } else if (item == 'session' && value != _HASH) {
                 document.location.hash = value;
@@ -786,44 +767,44 @@ document.addEventListener('DOMContentLoaded', function () {
                 let action = false;
                 // if (item.match(/^sample\d+_store/) && value) {
                 //     //var sample =
-                //     sourceman.storeSample(number_extract(item, 'sample'), value, 1, false);
+                //     sourceManager.storeSample(number_extract(item, 'sample'), value, 1, false);
                 //     this.updateSource(item, false, false, true, false);
                 //
                 // } else
                 if (item.match(/^sample\d+_load/) && value) {
                     if (IS_MONITOR || display) {
-                        this.sourceman.loadSample(numberExtract(item, 'sample'), value);
+                        this.sourceManager.loadSample(numberExtract(item, 'sample'), value);
                     }
                     this.updateSource(item, false, false, true, false);
 
                 } else if (item.match(/^sample\d+_/)) {
-                    this.sourceman.updateSample(numberExtract(item, 'sample'));
+                    this.sourceManager.updateSample(numberExtract(item, 'sample'));
                     action = true;
 
                 } else if (item.match(/^sequence\d+_/)) {
-                    this.sourceman.updateSequence(numberExtract(item, 'sequence'));
+                    this.sourceManager.updateSequence(numberExtract(item, 'sequence'));
                     action = true;
 
                 } else if (item.match(/display\d+_source/)) {
-                    var display = this.displayman.getDisplay(numberExtract(item, 'display'));
-                    this.sourceman.updateSource(display);
+                    var display = this.displayManager.getDisplay(numberExtract(item, 'display'));
+                    this.sourceManager.updateSource(display);
 
                     if (display && display.isFixedSize()) {
-                        this.displayman.updateDisplay(display.index, false);
+                        this.displayManager.updateDisplay(display.index, false);
                     }
 
                     action = true;
 
                 } else if (item.match(/display\d+_sequence/)) {
-                    this.sourceman.updateSource(this.displayman.getDisplay(numberExtract(item, 'display')));
+                    this.sourceManager.updateSource(this.displayManager.getDisplay(numberExtract(item, 'display')));
                     action = true;
 
                 } else if (item.match(/^lighting_(lights|scale)/)) {
-                    this.displayman.updateDisplays();
+                    this.displayManager.updateDisplays();
                     action = true;
 
                 } else if (item.match(/^lighting_(mode|color)/)) {
-                    this.sourceman.getLighting(0).update();
+                    this.sourceManager.getLighting(0).update();
                     action = true;
                 }
 
@@ -846,8 +827,8 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param data
          */
         updateMidi(data) {
-            if (listener && data.command == 'message') {
-                listener.fireEvent('midi.message', data.data);
+            if (this.listener && data.command == 'message') {
+                this.listener.fireEvent('midi.message', data.data);
             }
         }
 
@@ -863,7 +844,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (item.match(/^display\d+_\d/)) { // resize
                 if (value) {
-                    this.displayman.centerDisplay(numberExtract(item, 'display'), value);
+                    this.displayManager.centerDisplay(numberExtract(item, 'display'), value);
                     this.updateDisplay(item, false, display, true);
                 }
                 statics.DisplaySettingsManager.updateItem(item, value);
@@ -887,17 +868,17 @@ document.addEventListener('DOMContentLoaded', function () {
                         case 'mapping':
                         case 'clip_context':
                         case 'background':
-                            this.displayman.updateDisplays();
+                            this.displayManager.updateDisplays();
                             break;
 
                         case 'brightness':
-                            this.displayman.brightness(value);
+                            this.displayManager.brightness(value);
                             break;
 
                         case 'display_visibility':
                         case 'border_mode':
-                            this.displayman.settings.visibility.random = false;
-                            this.displayman.settings.border.random = false;
+                            this.displayManager.settings.visibility.random = false;
+                            this.displayManager.settings.border.random = false;
                             break;
                     }
                 }
@@ -907,13 +888,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     var i = numberExtract(item, 'display');
 
                     if (item.match(/_mask$/)) { // mask
-                        this.displayman.updateDisplay(i, 'mask');
+                        this.displayManager.updateDisplay(i, 'mask');
 
                     } else if (item.match(/_mapping/)) { // mapping
-                        this.displayman.updateDisplay(i, 'mapping'); // avoid removing/adding maptastic layer
+                        this.displayManager.updateDisplay(i, 'mapping'); // avoid removing/adding maptastic layer
 
                     } else { // anything else
-                        this.displayman.updateDisplay(i);
+                        this.displayManager.updateDisplay(i);
                         this.offline = false;
                     }
                 }
@@ -970,7 +951,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 for (var k in data) {
                     statics.DisplaySettingsManager.updateItem(k, data[k]);
                 }
-                this.displayman.reset();
+                this.displayManager.reset();
                 // this.fullReset(true);
 
             } else {

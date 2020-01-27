@@ -6,10 +6,17 @@
     HC.Lighting = class Lighting {
 
         /**
+         * @type {HC.DisplayManager}
+         */
+        displayManager;
+
+        /**
          *
+         * @param {HC.Animation} animation
          * @param index
          */
-        constructor(index) {
+        constructor(animation, index) {
+            this.displayManager = animation.displayManager;
             this.type = 'Lighting';
             this.index = index;
             this.id = this.type + this.index;
@@ -70,7 +77,7 @@
          * @returns {number}
          */
         brightness() {
-            return displayman.brightness();
+            return this.displayManager.brightness();
         }
 
         /**

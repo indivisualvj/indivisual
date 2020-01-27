@@ -9,11 +9,24 @@
     HC.Image = class Image {
 
         /**
+         * @type {HC.Animation}
+         */
+        animation;
+
+        /**
+         * @type {HC.Listener}
+         */
+        listener;
+
+        /**
          *
+         * @param {HC.Animation} animation
          * @param index
          * @param file
          */
-        constructor(index, file) {
+        constructor(animation, index, file) {
+            this.animation = animation;
+            this.listener = animation.listener;
             this.index = index;
             this.id = 'sample' + index;
             this.file = file;
@@ -82,15 +95,15 @@
 
             this.duration = Math.ceil(60000 / this._tempo);
             let inst = this;
-            tag.onload = function () {
+            tag.onload = () => {
                 inst.beats = 1;
                 inst.frames = [];
                 inst.enabled = true;
                 inst._init(1);
             };
-            tag.onabort = tag.onerror = function (err) {
+            tag.onabort = tag.onerror = (err) => {
                 console.error(err);
-                listener.fireEventId('sample.render.error', this.id, this);
+                this.listener.fireEventId('sample.render.error', this.id, this);
             }
         }
 
@@ -137,7 +150,7 @@
                 }
             };
 
-            listener.fireEventId('sample.init.start', inst.id, inst);
+            this.listener.fireEventId('sample.init.start', inst.id, inst);
             requestAnimationFrame(function () {
                 inst.initializing = true;
                 _loop(0);
@@ -151,7 +164,7 @@
             this.complete = true;
             this.pointer = 0;
 
-            listener.fireEventId('sample.render.end', this.id, this);
+            this.listener.fireEventId('sample.render.end', this.id, this);
         }
 
         /**
@@ -166,7 +179,7 @@
                 if (this.canvas && this.frames) {
                     if (!this.started) {
                         if (speed.starting()) {
-                            listener.fireEventId('sample.render.start', this.id, this);
+                            this.listener.fireEventId('sample.render.start', this.id, this);
                             this.started = true;
                         }
                     }
@@ -206,7 +219,7 @@
                         }
                     }
                 } else {
-                    listener.fireEventId('sample.render.error', this.id, this);
+                    this.listener.fireEventId('sample.render.error', this.id, this);
                 }
             }
         }

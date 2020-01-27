@@ -25,7 +25,7 @@
                 this.cameras.traverse(threeDispose);
                 this.cameras = undefined;
 
-                listener.removeLike(this.id());
+                messaging.program.listener.removeLike(this.id());
             }
         }
     }

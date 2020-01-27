@@ -29,7 +29,7 @@
             this.cubeTextureFromBackgroundInput(_onLoad);
 
             let id = this.id(index);
-            listener.register('animation.updateSetting', id, function (data) {
+            messaging.program.listener.register('animation.updateSetting', id, function (data) {
                 if (data.layer === inst.layer) {
                     switch (data.item) {
                         case 'background_input':
@@ -46,7 +46,7 @@
         }
 
         dispose() {
-            listener.removeLike(this.id());
+            messaging.program.listener.removeLike(this.id());
         }
     }
 }

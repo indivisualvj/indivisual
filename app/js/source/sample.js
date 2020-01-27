@@ -10,23 +10,78 @@
 
         index;
         id;
-        enabled = false;
-        record = false;
-        pointer = 0;
-        initialized = false;
-        initializing = false;
-        started = false;
-        complete = false;
-        counter = 0;
-        frames = false;
-        length = 0;
-        beats = 4;
-        
         /**
-         * 
+         *
+         * @type {boolean}
+         */
+        enabled = false;
+
+        /**
+         *
+         * @type {boolean}
+         */
+        record = false;
+        /**
+         *
+         * @type {number}
+         */
+        pointer = 0;
+        /**
+         *
+         * @type {boolean}
+         */
+        initialized = false;
+        /**
+         *
+         * @type {boolean}
+         */
+        initializing = false;
+        /**
+         *
+         * @type {boolean}
+         */
+        started = false;
+        /**
+         *
+         * @type {boolean}
+         */
+        complete = false;
+        /**
+         *
+         * @type {number}
+         */
+        counter = 0;
+
+        frames = false;
+        /**
+         *
+         * @type {number}
+         */
+        length = 0;
+        /**
+         *
+         * @type {number}
+         */
+        beats = 4;
+
+        /**
+         * @type {HC.Animation}
+         */
+        animation;
+
+        /**
+         * @type {HC.Listener}
+         */
+        listener;
+
+        /**
+         *
+         * @param {HC.Animation} animation
          * @param index
          */
-        constructor(index) {
+        constructor(animation, index) {
+            this.animation = animation;
+            this.listener = animation.listener;
             this.index = index;
             this.id = 'sample' + index;
         }
@@ -62,7 +117,7 @@
 
             } else if (!enabled) {
                 this._init(speed, true);
-                listener.fireEventId('sample.init.reset', this.id, this);
+                this.listener.fireEventId('sample.init.reset', this.id, this);
             }
 
         }
@@ -129,7 +184,7 @@
             }
 
             this.frameCount = frames;
-            animation.powersave = true;
+            this.animation.powersave = true;
 
             let _init = function (i) {
                 if (inst.initializing) {
@@ -144,8 +199,8 @@
                     cv.ctx.fillRect(0, 0, cv.width, cv.height);
                     if (i % 10 == 0) {
                         inst.pointer = i;
-                        listener.fireEventId('sample.init.progress', inst.id, inst);
-                        animation.powersave = true;
+                        this.listener.fireEventId('sample.init.progress', inst.id, inst);
+                        this.animation.powersave = true;
                     }
 
                     i++;
@@ -154,19 +209,19 @@
                             requestAnimationFrame(function () {
                                 _init(i);
                             });
-                        }, animation.threadTimeout(.125));
+                        }, this.animation.threadTimeout(.125));
 
                     } else {
                         inst.initialized = true;
                         inst.pointer = 0;
-                        animation.powersave = false;
-                        listener.fireEventId('sample.init.end', inst.id, inst);
+                        this.animation.powersave = false;
+                        this.listener.fireEventId('sample.init.end', inst.id, inst);
                     }
                 }
             };
 
             requestAnimationFrame(function () {
-                listener.fireEventId('sample.init.start', inst.id, inst);
+                this.listener.fireEventId('sample.init.start', inst.id, inst);
                 inst.initializing = true;
                 _init(0);
             });
@@ -182,7 +237,7 @@
                 this.pointer = 0;
                 this.counter = 0;
 
-                listener.fireEventId('sample.render.error', this.id, this);
+                this.listener.fireEventId('sample.render.error', this.id, this);
 
             } else {
                 this.frames.splice(this.pointer, this.frames.length - this.pointer);
@@ -192,7 +247,7 @@
                 this.length = this.frames.length / 60 * 1000;
                 this.counter = 0;
 
-                listener.fireEventId('sample.render.end', this.id, this);
+                this.listener.fireEventId('sample.render.end', this.id, this);
 
             }
         }
@@ -252,7 +307,6 @@
         /**
          *
          * @param name
-         * @param speed
          * @param width
          * @param height
          */
@@ -301,11 +355,11 @@
                         loaded++;
                         inst.pointer = loaded;
                         if (loaded % 10 == 0) {
-                            listener.fireEventId('sample.load.progress', inst.id, inst);
+                            this.listener.fireEventId('sample.load.progress', inst.id, inst);
                         }
                         if (loaded == frameCount) {
                             inst.finish();
-                            listener.fireEventId('sample.load.end', inst.id, inst);
+                            this.listener.fireEventId('sample.load.end', inst.id, inst);
                         }
                     };
                 }
@@ -320,7 +374,44 @@
          */
         render(image, speed, color) {
 
-            renderSample(this, image, speed, color);
+            let sample = this;
+            if (image && sample.frames) {
+                if (!sample.started) {
+                    if (speed.starting()) {
+                        this.listener.fireEventId('sample.render.start', sample.id, sample);
+                        sample.started = true;
+                        if (hook) {
+                            hook();
+                        }
+                    }
+                }
+                if (sample.started) {
+                    this.animation.powersave = true;
+                    if (speed.starting()) {
+                        if (sample.counter >= sample.beats) {
+                            sample.finish(sample.record);
+
+                        } else {
+                            sample.counter++;
+                            this.listener.fireEventId('sample.render.progress', sample.id, sample);
+                        }
+
+                    }
+                    if (!sample.complete) {
+                        var target = sample.frames[sample.pointer++];
+                        if (target && target.ctx) {
+                            target._color = color;
+                            target.progress = sample.counter + speed.prc;
+                            target.prc = speed.prc;
+                            var ctx = target.ctx;
+                            ctx.clearRect(0, 0, sample.width, sample.height);
+                            ctx.drawImage(image, 0, 0);
+                        }
+                    }
+                }
+            } else {
+                this.listener.fireEventId('sample.render.error', sample.id, sample);
+            }
 
         }
 

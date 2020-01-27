@@ -30,7 +30,7 @@
             mesh.name = this.id(index);
 
             let inst = this;
-            listener.register('renderer.render', this.id(index), function (renderer) {
+            messaging.program.listener.register('renderer.render', this.id(index), function (renderer) {
                 if (inst.layer.isVisible()) {
                     mesh.visible = false;
 

@@ -30,7 +30,7 @@
          */
         constructor(animation, index) {
             this.animation = animation;
-            this.displayManager = animation.displayman;
+            this.displayManager = animation.displayManager;
             this.type = 'Perspective';
             this.index = index;
             this.id = this.type + this.index;

@@ -9,8 +9,74 @@
      */
     HC.Display = class Display {
 
-        constructor(index) {
+        /**
+         * @type {HC.DisplayManager}
+         */
+        displayManager;
 
+        /**
+         * 
+         * @type {boolean}
+         */
+        mask = false;
+        /**
+         * 
+         * @type {boolean}
+         */
+        smear = false;
+        /**
+         * 
+         * @type {number}
+         */
+        blitz = 0;
+        /**
+         * 
+         * @type {boolean}
+         */
+        judder = false;
+        /**
+         * 
+         * @type {boolean}
+         */
+        visible = true;
+        /**
+         * 
+         * @type {boolean}
+         */
+        offline = false;
+        /**
+         * 
+         * @type {boolean}
+         */
+        transparent = false;
+        /**
+         * 
+         * @type {boolean}
+         */
+        keepbounds = true;
+        /**
+         * 
+         * @type {number}
+         */
+        smearing = 0.0;
+        /**
+         * 
+         * @type {boolean}
+         * @private
+         */
+        _dirty = true;
+
+        _bounds = false;
+        _points = false;
+        _source = false;
+
+        /**
+         * 
+         * @param {HC.DisplayManager} displayManager
+         * @param index
+         */
+        constructor(displayManager, index) {
+            this.displayManager = displayManager;
             this.index = index;
             this.id = 'display' + index;
             var canvas = document.createElement('canvas');
@@ -18,19 +84,6 @@
             this.canvas = canvas;
             this.ctx = canvas.getContext('2d', {antialias: false});
             canvas.ctx = this.ctx;
-            this.mask = false;
-            this.smear = false;
-            this.blitz = 0;
-            this.judder = false;
-            this.visible = true;
-            this.offline = false;
-            this.transparent = false;
-            this.keepbounds = true;
-            this.smearing = 0.0;
-            this._bounds = false;
-            this._points = false;
-            this._dirty = true;
-            this._source = false;
         }
 
         /**
@@ -154,7 +207,7 @@
          * @returns {*|number}
          */
         brightness() {
-            return displayman.brightness();
+            return this.displayManager.brightness();
         }
 
         /**
@@ -191,7 +244,7 @@
             this.smearing = settings[this.id + '_smearing'];
             this.transparent = settings[this.id + '_transparent'];
 
-            this.ctx.globalAlpha = displayman.brightness();
+            this.ctx.globalAlpha = this.displayManager.brightness();
         }
 
         /**
@@ -453,7 +506,7 @@
                 prc = speed.prc;
             }
 
-            ctx.globalAlpha = displayman.brightness();
+            ctx.globalAlpha = this.displayManager.brightness();
             ctx.globalCompositeOperation = 'source-over';
             ctx.strokeStyle = color;
             ctx.lineWidth = lineWidth * 2;

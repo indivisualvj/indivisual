@@ -12,7 +12,7 @@ HC.plugins.oscillate = HC.plugins.oscillate || {};
          * @returns {HC.Plugin}
          */
         construct(animation, layer, settings, tree, key) {
-            HC.AnimationPlugin.prototype.construct.call(this, layer, settings, tree, key);
+            HC.AnimationPlugin.prototype.construct.call(this, animation, layer, settings, tree, key);
             this.cache = this.cache || {};
 
             return this;

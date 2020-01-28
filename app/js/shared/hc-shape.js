@@ -95,8 +95,8 @@
         }
 
         shapeVolume() {
-            let i = this.index % audio.volumes.length;  // todo eliminate audio call
-            return audio.volumes[i];
+            let i = this.index % messaging.program.audioAnalyser.volumes.length;  // todo move shapeVolume to layer or so
+            return messaging.program.audioAnalyser.volumes[i];
         }
 
         sceneObject() {

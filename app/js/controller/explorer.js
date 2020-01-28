@@ -148,15 +148,8 @@
          * @param layer
          * @param loaded
          */
-        setLoaded(layer, loaded) {
-
-        }
-
-        /**
-         * 
-         */
-        resetLoaded() {
-
+        setSelected(layer, loaded) {
+            // todo set currently selected layer
         }
     }
 }

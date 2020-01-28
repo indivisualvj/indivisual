@@ -613,8 +613,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (item == 'layer') {
                     this.updateSettings(value, cm.prepareLayer(value), true, false, true);
 
-                    this.explorer.resetLoaded();
-                    this.explorer.setLoaded(value, true);
+                    this.explorer.setSelected(value, true);
 
                     let config = {
                         action: 'attr',

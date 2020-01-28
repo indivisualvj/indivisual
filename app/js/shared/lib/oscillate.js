@@ -63,7 +63,7 @@ HC.Osci = {
      * @param negative
      */
     step(pa, steps, speed, onpeak, negative) {
-        if ((onpeak && audio.peak) || (!onpeak && speed.starting())) {  // todo eliminate audio call
+        if ((onpeak && messaging.program.audioAnalyser.peak) || (!onpeak && speed.starting())) {  // todo eliminate audio call
             let n = pa.next;
             while (n == pa.next) {
                 n = (randomInt(0, steps, negative) / steps);
@@ -76,7 +76,7 @@ HC.Osci = {
         let diff = pa.next - pa.value;
 
         if (Math.abs(diff) > 0.01) {
-            let step = diff / 0.075 * animation.diff / (speed.duration * 2);  // todo eliminate animation call
+            let step = diff / 0.075 * messaging.program.diff / (speed.duration * 2);  // todo eliminate animation call
             pa.value += step;
         }
     },

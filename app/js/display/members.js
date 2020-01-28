@@ -1,6 +1,6 @@
 /**
  *
- * @type {{parent: HC.Display.borderModes.parent, randomall: HC.Display.borderModes.randomall, visible: HC.Display.borderModes.visible, jumpcw: HC.Display.borderModes.jumpcw, randomline: HC.Display.borderModes.randomline, jumpacw: HC.Display.borderModes.jumpacw, lineacw: HC.Display.borderModes.lineacw, growcw: HC.Display.borderModes.growcw, growacw: HC.Display.borderModes.growacw, linecw: HC.Display.borderModes.linecw}}
+ * @type {*}
  */
 HC.Display.borderModes = {
 
@@ -27,7 +27,7 @@ HC.Display.borderModes = {
 
     'randomline': function (ctx, points, pc, speed, prc) {
         ctx.beginPath();
-        if (((speed === false && audio.peak) || prc === 0) || !ctx.canvas._side) { // todo eliminate audio call
+        if (((speed === false && messaging.program.audioAnalyser.peak) || prc === 0) || !ctx.canvas._side) { // todo border_mode plugins and then: eliminate audio call
             ctx.canvas._side = randomInt(1, pc - 1);
         }
         var s = (ctx.canvas._side - 1) * 2;

@@ -18,7 +18,7 @@ HC.plugins.coloring_mode = HC.plugins.coloring_mode || {};
             if (this.settings.coloring_audio && this.animation.audioManager.isActive()) {
                 let v = this.audioAnalyser.volume;
                 if (!this.settings.coloring_sync) {
-                    v = shape.shapeVolume();
+                    v = shape.shapeVolume(); // todo aquire from anywhere but not from shape!
                 }
 
                 c.h += v * 180;

@@ -15,10 +15,6 @@ let messaging;
 let animation;
 
 /**
- * @type {HC.AudioAnalyser}
- */
-let audio;
-/**
  *
  * @type {HC.LayeredControlSetsManager}
  */
@@ -50,8 +46,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 animation.listener = listener;
                 let audioManager = new HC.AudioManager();
                 animation.audioManager = audioManager;
-                audio = new HC.AudioAnalyser(animation);
-                animation.audioAnalyser = audio;
+                let audioAnalyser = new HC.AudioAnalyser(animation);
+                animation.audioAnalyser = audioAnalyser;
                 let beatKeeper = new HC.BeatKeeper(animation);
                 animation.beatKeeper = beatKeeper;
 

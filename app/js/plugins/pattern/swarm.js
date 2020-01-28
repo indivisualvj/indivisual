@@ -13,25 +13,26 @@
             timeout: false
         };
         randshapes = false;
+        diameter = false;
 
         before(shape) {
             if (!this.randshapes) {
-                this.randshapes = this._randshapes(layer.shapeCount());
+                this.randshapes = this._randshapes(this.layer.shapeCount());
+                this.diameter = this.animation.renderer.getResolution().diameter;
             }
 
-            let layer = this.layer;
             let params = this.params(shape);
             if (!params.targetLook) {
                 this.settings.pattern_padding *= 2;
-                layer.getPatternPlugin('cube').apply(shape);
+                this.layer.getPatternPlugin('cube').apply(shape);
                 this.settings.pattern_padding /= 2;
 
                 params.targetLook = new THREE.Vector3();
                 this.randPosition(params);
             }
-            params.speed = layer.getShapeSpeed(shape);
+            params.speed = this.layer.getShapeSpeed(shape);
             if (!params.speed) {
-                params.speed = layer.getCurrentSpeed();
+                params.speed = this.layer.getCurrentSpeed();
             }
         }
 
@@ -69,7 +70,9 @@
 
                 v *= 2;
             }
-            shape.sceneObject().translateZ(Math.sqrt(v));
+
+            let step = Math.sqrt(v) * this.diameter/250;
+            shape.sceneObject().translateZ(step);
 
         }
 

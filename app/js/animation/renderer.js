@@ -322,7 +322,7 @@
                 if (sp.length > 1) {
                     let w = parseInt(sp[0]);
                     let h = parseInt(sp[1]);
-                    resolution = {x: w, y: h, aspect: w / h};
+                    resolution = {x: w, y: h, aspect: w / h, diameter: new THREE.Vector2(w, h).length()};
                 }
             }
 

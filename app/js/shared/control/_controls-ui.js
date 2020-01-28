@@ -230,8 +230,8 @@
                 config.type = 'checkbox';
 
             } else if (typeof value == 'string' && value.startsWith('#')) {
-                config.type = 'color';
-                config.format = 'hex';
+                config.type = 'text';
+                // config.format = 'hex';
 
             } else if (values) {
                 config.type = 'select';

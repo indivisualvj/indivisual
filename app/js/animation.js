@@ -10,12 +10,6 @@ let messaging;
 
 /**
  *
- * @type {HC.Animation}
- */
-let animation;
-
-/**
- *
  * @type {HC.LayeredControlSetsManager}
  */
 let cm;
@@ -25,7 +19,7 @@ let cm;
  */
 document.addEventListener('DOMContentLoaded', function () {
 
-    animation = new HC.Animation(G_INSTANCE);
+    let animation = new HC.Animation(G_INSTANCE);
     messaging = new HC.Messaging(animation);
 
     messaging.connect(function (reconnect, animation) {

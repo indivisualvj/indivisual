@@ -331,8 +331,9 @@
          */
         updateShaderPasses() {
             let shaders = null;
-            if (cm) {
-                let passes = cm.get(this.index, 'passes');
+            // if (this.animation.settingsManager)
+            {
+                let passes = this.animation.settingsManager.get(this.index, 'passes');
                 let shds = passes.getShaderPasses();
 
                 for (let index in shds) {

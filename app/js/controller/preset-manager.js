@@ -20,6 +20,11 @@
         filesystem;
 
         /**
+         * @type {HC.LayeredControlSetsManager}
+         */
+        settingsManager;
+
+        /**
          * 
          * @param {HC.Controller} controller
          * @param {HC.Explorer} explorer
@@ -28,6 +33,7 @@
             this.controller = controller;
             this.explorer = explorer;
             this.filesystem = controller.messaging;
+            this.settingsManager = controller.settingsManager;
         }
 
         /**
@@ -37,10 +43,10 @@
         loadPreset(ctrl) {
             if (ctrl.getLabel() == '_default') {
                 // load default
-                cm.setLayerProperties(statics.ControlSettings.layer, false);
+                this.settingsManager.setLayerProperties(statics.ControlSettings.layer, false);
                 requestAnimationFrame(() => {
                     this.explorer.resetPreset(statics.ControlSettings.layer + 1);
-                    this.controller.updatePreset(false, cm.prepareLayer(statics.ControlSettings.layer));
+                    this.controller.updatePreset(false, this.settingsManager.prepareLayer(statics.ControlSettings.layer));
                 });
 
             } else {
@@ -100,7 +106,7 @@
                     di++;
 
                 } else {
-                    this.controller.updatePreset(false, cm.prepareLayer(statics.ControlSettings.layer));
+                    this.controller.updatePreset(false, this.settingsManager.prepareLayer(statics.ControlSettings.layer));
                 }
             }
         }
@@ -125,7 +131,7 @@
 
             let di = 0;
             for (let i = 0; i < layers.length; i++) {
-                if (!cm.isDefault(i)) {
+                if (!this.settingsManager.isDefault(i)) {
                     continue;
                 }
                 if (!layerShuffleable(i)) {
@@ -137,7 +143,7 @@
                     di++;
 
                 } else {
-                    this.controller.updatePreset(false, cm.prepareLayer(statics.ControlSettings.layer));
+                    this.controller.updatePreset(false, this.settingsManager.prepareLayer(statics.ControlSettings.layer));
                 }
             }
         }
@@ -180,7 +186,7 @@
 
                 if (layer >= 0 && child.getChanged()) {
                     let save = (layer, child) => {
-                        let settings = cm.prepareLayer(layer);
+                        let settings = this.settingsManager.prepareLayer(layer);
                         this.filesystem.save(STORAGE_DIR, ctrl.getLabel(), child.getLabel(), settings, (result) => {
                             HC.log(result);
                             child.setInfo(null);
@@ -197,7 +203,7 @@
          * @param {HC.GuifyExplorerPreset} ctrl
          */
         savePreset(ctrl) {
-            let settings = cm.prepareLayer(statics.ControlSettings.layer);
+            let settings = this.settingsManager.prepareLayer(statics.ControlSettings.layer);
             this.filesystem.save(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), settings, (result) => {
                 HC.log(result);
                 ctrl.setChanged(null);
@@ -218,7 +224,7 @@
                     type: 'file',
                     dir: ctrl.getLabel(),
                     name: name + '.json',
-                    settings: cm.prepareLayer(statics.ControlSettings.layer)
+                    settings: this.settingsManager.prepareLayer(statics.ControlSettings.layer)
                 };
 
                 this.filesystem.save(STORAGE_DIR, nu.dir, nu.name, nu.settings, (result) => {

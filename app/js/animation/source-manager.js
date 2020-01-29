@@ -353,15 +353,15 @@
                 let dir = filePath(SAMPLE_DIR, name);
                 let callback = () => {
 
-                    messaging._emit({action: 'unlinkall', dir: dir}, function (files) {
+                    messaging._emit({action: 'unlinkall', dir: dir}, (files) => {
                         console.log('unlinkall', dir, files.length + ' files deleted');
 
-                        this.listener.register('sample.store.progress', sample.id, function (target) {
+                        this.listener.register('sample.store.progress', sample.id, (target) => {
                             let key = getSampleStoreKey(target.index);
                             messaging.emitAttr('[data-id="' + key + '"]', 'data-label', target.pointer + '/' + target.frames.length);
                             messaging.emitAttr('[data-id="' + key + '"]', 'data-color', 'red');
                         });
-                        this.listener.register('sample.store.end', sample.id, function (target) {
+                        this.listener.register('sample.store.end', sample.id, (target) => {
                             let key = getSampleStoreKey(target.index);
                             messaging.emitAttr('[data-id="' + key + '"]', 'data-label', '');
                             messaging.emitAttr('[data-id="' + key + '"]', 'data-color', '');
@@ -421,7 +421,7 @@
 
                     if (sample.pointer < sample.frames.length) {
 
-                        setTimeout(function () {
+                        setTimeout(() => {
                             requestAnimationFrame(_mov);
                         }, this.animation.threadTimeout(diff / this.animation.duration));
 
@@ -441,14 +441,14 @@
             let sample = this.getSample(i);
             if (sample) {
                 this.listener.register('sample.load.progress', sample.id, function (target) {
-                    let key = getSampleLoadKey(i);
-                    messaging.emitAttr('[data-id="' + key + '"]', 'data-label', target.pointer + '/' + target.frames.length);
-                    messaging.emitAttr('[data-id="' + key + '"]', 'data-color', 'red');
+                    // let key = getSampleLoadKey(i);
+                    // messaging.emitAttr('[data-id="' + key + '"]', 'data-label', target.pointer + '/' + target.frames.length);
+                    // messaging.emitAttr('[data-id="' + key + '"]', 'data-color', 'red');
                 });
                 this.listener.register('sample.load.end', sample.id, function (target) {
-                    let key = getSampleLoadKey(i);
-                    messaging.emitAttr('[data-id="' + key + '"]', 'data-label', '');
-                    messaging.emitAttr('[data-id="' + key + '"]', 'data-color', '');
+                    // let key = getSampleLoadKey(i);
+                    // messaging.emitAttr('[data-id="' + key + '"]', 'data-label', '');
+                    // messaging.emitAttr('[data-id="' + key + '"]', 'data-color', '');
                 });
                 sample.load(name, this.width, this.height);
             }

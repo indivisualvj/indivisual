@@ -45,7 +45,7 @@ HC.shuffle_mode = HC.shuffle_mode || {};
 
             let shuffleable = layerShuffleable(this.layer);
             if (shuffleable) {
-                let isdefault = cm.isDefault(this.layer);
+                let isdefault = this.animation.settingsManager.isDefault(this.layer);
                 if (!isdefault) {
                     // alright!
                     return true;

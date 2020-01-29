@@ -341,7 +341,7 @@
                 messaging.program.updateUiPasses();
             }
 
-            let passes = cm.get(statics.ControlSettings.layer, 'passes');
+            let passes = messaging.program.settingsManager.get(statics.ControlSettings.layer, 'passes');
             let data = {passes: {shaders: passes.getShaderPasses()}};
             messaging.emitSettings(statics.ControlSettings.layer, data, false, false, false);
 

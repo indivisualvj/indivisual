@@ -93,7 +93,6 @@
             this.layers = config.layers;
 
             this.initThreeJs();
-            this.initLayers(false);
         }
 
         /**

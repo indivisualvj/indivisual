@@ -73,7 +73,7 @@ function parseFileMeta(file) {
  * @returns {*}
  */
 function numberExtract(item, prefix) {
-    let regex = new RegExp(prefix + '(\\d+)');
+    let regex = new RegExp(prefix + '(\\d+)_?\\w*');
     let i = item.replace(regex, '$1');
     i = parseInt(i);
 

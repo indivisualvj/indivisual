@@ -10,12 +10,6 @@ let messaging;
 
 /**
  *
- * @type {HC.LayeredControlSetsManager}
- */
-let cm;
-
-/**
- *
  */
 document.addEventListener('DOMContentLoaded', function () {
 
@@ -70,7 +64,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     animation.messaging.emitAttr('#play', 'data-color', '');
                 }
 
-                cm = new HC.LayeredControlSetsManager(renderer.layers, statics.AnimationValues);
+                let cm = new HC.LayeredControlSetsManager(renderer.layers, statics.AnimationValues);
+                animation.settingsManager = cm;
+                renderer.initLayers(false);
 
                 let displayManager = new HC.DisplayManager(animation, {
                     display: new Array(statics.DisplayValues.display.length)
@@ -145,6 +141,11 @@ document.addEventListener('DOMContentLoaded', function () {
          * @type {HC.Renderer}
          */
         renderer;
+
+        /**
+         * @type {HC.LayeredControlSetsManager}
+         */
+        settingsManager;
 
 
         constructor(name) {
@@ -597,7 +598,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let layerIndex = layer;
             layer = this.renderer.layers[layer];
 
-            let updated = cm.updateData(layer, data);
+            let updated = this.settingsManager.updateData(layer, data);
             let property;
             let value;
             if (isArray(updated)) {
@@ -896,7 +897,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateSettings(layer, data, display, forward, force) {
 
             if (force) {
-                cm.updateData(layer, data);
+                this.settingsManager.updateData(layer, data);
 
                 this.renderer.resetLayer(layer);
 

@@ -8,13 +8,6 @@
  */
 let messaging;
 
-
-/**
- *
- * @type {HC.LayeredControlSetsManager}
- */
-let cm;
-
 /**
  *
  */
@@ -64,9 +57,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             loadResources(setupResources(), function () {
 
-                cm = new HC.LayeredControlSetsManager([], statics.AnimationValues);
+                let cm = new HC.LayeredControlSetsManager([], statics.AnimationValues);
                 statics.DataSettings = new HC.Settings({});
-
+                controller.settingsManager = cm;
                 controller.init();
                 controller.loadSession();
                 controller.initKeyboard();
@@ -159,6 +152,11 @@ document.addEventListener('DOMContentLoaded', function () {
         beatKeeper;
 
         /**
+         * @type {HC.LayeredControlSetsManager}
+         */
+        settingsManager;
+
+        /**
          *
          * @param name
          */
@@ -227,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.initClips();
             this.initThumbs();
 
-            this.addAnimationControllers(cm.getGlobalProperties());
+            this.addAnimationControllers(this.settingsManager.getGlobalProperties());
             this.addPassesFolder(HC.ShaderPassUi.onPasses);
         }
 
@@ -284,7 +282,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             let mappings = HC.LayeredControlSetsManager.mappings(() => {return HC.LayeredControlSetsManager.initAll(statics.AnimationValues);});
 
-            let passes = cm.get(layer, 'passes');
+            let passes = this.settingsManager.get(layer, 'passes');
             if (keepPasses !== true) {
                 passes.removeShaderPasses();
             }
@@ -316,7 +314,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else {
                     let set = mappings[k];
                     if (set) {
-                        cm.update(layer, set, k, value);
+                        this.settingsManager.update(layer, set, k, value);
                     }
                 }
 
@@ -334,7 +332,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateSettings(layer, data, display, forward, force) {
 
             if (force) {
-                cm.updateData(layer, data);
+                this.settingsManager.updateData(layer, data);
                 this.updateUi(this.animationSettingsGui);
 
             } else {
@@ -364,7 +362,7 @@ document.addEventListener('DOMContentLoaded', function () {
         shareSettings(folder, datasource) {
 
             let settings = {};
-            let controlSets = cm.prepareLayer(statics.ControlSettings.layer);
+            let controlSets = this.settingsManager.prepareLayer(statics.ControlSettings.layer);
             if (!datasource) {
                 let keys = Object.keys(controlSets[folder]);
 
@@ -383,7 +381,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (i == statics.ControlSettings.layer) {
                     continue;
                 }
-                if (cm.isDefault(i)) {
+                if (this.settingsManager.isDefault(i)) {
                     continue;
                 }
                 if (layerShuffleable(i) != layerShuffleable(statics.ControlSettings.layer)) {
@@ -392,7 +390,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 this.updateSettings(i, data, true, false, true);
 
-                if (cm.layers[i]._preset) {
+                if (this.settingsManager.layers[i]._preset) {
                     this.explorer.setChanged(i+1, true);
                 }
 
@@ -417,7 +415,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (i == statics.ControlSettings.layer) {
                     continue;
                 }
-                if (cm.isDefault(i)) {
+                if (this.settingsManager.isDefault(i)) {
                     continue;
                 }
                 if (layerShuffleable(i) != layerShuffleable(statics.ControlSettings.layer)) {
@@ -438,7 +436,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         setSynchronized(dir, value) {
 
-            let controlSets = cm.prepareLayer(0);
+            let controlSets = this.settingsManager.prepareLayer(0);
             for (let key in controlSets[dir]) {
                 this.synced[key] = value;
             }
@@ -530,7 +528,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateSetting(layer, data, display, forward, force) {
 
-            let updated = cm.updateData(layer, data);
+            let updated = this.settingsManager.updateData(layer, data);
             let property;
             let value;
             if (isArray(updated)) {
@@ -559,7 +557,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param ctrl
          */
         addShaderPass(layer, ctrl) {
-            let passes = cm.get(layer, 'passes');
+            let passes = this.settingsManager.get(layer, 'passes');
             let pass = {};
             pass[ctrl.name] = ctrl.getShader();
             passes.addShaderPass(pass);
@@ -575,7 +573,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         cleanShaderPasses() {
 
-            let cs = cm.get(statics.ControlSettings.layer, 'passes');
+            let cs = this.settingsManager.get(statics.ControlSettings.layer, 'passes');
             let passes = cs.getShaderPasses();
 
             for (let key in passes) {
@@ -611,7 +609,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 value = statics.ControlSettingsManager.updateItem(item, value);
 
                 if (item == 'layer') {
-                    this.updateSettings(value, cm.prepareLayer(value), true, false, true);
+                    this.updateSettings(value, this.settingsManager.prepareLayer(value), true, false, true);
 
                     this.explorer.setSelected(value+1, true);
 
@@ -626,7 +624,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 } else if (item == 'reset') {
                     if (force) {
-                        cm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
+                        this.settingsManager.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
                     }
                 }
 
@@ -921,7 +919,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * question push even if monitor is enabled? how do it nicely?
          */
         syncLayers() {
-            for (let layer in cm.layers) {
+            for (let layer in this.settingsManager.layers) {
                 let to = parseInt(layer) * 150;
 
                 let st = (layer, to) => {
@@ -950,7 +948,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param layer
          */
         syncLayer(layer) {
-            let settings = cm.prepareLayer(layer);
+            let settings = this.settingsManager.prepareLayer(layer);
 
             if (settings) {
                 this.messaging.emitSettings(layer, settings, true, false, true);
@@ -970,7 +968,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 layer = statics.ControlSettings.layer;
             }
 
-            cm.resetLayer(layer);
+            this.settingsManager.resetLayer(layer);
 
             if (!('info' in data)) {
                 this.migrateSettings0(layer, data);
@@ -983,8 +981,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.updateSettings(layer, data, false, false, true);
             }
 
-            data = cm.prepareLayer(layer);
-            if (cm.get(layer, 'info').hasTutorial()) {
+            data = this.settingsManager.prepareLayer(layer);
+            if (this.settingsManager.get(layer, 'info').hasTutorial()) {
                 new HC.ScriptProcessor(this, name, Object.create(data.info.tutorial)).log();
 
                 data.info.tutorial = {}; // fixme tutorial will be deleted on savePreset
@@ -1003,7 +1001,7 @@ document.addEventListener('DOMContentLoaded', function () {
             HC.log('passes', name);
 
             for (let i = 0; i < statics.ControlValues.layer.length; i++) {
-                if (!cm.get(i, 'passes').isDefault()
+                if (!this.settingsManager.get(i, 'passes').isDefault()
                     && layerShuffleable(i) == layerShuffleable(statics.ControlSettings.layer)
                 ) {
                     if (!('info' in data)) {
@@ -1018,18 +1016,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     } else {
                         let nu = data.passes;
-                        let passes = cm.get(i, 'passses');
+                        let passes = this.settingsManager.get(i, 'passses');
 
                         for (let k in nu) {
                             passes.addShaderPass(nu[k]);
                         }
                     }
 
-                    if (cm.layers[i]._preset) {
+                    if (this.settingsManager.layers[i]._preset) {
                         this.explorer.setChanged(i+1, true);
                     }
 
-                    this.messaging.emitSettings(i, cm.prepareLayer(i), false, false, true);
+                    this.messaging.emitSettings(i, this.settingsManager.prepareLayer(i), false, false, true);
                 }
             }
         }
@@ -1041,9 +1039,9 @@ document.addEventListener('DOMContentLoaded', function () {
             let preset = [];
 
             for (let i = 0; i < statics.ControlValues.layer.length; i++) {
-                if (cm.layers[i]) {
-                    let l = cm.getLayer(i);
-                    if (!cm.isDefault(l) && layerShuffleable(i)) {
+                if (this.settingsManager.layers[i]) {
+                    let l = this.settingsManager.getLayer(i);
+                    if (!this.settingsManager.isDefault(l) && layerShuffleable(i)) {
                         preset.push(i + 1);
                     }
                 }
@@ -1066,7 +1064,7 @@ document.addEventListener('DOMContentLoaded', function () {
         resetFolder(open) {
             let set = open.getKey();
             if (set) {
-                let cs = cm.get(statics.ControlSettings.layer, set);
+                let cs = this.settingsManager.get(statics.ControlSettings.layer, set);
                 if (cs) {
                     cs.reset();
                     let data = cs.prepare();

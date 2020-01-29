@@ -55,7 +55,7 @@ HC.ControlController = HC.ControlController || {};
 
                 if (statics.shiftKey || statics.ctrlKey) {
                     // sm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
-                    cm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
+                    messaging.program.settingsManager.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
                     messaging.program.syncLayers();
                     messaging.program.updateControl('reset', true, true, true, true);
                     messaging.program.explorer.resetPresets();
@@ -74,8 +74,8 @@ HC.ControlController = HC.ControlController || {};
                 messaging.program.pushSources();
             },
             rst_shaders: function () {
-                cm.update(statics.ControlSettings.layer, 'passes', 'shaders', []);
-                let data = cm.get(statics.ControlSettings.layer, 'passes').prepare();
+                messaging.program.settingsManager.update(statics.ControlSettings.layer, 'passes', 'shaders', []);
+                let data = messaging.program.settingsManager.get(statics.ControlSettings.layer, 'passes').prepare();
                 messaging.program.updateSettings(statics.ControlSettings.layer, data, false, false, true);
                 messaging.emitSettings(statics.ControlSettings.layer, data, false, false, true);
             },

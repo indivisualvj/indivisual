@@ -80,8 +80,10 @@
          * @param index
          */
         constructor(animation, index) {
-            this.animation = animation;
-            this.listener = animation.listener;
+            if (animation) {
+                this.animation = animation;
+                this.listener = animation.listener;
+            }
             this.index = index;
             this.id = 'sample' + index;
         }
@@ -186,7 +188,7 @@
             this.frameCount = frames;
             this.animation.powersave = true;
 
-            let _init = function (i) {
+            let _init = (i) => {
                 if (inst.initializing) {
                     let cv = document.createElement('canvas');
                     cv.id = inst.id + '_' + i;
@@ -220,7 +222,7 @@
                 }
             };
 
-            requestAnimationFrame(function () {
+            requestAnimationFrame(() => {
                 this.listener.fireEventId('sample.init.start', inst.id, inst);
                 inst.initializing = true;
                 _init(0);
@@ -259,43 +261,42 @@
          */
         clip(callback) {
             if (!this._clip) {
-                let inst = this;
-                inst._clip = {id: inst.id, ready: false, thumbs: [], frames: 0, beats: 0, duration: 0};
+                this._clip = {id: this.id, ready: false, thumbs: [], frames: 0, beats: 0, duration: 0};
 
-                let file = filePath(SAMPLE_DIR, inst.id);
+                let file = filePath(SAMPLE_DIR, this.id);
 
-                messaging.files(file, function (files) {
+                messaging.files(file, (files) => {
 
                     let loaded = 0;
                     let frameCount = files.length;
                     let step = frameCount / 16;
                     let seconds = frameCount / 60;
-                    inst._clip.frames = frameCount;
-                    inst._clip.duration = Math.ceil(60000 / statics.ControlSettings.tempo);
-                    inst._clip.beats = Math.ceil(seconds * 1000 / inst._clip.duration);
+                    this._clip.frames = frameCount;
+                    this._clip.duration = Math.ceil(60000 / statics.ControlSettings.tempo);
+                    this._clip.beats = Math.ceil(seconds * 1000 / this._clip.duration);
 
                     let index = 0;
 
                     for (let i = 0; i < frameCount; i += step) {
                         let ri = Math.floor(i);
                         let file = files[ri];
-                        file = filePath(SAMPLE_DIR, inst.id, ri + '.png');
+                        file = filePath(SAMPLE_DIR, this.id, ri + '.png');
                         let image = new Image();
                         image.src = file;
                         image._index = index++;
 
-                        inst._clip.thumbs[image._index] = image;
+                        this._clip.thumbs[image._index] = image;
 
-                        image.onerror = function () {
+                        image.onerror = () => {
                             //frameCount--;
                         };
-                        image.onload = function () {
+                        image.onload = () => {
 
-                            // inst._clip.thumbs[this._index] = this;
+                            // this._clip.thumbs[this._index] = this;
                             loaded += step; // see if next will bee too much
                             if (loaded >= frameCount) {
-                                inst._clip.ready = true;
-                                callback(inst);
+                                this._clip.ready = true;
+                                callback(this);
                             }
                         };
                     }
@@ -317,49 +318,48 @@
 
             let file = filePath(SAMPLE_DIR, name);
             let loaded = 0;
-            let inst = this;
 
-            messaging._emit({action: 'files', file: file}, function (files) {
+            messaging._emit({action: 'files', file: file}, (files) => {
 
                 let frameCount = files.length;
                 let seconds = frameCount / 60;
-                inst.enabled = true;
-                inst.initialized = true;
-                inst.duration = Math.ceil(60000 / statics.ControlSettings.tempo);
-                inst.beats = Math.ceil(seconds * 1000 / inst.duration);
+                this.enabled = true;
+                this.initialized = true;
+                this.duration = Math.ceil(60000 / statics.ControlSettings.tempo);
+                this.beats = Math.ceil(seconds * 1000 / this.duration);
 
-                inst.frameCount = frameCount;
-                inst.frames = [];
+                this.frameCount = frameCount;
+                this.frames = [];
 
                 for (let i = 0; i < frameCount; i++) {
                     let file = files[i];
                     file = filePath(SAMPLE_DIR, name, i + '.png');
                     let image = new Image();
-                    inst.frames.push(image);
+                    this.frames.push(image);
                     image.src = file;
                     image._index = i;
 
-                    image.onerror = function () {
+                    image.onerror = () => {
                         frameCount--;
                     };
-                    image.onload = function () {
+                    image.onload = () => {
 
                         let canvas = document.createElement('canvas');
                         let ctx = canvas.getContext('2d');
                         canvas.width = this.width;
                         canvas.height = this.height;
-                        ctx.drawImage(this, 0, 0, this.width, this.height);
+                        ctx.drawImage(image, 0, 0, image.width, image.height);
 
-                        inst.frames[this._index] = canvas;
+                        this.frames[image._index] = canvas;
 
                         loaded++;
-                        inst.pointer = loaded;
+                        this.pointer = loaded;
                         if (loaded % 10 == 0) {
-                            this.listener.fireEventId('sample.load.progress', inst.id, inst);
+                            this.listener.fireEventId('sample.load.progress', this.id, this);
                         }
                         if (loaded == frameCount) {
-                            inst.finish();
-                            this.listener.fireEventId('sample.load.end', inst.id, inst);
+                            this.finish();
+                            this.listener.fireEventId('sample.load.end', this.id, this);
                         }
                     };
                 }
@@ -380,9 +380,6 @@
                     if (speed.starting()) {
                         this.listener.fireEventId('sample.render.start', sample.id, sample);
                         sample.started = true;
-                        if (hook) {
-                            hook();
-                        }
                     }
                 }
                 if (sample.started) {
@@ -398,12 +395,12 @@
 
                     }
                     if (!sample.complete) {
-                        var target = sample.frames[sample.pointer++];
+                        let target = sample.frames[sample.pointer++];
                         if (target && target.ctx) {
                             target._color = color;
                             target.progress = sample.counter + speed.prc;
                             target.prc = speed.prc;
-                            var ctx = target.ctx;
+                            let ctx = target.ctx;
                             ctx.clearRect(0, 0, sample.width, sample.height);
                             ctx.drawImage(image, 0, 0);
                         }

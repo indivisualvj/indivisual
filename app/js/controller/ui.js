@@ -125,7 +125,7 @@ HC.Controller.prototype.addPassesFolder = function (submit) {
     if (passes) {
         this.animationSettingsGui.removeChild(passes.getLabel());
     }
-    let ui = new HC.ControlSetGuifyUi(cm.getGlobalProperties()['passes'], this.animationSettingsGui);
+    let ui = new HC.ControlSetGuifyUi(this.settingsManager.getGlobalProperties()['passes'], this.animationSettingsGui);
     let dir = ui.addFolder();
 
     dir.addSelectController('pass', 'pass', {pass: ''}, statics.Passes, submit);
@@ -500,7 +500,7 @@ HC.Controller.prototype.updateUiPasses = function () {
     if (passFld && passFld.getChild('pass')) {
         passFld.getChild('pass').setValue(null);
 
-        let cs = cm.get(statics.ControlSettings.layer, 'passes');
+        let cs = this.settingsManager.get(statics.ControlSettings.layer, 'passes');
         let passes = cs.getShaderPasses();
 
         for (let k in passFld.children) {
@@ -610,7 +610,7 @@ HC.Controller.prototype.updateThumbs = function () {
  * @param index
  */
 HC.Controller.prototype.loadClip = function (index) {
-    let smp = new HC.Sample(index);
+    let smp = new HC.Sample(null, index);
 
     smp.clip((sample) => {
         let data = {data: {DataSettings: {}}};

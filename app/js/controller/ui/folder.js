@@ -239,14 +239,13 @@
          * @param parent
          * @return {*|boolean|HC.GuifyFolder|boolean}
          */
-        findControlByProperty(property, parent) {
-            parent = parent || this;
+        findControlByProperty(property) {
 
-            for (let k in parent.children) {
-                let child = parent.getChild(k);
+            for (let k in this.children) {
+                let child = this.getChild(k);
 
                 if (child instanceof HC.GuifyFolder) {
-                    child = this.findControlByProperty(property, child); // fixme unnecessary child has this func too!
+                    child = this.findControlByProperty(property);
                     if (child) {
                         return child;
                     }

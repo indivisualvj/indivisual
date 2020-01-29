@@ -59,7 +59,7 @@ display_speed:
   midi: midi
 #  random: random
 
-border_mode:
+border_mode: # todo load from plugins
   parent: parent
   visible: visible
   growcw: grow clockwise

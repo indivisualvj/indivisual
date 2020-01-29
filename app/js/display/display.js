@@ -507,7 +507,7 @@
 
             var prc = false;
             if (speed === false) {
-                prc = this.animation.audioAnalyser.volume * 2;
+                prc = this.displayManager.audioAnalyser.volume * 2;
             } else {
                 prc = speed.prc;
             }
@@ -520,7 +520,7 @@
             var pc = points.length / 2;
 
             if (pc > 1) {
-                HC.Display.borderModes[mode](ctx, points, pc, speed, prc);
+                HC.Display.border_modes[mode].apply(ctx, points, pc, speed, prc);
                 this._dirty = true;
             }
         }

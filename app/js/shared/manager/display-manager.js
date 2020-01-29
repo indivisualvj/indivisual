@@ -55,6 +55,18 @@
             this.maptastic = this.initMaptastic();
             this.cliptastic = this.initCliptastic();
             this.mappingTimeouts = [];
+
+            this.initBorderModePlugins();
+        }
+
+        /**
+         *
+         */
+        initBorderModePlugins() {
+            for (let k in HC.Display.border_modes) {
+                let plugin = HC.Display.border_modes[k];
+                HC.Display.border_modes[k] = new plugin(this);
+            }
         }
 
         /**

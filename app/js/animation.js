@@ -997,7 +997,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (!this.plugins[name]) {
-                this.plugins[name] = new HC.shuffle_mode[name](statics.ControlSettings);
+                this.plugins[name] = new HC.shuffle_mode[name](this, statics.ControlSettings);
             }
 
             return this.plugins[name];

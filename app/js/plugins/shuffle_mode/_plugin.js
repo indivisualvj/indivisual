@@ -4,7 +4,24 @@ HC.shuffle_mode = HC.shuffle_mode || {};
         settings;
         layer = 0;
 
-        constructor(settings) {
+        /**
+         * @type {HC.Animation}
+         */
+        animation;
+
+        /**
+         * @type {HC.BeatKeeper}
+         */
+        beatKeeper;
+
+        /**
+         *
+         * @param {HC.Animation} animation
+         * @param settings
+         */
+        constructor(animation, settings) {
+            this.animation = animation;
+            this.beatKeeper = animation.beatKeeper;
             this.settings = settings;
         }
 

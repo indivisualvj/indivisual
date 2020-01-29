@@ -186,8 +186,8 @@
         incrementValue() {
             let v = this.getValue();
             let s = this.getStep();
-            this.setValue(v + s);
-            this.getComponent().emit('input', this.getValue());
+            // this.setValue(v + s);
+            this.getComponent().emit('input', v + s);
         }
 
         /**
@@ -196,8 +196,8 @@
         decrementValue() {
             let v = this.getValue();
             let s = this.getStep();
-            this.setValue(v - s);
-            this.getComponent().emit('input', this.getValue());
+            // this.setValue(v - s);
+            this.getComponent().emit('input', v - s);
         }
 
         /**

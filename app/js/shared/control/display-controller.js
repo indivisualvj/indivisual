@@ -291,6 +291,7 @@ HC.DisplayController = HC.DisplayController || {};
 
         types = {
             display_smearing: [0, 0.96, 0.02],
+            border: [0, 128, .5]
         };
 
         styles = {

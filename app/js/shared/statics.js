@@ -4,7 +4,7 @@
 
 HC.Statics = HC.Statics || {};
 
-// todo HC.Statics to be CLASS and HC.Statics.loadResources instead of _setup.js loadResources !?
+// todo HC.Configuration to be CLASS and .loadResources instead of _setup.js loadResources !? move all statics calls to animation.config. / controller.config.
 
 {
     /**

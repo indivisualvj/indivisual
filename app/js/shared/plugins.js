@@ -63,6 +63,16 @@ HC.Shape.prototype.initPlugins = function () {
 
         /**
          *
+         * @param {HC.Shape} shape
+         * @returns {*}
+         */
+        shapeVolume(shape) {
+            let i = shape.index % this.audioAnalyser.volumes.length;
+            return this.audioAnalyser.volumes[i];
+        }
+
+        /**
+         *
          * @param {HC.Animation} animation
          * @param {HC.Layer} layer
          * @param settings

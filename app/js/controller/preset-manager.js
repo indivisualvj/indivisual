@@ -63,6 +63,7 @@
                             let layer = statics.ControlSettings.layer + 1;
                             this.explorer.resetPreset(layer);
                             ctrl.setInfo(layer);
+                            ctrl.setSelected(true);
                         }
                     });
                 });

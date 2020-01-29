@@ -183,6 +183,19 @@
 
         /**
          *
+         * @param selected
+         */
+        setSelected(selected) {
+            if (selected) {
+                this.getComponent().label.setAttribute('data-selected', selected);
+
+            } else {
+                this.getComponent().label.removeAttribute('data-selected');
+            }
+        }
+
+        /**
+         *
          * @param info
          */
         setChanged(info) {

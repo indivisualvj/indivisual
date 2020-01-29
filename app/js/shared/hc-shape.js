@@ -94,11 +94,6 @@
             return this.mesh.material;
         }
 
-        shapeVolume() {
-            let i = this.index % messaging.program.audioAnalyser.volumes.length;  // todo move shapeVolume to layer or so
-            return messaging.program.audioAnalyser.volumes[i];
-        }
-
         sceneObject() {
             return this._position;
         }

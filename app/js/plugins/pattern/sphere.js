@@ -15,7 +15,7 @@
                 if (this.settings.pattern_sync) {
                     radius *= this.audioAnalyser.volume;
                 } else {
-                    radius *= shape.shapeVolume();
+                    radius *= this.shapeVolume(shape);
                 }
 
                 if (this.settings.pattern_limit) {
@@ -89,7 +89,7 @@
 
             let v = this.settings.pattern_audio == true
                 ? ((this.settings.pattern_sync == false
-                    ? shape.shapeVolume() : this.audioAnalyser.volume) * this.settings.pattern_padding) : 1;
+                    ? this.shapeVolume(shape) : this.audioAnalyser.volume) * this.settings.pattern_padding) : 1;
 
             if (this.audioAnalyser.peak) {
                 params.velocity *= 1.5;
@@ -147,7 +147,7 @@
             } else if (this.animation.audioManager.isActive()) {
                 if (this.audioAnalyser.peak) {
                     params.volume = this.settings.pattern_sync == false
-                        ? shape.shapeVolume() : this.audioAnalyser.volume;
+                        ? this.shapeVolume(shape) : this.audioAnalyser.volume;
                     params.velocity *= -1;
 
                 } else if (params.volume > 0) {

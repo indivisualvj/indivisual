@@ -20,7 +20,7 @@
                 if (this.settings.pattern_sync) {
                     radius *= this.audioAnalyser.volume;
                 } else {
-                    radius *= shape.shapeVolume();
+                    radius *= this.shapeVolume(shape);
                 }
                 if (this.settings.pattern_limit) {
                     radius = or + radius;

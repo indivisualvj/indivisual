@@ -22,7 +22,7 @@
                 let mul = this.settings.sizing_scale;
 
                 if (this.settings.sizing_mode_audio == true) {
-                    mul *= (this.settings.sizing_mode_sync == false ? shape.shapeVolume() : this.audioAnalyser.volume * 2);
+                    mul *= (this.settings.sizing_mode_sync == false ? this.shapeVolume(shape) : this.audioAnalyser.volume * 2);
                 }
 
                 if (this.settings.sizing_mode_limit == true) {

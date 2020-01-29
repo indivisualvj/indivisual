@@ -7,7 +7,7 @@ HC.plugins.offset_mode = HC.plugins.offset_mode || {};
                 let of = shape.offset();
                 let vo = this.audioAnalyser.volume;
                 if (!this.settings.offset_sync) {
-                    vo = shape.shapeVolume();
+                    vo = this.shapeVolume(shape);
                 }
 
                 of.multiplyScalar(vo);

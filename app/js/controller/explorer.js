@@ -128,6 +128,7 @@
             ctrls.forEach((ctrl) => {
                 ctrl.removeAttribute('data-label');
                 ctrl.removeAttribute('data-mnemonic');
+                ctrl.removeAttribute('data-selected');
             });
         }
 
@@ -149,7 +150,15 @@
          * @param loaded
          */
         setSelected(layer, loaded) {
-            // todo set currently selected layer
+            let ctrls = this.gui.getContainer().querySelectorAll('[data-selected]');
+            ctrls.forEach((ctrl) => {
+                ctrl.removeAttribute('data-selected');
+            });
+
+            ctrls = this.gui.getContainer().querySelectorAll('[data-label="' + (layer) + '"]');
+            ctrls.forEach((ctrl) => {
+                ctrl.setAttribute('data-selected', loaded ? 'true' : null);
+            });
         }
     }
 }

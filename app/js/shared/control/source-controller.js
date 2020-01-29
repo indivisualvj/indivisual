@@ -837,7 +837,7 @@ HC.SourceController = HC.SourceController || {};
 
             this._onResize();
 
-            let mo = new MutationObserver((mutations) => { // todo where to use this???!!!
+            let mo = new MutationObserver((mutations) => {
                 mutations.forEach((mutation) => {
                     if (mutation.attributeName == 'data-progress') {
                         this.setProgress(mutation.target.getAttribute(mutation.attributeName));

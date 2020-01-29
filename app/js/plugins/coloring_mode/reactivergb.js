@@ -14,13 +14,13 @@
             let m1 = 2;
             if (reactive !== false) {
                 let sync = this.settings.coloring_sync;
-                let fbdv = shape.shapeVolume();
+                let fbdv = this.shapeVolume(shape);
 
                 if (!sync && gridPosition.y > 1) {
                     let i = gridPosition.x - 1;
                     if (layer.shapes[i]) {
                         let c2 = layer.shapes[i];
-                        fbdv = c2.shapeVolume() * 0.6;
+                        fbdv = this.shapeVolume(c2) * 0.6;
                     }
                 }
 

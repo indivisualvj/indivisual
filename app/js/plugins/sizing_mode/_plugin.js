@@ -6,7 +6,7 @@ HC.plugins.sizing_mode = HC.plugins.sizing_mode || {};
                 let of = shape.scale();
                 let vo = this.audioAnalyser.volume;
                 if (!this.settings.sizing_sync) {
-                    vo = shape.shapeVolume();
+                    vo = this.shapeVolume(shape);
                 }
 
                 of.multiplyScalar(vo);

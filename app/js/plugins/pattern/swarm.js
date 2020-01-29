@@ -65,7 +65,7 @@
                 if (this.settings.pattern_sync) {
                     v *= this.audioAnalyser.volume;
                 } else {
-                    v *= shape.shapeVolume();
+                    v *= this.shapeVolume(shape);
                 }
 
                 v *= 2;

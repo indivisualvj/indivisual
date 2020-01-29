@@ -186,7 +186,7 @@
         incrementValue() {
             let v = this.getValue();
             let s = this.getStep();
-            // this.setValue(v + s);
+            // this.setValue(v + s); fixme does not stop at max
             this.getComponent().emit('input', v + s);
         }
 
@@ -196,7 +196,7 @@
         decrementValue() {
             let v = this.getValue();
             let s = this.getStep();
-            // this.setValue(v - s);
+            // this.setValue(v - s); fixme does not stop at min
             this.getComponent().emit('input', v - s);
         }
 

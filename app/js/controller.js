@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.animationSettingsGui,
             ];
             this.beatKeeper = new HC.BeatKeeper();
-            this.explorer = new HC.Explorer(this, statics); // todo lets have utilities classes have owners instead calling eg. controller directly
+            this.explorer = new HC.Explorer(this, statics);
 
             let controlSets = HC.Statics.initControlControlSets();
             statics.ControlSettingsManager = new HC.ControlSetsManager(controlSets);

@@ -102,10 +102,15 @@
                 e.stopPropagation();
 
                 if (e.keyCode == 38) { // UP
-                    this.incrementValue();
+                    requestAnimationFrame(() => {
+                        this.incrementValue();
+                    });
+
 
                 } else if (e.keyCode == 40) { // DOWN
-                    this.decrementValue();
+                    requestAnimationFrame(() => {
+                        this.decrementValue();
+                    });
                 }
             });
 
@@ -118,11 +123,17 @@
                     e.preventDefault();
                     e.stopPropagation();
                     let dy = e.movementY;
-                    if (dy < 0) { // todo make it depend on screen resolution
-                        this.incrementValue();
+                    let resY = window.screen.availHeight;
+                    let vy = Math.abs(dy / (resY/512));
+                    if (dy < 0) {
+                        requestAnimationFrame(() => {
+                            this.incrementValue(vy);
+                        });
 
                     } else if (dy > 0) {
-                        this.decrementValue();
+                        requestAnimationFrame(() => {
+                            this.decrementValue(vy);
+                        });
                     }
                 }
             });
@@ -182,22 +193,42 @@
 
         /**
          *
+         * @param factor
          */
-        incrementValue() {
+        incrementValue(factor) {
             let v = this.getValue();
-            let s = this.getStep();
-            // this.setValue(v + s); fixme does not stop at max
-            this.getComponent().emit('input', v + s);
+            let s = this.getStep() * factor;
+            v += s;
+            v = Math.min(v, this.getMax());
+            this.getComponent().emit('input', v);
         }
 
         /**
          *
+         * @param factor
          */
-        decrementValue() {
+        decrementValue(factor) {
             let v = this.getValue();
-            let s = this.getStep();
-            // this.setValue(v - s); fixme does not stop at min
-            this.getComponent().emit('input', v - s);
+            let s = this.getStep() * factor;
+            v -= s;
+            v = Math.max(v, this.getMin());
+            this.getComponent().emit('input', v);
+        }
+
+        /**
+         *
+         * @returns {number}
+         */
+        getMin() {
+            return this.getComponent().opts.min;
+        }
+
+        /**
+         *
+         * @returns {number}
+         */
+        getMax() {
+            return this.getComponent().opts.max;
         }
 
         /**

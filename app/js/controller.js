@@ -1001,13 +1001,13 @@ document.addEventListener('DOMContentLoaded', function () {
             HC.log('passes', name);
 
             for (let i = 0; i < statics.ControlValues.layer.length; i++) {
-                if (!this.settingsManager.get(i, 'passes').isDefault()
+                if (!this.settingsManager.isDefault(i)
                     && layerShuffleable(i) == layerShuffleable(statics.ControlSettings.layer)
                 ) {
                     if (!('info' in data)) {
 
                         let shaders = {shaders: data.shaders};
-// fixme migration does not work?
+
                         this.migrateSettings0(i, shaders, true);
 
                     // example!
@@ -1016,7 +1016,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     } else {
                         let nu = data.passes;
-                        let passes = this.settingsManager.get(i, 'passses');
+                        let passes = this.settingsManager.get(i, 'passes');
 
                         for (let k in nu) {
                             passes.addShaderPass(nu[k]);

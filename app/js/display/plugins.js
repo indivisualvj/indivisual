@@ -9,6 +9,8 @@ HC.Display.border_modes = {};
      */
     HC.Display.BorderModePlugin = class BorderModePlugin {
 
+        static index = 99;
+
         /**
          * @type {HC.DisplayManager}
          */
@@ -53,6 +55,9 @@ HC.Display.border_modes = {};
      * @type {HC.Display.border_modes.visible}
      */
     HC.Display.border_modes.visible = class visible extends HC.Display.BorderModePlugin  {
+
+        static index = 10;
+
         apply (ctx, points, pc, speed, prc) {
             ctx.beginPath();
             ctx.moveTo(points[0], points[1]);
@@ -74,6 +79,9 @@ HC.Display.border_modes = {};
      * @type {HC.Display.border_modes.parent}
      */
     HC.Display.border_modes.parent = class parent extends HC.Display.BorderModePlugin  {
+
+        static index = 1;
+
         apply (ctx, points, pc, speed, prc) {
             HC.Display.border_modes.visible.apply(ctx, points, pc, speed, prc);
         }
@@ -86,6 +94,9 @@ HC.Display.border_modes = {};
      * @type {HC.Display.border_modes.randomall}
      */
     HC.Display.border_modes.randomall = class randomall extends HC.Display.BorderModePlugin  {
+
+        static index = 999;
+        static name = 'random all';
 
         current = 0;
         modes = {};
@@ -117,6 +128,9 @@ HC.Display.border_modes = {};
      * @type {HC.Display.border_modes.randomline}
      */
     HC.Display.border_modes.randomline = class randomline extends HC.Display.BorderModePlugin  {
+
+        static name = 'random line';
+
         apply (ctx, points, pc, speed, prc) {
             ctx.beginPath();
             if (((speed === false && this.displayManager.audioAnalyser.peak) || prc === 0) || !ctx.canvas._side) {
@@ -141,6 +155,9 @@ HC.Display.border_modes = {};
      * @type {HC.Display.border_modes.linecw}
      */
     HC.Display.border_modes.linecw = class linecw extends HC.Display.BorderModePlugin  {
+
+        static name = 'grow clockwise';
+
         apply (ctx, points, pc, speed, prc) {
             ctx.beginPath();
             ctx.moveTo(points[0], points[1]);
@@ -170,6 +187,9 @@ HC.Display.border_modes = {};
      * @type {HC.Display.border_modes.lineacw}
      */
     HC.Display.border_modes.lineacw = class lineacw extends HC.Display.BorderModePlugin {
+
+        static name = 'grow anti-clockwise';
+
         apply (ctx, points, pc, speed, prc) {
             points = this.points_reverse(points);
             HC.Display.border_modes.linecw.apply(ctx, points, pc, speed, prc);
@@ -183,6 +203,9 @@ HC.Display.border_modes = {};
      * @type {HC.Display.border_modes.jumpcw}
      */
     HC.Display.border_modes.jumpcw = class jumpcw extends HC.Display.BorderModePlugin {
+
+        static name = 'jump clockwise';
+
         apply (ctx, points, pc, speed, prc) {
             ctx.beginPath();
             ctx.moveTo(points[0], points[1]);
@@ -226,6 +249,9 @@ HC.Display.border_modes = {};
      * @type {HC.Display.border_modes.jumpacw}
      */
     HC.Display.border_modes.jumpacw = class jumpacw extends HC.Display.BorderModePlugin {
+
+        static name = 'jump anti-clockwise';
+
         apply (ctx, points, pc, speed, prc) {
             points = this.points_reverse(points);
             HC.Display.border_modes.jumpcw.apply(ctx, points, pc, speed, prc);
@@ -239,6 +265,9 @@ HC.Display.border_modes = {};
      * @type {HC.Display.border_modes.growcw}
      */
     HC.Display.border_modes.growcw = class growcw extends HC.Display.BorderModePlugin {
+
+        static name = 'line clockwise';
+
         apply (ctx, points, pc, speed, prc) {
             ctx.beginPath();
             ctx.moveTo(points[0], points[1]);
@@ -280,6 +309,9 @@ HC.Display.border_modes = {};
      * @type {HC.Display.border_modes.growacw}
      */
     HC.Display.border_modes.growacw = class growacw extends HC.Display.BorderModePlugin {
+
+        static name = 'line anti-clockwise';
+
         apply (ctx, points, pc, speed, prc) {
             points = this.points_reverse(points);
             HC.Display.border_modes.growcw.apply(ctx, points, pc, speed, prc);

@@ -121,6 +121,7 @@ function setupResources() {
             file: 'structure/DisplayValues.yml',
             callback: function (data, finished) {
                 statics.DisplayValues = jsyaml.load(data.contents);
+                _loadBorderModePlugins(statics.DisplayValues);
                 finished();
             }
         },
@@ -207,12 +208,11 @@ function setupResources() {
     /**
      *
      * @param settings
-     * @param tree
      * @param section
      * @param plugins
      * @private
      */
-    function _loadPlugins(settings, tree, section, plugins) {
+    function _loadPlugins(settings, section, plugins) {
 
         let pluginKeys = Object.keys(plugins);
 
@@ -240,7 +240,7 @@ function setupResources() {
         for (let i = 0; i < pluginKeys.length; i++) {
 
             let pluginKey = pluginKeys[i];
-            let plugin = tree[section][pluginKey];
+            let plugin = plugins[pluginKey];
             let name = plugin.name || pluginKey;
 
             if (name == 'Plugin') {
@@ -311,7 +311,7 @@ function setupResources() {
      * @private
      */
     function _loadAudioPlugins(settings) {
-        _loadPlugins(settings, HC, 'audio', HC.audio);
+        _loadPlugins(settings, 'audio', HC.audio);
     }
 
     /**
@@ -320,7 +320,16 @@ function setupResources() {
      * @private
      */
     function _loadShufflePlugins(settings) {
-        _loadPlugins(settings, HC, 'shuffle_mode', HC.shuffle_mode);
+        _loadPlugins(settings, 'shuffle_mode', HC.shuffle_mode);
+    }
+
+    /**
+     *
+     * @param settings
+     * @private
+     */
+    function _loadBorderModePlugins(settings) {
+        _loadPlugins(settings, 'border_mode', HC.Display.border_modes);
     }
 
     /**
@@ -341,7 +350,7 @@ function setupResources() {
             // create plugin namespaces to work in
             HC.Shape.prototype.injected.plugins[section] = {};
 
-            _loadPlugins(settings, HC.plugins, section, HC.plugins[section]);
+            _loadPlugins(settings, section, HC.plugins[section]);
 
         }
     }

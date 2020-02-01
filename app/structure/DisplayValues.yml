@@ -59,17 +59,7 @@ display_speed:
   midi: midi
 #  random: random
 
-border_mode: # todo load from plugins
-  parent: parent
-  visible: visible
-  growcw: grow clockwise
-  growacw: grow anti-clockwise
-  jumpcw: jump clockwise
-  jumpacw: jump anti-clockwise
-  linecw: line clockwise
-  lineacw: line anti-clockwise
-  randomline: random line
-  randomall: random all
+border_mode: {}
 
 border_speed:
   peak: peak

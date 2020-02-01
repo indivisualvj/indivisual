@@ -34,11 +34,17 @@
         listener;
 
         /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
          * @param {HC.Animation} animation
          * @param config
          */
         constructor(animation, config) {
             this.animation = animation;
+            this.config = animation.config;
             this.displayManager = animation.displayManager;
             this.beatKeeper = animation.beatKeeper;
             this.renderer = animation.renderer;
@@ -61,7 +67,7 @@
                 display.canvas.style.display = 'block';
                 display.offline = false;
 
-                let type = statics.SourceSettings[display.id + '_source'];
+                let type = this.config.SourceSettings[display.id + '_source'];
                 let sq;
                 switch (type) {
 
@@ -71,19 +77,19 @@
                         break;
 
                     case 'sequence':
-                        sq = statics.SourceSettings[display.id + '_sequence'];
+                        sq = this.config.SourceSettings[display.id + '_sequence'];
                         source = new HC.Source(this.getSequence(sq), display.width(), display.height());
                         this.updateSequence(sq);
                         break;
 
                     case 'perspective':
-                        sq = statics.SourceSettings[display.id + '_sequence'];
+                        sq = this.config.SourceSettings[display.id + '_sequence'];
                         source = new HC.Source(this.getPerspective(sq), display.width(), display.height());
                         this.updatePerspective(sq);
                         break;
 
                     case 'display':
-                        sq = statics.SourceSettings[display.id + '_sequence'];
+                        sq = this.config.SourceSettings[display.id + '_sequence'];
                         source = new HC.Source(this.getDisplay(sq), display.width(), display.height());
                         break;
 
@@ -141,7 +147,7 @@
         updateSequence(i, override) {
             let sequence = this.getSequence(i);
             if (sequence) {
-                let smp = (statics.SourceSettings[sequence.id + '_input']);
+                let smp = (this.config.SourceSettings[sequence.id + '_input']);
                 let os = (override ? false : sequence.sample);
                 sequence.sample = this.getSample(smp);
 
@@ -168,7 +174,7 @@
                 }
                 this.updateSample(smp);
 
-                let overlay = parseInt(statics.SourceSettings[sequence.id + '_overlay']);
+                let overlay = parseInt(this.config.SourceSettings[sequence.id + '_overlay']);
                 if (overlay >= 0) {
                     sequence.overlay = this.getSequence(overlay);
 
@@ -188,10 +194,10 @@
         getSample(i) {
             if (!this.samples[i]) {
 
-                let iKeys = Object.keys(statics.SourceValues.input);
+                let iKeys = Object.keys(this.config.SourceValues.input);
                 let sample = false;
-                if (i < statics.SourceValues.sample.length) {
-                    sample = new HC.Sample(this.animation, i);
+                if (i < this.config.SourceValues.sample.length) {
+                    sample = new HC.Sample(this.animation, this.animation.config, i);
 
                 } else {
                     return;
@@ -295,7 +301,7 @@
 
                 let recordKey = getSampleRecordKey(target.index);
 
-                if (statics.SourceSettings[recordKey]) { // sample
+                if (this.config.SourceSettings[recordKey]) { // sample
                     this.animation.updateSource(recordKey, false, true, true, false);
 
                 }
@@ -320,13 +326,13 @@
         updateSample(i) {
             let sample = this.getSample(i);
             if (sample) {
-                sample.update(statics.ControlSettings.tempo, this.width, this.height);
+                sample.update(this.config.ControlSettings.tempo, this.width, this.height);
 
                 if (!sample.enabled && sample instanceof HC.Sample) {
                     sample.reset();
 
                     let warn = false;
-                    if (sample.index < statics.SourceValues.sample.length) {
+                    if (sample.index < this.config.SourceValues.sample.length) {
                         for (let s = 0; s < this.sequences.length; s++) {
                             let seq = this.getSequence(s);
                             if (seq && seq.sample == sample) { // reset input to off if sample was disabled

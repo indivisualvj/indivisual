@@ -7,7 +7,7 @@
                 action: function () {
                     this.animation.closeAll();
                     this.animation.animationSettingsGui.getChild('pattern').setOpen(true);
-                    this.animation.updateSetting(statics.ControlSettings.layer, {pattern:{pattern_overlay_volume: 1}}, true, true);
+                    this.animation.updateSetting(this.config.ControlSettings.layer, {pattern:{pattern_overlay_volume: 1}}, true, true);
                 }
             },
             invert: {
@@ -15,7 +15,7 @@
                 action: function () {
                     this.animation.closeAll();
                     this.animation.animationSettingsGui.getChild('layer').setOpen(true);
-                    this.animation.updateSetting(statics.ControlSettings.layer, {layer:{layer_rotationy: 180}}, true, true);
+                    this.animation.updateSetting(this.config.ControlSettings.layer, {layer:{layer_rotationy: 180}}, true, true);
                 }
             }
         };

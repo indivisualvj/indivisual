@@ -113,12 +113,12 @@ HC.Layer.prototype.nextShapeDelay = function (shape) {
  */
 HC.Layer.prototype.nextShapeRhythm = function (shape) {
 
-    if (statics.ControlSettings.beat) {
+    if (this.config.ControlSettings.beat) {
         let plugin = this.getShapeRhythmPlugin();
         this.doPlugin(plugin, shape);
 
     } else {
-        let max = 200000 / statics.ControlSettings.tempo;
+        let max = 200000 / this.config.ControlSettings.tempo;
         let min = max / 1.5;
         this.getShapeRhythmPlugin().params(shape).duration = randomInt(min, max);
     }

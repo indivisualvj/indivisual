@@ -7,24 +7,24 @@
  */
 HC.Layer.prototype.getPlugin = function (plugin, name, dontcry) {
 
-    if (DEBUG && !dontcry) {
-        if (!(plugin in this.plugins)) {
-            console.error('plugin not found: ' + plugin);
-        }
+    // if (DEBUG && !dontcry) {
+    //     if (!(plugin in this.plugins)) {
+    //         console.error('plugin not found: ' + plugin);
+    //     }
         // if (!(this.settings[plugin])) {
         //     console.error('setting not found: ' + plugin);
         // }
-    }
+    // }
 
     name = name || this.settings[plugin];
 
-    if (DEBUG && !dontcry) {
-        if (!(name in this.plugins[plugin])) {
-            console.error('plugin not found: ' + plugin + '.' + name);
-        }
-    }
+    // if (DEBUG && !dontcry) {
+    //     if (!(name in this.plugins[plugin])) {
+    //         console.error('plugin not found: ' + plugin + '.' + name);
+    //     }
+    // }
 
-    return this.plugins[plugin][name] || false;
+    return this.plugins[plugin][name];// || false;
 };
 
 /**

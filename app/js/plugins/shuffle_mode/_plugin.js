@@ -26,7 +26,7 @@ HC.shuffle_mode = HC.shuffle_mode || {};
         }
 
         after() {
-            for(let i = 0; i < statics.ControlValues.layer.length && !this.validate(); i++) {
+            for(let i = 0; i < this.config.ControlValues.layer.length && !this.validate(); i++) {
                 this.next();
             }
 

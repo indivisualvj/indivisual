@@ -25,6 +25,11 @@
         animation;
 
         /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
          * @type {HC.BeatKeeper}
          */
         beatKeeper;
@@ -45,6 +50,7 @@
          */
         constructor(animation, config) {
             this.animation = animation;
+            this.config = animation.config;
             this.beatKeeper = animation.beatKeeper;
             this.renderer = animation.renderer;
             this.audioAnalyser = animation.audioAnalyser;
@@ -225,7 +231,7 @@
                 }
             }
 
-            return Math.min(1, statics.DisplaySettings.brightness);
+            return Math.min(1, this.config.DisplaySettings.brightness);
         }
 
         /**
@@ -234,7 +240,7 @@
          * @returns {*}
          */
         getDisplay(i) {
-            let visible = statics.DisplaySettings['display' + i + '_visible'];
+            let visible = this.config.DisplaySettings['display' + i + '_visible'];
             if (visible) {
                 if (!this.displays[i]) {
                     this.displays[i] = new HC.Display(this.animation, i);
@@ -268,7 +274,7 @@
         updateDisplay(i, mode) {
             let display = this.getDisplay(i);
             if (display) {
-                display.update(this.width, this.height, statics.DisplaySettings);
+                display.update(this.width, this.height, this.config.DisplaySettings);
 
                 if (!mode) {
                     this.animation.sourceManager.updateSource(display);
@@ -368,9 +374,9 @@
          * @param mode
          */
         renderBorder(display, speed, mode) {
-            if (statics.DisplaySettings.border && !display.noborder) {
-                let lw = statics.DisplaySettings.border * 1;
-                let color = statics.DisplaySettings.border_color;
+            if (this.config.DisplaySettings.border && !display.noborder) {
+                let lw = this.config.DisplaySettings.border * 1;
+                let color = this.config.DisplaySettings.border_color;
 
                 if (color == '') {
                     let canvas = display.getSource() ? display.getSource().current() : false;
@@ -407,7 +413,7 @@
          */
         updateDisplays() {
 
-            document.body.style.backgroundColor = statics.DisplaySettings.background;
+            document.body.style.backgroundColor = this.config.DisplaySettings.background;
 
             for (let i = 0; i < this.displays.length; i++) {
                 this.updateDisplay(i, false);
@@ -449,7 +455,7 @@
 
                     let bm = this.settings.border.random !== false
                         ? this.settings.border.random
-                        : statics.DisplaySettings.border_mode;
+                        : this.config.DisplaySettings.border_mode;
 
                     switch (bm) {
                         case 'parent':
@@ -464,9 +470,9 @@
                     }
                 }
             }
-            statics.DisplaySettings.trigger_display_visibility = false;
-            statics.DisplaySettings.force_display_visibility = false;
-            statics.DisplaySettings.reset_display_visibility = false;
+            this.config.DisplaySettings.trigger_display_visibility = false;
+            this.config.DisplaySettings.force_display_visibility = false;
+            this.config.DisplaySettings.reset_display_visibility = false;
         }
 
         /**
@@ -494,16 +500,16 @@
                     break;
 
                 case 2:
-                    display.visible = randomInt(0, 3) > 0 ? true : statics.DisplaySettings.force_display_visibility;
+                    display.visible = randomInt(0, 3) > 0 ? true : this.config.DisplaySettings.force_display_visibility;
                     break;
 
                 case 3: // flash
-                    display.visible = randomBool() ? true : statics.DisplaySettings.force_display_visibility;
+                    display.visible = randomBool() ? true : this.config.DisplaySettings.force_display_visibility;
                     break;
 
                 case 4: // flash timeout
                     if (display.visible === true) {
-                        display.visible = this.flashTimeoutInFrames(statics.DisplaySettings.display_speed);
+                        display.visible = this.flashTimeoutInFrames(this.config.DisplaySettings.display_speed);
 
                     } else {
                         display.visible--;
@@ -514,13 +520,13 @@
                 //    break;
 
                 case -4:
-                    display.smear = (randomBool()) ? true : statics.DisplaySettings.force_display_visibility;
+                    display.smear = (randomBool()) ? true : this.config.DisplaySettings.force_display_visibility;
                     display.visible = true;
                     break;
 
                 case -5:
                     display.blitz = (randomBool()
-                        || statics.DisplaySettings.force_display_visibility) ? 4 : 0;
+                        || this.config.DisplaySettings.force_display_visibility) ? 4 : 0;
                     display.visible = true;
                     break;
             }
@@ -559,9 +565,9 @@
 
             let speed = this.visibilitySpeed();
             let sv = this.settings.visibility.random !== false
-                ? this.settings.visibility.random : statics.DisplaySettings.display_visibility;
+                ? this.settings.visibility.random : this.config.DisplaySettings.display_visibility;
 
-            if (statics.DisplaySettings.reset_display_visibility) {
+            if (this.config.DisplaySettings.reset_display_visibility) {
                 sv = 'visible';
             }
 
@@ -691,10 +697,10 @@
          */
         visibilitySpeed() {
             let speed = false;
-            let ds = statics.DisplaySettings.display_speed;
+            let ds = this.config.DisplaySettings.display_speed;
             if (ds == 'midi') {
-                if (statics.DisplaySettings.trigger_display_visibility
-                    || statics.DisplaySettings.force_display_visibility
+                if (this.config.DisplaySettings.trigger_display_visibility
+                    || this.config.DisplaySettings.force_display_visibility
                 ) {
                     speed = {prc: 0};
 
@@ -705,7 +711,7 @@
             } else if (ds == 'layer') {
                 if (this.renderer.layerSwitched) {
                     speed = {prc: 0};
-                    statics.DisplaySettings.force_display_visibility = true;
+                    this.config.DisplaySettings.force_display_visibility = true;
 
                 } else {
                     speed = {prc: 1};
@@ -728,7 +734,7 @@
          * @returns {boolean}
          */
         borderSpeed() {
-            let speed = this.beatKeeper.getSpeed(statics.DisplaySettings.border_speed);
+            let speed = this.beatKeeper.getSpeed(this.config.DisplaySettings.border_speed);
             return speed;
         }
 

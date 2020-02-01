@@ -1,5 +1,5 @@
 /**
- *
+ * fixme push to config
  * @param i
  * @returns {boolean}
  */
@@ -16,7 +16,7 @@ function layerShuffleable(i) {
 }
 
 /**
- *
+ * fixme push to config
  * @param value
  * @returns {*}
  */

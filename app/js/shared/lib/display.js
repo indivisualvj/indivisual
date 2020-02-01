@@ -5,9 +5,13 @@
  */
 function getSampleBySequence(i) {
     var key = getSequenceSampleKey(i);
-    var value = statics.SourceSettings[key];
+    if (key in statics.SourceSettings) {
+        var value = statics.SourceSettings[key];
 
-    return value;
+        return value;
+    }
+
+    return false;
 }
 
 /**
@@ -45,9 +49,12 @@ function getSampleEnabledBySequence(i) {
  */
 function getSampleEnabledBySample(i) {
     var key = getSampleEnabledKey(i);
-    var value = statics.SourceSettings[key];
+    if (key in statics.SourceSettings) {
+        var value = statics.SourceSettings[key];
+        return value;
+    }
 
-    return value;
+    return false;
 }
 
 /**
@@ -104,8 +111,12 @@ function getSequenceOverlayKey(i) {
  */
 function getSequenceOverlay(i) {
     var key = getSequenceOverlayKey(i);
-    var value = statics.SourceSettings[key];
-    return parseInt(value);
+    if (key in statics.SourceSettings) {
+        var value = statics.SourceSettings[key];
+        return parseInt(value);
+    }
+
+    return false;
 }
 
 /**

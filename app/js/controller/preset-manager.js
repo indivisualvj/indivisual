@@ -10,6 +10,11 @@
         controller;
 
         /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
          * @type {HC.Explorer}
          */
         explorer;
@@ -31,6 +36,7 @@
          */
         constructor(controller, explorer) {
             this.controller = controller;
+            this.config = controller.config;
             this.explorer = explorer;
             this.filesystem = controller.messaging;
             this.settingsManager = controller.settingsManager;
@@ -43,10 +49,10 @@
         loadPreset(ctrl) {
             if (ctrl.getLabel() == '_default') {
                 // load default
-                this.settingsManager.setLayerProperties(statics.ControlSettings.layer, false);
+                this.settingsManager.setLayerProperties(this.config.ControlSettings.layer, false);
                 requestAnimationFrame(() => {
-                    this.explorer.resetPreset(statics.ControlSettings.layer + 1);
-                    this.controller.updatePreset(false, this.settingsManager.prepareLayer(statics.ControlSettings.layer));
+                    this.explorer.resetPreset(this.config.ControlSettings.layer + 1);
+                    this.controller.updatePreset(false, this.settingsManager.prepareLayer(this.config.ControlSettings.layer));
                 });
 
             } else {
@@ -54,7 +60,7 @@
                 this.filesystem.load(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (data) => {
                     requestAnimationFrame(() => {
 
-                        if (statics.ctrlKey) { //load shaders into present presets
+                        if (this.config.ctrlKey) { //load shaders into present presets
                             this.controller.transferShaderPasses(data.dir + '/' + data.name, JSON.parse(data.contents));
 
                         } else {
@@ -66,7 +72,7 @@
                             let contents = JSON.parse(data.contents);
 
                             this.controller.updatePreset(key, contents);
-                            let layer = statics.ControlSettings.layer + 1;
+                            let layer = this.config.ControlSettings.layer + 1;
                             this.explorer.resetPreset(layer);
                             ctrl.setInfo(layer);
                             ctrl.setSelected(true);
@@ -83,7 +89,7 @@
         loadPresets(folder) {
             let children = Object.keys(folder.children);
             let dflt = [];
-            let layers = statics.ControlValues.layer;
+            let layers = this.config.ControlValues.layer;
 
             for (let i = 0; dflt.length < layers.length && i < children.length; i++) {
                 let child = folder.getChild(children[i]);
@@ -106,7 +112,7 @@
                     di++;
 
                 } else {
-                    this.controller.updatePreset(false, this.settingsManager.prepareLayer(statics.ControlSettings.layer));
+                    this.controller.updatePreset(false, this.settingsManager.prepareLayer(this.config.ControlSettings.layer));
                 }
             }
         }
@@ -118,7 +124,7 @@
         appendPresets(folder) {
             let children = Object.keys(folder.children);
             let dflt = [];
-            let layers = statics.ControlValues.layer;
+            let layers = this.config.ControlValues.layer;
 
             for (let i = 0; dflt.length < layers.length && i < children.length; i++) {
                 let child = folder.getChild(children[i]);
@@ -143,7 +149,7 @@
                     di++;
 
                 } else {
-                    this.controller.updatePreset(false, this.settingsManager.prepareLayer(statics.ControlSettings.layer));
+                    this.controller.updatePreset(false, this.settingsManager.prepareLayer(this.config.ControlSettings.layer));
                 }
             }
         }
@@ -203,7 +209,7 @@
          * @param {HC.GuifyExplorerPreset} ctrl
          */
         savePreset(ctrl) {
-            let settings = this.settingsManager.prepareLayer(statics.ControlSettings.layer);
+            let settings = this.settingsManager.prepareLayer(this.config.ControlSettings.layer);
             this.filesystem.save(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), settings, (result) => {
                 HC.log(result);
                 ctrl.setChanged(null);
@@ -224,7 +230,7 @@
                     type: 'file',
                     dir: ctrl.getLabel(),
                     name: name + '.json',
-                    settings: this.settingsManager.prepareLayer(statics.ControlSettings.layer)
+                    settings: this.settingsManager.prepareLayer(this.config.ControlSettings.layer)
                 };
 
                 this.filesystem.save(STORAGE_DIR, nu.dir, nu.name, nu.settings, (result) => {

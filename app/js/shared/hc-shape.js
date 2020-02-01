@@ -295,7 +295,13 @@
             this.z(this.z() + z);
         }
 
-        updateMaterial(plugin, emissive) {
+        /**
+         *
+         * @param plugin
+         * @param emissive
+         * @param needsUpdate
+         */
+        updateMaterial(plugin, emissive, needsUpdate) {
 
             let settings = this.parent.settings;
             let mat = this.mesh.material;
@@ -310,68 +316,72 @@
                 }
             }
 
-            if ('shininess' in mat && mat.shininess != settings.material_shininess) {
-                mat.shininess = settings.material_shininess;
+            // fixme do not update material during animation except it is necessary! =>
+            if (needsUpdate) {
+                if ('shininess' in mat && mat.shininess != settings.material_shininess) {
+                    mat.shininess = settings.material_shininess;
 
-            } else if (mat.refractionRatio != settings.material_shininess) {
-                mat.refractionRatio = settings.material_shininess / 100;
-            }
+                } else if (mat.refractionRatio != settings.material_shininess) {
+                    mat.refractionRatio = settings.material_shininess / 100;
+                }
 
-            mat.roughness = settings.material_roughness;
-            mat.metalness = settings.material_metalness;
+                mat.roughness = settings.material_roughness;
+                mat.metalness = settings.material_metalness;
 
-            if (plugin.properties && plugin.properties.map) {
-                if (mat.map != plugin.properties.map) {
+                if (plugin.properties && plugin.properties.map) {
+                    if (mat.map != plugin.properties.map) {
+                        var keys = Object.keys(plugin.properties);
+                        for (let k in keys) {
+                            let key = keys[k];
+                            let val = plugin.properties[key];
+                            if (key in mat && val !== undefined) {
+                                mat[key] = val;
+                            }
+                        }
+                        mat.needsUpdate = true;
+
+                    } else {
+                        if (mat.emissive) {
+                            // for mapped material disable color by setting to lum 1 _check hugh?
+                            mat.emissive.setHSL(0, 0, emissive ? 1 : 0);
+                        }
+                    }
+
+                    // this._updateMaterialMap();
+
+
+                } else if (mat.map) {
                     var keys = Object.keys(plugin.properties);
                     for (let k in keys) {
                         let key = keys[k];
-                        let val = plugin.properties[key];
-                        if (key in mat && val !== undefined) {
-                            mat[key] = val;
+                        if (key in mat) {
+                            mat[key] = null;
                         }
                     }
                     mat.needsUpdate = true;
-
-                } else {
-                    if (mat.emissive) {
-                        // for mapped material disable color by setting to lum 1 _check hugh?
-                        mat.emissive.setHSL(0, 0, emissive ? 1 : 0);
-                    }
                 }
 
-                // this._updateMaterialMap();
+                this._updateMaterialBlending();
 
-
-            } else if (mat.map) {
-                var keys = Object.keys(plugin.properties);
-                for (let k in keys) {
-                    let key = keys[k];
-                    if (key in mat) {
-                        mat[key] = null;
-                    }
+                if (mat.flatShading == settings.material_softshading) { // reversed logic!
+                    mat.flatShading = !settings.material_softshading; // reversed logic!
+                    mat.needsUpdate = true;
                 }
-                mat.needsUpdate = true;
+
+                if (mat.side != settings.material_side) {
+                    mat.side = settings.material_side;
+                    mat.needsUpdate = true;
+                }
+
+                if (mat.shadowSide != settings.material_shadowside) {
+                    mat.shadowSide = settings.material_shadowside;
+                    mat.needsUpdate = true;
+                }
+
+                this.mesh.castShadow = settings.lighting_shadows;
+                this.mesh.receiveShadow = settings.lighting_shadows;
             }
-
-            this._updateMaterialBlending();
-
-            if (mat.flatShading == settings.material_softshading) { // reversed logic!
-                mat.flatShading = !settings.material_softshading; // reversed logic!
-                mat.needsUpdate = true;
-            }
-
-            if (mat.side != settings.material_side) {
-                mat.side = settings.material_side;
-                mat.needsUpdate = true;
-            }
-
-            if (mat.shadowSide != settings.material_shadowside) {
-                mat.shadowSide = settings.material_shadowside;
-                mat.needsUpdate = true;
-            }
-
-            this.mesh.castShadow = settings.lighting_shadows;
-            this.mesh.receiveShadow = settings.lighting_shadows;
+            // fixme <= do not update material during animation except it is necessary!
 
         }
 

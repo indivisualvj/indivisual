@@ -19,6 +19,11 @@
         listener;
 
         /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
          *
          * @param {HC.Animation} animation
          * @param index
@@ -26,6 +31,7 @@
          */
         constructor(animation, index, file) {
             this.animation = animation;
+            this.config = animation.config;
             this.listener = animation.listener;
             this.index = index;
             this.type = 'video';
@@ -104,9 +110,9 @@
 
             tag.onloadedmetadata = () => {
                 let milliseconds = tag.duration * 1000;
-                let frameDuration = 1000 / statics.DisplaySettings.fps;
+                let frameDuration = 1000 / this.config.DisplaySettings.fps;
 
-                let maxFrames = this.duration * 32 / 1000 * statics.DisplaySettings.fps;
+                let maxFrames = this.duration * 32 / 1000 * this.config.DisplaySettings.fps;
                 let frames = Math.min(maxFrames, Math.ceil(milliseconds / frameDuration));
                 milliseconds = frameDuration * frames;
                 this.beats = Math.floor(milliseconds / this.duration);
@@ -222,7 +228,7 @@
                                      * genauer aber weniger dynamik da beim rendern prc werte aus
                                      * progress bei beatkorrektur würfeln
                                      */
-                                    //let frameDuration = 1000 / statics.DisplaySettings.fps;
+                                    //let frameDuration = 1000 / this.config.DisplaySettings.fps;
                                     //let progress = this.pointer * frameDuration;
                                     //let allover = progress / this.duration;
                                     //let prc = allover - Math.floor(allover);

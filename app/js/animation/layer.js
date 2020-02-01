@@ -14,6 +14,11 @@
         animation;
 
         /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
          * @type {HC.Renderer}
          */
         renderer;
@@ -94,6 +99,7 @@
          */
         constructor (animation, renderer, index) {
             this.animation = animation;
+            this.config = animation.config;
             this.beatKeeper = animation.beatKeeper;
             this.renderer = renderer;
             this.index = index;

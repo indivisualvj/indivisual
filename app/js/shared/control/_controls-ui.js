@@ -274,7 +274,7 @@
             data[set][that.getProperty()] = value;
 
             messaging.program.updateSetting(
-                statics.ControlSettings.layer,
+                undefined,
                 data,
                 true,
                 true,

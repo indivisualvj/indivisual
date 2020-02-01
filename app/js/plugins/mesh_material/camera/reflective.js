@@ -11,8 +11,8 @@
                             shape_moda: 3
                         }
                     };
-                    this.animation.updateSettings(statics.ControlSettings.layer, data, true, false, true);
-                    messaging.emitSettings(statics.ControlSettings.layer, data, true, true, true);
+                    this.animation.updateSettings(this.config.ControlSettings.layer, data, true, false, true);
+                    messaging.emitSettings(this.config.ControlSettings.layer, data, true, true, true);
                 }
             }
         };

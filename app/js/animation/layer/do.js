@@ -115,7 +115,7 @@ HC.Layer.prototype.doOverlay = function (shape) {
  */
 HC.Layer.prototype.doMaterialMap = function () {
 
-    let seq = statics.SourceSettings.material_map;
+    let seq = this.config.SourceSettings.material_map;
     let map = this.settings.material_input;
     let color = false;
 
@@ -174,7 +174,11 @@ HC.Layer.prototype.doMaterial = function (shape) {
 
     try {
         let map = this.getMaterialMap();
-        shape.updateMaterial(map, this.settings.coloring_emissive);
+        let needsUpdate = this.settings.material_needs_update;
+        shape.updateMaterial(map, this.settings.coloring_emissive, needsUpdate);
+        if (needsUpdate) {
+            this.settings.material_needs_update = false;
+        }
 
     } catch (e) {
         console.error(e);

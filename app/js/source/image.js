@@ -196,7 +196,7 @@
 
                                 } else {
 
-                                    let frameDuration = 1000 / statics.DisplaySettings.fps;
+                                    let frameDuration = 1000 / this.animation.config.DisplaySettings.fps;
                                     let progress = this.pointer * frameDuration;
                                     let allover = progress / this.duration;
                                     let prc = allover - Math.floor(allover);

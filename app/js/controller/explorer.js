@@ -13,7 +13,7 @@
          */
         controller;
 
-        statics;
+        config;
 
         /**
          * @type {HC.GuifyExplorer}
@@ -55,12 +55,10 @@
         /**
          *
          * @param {HC.Controller} controller
-         * @param settings
          */
-        constructor(controller, settings) {
+        constructor(controller) {
             this.controller = controller;
             this.messaging = controller.messaging;
-            this.statics = settings;
             this.presetMan = new HC.PresetManager(controller, this);
 
             this.gui = new HC.GuifyExplorer('Presets', true, this);

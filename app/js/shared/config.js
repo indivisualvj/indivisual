@@ -18,6 +18,46 @@ HC.Statics = HC.Statics || {};
          */
         messaging;
 
+        /**
+         * @var {HC.ControlSetsManager}
+         */
+        ControlSettingsManager;
+        ControlSettings;
+        ControlTypes;
+        ControlValues;
+        /**
+         * @var {HC.ControlSetsManager}
+         */
+        DisplaySettingsManager;
+        DisplaySettings;
+        DisplayTypes;
+        DisplayValues;
+        /**
+         * @var {HC.ControlSetsManager}
+         */
+        SourceSettingsManager;
+        SourceSettings;
+        SourceTypes;
+        SourceValues;
+
+        DataSettings;
+
+        /**
+         *
+         * @type {boolean}
+         */
+        ctrlKey = false;
+        /**
+         *
+         * @type {boolean}
+         */
+        altKey = false;
+        /**
+         *
+         * @type {boolean}
+         */
+        shiftKey = false;
+
         config = [
             {
                 file: 'structure/AnimationValues.yml',
@@ -180,25 +220,45 @@ HC.Statics = HC.Statics || {};
 
         initControlSets() {
             let controlSets = this.initControlControlSets();
-            statics.ControlSettingsManager = new HC.ControlSetsManager(controlSets);
-            statics.ControlSettings = statics.ControlSettingsManager.settingsProxy();
-            statics.ControlTypes = statics.ControlSettingsManager.typesProxy();
-            statics.ControlValues = statics.ControlSettingsManager.valuesProxy(statics.ControlValues);
+            this.ControlSettingsManager = new HC.ControlSetsManager(controlSets);
+            this.ControlSettings = this.ControlSettingsManager.settingsProxy();
+            this.ControlTypes = this.ControlSettingsManager.typesProxy();
+            this.ControlValues = this.ControlSettingsManager.valuesProxy(statics.ControlValues);
 
-            statics.ControlSettings.session = _HASH; // ugly workaround
+            this.ControlSettings.session = _HASH; // ugly workaround
 
             let displaySets = this.initDisplayControlSets();
-            statics.DisplaySettingsManager = new HC.ControlSetsManager(displaySets);
-            statics.DisplaySettings = statics.DisplaySettingsManager.settingsProxy();
-            statics.DisplayTypes = statics.DisplaySettingsManager.typesProxy();
-            statics.DisplayValues = statics.DisplaySettingsManager.valuesProxy(statics.DisplayValues);
+            this.DisplaySettingsManager = new HC.ControlSetsManager(displaySets);
+            this.DisplaySettings = this.DisplaySettingsManager.settingsProxy();
+            this.DisplayTypes = this.DisplaySettingsManager.typesProxy();
+            this.DisplayValues = this.DisplaySettingsManager.valuesProxy(statics.DisplayValues);
 
             let sourceSets = this.initSourceControlSets();
-            statics.SourceSettingsManager = new HC.ControlSetsManager(sourceSets);
-            statics.SourceSettings = statics.SourceSettingsManager.settingsProxy();
-            statics.SourceTypes = statics.SourceSettingsManager.typesProxy();
-            statics.SourceValues = statics.SourceSettingsManager.valuesProxy(statics.SourceValues);
+            this.SourceSettingsManager = new HC.ControlSetsManager(sourceSets);
+            this.SourceSettings = this.SourceSettingsManager.settingsProxy();
+            this.SourceTypes = this.SourceSettingsManager.typesProxy();
+            this.SourceValues = this.SourceSettingsManager.valuesProxy(statics.SourceValues);
 
+            this.DataSettings = {};
+
+            statics.ControlSettingsManager = this.ControlSettingsManager;
+            statics.ControlSettings = this.ControlSettings;
+            statics.ControlTypes = this.ControlTypes;
+            statics.ControlValues = this.ControlValues;
+            statics.DisplaySettingsManager = this.DisplaySettingsManager;
+            statics.DisplaySettings = this.DisplaySettings;
+            statics.DisplayTypes = this.DisplayTypes;
+            statics.DisplayValues = this.DisplayValues;
+            statics.SourceSettingsManager = this.SourceSettingsManager;
+            statics.SourceSettings = this.SourceSettings;
+            statics.SourceTypes = this.SourceTypes;
+            statics.SourceValues = this.SourceValues;
+            statics.DataSettings = this.DataSettings;
+
+            this.MidiController = statics.MidiController; // fixme do not load anything to statics once statics is dead
+            this.Passes = statics.Passes;
+            this.AnimationValues = statics.AnimationValues;
+            
             return {
                 controlSets: controlSets,
                 displaySets: displaySets,
@@ -290,10 +350,6 @@ HC.Statics = HC.Statics || {};
 
         /**
          *
-         * @param settings
-         * @param tree
-         * @param section
-         * @param plugins
          * @private
          */
         _loadControlSets() {

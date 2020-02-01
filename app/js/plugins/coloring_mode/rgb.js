@@ -4,7 +4,7 @@
         apply (shape) {
             if (this.isFirstShape(shape)) {
 
-                let prc = (this.animation.now - this.beatKeeper.beatStartTime) / (60000 / statics.ControlSettings.tempo) / 100 * this.settings.coloring_volume;
+                let prc = (this.animation.now - this.beatKeeper.beatStartTime) / (60000 / this.config.ControlSettings.tempo) / 100 * this.settings.coloring_volume;
                 prc = HC.Osci.sinInOut(prc) * 5;
 
                 prc *= RAD * 180 * this.settings.coloring_volume;

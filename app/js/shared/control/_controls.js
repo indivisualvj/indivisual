@@ -75,7 +75,7 @@ HC.controls = HC.controls || {};
         events = {};
 
         /**
-         *
+         * fixme inject config & program (statics. / messaging.program) into each and every controlset
          * @param name
          */
         constructor(name) {

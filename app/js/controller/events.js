@@ -146,16 +146,16 @@ HC.Controller.prototype.initKeyboard = function () {
     setMnemonics(this.animationSettingsGui);
 
     window.addEventListener('keyup', (e) => {
-        statics.ctrlKey = e.ctrlKey;
-        statics.altKey = e.altKey;
-        statics.shiftKey = e.shiftKey;
+        this.config.ctrlKey = e.ctrlKey;
+        this.config.altKey = e.altKey;
+        this.config.shiftKey = e.shiftKey;
     });
 
     window.addEventListener('keydown', (e) => {
 
-        statics.ctrlKey = e.ctrlKey;
-        statics.altKey = e.altKey;
-        statics.shiftKey = e.shiftKey;
+        this.config.ctrlKey = e.ctrlKey;
+        this.config.altKey = e.altKey;
+        this.config.shiftKey = e.shiftKey;
 
         if (e.ctrlKey && (e.shiftKey || e.altKey)) {
             return;
@@ -181,8 +181,8 @@ HC.Controller.prototype.initKeyboard = function () {
 
         }
 
-        if (e.keyCode in statics.ControlValues.layer_keycodes) {
-            var val = statics.ControlValues.layer_keycodes[e.keyCode];
+        if (e.keyCode in this.config.ControlValues.layer_keycodes) {
+            var val = this.config.ControlValues.layer_keycodes[e.keyCode];
 
             if (e.ctrlKey) {
                 e.preventDefault();

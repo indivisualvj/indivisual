@@ -14,6 +14,11 @@
         animation;
 
         /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
          * @type {HC.BeatKeeper}
          */
         beatKeeper;
@@ -30,6 +35,7 @@
          */
         constructor(animation, index) {
             this.animation = animation;
+            this.config = animation.config;
             this.beatKeeper = animation.beatKeeper;
             this.audioAnalyser = animation.audioAnalyser;
             this.type = 'sequence';
@@ -70,24 +76,24 @@
          * @param height
          */
         update(width, height) {
-            this.jump = statics.SourceSettings[this.id + '_jump'];
-            this.audio = statics.SourceSettings[this.id + '_audio'];
-            this.reversed = statics.SourceSettings[this.id + '_reversed'];
-            this.speedup = statics.SourceSettings[this.id + '_speedup'];
-            this.speeddown = statics.SourceSettings[this.id + '_speeddown'];
-            this.speed = statics.SourceSettings[this.id + '_speed'];
-            this.passthrough = statics.SourceSettings[this.id + '_passthrough'];
-            this.flipx = (statics.SourceSettings[this.id + '_flipx']) ? -1 : 1;
-            this.flipy = (statics.SourceSettings[this.id + '_flipy']) ? -1 : 1;
-            this.flipa = (statics.SourceSettings[this.id + '_flipa']);
+            this.jump = this.config.SourceSettings[this.id + '_jump'];
+            this.audio = this.config.SourceSettings[this.id + '_audio'];
+            this.reversed = this.config.SourceSettings[this.id + '_reversed'];
+            this.speedup = this.config.SourceSettings[this.id + '_speedup'];
+            this.speeddown = this.config.SourceSettings[this.id + '_speeddown'];
+            this.speed = this.config.SourceSettings[this.id + '_speed'];
+            this.passthrough = this.config.SourceSettings[this.id + '_passthrough'];
+            this.flipx = (this.config.SourceSettings[this.id + '_flipx']) ? -1 : 1;
+            this.flipy = (this.config.SourceSettings[this.id + '_flipy']) ? -1 : 1;
+            this.flipa = (this.config.SourceSettings[this.id + '_flipa']);
 
-            let osci = statics.SourceSettings[this.id + '_osci'];
+            let osci = this.config.SourceSettings[this.id + '_osci'];
             this.osci = osci;
 
-            let brightness = statics.SourceSettings[this.id + '_brightness'];
+            let brightness = this.config.SourceSettings[this.id + '_brightness'];
             this._brightness = brightness;
 
-            let blendmode = statics.SourceValues.blendmode[statics.SourceSettings[this.id + '_blendmode']];
+            let blendmode = this.config.SourceValues.blendmode[this.config.SourceSettings[this.id + '_blendmode']];
             this.blendmode = blendmode;
 
             this.width = Math.round(width);
@@ -96,8 +102,8 @@
             this._canvas.height = this.height;
 
             if (this.sample) {
-                let start = statics.SourceSettings[this.id + '_start'];
-                let end = statics.SourceSettings[this.id + '_end'];
+                let start = this.config.SourceSettings[this.id + '_start'];
+                let end = this.config.SourceSettings[this.id + '_end'];
 
                 let needsUpdate = start != this.start || end != this.end
                     || this.width != this.sample.width || this.height != this.sample.height;
@@ -268,8 +274,8 @@
                 if (br > 0) {
                     ctx.globalCompositeOperation = 'source-over';
 
-                    if (statics.DisplaySettings.transparency < 1) {
-                        ctx.globalAlpha = 1.0 - statics.DisplaySettings.transparency;
+                    if (this.config.DisplaySettings.transparency < 1) {
+                        ctx.globalAlpha = 1.0 - this.config.DisplaySettings.transparency;
                         ctx.fillRect(0, 0, this.width, this.height);
                     }
 

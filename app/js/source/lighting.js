@@ -11,6 +11,11 @@
         displayManager;
 
         /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
          * @type {HC.BeatKeeper}
          */
         beatKeeper;
@@ -23,6 +28,7 @@
         constructor(animation, index) {
             this.displayManager = animation.displayManager;
             this.beatKeeper = animation.beatKeeper;
+            this.config = animation.config;
             this.type = 'Lighting';
             this.index = index;
             this.id = this.type + this.index;
@@ -38,13 +44,13 @@
          *
          */
         update() {
-            let pixelUpdate = this.pixel.length != statics.SourceSettings.lighting_pattern_lights;
-            let scaleUpdate = this.scale != statics.SourceSettings.lighting_scale;
+            let pixelUpdate = this.pixel.length != this.config.SourceSettings.lighting_pattern_lights;
+            let scaleUpdate = this.scale != this.config.SourceSettings.lighting_scale;
             if (pixelUpdate || scaleUpdate) {
                 this.init();
             }
 
-            this.lighting_type = statics.SourceSettings.lighting_type;
+            this.lighting_type = this.config.SourceSettings.lighting_type;
         }
 
         /**
@@ -57,9 +63,9 @@
                 this.canvas.id = this.id;
             }
 
-            this.scale = statics.SourceSettings.lighting_scale;
+            this.scale = this.config.SourceSettings.lighting_scale;
             this.pixel = [];
-            for (let i = 0; i < statics.SourceSettings.lighting_pattern_lights; i++) {
+            for (let i = 0; i < this.config.SourceSettings.lighting_pattern_lights; i++) {
                 this.pixel[i] = {
                     brightness: 0.0,
                     color: '#ff0000'
@@ -93,13 +99,13 @@
          */
         current(fallback) {
 
-            if (statics.SourceSettings.lighting_type != 'off') {
+            if (this.config.SourceSettings.lighting_type != 'off') {
                 let index = this.getPixelIndex();
                 let color = this.getFillColor(fallback, index);
 
                 this.canvas.ctx.clearRect(0, 0, 4 * this.pixel.length * this.scale, 1 * this.scale);
 
-                let speed = this.beatKeeper.getSpeed(statics.SourceSettings.lighting_speed);
+                let speed = this.beatKeeper.getSpeed(this.config.SourceSettings.lighting_speed);
                 let redo = speed.starting();
                 if (redo) {
                     this.shuffleCounter++;
@@ -107,7 +113,7 @@
 
                 for (let i = 0; i < this.pixel.length; i++) {
                     this.updateLight(i, color);
-                    let br = this.pixel[i].brightness * statics.SourceSettings.lighting_brightness;
+                    let br = this.pixel[i].brightness * this.config.SourceSettings.lighting_brightness;
                     if (br) {
                         this.canvas.ctx.fillStyle = this.pixel[i].color;
                         this.canvas.ctx.globalAlpha = br;
@@ -129,15 +135,15 @@
          */
         updateLight(i, color) {
 
-            let speed = this.beatKeeper.getSpeed(statics.SourceSettings.lighting_speed);
+            let speed = this.beatKeeper.getSpeed(this.config.SourceSettings.lighting_speed);
             let redo = speed.starting();
             let m = this.lighting_type;
 
-            if (redo && i == 0 && statics.SourceSettings.lighting_type == 'randomall'
-                && this.shuffleCounter >= statics.ControlSettings.shuffle_every - 1) {
+            if (redo && i == 0 && this.config.SourceSettings.lighting_type == 'randomall'
+                && this.shuffleCounter >= this.config.ControlSettings.shuffle_every - 1) {
                 this.shuffleCounter = 0;
 
-                let k = Object.keys(statics.SourceValues.lighting_type);
+                let k = Object.keys(this.config.SourceValues.lighting_type);
                 let c = randomInt(1, k.length - 2);
                 this.lighting_type = k[c];
             }
@@ -207,7 +213,7 @@
          */
         getFillColor(fallback, index) {
             let color = fallback && fallback._color ? fallback._color : '#ff0000';
-            let lc = statics.SourceSettings.lighting_color;
+            let lc = this.config.SourceSettings.lighting_color;
 
             if (index > 0) {
                 color = '#ffffff';

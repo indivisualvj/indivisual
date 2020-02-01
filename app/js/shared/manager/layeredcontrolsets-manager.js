@@ -4,7 +4,7 @@
 
 {
     /**
-     *
+     * // fixme inject config
      * @type {HC.LayeredControlSetsManager}
      */
     HC.LayeredControlSetsManager = class LayeredControlSetsManager {
@@ -259,22 +259,25 @@
                 },
 
                 get(target, name, receiver) {
-                    let key = mappings[name];
-                    let set = target[key];
 
-                    if (set) {
-                        let props = set.properties;
+                    return target[mappings[name]].properties[name];
 
-                        if (name in props) {
-                            return props[name];
-                        }
-                    }
-
-                    // if (DEBUG) {
-                    //     console.error('setting not found: ' + name);
+                    // let key = mappings[name];
+                    // let set = target[key];
+                    //
+                    // if (set) {
+                    //     let props = set.properties;
+                    //
+                    //     if (name in props) {
+                    //         return props[name];
+                    //     }
                     // }
-
-                    return undefined;
+                    //
+                    // // if (DEBUG) {
+                    // //     console.error('setting not found: ' + name);
+                    // // }
+                    //
+                    // return undefined;
                 },
 
                 set(target, name, value, receiver) {
@@ -329,7 +332,7 @@
          */
         static initAll(pluggedValues) {
             let controlSets = {};
-            for (let key in statics.ControlSets) {
+            for (let key in statics.ControlSets) { // fixme no statics here! solve it.
                 let cs = new HC.controls[key](key);
                 cs.init(pluggedValues);
 

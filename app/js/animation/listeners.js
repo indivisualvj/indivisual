@@ -47,7 +47,7 @@
                     return;
                 }
                 if (e.keyCode === 32) { // SPACE = play/pause
-                    animation.updateControl('play', !statics.ControlSettings.play, true, false, false);
+                    animation.updateControl('play', !animation.config.ControlSettings.play, true, false, false);
                 }
             });
 
@@ -68,7 +68,7 @@
          */
         init (displayManager) {
             var onResize = function () {
-                for (var i = 0; i < statics.DisplayValues.display.length; i++) {
+                for (var i = 0; i < displayManager.config.DisplayValues.display.length; i++) {
                     var display = displayManager.getDisplay(i);
                     if (display) {
                         if (!display.getMapping()) {

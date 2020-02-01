@@ -179,13 +179,13 @@
                     let key = mappings[name];
                     let set = target[key];
 
-                    if (set) {
+                    // if (set) {
                         let props = set.properties;
 
-                        if (name in props) {
+                        // if (name in props) {
                             return props[name];
-                        }
-                    }
+                        // }
+                    // }
 
                     return undefined;
                 },

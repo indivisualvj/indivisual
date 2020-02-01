@@ -51,15 +51,15 @@
         /**
          *
          */
-        statics;
+        config;
 
         /**
          *
          * @param {HC.Controller} controller
          */
-        constructor(controller, settings) {
+        constructor(controller) {
             this.controller = controller;
-            this.statics = settings;
+            this.config = controller.config;
 
         }
 
@@ -111,14 +111,14 @@
 
                     // _check for valid ControlSet by MIDI Device name
                     let name = input.value.name;
-                    if (name in this.statics.MidiController) {
-                        _updateControlSet(input, this.statics.MidiController[name]);
+                    if (name in this.config.MidiController) {
+                        _updateControlSet(input, this.config.MidiController[name]);
                     }
 
                     // _check for valid ControlSet by MIDI Device manufacturer
                     name = input.value.manufacturer;
-                    if (name in this.statics.MidiController) {
-                        _updateControlSet(input, this.statics.MidiController[name]);
+                    if (name in this.config.MidiController) {
+                        _updateControlSet(input, this.config.MidiController[name]);
                     }
 
                     console.log(name, input.value);
@@ -202,8 +202,8 @@
                     this.clockbpm = round(4 * 60 * 1000 / diff, 2);
                     HC.log('clock-bpm', this.clockbpm);
 
-                    if (!this.statics.ControlSettings.peak_bpm_detect) { // tempo by MIDI clock
-                        if (this.statics.ControlSettings.tempo != this.clockbpm) {
+                    if (!this.config.ControlSettings.peak_bpm_detect) { // tempo by MIDI clock
+                        if (this.config.ControlSettings.tempo != this.clockbpm) {
                             this.controller.updateControl('tempo', this.clockbpm, true, true, false);
                         }
                     }
@@ -263,8 +263,8 @@
 
                         if (func in this.controller) {
                             func = this.controller[func];
-                            if (settings in this.statics) {
-                                settings = this.statics[settings];
+                            if (settings in this.config) {
+                                settings = this.config[settings];
                                 if (!(name in settings) && id.name in settings) {
                                     name = id.name;
                                 }
@@ -332,9 +332,9 @@
             switch (id.type) {
                 case 'status':
                     let status = id.data;
-                    if (values in this.statics && status in this.statics) {
-                        values = this.statics[values];
-                        status = this.statics[status];
+                    if (values in this.config && status in this.config) {
+                        values = this.config[values];
+                        status = this.config[status];
 
                         if (name in values) {
                             values = values[name];
@@ -379,8 +379,8 @@
                     break;
 
                 case 'select':
-                    if (values in this.statics) {
-                        values = this.statics[values];
+                    if (values in this.config) {
+                        values = this.config[values];
 
                         if (name in values) {
 
@@ -410,8 +410,8 @@
 
                 case 'volume':
                 case 'step':
-                    if (types in (this.statics)) {
-                        types = this.statics[types];
+                    if (types in (this.config)) {
+                        types = this.config[types];
                         if (name in types) {
                             types = types[name];
 

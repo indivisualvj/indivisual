@@ -15,6 +15,11 @@
         animation;
 
         /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
          * @type {HC.DisplayManager}
          */
         displayManager;
@@ -82,6 +87,7 @@
          */
         constructor(animation, index) {
             this.animation = animation;
+            this.config = animation.config;
             this.displayManager = animation.displayManager;
             this.index = index;
             this.id = 'display' + index;
@@ -131,7 +137,7 @@
             }
 
             var image = this._source ? this._source.current(fallback) : fallback;
-            var smearing = this.smear ? 1 : Math.max(statics.DisplaySettings.smearing, this.smearing);
+            var smearing = this.smear ? 1 : Math.max(this.config.DisplaySettings.smearing, this.smearing);
 
             if (bounds && smearing == 0 || !image) {
                 this.clear(bounds);
@@ -139,10 +145,10 @@
 
             var br = this.brightness();
             if (smearing > 0) {
-                br -= smearing * (1.0 - statics.DisplaySettings.transparency);
+                br -= smearing * (1.0 - this.config.DisplaySettings.transparency);
 
-                ctx.globalAlpha = Math.max(0.02, 1.0 - smearing) * statics.DisplaySettings.transparency;
-                ctx.fillStyle = statics.DisplaySettings.background;
+                ctx.globalAlpha = Math.max(0.02, 1.0 - smearing) * this.config.DisplaySettings.transparency;
+                ctx.fillStyle = this.config.DisplaySettings.background;
                 ctx.fillRect(
                     bounds.x, bounds.y, bounds.width, bounds.height
                 );
@@ -183,9 +189,9 @@
             if (this._dirty) {
                 bounds = bounds || this._clipBounds();
                 this.ctx.clearRect(bounds.x, bounds.y, bounds.width, bounds.height);
-                if (!this.transparent && statics.DisplaySettings.clip_context && this.mask) {
-                    this.ctx.drawImage(this.mask.background, 0, 0);
-                }
+                // if (!this.transparent && this.config.DisplaySettings.clip_context && this.mask) {
+                //     this.ctx.drawImage(this.mask.background, 0, 0);
+                // }
                 this._dirty = false;
             }
         }
@@ -262,8 +268,8 @@
             if (this.transparent) {
                 return false; // durchsichtig
 
-            } else if (statics.DisplaySettings.clip_context && this.mask) {
-                return false; // mask.background
+            // } else if (this.config.DisplaySettings.clip_context && this.mask) {
+            //     return false; // mask.background
             }
 
             return true;
@@ -304,7 +310,7 @@
 
             var sh = false;
 
-            switch (statics.DisplaySettings[prefix + '_shape']) {
+            switch (this.config.DisplaySettings[prefix + '_shape']) {
 
                 default:
                     sh = false;
@@ -366,7 +372,7 @@
             }
             this.mask = sh;
 
-            this.canvas.style.background = this.getSetBackground() ? statics.DisplaySettings.background : 'none';
+            this.canvas.style.background = this.getSetBackground() ? this.config.DisplaySettings.background : 'none';
 
             return sh;
         }
@@ -413,7 +419,7 @@
         loadMask() {
             if (this.mask) {
                 var mask = this.mask;
-                var stored = statics.DisplaySettings[mask.id];
+                var stored = this.config.DisplaySettings[mask.id];
                 if (stored) {
                     try {
                         stored = JSON.parse(stored);
@@ -465,7 +471,7 @@
          * @returns {*}
          */
         getMapping() {
-            return statics.DisplaySettings[this.id + '_mapping'];
+            return this.config.DisplaySettings[this.id + '_mapping'];
         }
 
         /**

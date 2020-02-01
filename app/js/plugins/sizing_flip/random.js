@@ -20,7 +20,7 @@
             let params = this.params(shape);
 
             if (!params.mode || overwrite) {
-                let keys = Object.keys(statics.AnimationValues.sizing_flip);
+                let keys = Object.keys(this.config.AnimationValues.sizing_flip);
                 params.mode = keys[randomInt(3, keys.length - 1)]; // first means off, last two have to be random and randompeak
 
             }

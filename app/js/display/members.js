@@ -23,6 +23,13 @@ HC.Display.border_modes = {};
         }
 
         /**
+         *
+         */
+        init() {
+
+        }
+
+        /**
          * 
          * @param array
          * @returns {any[]}
@@ -79,9 +86,27 @@ HC.Display.border_modes = {};
      * @type {HC.Display.border_modes.randomall}
      */
     HC.Display.border_modes.randomall = class randomall extends HC.Display.BorderModePlugin  {
+
+        current = 0;
+        modes = {};
+        modeCount = 0;
+        modeKeys = [];
+        currentMode = 0;
+
+        init() {
+            for (let k in HC.Display.border_modes) {
+                if (k !== this.constructor.name) {
+                    this.modeKeys[this.modeCount++] = k;
+                    this.modes[k] = HC.Display.border_modes[k];
+                }
+            }
+        }
+
         apply (ctx, points, pc, speed, prc) {
-            // fixme does not switch modes
-            HC.Display.border_modes.visible.apply(ctx, points, pc, speed, prc);
+            if (speed.starting()) {
+                this.currentMode = randomInt(0, this.modeCount-1);
+            }
+            HC.Display.border_modes[this.modeKeys[this.currentMode]].apply(ctx, points, pc, speed, prc);
         }
     }
 }

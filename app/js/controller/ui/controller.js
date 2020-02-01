@@ -251,6 +251,9 @@
         isModified() {
             let value = this.getValue();
             let initial = this.getInitialValue();
+            if (typeof value == 'string' && typeof initial === 'number') {
+                value = parseFloat(value);
+            }
             if (value !== undefined && initial !== undefined) {
                 return value !== initial;
             }

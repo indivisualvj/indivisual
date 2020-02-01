@@ -17,7 +17,7 @@
             material_blendequation: 'AddEquation',
             material_blendsrc: 'SrcAlphaFactor',
             material_blenddst: 'OneMinusSrcAlphaFactor',
-            material_side: 2, // fixme is isModified gives allways false because of Select cmp in guify onchange gives strings always
+            material_side: 2,
             material_shininess: 2,
             material_volume: 1,
             material_roughness: 0.5,

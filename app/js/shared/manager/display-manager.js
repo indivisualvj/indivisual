@@ -65,7 +65,9 @@
         initBorderModePlugins() {
             for (let k in HC.Display.border_modes) {
                 let plugin = HC.Display.border_modes[k];
-                HC.Display.border_modes[k] = new plugin(this);
+                plugin = new plugin(this);
+                HC.Display.border_modes[k] = plugin;
+                plugin.init();
             }
         }
 

@@ -38,7 +38,7 @@
                         this.filterTree(value);
                     },
                     delay: 175,
-                    action: (e) => { // fixme triggers in some strange cases
+                    action: (e) => {
                         let ctrl = this.findFirstVisibleControl();
                         if (ctrl) {
                             ctrl.triggerComponent();

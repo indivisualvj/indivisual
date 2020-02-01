@@ -27,12 +27,24 @@ layer:
 
 shuffle_mode: {}
 
-_keys:
-  g_controls:
-    play: spc
-    reset: del
-    monitor: hm
-    push_layers: end
-    push_sources: pgd
-    rst_shaders: pgu
-    debug: "-"
+layer_keycodes:
+  "49": 0
+  "50": 1
+  "51": 2
+  "52": 3
+  "53": 4
+  "54": 5
+  "55": 6
+  "56": 7
+  "57": 8
+  "48": 9
+  "97": 0
+  "98": 1
+  "99": 2
+  "100": 3
+  "101": 4
+  "102": 5
+  "103": 6
+  "104": 7
+  "105": 8
+  "96": 9

@@ -9,14 +9,43 @@
     HC.SourceManager = class SourceManager {
 
         /**
-         *
+         * @type {HC.Animation}
+         */
+        animation;
+        
+        /**
+         * @type {HC.DisplayManager}
+         */
+        displayManager;
+
+        /**
+         * @type {HC.BeatKeeper}
+         */
+        beatKeeper;
+
+        /**
+         * @type {HC.Renderer}
+         */
+        renderer;
+
+        /**
+         * @type {HC.Listener}
+         */
+        listener;
+
+        /**
+         * @param {HC.Animation} animation
          * @param config
          */
-        constructor(config) {
+        constructor(animation, config) {
+            this.animation = animation;
+            this.displayManager = animation.displayManager;
+            this.beatKeeper = animation.beatKeeper;
+            this.renderer = animation.renderer;
+            this.listener = animation.listener;
             this.perspectives = new Array(3);
             this.samples = config.sample;
             this.sequences = config.sequence;
-            this.videos = config.video;
             this.colors = [];
         }
 
@@ -38,7 +67,7 @@
 
                     case 'animation':
                     default:
-                        source = new HC.Source(renderer, renderer.resolution.x, renderer.resolution.y);
+                        source = new HC.Source(this.renderer, this.renderer.resolution.x, this.renderer.resolution.y);
                         break;
 
                     case 'sequence':
@@ -51,12 +80,6 @@
                         sq = statics.SourceSettings[display.id + '_sequence'];
                         source = new HC.Source(this.getPerspective(sq), display.width(), display.height());
                         this.updatePerspective(sq);
-                        break;
-
-                    case 'video':
-                        sq = statics.DisplaySettings[display.id + '_video'];
-                        source = new HC.Source(this.getVideo(sq), display.width(), display.height());
-                        this.updateVideo(sq);
                         break;
 
                     case 'display':
@@ -104,7 +127,7 @@
          */
         getSequence(i) {
             if (!this.sequences[i]) {
-                this.sequences[i] = new HC.Sequence(i);
+                this.sequences[i] = new HC.Sequence(this.animation, i);
             }
 
             return this.sequences[i];
@@ -124,7 +147,7 @@
 
                 if (sequence.sample) {
 
-                    let _indicator = function (sequence) {
+                    let _indicator = (sequence) => {
                         let type = [0, 0, 1];
                         if (sequence.sample) {
                             type[1] = sequence.sample.last();
@@ -135,8 +158,8 @@
                         conf.SourceTypes[getSequenceEndKey(sequence.index)] = type;
                         messaging.emitData(sequence.sample.id, conf);
 
-                        animation.updateSource(getSequenceStartKey(sequence.index), 0, false, true);
-                        animation.updateSource(getSequenceEndKey(sequence.index), type[1], false, true);
+                        this.animation.updateSource(getSequenceStartKey(sequence.index), 0, false, true);
+                        this.animation.updateSource(getSequenceEndKey(sequence.index), type[1], false, true);
                     };
 
                     if (os != sequence.sample) {
@@ -145,9 +168,9 @@
                 }
                 this.updateSample(smp);
 
-                let ovrly = parseInt(statics.SourceSettings[sequence.id + '_overlay']);
-                if (ovrly >= 0) {
-                    sequence.overlay = this.getSequence(ovrly);
+                let overlay = parseInt(statics.SourceSettings[sequence.id + '_overlay']);
+                if (overlay >= 0) {
+                    sequence.overlay = this.getSequence(overlay);
 
                 } else {
                     sequence.overlay = false;
@@ -168,19 +191,10 @@
                 let iKeys = Object.keys(statics.SourceValues.input);
                 let sample = false;
                 if (i < statics.SourceValues.sample.length) {
-                    sample = new HC.Sample(i);
+                    sample = new HC.Sample(this.animation, i);
 
-                } else if (i < iKeys.length && i in statics.SourceValues.input) {
-                    let file = statics.SourceValues.input[i];
-
-                    if (assetman.getVideo(file)) {
-                        let path = filePath(VIDEO_DIR, file);
-                        sample = new HC.Video(i, path);
-
-                    } else {
-                        let path = filePath(IMAGE_DIR, file);
-                        sample = new HC.Image(i, path);
-                    }
+                } else {
+                    return;
                 }
 
                 if (!sample) {
@@ -202,13 +216,12 @@
          * @param sample
          */
         initSample(sample) {
-            let enabledKey = getSampleEnabledKey(sample.index);
-            let recordKey = getSampleRecordKey(sample.index);
+            let thumbKey = getSampleThumbKey(sample.index);
 
-            listener.register('sample.init.start', sample.id, function (target) {
-                messaging.emitAttr('[data-id="' + enabledKey + '"]', 'data-color', 'red');
-                messaging.emitAttr('[data-id="' + enabledKey + '"]', 'style', '');
-                messaging.emitAttr('[data-id="' + enabledKey + '"]', 'data-label', '...');
+            this.listener.register('sample.init.start', sample.id, function (target) {
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'yellow');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'style', '');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', 'initializing');
                 messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {delay: 50});
 
                 let conf = {DataSettings: {}};
@@ -216,19 +229,18 @@
                 messaging.emitData(target.id, conf);
             });
 
-            listener.register('sample.init.progress', sample.id, function (target) {
-                let key = getSampleEnabledKey(sample.index);
-                messaging.emitAttr('[data-id="' + key + '"]', 'data-label', target.pointer + '/' + target.frameCount);
-                messaging.emitAttr('[data-id="' + key + '"]', 'data-color', 'red');
+            this.listener.register('sample.init.progress', sample.id, function (target) {
+                let progress = target.pointer / target.frameCount * 100;
+                let msg = 'preparing';
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', msg);
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-progress', progress);
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'yellow');
             });
 
-            listener.register('sample.init.reset', sample.id, function (target) {
-                messaging.emitAttr('[data-id="' + enabledKey + '"]', 'data-color', '');
-                messaging.emitAttr('[data-id="' + enabledKey + '"]', 'style', '');
-                messaging.emitAttr('[data-id="' + enabledKey + '"]', 'data-label', '');
-                messaging.emitAttr('[data-id="' + recordKey + '"]', 'data-color', '');
-                messaging.emitAttr('[data-id="' + recordKey + '"]', 'style', '');
-                messaging.emitAttr('[data-id="' + recordKey + '"]', 'data-label', '');
+            this.listener.register('sample.init.reset', sample.id, function (target) {
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', '');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'style', '');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', '');
                 messaging.emitMidi('off', MIDI_ROW_ONE[target.index]);
                 messaging.emitMidi('off', MIDI_SAMPLE_FEEDBACK);
 
@@ -237,11 +249,11 @@
                 messaging.emitData(target.id, conf);
             });
 
-            listener.register('sample.init.end', sample.id, function (target) {
-                animation.powersave = false;
-                messaging.emitAttr('[data-id="' + enabledKey + '"]', 'data-color', 'green');
-                messaging.emitAttr('[data-id="' + enabledKey + '"]', 'style', '');
-                messaging.emitAttr('[data-id="' + enabledKey + '"]', 'data-label', 'ready');
+            this.listener.register('sample.init.end', sample.id, (target) => {
+                this.animation.powersave = false;
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'green');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'style', '');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', 'ready to record');
                 messaging.emitMidi('off', MIDI_ROW_ONE[target.index]);
                 messaging.emitMidi('off', MIDI_SAMPLE_FEEDBACK);
                 let conf = {DataSettings: {}};
@@ -249,49 +261,53 @@
                 messaging.emitData(target.id, conf);
             });
 
-            listener.register('sample.render.start', sample.id, function (target) {
-                messaging.emitAttr('[data-id="' + recordKey + '"]', 'data-color', 'red');
-                messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {timeout: beatkeeper.getSpeed('eight').duration});
+            this.listener.register('sample.render.start', sample.id, (target) => {
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'red');
+                messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {timeout: this.beatKeeper.getSpeed('eight').duration});
                 messaging.emitMidi('glow', MIDI_SAMPLE_FEEDBACK);
             });
 
-            listener.register('sample.render.progress', sample.id, function (target) {
-                messaging.emitAttr('[data-id="' + recordKey + '"]', 'data-label', (target.counter) + ' (' + animation.fps + 'fps)');
+            this.listener.register('sample.render.progress', sample.id, (target) => {
+
+                let progress = target.counter / target.beats * 100;
+
+                let msg = 'recording' + ' (' + this.animation.fps + 'fps)';
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', msg);
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-progress', progress);
                 let conf = {
-                    timeout: beatkeeper.getSpeed('eight').duration,
+                    timeout: this.beatKeeper.getSpeed('eight').duration,
                     times: 2
                 };
                 messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], conf);
             });
 
-            listener.register('sample.render.error', sample.id, function (target) {
-                animation.powersave = false;
-                messaging.emitAttr('[data-id="' + recordKey + '"]', 'data-color', 'yellow');
-                messaging.emitAttr('[data-id="' + recordKey + '"]', 'data-label', '!error');
+            this.listener.register('sample.render.error', sample.id, (target) => {
+                this.animation.powersave = false;
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-progress', '');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'red');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', '[ERROR!]');
                 messaging.emitMidi('glow', MIDI_ROW_ONE[sample.index], {timeout: 500, times: 3});
                 messaging.emitMidi('glow', MIDI_SAMPLE_FEEDBACK, {timeout: 500, times: 3});
             });
 
-            listener.register('sample.render.end', sample.id, function (target) {
-                animation.powersave = false;
+            this.listener.register('sample.render.end', sample.id, (target) => {
+                this.animation.powersave = false;
 
                 let recordKey = getSampleRecordKey(target.index);
 
-                if (statics.SourceSettings.contains(recordKey)) { // sample
-                    animation.updateSource(recordKey, false, true, true, false);
+                if (statics.SourceSettings[recordKey]) { // sample
+                    this.animation.updateSource(recordKey, false, true, true, false);
 
-                } else { // video
-                    let seq = getSequenceBySample(target.index);
-                    sourceman.updateSequence(seq, true);
                 }
 
                 // if (IS_ANIMATION) {
                 let resolution = 630 / target.width;
-                sourceman.storeSample(target.index, target.id, resolution, true);
+                this.storeSample(target.index, target.id, resolution, true);
                 // }
 
-                messaging.emitAttr('[data-id="' + recordKey + '"]', 'data-color', 'yellow');
-                messaging.emitAttr('[data-id="' + recordKey + '"]', 'data-label', '...');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-progress', '');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'yellow');
+                messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', 'loading thumbs');
                 messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {delay: 50});
                 messaging.emitMidi('off', MIDI_SAMPLE_FEEDBACK);
             });
@@ -314,8 +330,8 @@
                         for (let s = 0; s < this.sequences.length; s++) {
                             let seq = this.getSequence(s);
                             if (seq && seq.sample == sample) { // reset input to off if sample was disabled
-                                animation.updateSource(getSequenceSampleKey(s), 'off', true, true, false);
                                 warn = true;
+                                break;
                             }
                         }
 
@@ -335,26 +351,26 @@
             if (sample) {
 
                 let dir = filePath(SAMPLE_DIR, name);
-                let callback = function () {
+                let callback = () => {
 
-                    messaging._emit({action: 'unlinkall', dir: dir}, function (files) {
+                    messaging._emit({action: 'unlinkall', dir: dir}, (files) => {
                         console.log('unlinkall', dir, files.length + ' files deleted');
 
-                        listener.register('sample.store.progress', sample.id, function (target) {
+                        this.listener.register('sample.store.progress', sample.id, (target) => {
                             let key = getSampleStoreKey(target.index);
                             messaging.emitAttr('[data-id="' + key + '"]', 'data-label', target.pointer + '/' + target.frames.length);
                             messaging.emitAttr('[data-id="' + key + '"]', 'data-color', 'red');
                         });
-                        listener.register('sample.store.end', sample.id, function (target) {
+                        this.listener.register('sample.store.end', sample.id, (target) => {
                             let key = getSampleStoreKey(target.index);
                             messaging.emitAttr('[data-id="' + key + '"]', 'data-label', '');
                             messaging.emitAttr('[data-id="' + key + '"]', 'data-color', '');
 
                             if (load) {
-                                animation.updateSource(getSampleLoadKey(sample.index), sample.id, false, true, false);
+                                this.animation.updateSource(getSampleLoadKey(sample.index), sample.id, false, true, false);
                             }
                         });
-                        storeSample(sample, name, resolution);
+                        this._storeSample(sample, name, resolution);
                     });
                 };
 
@@ -365,19 +381,74 @@
 
         /**
          *
+         * @param sample
+         * @param name
+         * @param resolution
+         * @private
+         */
+        _storeSample(sample, name, resolution) {
+            sample.pointer = 0;
+            var canvas = false;
+            var ctx = false;
+            if (resolution && resolution != 1.0) {
+                canvas = document.createElement('canvas');
+                canvas.width = sample.width * resolution;
+                canvas.height = sample.height * resolution;
+                ctx = canvas.getContext('2d');
+            }
+
+            var _mov = () => {
+
+                if (sample.isReady()) {
+                    this.animation.powersave = true;
+
+                    var frame = sample.frames[sample.pointer];
+                    if (ctx) {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(frame, 0, 0, frame.width, frame.height, 0, 0, canvas.width, canvas.height);
+                        frame = canvas;
+                    }
+                    var now = HC.now();
+                    var data = frame.toDataURL('image/png');
+                    var diff = HC.now() - now;
+
+                    messaging.sample(name, sample.pointer + '.png', data);
+                    sample.pointer++;
+
+                    if (sample.pointer % 5 == 0) {
+                        this.listener.fireEventId('sample.store.progress', sample.id, sample);
+                    }
+
+                    if (sample.pointer < sample.frames.length) {
+
+                        setTimeout(() => {
+                            requestAnimationFrame(_mov);
+                        }, this.animation.threadTimeout(diff / this.animation.duration));
+
+                    } else {
+                        this.animation.powersave = false;
+                        this.listener.fireEventId('sample.store.end', sample.id, sample);
+                    }
+                }
+            };
+            requestAnimationFrame(_mov);
+        }
+
+        /**
+         *
          */
         loadSample(i, name) {
             let sample = this.getSample(i);
             if (sample) {
-                listener.register('sample.load.progress', sample.id, function (target) {
-                    let key = getSampleLoadKey(i);
-                    messaging.emitAttr('[data-id="' + key + '"]', 'data-label', target.pointer + '/' + target.frames.length);
-                    messaging.emitAttr('[data-id="' + key + '"]', 'data-color', 'red');
+                this.listener.register('sample.load.progress', sample.id, function (target) {
+                    // let key = getSampleLoadKey(i);
+                    // messaging.emitAttr('[data-id="' + key + '"]', 'data-label', target.pointer + '/' + target.frames.length);
+                    // messaging.emitAttr('[data-id="' + key + '"]', 'data-color', 'red');
                 });
-                listener.register('sample.load.end', sample.id, function (target) {
-                    let key = getSampleLoadKey(i);
-                    messaging.emitAttr('[data-id="' + key + '"]', 'data-label', '');
-                    messaging.emitAttr('[data-id="' + key + '"]', 'data-color', '');
+                this.listener.register('sample.load.end', sample.id, function (target) {
+                    // let key = getSampleLoadKey(i);
+                    // messaging.emitAttr('[data-id="' + key + '"]', 'data-label', '');
+                    // messaging.emitAttr('[data-id="' + key + '"]', 'data-color', '');
                 });
                 sample.load(name, this.width, this.height);
             }
@@ -388,22 +459,8 @@
          * @param i
          * @returns {*}
          */
-        getVideo(i) {
-
-            if (!this.videos[i]) {
-                this.videos[i] = new HC.Video(i);
-            }
-
-            return this.videos[i];
-        }
-
-        /**
-         *
-         * @param i
-         * @returns {*}
-         */
         getDisplay(i) {
-            return displayman.getDisplay(i);
+            return this.displayManager.getDisplay(i);
         }
 
         /**
@@ -413,7 +470,7 @@
          */
         getColor(i) {
             if (!this.colors[i]) {
-                this.colors[i] = new HC.Color(i);
+                this.colors[i] = new HC.Color(this.animation, i);
             }
 
             return this.colors[i];
@@ -426,21 +483,10 @@
          */
         getLighting(i) {
             if (!this.lighting) {
-                this.lighting = new HC.Lighting(i);
+                this.lighting = new HC.Lighting(this.animation, i);
             }
 
             return this.lighting;
-        }
-
-        /**
-         *
-         * @param i
-         */
-        updateVideo(i) {
-            let video = this.getVideo(i);
-            if (video) {
-                video.update(statics.ControlSettings.tempo, 1280, 720);
-            }
         }
 
         /**
@@ -450,7 +496,7 @@
          */
         getPerspective(i) {
             if (!this.perspectives[i]) {
-                this.perspectives[i] = new HC.Perspective(i);
+                this.perspectives[i] = new HC.Perspective(this.animation, i);
             }
 
             return this.perspectives[i];
@@ -480,44 +526,10 @@
 
         /**
          *
-         * @param speed
-         */
-        updateVideos(speed) {
-            for (let i = 0; i < this.videos.length; i++) {
-                if (this.videos[i]) {
-                    this.videos[i].update(speed, false, false);
-                }
-            }
-        }
-
-        /**
-         *
-         */
-        startVideos() {
-            for (let i = 0; i < this.videos.length; i++) {
-                if (this.videos[i]) {
-                    this.videos[i].canvas.play();
-                }
-            }
-        }
-
-        /**
-         *
-         */
-        stopVideos() {
-            for (let i = 0; i < this.videos.length; i++) {
-                if (this.videos[i]) {
-                    this.videos[i].canvas.pause();
-                }
-            }
-        }
-
-        /**
-         *
          */
         updateSources() {
-            for (let i = 0; i < displayman.displays.length; i++) {
-                this.updateSource(displayman.getDisplay(i));
+            for (let i = 0; i < this.displayManager.displays.length; i++) {
+                this.updateSource(this.displayManager.getDisplay(i));
             }
         }
 
@@ -550,8 +562,8 @@
          *
          */
         renderPerspectives() {
-            for (let i = 0; i < displayman.displays.length; i++) {
-                let dsp = displayman.displays[i];
+            for (let i = 0; i < this.displayManager.displays.length; i++) {
+                let dsp = this.displayManager.displays[i];
                 if (dsp && dsp.visible && getDisplaySource(i) == 'perspective') {
                     this.getPerspective(getDisplaySequence(i)).next();
                 }
@@ -563,11 +575,11 @@
          * @param progress
          */
         renderSamples() {
-            let speed = beatkeeper.getDefaultSpeed();
+            let speed = this.beatKeeper.getDefaultSpeed();
             for (let i = 0; i < this.samples.length; i++) {
                 let sample = this.samples[i];
                 if (sample && sample.record && sample.enabled && sample.initialized && !sample.complete) {
-                    sample.render(renderer.current(), speed, renderer.currentColor());
+                    sample.render(this.renderer.current(), speed, this.renderer.currentColor());
                 }
             }
         }

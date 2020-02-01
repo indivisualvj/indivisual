@@ -1,4 +1,90 @@
 /**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+{
+    /**
+     *
+     * @type {HC.Event}
+     */
+    HC.Event = class Event {
+
+        /**
+         * @type {string}
+         */
+        type;
+
+        /**
+         * @type {function}
+         */
+        callback;
+
+        /**
+         *
+         * @param type
+         * @param callback
+         */
+        constructor(type, callback) {
+            this.type = type;
+            this.callback = callback;
+        }
+
+        /**
+         *
+         * @param element
+         */
+        register(element) {
+            element.addEventListener(this.type, this.callback);
+        }
+    };
+
+    /**
+     *
+     * @type {HC.KeyEvent}
+     */
+    HC.KeyEvent = class KeyEvent extends HC.Event {
+
+        codes;
+
+        label;
+
+        /**
+         *
+         * @param type
+         * @param codes
+         * @param callback
+         * @param label
+         */
+        constructor(type, codes, callback, label) {
+            super(type, callback);
+            this.codes = codes;
+            this.label = label;
+        }
+
+        /**
+         *
+         */
+        register(element) {
+            element.addEventListener(this.type, (e) => {
+                if (this.codes.includes(e.keyCode) && !(/INPUT|TEXTAREA|SELECT|BUTTON/.test(e.target.nodeName))) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.callback(e);
+                }
+            });
+        }
+    };
+
+    /**
+     *
+     * @type {HC.MouseEvent}
+     */
+    HC.MouseEvent = class MouseEvent extends HC.Event {
+
+    };
+}
+
+
+/**
  *
  */
 HC.Controller.prototype.initLogEvents = function () {
@@ -21,54 +107,51 @@ HC.Controller.prototype.initLogEvents = function () {
  *
  */
 HC.Controller.prototype.initKeyboard = function () {
-    var keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    var setMnemonics = function (control) {
 
-        var gi = 0;
-        if (control.__folders) {
-            for (var k in control.__folders) {
-                var v = control.__folders[k];
+    let keys = MNEMONICS;
+    let ci = 0;
+    let setMnemonics = function (control, key) {
+        key = key || control.getLabel();
 
-                if (gi < keys.length) {
-                    v.domElement.parentElement.setAttribute('data-mnemonic', keys.charAt(gi++));
-                }
-                setMnemonics(v);
-            }
+        if (control instanceof HC.Guify) {
+            let key = keys.charAt(ci++);
+            control.setMnemonic(key);
         }
-        if (control.__controllers && control.__controllers.length) {
-            for (var k in control.__controllers) {
-                var v = control.__controllers[k];
-                var folder = control.name;
-                var name = v.property;
 
-                if (gi < keys.length) {
+        let gi = 0;
+        if (control.children) {
+            for (let k in control.children) {
+                let child = control.getChild(k);
 
-                    var key = null;
-                    if (folder in statics.ControlValues._keys
-                        && name in statics.ControlValues._keys[folder]
-                    ) { // vorbelegte
-                        key = statics.ControlValues._keys[folder][name];
-
-                    } else {
-                        key = keys.charAt(gi++);
+                if (child instanceof HC.GuifyFolder) {
+                    if (!child.getMnemonic() && gi < keys.length) {
+                        child.setMnemonic(keys.charAt(gi++));
                     }
+                    setMnemonics(child, key);
 
-                    v.domElement.parentElement
-                        .parentElement.setAttribute('data-mnemonic', key);
+                } else {
+
+                    if (!child.isDisplay() && !child.getMnemonic() && gi < keys.length) {
+                        let key = keys.charAt(gi++);
+                        child.setMnemonic(key);
+                    }
                 }
             }
         }
     };
 
-    setMnemonics(controller.gui);
+    setMnemonics(this.controlSettingsGui);
+    setMnemonics(this.displaySettingsGui);
+    setMnemonics(this.sourceSettingsGui);
+    setMnemonics(this.animationSettingsGui);
 
-    window.addEventListener('keyup', function (e) {
+    window.addEventListener('keyup', (e) => {
         statics.ctrlKey = e.ctrlKey;
         statics.altKey = e.altKey;
         statics.shiftKey = e.shiftKey;
     });
 
-    window.addEventListener('keydown', function (e) {
+    window.addEventListener('keydown', (e) => {
 
         statics.ctrlKey = e.ctrlKey;
         statics.altKey = e.altKey;
@@ -78,92 +161,28 @@ HC.Controller.prototype.initKeyboard = function () {
             return;
         }
 
-        var src = e.srcElement;
-        if (src.nodeName.match(/(INPUT)/i)) {
-            if (e.keyCode == 27) { // ESCAPE
-                this.focus();
-                src.blur();
-                this.focus();
-                src.blur();
-                e.preventDefault();
-                e.stopPropagation();
-
-            } else if (e.keyCode == 9) { // TAB
-                e.preventDefault();
-                e.stopPropagation();
-
-            } else if (e.keyCode == 38 || e.keyCode == 40) { // UP + DOWN
-                var f = parseFloat(src.value);
-                if (!isNaN(f)) {
-                    var s = parseFloat(src.getAttribute('data-step'));
-                    if (!isNaN(s)) {
-                        if (e.keyCode == 40) {
-                            s *= -1;
-                        }
-                        src.value = f + s;
-                        src.blur();
-                        src.focus();
-                    }
-                }
-            }
-            return;
-
-        } else if (src.nodeName.match(/(SELECT)/i)) {
-            if (e.keyCode == 8 || e.keyCode == 27) { // BACKSPACE + ESCAPE
-                this.focus();
-                src.blur();
-                this.focus();
-                src.blur();
-                e.preventDefault();
-                e.stopPropagation();
-
-            }
+        if (/INPUT|TEXTAREA|SELECT|BUTTON/.test(e.target.nodeName)) {
             return;
         }
 
-        if (e.keyCode == 32) { // SPACE = play/pause
-            controller.updateControl('play', !statics.ControlSettings.play, true, true, false);
-
-        } else if (e.keyCode == 46) { // DEL = reset
-            statics.ControlController.g_controls.reset();
-
-        } else if (e.keyCode == 8) {
-            var open = controller.nextOpenFolder();
-            if (open != controller.gui) {
-                controller.closeAll(open.parent);
-                controller.scrollToControl(open.parent);
+        if (e.keyCode == 8) { // BACKSPACE = close folders
+            var open = this.nextOpenFolder();
+            if (!(open instanceof HC.Guify)) {
+                this.closeAll(open);
+                this.scrollToControl(open);
 
             } else {
-                controller.closeAll(controller.gui);
-                controller.scrollToControl(controller.gui);
+                let open = this.closeAll();
+                this.scrollToControl(open);
             }
             e.preventDefault();
             e.stopPropagation();
             return;
 
-        } else if (e.keyCode == 36) { // HOME = monitor
-            e.stopPropagation();
-            e.preventDefault();
-            controller.updateControl('monitor', !statics.ControlSettings.monitor, true, true, false);
-
-        } else if (e.keyCode == 35) { // END = push_layers
-            e.stopPropagation();
-            e.preventDefault();
-            statics.ControlController.g_controls.push_layers();
-
-        } else if (e.keyCode == 33) { // PG_UP = rst_shaders
-            e.stopPropagation();
-            e.preventDefault();
-            statics.ControlController.g_controls.rst_shaders();
-
-        } else if (e.keyCode == 34) { // PG_DOWN = push_sources
-            e.stopPropagation();
-            e.preventDefault();
-            statics.ControlController.g_controls.push_sources();
         }
 
-        if (e.keyCode in LAYER_KEYCODES) {
-            var val = LAYER_KEYCODES[e.keyCode];
+        if (e.keyCode in statics.ControlValues.layer_keycodes) {
+            var val = statics.ControlValues.layer_keycodes[e.keyCode];
 
             if (e.ctrlKey) {
                 e.preventDefault();
@@ -171,7 +190,7 @@ HC.Controller.prototype.initKeyboard = function () {
                 val += 10;
             }
 
-            controller.updateControl('layer', val, true, true);
+            this.updateControl('layer', val, true, true);
             return;
         }
 
@@ -182,7 +201,7 @@ HC.Controller.prototype.initKeyboard = function () {
             e.preventDefault();
             e.stopPropagation();
 
-            controller.toggleByKey(ci, e.shiftKey);
+            this.toggleByKey(ci, char, e.shiftKey);
         }
     });
 };

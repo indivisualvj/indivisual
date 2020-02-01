@@ -17,11 +17,11 @@ HC.Layer.prototype.resetLighting = function () {
     this.resetAmbientLight();
     this.resetFog();
 
-    var plugin = this.getLightingTypePlugin();
+    let plugin = this.getLightingTypePlugin();
 
     this.lights = [];
-    for (var i = 0; i < this.settings.lighting_pattern_lights; i++) {
-        var light = plugin.apply(i);
+    for (let i = 0; i < this.settings.lighting_pattern_lights; i++) {
+        let light = plugin.apply(i);
         if (light) {
             if (plugin.after) {
                 plugin.after(light);
@@ -40,13 +40,13 @@ HC.Layer.prototype.resetLighting = function () {
 HC.Layer.prototype.lightColor = function (value) {
 
     if (this.lights && this.lights.length) {
-        var c = new THREE.Color(value);
+        let c = new THREE.Color(value);
 
         if (c.r == 0 && c.g == 0 && c.b == 0) { // is black. change to white.
             c = new THREE.Color(0xffffff);
         }
 
-        for (var k in this.lights) {
+        for (let k in this.lights) {
             this.lights[k].color.set(c);
         }
     }
@@ -66,11 +66,11 @@ HC.Layer.prototype.updateLighting = function () {
         this.ambientLight.intensity = this.settings.lighting_ambient_intensity;
     }
 
-    var pattern = this.getLightingPatternPlugin();
-    var lookat = this.getLightingLookatPlugin();
-    var type = this.getLightingTypePlugin();
-    for (var k in this.lights) {
-        var light = this.lights[k];
+    let pattern = this.getLightingPatternPlugin();
+    let lookat = this.getLightingLookatPlugin();
+    let type = this.getLightingTypePlugin();
+    for (let k in this.lights) {
+        let light = this.lights[k];
 
         this.doPlugin(pattern, light);
         this.doPlugin(lookat, light);
@@ -87,7 +87,7 @@ HC.Layer.prototype.resetFog = function () {
     }
 
     if (this.settings.lighting_fog) {
-        var fog = new THREE.Fog(0x000000, this.settings.lighting_fog_near, this.settings.lighting_fog_far);
+        let fog = new THREE.Fog(0x000000, this.settings.lighting_fog_near, this.settings.lighting_fog_far);
         this._layer.fog = fog;
     }
 };
@@ -104,7 +104,7 @@ HC.Layer.prototype.resetAmbientLight = function () {
     }
 
     if (this.settings.lighting_ambient) {
-        var light = new THREE.AmbientLight(0xffffff);
+        let light = new THREE.AmbientLight(0xffffff);
         this._lighting.add(light);
         this.ambientLight = light;
     }

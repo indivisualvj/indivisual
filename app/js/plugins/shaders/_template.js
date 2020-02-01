@@ -11,8 +11,7 @@
 //
 //         static settings = {
 //             apply: false,
-//             random: false,
-//             index: 0
+//             random: false
 //         }
 //     };
 // }

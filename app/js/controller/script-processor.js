@@ -1,19 +1,34 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-
 {
     /**
      *
      * @type {HC.ScriptProcessor}
      */
     HC.ScriptProcessor = class ScriptProcessor {
-        constructor(key, desc) {
+
+        /**
+         * @type {HC.Controller}
+         */
+        instance;
+
+        /**
+         *
+         * @param {HC.Controller} instance
+         * @param key
+         * @param desc
+         */
+        constructor(instance, key, desc) {
+            this.instance = instance;
             this.key = key;
             this.desc = desc;
             this.load();
         }
 
+        /**
+         *
+         */
         load() {
             for (let i in this.desc) {
                 let d = this.desc[i];
@@ -50,14 +65,29 @@
             }
         }
 
+        /**
+         *
+         * @param instance
+         * @returns {null|HC.Controller}
+         * @private
+         */
         _getInstance(instance) {
             switch (instance) {
                 default:
                 case 'controller':
-                    return controller;
+                    return this.instance;
             }
+
+            return null;
         }
 
+        /**
+         *
+         * @param instance
+         * @param func
+         * @param args
+         * @private
+         */
         _call(instance, func, args) {
 
             if (args && args.length) {
@@ -86,6 +116,9 @@
             }
         }
 
+        /**
+         *
+         */
         log() {
 
             HC.clearLog();
@@ -102,6 +135,9 @@
             }
         }
 
+        /**
+         *
+         */
         execute() {
             for (let i in this.desc) {
                 let d = this.desc[i];

@@ -33,8 +33,27 @@ HC.Shape.prototype.initPlugins = function () {
      */
     HC.AnimationPlugin = class AnimationPlugin {
 
+        /**
+         * @type {HC.Animation}
+         */
+        animation;
+
+        /**
+         * @type {HC.BeatKeeper}
+         */
+        beatKeeper;
+
+        /**
+         * @type {HC.AudioAnalyser}
+         */
+        audioAnalyser;
+
+        /**
+         * @type {HC.Layer}
+         */
         layer;
         settings;
+        controlSets;
         tree;
         key;
         
@@ -42,7 +61,29 @@ HC.Shape.prototype.initPlugins = function () {
             return this.layer.index + '.' + this.tree + '.' + this.key + (suffix!==undefined?'.' + suffix:'');
         }
 
-        construct(layer, settings, tree, key) {
+        /**
+         *
+         * @param {HC.Shape} shape
+         * @returns {*}
+         */
+        shapeVolume(shape) {
+            let i = shape.index % this.audioAnalyser.volumes.length;
+            return this.audioAnalyser.volumes[i];
+        }
+
+        /**
+         *
+         * @param {HC.Animation} animation
+         * @param {HC.Layer} layer
+         * @param settings
+         * @param tree
+         * @param key
+         * @returns {HC.AnimationPlugin}
+         */
+        construct(animation, layer, settings, tree, key) {
+            this.animation = animation;
+            this.beatKeeper = animation.beatKeeper;
+            this.audioAnalyser = animation.audioAnalyser;
             this.layer = layer;
             this.settings = settings;
             this.tree = tree;
@@ -60,8 +101,8 @@ HC.Shape.prototype.initPlugins = function () {
             //
         }
 
-        setControlSets(controlsets) {
-            this.controlsets = controlsets;
+        setControlSets(controlSets) {
+            this.controlSets = controlSets;
         }
 
         inject() {
@@ -114,7 +155,7 @@ HC.Shape.prototype.initPlugins = function () {
          * @param tween
          */
         tweenStart(tween) {
-            tween.start(animation.now - this.layer.lastUpdate);
+            tween.start(this.animation.now - this.layer.lastUpdate);
         }
 
         /**

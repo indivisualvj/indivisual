@@ -23,44 +23,25 @@ IS_SETUP = G_INSTANCE == _SETUP;
 IS_ANIMATION = G_INSTANCE == _ANIMATION || G_INSTANCE == _CLIENT;
 IS_MONITOR = G_INSTANCE == _MONITOR;
 
-LAYER_KEYCODES = {
-    "49": 0,
-    "50": 1,
-    "51": 2,
-    "52": 3,
-    "53": 4,
-    "54": 5,
-    "55": 6,
-    "56": 7,
-    "57": 8,
-    "48": 9,
-    "97": 0,
-    "98": 1,
-    "99": 2,
-    "100": 3,
-    "101": 4,
-    "102": 5,
-    "103": 6,
-    "104": 7,
-    "105": 8,
-    "96": 9
-};
-
+MNEMONICS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 OSD_TIMEOUT = 2000;
 RAD = Math.PI / 180;
 DEG = 180 / Math.PI;
 SQUARE_DIAMETER = (Math.sqrt(2 * 2 + 2 * 2) / 2);
 ANTIALIAS = true;
 
-var HC = HC || {};
-
 HC.now = window.performance.now.bind(window.performance);
 if (TWEEN) {
     TWEEN.now = HC.now;
 }
 
-var assetman = new HC.AssetManager();
-var statics;
+/**
+ *
+ * @type {HC.AssetManager}
+ */
+assetman = new HC.AssetManager();
+
+statics = {};
 
 /**
  *
@@ -68,18 +49,18 @@ var statics;
  * @param callback
  */
 function loadResources(resources, callback) {
-    var _load = function (index, finished) {
+    let _load = function (index, finished) {
 
         if (index > resources.length - 1) {
             finished();
             return;
         }
-        var rsc = resources[index];
-        var action = 'get';
+        let rsc = resources[index];
+        let action = 'get';
         if (rsc.action) {
             action = rsc.action;
         }
-        var file = filePath(rsc.base || APP_DIR, rsc.file);
+        let file = filePath(rsc.base || APP_DIR, rsc.file);
         messaging._emit({action: action, file: file, name: rsc.name}, function (data) {
             rsc.callback(data, function () {
                 _load(index + 1, finished);
@@ -87,12 +68,12 @@ function loadResources(resources, callback) {
         });
     };
 
-    var _setup = function (callback) {
+    let _setup = function (callback) {
         if (!(_HASH in statics.ControlValues.session)) {
             statics.ControlValues.session[_HASH] = _HASH;
         }
 
-        statics.ControlSettings.session = _HASH;
+        // statics.ControlSettings.session = _HASH;
 
         callback();
     };
@@ -103,41 +84,19 @@ function loadResources(resources, callback) {
 }
 
 /**
- * All setup operations are encapsulated into this function
+ * setup operations are encapsulated into this function
  * @returns {*[]}
  */
 function setupResources() {
     return [
         {
-            file: 'structure/Statics.yml',
-            callback: function (data, finished) {
-                statics = new HC.Settings(jsyaml.load(data.contents));
-                finished();
-            }
-        },
-        {
-            file: 'structure/ShaderValues.yml',
-            callback: function (data, finished) {
-                var settings = jsyaml.load(data.contents);
-                statics.ShaderValues = settings;
-                finished();
-            }
-        },
-        {
-            file: 'structure/ShaderTypes.yml',
-            callback: function (data, finished) {
-                statics.ShaderTypes = new HC.Settings(jsyaml.load(data.contents));
-                finished();
-            }
-        },
-        {
             file: 'structure/AnimationValues.yml',
             callback: function (data, finished) {
-                var settings = jsyaml.load(data.contents);
+                let settings = jsyaml.load(data.contents);
 
                 _loadAnimationPlugins(settings);
                 statics.ShaderSettings = _loadShaderSettings(settings.shaders);
-                statics.Passes = [];
+                statics.Passes = [null];
                 for (let sh in statics.ShaderSettings) {
                     statics.Passes.push(sh);
                 }
@@ -150,27 +109,13 @@ function setupResources() {
         {
             file: 'structure/ControlValues.yml',
             callback: function (data, finished) {
-                var settings = jsyaml.load(data.contents);
+                let settings = jsyaml.load(data.contents);
 
                 _loadAudioPlugins(settings);
                 _loadShufflePlugins(settings);
                 _loadControlSets();
 
                 statics.ControlValues = settings;
-                finished();
-            }
-        },
-        {
-            file: 'structure/ControlSettings.yml',
-            callback: function (data, finished) {
-                statics.ControlSettings = new HC.Settings(jsyaml.load(data.contents));
-                finished();
-            }
-        },
-        {
-            file: 'structure/ControlTypes.yml',
-            callback: function (data, finished) {
-                statics.ControlTypes = jsyaml.load(data.contents);
                 finished();
             }
         },
@@ -182,20 +127,6 @@ function setupResources() {
             }
         },
         {
-            file: 'structure/DisplaySettings.yml',
-            callback: function (data, finished) {
-                statics.DisplaySettings = new HC.Settings(jsyaml.load(data.contents));
-                finished();
-            }
-        },
-        {
-            file: 'structure/DisplayTypes.yml',
-            callback: function (data, finished) {
-                statics.DisplayTypes = jsyaml.load(data.contents);
-                finished();
-            }
-        },
-        {
             file: 'structure/SourceValues.yml',
             callback: function (data, finished) {
                 statics.SourceValues = jsyaml.load(data.contents);
@@ -203,43 +134,15 @@ function setupResources() {
             }
         },
         {
-            file: 'structure/SourceSettings.yml',
-            callback: function (data, finished) {
-                statics.SourceSettings = new HC.Settings(jsyaml.load(data.contents));
-                finished();
-            }
-        },
-        {
-            file: 'structure/SourceTypes.yml',
-            callback: function (data, finished) {
-                statics.SourceTypes = jsyaml.load(data.contents);
-                finished();
-            }
-        },
-        {
-            file: 'structure/DataSettings.yml',
-            callback: function (data, finished) {
-                statics.DataSettings = new HC.Settings(jsyaml.load(data.contents));
-                finished();
-            }
-        },
-        {
-            file: 'structure/SourceTypes.yml',
-            callback: function (data, finished) {
-                statics.DataTypes = jsyaml.load(data.contents);
-                finished();
-            }
-        },
-        {
             file: 'structure/MidiController.yml',
             callback: function (data, finished) {
 
-                var settings = jsyaml.load(data.contents);
+                let settings = jsyaml.load(data.contents);
 
                 // create MIDI_ constants
-                var constants = settings.Default.constants;
-                for (var c in constants) {
-                    var co = constants[c];
+                let constants = settings.Default.constants;
+                for (let c in constants) {
+                    let co = constants[c];
                     window[c] = co;
                 }
 
@@ -252,8 +155,8 @@ function setupResources() {
             base: '.',
             file: SESSION_DIR,
             callback: function (files, finished) {
-                for (var i = 0; i < files.length; i++) {
-                    var f = files[i];
+                for (let i = 0; i < files.length; i++) {
+                    let f = files[i];
                     statics.ControlValues.session[f.name] = f.name;
                 }
 
@@ -266,14 +169,7 @@ function setupResources() {
             file: VIDEO_DIR,
             callback: function (files, finished) {
 
-                var videos = assetman.addVideos(files, 'name');
-
-                // add videos into source values by index
-                var keys = Object.keys(statics.SourceValues.input);
-                var index = keys.length;
-                for (var i in videos) {
-                    statics.SourceValues.input[index++] = i;
-                }
+                assetman.addVideos(files, 'name');
 
                 finished();
             }
@@ -283,20 +179,11 @@ function setupResources() {
             base: '.',
             file: IMAGE_DIR,
             callback: function (files, finished) {
-                var images = assetman.addImages(files, 'name');
+                let images = assetman.addImages(files, 'name');
                 // add images into AnimationValues by name
-                for (var i in images) {
+                for (let i in images) {
                     statics.AnimationValues.material_input[i] = i;
                     statics.AnimationValues.background_input[i] = i;
-                }
-
-                // add images into source values by index
-                var keys = Object.keys(statics.SourceValues.input);
-                var index = keys.length;
-                for (var i in images) {
-                    if (!i.match(/^.+\.mat$/)) {
-                        statics.SourceValues.input[index++] = i;
-                    }
                 }
 
                 finished();
@@ -307,10 +194,10 @@ function setupResources() {
             base: '.',
             file: CUBE_DIR,
             callback: function (files, finished) {
-                var cubes = assetman.addCubes(files, 'name');
+                let cubes = assetman.addCubes(files, 'name');
                 // add cubes into AnimationValues by name
-                for (var i in cubes) {
-                    var name = i + '.cube';
+                for (let i in cubes) {
+                    let name = i + '.cube';
                     statics.AnimationValues.background_input[i] = name;
                 }
 
@@ -329,14 +216,14 @@ function setupResources() {
      */
     function _loadPlugins(settings, tree, section, plugins) {
 
-        var pluginKeys = Object.keys(plugins);
+        let pluginKeys = Object.keys(plugins);
 
         pluginKeys.sort(function (a, b) {
 
-            var ai = plugins[a].index || 99999;
-            var bi = plugins[b].index || 99999;
-            var an = plugins[a].name || a;
-            var bn = plugins[b].name || b;
+            let ai = plugins[a].index || 99999;
+            let bi = plugins[b].index || 99999;
+            let an = plugins[a].name || a;
+            let bn = plugins[b].name || b;
 
             if (an === 'Plugin') {
                 an = a;
@@ -345,21 +232,24 @@ function setupResources() {
                 bn = b;
             }
 
-            var cmpi = ai - bi;
+            let cmpi = ai - bi;
             if (cmpi == 0) {
                 return an.localeCompare(bn);
             }
             return cmpi;
         });
 
-        for (var i = 0; i < pluginKeys.length; i++) {
+        for (let i = 0; i < pluginKeys.length; i++) {
 
-            var pluginKey = pluginKeys[i];
-            var plugin = tree[section][pluginKey];
-            var name = plugin.name || pluginKey;
+            let pluginKey = pluginKeys[i];
+            let plugin = tree[section][pluginKey];
+            let name = plugin.name || pluginKey;
 
             if (name == 'Plugin') {
                 name = pluginKey;
+            }
+            if (!(section in settings)) {
+                settings[section] = {};
             }
 
             settings[section][pluginKey] = name;
@@ -444,11 +334,11 @@ function setupResources() {
 
         Object.assign(HC.plugins.pattern_overlay, HC.plugins.pattern);
 
-        var sectionKeys = Object.keys(HC.plugins);
+        let sectionKeys = Object.keys(HC.plugins);
 
-        for (var pi = 0; pi < sectionKeys.length; pi++) {
+        for (let pi = 0; pi < sectionKeys.length; pi++) {
 
-            var section = sectionKeys[pi];
+            let section = sectionKeys[pi];
 
             // create plugin namespaces to work in
             HC.Shape.prototype.injected.plugins[section] = {};
@@ -456,8 +346,6 @@ function setupResources() {
             _loadPlugins(settings, HC.plugins, section, HC.plugins[section]);
 
         }
-
-        statics.ShaderValues.oscillate = settings.oscillate;
     }
 
     /**
@@ -466,8 +354,9 @@ function setupResources() {
      * @private
      */
     function _loadRhythms(settings) {
-        var speeds = HC.Beatkeeper.prototype.speeds;
-        for (var key in speeds) {
+        let speeds = HC.BeatKeeper.initSpeeds();
+        settings.rhythm = {};
+        for (let key in speeds) {
             if (speeds[key].visible !== false) {
                 settings.rhythm[key] = key;
             }
@@ -480,11 +369,11 @@ function setupResources() {
      * @private
      */
     function _loadShaderSettings(values) {
-        var settings = {};
-        var keys = Object.keys(values);
-        for (var i = 0; i < keys.length; i++) {
-            var key = keys[i];
-            var plug = HC.plugins.shaders[key];
+        let settings = {};
+        let keys = Object.keys(values);
+        for (let i = 0; i < keys.length; i++) {
+            let key = keys[i];
+            let plug = HC.plugins.shaders[key];
             settings[key] = plug.settings || {};
         }
 

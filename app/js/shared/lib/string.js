@@ -6,7 +6,7 @@
 function splitToIntArray(value) {
 
     if (value && isString(value)) {
-        var arr = value.split(',');
+        let arr = value.split(',');
         return arr.map(function (it) {
             return parseInt(it);
         });
@@ -24,7 +24,7 @@ function splitToIntArray(value) {
  * @returns {string}
  */
 function filePath() {
-    var args = Array.prototype.slice.call(arguments);
+    let args = Array.prototype.slice.call(arguments);
     return args.join('/');
 }
 
@@ -35,7 +35,7 @@ function filePath() {
  */
 function parseFileMeta(file) {
 
-    var meta = {
+    let meta = {
         tempo: 120,
         resolution: {
             x: 1280,
@@ -43,7 +43,7 @@ function parseFileMeta(file) {
         },
         fps: 30
     };
-    var data = file.replace(/^[^\d]+/, '').replace(/\..{3,4}$/, '');
+    let data = file.replace(/^[^\d]+/, '').replace(/\..{3,4}$/, '');
 
     if (data != file) {
         data = data.split(',');
@@ -51,7 +51,7 @@ function parseFileMeta(file) {
         meta.tempo = parseInt(data[0]);
         if (data.length > 1) {
             if (data[1].match(/\d+x\d+/)) {
-                var res = data[1].split('x');
+                let res = data[1].split('x');
                 meta.resolution.x = parseInt(res[0]);
                 meta.resolution.y = parseInt(res[1]);
             }
@@ -73,15 +73,15 @@ function parseFileMeta(file) {
  * @returns {*}
  */
 function numberExtract(item, prefix) {
-    var regex = new RegExp(prefix + '(\\d+)');
-    var i = item.replace(regex, '$1');
+    let regex = new RegExp(prefix + '(\\d+)_?\\w*');
+    let i = item.replace(regex, '$1');
     i = parseInt(i);
 
     if (!isNaN(i)) {
         return i;
     }
 
-    return item;
+    return undefined;
 }
 
 /**
@@ -101,6 +101,9 @@ function parse(value, fallback) {
 
     } else if (value.match(/^\d+\.\d+$/)) {
         return parseFloat(value);
+
+    } else if (value.match(/{.+}/)) {
+        return JSON.parse(value);
     }
 
     return fallback !== undefined ? fallback : value;
@@ -112,8 +115,8 @@ function parse(value, fallback) {
  * @returns {*}
  */
 function parseArray(args) {
-    for (var i in args) {
-        var a = args[i];
+    for (let i in args) {
+        let a = args[i];
         args[i] = parse(a);
     }
 

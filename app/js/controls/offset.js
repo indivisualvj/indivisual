@@ -24,15 +24,22 @@
         };
         
         types = {
-            offset_audio: ['third'],
-            offset_limit: ['third'],
-            offset_sync: ['third'],
-            offset_x: [-10, 10, 0.01, 'half'],
-            offset_y: [-10, 10, 0.01, 'half'],
-            offset_z: [-10, 10, 0.01, 'half'],
+            offset_x: [-10, 10, 0.01],
+            offset_y: [-10, 10, 0.01],
+            offset_z: [-10, 10, 0.01]
+        };
+
+        styles = {
+            // offset_mode: ['half'],
+            offset_x: ['half', 'clear'],
             offset_x_oscillate: ['half'],
+            offset_y: ['half', 'clear'],
             offset_y_oscillate: ['half'],
+            offset_z: ['half', 'clear'],
             offset_z_oscillate: ['half'],
+            offset_limit: ['third', 'clear'],
+            offset_audio: ['third'],
+            offset_sync: ['third'],
         };
     }
 }

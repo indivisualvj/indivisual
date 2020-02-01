@@ -12,17 +12,17 @@
             if (params.active < 0.1) {
 
                 // when to start growing?
-                if ((audio.peak && randomInt(0, this.settings.sizing_mode_sync ? 2 : 6) === 0)
-                    || (audio.volume > 0.05 && speed.progress <= 0 && randomInt(0, this.settings.sizing_mode_sync ? 2 : layer.shapeCount()) === 0)
+                if ((this.audioAnalyser.peak && randomInt(0, this.settings.sizing_mode_sync ? 2 : 6) === 0)
+                    || (this.audioAnalyser.volume > 0.05 && speed.progress <= 0 && randomInt(0, this.settings.sizing_mode_sync ? 2 : layer.shapeCount()) === 0)
                 ) {
                     params.active = this.settings.sizing_mode_limit ? 0.09 : 0.11;
-                    params.since = animation.now;
+                    params.since = this.animation.now;
                 }
 
                 let mul = this.settings.sizing_scale;
 
                 if (this.settings.sizing_mode_audio == true) {
-                    mul *= (this.settings.sizing_mode_sync == false ? shape.shapeVolume() : audio.volume * 2);
+                    mul *= (this.settings.sizing_mode_sync == false ? this.shapeVolume(shape) : this.audioAnalyser.volume * 2);
                 }
 
                 if (this.settings.sizing_mode_limit == true) {
@@ -38,11 +38,11 @@
             } else {
 
                 let speed = layer.getShapeSpeed(shape);
-                let jump = 1 / speed.duration * animation.diffPrc;
+                let jump = 1 / speed.duration * this.animation.diffPrc;
 
                 params.active += jump * 60 * this.settings.sizing_scale;
 
-                let diff = animation.now - params.since;
+                let diff = this.animation.now - params.since;
                 if (diff > speed.duration * 4 / this.settings.sizing_scale) {
                     params.active = 0.09;
                 }

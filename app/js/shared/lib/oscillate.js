@@ -30,21 +30,6 @@ HC.Osci = {
 
     /**
      *
-     * @param offset
-     * @param settings
-     * @returns {number}
-     */
-    reverse(offset, settings) {
-        let bpm = 180 / statics.ControlSettings.tempo * 1000;
-        let div = beatkeeper.getSpeed(settings.rhythm).divider / 8;
-        let progress = Math.PI * animation.last / (bpm * settings.osci1_period);
-        progress *= div;
-
-        return Math.sin(offset + progress);
-    },
-
-    /**
-     *
      * @param prc
      * @param add
      * @returns {*}
@@ -78,7 +63,7 @@ HC.Osci = {
      * @param negative
      */
     step(pa, steps, speed, onpeak, negative) {
-        if ((onpeak && audio.peak) || (!onpeak && speed.starting())) {
+        if ((onpeak && messaging.program.audioAnalyser.peak) || (!onpeak && speed.starting())) {  // todo eliminate audio call
             let n = pa.next;
             while (n == pa.next) {
                 n = (randomInt(0, steps, negative) / steps);
@@ -91,25 +76,26 @@ HC.Osci = {
         let diff = pa.next - pa.value;
 
         if (Math.abs(diff) > 0.01) {
-            let step = diff / 0.075 * animation.diff / (speed.duration * 2);
+            let step = diff / 0.075 * messaging.program.diff / (speed.duration * 2);  // todo eliminate animation call
             pa.value += step;
         }
     },
 
     /**
      *
+     * @param beatKeeper
      * @param progress
      * @param settings
      * @param func
      * @returns {number}
      */
-    wobble(progress, settings, func) {
+    wobble(beatKeeper, progress, settings, func) {
         let p = 1;
 
         let bpm = 60000 / statics.ControlSettings.tempo;
-        let div = beatkeeper.rhythmDivider(settings.rhythm) / 2;
+        let div = beatKeeper.rhythmDivider(settings.rhythm) / 2;
         func = func || Math.sin;
-        progress = progress || Math.PI * animation.now;
+        progress = progress || Math.PI * messaging.program.now; // todo eliminate animation call
 
         if (settings.osci1_period !== 0) {
             let pr = progress / (bpm * settings.osci1_period);

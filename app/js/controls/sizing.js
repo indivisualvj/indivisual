@@ -28,17 +28,26 @@
         };
         
         types = {
-            sizing_scale: [-10, 10, 0.01, 'half'],
-            sizing_x: [-10, 10, 0.01, 'half'],
-            sizing_y: [-10, 10, 0.01, 'half'],
-            sizing_z: [-10, 10, 0.01, 'half'],
-            sizing_x_oscillate: ['half'],
-            sizing_y_oscillate: ['half'],
-            sizing_z_oscillate: ['half'],
+            sizing_scale: [-10, 10, 0.01],
+            sizing_x: [-10, 10, 0.01],
+            sizing_y: [-10, 10, 0.01],
+            sizing_z: [-10, 10, 0.01],
+        };
+
+        styles = {
+            // sizing_mode: ['half'],
+            sizing_scale: ['half', 'clear'],
             sizing_scale_oscillate: ['half'],
-            sizing_audio: ['hex'],
+            sizing_x: ['half', 'clear'],
+            sizing_x_oscillate: ['half'],
+            sizing_y: ['half', 'clear'],
+            sizing_y_oscillate: ['half'],
+            sizing_z: ['half', 'clear'],
+            sizing_z_oscillate: ['half'],
+            sizing_flip: ['half', 'clear'],
             sizing_limit: ['hex'],
-            sizing_sync: ['hex']
+            sizing_audio: ['hex'],
+            sizing_sync: ['hex'],
         };
     }
 }

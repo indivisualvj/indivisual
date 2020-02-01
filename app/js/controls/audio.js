@@ -18,7 +18,11 @@
         };
         
         types = {
-            audio_thickness: [0, 0.99, 0.01, 'half'],
+            audio_thickness: [0, 0.99, 0.01],
+        };
+
+        styles = {
+            audio_thickness: ['half', 'clear'],
             audio_usewaveform: ['half']
         };
     }

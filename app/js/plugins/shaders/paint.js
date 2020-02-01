@@ -13,7 +13,6 @@
         static settings = {
             apply: false,
             random: false,
-            index: 0,
             colorOffset: {
                 value: 0.95,
                 _type: [0, 2, 0.01],

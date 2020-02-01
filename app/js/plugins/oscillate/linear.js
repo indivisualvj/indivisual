@@ -27,7 +27,7 @@
         static index = 60;
 
         apply(key, speed) {
-            speed = speed || beatkeeper.getSpeed('double');
+            speed = speed || this.beatKeeper.getSpeed('double');
             return this.layer.getOscillatePlugin('lininout').apply(key, speed, .5);
         }
     }
@@ -38,7 +38,7 @@
         static index = 60;
 
         apply(key, speed) {
-            speed = speed || beatkeeper.getSpeed('quad');
+            speed = speed || this.beatKeeper.getSpeed('quad');
             return this.layer.getOscillatePlugin('lininout').apply(key, speed, .5);
         }
     }
@@ -49,7 +49,7 @@
         static index = 60;
 
         apply(key, speed) {
-            speed = speed || beatkeeper.getSpeed('octa');
+            speed = speed || this.beatKeeper.getSpeed('octa');
             return this.layer.getOscillatePlugin('lininout').apply(key, speed, .5);
         }
     }
@@ -60,7 +60,7 @@
         static index = 60;
 
         apply(key, speed) {
-            speed = speed || beatkeeper.getSpeed('hexa');
+            speed = speed || this.beatKeeper.getSpeed('hexa');
             return this.layer.getOscillatePlugin('lininout').apply(key, speed, .5);
         }
     }

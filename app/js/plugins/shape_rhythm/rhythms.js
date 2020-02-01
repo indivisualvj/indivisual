@@ -6,10 +6,10 @@
             let layer = this.layer;
             let params = this.params(shape);
             if (shape.index % 2 == 0) {
-                params.speed = beatkeeper.speeds.double;
+                params.speed = this.beatKeeper.speeds.double;
 
             } else {
-                params.speed = beatkeeper.speeds.quad;
+                params.speed = this.beatKeeper.speeds.quad;
             }
         }
     }
@@ -22,10 +22,10 @@
             let layer = this.layer;
             let params = this.params(shape);
             if (shape.index % 2 == 0) {
-                params.speed = beatkeeper.speeds.quad;
+                params.speed = this.beatKeeper.speeds.quad;
 
             } else {
-                params.speed = beatkeeper.speeds.double;
+                params.speed = this.beatKeeper.speeds.double;
             }
         }
     }
@@ -38,10 +38,10 @@
             let layer = this.layer;
             let params = this.params(shape);
             if (shape.index % 2 == 0) {
-                params.speed = beatkeeper.speeds.double;
+                params.speed = this.beatKeeper.speeds.double;
 
             } else {
-                params.speed = beatkeeper.speeds.full;
+                params.speed = this.beatKeeper.speeds.full;
             }
         }
     }
@@ -54,10 +54,10 @@
             let layer = this.layer;
             let params = this.params(shape);
             if (shape.index % 2 == 0) {
-                params.speed = beatkeeper.speeds.full;
+                params.speed = this.beatKeeper.speeds.full;
 
             } else {
-                params.speed = beatkeeper.speeds.double;
+                params.speed = this.beatKeeper.speeds.double;
             }
         }
     }
@@ -70,10 +70,10 @@
             let layer = this.layer;
             let params = this.params(shape);
             if (shape.index % 2 == 0) {
-                params.speed = beatkeeper.speeds.full;
+                params.speed = this.beatKeeper.speeds.full;
 
             } else {
-                params.speed = beatkeeper.speeds.half;
+                params.speed = this.beatKeeper.speeds.half;
             }
         }
     }
@@ -86,10 +86,10 @@
             let layer = this.layer;
             let params = this.params(shape);
             if (shape.index % 2 == 1) {
-                params.speed = beatkeeper.speeds.full;
+                params.speed = this.beatKeeper.speeds.full;
 
             } else {
-                params.speed = beatkeeper.speeds.half;
+                params.speed = this.beatKeeper.speeds.half;
             }
         }
     }
@@ -102,10 +102,10 @@
             let layer = this.layer;
             let params = this.params(shape);
             if (shape.index % 2 == 0) {
-                params.speed = beatkeeper.speeds.half;
+                params.speed = this.beatKeeper.speeds.half;
 
             } else {
-                params.speed = beatkeeper.speeds.quarter;
+                params.speed = this.beatKeeper.speeds.quarter;
             }
         }
     }
@@ -118,10 +118,10 @@
             let layer = this.layer;
             let params = this.params(shape);
             if (shape.index % 2 == 0) {
-                params.speed = beatkeeper.speeds.quarter;
+                params.speed = this.beatKeeper.speeds.quarter;
 
             } else {
-                params.speed = beatkeeper.speeds.half;
+                params.speed = this.beatKeeper.speeds.half;
             }
         }
     }
@@ -136,15 +136,15 @@
             let mod = shape.index % 3;
             switch (mod) {
                 case 0:
-                    params.speed = beatkeeper.speeds.full;
+                    params.speed = this.beatKeeper.speeds.full;
                     break;
 
                 case 1:
-                    params.speed = beatkeeper.speeds.half;
+                    params.speed = this.beatKeeper.speeds.half;
                     break;
 
                 case 2:
-                    params.speed = beatkeeper.speeds.quarter;
+                    params.speed = this.beatKeeper.speeds.quarter;
                     break;
             }
         }
@@ -162,19 +162,19 @@
             }
             switch (mod) {
                 case 0:
-                    params.speed = beatkeeper.speeds.full;
+                    params.speed = this.beatKeeper.speeds.full;
                     break;
 
                 case 1:
-                    params.speed = beatkeeper.speeds.half;
+                    params.speed = this.beatKeeper.speeds.half;
                     break;
 
                 case 2:
-                    params.speed = beatkeeper.speeds.quarter;
+                    params.speed = this.beatKeeper.speeds.quarter;
                     break;
 
                 case 3:
-                    params.speed = beatkeeper.speeds.eight;
+                    params.speed = this.beatKeeper.speeds.eight;
             }
         }
     }

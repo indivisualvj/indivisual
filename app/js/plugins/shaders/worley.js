@@ -13,7 +13,6 @@
         static settings = {
             apply: false,
             random: false,
-            index: 0,
             time: {
                 value: 1,
                 _type: [-3, 3, 0.001],

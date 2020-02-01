@@ -28,7 +28,7 @@
                 let shapeDir = layer.getShapeDirection(shape);
                 let jump = this.settings.pattern_padding * shapeDir;
 
-                jump *= (0.1 * animation.diff);
+                jump *= (0.1 * this.animation.diff);
 
                 if (vertical) {
                     this.mover.y += jump;

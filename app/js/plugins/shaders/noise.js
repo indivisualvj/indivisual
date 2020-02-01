@@ -16,7 +16,6 @@
         static settings = {
             apply: false,
             random: false,
-            index: 0,
             smoothness: {
                 value: 0.02,
                 _type: [0, 32, 0.01],

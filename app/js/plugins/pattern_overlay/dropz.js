@@ -5,17 +5,17 @@
             activate: {
                 text: 'Accelerates shapes on Z-Axis towards the Camera. To make it work perfectly, set pattern_overlay_volume to 1.0',
                 action: function () {
-                    controller.closeAll();
-                    controller.toggleByProperty('pattern_overlay_volume');
-                    controller.updateSetting(statics.ControlSettings.layer, {pattern:{pattern_overlay_volume: 1}}, true, true);
+                    this.animation.closeAll();
+                    this.animation.animationSettingsGui.getChild('pattern').setOpen(true);
+                    this.animation.updateSetting(statics.ControlSettings.layer, {pattern:{pattern_overlay_volume: 1}}, true, true);
                 }
             },
             invert: {
                 text: 'To invert movement, twist the layer by 180°',
                 action: function () {
-                    controller.closeAll();
-                    controller.toggleByProperty('layer_rotationy');
-                    controller.updateSetting(statics.ControlSettings.layer, {layer:{layer_rotationy: 180}}, true, true);
+                    this.animation.closeAll();
+                    this.animation.animationSettingsGui.getChild('layer').setOpen(true);
+                    this.animation.updateSetting(statics.ControlSettings.layer, {layer:{layer_rotationy: 180}}, true, true);
                 }
             }
         };
@@ -38,7 +38,7 @@
                 // go backwards by rotating the layer
                 let acc = Math.abs(this.settings.pattern_paddingz);
                 params.velocity = Math.max(1, params.velocity);
-                params.velocity *= (1.05 * animation.diffPrc * acc);
+                params.velocity *= (1.05 * this.animation.diffPrc * acc);
 
                 let so = shape.sceneObject();
                 so.translateZ(params.velocity);
@@ -50,7 +50,7 @@
 
             //countdown
             } else {
-                params.delay -= animation.diff;
+                params.delay -= this.animation.diff;
             }
         }
     }

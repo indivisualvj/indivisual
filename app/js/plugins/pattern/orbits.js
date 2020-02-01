@@ -50,7 +50,7 @@
                 speed = shape.size() / distance * 25;
             }
 
-            params.groundAngle += speed * animation.diff;
+            params.groundAngle += speed * this.animation.diff;
             if (params.groundAngle - params.startAngle > 360) {
                 params.groundAngle -= 360;
             }

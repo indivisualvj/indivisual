@@ -15,14 +15,14 @@
                 shape.mesh.name = 'original';
                 params.original = shape.mesh;
 
-                shape.setMesh(mesh); // todo why does transform work when first shape ist not a lined but the others?
+                shape.setMesh(mesh); // question why does transform work when first shape ist not a lined but the others?
             }
 
             if (!this.active[shape.index]) {
                 this.active[shape.index] = true;
 
                 let inst = this;
-                listener.register('animation.updateSetting', this.id(shape.index), function (data) {
+                this.animation.listener.register('animation.updateSetting', this.id(shape.index), function (data) {
                     if (inst.layer == data.layer) {
                         switch (data.item) {
                             case inst.tree:
@@ -31,7 +31,7 @@
                                     params.mesh = false;
                                     shape.setMesh(params.original);
 
-                                    listener.removeId(inst.id(shape.index));
+                                    this.animation.listener.removeId(inst.id(shape.index));
                                 }
                                 break;
                         }
@@ -43,7 +43,7 @@
         reset() {
             if (this.active.length) {
                 this.active = [];
-                listener.removeLike(this.id());
+                this.animation.listener.removeLike(this.id());
             }
         }
     }
@@ -65,7 +65,7 @@
                 params.states.push(mesh);
             }
 
-            if ((audio.peak && randomBool())) {
+            if ((this.audioAnalyser.peak && randomBool())) {
                 let state = randomInt(0, 1);
                 shape.setMesh(params.states[state]);
             }
@@ -74,7 +74,7 @@
                 this.active[shape.index] = true;
 
                 let inst = this;
-                listener.register('animation.updateSetting', this.id(shape.index), function (data) {
+                this.animation.listener.register('animation.updateSetting', this.id(shape.index), function (data) {
                     if (inst.layer == data.layer) {
                         switch (data.item) {
                             case inst.tree:
@@ -83,7 +83,7 @@
                                     shape.setMesh(params.states[0]);
                                     params.states = false;
 
-                                    listener.removeId(inst.id(shape.index));
+                                    this.animation.listener.removeId(inst.id(shape.index));
                                 }
                                 break;
                         }
@@ -95,7 +95,7 @@
         reset() {
             if (this.active.length) {
                 this.active = [];
-                listener.removeLike(this.id());
+                this.animation.listener.removeLike(this.id());
             }
         }
     }

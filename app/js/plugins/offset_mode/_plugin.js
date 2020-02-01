@@ -3,11 +3,11 @@ HC.plugins.offset_mode = HC.plugins.offset_mode || {};
     HC.OffsetModePlugin = class Plugin extends HC.AnimationPlugin {
         after(shape) {
             let layer = this.layer;
-            if (this.settings.offset_audio && audioman.isActive()) {
+            if (this.settings.offset_audio && this.animation.audioManager.isActive()) {
                 let of = shape.offset();
-                let vo = audio.volume;
+                let vo = this.audioAnalyser.volume;
                 if (!this.settings.offset_sync) {
-                    vo = shape.shapeVolume();
+                    vo = this.shapeVolume(shape);
                 }
 
                 of.multiplyScalar(vo);

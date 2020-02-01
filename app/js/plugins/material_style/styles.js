@@ -26,7 +26,7 @@
 
         apply(shape) {
             if (this.isFirstShape(shape)) {
-                if (audio.peak && randomBool()) {
+                if (this.audioAnalyser.peak && randomBool()) {
                     this.state = !this.state;
                 }
             }

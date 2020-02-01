@@ -45,6 +45,9 @@
             return false;
         }
 
+        /**
+         *
+         */
         start() {
             if (this.plugin) {
                 this.plugin.start();

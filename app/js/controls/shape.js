@@ -43,5 +43,23 @@
             shape_rhythm: ['half'],
             shape_delay: ['half'],
         };
+
+        styles = {
+            shape_geometry: ['half', 'clear'],
+            shape_sizedivider: ['half'],
+            shape_moda: ['half', 'clear'],
+            shape_modb: ['half'],
+            shape_modc: ['half', 'clear'],
+            shape_limit: ['quarter'],
+            shape_sync: ['quarter'],
+            // shape_vertices: ['half'],
+            shape_modifier: ['half', 'clear'],
+            shape_modifier_volume: ['half'],
+            shape_transform: ['half', 'clear'],
+            shape_transform_volume: ['half'],
+            // shape_pairing: ['half'],
+            shape_rhythm: ['half', 'clear'],
+            shape_delay: ['half'],
+        };
     }
 }

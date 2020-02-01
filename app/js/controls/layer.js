@@ -28,18 +28,28 @@
         };
         
         types = {
+            layer_positionx: [-5, 5, 0.01],
+            layer_positiony: [-5, 5, 0.01],
+            layer_positionz: [-5, 5, 0.01],
+            layer_rotationx: [-180, 180, 0.01],
+            layer_rotationy: [-180, 180, 0.01],
+            layer_rotationz: [-180, 180, 0.01]
+        };
+
+        styles = {
+            // layer_transvisible: ['half'],
+            layer_positionx: ['half', 'clear'],
             layer_positionx_oscillate: ['half'],
+            layer_positiony: ['half', 'clear'],
             layer_positiony_oscillate: ['half'],
+            layer_positionz: ['half', 'clear'],
             layer_positionz_oscillate: ['half'],
-            layer_positionx: [-5, 5, 0.01, 'half'],
-            layer_positiony: [-5, 5, 0.01, 'half'],
-            layer_positionz: [-5, 5, 0.01, 'half'],
+            layer_rotationx: ['half', 'clear'],
             layer_rotationx_oscillate: ['half'],
+            layer_rotationy: ['half', 'clear'],
             layer_rotationy_oscillate: ['half'],
+            layer_rotationz: ['half', 'clear'],
             layer_rotationz_oscillate: ['half'],
-            layer_rotationx: [-180, 180, 0.01, 'half'],
-            layer_rotationy: [-180, 180, 0.01, 'half'],
-            layer_rotationz: [-180, 180, 0.01, 'half']
         };
     }
 }

@@ -1,31 +1,55 @@
-(function () {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+{
     /**
      *
-     * @param index
-     * @constructor
+     * @type {HC.Perspective}
      */
-    HC.Perspective = function (index) {
-        this.type = 'Perspective';
-        this.index = index;
-        this.id = this.type + this.index;
-        this._bounds = false;
-        this._last = 0;
-        this.renderer = new THREE.WebGLRenderer({alpha: true, antialias: ANTIALIAS});
-        this.renderer.view = this.renderer.domElement;
-        this.renderer.view.id = this.id;
-    };
+    HC.Perspective = class Perspective {
 
-    HC.Perspective.prototype = {
+        /**
+         * @type {HC.Animation}
+         */
+        animation;
+
+        /**
+         * @type {HC.DisplayManager}
+         */
+        displayManager;
+
+        /**
+         * @type {HC.Renderer}
+         */
+        renderer;
+
+        /**
+         *
+         * @param {HC.Animation} animation
+         * @param index
+         */
+        constructor(animation, index) {
+            this.animation = animation;
+            this.displayManager = animation.displayManager;
+            this.type = 'Perspective';
+            this.index = index;
+            this.id = this.type + this.index;
+            this._bounds = false;
+            this._last = 0;
+            this.renderer = new THREE.WebGLRenderer({alpha: true, antialias: ANTIALIAS});
+            this.renderer.view = this.renderer.domElement;
+            this.renderer.view.id = this.id;
+        }
 
         /**
          *
          * @param width
          * @param height
          */
-        update: function (width, height) {
-            var checkWidth = this.width != width;
-            var checkHeight = this.height != height;
-            var needsUpdate = checkWidth || checkHeight;
+        update(width, height) {
+            let checkWidth = this.width != width;
+            let checkHeight = this.height != height;
+            let needsUpdate = checkWidth || checkHeight;
             this.width = width;
             this.height = height;
             this.renderer.setSize(this.width, this.height);
@@ -33,56 +57,56 @@
             if (needsUpdate) {
                 this.init();
             }
-        },
+        }
 
         /**
          *
          */
-        init: function () {
+        init() {
 
-        },
+        }
 
         /**
          *
          * @param reference
          * @returns {*}
          */
-        bounds: function (reference) {
+        bounds(reference) {
             return reference;
-        },
+        }
 
         /**
          *
          * @returns {*}
          */
-        brightness: function () {
-            return displayman.brightness();
-        },
+        brightness() {
+            return this.displayManager.brightness();
+        }
 
         /**
          *
          * @param fallback
          * @returns {*}
          */
-        current: function (fallback) {
-            if (this._last == animation.now) {
+        current(fallback) {
+            if (this._last == this.animation.now) {
                 return this.renderer.view;
             }
 
             return fallback;
-        },
+        }
 
         /**
          *
          */
-        next: function () {
+        next() {
 
-            if (this._last != animation.now) {
-                var key = 'perspective' + this.index;
-                var layer = renderer.currentLayer;
-                var three = layer.three;
-                var cam = renderer.three[key];
-                var lcam = three.camera;
+            if (this._last != this.animation.now) {
+                let key = 'perspective' + this.index;
+                let layer = this.animation.renderer.currentLayer;
+                let three = layer.three;
+                let cam = this.animation.renderer.three[key];
+                let lcam = three.camera;
                 cam.position.x = lcam.position.x;
                 cam.position.y = lcam.position.y;
                 cam.position.z = lcam.position.z;
@@ -96,10 +120,8 @@
 
                 this.renderer.render(three.scene, cam);
 
-                this._last = animation.now;
+                this._last = this.animation.now;
             }
         }
-
-    };
-
-}());
+    }
+}

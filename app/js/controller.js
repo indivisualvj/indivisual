@@ -7,32 +7,6 @@
  * @type {HC.Messaging}
  */
 let messaging;
-/**
- *
- * @type {HC.Explorer}
- */
-let explorer;
-/**
- *
- * @type {HC.Controller}
- */
-let controller;
-/**
- *
- * @type {HC.Midi}
- */
-let midi;
-/**
- *
- * @type {HC.Beatkeeper}
- */
-let beatkeeper;
-
-/**
- *
- * @type {HC.ControlSetsManager}
- */
-let cm;
 
 /**
  *
@@ -68,11 +42,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     window.addEventListener('resize', onResize);
 
-    controller = new HC.Controller(G_INSTANCE);
+    let controller = new HC.Controller(G_INSTANCE);
     messaging = new HC.Messaging(controller);
-    messaging.connect(function (reconnect) {
 
-        document.getElementById(_MONITOR).setAttribute('src', 'monitor.html#' + messaging.sid);
+    messaging.connect(function (reconnect, controller) {
+
+        setTimeout(() => {
+            document.getElementById(_MONITOR).setAttribute('src', 'monitor.html#' + messaging.sid);
+        }, 250);
 
         HC.log(controller.name, 'connected', true, true);
 
@@ -80,56 +57,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
             loadResources(setupResources(), function () {
 
-                cm = new HC.ControlSetsManager([], statics.AnimationValues);
-
-                statics.ControlController = new HC.ControlController();
-                statics.DisplayController = new HC.DisplayController();
-                statics.SourceController = new HC.SourceController();
-
+                let cm = new HC.LayeredControlSetsManager([], statics.AnimationValues);
+                statics.DataSettings = new HC.Settings({});
+                controller.settingsManager = cm;
                 controller.init();
-                controller.addControllers(statics.ControlController,
-                    statics.ControlSettings,
-                    statics.ControlValues,
-                    statics.ControlTypes,
-                    function (value) {
-                        controller.updateControl(this.property, value, true, true, false);
-                    }
-                );
-                controller.addControllers(statics.DisplayController,
-                    statics.DisplaySettings,
-                    statics.DisplayValues,
-                    statics.DisplayTypes,
-                    function (value) {
-                        controller.updateDisplay(this.property, value, true, true, false);
-                    }
-                );
-                controller.addControllers(statics.SourceController,
-                    statics.SourceSettings,
-                    statics.SourceValues,
-                    statics.SourceTypes,
-                    function (value) {
-                        controller.updateSource(this.property, value, true, true, false);
-                    }
-                );
-                controller.addAnimationControllers(cm.getGlobalProperties());
-
-                // controller.addShaderControllers();
-
-                controller.addShaderPassControllers(HC.ShaderPassUi.onPasses);
-
-                explorer = new HC.Explorer();
-                explorer.init();
-                explorer.load();
-
-                beatkeeper = new HC.Beatkeeper();
-
-                messaging.sync(function (data) {
-                    controller.loadSession(data);
-                });
-
+                controller.loadSession();
                 controller.initKeyboard();
                 controller.initLogEvents();
-                midi = controller.initMidi(controller);
+                controller.midi = new HC.Midi(controller, statics);
+                controller.midi.init();
 
                 onResize();
             });
@@ -142,63 +78,199 @@ document.addEventListener('DOMContentLoaded', function () {
      *
      * @type {HC.Controller}
      */
-    HC.Controller = class Controller {
-        gui = false;
-        synced = {};
-        thumbTimeouts = [];
-        name;
+    HC.Controller = class Controller extends HC.Messageable {
 
+        /**
+         * @type {HC.Guify[]}
+         */
+        guis;
+
+        /**
+         * @type {HC.SourceControllerClip[]}
+         */
+        clips;
+
+        /**
+         * @type {HC.SourceControllerThumb[]}
+         */
+        thumbs;
+
+        /**
+         * @type {HC.Guify}
+         */
+        controlSettingsGui;
+        /**
+         * @type {HC.Guify}
+         */
+        displaySettingsGui;
+        /**
+         * @type {HC.Guify}
+         */
+        sourceSettingsGui;
+        /**
+         * @type {HC.Guify}
+         */
+        animationSettingsGui;
+
+        /**
+         * @type {HC.Guify}
+         */
+        configurationSettingsGui;
+
+        /**
+         *
+         * @type {{}}
+         */
+        synced = {};
+
+        /**
+         *
+         * @type {*[]}
+         */
+        thumbTimeouts = [];
+
+        /**
+         *
+         * @type {boolean}
+         */
+        ready = false;
+
+        /**
+         *
+         * @type {HC.Midi}
+         */
+        midi;
+
+        /**
+         * @type {HC.Messaging}
+         */
+        messaging;
+
+        /**
+         * @type {HC.BeatKeeper}
+         */
+        beatKeeper;
+
+        /**
+         * @type {HC.LayeredControlSetsManager}
+         */
+        settingsManager;
+
+        /**
+         *
+         * @param name
+         */
         constructor(name) {
-            this.name = name;
+            super(name);
         }
 
         /**
          *
          */
         init() {
-            // todo grid layout mit einer UI instanz pro controlset https://vuejsexamples.com/simple-and-flexible-vue-js-component-for-grid-layout/
-            // todo UI wird in controlsetui initialisiert und platziert vom layoutmanager
-            // todo neue UI https://github.com/colejd/guify
-            // todo oder dat gui käse komplett mit aktueller datgui version aufbauen
+            this.controlSettingsGui = new HC.Guify('ControlSettings', true);
+            this.displaySettingsGui = new HC.Guify('DisplaySettings');
+            this.sourceSettingsGui = new HC.Guify('SourceSettings');
+            this.animationSettingsGui = new HC.Guify('AnimationSettings');
+            this.configurationSettingsGui = new HC.Guify('ConfigurationSettings');
 
-            this.gui = new dat.GUI({autoPlace: false});
-            document.getElementById('controller').appendChild(this.gui.domElement);
+            this.guis = [
+                this.controlSettingsGui,
+                this.displaySettingsGui,
+                this.sourceSettingsGui,
+                this.animationSettingsGui,
+            ];
+            this.beatKeeper = new HC.BeatKeeper();
+            this.explorer = new HC.Explorer(this, statics);
+
+            let controlSets = HC.Statics.initControlControlSets();
+            statics.ControlSettingsManager = new HC.ControlSetsManager(controlSets);
+            statics.ControlSettings = statics.ControlSettingsManager.settingsProxy();
+            statics.ControlTypes = statics.ControlSettingsManager.typesProxy();
+            statics.ControlValues = statics.ControlSettingsManager.valuesProxy(statics.ControlValues);
+
+            this.addGuifyControllers(
+                controlSets,
+                HC.ControlControllerUi,
+                this.controlSettingsGui
+            );
+
+            let displaySets = HC.Statics.initDisplayControlSets();
+            statics.DisplaySettingsManager = new HC.ControlSetsManager(displaySets);
+            statics.DisplaySettings = statics.DisplaySettingsManager.settingsProxy();
+            statics.DisplayTypes = statics.DisplaySettingsManager.typesProxy();
+            statics.DisplayValues = statics.DisplaySettingsManager.valuesProxy(statics.DisplayValues);
+
+            this.addGuifyDisplayControllers(
+                HC.DisplayController,
+                displaySets,
+                HC.DisplayControllerUi,
+                this.displaySettingsGui
+            );
+
+            let sourceSets = HC.Statics.initSourceControlSets();
+            statics.SourceSettingsManager = new HC.ControlSetsManager(sourceSets);
+            statics.SourceSettings = statics.SourceSettingsManager.settingsProxy();
+            statics.SourceTypes = statics.SourceSettingsManager.typesProxy();
+            statics.SourceValues = statics.SourceSettingsManager.valuesProxy(statics.SourceValues);
+
+            this.addGuifyControllers(
+                sourceSets,
+                HC.SourceControllerUi,
+                this.sourceSettingsGui
+            );
+
+            this.addConfigurationSettings();
+            this.initStatusBar();
+            this.initClips();
+            this.initThumbs();
+
+            this.addAnimationControllers(this.settingsManager.getGlobalProperties());
+            this.addPassesFolder(HC.ShaderPassUi.onPasses);
         }
 
         /**
          *
-         * @param session
+         * @param {HC.Messaging} messaging
          */
-        loadSession(session) {
+        setMessaging(messaging) {
+            this.messaging = messaging;
+        }
 
-            if ('controls' in session) {
-                HC.log('controls', 'synced');
-                let controls = session.controls;
-                this.updateControls(controls, true, false, true);
-            }
-            if ('displays' in session) {
-                HC.log('displays', 'synced');
-                let displays = session.displays;
-                this.updateDisplays(displays, true, false, true);
-            }
-            if ('sources' in session) {
-                HC.log('sources', 'synced');
-                let sources = session.sources;
-                this.updateSources(sources, true, false, true);
-            }
-            if ('settings' in session) {
-                HC.log('settings', 'synced');
-                let settings = session.settings;
-                for (let k in settings) {
-                    this.updateSettings(k, settings[k], true, false, true);
+        /**
+         *
+         */
+        loadSession() {
+            this.messaging.sync((session) => {
+                if ('controls' in session) {
+                    HC.log('controls', 'synced');
+                    let controls = session.controls;
+                    this.updateControls(controls, true, false, true);
                 }
-            }
-            if ('data' in session) {
-                HC.log('data', 'synced');
-                this.updateData();
-            }
+                if ('displays' in session) {
+                    HC.log('displays', 'synced');
+                    let displays = session.displays;
+                    this.updateDisplays(displays, true, false, true);
+                }
+                if ('sources' in session) {
+                    HC.log('sources', 'synced');
+                    let sources = session.sources;
+                    this.updateSources(sources, true, false, true);
+                }
+                if ('settings' in session) {
+                    HC.log('settings', 'synced');
+                    let settings = session.settings;
+                    for (let k in settings) {
+                        this.updateSettings(k, settings[k], true, false, true);
+                    }
+                }
+                if ('data' in session) {
+                    HC.log('data', 'synced');
+                    this.updateData();
+                }
 
-            this.updateControl('layer', statics.ControlSettings.layer, true, false, false);
+                this.updateControl('layer', statics.ControlSettings.layer, true, false, false);
+            });
         }
 
         /**
@@ -208,22 +280,16 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         migrateSettings0(layer, data, keepPasses) {
 
-            let mappings = HC.ControlSetsManager.mappings(() => {return HC.ControlSetsManager.initAll(statics.AnimationValues);});
+            let mappings = HC.LayeredControlSetsManager.mappings(() => {return HC.LayeredControlSetsManager.initAll(statics.AnimationValues);});
 
-            let passes = cm.get(layer, 'passes');
+            let passes = this.settingsManager.get(layer, 'passes');
             if (keepPasses !== true) {
                 passes.removeShaderPasses();
             }
 
             for (let k in data) {
                 let value = data[k];
-                if (typeof value !== 'object') {
-                    let set = mappings[k];
-                    if (set) {
-                        cm.update(layer, set, k, value);
-                    }
-
-                } else if (k == 'shaders' || k == 'passes') {
+                if (k == 'shaders' || k == 'passes') {
                     // sort shaders by index
                     delete value._template;
                     delete value.isdefault;
@@ -245,9 +311,15 @@ document.addEventListener('DOMContentLoaded', function () {
                             passes.addShaderPass(pass);
                         }
                     }
+                } else {
+                    let set = mappings[k];
+                    if (set) {
+                        this.settingsManager.update(layer, set, k, value);
+                    }
                 }
+
             }
-            this.updateUi();
+            this.updateUi(this.animationSettingsGui);
         }
 
         /**
@@ -260,8 +332,8 @@ document.addEventListener('DOMContentLoaded', function () {
         updateSettings(layer, data, display, forward, force) {
 
             if (force) {
-                cm.updateData(layer, data);
-                this.updateUi();
+                this.settingsManager.updateData(layer, data);
+                this.updateUi(this.animationSettingsGui);
 
             } else {
                 for (let k in data) {
@@ -290,16 +362,16 @@ document.addEventListener('DOMContentLoaded', function () {
         shareSettings(folder, datasource) {
 
             let settings = {};
-            let controlsets = cm.prepareLayer(statics.ControlSettings.layer);
+            let controlSets = this.settingsManager.prepareLayer(statics.ControlSettings.layer);
             if (!datasource) {
-                let keys = Object.keys(controlsets[folder]);
+                let keys = Object.keys(controlSets[folder]);
 
                 for (let i = 0; i < keys.length; i++) {
-                    settings[keys[i]] = controlsets[folder][keys[i]];
+                    settings[keys[i]] = controlSets[folder][keys[i]];
                 }
 
             } else {
-                settings[folder] = controlsets[folder];
+                settings[folder] = controlSets[folder];
             }
 
             let data = {};
@@ -309,7 +381,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (i == statics.ControlSettings.layer) {
                     continue;
                 }
-                if (cm.isDefault(i)) {
+                if (this.settingsManager.isDefault(i)) {
                     continue;
                 }
                 if (layerShuffleable(i) != layerShuffleable(statics.ControlSettings.layer)) {
@@ -318,11 +390,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 this.updateSettings(i, data, true, false, true);
 
-                if (cm.layers[i]._preset) {
-                    explorer.setChanged(i, true);
+                if (this.settingsManager.layers[i]._preset) {
+                    this.explorer.setChanged(i+1, true);
                 }
 
-                messaging.emitSettings(i, data, false, false, true);
+                this.messaging.emitSettings(i, data, false, false, true);
 
             }
         }
@@ -333,7 +405,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param value
          */
         shareSetting(item, value) {
-            let mappings = HC.ControlSetsManager.mappings(() => {return HC.ControlSetsManager.initAll(statics.AnimationValues);});
+            let mappings = HC.LayeredControlSetsManager.mappings(() => {return HC.LayeredControlSetsManager.initAll(statics.AnimationValues);});
             let set = mappings[item];
             let data = {};
             data[set] = {};
@@ -341,26 +413,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
             for (let i = 0; i < statics.ControlValues.layer.length; i++) {
                 if (i == statics.ControlSettings.layer) {
-                    console.log('currentlayer');
                     continue;
                 }
-                if (cm.isDefault(i)) {
-                    console.log('isdefault');
+                if (this.settingsManager.isDefault(i)) {
                     continue;
                 }
                 if (layerShuffleable(i) != layerShuffleable(statics.ControlSettings.layer)) {
-                    console.log('not same kind of shuffleable');
                     continue;
                 }
 
                 this.updateSettings(i, data, false, false, true);
 
-                if (cm.layers[i]._preset) {
-                    explorer.setChanged(i, true);
-                }
-
-                messaging.emitSettings(i, data, false, false, true);
-                // messaging.emitSettings(i, data, false, false, true);
+                this.explorer.setChanged(i+1, true);
+                this.messaging.emitSettings(i, data, false, false, true);
             }
         }
 
@@ -371,8 +436,8 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         setSynchronized(dir, value) {
 
-            let controlsets = cm.prepareLayer(0);
-            for (let key in controlsets[dir]) {
+            let controlSets = this.settingsManager.prepareLayer(0);
+            for (let key in controlSets[dir]) {
                 this.synced[key] = value;
             }
 
@@ -390,9 +455,9 @@ document.addEventListener('DOMContentLoaded', function () {
             if (force) {
                 for (let k in data) {
                     let value = data[k];
-                    statics.ControlSettings.update(k, value);
+                    statics.ControlSettingsManager.updateItem(k, value);
                 }
-                this.updateUi();
+                this.updateUi(this.controlSettingsGui);
                 this.showDisplayControls();
 
             } else {
@@ -415,9 +480,9 @@ document.addEventListener('DOMContentLoaded', function () {
             if (force) {
                 for (let k in data) {
                     let value = data[k];
-                    statics.DisplaySettings.update(k, value);
+                    value = statics.DisplaySettingsManager.updateItem(k, value);
                 }
-                this.updateUi();
+                this.updateUi(this.displaySettingsGui);
                 this.showDisplayControls();
 
             } else {
@@ -440,9 +505,9 @@ document.addEventListener('DOMContentLoaded', function () {
             if (force) {
                 for (let k in data) {
                     let value = data[k];
-                    statics.SourceSettings.update(k, value);
+                    statics.SourceSettingsManager.updateItem(k, value);
                 }
-                this.updateUi();
+                this.updateUi(this.sourceSettingsGui);
                 this.showDisplayControls();
 
             } else {
@@ -463,7 +528,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateSetting(layer, data, display, forward, force) {
 
-            let updated = cm.updateData(layer, data);
+            let updated = this.settingsManager.updateData(layer, data);
             let property;
             let value;
             if (isArray(updated)) {
@@ -476,13 +541,13 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (forward) {
-                messaging.emitSettings(layer, data, display, false, false);
+                this.messaging.emitSettings(layer, data, display, false, false);
             }
 
             if (display !== false) {
                 this.explainPlugin(property, value);
-                this.updateUi(property);
-                explorer.setChanged(statics.ControlSettings.layer, true);
+                this.updateUi(this.animationSettingsGui);
+                this.explorer.setChanged(statics.ControlSettings.layer+1, true);
             }
         }
 
@@ -492,15 +557,15 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param ctrl
          */
         addShaderPass(layer, ctrl) {
-            let passes = cm.get(layer, 'passes');
+            let passes = this.settingsManager.get(layer, 'passes');
             let pass = {};
             pass[ctrl.name] = ctrl.getShader();
             passes.addShaderPass(pass);
 
-            this.updateUi();
+            this.updateUi(this.animationSettingsGui);
 
             let data = {passes: {shaders: passes.getShaderPasses()}};
-            messaging.emitSettings(layer, data, false, false, false);
+            this.messaging.emitSettings(layer, data, false, false, false);
         }
 
         /**
@@ -508,7 +573,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         cleanShaderPasses() {
 
-            let cs = cm.get(statics.ControlSettings.layer, 'passes');
+            let cs = this.settingsManager.get(statics.ControlSettings.layer, 'passes');
             let passes = cs.getShaderPasses();
 
             for (let key in passes) {
@@ -534,19 +599,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.explainPlugin(item, value, HC);
             }
 
-            if (statics.ControlSettings && statics.ControlSettings.contains(item)) {
+            // if (statics.ControlSettings) {
 
                 if (item == 'beat') {
-                    value = beatkeeper.trigger(value, true, statics.ControlSettings.tempo, false);
+                    value = this.beatKeeper.trigger(value);
                 }
 
-                value = statics.ControlSettings.update(item, value);
+            let tValue = value;
+                value = statics.ControlSettingsManager.updateItem(item, value);
 
                 if (item == 'layer') {
-                    this.updateSettings(value, cm.prepareLayer(value), true, false, true);
+                    this.updateSettings(value, this.settingsManager.prepareLayer(value), true, false, true);
 
-                    explorer.resetLoaded();
-                    explorer.setLoaded(value, true);
+                    this.explorer.setSelected(value+1, true);
 
                     let config = {
                         action: 'attr',
@@ -555,19 +620,21 @@ document.addEventListener('DOMContentLoaded', function () {
                         value: value + 1
                     };
 
-                    messaging.onAttr(config);
+                    this.messaging.onAttr(config);
 
                 } else if (item == 'reset') {
                     if (force) {
-                        cm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
-                        // sm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
+                        this.settingsManager.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
                     }
                 }
 
                 if (forward) {
+                    if (typeof value === 'function') { // reset to
+                        value = tValue;
+                    }
                     let data = {};
                     data[item] = value;
-                    messaging.emitControls(data, true, false, force);
+                    this.messaging.emitControls(data, true, false, force);
                 }
 
                 if (display !== false) {
@@ -576,7 +643,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         this.updateData();
                     }
 
-                    this.updateUi(item);
+                    this.updateUi(this.controlSettingsGui);
                 }
 
                 if (item == 'session' && value != _HASH) {
@@ -584,7 +651,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     document.location.reload();
 
                 }
-            }
+            // }
         }
 
         /**
@@ -602,24 +669,20 @@ document.addEventListener('DOMContentLoaded', function () {
                 // this.explainPlugin(item, value);
             }
 
-            if (statics.DisplaySettings.contains(item)) {
+            value = statics.DisplaySettingsManager.updateItem(item, value);
 
-                value = statics.DisplaySettings.update(item, value);
+            if (item.match(/display\d+_visible/)) {
+                this.showDisplayControls();
+            }
 
-                if (item.match(/display\d+_visible/)) {
-                    this.showDisplayControls();
-                }
+            if (forward) {
+                let data = {};
+                data[item] = value;
+                this.messaging.emitDisplays(data, true, false, force);
+            }
 
-                if (forward) {
-                    let data = {};
-                    data[item] = value;
-                    messaging.emitDisplays(data, true, false, force);
-                }
-
-                if (display !== false) {
-                    this.updateUi(item);
-                }
-
+            if (display !== false) {
+                this.updateUi(this.displaySettingsGui);
             }
         }
 
@@ -638,34 +701,37 @@ document.addEventListener('DOMContentLoaded', function () {
                 // this.explainPlugin(item, value);
             }
 
-            if (statics.SourceSettings.contains(item)) {
+            value = statics.SourceSettingsManager.updateItem(item, value);
 
-                value = statics.SourceSettings.update(item, value);
+            if (display !== false) {
 
-                if (forward) {
-                    let data = {};
-                    data[item] = value;
-                    messaging.emitSources(data, true, false, force);
-                }
+                if (item.match(/_(start|end|sequence|input|source)$/)) {
+                    this.updateData();
 
-                if (display !== false) {
+                } else if (item.match(/_(enabled)/)) {
+                    if (!value) { // set record to false if enabled == false
+                        let smp = numberExtract(item, 'sample');
+                        this.updateSource(getSampleRecordKey(smp), false, true, true, false);
 
-                    if (item.match(/_(start|end|input|sequence|source)/)) {
-                        this.updateData();
-
-                    } else if (item.match(/_(enabled)/)) {
-                        if (!value) { // set record to false if enabled == false
-                            let smp = numberExtract(item, 'sample');
-                            this.updateSource(getSampleRecordKey(smp), false, true, true, false);
+                        let seq = false;
+                        while ((seq = getSequenceBySample(smp)) !== false) {
+                            let key = getSequenceSampleKey(seq);
+                            this.updateSource(key, 'off', true, true, false);
                         }
-
-                    } else if (item.match(/_(load)/)) {
-                        this.loadClip(numberExtract(item, 'sample'));
                     }
 
-                    this.updateUi(item);
+                } else if (item.match(/_(load)/)) {
+                    let smp = numberExtract(item, 'sample');
+                    this.loadClip(smp);
                 }
 
+                this.updateUi(this.sourceSettingsGui);
+            }
+
+            if (forward) {
+                let data = {};
+                data[item] = value;
+                this.messaging.emitSources(data, true, false, force);
             }
         }
 
@@ -686,11 +752,19 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     }
                 }
-                controller.updateUi();
+                this.updateUi(this.sourceSettingsGui);
             }
 
             if (statics.SourceValues && statics.SourceValues.sequence) {
                 for (let seq = 0; seq < statics.SourceValues.sequence.length; seq++) {
+
+                    // set sequence inputs without enabled sample to off
+                    if (getSampleEnabledBySequence(seq) === false) {
+                        let key = getSequenceSampleKey(seq);
+                        setTimeout(() => {
+                            this.updateSource(key, 'off', false, true);
+                        }, 125);
+                    }
 
                     let _trigger = (_seq) => {
 
@@ -728,15 +802,15 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param data
          */
         updateMidi(data) {
-            if (midi) {
+            if (this.midi) {
                 if (data.command == 'glow') {
-                    midi.glow(data.data, data.conf);
+                    this.midi.glow(data.data, data.conf);
 
                 } else if (data.command == 'off') {
-                    midi.off(data.data);
+                    this.midi.off(data.data);
 
                 } else if (data.command == 'clock') {
-                    midi.clock(data.data, data.conf);
+                    this.midi.clock(data.data, data.conf);
                 }
             }
         }
@@ -748,9 +822,6 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         setAllDisplaysTo(item, value, group) {
             let increment = value === false;
-            if (increment) {
-                value = 0;
-            }
             group = splitToIntArray(statics.SourceSettings[group]);
 
             let updates = {};
@@ -763,26 +834,23 @@ document.addEventListener('DOMContentLoaded', function () {
                 let n = 'display' + i;
                 let nv = n + '_visible';
                 if (statics.DisplaySettings[nv]) {
-                    let key = new RegExp('^' + n + '_' + item);
+                    let key = n + '_' + item;
                     let ns = n + '_static';
                     if (!statics.DisplaySettings[ns]) {
-                        for (let c in statics.SourceSettings.initial) {
-                            if (c.match(key)) {
-                                updates[c] = value;
-
-                                if (increment) {
-                                    value++;
-                                    if (value >= statics.SourceValues[item].length) {
-                                        value = 0;
-                                    }
-                                }
+                        if (increment) {
+                            value = statics.SourceSettings[n + '_' + item];
+                            value++;
+                            if (value >= statics.SourceValues[item].length) {
+                                value = 0;
                             }
                         }
+
+                        updates[key] = value;
                     }
                 }
             }
             this.updateSources(updates, true, false, false);
-            messaging.emitSources(updates, true, true, false);
+            this.messaging.emitSources(updates, true, true, false);
         }
 
         /**
@@ -813,7 +881,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
             this.updateSources(updates, true, false, false);
-            messaging.emitSources(updates, true, true, false);
+            this.messaging.emitSources(updates, true, true, false);
         }
 
         /**
@@ -844,14 +912,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
             this.updateSources(updates, true, false, false);
-            messaging.emitSources(updates, true, true, false);
+            this.messaging.emitSources(updates, true, true, false);
         }
 
         /**
-         *
+         * question push even if monitor is enabled? how do it nicely?
          */
         syncLayers() {
-            for (let layer in cm.layers) {
+            for (let layer in this.settingsManager.layers) {
                 let to = parseInt(layer) * 150;
 
                 let st = (layer, to) => {
@@ -872,7 +940,7 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         pushSources() {
-            messaging.emitSources(statics.SourceSettings, true, true, false);
+            this.messaging.emitSources(statics.SourceSettings, true, true, false);
         }
 
         /**
@@ -880,10 +948,10 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param layer
          */
         syncLayer(layer) {
-            let settings = cm.prepareLayer(layer);
+            let settings = this.settingsManager.prepareLayer(layer);
 
             if (settings) {
-                messaging.emitSettings(layer, settings, true, false, true);
+                this.messaging.emitSettings(layer, settings, true, false, true);
             }
         }
 
@@ -900,6 +968,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 layer = statics.ControlSettings.layer;
             }
 
+            this.settingsManager.resetLayer(layer);
+
             if (!('info' in data)) {
                 this.migrateSettings0(layer, data);
 
@@ -911,7 +981,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.updateSettings(layer, data, false, false, true);
             }
 
-            messaging.emitSettings(layer, cm.prepareLayer(layer), false, false, true);
+            data = this.settingsManager.prepareLayer(layer);
+            if (this.settingsManager.get(layer, 'info').hasTutorial()) {
+                new HC.ScriptProcessor(this, name, Object.create(data.info.tutorial)).log();
+
+                data.info.tutorial = {}; // fixme tutorial will be deleted on savePreset
+            }
+
+            this.messaging.emitSettings(layer, data, false, false, true);
         }
 
         /**
@@ -924,7 +1001,7 @@ document.addEventListener('DOMContentLoaded', function () {
             HC.log('passes', name);
 
             for (let i = 0; i < statics.ControlValues.layer.length; i++) {
-                if (!cm.get(i, 'passes').isDefault()
+                if (!this.settingsManager.isDefault(i)
                     && layerShuffleable(i) == layerShuffleable(statics.ControlSettings.layer)
                 ) {
                     if (!('info' in data)) {
@@ -939,18 +1016,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     } else {
                         let nu = data.passes;
-                        let passes = cm.get(i, 'passses');
+                        let passes = this.settingsManager.get(i, 'passes');
 
                         for (let k in nu) {
                             passes.addShaderPass(nu[k]);
                         }
                     }
 
-                    if (cm.layers[i]._preset) {
-                        explorer.setChanged(i, true);
+                    if (this.settingsManager.layers[i]._preset) {
+                        this.explorer.setChanged(i+1, true);
                     }
 
-                    messaging.emitSettings(i, cm.prepareLayer(i), false, false, true);
+                    this.messaging.emitSettings(i, this.settingsManager.prepareLayer(i), false, false, true);
                 }
             }
         }
@@ -962,9 +1039,9 @@ document.addEventListener('DOMContentLoaded', function () {
             let preset = [];
 
             for (let i = 0; i < statics.ControlValues.layer.length; i++) {
-                if (cm.layers[i]) {
-                    let l = cm.getLayer(i);
-                    if (!cm.isDefault(l) && layerShuffleable(i)) {
+                if (this.settingsManager.layers[i]) {
+                    let l = this.settingsManager.getLayer(i);
+                    if (!this.settingsManager.isDefault(l) && layerShuffleable(i)) {
                         preset.push(i + 1);
                     }
                 }
@@ -977,23 +1054,21 @@ document.addEventListener('DOMContentLoaded', function () {
                 value: preset.join('|')
             };
 
-            messaging.onAttr(config);
+            this.messaging.onAttr(config);
         }
 
         /**
          *
-         * @param open
+         * @param open {HC.GuifyFolder}
          */
         resetFolder(open) {
-            if (open.__controllers.length) {
-                let ctl = open.__controllers[0];
-                let mappings = HC.ControlSetsManager.mappings(() => {return HC.ControlSetsManager.initAll(statics.AnimationValues);});
-                let set = mappings[ctl.property];
-                if (set) {
-                    let cs = cm.get(statics.ControlSettings.layer, set);
+            let set = open.getKey();
+            if (set) {
+                let cs = this.settingsManager.get(statics.ControlSettings.layer, set);
+                if (cs) {
                     cs.reset();
                     let data = cs.prepare();
-                    controller.updateSetting(statics.ControlSettings.layer, data, true, true, false);
+                    this.updateSetting(statics.ControlSettings.layer, data, true, true, false);
                 }
             }
         }

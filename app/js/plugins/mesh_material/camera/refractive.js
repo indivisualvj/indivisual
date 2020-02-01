@@ -17,7 +17,7 @@
                             material_shininess: 50
                         }
                     };
-                    controller.updateSettings(statics.ControlSettings.layer, data, true, false, true);
+                    this.animation.updateSettings(statics.ControlSettings.layer, data, true, false, true);
                     messaging.emitSettings(statics.ControlSettings.layer, data, true, true, true);
                 }
             }
@@ -36,7 +36,7 @@
             mesh.name = this.id(index);
 
             let inst = this;
-            listener.register('renderer.render', this.id(index), function (renderer) {
+            this.animation.listener.register('renderer.render', this.id(index), function (renderer) {
                 if (inst.layer.isVisible()) {
                     mesh.visible = false;
 

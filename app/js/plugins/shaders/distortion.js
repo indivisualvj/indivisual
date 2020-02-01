@@ -13,7 +13,6 @@
         static settings = {
             apply: false,
             random: false,
-            index: 0,
             multiplier: {
                 value: 0,
                 _type: [0, 2, 0.001],

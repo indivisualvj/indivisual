@@ -54,7 +54,7 @@
                 z = randomInt(-100000, -5000, false);
 
             } else {
-                z += animation.diff * 10 * this.settings.pattern_paddingz;
+                z +=this.animation.diff * 10 * this.settings.pattern_paddingz;
             }
 
             layer.getPatternPlugin('ring').apply(shape);

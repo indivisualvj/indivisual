@@ -1,39 +1,53 @@
-(function () {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+{
     /**
      *
-     * @param index
-     * @constructor
+     * @type {HC.Color}
      */
-    HC.Color = function (index) {
-        this.type = 'Color';
-        this.index = index;
-        this.id = this.type + this.index;
-        this._bounds = false;
-    };
+    HC.Color = class Color {
 
-    HC.Color.prototype = {
+        /**
+         * @type {HC.DisplayManager}
+         */
+        displayManager;
+
+        /**
+         *
+         * @param {HC.Animation} animation
+         * @param index
+         */
+        constructor(animation, index) {
+            this.displayManager = animation.displayManager;
+            this.type = 'Color';
+            this.index = index;
+            this.id = this.type + this.index;
+            this._bounds = false;
+        }
+
 
         /**
          *
          * @param width
          * @param height
          */
-        update: function (width, height) {
-            var checkWidth = this.width != width;
-            var checkHeight = this.height != height;
-            var needsUpdate = checkWidth || checkHeight;
+        update(width, height) {
+            let checkWidth = this.width != width;
+            let checkHeight = this.height != height;
+            let needsUpdate = checkWidth || checkHeight;
             this.width = width;
             this.height = height;
 
             if (needsUpdate) {
                 this.init();
             }
-        },
+        }
 
         /**
          *
          */
-        init: function () {
+        init() {
             if (!this.canvas) {
                 this.canvas = document.createElement('canvas');
                 this.canvas.ctx = this.canvas.getContext('2d');
@@ -45,33 +59,33 @@
             this.canvas.ctx.fillRect(0, 0, this.width, this.height);
 
             this.canvas.id = this.id + this.canvas.ctx.fillStyle;
-        },
+        }
 
         /**
          *
          * @param reference
          * @returns {*}
          */
-        bounds: function (reference) {
+        bounds(reference) {
             return reference;
-        },
+        }
 
         /**
          *
          * @returns {*}
          */
-        brightness: function () {
-            return displayman.brightness();
-        },
+        brightness() {
+            return this.displayManager.brightness();
+        }
 
         /**
          *
          * @returns {HTMLElement|*}
          */
-        current: function () {
+        current() {
             return this.canvas;
         }
 
-    };
+    }
 
-}());
+}

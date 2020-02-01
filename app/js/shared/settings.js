@@ -235,23 +235,26 @@
          */
         validate(item, value, initial) {
 
-            let type = typeof value;
-            // _check if string contains float and then convert
-            if (type == 'string') {
-                let f = parseFloat(value);
-                if (f && f.toString().length == value.length) {
-                    value = f;
-                }
-            }
-
             // avoid values to be overwritten by wrong type
             if (initial && item in initial) {
+                let type = typeof value;
                 let org = initial[item];
                 let otype = typeof org;
 
                 if (otype !== type) {
-                    // console.log(item, type, value, otype, org);
-                    value = org;
+                    // cast to whatever
+                    if (type == 'string' && otype != 'string') {
+                        value = parse(value);
+
+                    // cast to string
+                    } else if (type != 'string' && otype == 'string') {
+                        value = value.toString();
+
+                    // fallback to original
+                    } else {
+
+                        value = org;
+                    }
                 }
             }
 

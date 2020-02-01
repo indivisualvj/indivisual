@@ -29,7 +29,7 @@
                 let file = assetman.getImage(this.settings.background_input);
                 if (file) {
                     assetman.loadMaterialMap(mat, filePath(IMAGE_DIR, file), function (mat) {
-                        // tex.wrapS = THREE.RepeatWrapping; // todo assign to all ..maps?
+                        // tex.wrapS = THREE.RepeatWrapping;
                         // tex.repeat.x = -1;
 
                         if (!mat.emissiveMap) {

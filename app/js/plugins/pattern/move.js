@@ -31,7 +31,7 @@
             let dir = new THREE.Vector3(0, 0, 1);
             dir.applyEuler(roto);
 
-            let m = params.velocity * animation.diffPrc * this.settings.pattern_padding;
+            let m = params.velocity * this.animation.diffPrc * this.settings.pattern_padding;
             dir.multiplyScalar(m);
 
             shape.position().add(dir);

@@ -28,18 +28,18 @@
             maxL = maxL || 60;
 
             // Hue
-            color.h += params.velocity.x * animation.diffPrc / 2 * this.settings.coloring_volume;
+            color.h += params.velocity.x * this.animation.diffPrc / 2 * this.settings.coloring_volume;
             color.h %= 360;
 
             // Saturation
-            color.s += params.velocity.y * animation.diffPrc / 5;
+            color.s += params.velocity.y * this.animation.diffPrc / 5;
             if (color.s < minS || color.s > maxS) {
                 params.velocity.y *= -1;
                 color.s = clamp(color.s, minS, maxS);
             }
 
             // Luminance
-            color.l += params.velocity.z * animation.diffPrc / 5;
+            color.l += params.velocity.z * this.animation.diffPrc / 5;
             if (color.l < minL || color.l > maxL) {
                 params.velocity.z *= -1;
                 color.l = clamp(color.l, minL, maxL);

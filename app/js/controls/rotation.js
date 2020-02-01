@@ -34,28 +34,34 @@
         };
         
         types = {
-            rotation_mode: ['half'],
+            rotation_x_volume: [-4, 4, 0.001],
+            rotation_y_volume: [-4, 4, 0.001],
+            rotation_z_volume: [-4, 4, 0.001],
+            rotation_offsetx: [-4, 4, 0.001],
+            rotation_offsety: [-4, 4, 0.001],
+            rotation_offsetz: [-4, 4, 0.001]
+        };
+
+        styles = {
+            rotation_mode: ['half', 'clear'],
             rotation_sync: ['half'],
-            rotation_direction: ['half'],
+            rotation_direction: ['half', 'clear'],
             rotation_easing: ['half'],
-            rotation_x: ['quarter'],
+            rotation_x: ['quarter', 'clear'],
             rotation_x_random: ['quarter'],
-            rotation_x_volume: [-4, 4, 0.001, 'half'],
-            rotation_y: ['quarter'],
+            rotation_x_volume: ['half'],
+            rotation_y: ['quarter', 'clear'],
             rotation_y_random: ['quarter'],
-            rotation_y_volume: [-4, 4, 0.001, 'half'],
-            rotation_z: ['quarter'],
+            rotation_y_volume: ['half'],
+            rotation_z: ['quarter', 'clear'],
             rotation_z_random: ['quarter'],
-            rotation_z_volume: [-4, 4, 0.001, 'half'],
-            rotation_offsetx: [-4, 4, 0.001, 'half'],
+            rotation_z_volume: ['half'],
+            rotation_offsetx: ['half', 'clear'],
             rotation_offsetx_oscillate: ['half'],
-            rotation_offsety: [-4, 4, 0.001, 'half'],
+            rotation_offsety: ['half', 'clear'],
             rotation_offsety_oscillate: ['half'],
-            rotation_offsetz: [-4, 4, 0.001, 'half'],
-            rotation_offsetz_oscillate: ['half'],
-            rotation_x_oscillate: ['half'],
-            rotation_y_oscillate: ['half'],
-            rotation_z_oscillate: ['half']
+            rotation_offsetz: ['half', 'clear'],
+            rotation_offsetz_oscillate: ['half']
         };
     }
 }

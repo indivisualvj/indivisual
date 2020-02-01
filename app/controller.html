@@ -8,12 +8,11 @@
         <meta name="keywords" content="HTML5, WebGL, Visuals, Animations, Music">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-        <link rel="stylesheet" href="css/dat-gui.css">
+        <link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
         <link rel="stylesheet" href="css/controller.css">
 
         <script src="socket.io/socket.io.js"></script>
-        <script src="lib/dat.gui.js"></script>
-        <script src="lib/vue.js"></script>
+        <script src="lib/guify.js"></script>
         <script src="lib/js-yaml.js"></script>
         <script src="lib/tween.js"></script>
         <script type="application/javascript">
@@ -22,97 +21,40 @@
 
         <script src="controller.js"></script>
 
-        <script type="text/x-template" id="itemtpl">
-            <li v-if="isFolder" class="folder">
-                <div v-show="isVisible"  data-id="folder" class="dg">
-                    <ul :class="{closed: !open}">
-                        <li class="title">
-                            <span @click="toggleFolder">{{item.name}}</span>
-                            <div v-if="isRoot" class="actions">
-                                <div @click="newFolder" class="new_folder"></div>
-                                <div @click="reload" class="reset"></div>
-                            </div>
-
-                            <div v-if="!isRoot && !isDefault" class="actions">
-                                <div @click="newPreset" class="new"></div>
-                                <div @click="loadPresets" class="fill"></div>
-                                <div @click="savePresets" class="save"></div>
-                                <div @click="renameItem" class="rename"></div>
-                            </div>
-                        </li>
-
-                        <item v-for="child in item.children" :item="child" :key="child.name"></item>
-
-                    </ul>
-                </div>
-            </li>
-            <li v-else class="cr" :class="{function: isPreset, changed: hasChanged, selected: isLoaded}">
-                <div>
-                    <span @click="loadPreset" class="property-name">{{item.name}}</span>
-                    <div v-if="isFile" class="actions">
-                        {{item.layer}} {{item.changed}}
-                        <div @click="savePreset" class="save"></div>
-                        <div @click="renameItem" class="rename"></div>
-                        <div @click="deletePreset" class="delete"></div>
-                    </div>
-                </div>
-            </li>
-        </script>
     </head>
     <body>
         <pre id="osd"></pre>
-        <div class="left w40p">
+        <div class="left w45p">
             <div class="item fh">
                 <iframe id="monitor" src="" class="control"></iframe>
-
                 <div id="blockfocus" class="expandable">
                     <pre id="log"></pre>
                 </div>
             </div>
-
-            <div class="control metalback" >
-            <div id="explorer" class="item">
-                <div class="dg main">
-                    <ul id="root">
-                        <li class="cr string">
-                            <div>
-                                <span class="property-name">search</span>
-                                <div class="c">
-                                    <input name="filterValue" v-model="searchValue" v-on:keyup="filterTree" type="text">
-                                </div>
-                            </div>
-                        </li>
-
-                        <item :item="treeData"></item>
-
-                    </ul>
-                </div>
+            <div class="item fh">
+                <div id="samples"></div>
             </div>
-        </div>
+            <div class="item fh">
+                <div id="sequences"></div>
+            </div>
+            <div class="item" >
+                <div id="Presets" class="control guify-main fullscreenable metalback"></div>
+                <div id="ConfigurationSettings" class="control guify-main fullscreenable metalback"></div>
+            </div>
         </div>
         <div class="left w55p">
-            <div class="control metalback">
-                <div id="status" class="item fh metalback">
-                    <div class="dg main">
-
-                        <ul>
-                            <li class="folder">
-                                <div class="dg">
-                                    <ul>
-                                        <li class="cr boolean" data-class="quarter" id="play"><div></div></li>
-                                        <li class="cr boolean" data-class="fourty" id="beat"><div></div></li>
-                                        <li class="cr boolean" data-class="zero" id="sync"><div></div></li>
-                                        <li class="cr boolean" data-class="twenty" id="audio"><div></div></li>
-                                        <li class="cr boolean" data-class="ten" id="layer"><div></div></li>
-                                        <li class="cr boolean" id="layers"><div></div></li>
-                                    </ul>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            <div id="controller" class="item">
+            <div id="status" class="item fh control">
+                <div class="" data-class="twentyfive" id="play"></div>
+                <div class="" data-class="fifty" id="beat"></div>
+                <div class="" data-class="twenty" id="audio"></div>
+                <div class="" data-class="five" id="layer"></div>
+                <div class="clear" id="layers"></div>
             </div>
+            <div id="guify" class="item">
+                <div id="ControlSettings" class="control guify-main fullscreenable metalback"></div>
+                <div id="DisplaySettings" class="control guify-main fullscreenable metalback"></div>
+                <div id="SourceSettings" class="control guify-main fullscreenable metalback"></div>
+                <div id="AnimationSettings" class="control guify-main fullscreenable metalback"></div>
             </div>
         </div>
     </body>

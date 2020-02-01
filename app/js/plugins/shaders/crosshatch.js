@@ -13,7 +13,6 @@
         static settings = {
             apply: false,
             random: false,
-            index: 0,
             spacing: {
                 value: 10,
                 _type: [0.1, 24, 0.1],

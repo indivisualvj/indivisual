@@ -126,7 +126,7 @@ Many thanks to:
 - https://github.com/tweenjs/tween.js
 - https://github.com/glowbox/maptasticjs
 - https://github.com/vuejs/vue
-- https://github.com/dataarts/dat.gui
+- https://github.com/colejd/guify
 - https://github.com/mrdoob/stats.js
 - https://github.com/nodejs/node
 - https://github.com/yarnpkg/yarn

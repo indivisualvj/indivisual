@@ -2,60 +2,63 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-(function () {
+{
     /**
      *
-     * @param prefix
-     * @param canvas
-     * @param type
-     * @param config
-     * @constructor
+     * @type {HC.Mask}
      */
-    HC.Mask = function (prefix, canvas, type, config) {
-        this.index = numberExtract(prefix, 'display');
-        this.id = prefix + '_mask';
-        this.ctx = canvas.ctx;
-        this.canvas = canvas;
-        this.type = type;
+    HC.Mask = class Mask {
 
-        this.background = document.createElement('canvas');
-        this.background.ctx = this.background.getContext('2d', {antialias: ANTIALIAS});
+        /**
+         *
+         * @param prefix
+         * @param canvas
+         * @param type
+         * @param config
+         */
+        constructor(prefix, canvas, type, config) {
+            this.index = numberExtract(prefix, 'display');
+            this.id = prefix + '_mask';
+            this.ctx = canvas.ctx;
+            this.canvas = canvas;
+            this.type = type;
 
-        if (config) {
-            if ('width' in config) {
+            this.background = document.createElement('canvas');
+            this.background.ctx = this.background.getContext('2d', {antialias: ANTIALIAS});
+
+            if (config) {
+                if ('width' in config) {
+                    this.sides = 4;
+                    this.width = config.width;
+                }
+                if ('height' in config) {
+                    this.sides = 4;
+                    this.height = config.height;
+                }
+                if ('sides' in config) {
+                    this.sides = config.sides;
+                }
+            } else {
                 this.sides = 4;
-                this.width = config.width;
+                this.width = this.ctx.canvas.width;
+                this.height = this.ctx.canvas.height;
             }
-            if ('height' in config) {
-                this.sides = 4;
-                this.height = config.height;
-            }
-            if ('sides' in config) {
-                this.sides = config.sides;
-            }
-        } else {
-            this.sides = 4;
-            this.width = this.ctx.canvas.width;
-            this.height = this.ctx.canvas.height;
+            this.points = false;
         }
-        this.points = false;
-    };
-
-    HC.Mask.prototype = {
 
         /**
          *
          */
-        init: function () {
+        init() {
 
             if (this.width && this.height) {
-                var w = this.canvas.width;
-                var h = this.canvas.height;
-                var cx = w / 2;
-                var cy = h / 2;
+                let w = this.canvas.width;
+                let h = this.canvas.height;
+                let cx = w / 2;
+                let cy = h / 2;
 
-                var x = cx - this.width / 2;
-                var y = cy - this.height / 2;
+                let x = cx - this.width / 2;
+                let y = cy - this.height / 2;
 
                 this.points = [
                     x, y, x + this.width, y, x + this.width, y + this.height, x, y + this.height
@@ -64,20 +67,20 @@
             } else {
                 this.points = [];
 
-                var seg = Math.PI * 2 / this.sides;
-                var hseg = 0 - Math.PI * 0.5;
-                var w = this.canvas.width;
-                var h = this.canvas.height;
-                var cx = w / 2;
-                var cy = h / 2;
-                var r = Math.min(cx, cy);
+                let seg = Math.PI * 2 / this.sides;
+                let hseg = 0 - Math.PI * 0.5;
+                let w = this.canvas.width;
+                let h = this.canvas.height;
+                let cx = w / 2;
+                let cy = h / 2;
+                let r = Math.min(cx, cy);
 
-                for (var i = 0; i < this.sides; i++) {
-                    var cos = Math.cos(hseg + seg * i);
-                    var sin = Math.sin(hseg + seg * i);
+                for (let i = 0; i < this.sides; i++) {
+                    let cos = Math.cos(hseg + seg * i);
+                    let sin = Math.sin(hseg + seg * i);
 
-                    var x = cx + cos * r;
-                    var y = cy + sin * r;
+                    let x = cx + cos * r;
+                    let y = cy + sin * r;
 
                     this.points.push(x);
                     this.points.push(y);
@@ -89,12 +92,12 @@
             this.points.push(this.points[1]);
 
             this.update();
-        },
+        }
 
         /**
          *
          */
-        update: function () {
+        update() {
 
             this.background.width = this.canvas.width;
             this.background.height = this.canvas.height;
@@ -102,14 +105,14 @@
             this.canvas.width = this.canvas.width;
 
             // bounds
-            var x1 = this.canvas.width;
-            var y1 = this.canvas.height;
-            var x2 = 0;
-            var y2 = 0;
+            let x1 = this.canvas.width;
+            let y1 = this.canvas.height;
+            let x2 = 0;
+            let y2 = 0;
 
-            for (var i = 0; i < this.points.length; i += 2) {
-                var x = this.points[i];
-                var y = this.points[i + 1];
+            for (let i = 0; i < this.points.length; i += 2) {
+                let x = this.points[i];
+                let y = this.points[i + 1];
 
                 x1 = Math.min(x, x1);
                 y1 = Math.min(y, y1);
@@ -121,20 +124,20 @@
             x2 += 1;
             y2 += 1;
 
-            var w = x2 - x1;
-            var h = y2 - y1;
+            let w = x2 - x1;
+            let h = y2 - y1;
             this.bounds = new HC.Rectangle(x1, y1, w, h);
 
             if (!statics.DisplaySettings.clip_context) {
-                var clipPath = this.points.join(', ');
+                let clipPath = this.points.join(', ');
                 clipPath = 'polygon(' + clipPath.replace(/([^,]+), ([^,]+)/gi, '$1px $2px') + ')';
                 this.canvas.style.webkitClipPath = clipPath;
 
             } else {
-                var _paint = function (points, ctx) {
+                let _paint = function (points, ctx) {
                     ctx.beginPath();
                     ctx.moveTo(points[0], points[1]);
-                    for (var i = 2; i < points.length; i += 2) {
+                    for (let i = 2; i < points.length; i += 2) {
                         ctx.lineTo(points[i], points[i + 1]);
                     }
                     ctx.closePath();
@@ -149,6 +152,5 @@
                 this.canvas._clipped = true;
             }
         }
-    };
-
-}());
+    }
+}

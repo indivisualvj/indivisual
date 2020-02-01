@@ -94,11 +94,6 @@
             return this.mesh.material;
         }
 
-        shapeVolume() {
-            let i = this.index % audio.volumes.length;
-            return audio.volumes[i];
-        }
-
         sceneObject() {
             return this._position;
         }

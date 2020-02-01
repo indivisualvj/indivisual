@@ -1,50 +1,75 @@
-(function () {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+{
     /**
      *
-     * @param index
-     * @constructor
+     * @type {HC.Sequence}
      */
-    HC.Sequence = function (index) {
-        this.type = 'sequence';
-        this.index = index;
-        this.id = this.type + this.index;
-        this._pointer = 0;
-        this._floatPointer = 0.0;
-        this._dirty = true;
-        this._canvas = document.createElement('canvas');
-        this._canvas.id = this.id;
-        this._ctx = this._canvas.getContext('2d');
-        this.counter = 0;
-        this.start = 0;
-        this.end = 0;
-        this.length = 0;
-        this.speedup = false;
-        this.speeddown = false;
-        this.passthrough = false;
-        this.speed = 1;
-        this._velocity = 1.0;
-        this._peak = 1;
-        this.oscillators = {};
-        this.loadOscillators();
-    };
+    HC.Sequence = class Sequence {
 
-    HC.Sequence.prototype = {
+        /**
+         * @type {HC.Animation}
+         */
+        animation;
+
+        /**
+         * @type {HC.BeatKeeper}
+         */
+        beatKeeper;
+
+        /**
+         * @type {HC.AudioAnalyser}
+         */
+        audioAnalyser;
+
+        /**
+         *
+         * @param {HC.Animation} animation
+         * @param index
+         */
+        constructor(animation, index) {
+            this.animation = animation;
+            this.beatKeeper = animation.beatKeeper;
+            this.audioAnalyser = animation.audioAnalyser;
+            this.type = 'sequence';
+            this.index = index;
+            this.id = this.type + this.index;
+            this._pointer = 0;
+            this._floatPointer = 0.0;
+            this._dirty = true;
+            this._canvas = document.createElement('canvas');
+            this._canvas.id = this.id;
+            this._ctx = this._canvas.getContext('2d');
+            this.counter = 0;
+            this.start = 0;
+            this.end = 0;
+            this.length = 0;
+            this.speedup = false;
+            this.speeddown = false;
+            this.passthrough = false;
+            this.speed = 1;
+            this._velocity = 1.0;
+            this._peak = 1;
+            this.oscillators = {};
+            this.loadOscillators();
+        }
 
         /**
          *
          * @param reference
          * @returns {*}
          */
-        bounds: function (reference) {
+        bounds(reference) {
             return reference;
-        },
+        }
 
         /**
          *
          * @param width
          * @param height
          */
-        update: function (width, height) {
+        update(width, height) {
             this.jump = statics.SourceSettings[this.id + '_jump'];
             this.audio = statics.SourceSettings[this.id + '_audio'];
             this.reversed = statics.SourceSettings[this.id + '_reversed'];
@@ -56,13 +81,13 @@
             this.flipy = (statics.SourceSettings[this.id + '_flipy']) ? -1 : 1;
             this.flipa = (statics.SourceSettings[this.id + '_flipa']);
 
-            var osci = statics.SourceSettings[this.id + '_osci'];
+            let osci = statics.SourceSettings[this.id + '_osci'];
             this.osci = osci;
 
-            var brightness = statics.SourceSettings[this.id + '_brightness'];
+            let brightness = statics.SourceSettings[this.id + '_brightness'];
             this._brightness = brightness;
 
-            var blendmode = statics.SourceValues.blendmode[statics.SourceSettings[this.id + '_blendmode']];
+            let blendmode = statics.SourceValues.blendmode[statics.SourceSettings[this.id + '_blendmode']];
             this.blendmode = blendmode;
 
             this.width = Math.round(width);
@@ -71,17 +96,17 @@
             this._canvas.height = this.height;
 
             if (this.sample) {
-                var start = statics.SourceSettings[this.id + '_start'];
-                var end = statics.SourceSettings[this.id + '_end'];
+                let start = statics.SourceSettings[this.id + '_start'];
+                let end = statics.SourceSettings[this.id + '_end'];
 
-                var needsUpdate = start != this.start || end != this.end
+                let needsUpdate = start != this.start || end != this.end
                     || this.width != this.sample.width || this.height != this.sample.height;
 
                 if (needsUpdate) {
 
-                    var os = this.start;
-                    var oe = this.end;
-                    var frames = this.sample.frames.length;
+                    let os = this.start;
+                    let oe = this.end;
+                    let frames = this.sample.frames.length;
                     applySequenceSlice(this, frames, start, end);
 
                     if (os != this.start) {
@@ -96,19 +121,19 @@
                     this._dirty = true;
                 }
             }
-        },
+        }
 
         /**
          *
          * @returns {number}
          */
-        brightness: function () {
-            var v = this._brightness;
+        brightness() {
+            let v = this._brightness;
 
             if (this._dirty) {
-                var plugin = this.oscillators[this.osci];
+                let plugin = this.oscillators[this.osci];
                 if (plugin && plugin.apply) {
-                    var shs = {value: v};
+                    let shs = {value: v};
                     plugin.store(shs);
                     plugin.apply(shs);
                     v = Math.abs(shs.value);
@@ -117,17 +142,17 @@
             }
 
             return v;
-        },
+        }
 
         /**
          *
          * @param speed
          */
-        next: function (speed) {
+        next(speed) {
 
-            if (this._last != animation.now) {
+            if (this._last != this.animation.now) {
 
-                var sample = this.sample;
+                let sample = this.sample;
 
                 if (sample && sample.isReady()) {
 
@@ -158,29 +183,29 @@
                 }
 
                 // autoflip flipa flip on peak if random hits
-                if (this.flipa && audio.peak && randomBool()) {
+                if (this.flipa && this.audioAnalyser.peak && randomBool()) {
                     this.flipx = randomBool() ? -1 : 1;
                     this.flipy = randomBool() ? -1 : 1;
                 }
 
                 this._dirty = true;
 
-                this._last = animation.now;
+                this._last = this.animation.now;
             }
-        },
+        }
 
         /**
          *
          * @returns {number}
          */
-        pointer: function () {
+        pointer() {
             if (this.reversed) {
-                var ds = this._pointer - this.start;
+                let ds = this._pointer - this.start;
                 return this.end - ds;
             }
 
             return Math.round(this._pointer);
-        },
+        }
 
         /**
          *
@@ -188,13 +213,13 @@
          * @param passthrough
          * @returns {*}
          */
-        current: function (fallback, passthrough) {
+        current(fallback, passthrough) {
 
-            this.next(beatkeeper.getDefaultSpeed());
+            this.next(this.beatKeeper.getDefaultSpeed());
 
-            var image = fallback;
+            let image = fallback;
             if (this.sample) {
-                var frame = this.sample.getFrame(this.pointer());
+                let frame = this.sample.getFrame(this.pointer());
 
                 image = frame || fallback;
 
@@ -205,7 +230,7 @@
                 this._draw(this, image);
 
                 if (this.overlay && this.overlay != this && this.overlay.overlay != this) {
-                    var oimage = this.overlay.current((passthrough || this.overlay.passthrough) ? fallback : false);
+                    let oimage = this.overlay.current((passthrough || this.overlay.passthrough) ? fallback : false);
                     this._overlay(this.overlay, oimage, this.blendmode);
                 }
                 image = this._canvas;
@@ -216,7 +241,7 @@
             }
 
             return image;
-        },
+        }
 
         /**
          *
@@ -224,11 +249,11 @@
          * @param image
          * @private
          */
-        _draw: function (instance, image) {
+        _draw(instance, image) {
 
             if (image) {
-                var ctx = this._ctx;
-                var br = instance.brightness();
+                let ctx = this._ctx;
+                let br = instance.brightness();
 
                 if (!this.width || !this.height) {
                     this.width = Math.round(image.width);
@@ -250,9 +275,9 @@
 
                     ctx.globalAlpha = br;
 
-                    var flipx = instance.flipx;
-                    var flipy = instance.flipy;
-                    var flipped = false;
+                    let flipx = instance.flipx;
+                    let flipy = instance.flipy;
+                    let flipped = false;
                     if (flipx != 1) {
                         flipped = true;
                         ctx.scale(flipx, 1);
@@ -267,14 +292,13 @@
                     } else {
                         ctx.drawImage(image, 0, 0, image.width * flipx, image.height * flipy);
                     }
-                    //statics.tmp._draw++;
 
                     if (flipped) {
                         ctx.setTransform(1, 0, 0, 1, 0, 0);
                     }
                 }
             }
-        },
+        }
 
         /**
          *
@@ -283,41 +307,40 @@
          * @param blendmode
          * @private
          */
-        _overlay: function (instance, image, blendmode) {
+        _overlay(instance, image, blendmode) {
             if (image) {
-                var br = instance.passthrough ? 1 : instance.brightness();
+                let br = instance.passthrough ? 1 : instance.brightness();
                 if (br > 0) {
-                    var ctx = this._ctx;
+                    let ctx = this._ctx;
                     ctx.globalAlpha = br;
                     ctx.globalCompositeOperation = blendmode ? blendmode : 'source-over';
                     ctx.drawImage(image, 0, 0, image.width, image.height);//, 0, 0, this.width, this.height);
-                    //statics.tmp._draw++;
                 }
             }
-        },
+        }
 
         /**
          *
          * @param speed
          * @private
          */
-        _progress: function (speed) {
-            var sample = this.sample;
-            var dur = sample.duration;
-            var fd = dur / sample.frames.length;
-            var ms = fd * this.length;
+        _progress(speed) {
+            let sample = this.sample;
+            let dur = sample.duration;
+            let fd = dur / sample.frames.length;
+            let ms = fd * this.length;
             dur /= sample.beats;
-            var beats = Math.max(0.25, Math.round(ms / dur));
+            let beats = Math.max(0.25, Math.round(ms / dur));
             //if (beat.starting()) {
             //    listener.fireEventId('sequence.next.progress', this.id, this);
             //}
 
-            var prcb = speed;
+            let prcb = speed;
             if (this.speedup) {
-                prcb = beatkeeper.getSpeed('eight');
+                prcb = this.beatKeeper.getSpeed('eight');
 
             } else if (this.speeddown) {
-                prcb = beatkeeper.getSpeed('half');
+                prcb = this.beatKeeper.getSpeed('half');
             }
 
             if (prcb.starting()) {
@@ -327,29 +350,29 @@
                 }
             }
 
-            var eprc = this.counter + prcb.prc;
-            var prc = eprc / beats;
-            var p = this.length * prc;
+            let eprc = this.counter + prcb.prc;
+            let prc = eprc / beats;
+            let p = this.length * prc;
             this._pointer = this.start + Math.ceil(p);
-        },
+        }
 
         /**
          *
          * @param beat
          * @private
          */
-        _raceonpeak: function (beat) {
+        _raceonpeak(beat) {
 
-            var s = Math.max(-0.75, Math.min(0.75, this.speed));
-            var p = Math.max(-1.5, Math.min(1.5, this.speed));
+            let s = Math.max(-0.75, Math.min(0.75, this.speed));
+            let p = Math.max(-1.5, Math.min(1.5, this.speed));
 
-            if (audio.peak) {
+            if (this.audioAnalyser.peak) {
                 if (this._velocity < 2 * s) {
                     this._velocity = 4 * s;
                 }
 
             } else if (this._velocity > s) {
-                this._velocity = Math.max(s, this._velocity - animation.diff * 0.03 * s);
+                this._velocity = Math.max(s, this._velocity - this.animation.diff * 0.03 * s);
             }
 
             p = p * this._velocity;
@@ -365,24 +388,23 @@
                 this._pointer -= this.length;
                 this._floatPointer = this._pointer;
             }
-
-        },
+        }
 
         /**
          *
          * @param beat
          * @private
          */
-        _jump: function (beat) {
-            var sample = this.sample;
-            var frame = sample.frames[this._pointer];
+        _jump(beat) {
+            let sample = this.sample;
+            let frame = sample.frames[this._pointer];
             this._pointer++;
 
             if (this.speedup) {
-                beat = beatkeeper.getSpeed('sixteen');
+                beat = this.beatKeeper.getSpeed('sixteen');
 
             } else if (this.speeddown) {
-                beat = beatkeeper.getSpeed('full');
+                beat = this.beatKeeper.getSpeed('full');
             }
 
             while (frame && frame.prc < beat.prc) {
@@ -392,26 +414,26 @@
                 }
                 frame = sample.frames[this._pointer++];
             }
-        },
+        }
 
         /**
          *
          * @param beat
          * @private
          */
-        _audio: function (beat) {
+        _audio(beat) {
 
-            //var p = audio.volume - 0.25;
+            //let p = audio.volume - 0.25;
 
-            var p = (audio.volume - 0.28) * 10;
+            let p = (this.audioAnalyser.volume - 0.28) * 10;
             p = Math.min(1, Math.max(-1, p)); // kann aktuell stocken. wäre evtl was für jump+audio oder audio_judder
 
             if (this.jump) {
-                if (audio.peak && this._peak < 4) {
+                if (this.audioAnalyser.peak && this._peak < 4) {
                     this._peak = 8;
 
                 } else if (this._peak > 1) {
-                    this._peak = Math.max(1, this._peak - animation.diff * 0.05);
+                    this._peak = Math.max(1, this._peak - this.animation.diff * 0.05);
 
                 }
                 p = Math.round(p * this._peak);
@@ -437,36 +459,35 @@
             } else if (this._pointer >= this.end) {
                 this._pointer -= this.length;
             }
-        },
+        }
 
         /**
          *
          */
-        loadOscillators: function () {
+        loadOscillators() {
 
-            var plugin = 'oscillate';
-            var items = HC.plugins[plugin];
+            let plugin = 'oscillate';
+            let items = HC.plugins[plugin];
 
             this.oscillators[plugin] = this.oscillators[plugin] || {};
 
-            var keys = Object.keys(items);
-            for (var i = 0; i < keys.length; i++) {
-                var key = keys[i];
+            let keys = Object.keys(items);
+            for (let i = 0; i < keys.length; i++) {
+                let key = keys[i];
 
-                var instance = new HC.plugins[plugin][key](this);
-                instance.construct(this, {}, plugin, key);
+                let instance = new HC.plugins[plugin][key]();
+                instance.construct(this.animation, this, {}, plugin, key);
                 instance.inject();
 
                 this.oscillators[key] = instance;
             }
-        },
+        }
 
         /**
          * OscillatePlugin workaround...
          */
-        getCurrentSpeed: function () {
-            return beatkeeper.getSpeed('half');
+        getCurrentSpeed() {
+            return this.beatKeeper.getSpeed('half');
         }
-
-    };
-}());
+    }
+}

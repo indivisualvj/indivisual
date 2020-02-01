@@ -8,7 +8,7 @@
      * @type {HC.Animation.EventListener}
      */
     HC.Animation.EventListener = class EventListener {
-        init (hook) {
+        init () {
 
             document.onselectstart = function () {
                 return false;
@@ -24,10 +24,6 @@
                     }, 2000);
                 });
             }
-
-            if (hook) {
-                hook();
-            }
         }
     }
 }
@@ -38,7 +34,12 @@
      * @type {HC.Animation.KeyboardListener}
      */
     HC.Animation.KeyboardListener = class KeyboardListener {
-        init (hook) {
+
+        /**
+         *
+         * @param {HC.Animation} animation
+         */
+        init (animation) {
 
             window.addEventListener('keydown', function (e) {
 
@@ -50,9 +51,6 @@
                 }
             });
 
-            if (hook) {
-                hook();
-            }
         }
     }
 }
@@ -64,23 +62,23 @@
      */
     HC.Animation.ResizeListener = class ResizeListener {
 
-        init (hook) {
+        /**
+         *
+         * @param {HC.DisplayManager} displayManager
+         */
+        init (displayManager) {
             var onResize = function () {
                 for (var i = 0; i < statics.DisplayValues.display.length; i++) {
-                    var display = displayman.getDisplay(i);
+                    var display = displayManager.getDisplay(i);
                     if (display) {
                         if (!display.getMapping()) {
-                            displayman.centerDisplay(i, 1, true, false);
+                            displayManager.centerDisplay(i, 1, true, false);
                         }
                     }
                 }
             };
 
             window.addEventListener('resize', onResize);
-
-            if (hook) {
-                hook();
-            }
         }
     }
 }

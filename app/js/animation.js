@@ -7,129 +7,88 @@
  * @type {HC.Messaging}
  */
 let messaging;
-/**
- *
- * @type {HC.AudioManager}
- */
-let audioman;
-/**
- *
- * @type {HC.Animation}
- */
-let animation;
-/**
- *
- * @type {HC.Renderer}
- */
-let renderer;
-/**
- *
- * @type {HC.Beatkeeper}
- */
-let beatkeeper;
-/**
- * @type {HC.AudioAnalyser}
- */
-let audio;
-/**
- *
- * @type {HC.DisplayManager}
- */
-let displayman;
-/**
- *
- * @type {HC.SourceManager}
- */
-let sourceman;
-/**
- *
- * @type {HC.Listener}
- */
-let listener;
-/**
- *
- * @type {HC.ControlSetsManager}
- */
-let cm;
 
 /**
  *
  */
 document.addEventListener('DOMContentLoaded', function () {
 
-    animation = new HC.Animation(G_INSTANCE);
+    let animation = new HC.Animation(G_INSTANCE);
     messaging = new HC.Messaging(animation);
 
-    messaging.connect(function (reconnect) {
+    messaging.connect(function (reconnect, animation) {
 
         HC.log(animation.name, 'connected', true, true);
 
         if (!reconnect) {
             loadResources(setupResources(), function () {
 
-                HC.DisplayController.createAllControls();
-                HC.SourceController.createAllControls();
+                statics.DisplaySettingsManager = new HC.ControlSetsManager(HC.Statics.initDisplayControlSets());
+                statics.DisplaySettings = statics.DisplaySettingsManager.settingsProxy();
+                statics.SourceSettingsManager = new HC.ControlSetsManager(HC.Statics.initSourceControlSets());
+                statics.SourceSettings = statics.SourceSettingsManager.settingsProxy();
+                statics.ControlSettingsManager = new HC.ControlSetsManager(HC.Statics.initControlControlSets());
+                statics.ControlSettings = statics.ControlSettingsManager.settingsProxy();
 
-                listener = new HC.Listener();
-                audioman = new HC.AudioManager();
-                audio = new HC.AudioAnalyser(audioman.audioContext);
-                beatkeeper = new HC.Beatkeeper();
+                let listener = new HC.Listener();
+                animation.listener = listener;
+                let audioManager = new HC.AudioManager();
+                animation.audioManager = audioManager;
+                let audioAnalyser = new HC.AudioAnalyser(animation);
+                animation.audioAnalyser = audioAnalyser;
+                let beatKeeper = new HC.BeatKeeper(animation);
+                animation.beatKeeper = beatKeeper;
 
-                renderer = new HC.Renderer({
+                let renderer = new HC.Renderer(animation, {
                     layers: new Array(statics.ControlValues.layer.length)
                 });
+                animation.renderer = renderer;
 
                 if (IS_ANIMATION) {
-                    listener.register('webglcontextlost', animation.name, function () {
+                    animation.listener.register('webglcontextlost', animation.name, function () {
                         // now reset...
                         HC.log('HC.Renderer', 'another context loss...', true, true);
 
                         if (DEBUG) {
                             for (let i in MIDI_ROW_ONE) { // glContext messed up... make that clear
-                                messaging.emitMidi('glow', MIDI_ROW_ONE[i], {timeout: 500, times: 15});
-                                messaging.emitMidi('glow', MIDI_ROW_TWO[i], {timeout: 500, times: 15});
+                                animation.messaging.emitMidi('glow', MIDI_ROW_ONE[i], {timeout: 500, times: 15});
+                                animation.messaging.emitMidi('glow', MIDI_ROW_TWO[i], {timeout: 500, times: 15});
+                                animation.messaging.emitAttr('#play', 'data-color', 'red');
                             }
 
                         } else {
                             window.location.reload(true);
                         }
                     });
+
+                    animation.messaging.emitAttr('#play', 'data-color', '');
                 }
 
-                cm = new HC.ControlSetsManager(renderer.layers, statics.AnimationValues);
+                let cm = new HC.LayeredControlSetsManager(renderer.layers, statics.AnimationValues);
+                animation.settingsManager = cm;
+                renderer.initLayers(false);
 
-                displayman = new HC.DisplayManager({
+                let displayManager = new HC.DisplayManager(animation, {
                     display: new Array(statics.DisplayValues.display.length)
                 });
-                displayman.resize(renderer.getResolution());
+                displayManager.resize(renderer.getResolution());
+                animation.displayManager = displayManager;
 
-                sourceman = new HC.SourceManager({
+                let sourceManager = new HC.SourceManager(animation, {
                     sequence: new Array(statics.SourceValues.sequence.length),
-                    sample: new Array(statics.SourceValues.sample.length),
-                    video: new Array(statics.DisplayValues.video.length)
+                    sample: new Array(statics.SourceValues.sample.length)
                 });
-                sourceman.resize(renderer.getResolution());
+                sourceManager.resize(renderer.getResolution());
+                animation.sourceManager = sourceManager;
 
-                new HC.Animation.KeyboardListener().init();
+                new HC.Animation.KeyboardListener().init(animation);
                 new HC.Animation.EventListener().init();
 
                 animation._perspectiveHook = function () {
-                    sourceman.renderPerspectives();
+                    sourceManager.renderPerspectives();
                 };
 
-                let callback = function (data) {
-                    animation.loadSession(data);
-
-                    if (IS_MONITOR) {
-                        new HC.Monitor().init(function () {
-                            displayman.updateDisplay(0);
-                            new HC.Animation.ResizeListener().init();
-                        });
-                    } else {
-                        new HC.Animation.ResizeListener().init();
-                    }
-                };
-                messaging.sync(callback);
+                animation.loadSession();
             });
         }
     });
@@ -140,10 +99,57 @@ document.addEventListener('DOMContentLoaded', function () {
      *
      * @type {HC.Animation}
      */
-    HC.Animation = class Animation {
+    HC.Animation = class Animation extends HC.Messageable {
+
+        /**
+         * @type {HC.Messaging}
+         */
+        messaging;
+
+        /**
+         *
+         * @type {HC.SourceManager}
+         */
+        sourceManager;
+
+        /**
+         * @type {HC.AudioManager}
+         */
+        audioManager;
+
+        /**
+         * @type {HC.AudioAnalyser}
+         */
+        audioAnalyser;
+
+        /**
+         * @type {HC.DisplayManager}
+         */
+        displayManager;
+
+        /**
+         * @type {HC.BeatKeeper}
+         */
+        beatKeeper;
+
+        /**
+         * @type {HC.Listener}
+         */
+        listener;
+
+        /**
+         * @type {HC.Renderer}
+         */
+        renderer;
+
+        /**
+         * @type {HC.LayeredControlSetsManager}
+         */
+        settingsManager;
+
 
         constructor(name) {
-            this.name = name;
+            super(name);
             this.now = HC.now();
             this.last = this.now;
             this.running = false;
@@ -171,27 +177,35 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
+        /**
+         *
+         * @param {HC.Messaging} messaging
+         */
+        setMessaging(messaging) {
+            this.messaging = messaging;
+        }
+
         animate() {
 
             /**
              * do general stuff
              */
-            let speed = beatkeeper.getDefaultSpeed();
+            let speed = this.beatKeeper.getDefaultSpeed();
 
             if (IS_ANIMATION && speed.starting()) {
 
                 let detectedSpeed = false;
 
-                if (audioman.isActive()) {
+                if (this.audioManager.isActive()) {
 
-                    if (statics.ControlSettings.peak_bpm_detect && audio.peakReliable) {
+                    if (statics.ControlSettings.peak_bpm_detect && this.audioAnalyser.peakReliable) {
 
-                        detectedSpeed = beatkeeper.speedByPeakBpm(audio.firstPeak, audio.peakBPM, statics.ControlSettings.tempo);
+                        detectedSpeed = this.beatKeeper.speedByPeakBpm(this.audioAnalyser.firstPeak, this.audioAnalyser.peakBPM, statics.ControlSettings.tempo);
 
                         if (detectedSpeed) {
-                            audio.peakReliable = false;
-                            messaging.emitLog('peakBPM', detectedSpeed);
-                            animation.updateControl('tempo', detectedSpeed, true, true);
+                            this.audioAnalyser.peakReliable = false;
+                            this.messaging.emitLog('peakBPM', detectedSpeed);
+                            this.updateControl('tempo', detectedSpeed, true, true);
                         }
                     }
 
@@ -201,26 +215,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.postStatus(detectedSpeed);
             }
 
-            if (audioman.isActive()) {
+            if (this.audioManager.isActive()) {
                 let config = {
-                    useWaveform: renderer.currentLayer.settings.audio_usewaveform,
+                    useWaveform: this.renderer.currentLayer.settings.audio_usewaveform,
                     volume: statics.ControlSettings.volume,
                     // resetPeakCountAfter: statics.ControlSettings.shuffle_every,
                     tempo: statics.ControlSettings.tempo,
-                    minDiff: beatkeeper.getSpeed('sixteen').duration,
+                    minDiff: this.beatKeeper.getSpeed('sixteen').duration,
                     now: this.now,
-                    thickness: renderer.currentLayer.settings.audio_thickness
+                    thickness: this.renderer.currentLayer.settings.audio_thickness
                 };
-                audio.update(config);
+                this.audioAnalyser.update(config);
 
             } else {
                 this.fakeAudio();
             }
 
-            if (audio.peak) {
-                messaging.emitMidi('glow', MIDI_PEAK_FEEDBACK, {timeout: 125});
+            if (this.audioAnalyser.peak) {
+                this.messaging.emitMidi('glow', MIDI_PEAK_FEEDBACK, {timeout: 125});
 
-                listener.fireEvent('audio.peak', audio);
+                this.listener.fireEvent('audio.peak', this.audioAnalyser);
             }
 
             /**
@@ -233,10 +247,10 @@ document.addEventListener('DOMContentLoaded', function () {
             if (IS_ANIMATION) {
                 this.doShuffle();
             }
-            renderer.switchLayer(IS_MONITOR);
+            this.renderer.switchLayer(IS_MONITOR);
 
             let hook = this.doNotDisplay ? false : this._perspectiveHook;
-            renderer.animate(hook);
+            this.renderer.animate(hook);
 
         }
 
@@ -245,10 +259,10 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         render() {
             if (IS_ANIMATION) {
-                sourceman.render();
+                this.sourceManager.render();
             }
             if (!this.doNotDisplay) {
-                displayman.render();
+                this.displayManager.render();
             }
         }
 
@@ -266,13 +280,6 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 this.pause();
             }
-
-            if (statics.ControlSettings.play) {
-                sourceman.startVideos();
-
-            } else {
-                sourceman.stopVideos();
-            }
         }
 
         /**
@@ -283,10 +290,10 @@ document.addEventListener('DOMContentLoaded', function () {
             this.running = true;
 
             if (this.lastUpdate) {
-                this.lastUpdate = animation.now - this.lastUpdate;
+                this.lastUpdate = this.now - this.lastUpdate;
             }
-            beatkeeper.play();
-            renderer.resumeLayers();
+            this.beatKeeper.play();
+            this.renderer.resumeLayers();
 
             let render = () => {
                 if (this.running) {
@@ -295,9 +302,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     this.updateRuntime();
 
-                    beatkeeper.updateSpeeds(this.diff, statics.ControlSettings.tempo);
+                    this.beatKeeper.updateSpeeds(this.diff, statics.ControlSettings.tempo);
 
-                    if (beatkeeper.getSpeed('sixteen').starting()) {
+                    if (this.beatKeeper.getSpeed('sixteen').starting()) {
                         this.doNotDisplay = false;
 
                     } else if (statics.DisplaySettings.fps < 46) {
@@ -326,8 +333,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
                 } else {
-                    renderer.pauseLayers();
-                    beatkeeper.stop();
+                    this.renderer.pauseLayers();
+                    this.beatKeeper.stop();
                 }
             };
 
@@ -355,42 +362,40 @@ document.addEventListener('DOMContentLoaded', function () {
             this._rmss += this.rms;
             this.last = this.now;
 
-            listener.fireEvent('animation.updateRuntime', this);
+            this.listener.fireEvent('animation.updateRuntime', this);
         }
 
         /**
          *
          */
         fakeAudio() {
-            let speed = beatkeeper.getSpeed('half');
-            audio.volume = Math.random();
-            audio.volumes = new Array(audio.binCount).fill(0).map(Math.random);
+            let speed = this.beatKeeper.getSpeed('half');
+            this.audioAnalyser.volume = Math.random();
+            this.audioAnalyser.volumes = new Array(this.audioAnalyser.binCount).fill(0).map(Math.random);
             if (speed.progress <= 0) {
-                audio.peak = true;
-                // audio.peakCount += speed.beats;
-                //
-                // if (audio.peakCount > statics.ControlSettings.shuffle_every) { // doubled due to audio off
-                //     audio.peakCount = 0;
-                // }
+                this.audioAnalyser.peak = true;
 
             } else {
-                audio.peak = false;
+                this.audioAnalyser.peak = false;
             }
         }
 
+        /**
+         *
+         */
         updateAudio() {
-            audio.reset();
+            this.audioAnalyser.reset();
             let value = statics.ControlSettings.audio;
             if (value) {
-                audioman.stop();
-                audioman.initPlugin(value, function (source) {
-                    let analyser = audio.createAnalyser(audioman.context);
+                this.audioManager.stop();
+                this.audioManager.initPlugin(value, (source) => {
+                    let analyser = this.audioAnalyser.createAnalyser(this.audioManager.context);
                     source.connect(analyser);
-                    audioman.start();
+                    this.audioManager.start();
                 });
 
             } else {
-                audioman.stop();
+                this.audioManager.stop();
             }
         }
 
@@ -399,30 +404,30 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         autoVolume() {
             let gain = 0;
-            if (audio.avgVolume < 0.10) {
+            if (this.audioAnalyser.avgVolume < 0.10) {
                 gain += 0.1;
 
-            } else if (audio.avgVolume < 0.20) {
+            } else if (this.audioAnalyser.avgVolume < 0.20) {
                 gain += 0.05;
 
-            } else if (audio.avgVolume < 0.26) {
+            } else if (this.audioAnalyser.avgVolume < 0.26) {
                 gain += 0.005;
 
-            } else if (audio.avgVolume > 0.46) {
+            } else if (this.audioAnalyser.avgVolume > 0.46) {
                 gain -= 0.1;
 
-            } else if (audio.avgVolume > 0.36) {
+            } else if (this.audioAnalyser.avgVolume > 0.36) {
                 gain -= 0.05;
 
-            } else if (audio.avgVolume > 0.30) {
+            } else if (this.audioAnalyser.avgVolume > 0.30) {
                 gain -= 0.005;
             }
 
             if (gain !== 0) {
-                //console.log('gain', [audio.volume, audio.avgVolume, gain]);
+                //console.log('gain', [this.audioAnalyser.volume, this.audioAnalyser.avgVolume, gain]);
                 let vo = Math.min(2, Math.max(0.5, statics.ControlSettings.volume + gain));
                 // statics.ControlSettings.volume = vo;
-                animation.updateControl('volume', vo, false, false, false);
+                this.updateControl('volume', vo, false, false, false);
             }
         }
 
@@ -454,110 +459,116 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         postStatus(detectedSpeed) {
 
-            let color = detectedSpeed ? 'green' : (audio.peakReliable ? 'yellow' : 'red');
-            messaging.emitAttr('#sync', 'data-color', color);
-
             if (statics.ControlSettings.beat) {
-                let speed = beatkeeper.getDefaultSpeed();
-                let btk = ['bpm:' + beatkeeper.bpm,
+                let speed = this.beatKeeper.getDefaultSpeed();
+                let color = detectedSpeed ? 'green' : (this.audioAnalyser.peakReliable ? 'yellow' : '');
+
+                this.messaging.emitAttr('#beat', 'color', color, '', speed.duration);
+
+                let btk = ['bpm:' + this.beatKeeper.bpm,
                     'b:' + speed.beats,
                     'd:' + speed.duration.toFixed(0),
-                    'p:' + beatkeeper.speeds.quarter.pitch.toFixed(0)
+                    'p:' + this.beatKeeper.speeds.quarter.pitch.toFixed(0)
                 ];
 
-                messaging.emitAttr('#beat', 'data-label', btk.join(' / '));
+                this.messaging.emitAttr('#beat', 'data-label', btk.join(' / '));
 
-                let vo = round(audio.avgVolume, 2) + '';
-                messaging.emitAttr('#audio', 'data-mnemonic', vo);
-
-                if (audioman.isActive()) {
+                if (this.audioManager.isActive()) {
                     let au = [
-                        audio.peakBPM.toFixed(2),
+                        round(this.audioAnalyser.avgVolume, 2) + '',
+                        this.audioAnalyser.peakBPM.toFixed(2),
                     ];
-                    messaging.emitAttr('#audio', 'data-label', au.join(' / '));
+                    this.messaging.emitAttr('#audio', 'data-label', au.join(' / '));
                 }
                 //messaging.emitAttr('#beat', 'data-color', 'red', 'green');<
-                messaging.emitMidi('glow', MIDI_BEAT_FEEDBACK, {timeout: 125});
+                this.messaging.emitMidi('glow', MIDI_BEAT_FEEDBACK, {timeout: 125});
                 if (detectedSpeed) {
-                    messaging.emitMidi('glow', MIDI_PEAKBPM_FEEDBACK, {timeout: 15000 / detectedSpeed, times: 8});
+                    this.messaging.emitMidi('glow', MIDI_PEAKBPM_FEEDBACK, {timeout: 15000 / detectedSpeed, times: 8});
                 }
                 if (statics.DisplaySettings.display_speed == 'midi') {
-                    messaging.emitMidi('clock', MIDI_CLOCK_NEXT, {duration: beatkeeper.getDefaultSpeed().duration});
+                    this.messaging.emitMidi('clock', MIDI_CLOCK_NEXT, {duration: this.beatKeeper.getDefaultSpeed().duration});
                 }
 
-                if (beatkeeper.getSpeed('half').starting()) {
+                if (this.beatKeeper.getSpeed('half').starting()) {
                     for (let i = 0; i < statics.SourceValues.sequence.length; i++) {
                         let parent = getSequenceHasParent(i);
                         let use = getSampleBySequence(i);
                         if (parent) {
-                            messaging.emitMidi('glow', MIDI_ROW_TWO[i], {timeout: 125});
+                            this.messaging.emitMidi('glow', MIDI_ROW_TWO[i], {timeout: 125});
                         }
                         if (use != 'off') {
-                            messaging.emitMidi('glow', MIDI_ROW_ONE[use], {timeout: 125});
+                            this.messaging.emitMidi('glow', MIDI_ROW_ONE[use], {timeout: 125});
                         }
                     }
                 }
             }
 
-            // let sh = statics.ControlSettings.shuffle;
-            // let count = statics.ControlSettings.shuffle_usepeak ? audio.peakCount :
-            //     (statics.shuffle.counter % statics.ControlSettings.shuffle_every);
-            // messaging.emitAttr('#layer', 'data-label', count + (sh ? 's' : ''));
+            this.messaging.emitAttr('#layers', 'data-mnemonic', (this.renderer.currentLayer.index + 1));
 
-            let layerDisplayValue = (statics.ControlSettings.layer + 1);
-            messaging.emitAttr('#layers', 'data-mnemonic', layerDisplayValue);
-
-            if (animation.stats) {
-                let state = (animation.powersave ? 'i' : '') + (animation.offline ? 'o' : '');
+            if (this.stats) {
+                let state = (this.powersave ? 'i' : '') + (this.offline ? 'o' : '');
                 let vals = [
-                    'fps:' + animation.fps + state,
-                    'rms:' + animation.rmsAverage()];
-                messaging.emitAttr('#play', 'data-label', vals.join(' / '));
+                    'fps:' + this.fps + state,
+                    'rms:' + this.rmsAverage()];
+                this.messaging.emitAttr('#play', 'data-label', vals.join(' / '));
             }
         }
 
         /**
          *
-         * @param session
          */
-        loadSession(session) {
+        loadSession() {
 
-            if ('displays' in session) {
-                HC.log('displays', 'synced');
-                let displays = session.displays;
-                this.updateDisplays(displays, true, false, true);
-            }
+            let callback = (session) => {
 
-            if ('sources' in session) {
-                HC.log('sources', 'synced');
-                let sources = session.sources;
-                this.updateSources(sources, true, false, true);
-            }
-
-            if ('settings' in session) {
-                HC.log('settings', 'synced');
-                let settings = session.settings;
-                for (let k in settings) {
-                    this.updateSettings(k, settings[k], true, false, true);
+                if ('displays' in session) {
+                    HC.log('displays', 'synced');
+                    let displays = session.displays;
+                    this.updateDisplays(displays, true, false, true);
                 }
-            }
 
-            // if ('settings' in session) {
-            //     HC.log('settings', 'synced');
-            //     let settings = session.settings;
-            //     for (let k in settings) {
-            //         this.updateSettings(k, settings[k], true, false, true);
-            //     }
-            // }
+                if ('sources' in session) {
+                    HC.log('sources', 'synced');
+                    let sources = session.sources;
+                    this.updateSources(sources, true, false, true);
+                }
 
-            if ('controls' in session) {
-                HC.log('controls', 'synced');
-                let controls = session.controls;
-                this.updateControls(controls, true, false, true);
-            }
+                if ('settings' in session) {
+                    HC.log('settings', 'synced');
+                    let settings = session.settings;
+                    for (let k in settings) {
+                        this.updateSettings(k, settings[k], true, false, true);
+                    }
+                }
 
-            sourceman.updateSequences();
-            this.fullReset(true);
+                // if ('settings' in session) {
+                //     HC.log('settings', 'synced');
+                //     let settings = session.settings;
+                //     for (let k in settings) {
+                //         this.updateSettings(k, settings[k], true, false, true);
+                //     }
+                // }
+
+                if ('controls' in session) {
+                    HC.log('controls', 'synced');
+                    let controls = session.controls;
+                    this.updateControls(controls, true, false, true);
+                }
+
+                this.sourceManager.updateSequences();
+                this.fullReset(true);
+
+                if (IS_MONITOR) {
+                    new HC.Monitor().init(() => {
+                        this.displayManager.updateDisplay(0);
+                        new HC.Animation.ResizeListener().init(this.displayManager);
+                    });
+                } else {
+                    new HC.Animation.ResizeListener().init(this.displayManager);
+                }
+            };
+
+            this.messaging.sync(callback);
         }
 
         /**
@@ -565,9 +576,9 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param keepsettings
          */
         fullReset(keepsettings) {
-            renderer.fullReset(keepsettings);
-            sourceman.resize(renderer.getResolution());
-            displayman.resize(renderer.getResolution());
+            this.renderer.fullReset(keepsettings);
+            this.sourceManager.resize(this.renderer.getResolution());
+            this.displayManager.resize(this.renderer.getResolution());
         }
 
         /**
@@ -582,10 +593,12 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateSetting(layer, data, display, forward, force) {
 
-            let layerIndex = layer;
-            layer = renderer.layers[layer];
+            // if (!renderer)return;
 
-            let updated = cm.updateData(layer, data);
+            let layerIndex = layer;
+            layer = this.renderer.layers[layer];
+
+            let updated = this.settingsManager.updateData(layer, data);
             let property;
             let value;
             if (isArray(updated)) {
@@ -598,7 +611,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // complete layer reset:
                 case 'shape_sizedivider':
                 case 'pattern_shapes':
-                    renderer.resetLayer(layer);
+                    this.renderer.resetLayer(layer);
                     break;
 
                 // shader reset
@@ -643,10 +656,10 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (forward === true) {
-                messaging.emitSettings(layerIndex, data, true, false, force);
+                this.messaging.emitSettings(layerIndex, data, true, false, force);
             }
 
-            listener.fireEvent('animation.updateSetting', {layer: layer, item: property, value: value});
+            this.listener.fireEvent('animation.updateSetting', {layer: layer, item: property, value: value});
         }
 
         /**
@@ -660,69 +673,59 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateControl(item, value, display, forward, force) {
 
-            if (statics.ControlSettings && statics.ControlSettings.contains(item)) {
+            if (item == 'beat') {
+                value = this.beatKeeper.trigger(value);
 
-                if (item == 'beat') {
-                    value = beatkeeper.trigger(value, true, statics.ControlSettings.tempo, true);
+            } else if (item == 'session' && value != _HASH) {
+                document.location.hash = value;
+                setTimeout(function () {
+                    document.location.reload();
+                }, 250);
+                return;
+            }
 
-                } else if (item == 'session' && value != _HASH) {
-                    document.location.hash = value;
-                    setTimeout(function () {
-                        document.location.reload();
-                    }, 250);
-                    return;
-                }
+            value = statics.ControlSettingsManager.updateItem(item, value);
 
-                value = statics.ControlSettings.update(item, value);
+            if (forward === true) {
+                let data = {};
+                data[item] = value;
+                this.messaging.emitControls(data, true, false, force);
+            }
 
-                if (forward === true) {
-                    let data = {};
-                    data[item] = value;
-                    messaging.emitControls(data, true, false, force);
-                }
+            if (display) {
+                switch (item) {
+                    case 'reset':
+                        if (this.renderer) {
+                            if (force) {
+                                this.beatKeeper.reset();
+                                this.fullReset(false);
 
-                if (display) {
-                    switch (item) {
-                        case 'reset':
-                            if (renderer) {
-                                if (force) {
-                                    beatkeeper.reset();
-                                    this.fullReset(false);
-
-                                } else {
-                                    renderer.resetLayer(renderer.currentLayer);
-                                }
+                            } else {
+                                this.renderer.resetLayer(this.renderer.currentLayer);
                             }
-                            break;
+                        }
+                        break;
 
-                        case 'layer':
-                            // audio.peakCount = 0; // disable shuffle for [shuffle every] count of peaks
-                            renderer.nextLayer = renderer.layers[value];
-                            break;
+                    case 'layer':
+                        // audio.peakCount = 0; // disable shuffle for [shuffle every] count of peaks
+                        this.renderer.nextLayer = this.renderer.layers[value];
+                        break;
 
-                        case 'tempo':
-                            sourceman.updateVideos(value);
-                            break;
+                    // case 'tempo':
+                    //
+                    //     break;
 
-                        case 'monitor':
-                            if (!IS_MONITOR) {
-                                break;
-                            }
-                        case 'play':
-                            this.updatePlay();
+                    case 'monitor':
+                        if (!IS_MONITOR) {
                             break;
+                        }
+                    case 'play':
+                        this.updatePlay();
+                        break;
 
-                        case 'audio':
-                            this.updateAudio();
-                            break;
-
-                        case 'shuffle':
-                            if (value) {
-                                this.shuffleLayer(false);
-                            }
-                            break;
-
-                    }
+                    case 'audio':
+                        this.updateAudio();
+                        break;
                 }
             }
         }
@@ -738,64 +741,61 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateSource(item, value, display, forward, force) {
 
-            if (statics.SourceSettings.contains(item)) {
+            value = statics.SourceSettingsManager.updateItem(item, value);
 
-                value = statics.SourceSettings.update(item, value);
+            if (forward === true) {
+                let data = {};
+                data[item] = value;
+                this.messaging.emitSources(data, true, false, force);
+            }
 
-                if (forward === true) {
-                    let data = {};
-                    data[item] = value;
-                    messaging.emitSources(data, true, false, force);
+            if (display) {
+                let action = false;
+                // if (item.match(/^sample\d+_store/) && value) {
+                //     //var sample =
+                //     sourceManager.storeSample(number_extract(item, 'sample'), value, 1, false);
+                //     this.updateSource(item, false, false, true, false);
+                //
+                // } else
+                if (item.match(/^sample\d+_load/) && value) {
+                    if (IS_MONITOR || display) {
+                        this.sourceManager.loadSample(numberExtract(item, 'sample'), value);
+                    }
+                    this.updateSource(item, false, false, true, false);
+
+                } else if (item.match(/^sample\d+_/)) {
+                    this.sourceManager.updateSample(numberExtract(item, 'sample'));
+                    action = true;
+
+                } else if (item.match(/^sequence\d+_/)) {
+                    this.sourceManager.updateSequence(numberExtract(item, 'sequence'));
+                    action = true;
+
+                } else if (item.match(/display\d+_source/)) {
+                    var display = this.displayManager.getDisplay(numberExtract(item, 'display'));
+                    this.sourceManager.updateSource(display);
+
+                    if (display && display.isFixedSize()) {
+                        this.displayManager.updateDisplay(display.index, false);
+                    }
+
+                    action = true;
+
+                } else if (item.match(/display\d+_sequence/)) {
+                    this.sourceManager.updateSource(this.displayManager.getDisplay(numberExtract(item, 'display')));
+                    action = true;
+
+                } else if (item.match(/^lighting_(lights|scale)/)) {
+                    this.displayManager.updateDisplays();
+                    action = true;
+
+                } else if (item.match(/^lighting_(mode|color)/)) {
+                    this.sourceManager.getLighting(0).update();
+                    action = true;
                 }
 
-                if (display) {
-                    let action = false;
-                    // if (item.match(/^sample\d+_store/) && value) {
-                    //     //var sample =
-                    //     sourceman.storeSample(number_extract(item, 'sample'), value, 1, false);
-                    //     this.updateSource(item, false, false, true, false);
-                    //
-                    // } else
-                    if (item.match(/^sample\d+_load/) && value) {
-                        if (IS_MONITOR || display) {
-                            sourceman.loadSample(numberExtract(item, 'sample'), value);
-                        }
-                        this.updateSource(item, false, false, true, false);
-
-                    } else if (item.match(/^sample\d+_/)) {
-                        sourceman.updateSample(numberExtract(item, 'sample'));
-                        action = true;
-
-                    } else if (item.match(/^sequence\d+_/)) {
-                        sourceman.updateSequence(numberExtract(item, 'sequence'));
-                        action = true;
-
-                    } else if (item.match(/display\d+_source/)) {
-                        var display = displayman.getDisplay(numberExtract(item, 'display'));
-                        sourceman.updateSource(display);
-
-                        if (display && display.isFixedSize()) {
-                            displayman.updateDisplay(display.index, false);
-                        }
-
-                        action = true;
-
-                    } else if (item.match(/display\d+_sequence/)) {
-                        sourceman.updateSource(displayman.getDisplay(numberExtract(item, 'display')));
-                        action = true;
-
-                    } else if (item.match(/^lighting_(lights|scale)/)) {
-                        displayman.updateDisplays();
-                        action = true;
-
-                    } else if (item.match(/^lighting_(mode|color)/)) {
-                        sourceman.getLighting(0).update();
-                        action = true;
-                    }
-
-                    if (action) {
-                        animation.offline = false;
-                    }
+                if (action) {
+                    this.offline = false;
                 }
             }
         }
@@ -813,8 +813,8 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param data
          */
         updateMidi(data) {
-            if (listener && data.command == 'message') {
-                listener.fireEvent('midi.message', data.data);
+            if (this.listener && data.command == 'message') {
+                this.listener.fireEvent('midi.message', data.data);
             }
         }
 
@@ -830,19 +830,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (item.match(/^display\d+_\d/)) { // resize
                 if (value) {
-                    displayman.centerDisplay(numberExtract(item, 'display'), value);
+                    this.displayManager.centerDisplay(numberExtract(item, 'display'), value);
                     this.updateDisplay(item, false, display, true);
                 }
-                statics.DisplaySettings.update(item, value);
+                statics.DisplaySettingsManager.updateItem(item, value);
 
-            } else if (statics.DisplaySettings.contains(item)) {
+            } else {
 
-                value = statics.DisplaySettings.update(item, value);
+                value = statics.DisplaySettingsManager.updateItem(item, value);
 
                 if (forward === true) {
                     var data = {};
                     data[item] = value;
-                    messaging.emitDisplays(data, true, false, force);
+                    this.messaging.emitDisplays(data, true, false, force);
                 }
 
                 if (display) {
@@ -854,17 +854,17 @@ document.addEventListener('DOMContentLoaded', function () {
                         case 'mapping':
                         case 'clip_context':
                         case 'background':
-                            displayman.updateDisplays();
+                            this.displayManager.updateDisplays();
                             break;
 
                         case 'brightness':
-                            displayman.brightness(value);
+                            this.displayManager.brightness(value);
                             break;
 
                         case 'display_visibility':
                         case 'border_mode':
-                            statics.display.visibility.random = false;
-                            statics.display.border.random = false;
+                            this.displayManager.settings.visibility.random = false;
+                            this.displayManager.settings.border.random = false;
                             break;
                     }
                 }
@@ -874,14 +874,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     var i = numberExtract(item, 'display');
 
                     if (item.match(/_mask$/)) { // mask
-                        displayman.updateDisplay(i, 'mask');
+                        this.displayManager.updateDisplay(i, 'mask');
 
                     } else if (item.match(/_mapping/)) { // mapping
-                        displayman.updateDisplay(i, 'mapping'); // avoid removing/adding maptastic layer
+                        this.displayManager.updateDisplay(i, 'mapping'); // avoid removing/adding maptastic layer
 
                     } else { // anything else
-                        displayman.updateDisplay(i);
-                        animation.offline = false;
+                        this.displayManager.updateDisplay(i);
+                        this.offline = false;
                     }
                 }
             }
@@ -897,9 +897,9 @@ document.addEventListener('DOMContentLoaded', function () {
         updateSettings(layer, data, display, forward, force) {
 
             if (force) {
-                cm.updateData(layer, data);
+                this.settingsManager.updateData(layer, data);
 
-                renderer.resetLayer(layer);
+                this.renderer.resetLayer(layer);
 
             } else {
                 for (var k in data) {
@@ -935,9 +935,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (force) {
                 for (var k in data) {
-                    statics.DisplaySettings.update(k, data[k]);
+                    statics.DisplaySettingsManager.updateItem(k, data[k]);
                 }
-                displayman.reset();
+                this.displayManager.reset();
                 // this.fullReset(true);
 
             } else {
@@ -965,7 +965,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         * Keep in mind: If durations in HC.Beatkeeper.speeds change due to pitching, this will not return usable values for smooth animations.
+         * Keep in mind: If durations in HC.BeatKeeper.speeds change due to pitching, this will not return usable values for smooth animations.
          * @param duration
          * @param divider
          * @returns {number}
@@ -979,12 +979,11 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         doShuffle() {
             var plugin = this.getShuffleModePlugin(statics.ControlSettings.shuffle_mode);
-
             var result = plugin.apply();
             if (result !== false) {
                 result = plugin.after();
                 if (result !== false) {
-                    renderer.nextLayer = renderer.layers[result];
+                    this.renderer.nextLayer = this.renderer.layers[result];
                 }
             }
         }
@@ -999,7 +998,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (!this.plugins[name]) {
-                this.plugins[name] = new HC.shuffle_mode[name](statics.ControlSettings);
+                this.plugins[name] = new HC.shuffle_mode[name](this, statics.ControlSettings);
             }
 
             return this.plugins[name];

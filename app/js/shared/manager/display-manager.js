@@ -9,11 +9,45 @@
      */
     HC.DisplayManager = class DisplayManager {
 
+        settings = {
+            visibility: {
+                index: 0,
+                random: false
+            },
+            border: {
+                random: false
+            }
+        };
+
         /**
-         *
+         * @type {HC.Animation}
+         */
+        animation;
+
+        /**
+         * @type {HC.BeatKeeper}
+         */
+        beatKeeper;
+
+        /**
+         * @type {HC.Renderer}
+         */
+        renderer;
+
+        /**
+         * @type {HC.AudioAnalyser}
+         */
+        audioAnalyser;
+
+        /**
+         * @param {HC.Animation} animation
          * @param config
          */
-        constructor(config) {
+        constructor(animation, config) {
+            this.animation = animation;
+            this.beatKeeper = animation.beatKeeper;
+            this.renderer = animation.renderer;
+            this.audioAnalyser = animation.audioAnalyser;
             this.displays = config.display;
             this.width = 1280;
             this.height = 720;
@@ -21,7 +55,20 @@
             this.maptastic = this.initMaptastic();
             this.cliptastic = this.initCliptastic();
             this.mappingTimeouts = [];
-            this.maskTimeouts = [];
+
+            this.initBorderModePlugins();
+        }
+
+        /**
+         *
+         */
+        initBorderModePlugins() {
+            for (let k in HC.Display.border_modes) {
+                let plugin = HC.Display.border_modes[k];
+                plugin = new plugin(this);
+                HC.Display.border_modes[k] = plugin;
+                plugin.init();
+            }
         }
 
         /**
@@ -57,10 +104,10 @@
             if (this.mappingTimeouts[id]) {
                 clearTimeout(this.mappingTimeouts[id]);
             }
-            if (animation) {
+            if (this.animation) {
                 let f = (id, mapping) => {
                     this.mappingTimeouts[id] = setTimeout(() => {
-                        animation.updateDisplay(id + '_mapping', JSON.stringify(mapping), false, true, false);
+                        this.animation.updateDisplay(id + '_mapping', JSON.stringify(mapping), false, true, false);
                         this.mappingTimeouts[id] = false;
                     }, 125);
                 };
@@ -72,22 +119,24 @@
          *
          */
         initCliptastic() {
+
+            let maskTimeouts = [];
             let onMask = (id, mask) => {
-                if (this.maskTimeouts[id]) {
-                    clearTimeout(this.maskTimeouts[id]);
+                if (maskTimeouts[id]) {
+                    clearTimeout(maskTimeouts[id]);
                 }
-                if (animation) {
+                if (this.animation) {
                     let f = (id, mask) => {
-                        this.maskTimeouts[id] = setTimeout(function () {
-                            animation.updateDisplay(id, JSON.stringify(mask), true, true, false);
-                            this.maskTimeouts[id] = false;
+                        maskTimeouts[id] = setTimeout(() => {
+                            this.animation.updateDisplay(id, JSON.stringify(mask), true, true, false);
+                            maskTimeouts[id] = false;
                         }, 125);
                     };
                     f(id, mask);
                 }
             };
             return Cliptastic({
-                onchange(e) {
+                onchange: (e) => {
                     if (e && 'element' in e) {
                         let element = e.element;
                         let id = element.id;
@@ -188,7 +237,7 @@
             let visible = statics.DisplaySettings['display' + i + '_visible'];
             if (visible) {
                 if (!this.displays[i]) {
-                    this.displays[i] = new HC.Display(i);
+                    this.displays[i] = new HC.Display(this.animation, i);
                     this._addDisplay(i);
 
                     if (IS_SETUP) {
@@ -222,7 +271,7 @@
                 display.update(this.width, this.height, statics.DisplaySettings);
 
                 if (!mode) {
-                    sourceman.updateSource(display);
+                    this.animation.sourceManager.updateSource(display);
                     this.enableCliptastic(display, false);
                     display.updateMask();
                     this.enableCliptastic(display, !display.isFixedSize());
@@ -325,7 +374,7 @@
 
                 if (color == '') {
                     let canvas = display.getSource() ? display.getSource().current() : false;
-                    color = (canvas && canvas._color) ? canvas._color : renderer.currentLayer.shapeColor(false);
+                    color = (canvas && canvas._color) ? canvas._color : this.renderer.currentLayer.shapeColor(false);
                 }
 
                 display.drawBorder(lw, color, mode, speed);
@@ -384,7 +433,7 @@
          */
         renderDisplays() {
             let visibleIndex = 0;
-            let fallback = renderer.current();
+            let fallback = this.renderer.current();
 
             for (let i = 0; i < this.displays.length; i++) {
                 let display = this.displays[i];
@@ -398,8 +447,8 @@
                         display.clear();
                     }
 
-                    let bm = statics.display.border.random !== false
-                        ? statics.display.border.random
+                    let bm = this.settings.border.random !== false
+                        ? this.settings.border.random
                         : statics.DisplaySettings.border_mode;
 
                     switch (bm) {
@@ -509,8 +558,8 @@
             let redo = false;
 
             let speed = this.visibilitySpeed();
-            let sv = statics.display.visibility.random !== false
-                ? statics.display.visibility.random : statics.DisplaySettings.display_visibility;
+            let sv = this.settings.visibility.random !== false
+                ? this.settings.visibility.random : statics.DisplaySettings.display_visibility;
 
             if (statics.DisplaySettings.reset_display_visibility) {
                 sv = 'visible';
@@ -518,31 +567,31 @@
 
             switch (sv) {
                 case 'random':
-                    if ((speed === false && audio.peak) || speed === 0) {
+                    if ((speed === false && this.audioAnalyser.peak) || speed === 0) {
                         redo = 2;
                     }
                     break;
 
                 case 'randomoneon':
-                    if ((speed === false && audio.peak) || speed === 0) {
+                    if ((speed === false && this.audioAnalyser.peak) || speed === 0) {
                         if (index == 0) {
-                            statics.display.visibility.index = randomInt(0, this.displayMap.length - 1);
+                            this.settings.visibility.index = randomInt(0, this.displayMap.length - 1);
                         }
                     }
-                    redo = statics.display.visibility.index == index ? 1 : 0;
+                    redo = this.settings.visibility.index == index ? 1 : 0;
                     break;
 
                 case 'randomoneoff':
-                    if ((speed === false && audio.peak) || speed === 0) {
+                    if ((speed === false && this.audioAnalyser.peak) || speed === 0) {
                         if (index == 0) {
-                            statics.display.visibility.index = randomInt(0, this.displayMap.length - 1);
+                            this.settings.visibility.index = randomInt(0, this.displayMap.length - 1);
                         }
                     }
-                    redo = statics.display.visibility.index == index ? 0 : 1;
+                    redo = this.settings.visibility.index == index ? 0 : 1;
                     break;
 
                 case 'randomflash':
-                    if (!visible && ((speed === false && audio.peak) || speed === 0)) {
+                    if (!visible && ((speed === false && this.audioAnalyser.peak) || speed === 0)) {
                         redo = 3;
 
                     } else if (visible) {
@@ -554,7 +603,7 @@
                     break;
 
                 case 'randomblitz':
-                    if ((speed === false && audio.peak) || speed === 0) {
+                    if ((speed === false && this.audioAnalyser.peak) || speed === 0) {
                         redo = -5;
                     } else {
                         redo = -2;
@@ -562,7 +611,7 @@
                     break;
 
                 case 'randomsmear':
-                    if ((speed === false && audio.peak) || speed === 0) {
+                    if ((speed === false && this.audioAnalyser.peak) || speed === 0) {
                         redo = -4;
                     } else {
                         redo = -2;
@@ -575,7 +624,7 @@
                     var prc = percentile * (index + 1);
                     //if (speed === false) {
                     this.visibilityStack(index, 1, speed);
-                    var i = statics.display.visibility.index + 2;
+                    var i = this.settings.visibility.index + 2;
                     speed = i * percentile;
                     //}
                     if (speed > prc) {
@@ -590,7 +639,7 @@
                     var prc = percentile * (index);
                     //if (speed === false) {
                     this.visibilityStack(index, 1, speed);
-                    var i = statics.display.visibility.index;
+                    var i = this.settings.visibility.index;
                     speed = i * percentile;
                     //}
                     if (1 - speed > prc) {
@@ -602,7 +651,7 @@
 
                 case 'stackoof': // stack one off forward
                     this.visibilityStack(index, 1, speed);
-                    var i = statics.display.visibility.index;
+                    var i = this.settings.visibility.index;
                     if (index == i) {
                         redo = 0;
                     } else {
@@ -612,7 +661,7 @@
 
                 case 'stackoor': // stack one off reversed
                     this.visibilityStack(index, -1, speed);
-                    var i = statics.display.visibility.index;
+                    var i = this.settings.visibility.index;
                     if (index == i) {
                         redo = 0;
                     } else {
@@ -654,7 +703,7 @@
                 }
 
             } else if (ds == 'layer') {
-                if (renderer.layerSwitched) {
+                if (this.renderer.layerSwitched) {
                     speed = {prc: 0};
                     statics.DisplaySettings.force_display_visibility = true;
 
@@ -663,7 +712,7 @@
                 }
 
             } else {
-                speed = beatkeeper.getSpeed(ds);
+                speed = this.beatKeeper.getSpeed(ds);
             }
 
             if (speed) {
@@ -679,7 +728,7 @@
          * @returns {boolean}
          */
         borderSpeed() {
-            let speed = beatkeeper.getSpeed(statics.DisplaySettings.border_speed);
+            let speed = this.beatKeeper.getSpeed(statics.DisplaySettings.border_speed);
             return speed;
         }
 
@@ -691,9 +740,9 @@
          */
         visibilityStack(index, dir, speed) {
 
-            if (index == 0 && ((speed === false && audio.peak) || speed === 0)) {
+            if (index == 0 && ((speed === false && this.audioAnalyser.peak) || speed === 0)) {
 
-                let i = statics.display.visibility.index;
+                let i = this.settings.visibility.index;
 
                 i += dir;
 
@@ -704,7 +753,7 @@
                     i = this.displayMap.length - 1;
                 }
 
-                statics.display.visibility.index = i;
+                this.settings.visibility.index = i;
             }
         }
 
@@ -714,9 +763,10 @@
          * @returns {number}
          */
         flashTimeoutInFrames(speed) {
-            let timeout = beatkeeper.getSpeed(speed).duration / 2;
-            let count = Math.round((timeout / animation.duration) / 2);
+            let timeout = this.beatKeeper.getSpeed(speed).duration / 2;
+            let count = Math.round((timeout / this.animation.duration) / 2);
             return count;
         }
+
     }
 }

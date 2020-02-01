@@ -12,7 +12,7 @@
 
                 if (e.dataTransfer.files.length) {
                     HC.audio.mediafile.dropEvent = e;
-                    animation.updateControl('audio', 'mediafile', true, true, false);
+                    this.animation.updateControl('audio', 'mediafile', true, true, false);
                 }
             };
 

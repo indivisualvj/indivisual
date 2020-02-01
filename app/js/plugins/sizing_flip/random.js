@@ -5,7 +5,7 @@
         apply(shape) {
             let layer = this.layer;
 
-            layer.getSizingFlipPlugin('random').apply(shape, audio.peak && randomBool());
+            layer.getSizingFlipPlugin('random').apply(shape, this.audioAnalyser.peak && randomBool());
         }
     }
 }

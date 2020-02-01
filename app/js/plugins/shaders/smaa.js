@@ -13,8 +13,7 @@
 
         static settings = {
             apply: false,
-            random: false,
-            index: 1001
+            random: false
         }
     }
 }

@@ -5,7 +5,7 @@
         beats = 0;
 
         apply() {
-            this.beats += (beatkeeper.getDefaultSpeed().prc==0?1:0);
+            this.beats += (this.beatKeeper.getDefaultSpeed().prc==0?1:0);
             let every = this.settings.shuffle_every;
 
             if (this.beats >= every) {
@@ -48,7 +48,7 @@
         next() {
             let pile = [];
             for(let i = 0; i < statics.ControlValues.layer.length; i++) {
-                if (layerShuffleable(i) && !cm.isDefault(i)) {
+                if (layerShuffleable(i) && !this.animation.settingsManager.isDefault(i)) {
                     pile.push(i);
                 }
             }

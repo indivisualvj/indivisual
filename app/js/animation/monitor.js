@@ -1,7 +1,6 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-
 {
     /**
      *
@@ -25,7 +24,6 @@
 
             statics.ControlSettings.play = false;
             statics.ControlSettings.monitor = false;
-            statics.ControlSettings.shuffle = false;
             statics.DisplaySettings.fps = 30;
             statics.DisplaySettings.display0_visible = true;
 

@@ -2,260 +2,150 @@
  *
  * @param actions
  */
-HC.Controller.prototype.addAnimationControllers = function (controlsets) {
+HC.Controller.prototype.addAnimationControllers = function (controlSets) {
 
-    for (let cs in controlsets) {
-        let set = controlsets[cs];
+    for (let cs in controlSets) {
+        let set = controlSets[cs];
         if (set.visible !== false) {
-            let ui = new HC.ControlSetUi(set);
-            ui.addFolder(this.gui);
-            ui.addControls();
+            let ui = new HC.ControlSetGuifyUi(set, this.animationSettingsGui);
+            ui.addFolder(true);
+            ui.addControllers();
         }
     }
 };
 
 /**
  *
- * @param controllers
- * @param settings
- * @param values
- * @param types
- * @param submit
- * @param actions
- */
-HC.Controller.prototype.addControllers = function (controllers, settings, values, types, submit, actions) {
-
-    for (var key in controllers) {
-        var dir = controller.gui.addFolder(key);
-        dir.__ul.parentNode.parentNode.setAttribute('data-id', key);
-
-        if (actions) {
-            this._addShareListener(key, dir, false);
-        }
-
-        for (var ksub in controllers[key]) {
-            var options = controllers[key];
-            if (options[ksub]
-                && typeof options[ksub] == 'object'
-                && (ksub.match(/^_.+/))
-            ) {
-                options = options[ksub];
-                var _dir = dir.addFolder(ksub);
-                _dir.__ul.parentNode.parentNode.setAttribute('data-id', ksub);
-                _dir.__ul.parentNode.parentNode.setAttribute('data-parent', key);
-
-                for (var _ksub in options) {
-                    var ctl = this._addControl(options, settings, values, types, _ksub, _dir, submit, ksub.substr(1) + '_');
-                    if (ctl) {
-                        ctl.__li.setAttribute('data-parent', ksub);
-                    }
-                }
-
-            } else {
-                var ctl = this._addControl(options, settings, values, types, ksub, dir, submit, key + '_');
-                if (ctl) {
-                    ctl.__li.setAttribute('data-parent', key);
-                }
-            }
-        }
-
-    }
-};
-
-/**
- *
- * @param options
- * @param settings
- * @param values
- * @param types
- * @param ksub
- * @param dir
- * @param submit
- * @param removePrefix
+ * @param groups
+ * @param controlSets
+ * @param uiClass
+ * @param gui
  * @returns {*}
- * @private
  */
-HC.Controller.prototype._addControl = function (options, settings, values, types, ksub, dir, submit, removePrefix) {
-    var vsub = options[ksub];
+HC.Controller.prototype.addGuifyDisplayControllers = function (groups, controlSets, uiClass, gui) {
 
-    if (vsub === null) {
-        return; // not visible
+    for (let k in groups) {
+        let group = groups[k];
+        let folder = gui.addFolder(k);
+        let sets = {};
 
-    } else if (ksub == 'open') {
-        dir.open();
+        for (let s in group) {
+            sets[s] = controlSets[k + '.' + s];
+        }
 
-        return false; // prevent fucking it up later
+        this.addGuifyControllers(sets, uiClass, folder);
     }
-
-    var ctl = false;
-
-    if (typeof vsub == 'function') {
-
-        settings[ksub] = vsub;
-
-        ctl = dir.add(settings, ksub);
-        if (removePrefix) {
-            var reg = new RegExp('^' + removePrefix);
-            ctl.name(ksub.replace(reg, ''));
-        }
-        if (ksub in types) {
-            var bnd = types[ksub];
-            if (!bnd || bnd.length < 1) {
-                console.log('error in ' + ksub);
-            } else {
-                ctl.__li.setAttribute('data-class', bnd[0]);
-            }
-        }
-
-        ctl.__li.setAttribute('data-id', ksub);
-
-        return ctl; // prevent fucking it up later
-
-    } else if (ksub in values) { // dropdown
-
-        var vls = values[ksub];
-        if (typeof vls == 'object') {
-            ctl = dir.add(settings, ksub, vls);
-
-        }
-        //else if (typeof vls == 'boolean') {
-        //ctl = dir.add(settings, ksub);
-        //}
-
-    } else {
-        if (typeof vsub == 'number') {
-            if (ksub in types) {
-                var bnd = types[ksub];
-                var min = bnd[0];
-                var max = bnd[1];
-                var step = bnd[2];
-
-                ctl = dir.add(settings, ksub, min, max, step);
-                var el = ctl.domElement.getElementsByTagName('input')[0];
-                el.setAttribute('data-step', step);
-            }
-        }
-    }
-
-    if (!ctl) {
-        ctl = dir.add(settings, ksub);
-    }
-
-    if (ctl) {
-
-        if (removePrefix) {
-            // pattern_padding_oscillate -> oscillate
-            // rotation_x_random -> random
-            var reg = new RegExp('\\w+_([^_]+)$');
-            var _ksub = ksub.replace(reg, '$1');
-            ctl.name(_ksub);
-            //ctl.name(ksub);
-        }
-        if (ksub.match(/[^0-9]+\d+_.+/)) {
-            ctl.name(ksub.replace(/[^0-9]+(\d+_.+)/, '$1'));
-        }
-
-        if (ksub in types) {
-            var bnd = types[ksub];
-            if (!bnd || bnd.length < 1) {
-                console.log('error in ' + ksub);
-            } else {
-                ctl.__li.setAttribute('data-class', bnd[bnd.length - 1]);
-            }
-        }
-
-        ctl.__li.setAttribute('data-id', ksub);
-
-        if (ctl instanceof dat.controllers.NumberControllerBox
-            || ctl instanceof dat.controllers.NumberControllerSlider
-        ) {
-            ctl.onChange(submit);
-        } else {
-            ctl.onFinishChange(submit);
-        }
-
-        ctl._parent = dir;
-    }
-
-    return ctl;
 };
 
 /**
  *
- * @param key
- * @param dir
- * @param datasource
- * @private
- */
-HC.Controller.prototype._addShareListener = function (key, dir, datasource) {
-    var ul = dir.__ul;
-    var li = ul.lastChild;
-    var ac = document.createElement('div');
-    ac.setAttribute('class', 'actions');
-
-    var sy = document.createElement('div');
-    sy.setAttribute('class', 'sync');
-
-    sy.addEventListener('click', function () {
-
-        if (sy.classList.contains('selected')) {
-            controller.setSynchronized(key, false);
-            sy.setAttribute('class', 'sync');
-
-        } else {
-            controller.setSynchronized(key, true);
-            sy.setAttribute('class', 'sync selected');
-        }
-
-        dir.closed = !dir.closed; // no toggle folder tweak
-    });
-
-    ac.appendChild(sy);
-
-    var sh = document.createElement('div');
-    sh.setAttribute('class', 'share');
-
-    sh.addEventListener('click', function () {
-        // share to all layers
-        controller.shareSettings(key, datasource);
-        dir.closed = !dir.closed;  // no toggle folder tweak
-    });
-
-    ac.appendChild(sh);
-
-    li.appendChild(ac);
-};
-
-/**
- *
- * @param submit
- * @returns {*|dat.gui.GUI}
- */
-HC.Controller.prototype.addShaderPassControllers = function (submit) {
-
-    if (controller._passes) {
-        controller.gui.removeFolder(controller._passes.name);
-    }
-    let dir = controller.gui.addFolder('passes');
-    controller._passes = dir;
-    this._addShareListener('passes', dir, true);
-
-    let ctl = dir.add({pass: ''}, 'pass', statics.Passes);
-    ctl.onFinishChange(submit);
-
-    return dir;
-};
-
-
-/**
- *
- * @param controller
+ * @param controlSets
+ * @param uiClass
  * @param parent
  */
-HC.Controller.prototype.addShaderPassController = function (key, controller, parent) {
+HC.Controller.prototype.addGuifyControllers = function (controlSets, uiClass, parent) {
+    for (let k in controlSets) {
+        let inst = controlSets[k];
+
+        if (inst.visible !== false) {
+            let ui = new uiClass(inst, parent);
+
+            if (inst instanceof HC.IterableControlSet) {
+                ui.folder = parent;
+
+            } else {
+                ui.addFolder();
+            }
+            ui.addControllers();
+        }
+    }
+};
+
+/**
+ *
+ */
+HC.Controller.prototype.addConfigurationSettings = function () {
+
+    for (let k in statics) {
+        if (k.endsWith('Types')) {
+            let object = statics[k];
+            let folder = this.configurationSettingsGui.addFolder(k, false);
+
+            for (let p in object) {
+
+                let v = object[p];
+
+                if (isArray(v) && v.length > 1) {
+                    let opts = {
+                        type: 'interval',
+                        label: p,
+                        property: p,
+                        object: object,
+                        min: v[0]*2,
+                        max: v[1]*2
+                    };
+                    folder.addController(opts);
+                }
+            }
+        }
+    }
+};
+
+HC.Controller.prototype.initStatusBar = function () {
+
+    let ctrls = {
+        play: {
+            dataClass: 'quarter'
+        },
+        beat: {
+
+        },
+        sync: {
+
+        },
+        audio: {
+
+        },
+        layer: {
+
+        },
+        layers: {
+
+        }
+    };
+};
+
+/**
+ *
+ * @param submit
+ */
+HC.Controller.prototype.addPassesFolder = function (submit) {
+
+    let passes = this.animationSettingsGui.getChild('passes');
+    if (passes) {
+        this.animationSettingsGui.removeChild(passes.getLabel());
+    }
+    let ui = new HC.ControlSetGuifyUi(this.settingsManager.getGlobalProperties()['passes'], this.animationSettingsGui);
+    let dir = ui.addFolder();
+
+    dir.addSelectController('pass', 'pass', {pass: ''}, statics.Passes, submit);
+};
+
+
+/**
+ *
+ * @param control
+ * @param parent
+ */
+HC.Controller.prototype.addShaderPassController = function (key, control, parent) {
     let folder = parent.addFolder(key);
-    let sh = controller.getShader();
-    this.addShaderController(folder, false, sh, controller.name, controller);
+    let sh = control.getShader();
+    this.addShaderController(folder, false, sh, control.name, control);
+
+    let clear = document.createElement('div');
+    clear.classList.add('guify-component-container');
+    clear.classList.add('clear');
+    folder.getFolderContainer().appendChild(clear);
 };
 
 
@@ -265,132 +155,123 @@ HC.Controller.prototype.addShaderPassController = function (key, controller, par
  * @param key
  * @param sh
  * @param parent
- * @param controller
+ * @param control
  */
-HC.Controller.prototype.addShaderController = function (folder, key, sh, parent, controller) {
+HC.Controller.prototype.addShaderController = function (folder, key, sh, parent, control) {
 
-    controller = controller || new HC.ShaderPassUi(parent);
-    let shi = controller.getInitialSettings() || {}; // fallback 4 cleaned settings from storage
-    let submit = controller.onChange;
+    control = control || new HC.ShaderPassUi(parent);
+    let shi = control.getInitialSettings() || {}; // fallback 4 cleaned settings from storage
+    let submit = control.onChange;
 
-    for (var skey in sh) {
-        var shs = sh[skey];
-        var shis = shi[skey] || {};
+    for (let skey in sh) {
+        let shs = sh[skey];
+        let shis = shi[skey] || {};
 
-        var ctl = false;
-        var label = skey;
+        let label = skey;
+
+        let _opts = function (label, onChange, folder, property, object) {
+            return {
+                label: label,
+                onChange: onChange,
+                folder: folder,
+                property: property,
+                object: object,
+                cssClasses: 'clear'
+            };
+        };
+
+        let opts = _opts(label, submit, folder, skey, sh);
+
+        switch(skey) {
+            case 'apply':
+                opts.dataClass = 'half';
+                break;
+
+            case 'random':
+                opts.dataClass = 'half';
+                opts.cssClasses = 'noclear';
+                break;
+        }
 
         if (typeof shs == 'boolean') { // apply, etc.
-            ctl = folder.add(sh, skey)
-                .onFinishChange(submit);
-
-            if (skey in statics.ShaderTypes) {
-                var bnd = statics.ShaderTypes[skey];
-                ctl.__li.setAttribute('data-class', bnd[0]);
-            }
+            opts.type = 'checkbox';
+            folder.addController(opts);
 
         } else if (typeof shs == 'number') {
-            ctl = folder.add(sh, skey, 0)
-                .onFinishChange(submit);
-            ctl.step(1);
+            opts.type = 'range';
+            opts.step = 1;
 
-            var el = ctl.domElement.getElementsByTagName('input')[0];
-            el.setAttribute('data-step', 1);
-
-            if (skey in statics.ShaderTypes) {
-                var bnd = statics.ShaderTypes[skey];
-                ctl.__li.setAttribute('data-class', bnd[0]);
-            }
+            folder.addController(opts);
 
         } else {
-            var v = ('value' in shs) ? shs['value'] : null;
+            let v = ('value' in shs) ? shs['value'] : null;
 
             if (v !== null) {
-                var b = ('_type' in shs) ? shs['_type'] : (('_type' in shis) ? shis['_type'] : null);
-                var a = ('audio' in shs) ? shs['audio'] : null;
-                var s = ('stepwise' in shs) ? shs['stepwise'] : null;
-                var o = ('oscillate' in shs) ? shs['oscillate'] : null;
+                let range = ('_type' in shs) ? shs['_type'] : (('_type' in shis) ? shis['_type'] : null);
+                let audio = ('audio' in shs) ? shs['audio'] : null;
+                let stepwise = ('stepwise' in shs) ? shs['stepwise'] : null;
+                let oscillate = ('oscillate' in shs) ? shs['oscillate'] : null;
 
                 label = (key ? (key + '_') : '') + skey;
-                var min, max, step;
-                if (b) {
-                    min = b[0];
-                    max = b[1];
-                    step = b[2];
 
-                    ctl = folder.add(shs, 'value', min, max, step)
-                        .name(label)
-                        .onChange(submit)
-                        .onFinishChange(submit);
+                opts = _opts(label, submit, folder, 'value', shs);
 
-                    var el = ctl.domElement.getElementsByTagName('input')[0];
-                    el.setAttribute('data-step', step);
+                let min, max, step;
+                if (range) {
+                    min = range[0];
+                    max = range[1];
+                    step = range[2];
+
+                    opts.type = 'range';
+                    opts.min = min;
+                    opts.max = max;
+                    opts.step = step;
+
+                    folder.addController(opts);
 
                 } else {
-                    ctl = folder.add(shs, 'value')
-                        .name(label)
-                        .onFinishChange(submit);
+                    let type = typeof v;
+                    opts.type = type==='number' ? 'range' : type==='boolean' ? 'checkbox' : 'text';
+
+                    folder.addController(opts);
                 }
 
-                if (a !== null) {
-                    var _label = skey + '_audio';
-                    ctl = folder.add(shs, 'audio')
-                        .name(_label)
-                        .onFinishChange(submit);
-                    ctl.parent = parent;
-                    ctl.label = _label;
+                if (audio !== null) {
+                    let _label = skey + '_audio';
 
-                    if (_label) {
-                        var suffix = _label.replace(/^.+_/, '_');
-                        if (suffix in statics.ShaderTypes) {
-                            var bnd = statics.ShaderTypes[suffix];
-                            ctl.__li.setAttribute('data-class', bnd[0]);
-                        }
-                    }
+                    opts = _opts(_label, submit, folder, 'audio', shs);
+                    opts.type = 'checkbox';
+                    opts.dataClass = 'quarter';
+                    opts.cssClasses = 'clear';
+
+                    folder.addController(opts);
                 }
 
-                if (s !== null) {
-                    var _label = skey + '_stepwise';
-                    ctl = folder.add(shs, 'stepwise')
-                        .name(_label)
-                        .onFinishChange(submit);
-                    ctl.parent = parent;
-                    ctl.label = _label;
+                if (stepwise !== null) {
+                    let _label = skey + '_stepwise';
 
-                    if (_label) {
-                        var suffix = _label.replace(/^.+_/, '_');
-                        if (suffix in statics.ShaderTypes) {
-                            var bnd = statics.ShaderTypes[suffix];
-                            ctl.__li.setAttribute('data-class', bnd[0]);
-                        }
-                    }
+                    opts = _opts(_label, submit, folder, 'stepwise', shs);
+                    opts.type = 'checkbox';
+                    opts.dataClass = 'quarter';
+                    opts.cssClasses = 'noclear';
+
+                    folder.addController(opts);
                 }
 
-                if (o !== null) {
-                    var _label = skey + '_oscillate';
-                    ctl = folder.add(shs, 'oscillate', statics.ShaderValues.oscillate)
-                        .name(_label)
-                        .onFinishChange(submit);
-                    ctl.parent = parent;
-                    ctl.label = _label;
+                if (oscillate !== null) {
+                    let _label = skey + '_oscillate';
+                    opts = _opts(_label, submit, folder, 'oscillate', shs);
+                    opts.type = 'select';
+                    opts.options = statics.AnimationValues.oscillate;
+                    opts.dataClass = 'half';
+                    opts.cssClasses = 'noclear';
 
-                    if (_label) {
-                        var suffix = _label.replace(/^.+_/, '_');
-                        if (suffix in statics.ShaderTypes) {
-                            var bnd = statics.ShaderTypes[suffix];
-                            ctl.__li.setAttribute('data-class', bnd[0]);
-                        }
-                    }
+                    folder.addController(opts);
                 }
 
             } else { // go deeper
-                this.addShaderController(folder, skey, shs, parent, controller);
+                this.addShaderController(folder, skey, shs, parent, control);
             }
-        }
-
-        if (ctl) {
-            ctl._parent = folder;
-            ctl.__controller = controller;
         }
     }
 };
@@ -403,15 +284,25 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
 HC.Controller.prototype.nextOpenFolder = function (control) {
 
     if (!control) {
-        control = this.gui;
+        return this.nextOpenFolder(this.controlSettingsGui) ||
+        this.nextOpenFolder(this.displaySettingsGui) ||
+        this.nextOpenFolder(this.sourceSettingsGui) ||
+        this.nextOpenFolder(this.animationSettingsGui) || this.controlSettingsGui;
     }
 
-    if (control.__folders) {
-        for (var k in control.__folders) {
-            var v = control.__folders[k];
-            if (!v.closed) {
-                control = this.nextOpenFolder(v);
-                break;
+    if (control instanceof HC.Guify && !control.isExpanded()) {
+        return false;
+    }
+
+    if (control.children) {
+        for (let k in control.children) {
+            let child = control.getChild(k);
+            if (child instanceof HC.GuifyFolder) {
+
+                if (child.isExpanded()) {
+                    control = this.nextOpenFolder(child);
+                    break;
+                }
             }
         }
     }
@@ -423,45 +314,54 @@ HC.Controller.prototype.nextOpenFolder = function (control) {
  * @param name
  */
 HC.Controller.prototype.toggleByName = function (name) {
-    // todo für tutorials und öffnen von shaders
+    // for tutorials and to open shader passes
+    console.error('not implemented');
 };
 
 /**
  *
  * @param property
  */
-HC.Controller.prototype.toggleByProperty = function (property) {
-    var control = this.getControlParentByProperty(property);
-    control.open();
-    this.scrollToControl(control);
+HC.Controller.prototype.openTreeByProperty = function (property) {
+
+    let roots = this.guis;
+
+    for (let k in roots) {
+        let control;
+        if (control = roots[k].findControlByProperty(property)) {
+            this.closeAll(roots[k]);
+            let scrollto = control;
+            control = control.getParent();
+
+            do {
+                control.setOpen(true);
+            } while(control = control.getParent())
+
+            this.scrollToControl(scrollto);
+        }
+    }
 };
 
 /**
  *
- * @param property
- * @param [control]
- * @returns {*}
+ * @param key
  */
-HC.Controller.prototype.getControlParentByProperty = function (property, control) {
+HC.Controller.prototype.openTreeByFolder = function (key) {
+    let roots = this.guis;
 
-    control = control || this.gui;
+    for (let k in roots) {
+        let folder;
+        if (folder = roots[k].findFolderByKey(key)) {
+            this.closeAll(roots[k]);
+            let scrollto = folder;
 
-    for (var c in control.__controllers) {
-        var co = control.__controllers[c];
-        if (co.property == property) {
-            // found
-            return control;
+            do {
+                folder.setOpen(true);
+            } while(folder = folder.getParent())
+
+            this.scrollToControl(scrollto);
         }
     }
-    for (var k in control.__folders) {
-        var v = control.__folders[k];
-
-        var c = this.getControlParentByProperty(property, v);
-        if (c) {
-            return c;
-        }
-    }
-    return false;
 };
 
 /**
@@ -479,7 +379,7 @@ HC.Controller.prototype.explainPlugin = function (item, value, tree) {
             var desc = proto.tutorial;
             if (desc) {
                 var key = item + '.' + value;
-                new HC.ScriptProcessor(key, desc).log();
+                new HC.ScriptProcessor(this, key, desc).log();
             }
         }
     }
@@ -491,15 +391,34 @@ HC.Controller.prototype.explainPlugin = function (item, value, tree) {
  */
 HC.Controller.prototype.closeAll = function (control) {
 
-    control = control || this.gui;
+    if (!control) {
+        this.closeAll(this.controlSettingsGui);
+        this.closeAll(this.displaySettingsGui);
+        this.closeAll(this.sourceSettingsGui);
+        this.closeAll(this.animationSettingsGui);
+        return;
+    }
 
-    if (control.__folders) {
-        for (var k in control.__folders) {
-            var v = control.__folders[k];
-            v.close();
-            this.closeAll(v);
+    if (control instanceof HC.Guify) {
+        control.setOpen(false);
+
+    } else if (control instanceof HC.GuifyFolder) {
+        control.setOpen(false);
+    }
+
+    let result;
+    if (control.children) {
+        for (let k in control.children) {
+            let child = control.getChild(k);
+            if (child instanceof HC.GuifyFolder) {
+                child.setOpen(false);
+                result = child;
+                this.closeAll(child);
+            }
         }
     }
+
+    return result;
 };
 
 /**
@@ -507,63 +426,26 @@ HC.Controller.prototype.closeAll = function (control) {
  * @param ci
  * @param shiftKey
  */
-HC.Controller.prototype.toggleByKey = function (ci, shiftKey) {
-    var open = this.nextOpenFolder(this.gui);
-    var folderKeys = [];
-    if (open.__folders) {
-        folderKeys = Object.keys(open.__folders);
+HC.Controller.prototype.toggleByKey = function (ci, char, shiftKey) {
+    let roots = this.guis;
+    let open = this.nextOpenFolder();
+
+    if (!open.isExpanded()) {
+        if (ci < roots.length) {
+            roots[ci].setOpen(true);
+        }
+        return;
     }
 
-    var controllerKeys = [];
-    if (open.__controllers) {
-        controllerKeys = Object.keys(open.__controllers);
+    let controllers = open.getControllers();
 
-        if (shiftKey && controllerKeys.length > 0) { // reset on shift
-            this.resetFolder(open);
-            return;
-        }
-
+    if (shiftKey && controllers.length > 0) { // reset on shift
+        this.resetFolder(open);
+        return;
     }
 
-    if (folderKeys && folderKeys.length > ci) { // open folder
-        var control = open.__folders[folderKeys[ci]];
-        control.open();
-        this.scrollToControl(control);
-
-    } else if (!shiftKey
-        && controllerKeys
-        && folderKeys.length + controllerKeys.length > ci
-    ) { // activate controller
-
-        var folder = open.name;
-        if (folder in statics.ControlValues._keys) {
-            ci += Object.keys(statics.ControlValues._keys[folder]).length; // vorbelegte überspringen
-        }
-
-        var control = open.__controllers[controllerKeys[ci - folderKeys]];
-
-        if (control && control.__li.hasAttribute('data-mnemonic')) {
-            if (control instanceof dat.controllers.BooleanController
-                || control instanceof dat.controllers.FunctionController
-            ) {
-                control.domElement.click();
-
-            } else if (control instanceof dat.controllers.NumberControllerSlider
-                || control instanceof dat.controllers.NumberControllerBox
-                || control instanceof dat.controllers.StringController
-            ) {
-                var el = control.domElement.getElementsByTagName('input')[0];
-                el.focus();
-                el.select();
-
-            } else if (control instanceof dat.controllers.OptionController) {
-                control.domElement.getElementsByTagName('select')[0].focus();
-
-            } else {
-                HC.log(control);
-            }
-        }
-    }
+    let ctrl = open.toggleByMnemonic(char);
+    this.scrollToControl(ctrl);
 };
 
 /**
@@ -572,61 +454,58 @@ HC.Controller.prototype.toggleByKey = function (ci, shiftKey) {
  */
 HC.Controller.prototype.scrollToControl = function (control) {
 
-    setTimeout(function () {
-        var container = control.__ul;
-        container.scrollIntoView();
-    }, 125);
+    if (control) {
+        setTimeout(function () {
+            var container = control.getContainer();
+            container.scrollIntoView();
+        }, 125);
+    }
 };
 
 /**
  *
- * @param item
  * @param control
- * @param show
  */
-HC.Controller.prototype.updateUi = function (item, control) {
+HC.Controller.prototype.updateUi = function (control) {
+
+    this.refreshLayerInfo();
 
     if (!control) {
-        control = this.gui;
-        this.refreshLayerInfo();
+        this.updateValuesChanged(this.controlSettingsGui);
+        this.updateValuesChanged(this.displaySettingsGui);
+        this.updateValuesChanged(this.sourceSettingsGui);
+        this.updateValuesChanged(this.animationSettingsGui);
+        return;
+    }
 
+    if (control == this.animationSettingsGui) {
         this.updateUiPasses();
     }
 
-    var flds = control.__folders || [];
+    for (let key in control.children) {
+        let child = control.getChild(key);
 
-    for (var key in flds) {
-        var fld = flds[key];
-
-        this.updateUi(item, fld);
-        this.updateValuesChanged(fld);
-    }
-
-    var ctrls = control.__controllers || [];
-
-    for (var key in ctrls) {
-        var ctrl = ctrls[key];
-        var property = ctrl.property;
-
-        if (!item || property == item) {
-            ctrl.updateDisplay();
+        if (child instanceof HC.GuifyFolder) {
+            this.updateValuesChanged(child);
         }
     }
 };
 
 /**
- *
+ * 
  */
 HC.Controller.prototype.updateUiPasses = function () {
 
-    if (this._passes) {
-        this._passes.__controllers[0].setValue(null);
+    let passFld = this.animationSettingsGui.getChild('passes');
+    if (passFld && passFld.getChild('pass')) {
+        passFld.getChild('pass').setValue(null);
 
-        let cs = cm.get(statics.ControlSettings.layer, 'passes');
+        let cs = this.settingsManager.get(statics.ControlSettings.layer, 'passes');
         let passes = cs.getShaderPasses();
 
-        for (let f in this._passes.__folders) {
-            this._passes.removeFolder(f);
+        for (let k in passFld.children) {
+            if (k == 'pass')continue;
+            passFld.removeChild(k);
         }
 
         for (let k in passes) {
@@ -635,7 +514,7 @@ HC.Controller.prototype.updateUiPasses = function () {
             let sh = cs.getShader(k);
             let ctrl = new HC.ShaderPassUi(name);
             ctrl.init(sh);
-            this.addShaderPassController(key, ctrl, this._passes);
+            this.addShaderPassController(key, ctrl, passFld);
         }
     }
 };
@@ -644,13 +523,21 @@ HC.Controller.prototype.updateUiPasses = function () {
  *
  */
 HC.Controller.prototype.showDisplayControls = function () {
-    for (var i = 0; i < statics.DisplayValues.display.length; i++) {
-        var n = 'display' + i;
-        var v = statics.DisplaySettings[n + '_visible'];
-        this.showControls(n, 'g_sources', v);
+    for (let i = 0; i < statics.DisplayValues.display.length; i++) {
+        let key = 'display' + i;
+        let visible = statics.DisplaySettings[key + '_visible'];
 
-        n = '_display' + i;
-        this.showControls(n, 'g_displays', v);
+        let displays = this.displaySettingsGui.children.displays.children;
+        let display = displays[key];
+        display.setVisible(visible);
+
+        let sources = this.sourceSettingsGui.children.source.children;
+        let sk = key + '_source';
+        let ctrl = sources[sk];
+        ctrl.setVisible(visible);
+        sk = key + '_sequence';
+        ctrl = sources[sk];
+        ctrl.setVisible(visible);
     }
 };
 
@@ -661,46 +548,44 @@ HC.Controller.prototype.showDisplayControls = function () {
  */
 HC.Controller.prototype.updateValuesChanged = function (folder) {
 
-    var changed = false;
+    let changes = false;
 
     if (!folder) {
-        folder = this.gui;
+        this.updateValuesChanged(this.controlSettingsGui);
+        this.updateValuesChanged(this.displaySettingsGui);
+        this.updateValuesChanged(this.sourceSettingsGui);
+        this.updateValuesChanged(this.animationSettingsGui);
+        return;
     }
 
-    var flds = folder.__folders || [];
-
-    for (var key in flds) {
-        var fld = flds[key];
-
-        if (this.updateValuesChanged(fld)) {
-            changed = true;
-        }
-    }
-
-    var ctrls = folder.__controllers || [];
-
-    for (var key in ctrls) {
-        var ctrl = ctrls[key];
-        var li = ctrl.__li;
-
-        if (ctrl.isModified()) {
-            li.setAttribute('data-changed', true);
-            changed = true;
+    for (let key in folder.children) {
+        let child = folder.getChild(key);
+        let changed = false;
+        if (child instanceof HC.GuifyFolder) {
+            changed = this.updateValuesChanged(child);
 
         } else {
-            li.removeAttribute('data-changed');
+            changed = child.isModified();
+        }
+
+        if (changed) {
+            changes = true;
+            child.getContainer().setAttribute('data-changed', true);
+
+        } else {
+            child.getContainer().removeAttribute('data-changed');
         }
     }
 
-    var ul = folder.__ul || folder.__gui.__ul;
-    if (ul && changed) {
-        ul.setAttribute('data-changed', true);
+    if (changes) {
+        folder.getContainer().setAttribute('data-changed', true);
 
     } else {
-        ul.removeAttribute('data-changed');
+        folder.getContainer().removeAttribute('data-changed');
     }
 
-    return changed;
+
+    return changes;
 };
 
 /**
@@ -708,115 +593,48 @@ HC.Controller.prototype.updateValuesChanged = function (folder) {
  */
 HC.Controller.prototype.updateThumbs = function () {
 
-    for (var i = 0; i < statics.SourceValues.sample.length; i++) {
-        var sampleKey = getSampleKey(i);
-        var enabledKey = getSampleEnabledKey(i);
-        var sampleNode = document.querySelector('[data-id="' + enabledKey + '"]');
+    for (let i = 0; i < statics.SourceValues.sample.length; i++) {
+        let sampleKey = getSampleKey(i);
 
-        var data = false;
+        let data = false;
         if (sampleKey in statics.DataSettings) {
             data = statics.DataSettings[sampleKey];
         }
 
-        var enabled = getSampleEnabledBySample(i) && (data != false);
-        if (enabled) {
-            var src = data.thumbs[Math.round(data.thumbs.length / 2)].src;
-            sampleNode.setAttribute('style', 'background: url(' + src + ') center center; background-size: 50%')
-
-        } else {
-            sampleNode.removeAttribute('style');
-        }
+        this.thumbs[i].update(data);
     }
 };
 
 /**
  *
- * @param item
- * @param parent
- * @param enabled
+ * @param index
  */
-HC.Controller.prototype.showControls = function (item, parent, enabled) {
-    requestAnimationFrame(function () {
-        var n = item.replace(/(display\d+)[^0-9]+/, '$1');
-        var q = '[data-id^="' + n + '"]';
-        var elem = document.querySelectorAll(q);
-        for (var i = 0; i < elem.length; i++) {
-            var e = elem[i];
-            if (e.getAttribute('data-parent') == parent) {
-                if (enabled) {
-                    e.style.display = '';
-                } else {
-                    e.style.display = 'none';
-                }
-            }
-        }
-    });
-};
+HC.Controller.prototype.loadClip = function (index) {
+    let smp = new HC.Sample(null, index);
 
-/**
- *
- * @param name
- */
-HC.Controller.prototype.loadClip = function (i) {
-    var smp = new HC.Sample(i);
-    var inst = this;
-
-    smp.clip(function (sample) {
-        var data = {data: {DataSettings: {}}};
+    smp.clip((sample) => {
+        let data = {data: {DataSettings: {}}};
         data.data.DataSettings[getSampleKey(sample.index)] = sample._clip;
-        inst.updateData(data);
-
-        var recordKey = getSampleRecordKey(sample.index);
-        var data = {query: '[data-id="' + recordKey + '"]', key: 'data-color', value: 'green'};
-        messaging.onAttr(data);
-        data = {query: '[data-id="' + recordKey + '"]', key: 'data-label', value: ''};
-        messaging.onAttr(data);
-        data = {command: 'off', data: MIDI_ROW_ONE[sample.index]};
-        messaging.onMidi(data);
+        this.updateData(data);
     });
 };
 
 /**
- *
+ * 
  * @param seq
  */
 HC.Controller.prototype.updateIndicator = function (seq) {
-    var sample = getSampleBySequence(seq);
-    var sampleKey = getSampleKey(sample);
-    var data = false;
+
+    let clip = this.clips[seq];
+
+    let sample = getSampleBySequence(seq);
+    let sampleKey = getSampleKey(sample);
+    let data = false;
     if (sampleKey in statics.DataSettings) {
         data = statics.DataSettings[sampleKey];
     }
-    var sequenceKey = getSequenceKey(seq);
-    var indicatorKey = sequenceKey + '_indicator';
-    var indicatorNode = document.getElementById(indicatorKey);
-    if (indicatorNode) {
-        var left = 0;
-        var width = 0;
-        var beats = 0;
-        if (data) {
-            var start = getSequenceStart(seq);
-            var end = getSequenceEnd(seq);
-            var frames = data.frames;
-            var sequence = {
-                start: 0,
-                end: 0,
-                length: 0
-            };
-            applySequenceSlice(sequence, frames, start, end);
 
-            var frameDuration = data.duration / frames;
-            var beatDuration = data.duration / data.beats;
-            var sliceDuration = sequence.length * frameDuration;
-            beats = sliceDuration / beatDuration;
-            width = sequence.length / frames * 100;
-            left = sequence.start / frames * 100;
-        }
-
-        indicatorNode.setAttribute('data-label', beats.toFixed(2));
-        indicatorNode.style.left = left + '%';
-        indicatorNode.style.width = (width - .5) + '%';
-    }
+    clip.updateIndicator(data);
 
 };
 
@@ -826,88 +644,40 @@ HC.Controller.prototype.updateIndicator = function (seq) {
  */
 HC.Controller.prototype.updateClip = function (seq) {
 
-    var sequenceKey = getSequenceKey(seq);
-    //var sequenceInUse = getSequenceInUse(seq);
-    var sample = getSampleBySequence(seq);
-    var sampleKey = getSampleKey(sample);
-    var clipKey = sequenceKey + '_clip';
-    var clipNode = document.getElementById(clipKey);
-    var indicatorKey = sequenceKey + '_indicator';
-    var indicatorNode = document.getElementById(indicatorKey);
-    var sequenceQuery = sequenceKey + '_';
-    var sequenceNodes = document.querySelectorAll('[data-id^="' + sequenceQuery + '"]');
-    var firstNode = sequenceNodes[0];
-    var lastNode = sequenceNodes[sequenceNodes.length - 3]; // -3 because _rereset
+    let clip = this.clips[seq];
 
-    var data = false;
+    let sample = getSampleBySequence(seq);
+    let sampleKey = getSampleKey(sample);
+
+    let data = false;
     if (sampleKey in statics.DataSettings) {
         data = statics.DataSettings[sampleKey];
     }
 
-    var enabled = getSampleEnabledBySequence(seq) && (data != false);
+    let enabled = getSampleEnabledBySequence(seq) && (data != false);
 
-    if (!clipNode) {
-        var clone = lastNode.cloneNode();
-        clone.setAttribute('class', 'scrollx');
-        clone.removeAttribute('data-parent');
-        clone.removeAttribute('data-id');
-        clone.removeAttribute('data-class');
-        clone.removeAttribute('data-mnemonic');
-        lastNode.parentNode.insertBefore(clone, lastNode.nextSibling);
+    clip.update(sample, enabled, data);
+};
 
-        clipNode = document.createElement('div');
-        clipNode.id = clipKey;
-        clipNode.setAttribute('class', 'thumbs');
+/**
+ * 
+ */
+HC.Controller.prototype.initClips = function () {
 
-        clone.appendChild(clipNode);
-
-        indicatorNode = document.createElement('div');
-        indicatorNode.id = indicatorKey;
-        indicatorNode.setAttribute('class', 'indicator');
-        clone.appendChild(indicatorNode);
+    this.clips = [];
+    for (let seq = 0; seq < statics.SourceValues.sequence.length; seq++) {
+        this.clips.push(new HC.SourceControllerClip(seq));
     }
 
-    var clipSample = parseInt(clipNode.getAttribute('data-sample'));
-    var clipEnabled = clipNode.getAttribute('data-enabled') === 'true';
-    clipNode.setAttribute('data-sample', sample);
-    clipNode.setAttribute('data-enabled', enabled);
-    //clipNode.style.background = '#ccc';
+};
 
-    if (data) {
-        //if (sequenceInUse) {
-        firstNode.setAttribute('data-color', 'green');
-        //
-        //} else {
-        //    firstNode.setAttribute('data-color', 'yellow');
-        //}
+/**
+ *
+ */
+HC.Controller.prototype.initThumbs = function () {
 
-        if (clipEnabled != enabled || clipSample != sample) {
-            clipNode.innerHTML = '';
-
-        } else {
-            return;
-        }
-
-        var thumbs = data.thumbs;
-        var max = 24;
-
-        for (var i = 0; i < thumbs.length && i < max; i++) {
-
-            var frameIndex = data.thumbs[i]._index;
-
-            var img = data.thumbs[i].cloneNode();
-            var div = document.createElement('div');
-            div.setAttribute('class', 'thumb');
-            div.setAttribute('data-index', frameIndex);
-
-            div.appendChild(img);
-
-            clipNode.appendChild(div);
-
-        }
-
-    } else {
-        firstNode.setAttribute('data-color', 'red');
-        clipNode.innerHTML = '';
+    this.thumbs = [];
+    for (let seq = 0; seq < statics.SourceValues.sample.length; seq++) {
+        this.thumbs.push(new HC.SourceControllerThumb(seq));
     }
 };

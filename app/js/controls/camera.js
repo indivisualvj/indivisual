@@ -29,22 +29,31 @@
         };
         
         types = {
-            camera_rotationx_oscillate: ['half'],
-            camera_rotationy_oscillate: ['half'],
-            camera_rotationz_oscillate: ['half'],
-            camera_rotationx: [-180, 180, 0.1, 'half'],
-            camera_rotationy: [-180, 180, 0.1, 'half'],
-            camera_rotationz: [-180, 180, 0.1, 'half'],
-            camera_type: ['half'],
+            camera_rotationx: [-180, 180, 0.1],
+            camera_rotationy: [-180, 180, 0.1],
+            camera_rotationz: [-180, 180, 0.1],
+            camera_mode_volume: [-10, 10, 0.01],
+            camera_x: [-5, 5, 0.01],
+            camera_y: [-5, 5, 0.01],
+            camera_z: [-5, 5, 0.01],
+        };
+
+        styles = {
             // camera_mode: ['half'],
-            camera_mode_volume: [-10, 10, 0.01, 'half'],
+            camera_mode_volume: ['half', 'clear'],
             camera_mode_volume_oscillate: ['half'],
-            camera_x: [-5, 5, 0.01, 'half'],
-            camera_y: [-5, 5, 0.01, 'half'],
-            camera_z: [-5, 5, 0.01, 'half'],
+            camera_x: ['half', 'clear'],
             camera_x_oscillate: ['half'],
+            camera_y: ['half', 'clear'],
             camera_y_oscillate: ['half'],
+            camera_z: ['half', 'clear'],
             camera_z_oscillate: ['half'],
+            camera_rotationx: ['half', 'clear'],
+            camera_rotationx_oscillate: ['half'],
+            camera_rotationy: ['half', 'clear'],
+            camera_rotationy_oscillate: ['half'],
+            camera_rotationz: ['half', 'clear'],
+            camera_rotationz_oscillate: ['half'],
         };
     }
 }

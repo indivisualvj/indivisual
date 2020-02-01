@@ -9,7 +9,7 @@
 
             let inst = this;
 
-            listener.register('audio.peak', this.objectName, function (target) {
+            this.animation.listener.register('audio.peak', this.objectName, function (target) {
                 inst.peaks++;
             });
         }
@@ -57,7 +57,7 @@
         next() {
             let pile = [];
             for(let i = 0; i < statics.ControlValues.layer.length; i++) {
-                if (layerShuffleable(i) && !cm.isDefault(i)) {
+                if (layerShuffleable(i) && !this.animation.settingsManager.isDefault(i)) {
                     pile.push(i);
                 }
             }

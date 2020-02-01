@@ -136,7 +136,7 @@
     "lighting_ambient": false,
     "lighting_ambient_intensity": 1,
     "lighting_bottom": false,
-    "lighting_color": "#fff",
+    "lighting_color": "#ffffff",
     "lighting_intensity": 1,
     "lighting_pattern": "ring",
     "lighting_pattern_lights": 6,

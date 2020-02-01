@@ -2812,7 +2812,7 @@ var GUI = function () {
             // and get its folderContainer.
             if (opts.folder) {
                 var folderComp = this.loadedComponents.find(function (cmp) {
-                    return cmp.opts.type === 'folder' && cmp.opts.label === opts.folder;
+                    return cmp === opts.folder || cmp.opts.type === 'folder' && cmp.opts.label === opts.folder;
                 });
 
                 if (folderComp) root = folderComp.folderContainer;else throw new Error('No folder exists with the name ' + opts.folder);
@@ -2832,9 +2832,10 @@ var GUI = function () {
                 });
 
                 component.on('input', function (data) {
+                    var oldValue = opts.object[opts.property];
                     if (opts.object && opts.property) opts.object[opts.property] = data;
 
-                    if (opts.onChange) {
+                    if (data !== oldValue && opts.onChange) {
                         opts.onChange(data);
                     }
                 });
@@ -3404,7 +3405,7 @@ var Range = function (_EventEmitter) {
         _this.opts = opts;
 
         _this.container = __webpack_require__(2)(root, opts.label, theme);
-        __webpack_require__(5)(_this.container, opts.label, theme);
+        _this.label = __webpack_require__(5)(_this.container, opts.label, theme);
 
         if (!!opts.step && !!opts.steps) {
             throw new Error('Cannot specify both step and steps. Got step = ' + opts.step + ', steps = ', opts.steps);
@@ -4103,12 +4104,14 @@ var Button = function (_EventEmitter) {
         _this.opts = opts;
 
         _this.container = __webpack_require__(2)(root, opts.label, theme);
-        __webpack_require__(5)(_this.container, '', theme);
+        // require('./partials/label')(this.container, '', theme)
 
         var input = _this.container.appendChild(document.createElement('button'));
         input.className = styles['guify-button'];
 
         input.textContent = opts.label;
+        _this.label = input;
+        _this.button = input;
 
         input.addEventListener('click', opts.action);
 
@@ -4184,10 +4187,10 @@ var Checkbox = function (_EventEmitter) {
         _this.opts = opts;
 
         _this.container = __webpack_require__(2)(root, opts.label, theme);
-        __webpack_require__(5)(_this.container, opts.label, theme);
+        _this.label = __webpack_require__(5)(_this.container, opts.label, theme);
 
         _this.input = _this.container.appendChild(document.createElement('input'));
-        _this.input.id = 'checkbox-' + opts.label + uuid;
+        _this.input.id = 'checkbox-' + opts.property + uuid;
         _this.input.type = 'checkbox';
         _this.input.checked = opts.initial;
         _this.input.className = styles['guify-checkbox'];
@@ -4201,8 +4204,13 @@ var Checkbox = function (_EventEmitter) {
             _this.emit('initialized', _this.input.checked);
         });
 
-        _this.input.onchange = function (data) {
-            _this.emit('input', data.target.checked);
+        // this.input.onchange = (data) => {
+        //     this.emit('input', data.target.checked)
+        // }
+
+        _this.container.onclick = function (data) {
+            _this.input.checked = !_this.input.checked;
+            _this.emit('input', _this.input.checked);
         };
 
         return _this;
@@ -4285,7 +4293,7 @@ var Select = function (_EventEmitter) {
         var i, downTriangle, upTriangle, key, option, el, keys;
 
         _this.container = __webpack_require__(2)(root, opts.label, theme);
-        __webpack_require__(5)(_this.container, opts.label, theme);
+        _this.label = __webpack_require__(5)(_this.container, opts.label, theme);
 
         _this.input = document.createElement('select');
         _this.input.className = styles['guify-select-dropdown'];
@@ -4305,7 +4313,8 @@ var Select = function (_EventEmitter) {
             for (i = 0; i < opts.options.length; i++) {
                 option = opts.options[i];
                 el = document.createElement('option');
-                el.value = el.textContent = option;
+                el.value = i;
+                el.textContent = option;
                 if (opts.initial === option) {
                     el.selected = 'selected';
                 }
@@ -4434,7 +4443,7 @@ var Text = function (_EventEmitter) {
         _this.opts = opts;
 
         _this.container = __webpack_require__(2)(root, opts.label, theme);
-        __webpack_require__(5)(_this.container, opts.label, theme);
+        _this.label = __webpack_require__(5)(_this.container, opts.label, theme);
 
         _this.input = _this.container.appendChild(document.createElement('input'));
         _this.input.type = 'text';
@@ -4463,6 +4472,10 @@ var Text = function (_EventEmitter) {
         });
 
         _this.input.oninput = function (data) {
+            // this.emit('input', data.target.value)
+        };
+
+        _this.input.onchange = function (data) {
             _this.emit('input', data.target.value);
         };
 
@@ -4473,8 +4486,9 @@ var Text = function (_EventEmitter) {
         });
 
         // Lose focus
-        _this.input.addEventListener('blur', function () {
+        _this.input.addEventListener('blur', function (data) {
             _this.focused = false;
+            _this.emit('input', data.target.value);
         });
         return _this;
     }
@@ -4553,7 +4567,7 @@ var Color = function (_EventEmitter) {
         opts.initial = opts.initial || '#123456';
 
         _this.container = __webpack_require__(2)(root, opts.label, theme);
-        __webpack_require__(5)(_this.container, opts.label, theme);
+        _this.label = __webpack_require__(5)(_this.container, opts.label, theme);
 
         var icon = _this.container.appendChild(document.createElement('span'));
         icon.className = 'guify-color-' + uuid;
@@ -6094,7 +6108,7 @@ var Display = function () {
 
         this.container = __webpack_require__(2)(root, opts.label, theme);
 
-        __webpack_require__(5)(this.container, opts.label, theme);
+        this.label = __webpack_require__(5)(this.container, opts.label, theme);
 
         this.text = this.container.appendChild(document.createElement('div'));
         (0, _domCss2.default)(this.text, {
@@ -6185,7 +6199,7 @@ var Interval = function (_EventEmitter) {
         _this.opts = opts;
 
         _this.container = __webpack_require__(2)(root, opts.label, theme);
-        __webpack_require__(5)(_this.container, opts.label, theme);
+        _this.label = __webpack_require__(5)(_this.container, opts.label, theme);
 
         if (!!opts.step && !!opts.steps) {
             throw new Error('Cannot specify both step and steps. Got step = ' + opts.step + ', steps = ', opts.steps);
@@ -6562,17 +6576,55 @@ var MenuBar = exports.MenuBar = function (_EventEmitter) {
             var text = _this.element.appendChild(document.createElement('div'));
             text.className = styles['guify-bar-title'];
             text.innerHTML = opts.title;
+            _this.label = text;
         }
 
-        // Make the menu collapse button
-        var menuButton = _this.element.appendChild(document.createElement('button'));
-        menuButton.className = styles['guify-bar-button'];
-        menuButton.innerHTML = 'Controls';
-        (0, _domCss2.default)(menuButton, {
-            left: opts.align == 'left' ? '0' : 'unset',
-            right: opts.align == 'left' ? 'unset' : '0'
-        });
-        menuButton.onclick = function () {
+        // Make the menu search input
+        if (opts.search) {
+            var menuButton = _this.element.appendChild(document.createElement('input'));
+            menuButton.value = 'search';
+            menuButton.className = styles['guify-bar-search'];
+            // menuButton.innerHTML = 'Controls';
+            (0, _domCss2.default)(menuButton, {
+                left: opts.align == 'left' ? '0' : 'unset',
+                right: opts.align == 'left' ? 'unset' : '0'
+            });
+            _this.input = menuButton;
+            _this.input.onfocus = function (e) {
+                if (_this.input.value === 'search') {
+                    _this.input.value = '';
+                }
+            };
+            _this.input.onblur = function (e) {
+                if (_this.input.value === '') {
+                    _this.input.value = 'search';
+                }
+            };
+            var timeout = void 0;
+            var delay = opts.search.delay || 0;
+            _this.input.oninput = function (e) {
+                if (timeout) {
+                    clearTimeout(timeout);
+                }
+
+                timeout = setTimeout(function () {
+                    opts.search.filter(_this.input.value);
+                    timeout = false;
+                }, delay);
+            };
+            _this.input.onkeydown = function (e) {
+                if (e.keyCode != 13) return; // only on enter
+
+                if (timeout) {
+                    clearTimeout(timeout);
+                    timeout = false;
+                    opts.search.filter(_this.input.value);
+                }
+                opts.search.action(e);
+            };
+        }
+
+        _this.label.onclick = function () {
             _this.emit('ontogglepanel');
         };
 
@@ -6611,7 +6663,7 @@ var MenuBar = exports.MenuBar = function (_EventEmitter) {
 "use strict";
 
 
-var _templateObject = _taggedTemplateLiteral(['\n\n.guify-bar {\n    background-color: ', ';\n    height: ', ';\n    width: 100%;\n    opacity: 1.0;\n    position: relative;\n    cursor: default;\n}\n\n.guify-bar-title {\n    color: ', ';\n    text-align: center;\n    width: 100%;\n    position: absolute;\n    top: 0;\n    line-height: ', ';\n    color: ', ';\n    -webkit-user-select: none;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n}\n\n.guify-bar-button {\n    text-align: center;\n    border: none;\n    cursor: pointer;\n    font-family: inherit;\n    height: 100%;\n    position: absolute;\n    top: 0;\n    color: ', ';\n    background-color: ', ';\n    -webkit-user-select: none;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n    margin: 0;\n\n}\n\n/* Hide default accessibility outlines since we\'re providing our own visual feedback */\n.guify-bar-button:focus {\n    outline:none;\n}\n.guify-bar-button::-moz-focus-inner {\n    border:0;\n}\n\n.guify-bar-button:hover,\n.guify-bar-button:focus {\n    color: ', ';\n    background-color: ', ';\n}\n\n.guify-bar-button:active {\n    color: ', ' !important;\n    background-color: ', ' !important;\n}\n\n\n'], ['\n\n.guify-bar {\n    background-color: ', ';\n    height: ', ';\n    width: 100%;\n    opacity: 1.0;\n    position: relative;\n    cursor: default;\n}\n\n.guify-bar-title {\n    color: ', ';\n    text-align: center;\n    width: 100%;\n    position: absolute;\n    top: 0;\n    line-height: ', ';\n    color: ', ';\n    -webkit-user-select: none;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n}\n\n.guify-bar-button {\n    text-align: center;\n    border: none;\n    cursor: pointer;\n    font-family: inherit;\n    height: 100%;\n    position: absolute;\n    top: 0;\n    color: ', ';\n    background-color: ', ';\n    -webkit-user-select: none;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n    margin: 0;\n\n}\n\n/* Hide default accessibility outlines since we\'re providing our own visual feedback */\n.guify-bar-button:focus {\n    outline:none;\n}\n.guify-bar-button::-moz-focus-inner {\n    border:0;\n}\n\n.guify-bar-button:hover,\n.guify-bar-button:focus {\n    color: ', ';\n    background-color: ', ';\n}\n\n.guify-bar-button:active {\n    color: ', ' !important;\n    background-color: ', ' !important;\n}\n\n\n']);
+var _templateObject = _taggedTemplateLiteral(['\n\n.guify-bar {\n    background-color: ', ';\n    height: ', ';\n    width: 100%;\n    opacity: 1.0;\n    position: relative;\n    cursor: default;\n}\n\n.guify-bar-title {\n    color: ', ';\n    text-align: center;\n    width: 100%;\n    position: absolute;\n    top: 0;\n    line-height: ', ';\n    color: ', ';\n    -webkit-user-select: none;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n    cursor: pointer;\n}\n\n.guify-bar-button {\n    text-align: center;\n    border: none;\n    cursor: pointer;\n    font-family: inherit;\n    height: 100%;\n    position: absolute;\n    top: 0;\n    color: ', ';\n    background-color: ', ';\n    -webkit-user-select: none;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n    margin: 0;\n\n}\n\n.guify-bar-search {\n    text-align: center;\n    border: none;\n    cursor: pointer;\n    font-family: inherit;\n    font-size: 11px;\n    height: 19px;\n    position: absolute;\n    top: 0;\n    color: ', ';\n    background-color: ', ';\n    -webkit-user-select: none;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n    cursor: auto;\n    margin: 2px;\n\n}\n\n/* Hide default accessibility outlines since we\'re providing our own visual feedback */\n.guify-bar-button:focus {\n    outline:none;\n}\n.guify-bar-button::-moz-focus-inner {\n    border:0;\n}\n\n.guify-bar-button:hover,\n.guify-bar-button:focus {\n    color: ', ';\n    background-color: ', ';\n}\n\n.guify-bar-button:active {\n    color: ', ' !important;\n    background-color: ', ' !important;\n}\n\n\n'], ['\n\n.guify-bar {\n    background-color: ', ';\n    height: ', ';\n    width: 100%;\n    opacity: 1.0;\n    position: relative;\n    cursor: default;\n}\n\n.guify-bar-title {\n    color: ', ';\n    text-align: center;\n    width: 100%;\n    position: absolute;\n    top: 0;\n    line-height: ', ';\n    color: ', ';\n    -webkit-user-select: none;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n    cursor: pointer;\n}\n\n.guify-bar-button {\n    text-align: center;\n    border: none;\n    cursor: pointer;\n    font-family: inherit;\n    height: 100%;\n    position: absolute;\n    top: 0;\n    color: ', ';\n    background-color: ', ';\n    -webkit-user-select: none;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n    margin: 0;\n\n}\n\n.guify-bar-search {\n    text-align: center;\n    border: none;\n    cursor: pointer;\n    font-family: inherit;\n    font-size: 11px;\n    height: 19px;\n    position: absolute;\n    top: 0;\n    color: ', ';\n    background-color: ', ';\n    -webkit-user-select: none;\n    -moz-user-select: none;\n    -ms-user-select: none;\n    user-select: none;\n    cursor: auto;\n    margin: 2px;\n\n}\n\n/* Hide default accessibility outlines since we\'re providing our own visual feedback */\n.guify-bar-button:focus {\n    outline:none;\n}\n.guify-bar-button::-moz-focus-inner {\n    border:0;\n}\n\n.guify-bar-button:hover,\n.guify-bar-button:focus {\n    color: ', ';\n    background-color: ', ';\n}\n\n.guify-bar-button:active {\n    color: ', ' !important;\n    background-color: ', ' !important;\n}\n\n\n']);
 
 var _theme = __webpack_require__(1);
 
@@ -6619,7 +6671,7 @@ function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defi
 
 var csjs = __webpack_require__(3);
 
-module.exports = csjs(_templateObject, _theme.theme.colors.menuBarBackground, _theme.theme.sizing.menuBarHeight, _theme.theme.colors.text1, _theme.theme.sizing.menuBarHeight, _theme.theme.colors.menuBarText, _theme.theme.colors.textPrimary, _theme.theme.colors.componentBackground, _theme.theme.colors.textHover, _theme.theme.colors.componentForeground, _theme.theme.colors.textActive, _theme.theme.colors.componentActive);
+module.exports = csjs(_templateObject, _theme.theme.colors.menuBarBackground, _theme.theme.sizing.menuBarHeight, _theme.theme.colors.text1, _theme.theme.sizing.menuBarHeight, _theme.theme.colors.menuBarText, _theme.theme.colors.textPrimary, _theme.theme.colors.componentBackground, _theme.theme.colors.textPrimary, _theme.theme.colors.componentBackground, _theme.theme.colors.textHover, _theme.theme.colors.componentForeground, _theme.theme.colors.textActive, _theme.theme.colors.componentActive);
 
 /***/ }),
 /* 74 */

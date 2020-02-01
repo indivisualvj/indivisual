@@ -13,7 +13,6 @@
         static settings = {
             apply: false,
             random: false,
-            index: 0,
             divisor: {
                 value: 80,
                 _type: [1, 500, 0.5],

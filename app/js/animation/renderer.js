@@ -153,7 +153,7 @@
                      * those layers are there to record samples while animation is offline or to test certain settings/setups
                      */
                     if ((keepsettings || !layerShuffleable(i))) {
-                        op = this.layers[i].preset;
+                        // op = this.layers[i].preset;
                         os = this.layers[i].controlSets;
                     }
                     ol.dispose();
@@ -161,7 +161,7 @@
 
                 let l = new HC.Layer(this.animation, this, i);
 
-                l.preset = op;
+                // l.preset = op;
                 l.controlSets = os || HC.LayeredControlSetsManager.initAll(statics.AnimationValues);
                 l.settings = HC.LayeredControlSetsManager.settingsProxy(os || l.controlSets);
 

@@ -57,12 +57,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!reconnect) {
 
-            controller.config.loadResources(setupResources(), function () {
+            controller.config.loadConfig(function () {
 
+                let sets = controller.config.initControlSets();
                 let cm = new HC.LayeredControlSetsManager([], statics.AnimationValues);
                 statics.DataSettings = new HC.Settings({});
                 controller.settingsManager = cm;
-                controller.init();
+                controller.init(sets);
                 controller.loadSession();
                 controller.initKeyboard();
                 controller.initLogEvents();
@@ -173,8 +174,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
+         * @param sets
          */
-        init() {
+        init(sets) {
             this.controlSettingsGui = new HC.Guify('ControlSettings', true);
             this.displaySettingsGui = new HC.Guify('DisplaySettings');
             this.sourceSettingsGui = new HC.Guify('SourceSettings');
@@ -190,12 +192,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.beatKeeper = new HC.BeatKeeper();
             this.explorer = new HC.Explorer(this, statics);
 
-            let controlSets = this.config.initControlControlSets();
-            statics.ControlSettingsManager = new HC.ControlSetsManager(controlSets);
-            statics.ControlSettings = statics.ControlSettingsManager.settingsProxy();
-            statics.ControlTypes = statics.ControlSettingsManager.typesProxy();
-            statics.ControlValues = statics.ControlSettingsManager.valuesProxy(statics.ControlValues);
-
+            let controlSets = sets.controlSets;
             statics.ControlSettings.session = _HASH; // ugly workaround
 
             this.addGuifyControllers(
@@ -204,11 +201,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.controlSettingsGui
             );
 
-            let displaySets = this.config.initDisplayControlSets();
-            statics.DisplaySettingsManager = new HC.ControlSetsManager(displaySets);
-            statics.DisplaySettings = statics.DisplaySettingsManager.settingsProxy();
-            statics.DisplayTypes = statics.DisplaySettingsManager.typesProxy();
-            statics.DisplayValues = statics.DisplaySettingsManager.valuesProxy(statics.DisplayValues);
+            let displaySets = sets.displaySets;
 
             this.addGuifyDisplayControllers(
                 HC.DisplayController,
@@ -217,11 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.displaySettingsGui
             );
 
-            let sourceSets = this.config.initSourceControlSets();
-            statics.SourceSettingsManager = new HC.ControlSetsManager(sourceSets);
-            statics.SourceSettings = statics.SourceSettingsManager.settingsProxy();
-            statics.SourceTypes = statics.SourceSettingsManager.typesProxy();
-            statics.SourceValues = statics.SourceSettingsManager.valuesProxy(statics.SourceValues);
+            let sourceSets = sets.sourceSets;
 
             this.addGuifyControllers(
                 sourceSets,

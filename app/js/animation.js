@@ -23,14 +23,8 @@ document.addEventListener('DOMContentLoaded', function () {
         HC.log(animation.name, 'connected', true, true);
 
         if (!reconnect) {
-            config.loadResources(setupResources(), () => {
-
-                statics.DisplaySettingsManager = new HC.ControlSetsManager(animation.config.initDisplayControlSets());
-                statics.DisplaySettings = statics.DisplaySettingsManager.settingsProxy();
-                statics.SourceSettingsManager = new HC.ControlSetsManager(animation.config.initSourceControlSets());
-                statics.SourceSettings = statics.SourceSettingsManager.settingsProxy();
-                statics.ControlSettingsManager = new HC.ControlSetsManager(animation.config.initControlControlSets());
-                statics.ControlSettings = statics.ControlSettingsManager.settingsProxy();
+            config.loadConfig(() => {
+                animation.config.initControlSets();
 
                 let listener = new HC.Listener();
                 animation.listener = listener;

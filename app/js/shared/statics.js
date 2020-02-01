@@ -4,57 +4,115 @@
 
 HC.Statics = HC.Statics || {};
 
-// todo HC.Configuration to be CLASS and .loadResources instead of _setup.js loadResources !? move all statics calls to animation.config. / controller.config.
+// todo HC.Config to be CLASS and .loadResources instead of _setup.js loadResources !? move all statics calls to animation.config. / controller.config.
 
 {
     /**
      *
+     * @type {HC.Config}
      */
-    HC.Statics.initControlControlSets = function () {
-        let instances = {};
+    HC.Config = class Config {
 
-        for (let cs in HC.ControlController) {
-            let set = HC.ControlController[cs];
-            let inst = new set(cs);
-            inst.init(statics.ControlValues);
-            instances[cs] = inst;
+        /**
+         * @type {HC.Messaging}
+         */
+        messaging;
+
+        /**
+         *
+         * @param {HC.Messaging} messaging
+         */
+        constructor(messaging) {
+            this.messaging = messaging;
         }
 
-        return instances;
-    };
+        /**
+         *
+         * @param resources
+         * @param callback
+         */
+        loadResources(resources, callback) {
+            let _load = (index, callback) => {
 
-    /**
-     *
-     */
-    HC.Statics.initDisplayControlSets = function () {
-        let instances = {};
+                if (index > resources.length - 1) {
+                    callback();
+                    return;
+                }
+                let rsc = resources[index];
+                let action = 'get';
+                if (rsc.action) {
+                    action = rsc.action;
+                }
+                let file = filePath(rsc.base || APP_DIR, rsc.file);
+                this.messaging._emit({action: action, file: file, name: rsc.name}, (data) => {
+                    rsc.callback(data, () => {
+                        _load(index + 1, callback);
+                    });
+                });
+            };
 
-        for (let cs in HC.DisplayController) {
-            let group = HC.DisplayController[cs];
-            for (let s in group) {
-                let set = group[s];
-                let inst = new set(s);
-                inst.init(statics.DisplayValues);
-                instances[cs + '.' + s] = inst;
+            let _setup = function (callback) {
+                if (!(_HASH in statics.ControlValues.session)) {
+                    statics.ControlValues.session[_HASH] = _HASH;
+                }
+
+                callback();
+            };
+
+            _load(0, function () {
+                _setup(callback);
+            });
+        }
+
+        /**
+         *
+         */
+        initControlControlSets() {
+            let instances = {};
+
+            for (let cs in HC.ControlController) {
+                let set = HC.ControlController[cs];
+                let inst = new set(cs);
+                inst.init(statics.ControlValues);
+                instances[cs] = inst;
             }
+
+            return instances;
         }
 
-        return instances;
-    };
+        /**
+         *
+         */
+        initDisplayControlSets() {
+            let instances = {};
 
-    /**
-     *
-     */
-    HC.Statics.initSourceControlSets = function () {
-        let instances = {};
+            for (let cs in HC.DisplayController) {
+                let group = HC.DisplayController[cs];
+                for (let s in group) {
+                    let set = group[s];
+                    let inst = new set(s);
+                    inst.init(statics.DisplayValues);
+                    instances[cs + '.' + s] = inst;
+                }
+            }
 
-        for (let cs in HC.SourceController) {
-            let set = HC.SourceController[cs];
-            let inst = new set(cs);
-            inst.init(statics.SourceValues);
-            instances[cs] = inst;
+            return instances;
         }
 
-        return instances;
-    };
+        /**
+         *
+         */
+        initSourceControlSets() {
+            let instances = {};
+
+            for (let cs in HC.SourceController) {
+                let set = HC.SourceController[cs];
+                let inst = new set(cs);
+                inst.init(statics.SourceValues);
+                instances[cs] = inst;
+            }
+
+            return instances;
+        }
+    }
 }

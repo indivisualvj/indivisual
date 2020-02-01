@@ -15,19 +15,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let animation = new HC.Animation(G_INSTANCE);
     messaging = new HC.Messaging(animation);
+    let config = new HC.Config(messaging);
+    animation.config = config;
 
     messaging.connect(function (reconnect, animation) {
 
         HC.log(animation.name, 'connected', true, true);
 
         if (!reconnect) {
-            loadResources(setupResources(), function () {
+            config.loadResources(setupResources(), () => {
 
-                statics.DisplaySettingsManager = new HC.ControlSetsManager(HC.Statics.initDisplayControlSets());
+                statics.DisplaySettingsManager = new HC.ControlSetsManager(animation.config.initDisplayControlSets());
                 statics.DisplaySettings = statics.DisplaySettingsManager.settingsProxy();
-                statics.SourceSettingsManager = new HC.ControlSetsManager(HC.Statics.initSourceControlSets());
+                statics.SourceSettingsManager = new HC.ControlSetsManager(animation.config.initSourceControlSets());
                 statics.SourceSettings = statics.SourceSettingsManager.settingsProxy();
-                statics.ControlSettingsManager = new HC.ControlSetsManager(HC.Statics.initControlControlSets());
+                statics.ControlSettingsManager = new HC.ControlSetsManager(animation.config.initControlControlSets());
                 statics.ControlSettings = statics.ControlSettingsManager.settingsProxy();
 
                 let listener = new HC.Listener();
@@ -105,6 +107,11 @@ document.addEventListener('DOMContentLoaded', function () {
          * @type {HC.Messaging}
          */
         messaging;
+
+        /**
+         * @type {HC.Config}
+         */
+        config;
 
         /**
          *

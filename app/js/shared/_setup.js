@@ -44,44 +44,6 @@ assetman = new HC.AssetManager();
 statics = {};
 
 /**
- *
- * @param resources
- * @param callback
- */
-function loadResources(resources, callback) {
-    let _load = function (index, finished) {
-
-        if (index > resources.length - 1) {
-            finished();
-            return;
-        }
-        let rsc = resources[index];
-        let action = 'get';
-        if (rsc.action) {
-            action = rsc.action;
-        }
-        let file = filePath(rsc.base || APP_DIR, rsc.file);
-        messaging._emit({action: action, file: file, name: rsc.name}, function (data) {
-            rsc.callback(data, function () {
-                _load(index + 1, finished);
-            });
-        });
-    };
-
-    let _setup = function (callback) {
-        if (!(_HASH in statics.ControlValues.session)) {
-            statics.ControlValues.session[_HASH] = _HASH;
-        }
-
-        callback();
-    };
-
-    _load(0, function () {
-        _setup(callback);
-    });
-}
-
-/**
  * setup operations are encapsulated into this function
  * @returns {*[]}
  */

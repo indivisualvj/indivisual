@@ -44,6 +44,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let controller = new HC.Controller(G_INSTANCE);
     messaging = new HC.Messaging(controller);
+    let config = new HC.Config(messaging);
+    controller.config = config;
 
     messaging.connect(function (reconnect, controller) {
 
@@ -55,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!reconnect) {
 
-            loadResources(setupResources(), function () {
+            controller.config.loadResources(setupResources(), function () {
 
                 let cm = new HC.LayeredControlSetsManager([], statics.AnimationValues);
                 statics.DataSettings = new HC.Settings({});
@@ -157,6 +159,11 @@ document.addEventListener('DOMContentLoaded', function () {
         settingsManager;
 
         /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
          *
          * @param name
          */
@@ -183,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.beatKeeper = new HC.BeatKeeper();
             this.explorer = new HC.Explorer(this, statics);
 
-            let controlSets = HC.Statics.initControlControlSets();
+            let controlSets = this.config.initControlControlSets();
             statics.ControlSettingsManager = new HC.ControlSetsManager(controlSets);
             statics.ControlSettings = statics.ControlSettingsManager.settingsProxy();
             statics.ControlTypes = statics.ControlSettingsManager.typesProxy();
@@ -197,7 +204,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.controlSettingsGui
             );
 
-            let displaySets = HC.Statics.initDisplayControlSets();
+            let displaySets = this.config.initDisplayControlSets();
             statics.DisplaySettingsManager = new HC.ControlSetsManager(displaySets);
             statics.DisplaySettings = statics.DisplaySettingsManager.settingsProxy();
             statics.DisplayTypes = statics.DisplaySettingsManager.typesProxy();
@@ -210,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.displaySettingsGui
             );
 
-            let sourceSets = HC.Statics.initSourceControlSets();
+            let sourceSets = this.config.initSourceControlSets();
             statics.SourceSettingsManager = new HC.ControlSetsManager(sourceSets);
             statics.SourceSettings = statics.SourceSettingsManager.settingsProxy();
             statics.SourceTypes = statics.SourceSettingsManager.typesProxy();

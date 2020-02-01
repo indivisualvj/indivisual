@@ -189,6 +189,8 @@ document.addEventListener('DOMContentLoaded', function () {
             statics.ControlTypes = statics.ControlSettingsManager.typesProxy();
             statics.ControlValues = statics.ControlSettingsManager.valuesProxy(statics.ControlValues);
 
+            statics.ControlSettings.session = _HASH; // ugly workaround
+
             this.addGuifyControllers(
                 controlSets,
                 HC.ControlControllerUi,

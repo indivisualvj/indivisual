@@ -73,8 +73,6 @@ function loadResources(resources, callback) {
             statics.ControlValues.session[_HASH] = _HASH;
         }
 
-        // statics.ControlSettings.session = _HASH;
-
         callback();
     };
 

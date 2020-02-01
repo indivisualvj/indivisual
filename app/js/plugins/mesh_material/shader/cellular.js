@@ -38,7 +38,7 @@
                     float j = floor(r.y/side)+4.;
                     float ii = r.x/side+2.;
                     float jj = r.y/side+4.;
-                
+
                     vec3 pix = vec3(0.0);
                 
                     float rad, disks;

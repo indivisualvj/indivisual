@@ -91,7 +91,7 @@
 
         /**
          *
-         * @param controlSet
+         * @param {HC.ControlSet} controlSet
          * @param gui
          */
         constructor(controlSet, gui) {

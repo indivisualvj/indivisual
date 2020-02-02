@@ -90,10 +90,10 @@ HC.controls = HC.controls || {};
             this._className = name;
             this.config = config;
 
-            if (!this.__proto__._name) {
+            if (!this.constructor._name) {
                 this._name = name;
             } else {
-                this._name = this.__proto__._name;
+                this._name = this.constructor._name;
             }
         }
 
@@ -116,6 +116,22 @@ HC.controls = HC.controls || {};
                     }
                 }
             }
+        }
+
+        /**
+         *
+         * @returns {string}
+         */
+        name() {
+            return this._name;
+        }
+
+        /**
+         *
+         * @return {string}
+         */
+        className() {
+            return this._className;
         }
 
         /**
@@ -298,22 +314,6 @@ HC.controls = HC.controls || {};
                     this.set(k, data[k]);
                 }
             }
-        }
-
-        /**
-         *
-         * @returns {string}
-         */
-        name() {
-            return this._name;
-        }
-
-        /**
-         *
-         * @return {string}
-         */
-        className() {
-            return this._className;
         }
     }
 }

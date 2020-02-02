@@ -363,7 +363,7 @@ HC.Statics = HC.Statics || {};
 
                 let key = keys[i];
                 let plugin = HC.controls[key];
-                let name = plugin.name || key;
+                let name = plugin._name || key;
 
                 if (name == 'ControlSet') {
                     name = key;

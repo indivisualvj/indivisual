@@ -187,7 +187,8 @@
                 speed = this.speeds[rhythm];
 
             } else {
-                speed = this.getDefaultSpeed();
+                throw new Error('rhythm ' + rhythm + ' not found!');
+                // speed = this.getDefaultSpeed();
             }
 
             return speed;

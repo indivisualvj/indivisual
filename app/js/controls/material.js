@@ -10,6 +10,12 @@
 
         static index = 110;
 
+        hooks = {
+            onSet: () => {
+                this.properties.material_needs_update = true;
+            }
+        };
+
         settings = {
             mesh_material: 'lambert',
             material_style: 'fill',

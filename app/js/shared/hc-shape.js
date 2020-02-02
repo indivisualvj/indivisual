@@ -19,6 +19,7 @@
         mesh;
         geometry;
         normalScale;
+        needsUpdate = true;
 
         /**
          *
@@ -299,9 +300,8 @@
          *
          * @param plugin
          * @param emissive
-         * @param needsUpdate
          */
-        updateMaterial(plugin, emissive, needsUpdate) {
+        updateMaterial(plugin, emissive) {
 
             let settings = this.parent.settings;
             let mat = this.mesh.material;
@@ -349,7 +349,11 @@
                 mat.needsUpdate = true;
             }
 
-            if (needsUpdate) {
+            this.mesh.castShadow = settings.lighting_shadows;
+            this.mesh.receiveShadow = settings.lighting_shadows;
+
+            if (this.needsUpdate) {
+                this.needsUpdate = false;
                 if ('shininess' in mat && mat.shininess != settings.material_shininess) {
                     mat.shininess = settings.material_shininess;
 
@@ -376,9 +380,6 @@
                     mat.shadowSide = settings.material_shadowside;
                     mat.needsUpdate = true;
                 }
-
-                this.mesh.castShadow = settings.lighting_shadows;
-                this.mesh.receiveShadow = settings.lighting_shadows;
             }
 
         }

@@ -61,11 +61,15 @@ HC.Layer.prototype.animate = function (hook) {
     this.animateShape(this.shape);
     this.doPatternRotation(); // preset current pattern euler from layer's shape rotation
 
+    let shapeNeedsUpdate = this.settings.material_needs_update;
+
     for (let i = 0; i < this.shapes.length; i++) {
         let shape = this.shapes[i];
-
         this.animateShape(shape, true);
+        shape.needsUpdate = shapeNeedsUpdate;
     }
+
+    this.settings.material_needs_update = false;
 
     this.doLighting(materialColor);
     this.doBackground();

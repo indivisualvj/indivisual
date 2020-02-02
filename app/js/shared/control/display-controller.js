@@ -23,7 +23,7 @@ HC.DisplayController = HC.DisplayController || {};
             transparency: 1.0,
             smearing: 0.0,
             background: '#000000',
-            mask_copy: function () {
+            mask_copy: () => {
                 let updates = {};
                 for (let i = 1; i < this.config.DisplayValues.display.length; i++) {
                     let v = 'display' + i + '_visible';
@@ -37,7 +37,7 @@ HC.DisplayController = HC.DisplayController || {};
                 messaging.program.updateDisplays(updates, true, true, true);
                 messaging.emitDisplays(updates, true, false, true);
             },
-            mask_reset: function () {
+            mask_reset: () => {
                 let updates = {};
                 for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
                     let key = 'display' + i;
@@ -50,7 +50,7 @@ HC.DisplayController = HC.DisplayController || {};
                 messaging.program.updateDisplays(updates, true, true, true);
                 messaging.emitDisplays(updates, true, false, true);
             },
-            auto: function () {
+            auto: () => {
                 for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
                     let key = 'display' + i;
                     key += '_mapping';
@@ -59,7 +59,7 @@ HC.DisplayController = HC.DisplayController || {};
                     messaging.emitDisplays(data, true, true, false);
                 }
             },
-            full: function () {
+            full: () => {
                 for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
                     let key = 'display' + i;
                     let v = key + '_visible';
@@ -71,7 +71,7 @@ HC.DisplayController = HC.DisplayController || {};
                     }
                 }
             },
-            half: function () {
+            half: () => {
                 for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
                     let key = 'display' + i;
                     let v = key + '_visible';
@@ -83,7 +83,7 @@ HC.DisplayController = HC.DisplayController || {};
                     }
                 }
             },
-            third: function () {
+            third: () => {
                 for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
                     let key = 'display' + i;
                     let v = key + '_visible';
@@ -278,13 +278,13 @@ HC.DisplayController = HC.DisplayController || {};
             border_speed: 'half',
             border: 0,
             border_color: '#ffffff',
-            trigger_display_visibility: function () {
+            trigger_display_visibility: () => {
                 messaging.program.updateDisplay('trigger_display_visibility', true, true, true, false);
             },
-            force_display_visibility: function () {
+            force_display_visibility: () => {
                 messaging.program.updateDisplay('force_display_visibility', true, true, true, false);
             },
-            reset_display_visibility: function () {
+            reset_display_visibility: () => {
                 messaging.program.updateDisplay('reset_display_visibility', true, true, true, false);
             }
         };

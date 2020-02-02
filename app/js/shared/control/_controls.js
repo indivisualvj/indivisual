@@ -74,6 +74,8 @@ HC.controls = HC.controls || {};
          */
         events = {};
 
+        hooks = {};
+
         /**
          * @type {HC.Config}
          */
@@ -205,6 +207,11 @@ HC.controls = HC.controls || {};
          */
         set(key, value) {
             if (key in this.settings) {
+
+                if ('onSet' in this.hooks) {
+                    this.hooks.onSet();
+                }
+
                 this.properties[key] = this.validate(key, value)
             }
 

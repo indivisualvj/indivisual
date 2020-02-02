@@ -174,12 +174,7 @@ HC.Layer.prototype.doMaterial = function (shape) {
 
     try {
         let map = this.getMaterialMap();
-        let needsUpdate = this.controlSets.material.material_needs_update;
-        shape.updateMaterial(map, this.controlSets.coloring.coloring_emissive, needsUpdate);
-        if (needsUpdate) {
-            this.controlSets.material.material_needs_update = false;
-        }
-
+        shape.updateMaterial(map, this.settings.coloring_emissive);
     } catch (e) {
         console.error(e);
     }

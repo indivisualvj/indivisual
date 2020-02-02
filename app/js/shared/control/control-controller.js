@@ -40,13 +40,12 @@ HC.ControlController = HC.ControlController || {};
         settings = {
             play: true,
 
-            reset: function () {
+            reset: () => {
 
                 if (messaging.program.config.ctrlKey) {
                     let yes = confirm('Reset everything?');
                     if (yes) {
                         let os = this.config.ControlSettings.session;
-                        // this.config.ControlSettings.update(this.config.ControlSettings.initial);
                         this.config.ControlSettings.session = os;
 
                         messaging.emitControls(this.config.ControlSettings, true, true, true);
@@ -54,7 +53,6 @@ HC.ControlController = HC.ControlController || {};
                 }
 
                 if (messaging.program.config.shiftKey || messaging.program.config.ctrlKey) {
-                    // sm.reset(splitToIntArray(this.config.ControlSettings.shuffleable));
                     messaging.program.settingsManager.reset(splitToIntArray(this.config.ControlSettings.shuffleable));
                     messaging.program.syncLayers();
                     messaging.program.updateControl('reset', true, true, true, true);
@@ -67,13 +65,13 @@ HC.ControlController = HC.ControlController || {};
             },
 
             monitor: false,
-            push_layers: function () {
+            push_layers: () => {
                 messaging.program.syncLayers();
             },
-            push_sources: function () {
+            push_sources: () => {
                 messaging.program.pushSources();
             },
-            rst_shaders: function () {
+            rst_shaders: () => {
                 messaging.program.settingsManager.update(this.config.ControlSettings.layer, 'passes', 'shaders', []);
                 let data = messaging.program.settingsManager.get(this.config.ControlSettings.layer, 'passes').prepare();
                 messaging.program.updateSettings(this.config.ControlSettings.layer, data, false, false, true);

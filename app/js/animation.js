@@ -652,10 +652,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     layer.resetShapes();
                     break;
 
-                case new RegExp('^material_.+').test(property):
-                    layer.settings.material_needs_update = true;
-                    break;
-
                 // special case for shapetastic
                 case 'shape_vertices':
                     if (display) {

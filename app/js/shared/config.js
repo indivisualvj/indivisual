@@ -4,8 +4,6 @@
 
 HC.Statics = HC.Statics || {};
 
-// todo move all statics calls to animation.config. / controller.config.
-
 {
     /**
      *

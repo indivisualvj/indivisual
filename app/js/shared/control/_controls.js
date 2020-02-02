@@ -148,6 +148,13 @@ HC.controls = HC.controls || {};
          */
         isDefault() {
             for (let key in this.settings) {
+
+                if (key in this.types) {
+                    if (this.types[key].includes('hidden')) {
+                        return true;
+                    }
+                }
+
                 let set = this.settings[key];
                 let prop = this.properties[key];
 

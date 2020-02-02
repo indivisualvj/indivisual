@@ -1,6 +1,8 @@
 {
     HC.plugins.coloring_mode.onergb = class Plugin extends HC.ColoringModePlugin {
 
+        static index = 12;
+
         apply (shape) {
             if (this.isFirstShape(shape)) {
 

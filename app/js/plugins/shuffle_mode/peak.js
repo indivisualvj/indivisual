@@ -4,8 +4,8 @@
         static index = 10;
         peaks = 0;
 
-        constructor(settings) {
-            super(settings);
+        constructor(animation, settings) {
+            super(animation, settings);
 
             let inst = this;
 

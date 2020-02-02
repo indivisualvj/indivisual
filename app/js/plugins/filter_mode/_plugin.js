@@ -1,6 +1,13 @@
 HC.plugins.filter_mode = HC.plugins.filter_mode || {};
 {
     HC.FilterModePlugin = class Plugin extends HC.AnimationPlugin {
+
+        setControlSets(controlSets) {
+            super.setControlSets(controlSets);
+            // make all such plugins make use of corresponding controlset only
+            this.settings = controlSets.filter.properties;
+        }
+
         before(shape) {
             // let locked = this.shapeFilterModeLocked(shape);
             // if (locked) {

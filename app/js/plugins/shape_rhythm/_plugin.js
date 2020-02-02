@@ -9,6 +9,12 @@ HC.plugins.shape_rhythm = HC.plugins.shape_rhythm || {};
             prc: 0
         };
 
+        setControlSets(controlSets) {
+            super.setControlSets(controlSets);
+            // make all such plugins make use of corresponding controlset only
+            this.settings = controlSets.shape.properties;
+        }
+
         before(shape) {
             if (!shape.isVisible()) { // no special speed for pattern rotation
                 this.params(shape).speed = this.beatKeeper.getSpeed(this.settings.rhythm);

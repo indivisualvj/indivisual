@@ -2,6 +2,12 @@ HC.plugins.shape_modifier = HC.plugins.shape_modifier || {};
 {
     HC.ShapeModifierPlugin = class Plugin extends HC.AnimationPlugin {
 
+        setControlSets(controlSets) {
+            super.setControlSets(controlSets);
+            // make all such plugins make use of corresponding controlset only
+            this.settings = controlSets.shape.properties;
+        }
+
         apply(geometry) {
             if (!this.geometry) { // all meshes use the same geometry
                 geometry = this.create(geometry);

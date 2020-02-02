@@ -349,7 +349,6 @@
                 mat.needsUpdate = true;
             }
 
-            // fixme do not update material during animation except it is necessary! =>
             if (needsUpdate) {
                 if ('shininess' in mat && mat.shininess != settings.material_shininess) {
                     mat.shininess = settings.material_shininess;
@@ -381,7 +380,6 @@
                 this.mesh.castShadow = settings.lighting_shadows;
                 this.mesh.receiveShadow = settings.lighting_shadows;
             }
-            // fixme <= do not update material during animation except it is necessary!
 
         }
 

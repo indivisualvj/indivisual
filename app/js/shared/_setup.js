@@ -39,4 +39,4 @@ if (TWEEN) {
  *
  * @type {HC.AssetManager}
  */
-assetman = new HC.AssetManager(); // fixme put into config ?!
+assetman = new HC.AssetManager(); // todo put into config ?!

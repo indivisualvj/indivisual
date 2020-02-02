@@ -1,5 +1,5 @@
 /**
- * fixme push config
+ * todo push config
  * @param i
  * @returns {boolean}
  */

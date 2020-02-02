@@ -124,7 +124,7 @@
                     e.stopPropagation();
                     let dy = e.movementY;
                     let resY = window.screen.availHeight;
-                    let vy = Math.abs(dy / (resY/512));
+                    let vy = Math.abs(dy / (resY/512)); // fixme do not use for INT incrementing range controls
                     if (dy < 0) {
                         requestAnimationFrame(() => {
                             this.incrementValue(vy);

@@ -823,7 +823,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         *
+         * fixme something goes wrong. press on seq_0
          * @param item
          * @param value
          */

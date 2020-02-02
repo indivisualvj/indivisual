@@ -124,7 +124,7 @@
                     e.stopPropagation();
                     let dy = e.movementY;
                     let resY = window.screen.availHeight;
-                    let vy = Math.abs(dy / (resY/512)); // fixme do not use for INT incrementing range controls
+                    let vy = Math.abs(dy / (resY/512));
                     if (dy < 0) {
                         requestAnimationFrame(() => {
                             this.incrementValue(vy);
@@ -197,7 +197,12 @@
          */
         incrementValue(factor) {
             let v = this.getValue();
-            let s = this.getStep() * factor;
+            let s = this.getStep();
+
+            if (isFloat(s)) {
+                s *= factor;
+            }
+
             v += s;
             v = Math.min(v, this.getMax());
             this.getComponent().emit('input', v);
@@ -209,7 +214,12 @@
          */
         decrementValue(factor) {
             let v = this.getValue();
-            let s = this.getStep() * factor;
+            let s = this.getStep();
+
+            if (isFloat(s)) {
+                s *= factor;
+            }
+
             v -= s;
             v = Math.max(v, this.getMin());
             this.getComponent().emit('input', v);

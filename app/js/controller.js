@@ -193,7 +193,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.sourceSettingsGui,
                 this.animationSettingsGui,
             ];
-            this.beatKeeper = new HC.BeatKeeper(null);
+            this.beatKeeper = new HC.BeatKeeper(null, this.config);
             this.sourceManager = new HC.SourceManager(null, { config: this.config, sequence: [], sample: [] });
             this.explorer = new HC.Explorer(this);
 

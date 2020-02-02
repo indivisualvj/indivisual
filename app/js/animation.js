@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 animation.audioManager = audioManager;
                 let audioAnalyser = new HC.AudioAnalyser(animation);
                 animation.audioAnalyser = audioAnalyser;
-                let beatKeeper = new HC.BeatKeeper(animation);
+                let beatKeeper = new HC.BeatKeeper(animation, animation.config);
                 animation.beatKeeper = beatKeeper;
 
                 let renderer = new HC.Renderer(animation, {

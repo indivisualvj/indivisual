@@ -12,6 +12,7 @@
 
         apply(geometry, index) {
 
+            let inst = this;
             let file = this.settings.background_input;
             let material = new THREE.MeshPhysicalMaterial({envMap: null});
             let mesh = new THREE.Mesh(geometry, material);
@@ -28,13 +29,13 @@
             this.cubeTextureFromBackgroundInput(_onLoad);
 
             let id = this.id(index);
-            this.animation.listener.register('animation.updateSetting', id, (data) => {
-                if (data.layer === this.layer) {
+            this.animation.listener.register('animation.updateSetting', id, function (data) {
+                if (data.layer === inst.layer) {
                     switch (data.item) {
                         case 'background_input':
                             if (data.value !== file) {
                                 file = data.value;
-                                this.cubeTextureFromBackgroundInput(_onLoad);
+                                inst.cubeTextureFromBackgroundInput(_onLoad);
                             }
                             break;
                     }

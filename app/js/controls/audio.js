@@ -9,7 +9,7 @@
     HC.controls.audio = class ControlSet extends HC.ControlSet {
 
         static index = 20;
-        static _name = 'audio & timing';
+        static _name = 'audio & timing'; // fixme is not found
 
         settings = {
             audio_thickness: 0,

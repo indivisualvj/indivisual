@@ -40,12 +40,11 @@
         /**
          *
          * @param {HC.Animation} animation
+         * @param {HC.Config} config
          */
-        constructor(animation) {
+        constructor(animation, config) {
             this.animation = animation;
-            if (animation) {
-                this.config = animation.config;
-            }
+            this.config = config;
             this.tween = new TWEEN.Group();
         }
 

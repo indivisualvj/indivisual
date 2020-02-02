@@ -650,12 +650,18 @@ HC.SourceController = HC.SourceController || {};
         controller;
 
         /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
          *
          * @param {HC.Controller} controller
          * @param index
          */
         constructor(controller, index) {
             this.controller = controller;
+            this.config = controller.config;
             this.index = index;
 
             this.init();

@@ -298,11 +298,18 @@
         name;
 
         /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
          *
          * @param name
+         * @param {HC.Config} config
          */
-        constructor(name) {
+        constructor(name, config) {
             this.name = name;
+            this.config = config;
         }
 
         /**
@@ -341,9 +348,9 @@
                 messaging.program.updateUiPasses();
             }
 
-            let passes = messaging.program.settingsManager.get(statics.ControlSettings.layer, 'passes');
+            let passes = messaging.program.settingsManager.get(this.config.ControlSettings.layer, 'passes');
             let data = {passes: {shaders: passes.getShaderPasses()}};
-            messaging.emitSettings(statics.ControlSettings.layer, data, false, false, false);
+            messaging.emitSettings(this.config.ControlSettings.layer, data, false, false, false);
 
             HC.log(that.getParent().getLabel() + '/' + that.getLabel(), v);
         }
@@ -353,7 +360,7 @@
          * @return {*}
          */
         getInitialSettings() {
-            return statics.ShaderSettings[this.name];
+            return this.config.ShaderSettings[this.name];
         }
 
         /**
@@ -363,8 +370,8 @@
          */
         static onPasses(v, that) {
 
-            if (v !== null && v in statics.Passes) {
-                let name = statics.Passes[v];
+            if (v !== null && v in messaging.program.config.Passes) {
+                let name = messaging.program.config.Passes[v];
                 if (name !== null) {
 
                     setTimeout(() => {
@@ -372,11 +379,11 @@
                     }, 125);
 
                     let ctrl = new HC.ShaderPassUi(name);
-                    let sh = JSON.copy(statics.ShaderSettings[name]);
+                    let sh = JSON.copy(messaging.program.config.ShaderSettings[name]);
                     ctrl.init(sh);
 
                     messaging.program.addShaderPass(
-                        statics.ControlSettings.layer,
+                        messaging.program.config.ControlSettings.layer,
                         ctrl
                     );
                 }

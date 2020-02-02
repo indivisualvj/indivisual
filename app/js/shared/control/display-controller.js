@@ -25,13 +25,13 @@ HC.DisplayController = HC.DisplayController || {};
             background: '#000000',
             mask_copy: function () {
                 let updates = {};
-                for (let i = 1; i < statics.DisplayValues.display.length; i++) {
+                for (let i = 1; i < this.config.DisplayValues.display.length; i++) {
                     let v = 'display' + i + '_visible';
-                    if (statics.DisplaySettings[v]) {
+                    if (this.config.DisplaySettings[v]) {
                         let okey = 'display0_mask';
                         let key = 'display' + i + '_mask';
 
-                        updates[key] = statics.DisplaySettings[okey];
+                        updates[key] = this.config.DisplaySettings[okey];
                     }
                 }
                 messaging.program.updateDisplays(updates, true, true, true);
@@ -39,19 +39,19 @@ HC.DisplayController = HC.DisplayController || {};
             },
             mask_reset: function () {
                 let updates = {};
-                for (let i = 0; i < statics.DisplayValues.display.length; i++) {
+                for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
                     let key = 'display' + i;
                     let v = key + '_visible';
                     key +=  '_mask';
-                    if (statics.DisplaySettings[v]) {
-                        updates[key] = statics.DisplaySettingsManager.get('video.displayN').getDefault(key);
+                    if (this.config.DisplaySettings[v]) {
+                        updates[key] = this.config.DisplaySettingsManager.get('video.displayN').getDefault(key);
                     }
                 }
                 messaging.program.updateDisplays(updates, true, true, true);
                 messaging.emitDisplays(updates, true, false, true);
             },
             auto: function () {
-                for (let i = 0; i < statics.DisplayValues.display.length; i++) {
+                for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
                     let key = 'display' + i;
                     key += '_mapping';
                     let data = {};
@@ -60,10 +60,10 @@ HC.DisplayController = HC.DisplayController || {};
                 }
             },
             full: function () {
-                for (let i = 0; i < statics.DisplayValues.display.length; i++) {
+                for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
                     let key = 'display' + i;
                     let v = key + '_visible';
-                    if (statics.DisplaySettings[v]) {
+                    if (this.config.DisplaySettings[v]) {
                         key += '_' + 1;
                         let data = {};
                         data[key] = 1;
@@ -72,10 +72,10 @@ HC.DisplayController = HC.DisplayController || {};
                 }
             },
             half: function () {
-                for (let i = 0; i < statics.DisplayValues.display.length; i++) {
+                for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
                     let key = 'display' + i;
                     let v = key + '_visible';
-                    if (statics.DisplaySettings[v]) {
+                    if (this.config.DisplaySettings[v]) {
                         key += '_' + 2;
                         let data = {};
                         data[key] = 2;
@@ -84,10 +84,10 @@ HC.DisplayController = HC.DisplayController || {};
                 }
             },
             third: function () {
-                for (let i = 0; i < statics.DisplayValues.display.length; i++) {
+                for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
                     let key = 'display' + i;
                     let v = key + '_visible';
-                    if (statics.DisplaySettings[v]) {
+                    if (this.config.DisplaySettings[v]) {
                         key += '_' + 3;
                         let data = {};
                         data[key] = 3;

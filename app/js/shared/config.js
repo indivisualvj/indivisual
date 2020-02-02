@@ -4,7 +4,7 @@
 
 HC.Statics = HC.Statics || {};
 
-// todo HC.Config to be CLASS and .loadResources instead of _setup.js loadResources !? move all statics calls to animation.config. / controller.config.
+// todo move all statics calls to animation.config. / controller.config.
 
 {
     /**
@@ -40,6 +40,7 @@ HC.Statics = HC.Statics || {};
         SourceTypes;
         SourceValues;
 
+        ShaderSettings;
         DataSettings;
 
         /**
@@ -65,14 +66,14 @@ HC.Statics = HC.Statics || {};
                     let settings = jsyaml.load(data.contents);
 
                     this._loadAnimationPlugins(settings);
-                    statics.ShaderSettings = this._loadShaderSettings(settings.shaders);
-                    statics.Passes = [null];
-                    for (let sh in statics.ShaderSettings) {
-                        statics.Passes.push(sh);
+                    this.ShaderSettings = this._loadShaderSettings(settings.shaders);
+                    this.Passes = [null];
+                    for (let sh in this.ShaderSettings) {
+                        this.Passes.push(sh);
                     }
                     this._loadRhythms(settings);
 
-                    statics.AnimationValues = settings;
+                    this.AnimationValues = settings;
                     finished();
                 }
             },
@@ -86,22 +87,22 @@ HC.Statics = HC.Statics || {};
                     this._loadControlSets();
                     settings.session[_HASH] = _HASH;
 
-                    statics.ControlValues = settings;
+                    this.ControlValues = settings;
                     finished();
                 }
             },
             {
                 file: 'structure/DisplayValues.yml',
                 callback: (data, finished) => {
-                    statics.DisplayValues = jsyaml.load(data.contents);
-                    this._loadBorderModePlugins(statics.DisplayValues);
+                    this.DisplayValues = jsyaml.load(data.contents);
+                    this._loadBorderModePlugins(this.DisplayValues);
                     finished();
                 }
             },
             {
                 file: 'structure/SourceValues.yml',
                 callback: (data, finished) => {
-                    statics.SourceValues = jsyaml.load(data.contents);
+                    this.SourceValues = jsyaml.load(data.contents);
                     finished();
                 }
             },
@@ -118,7 +119,7 @@ HC.Statics = HC.Statics || {};
                         window[c] = co;
                     }
 
-                    statics.MidiController = settings;
+                    this.MidiController = settings;
                     finished();
                 }
             },
@@ -126,10 +127,10 @@ HC.Statics = HC.Statics || {};
                 action: 'files',
                 base: '.',
                 file: SESSION_DIR,
-                callback: function (files, finished) {
+                callback: (files, finished) => {
                     for (let i = 0; i < files.length; i++) {
                         let f = files[i];
-                        statics.ControlValues.session[f.name] = f.name;
+                        this.ControlValues.session[f.name] = f.name;
                     }
 
                     finished();
@@ -139,7 +140,7 @@ HC.Statics = HC.Statics || {};
                 action: 'files',
                 base: '.',
                 file: VIDEO_DIR,
-                callback: function (files, finished) {
+                callback: (files, finished) => {
 
                     assetman.addVideos(files, 'name');
 
@@ -150,12 +151,12 @@ HC.Statics = HC.Statics || {};
                 action: 'files',
                 base: '.',
                 file: IMAGE_DIR,
-                callback: function (files, finished) {
+                callback: (files, finished) => {
                     let images = assetman.addImages(files, 'name');
                     // add images into AnimationValues by name
                     for (let i in images) {
-                        statics.AnimationValues.material_input[i] = i;
-                        statics.AnimationValues.background_input[i] = i;
+                        this.AnimationValues.material_input[i] = i;
+                        this.AnimationValues.background_input[i] = i;
                     }
 
                     finished();
@@ -165,12 +166,12 @@ HC.Statics = HC.Statics || {};
                 action: 'files',
                 base: '.',
                 file: CUBE_DIR,
-                callback: function (files, finished) {
+                callback: (files, finished) => {
                     let cubes = assetman.addCubes(files, 'name');
                     // add cubes into AnimationValues by name
                     for (let i in cubes) {
                         let name = i + '.cube';
-                        statics.AnimationValues.background_input[i] = name;
+                        this.AnimationValues.background_input[i] = name;
                     }
 
                     finished();
@@ -223,7 +224,7 @@ HC.Statics = HC.Statics || {};
             this.ControlSettingsManager = new HC.ControlSetsManager(controlSets);
             this.ControlSettings = this.ControlSettingsManager.settingsProxy();
             this.ControlTypes = this.ControlSettingsManager.typesProxy();
-            this.ControlValues = this.ControlSettingsManager.valuesProxy(statics.ControlValues);
+            this.ControlValues = this.ControlSettingsManager.valuesProxy(this.ControlValues);
 
             this.ControlSettings.session = _HASH; // ugly workaround
 
@@ -231,33 +232,35 @@ HC.Statics = HC.Statics || {};
             this.DisplaySettingsManager = new HC.ControlSetsManager(displaySets);
             this.DisplaySettings = this.DisplaySettingsManager.settingsProxy();
             this.DisplayTypes = this.DisplaySettingsManager.typesProxy();
-            this.DisplayValues = this.DisplaySettingsManager.valuesProxy(statics.DisplayValues);
+            this.DisplayValues = this.DisplaySettingsManager.valuesProxy(this.DisplayValues);
 
             let sourceSets = this.initSourceControlSets();
             this.SourceSettingsManager = new HC.ControlSetsManager(sourceSets);
             this.SourceSettings = this.SourceSettingsManager.settingsProxy();
             this.SourceTypes = this.SourceSettingsManager.typesProxy();
-            this.SourceValues = this.SourceSettingsManager.valuesProxy(statics.SourceValues);
+            this.SourceValues = this.SourceSettingsManager.valuesProxy(this.SourceValues);
 
             this.DataSettings = {};
+            // this.ShaderSettings = statics.ShaderSettings;
+            //
+            // statics.ControlSettingsManager = this.ControlSettingsManager;
+            // statics.ControlSettings = this.ControlSettings;
+            // statics.ControlTypes = this.ControlTypes;
+            // statics.ControlValues = this.ControlValues;
+            // statics.DisplaySettingsManager = this.DisplaySettingsManager;
+            // statics.DisplaySettings = this.DisplaySettings;
+            // statics.DisplayTypes = this.DisplayTypes;
+            // statics.DisplayValues = this.DisplayValues;
+            // statics.SourceSettingsManager = this.SourceSettingsManager;
+            // statics.SourceSettings = this.SourceSettings;
+            // statics.SourceTypes = this.SourceTypes;
+            // statics.SourceValues = this.SourceValues;
+            // statics.DataSettings = this.DataSettings;
 
-            statics.ControlSettingsManager = this.ControlSettingsManager;
-            statics.ControlSettings = this.ControlSettings;
-            statics.ControlTypes = this.ControlTypes;
-            statics.ControlValues = this.ControlValues;
-            statics.DisplaySettingsManager = this.DisplaySettingsManager;
-            statics.DisplaySettings = this.DisplaySettings;
-            statics.DisplayTypes = this.DisplayTypes;
-            statics.DisplayValues = this.DisplayValues;
-            statics.SourceSettingsManager = this.SourceSettingsManager;
-            statics.SourceSettings = this.SourceSettings;
-            statics.SourceTypes = this.SourceTypes;
-            statics.SourceValues = this.SourceValues;
-            statics.DataSettings = this.DataSettings;
 
-            this.MidiController = statics.MidiController; // fixme do not load anything to statics once statics is dead
-            this.Passes = statics.Passes;
-            this.AnimationValues = statics.AnimationValues;
+            // this.MidiController = statics.MidiController;
+            // this.Passes = statics.Passes;
+            // this.AnimationValues = statics.AnimationValues;
             
             return {
                 controlSets: controlSets,
@@ -270,16 +273,7 @@ HC.Statics = HC.Statics || {};
          *
          */
         initControlControlSets() {
-            let instances = {};
-
-            for (let cs in HC.ControlController) {
-                let set = HC.ControlController[cs];
-                let inst = new set(cs);
-                inst.init(statics.ControlValues);
-                instances[cs] = inst;
-            }
-
-            return instances;
+            return this._initControlSets(HC.ControlController, this.ControlValues);
         }
 
         /**
@@ -292,8 +286,8 @@ HC.Statics = HC.Statics || {};
                 let group = HC.DisplayController[cs];
                 for (let s in group) {
                     let set = group[s];
-                    let inst = new set(s);
-                    inst.init(statics.DisplayValues);
+                    let inst = new set(s, this);
+                    inst.init(this.DisplayValues);
                     instances[cs + '.' + s] = inst;
                 }
             }
@@ -305,12 +299,19 @@ HC.Statics = HC.Statics || {};
          *
          */
         initSourceControlSets() {
+            return this._initControlSets(HC.SourceController, this.SourceValues);
+        }
+
+        /**
+         *
+         */
+        _initControlSets(tree, values) {
             let instances = {};
 
-            for (let cs in HC.SourceController) {
-                let set = HC.SourceController[cs];
-                let inst = new set(cs);
-                inst.init(statics.SourceValues);
+            for (let cs in tree) {
+                let set = tree[cs];
+                let inst = new set(cs, this);
+                inst.init(values);
                 instances[cs] = inst;
             }
 
@@ -354,7 +355,7 @@ HC.Statics = HC.Statics || {};
          */
         _loadControlSets() {
 
-            statics.ControlSets = {};
+            this.ControlSets = {};
             let plugins = HC.controls;
             let keys = Object.keys(plugins);
 
@@ -370,7 +371,7 @@ HC.Statics = HC.Statics || {};
                     name = key;
                 }
 
-                statics.ControlSets[key] = name;
+                this.ControlSets[key] = name;
 
             }
         }

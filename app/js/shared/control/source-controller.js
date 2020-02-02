@@ -142,7 +142,7 @@ HC.SourceController = HC.SourceController || {};
          */
         createSourceSettings(pluggedValues) {
             let okey = 'display';
-            for (let i = 0; i < statics.DisplayValues.display.length; i++) {
+            for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
 
                 let key = 'display' + i;
 
@@ -790,7 +790,7 @@ HC.SourceController = HC.SourceController || {};
          */
         getSequenceStart(i) {
             let key = getSequenceStartKey(i);
-            let value = statics.SourceSettings[key];
+            let value = this.config.SourceSettings[key];
             return parseInt(value);
         }
 
@@ -801,7 +801,7 @@ HC.SourceController = HC.SourceController || {};
          */
         getSequenceEnd(i) {
             let key = getSequenceEndKey(i);
-            let value = statics.SourceSettings[key];
+            let value = this.config.SourceSettings[key];
             return parseInt(value);
         }
 

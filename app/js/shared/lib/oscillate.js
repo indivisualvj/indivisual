@@ -92,7 +92,7 @@ HC.Osci = {
     wobble(beatKeeper, progress, settings, func) {
         let p = 1;
 
-        let bpm = 60000 / statics.ControlSettings.tempo;
+        let bpm = 60000 / messaging.program.config.ControlSettings.tempo;
         let div = beatKeeper.rhythmDivider(settings.rhythm) / 2;
         func = func || Math.sin;
         progress = progress || Math.PI * messaging.program.now; // todo eliminate animation call

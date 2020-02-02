@@ -75,11 +75,19 @@ HC.controls = HC.controls || {};
         events = {};
 
         /**
-         * fixme inject config & program (statics. / messaging.program) into each and every controlset
-         * @param name
+         * @type {HC.Config}
          */
-        constructor(name) {
+        config;
+
+        /**
+         *
+         * @param name
+         * @param {HC.Config} config
+         */
+        constructor(name, config) {
             this._className = name;
+            this.config = config;
+
             if (!this.__proto__._name) {
                 this._name = name;
             } else {
@@ -90,7 +98,6 @@ HC.controls = HC.controls || {};
         /**
          *
          * @param pluggedValues
-         * @param reset
          */
         init(pluggedValues) {
             if (!this.properties) {
@@ -312,7 +319,7 @@ HC.controls = HC.controls || {};
 
         /**
          *
-         * @param pluggedValues
+         * @param {HC.Config} config
          */
         init(pluggedValues) {
             this.initMembers();

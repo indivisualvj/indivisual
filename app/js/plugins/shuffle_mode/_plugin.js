@@ -10,6 +10,11 @@ HC.shuffle_mode = HC.shuffle_mode || {};
         animation;
 
         /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
          * @type {HC.BeatKeeper}
          */
         beatKeeper;
@@ -21,6 +26,7 @@ HC.shuffle_mode = HC.shuffle_mode || {};
          */
         constructor(animation, settings) {
             this.animation = animation;
+            this.config = animation.config;
             this.beatKeeper = animation.beatKeeper;
             this.settings = settings;
         }

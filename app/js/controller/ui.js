@@ -159,7 +159,7 @@ HC.Controller.prototype.addShaderPassController = function (key, control, parent
  */
 HC.Controller.prototype.addShaderController = function (folder, key, sh, parent, control) {
 
-    control = control || new HC.ShaderPassUi(parent);
+    control = control || new HC.ShaderPassUi(parent, this.config);
     let shi = control.getInitialSettings() || {}; // fallback 4 cleaned settings from storage
     let submit = control.onChange;
 
@@ -512,7 +512,7 @@ HC.Controller.prototype.updateUiPasses = function () {
             let key = cs.getShaderPassKey(k);
             let name = cs.getShaderName(k);
             let sh = cs.getShader(k);
-            let ctrl = new HC.ShaderPassUi(name);
+            let ctrl = new HC.ShaderPassUi(name, this.config);
             ctrl.init(sh);
             this.addShaderPassController(key, ctrl, passFld);
         }

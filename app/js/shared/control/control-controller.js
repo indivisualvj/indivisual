@@ -45,21 +45,21 @@ HC.ControlController = HC.ControlController || {};
                 if (messaging.program.config.ctrlKey) {
                     let yes = confirm('Reset everything?');
                     if (yes) {
-                        let os = statics.ControlSettings.session;
-                        // statics.ControlSettings.update(statics.ControlSettings.initial);
-                        statics.ControlSettings.session = os;
+                        let os = this.config.ControlSettings.session;
+                        // this.config.ControlSettings.update(this.config.ControlSettings.initial);
+                        this.config.ControlSettings.session = os;
 
-                        messaging.emitControls(statics.ControlSettings, true, true, true);
+                        messaging.emitControls(this.config.ControlSettings, true, true, true);
                     }
                 }
 
                 if (messaging.program.config.shiftKey || messaging.program.config.ctrlKey) {
-                    // sm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
-                    messaging.program.settingsManager.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
+                    // sm.reset(splitToIntArray(this.config.ControlSettings.shuffleable));
+                    messaging.program.settingsManager.reset(splitToIntArray(this.config.ControlSettings.shuffleable));
                     messaging.program.syncLayers();
                     messaging.program.updateControl('reset', true, true, true, true);
                     messaging.program.explorer.resetPresets();
-                    messaging.program.updateControl('layer', statics.ControlSettings.layer, true, false, false);
+                    messaging.program.updateControl('layer', this.config.ControlSettings.layer, true, false, false);
 
                 } else {
                     messaging.program.updateControl('reset', true, true, true, false);
@@ -74,10 +74,10 @@ HC.ControlController = HC.ControlController || {};
                 messaging.program.pushSources();
             },
             rst_shaders: function () {
-                messaging.program.settingsManager.update(statics.ControlSettings.layer, 'passes', 'shaders', []);
-                let data = messaging.program.settingsManager.get(statics.ControlSettings.layer, 'passes').prepare();
-                messaging.program.updateSettings(statics.ControlSettings.layer, data, false, false, true);
-                messaging.emitSettings(statics.ControlSettings.layer, data, false, false, true);
+                messaging.program.settingsManager.update(this.config.ControlSettings.layer, 'passes', 'shaders', []);
+                let data = messaging.program.settingsManager.get(this.config.ControlSettings.layer, 'passes').prepare();
+                messaging.program.updateSettings(this.config.ControlSettings.layer, data, false, false, true);
+                messaging.emitSettings(this.config.ControlSettings.layer, data, false, false, true);
             },
             debug: false,
             tempo: 120.00,
@@ -124,13 +124,13 @@ HC.ControlController = HC.ControlController || {};
 
         events = {
             play: (inst) => { return new HC.KeyEvent('keyup', [32], (e) => {
-                messaging.program.updateControl('play', !statics.ControlSettings.play, true, true, false);
+                messaging.program.updateControl('play', !this.config.ControlSettings.play, true, true, false);
             }, 'spc')},
             reset: (inst) => { return new HC.KeyEvent('keyup', [46], (e) => {
                 inst.settings.reset();
             }, 'del')},
             monitor: (inst) => { return new HC.KeyEvent('keyup', [36], (e) => {
-                messaging.program.updateControl('monitor', !statics.ControlSettings.monitor, true, true, false);
+                messaging.program.updateControl('monitor', !this.config.ControlSettings.monitor, true, true, false);
             }, 'hm')},
             push_layers: (inst) => { return new HC.KeyEvent('keyup', [35], (e) => {
                 inst.settings.push_layers();

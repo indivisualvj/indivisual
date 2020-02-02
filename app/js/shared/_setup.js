@@ -39,6 +39,4 @@ if (TWEEN) {
  *
  * @type {HC.AssetManager}
  */
-assetman = new HC.AssetManager();
-
-statics = {};
+assetman = new HC.AssetManager(); // fixme put into config ?!

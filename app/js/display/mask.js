@@ -4,7 +4,7 @@
 
 {
     /**
-     * // fixme inject animation
+     *
      * @type {HC.Mask}
      */
     HC.Mask = class Mask {
@@ -22,9 +22,6 @@
             this.ctx = canvas.ctx;
             this.canvas = canvas;
             this.type = type;
-
-            this.background = document.createElement('canvas');
-            this.background.ctx = this.background.getContext('2d', {antialias: ANTIALIAS});
 
             if (config) {
                 if ('width' in config) {
@@ -99,9 +96,7 @@
          */
         update() {
 
-            this.background.width = this.canvas.width;
-            this.background.height = this.canvas.height;
-            this.canvas.style.webkitClipPath = '';
+            this.canvas.style.clipPath = '';
             this.canvas.width = this.canvas.width;
 
             // bounds
@@ -128,29 +123,9 @@
             let h = y2 - y1;
             this.bounds = new HC.Rectangle(x1, y1, w, h);
 
-            // if (!statics.DisplaySettings.clip_context) {
-                let clipPath = this.points.join(', ');
-                clipPath = 'polygon(' + clipPath.replace(/([^,]+), ([^,]+)/gi, '$1px $2px') + ')';
-                this.canvas.style.webkitClipPath = clipPath;
-
-            // } else {
-            //     let _paint = function (points, ctx) {
-            //         ctx.beginPath();
-            //         ctx.moveTo(points[0], points[1]);
-            //         for (let i = 2; i < points.length; i += 2) {
-            //             ctx.lineTo(points[i], points[i + 1]);
-            //         }
-            //         ctx.closePath();
-            //     };
-            //
-            //     _paint(this.points, this.background.ctx);
-            //     this.background.ctx.fillStyle = statics.DisplaySettings.background;
-            //     this.background.ctx.fill();
-            //
-            //     _paint(this.points, this.ctx);
-            //     this.ctx.clip();
-            //     this.canvas._clipped = true;
-            // }
+            let clipPath = this.points.join(', ');
+            clipPath = 'polygon(' + clipPath.replace(/([^,]+), ([^,]+)/gi, '$1px $2px') + ')';
+            this.canvas.style.clipPath = clipPath;
         }
     }
 }

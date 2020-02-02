@@ -1,10 +1,10 @@
 /**
- * fixme push to config
+ * fixme push config
  * @param i
  * @returns {boolean}
  */
 function layerShuffleable(i) {
-    var shuffleable = splitToShuffleable(statics.ControlSettings.shuffleable);
+    let shuffleable = splitToIntArray(messaging.program.config.ControlSettings.shuffleable);
     if (!shuffleable || shuffleable.length < 1) {
         return true;
 
@@ -16,14 +16,14 @@ function layerShuffleable(i) {
 }
 
 /**
- * fixme push to config
+ * 
  * @param value
  * @returns {*}
  */
-function splitToShuffleable(value) {
+function splitToIntArray(value) {
 
     if (value && isString(value)) {
-        var arr = value.split(',');
+        let arr = value.split(',');
         return arr.map(function (it) {
             return parseInt(it) - 1;
         });

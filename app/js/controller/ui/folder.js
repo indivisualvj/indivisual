@@ -66,13 +66,15 @@
 
         /**
          *
+         * @param key
          * @param name
          * @param open
          * @returns {HC.GuifyFolder}
          */
-        addFolder(name, open) {
-            let folder = new HC.GuifyFolder(this.gui, this, name, open);
-            this.children[folder.getLabel()] = folder;
+        addFolder(key, name, open) {
+            let folder = new HC.GuifyFolder(this.gui, this, name || key, open);
+            folder.setKey(key);
+            this.children[key] = folder;
 
             return folder;
         }

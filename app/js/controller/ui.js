@@ -69,7 +69,7 @@ HC.Controller.prototype.addConfigurationSettings = function () {
     for (let k in this.config) {
         if (k.endsWith('Types')) {
             let object = this.config[k];
-            let folder = this.configurationSettingsGui.addFolder(k, false);
+            let folder = this.configurationSettingsGui.addFolder(k);
 
             for (let p in object) {
 

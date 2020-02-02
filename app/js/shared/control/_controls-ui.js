@@ -127,8 +127,7 @@
             let key = this.controlSet.className();
             let name = this.controlSet.name();
 
-            this.folder = this.gui.addFolder(name, this.controlSet.open);
-            this.folder.setKey(key);
+            this.folder = this.gui.addFolder(key, name, this.controlSet.open);
             this._styleFolder(this.folder, key, 'green');
 
             if (shareListener === true) {
@@ -171,7 +170,7 @@
 
             if (parent) {
                 if (!this.folder.children[parent]) {
-                    folder = this.folder.addFolder(parent, false);
+                    folder = this.folder.addFolder(parent);
                     this._styleFolder(folder, parent,'blue');
                 } else {
                     folder = this.folder.children[parent];

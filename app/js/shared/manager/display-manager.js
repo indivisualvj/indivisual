@@ -555,7 +555,7 @@
         }
 
         /**
-         *
+         * todo PLUGINS MAN?
          * @param index
          * @param visible
          * @returns {boolean}
@@ -693,7 +693,7 @@
 
         /**
          *
-         * @returns {boolean}
+         * @returns {boolean|number}
          */
         visibilitySpeed() {
             let speed = false;

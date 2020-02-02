@@ -318,7 +318,7 @@
 
             if (plugin.properties && plugin.properties.map) {
                 if (mat.map != plugin.properties.map) {
-                    var keys = Object.keys(plugin.properties);
+                    let keys = Object.keys(plugin.properties);
                     for (let k in keys) {
                         let key = keys[k];
                         let val = plugin.properties[key];
@@ -339,7 +339,7 @@
 
 
             } else if (mat.map) {
-                var keys = Object.keys(plugin.properties);
+                let keys = Object.keys(plugin.properties);
                 for (let k in keys) {
                     let key = keys[k];
                     if (key in mat) {

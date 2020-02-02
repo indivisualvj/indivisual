@@ -15,11 +15,11 @@ HC.Shape.prototype.initPlugins = function () {
 
     if (!HC.Shape.prototype._plugins) {
         HC.Shape.prototype._plugins = {};
-        var plugins = Object.keys(HC.Shape.prototype.injected.plugins);
-        for (var p = 0; p < plugins.length; p++) {
-            var key = plugins[p];
-            var plugin = HC.Shape.prototype.injected.plugins[key];
-            var clone = JSON.parse(JSON.stringify(plugin));
+        let plugins = Object.keys(HC.Shape.prototype.injected.plugins);
+        for (let p = 0; p < plugins.length; p++) {
+            let key = plugins[p];
+            let plugin = HC.Shape.prototype.injected.plugins[key];
+            let clone = JSON.parse(JSON.stringify(plugin));
             HC.Shape.prototype._plugins[key] = clone;
         }
     }
@@ -133,14 +133,14 @@ HC.Shape.prototype.initPlugins = function () {
 
         tweenShape(shape, from, to) {
 
-            var speed = this.layer.getShapeSpeed(shape);
-            var delay = this.layer.getShapeDelay(shape);
+            let speed = this.layer.getShapeSpeed(shape);
+            let delay = this.layer.getShapeDelay(shape);
 
-            var duration = speed.duration;
-            var dly = delay.delay;
+            let duration = speed.duration;
+            let dly = delay.delay;
 
             // tweens may never be longer than their superordinate delay + duration
-            var time = speed.speed.duration - speed.duration - delay.delay - speed.speed.progress;
+            let time = speed.speed.duration - speed.duration - delay.delay - speed.speed.progress;
             if (time < 0) {
                 time = Math.abs(time) + 5;
                 if (delay.delay > time) {

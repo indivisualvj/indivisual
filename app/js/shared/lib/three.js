@@ -9,7 +9,7 @@ function threeDispose(obj) {
     if (obj.material) {
         obj.material.dispose();
 
-        var keys = Object.keys(obj.material);
+        let keys = Object.keys(obj.material);
         for(let k in keys) {
             let key = keys[k];
             if (obj.material[key] instanceof THREE.Texture) {

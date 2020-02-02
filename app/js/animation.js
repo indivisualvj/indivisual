@@ -757,7 +757,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (display) {
                 let action = false;
                 // if (item.match(/^sample\d+_store/) && value) {
-                //     //var sample =
+                //     //let sample =
                 //     sourceManager.storeSample(number_extract(item, 'sample'), value, 1, false);
                 //     this.updateSource(item, false, false, true, false);
                 //
@@ -777,7 +777,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     action = true;
 
                 } else if (item.match(/display\d+_source/)) {
-                    var display = this.displayManager.getDisplay(numberExtract(item, 'display'));
+                    let display = this.displayManager.getDisplay(numberExtract(item, 'display'));
                     this.sourceManager.updateSource(display);
 
                     if (display && display.isFixedSize()) {
@@ -845,7 +845,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 value = this.config.DisplaySettingsManager.updateItem(item, value);
 
                 if (forward === true) {
-                    var data = {};
+                    let data = {};
                     data[item] = value;
                     this.messaging.emitDisplays(data, true, false, force);
                 }
@@ -876,7 +876,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (item.match(/^display\d+_/)) {
 
-                    var i = numberExtract(item, 'display');
+                    let i = numberExtract(item, 'display');
 
                     if (item.match(/_mask$/)) { // mask
                         this.displayManager.updateDisplay(i, 'mask');
@@ -907,7 +907,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.renderer.resetLayer(layer);
 
             } else {
-                for (var k in data) {
+                for (let k in data) {
                     let value = {};
                     value[k] = data[k];
                     this.updateSetting(layer, value, display, forward, force);
@@ -923,8 +923,8 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param force
          */
         updateControls(data, display, forward, force) {
-            for (var k in data) {
-                var value = data[k];
+            for (let k in data) {
+                let value = data[k];
                 this.updateControl(k, value, display, forward, force);
             }
         }
@@ -939,15 +939,15 @@ document.addEventListener('DOMContentLoaded', function () {
         updateDisplays(data, display, forward, force) {
 
             if (force) {
-                for (var k in data) {
+                for (let k in data) {
                     this.config.DisplaySettingsManager.updateItem(k, data[k]);
                 }
                 this.displayManager.reset();
                 // this.fullReset(true);
 
             } else {
-                for (var k in data) {
-                    var value = data[k];
+                for (let k in data) {
+                    let value = data[k];
                     this.updateDisplay(k, value, display, forward, force);
                 }
             }
@@ -962,8 +962,8 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateSources(data, display, forward, force) {
 
-            for (var k in data) {
-                var value = data[k];
+            for (let k in data) {
+                let value = data[k];
                 this.updateSource(k, value, display, forward, force);
             }
 
@@ -983,8 +983,8 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         doShuffle() {
-            var plugin = this.getShuffleModePlugin(this.config.ControlSettings.shuffle_mode);
-            var result = plugin.apply();
+            let plugin = this.getShuffleModePlugin(this.config.ControlSettings.shuffle_mode);
+            let result = plugin.apply();
             if (result !== false) {
                 result = plugin.after();
                 if (result !== false) {

@@ -9,14 +9,14 @@ HC.plugins.material_map = HC.plugins.material_map || {};
 
         reset() {
             this.dispose();
-            var keys = Object.keys(this.properties);
+            let keys = Object.keys(this.properties);
             for (let k in keys) {
                 this.properties[keys[k]] = undefined;
             }
         }
 
         dispose() {
-            var keys = Object.keys(this.properties);
+            let keys = Object.keys(this.properties);
             for (let k in keys) {
                 let v = this.properties[keys[k]];
                 if (v && v.dispose) {

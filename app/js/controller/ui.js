@@ -375,10 +375,10 @@ HC.Controller.prototype.explainPlugin = function (item, value, tree) {
 
     if (item in tree) {
         if (value in tree[item]) {
-            var proto = tree[item][value];
-            var desc = proto.tutorial;
+            let proto = tree[item][value];
+            let desc = proto.tutorial;
             if (desc) {
-                var key = item + '.' + value;
+                let key = item + '.' + value;
                 new HC.ScriptProcessor(this, key, desc).log();
             }
         }
@@ -456,7 +456,7 @@ HC.Controller.prototype.scrollToControl = function (control) {
 
     if (control) {
         setTimeout(function () {
-            var container = control.getContainer();
+            let container = control.getContainer();
             container.scrollIntoView();
         }, 125);
     }

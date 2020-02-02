@@ -17,21 +17,21 @@ HC.Statics = HC.Statics || {};
         messaging;
 
         /**
-         * @var {HC.ControlSetsManager}
+         * @type {HC.ControlSetsManager}
          */
         ControlSettingsManager;
         ControlSettings;
         ControlTypes;
         ControlValues;
         /**
-         * @var {HC.ControlSetsManager}
+         * @type {HC.ControlSetsManager}
          */
         DisplaySettingsManager;
         DisplaySettings;
         DisplayTypes;
         DisplayValues;
         /**
-         * @var {HC.ControlSetsManager}
+         * @type {HC.ControlSetsManager}
          */
         SourceSettingsManager;
         SourceSettings;

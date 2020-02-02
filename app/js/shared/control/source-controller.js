@@ -645,10 +645,17 @@ HC.SourceController = HC.SourceController || {};
         enabled = false;
 
         /**
+         * @type {HC.Controller}
+         */
+        controller;
+
+        /**
          *
+         * @param {HC.Controller} controller
          * @param index
          */
-        constructor(index) {
+        constructor(controller, index) {
+            this.controller = controller;
             this.index = index;
 
             this.init();
@@ -751,15 +758,15 @@ HC.SourceController = HC.SourceController || {};
                 let width = 0;
                 let beats = 0;
                 if (data) {
-                    let start = getSequenceStart(this.index);
-                    let end = getSequenceEnd(this.index);
+                    let start = this.getSequenceStart(this.index);
+                    let end = this.getSequenceEnd(this.index);
                     let frames = data.frames;
                     let sequence = {
                         start: 0,
                         end: 0,
                         length: 0
                     };
-                    applySequenceSlice(sequence, frames, start, end);
+                    this.controller.sourceManager.applySequenceSlice(sequence, frames, start, end);
 
                     let frameDuration = data.duration / frames;
                     let beatDuration = data.duration / data.beats;
@@ -774,6 +781,30 @@ HC.SourceController = HC.SourceController || {};
                 indicatorNode.style.width = (width - .5) + '%';
             }
         }
+
+
+        /**
+         *
+         * @param i
+         * @returns {*}
+         */
+        getSequenceStart(i) {
+            let key = getSequenceStartKey(i);
+            let value = statics.SourceSettings[key];
+            return parseInt(value);
+        }
+
+        /**
+         *
+         * @param i
+         * @returns {*}
+         */
+        getSequenceEnd(i) {
+            let key = getSequenceEndKey(i);
+            let value = statics.SourceSettings[key];
+            return parseInt(value);
+        }
+
 
         /**
          *
@@ -812,10 +843,17 @@ HC.SourceController = HC.SourceController || {};
         index;
 
         /**
+         * @type {HC.Controller}
+         */
+        controller;
+
+        /**
          *
+         * @param {HC.Controller} controller
          * @param index
          */
-        constructor(index) {
+        constructor(controller, index) {
+            this.controller = controller;
             this.index = index;
 
             this.init();
@@ -853,7 +891,7 @@ HC.SourceController = HC.SourceController || {};
          * @param data
          */
         update(data) {
-            let enabled = getSampleEnabledBySample(this.index) && (data != false);
+            let enabled = this.controller.sourceManager.getSampleEnabledBySample(this.index) && (data != false);
             if (enabled) {
                 let src = data.thumbs[Math.round(data.thumbs.length / 2)].src;
                 this.node.style.backgroundImage = 'url(' + src + ')';

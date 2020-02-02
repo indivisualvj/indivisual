@@ -113,7 +113,7 @@
                     let os = this.start;
                     let oe = this.end;
                     let frames = this.sample.frames.length;
-                    applySequenceSlice(this, frames, start, end);
+                    this.animation.sourceManager.applySequenceSlice(this, frames, start, end);
 
                     if (os != this.start) {
                         this._pointer = this.start;

@@ -27,6 +27,11 @@
         animation;
 
         /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
          *
          * @type {Object.<string, HC.Speed>}
          */
@@ -38,6 +43,9 @@
          */
         constructor(animation) {
             this.animation = animation;
+            if (animation) {
+                this.config = animation.config;
+            }
             this.tween = new TWEEN.Group();
         }
 
@@ -107,7 +115,7 @@
 
                 this.triggerCounter++;
 
-                statics.ControlSettings.beat = true;
+                this.config.ControlSettings.beat = true;
 
                 this.timeout = setTimeout(() => {
                     this.resetCounters(this.firstTrigger);
@@ -115,7 +123,7 @@
                 }, 1333);
 
                 messaging.program.updateControl('tempo', bpm, true, false, false);
-                // statics.ControlSettings.tempo = bpm;
+                // this.config.ControlSettings.tempo = bpm;
                 // messaging.emitControls({tempo: bpm}, true, false);
 
 
@@ -125,12 +133,12 @@
 
                 clearTimeout(this.timeout);
                 this.timeout = setTimeout(() => {
-                    statics.ControlSettings.beat = value;
+                    this.config.ControlSettings.beat = value;
                     this.resetTrigger();
                 }, 1333);
             }
 
-            return statics.ControlSettings.beat;
+            return this.config.ControlSettings.beat;
         }
 
         /**
@@ -243,7 +251,7 @@
          */
         resetCounters(beatStartTime) {
             this.beatStartTime = beatStartTime;
-            let duration = 60000 / statics.ControlSettings.tempo;
+            let duration = 60000 / this.config.ControlSettings.tempo;
             let elapsed = HC.now() - this.beatStartTime;
             let ebeats = Math.floor((elapsed / duration) / 4);
 

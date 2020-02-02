@@ -42,7 +42,7 @@ HC.ControlController = HC.ControlController || {};
 
             reset: function () {
 
-                if (statics.ctrlKey) {
+                if (messaging.program.config.ctrlKey) {
                     let yes = confirm('Reset everything?');
                     if (yes) {
                         let os = statics.ControlSettings.session;
@@ -53,7 +53,7 @@ HC.ControlController = HC.ControlController || {};
                     }
                 }
 
-                if (statics.shiftKey || statics.ctrlKey) {
+                if (messaging.program.config.shiftKey || messaging.program.config.ctrlKey) {
                     // sm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
                     messaging.program.settingsManager.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
                     messaging.program.syncLayers();

@@ -159,6 +159,11 @@ document.addEventListener('DOMContentLoaded', function () {
         settingsManager;
 
         /**
+         * @type {HC.SourceManager}
+         */
+        sourceManager;
+
+        /**
          * @type {HC.Config}
          */
         config;
@@ -188,7 +193,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.sourceSettingsGui,
                 this.animationSettingsGui,
             ];
-            this.beatKeeper = new HC.BeatKeeper();
+            this.beatKeeper = new HC.BeatKeeper(null);
+            this.sourceManager = new HC.SourceManager(null, { config: this.config, sequence: [], sample: [] });
             this.explorer = new HC.Explorer(this);
 
             let controlSets = sets.controlSets;
@@ -715,7 +721,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         this.updateSource(getSampleRecordKey(smp), false, true, true, false);
 
                         let seq = false;
-                        while ((seq = getSequenceBySample(smp)) !== false) {
+                        while ((seq = this.sourceManager.getSequenceBySample(smp)) !== false) {
                             let key = getSequenceSampleKey(seq);
                             this.updateSource(key, 'off', true, true, false);
                         }
@@ -760,7 +766,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
 
                     // set sequence inputs without enabled sample to off
-                    if (getSampleEnabledBySequence(seq) === false) {
+                    if (this.sourceManager.getSampleEnabledBySequence(seq) === false) {
                         let key = getSequenceSampleKey(seq);
                         setTimeout(() => {
                             this.updateSource(key, 'off', false, true);

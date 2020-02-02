@@ -71,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 animation.displayManager = displayManager;
 
                 let sourceManager = new HC.SourceManager(animation, {
+                    config: animation.config,
                     sequence: new Array(animation.config.SourceValues.sequence.length),
                     sample: new Array(animation.config.SourceValues.sample.length)
                 });
@@ -492,8 +493,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (this.beatKeeper.getSpeed('half').starting()) {
                     for (let i = 0; i < this.config.SourceValues.sequence.length; i++) {
-                        let parent = getSequenceHasParent(i);
-                        let use = getSampleBySequence(i);
+                        let parent = this.sourceManager.getSequenceHasParent(i);
+                        let use = this.sourceManager.getSampleBySequence(i);
                         if (parent) {
                             this.messaging.emitMidi('glow', MIDI_ROW_TWO[i], {timeout: 125});
                         }

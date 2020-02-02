@@ -316,6 +316,39 @@
                 }
             }
 
+            if (plugin.properties && plugin.properties.map) {
+                if (mat.map != plugin.properties.map) {
+                    var keys = Object.keys(plugin.properties);
+                    for (let k in keys) {
+                        let key = keys[k];
+                        let val = plugin.properties[key];
+                        if (key in mat && val !== undefined) {
+                            mat[key] = val;
+                        }
+                    }
+                    mat.needsUpdate = true;
+
+                } else {
+                    if (mat.emissive) {
+                        // for mapped material disable color by setting to lum 1 _check hugh?
+                        mat.emissive.setHSL(0, 0, emissive ? 1 : 0);
+                    }
+                }
+
+                // this._updateMaterialMap();
+
+
+            } else if (mat.map) {
+                var keys = Object.keys(plugin.properties);
+                for (let k in keys) {
+                    let key = keys[k];
+                    if (key in mat) {
+                        mat[key] = null;
+                    }
+                }
+                mat.needsUpdate = true;
+            }
+
             // fixme do not update material during animation except it is necessary! =>
             if (needsUpdate) {
                 if ('shininess' in mat && mat.shininess != settings.material_shininess) {
@@ -327,39 +360,6 @@
 
                 mat.roughness = settings.material_roughness;
                 mat.metalness = settings.material_metalness;
-
-                if (plugin.properties && plugin.properties.map) {
-                    if (mat.map != plugin.properties.map) {
-                        var keys = Object.keys(plugin.properties);
-                        for (let k in keys) {
-                            let key = keys[k];
-                            let val = plugin.properties[key];
-                            if (key in mat && val !== undefined) {
-                                mat[key] = val;
-                            }
-                        }
-                        mat.needsUpdate = true;
-
-                    } else {
-                        if (mat.emissive) {
-                            // for mapped material disable color by setting to lum 1 _check hugh?
-                            mat.emissive.setHSL(0, 0, emissive ? 1 : 0);
-                        }
-                    }
-
-                    // this._updateMaterialMap();
-
-
-                } else if (mat.map) {
-                    var keys = Object.keys(plugin.properties);
-                    for (let k in keys) {
-                        let key = keys[k];
-                        if (key in mat) {
-                            mat[key] = null;
-                        }
-                    }
-                    mat.needsUpdate = true;
-                }
 
                 this._updateMaterialBlending();
 

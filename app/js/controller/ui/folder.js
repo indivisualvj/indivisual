@@ -163,7 +163,9 @@
          */
         remove() {
             super.remove();
-            this.removeChildren();
+            if (this.isExpanded()) {
+                this.removeChildren();
+            }
         }
 
         /**

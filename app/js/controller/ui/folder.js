@@ -247,7 +247,7 @@
                 let child = this.getChild(k);
 
                 if (child instanceof HC.GuifyFolder) {
-                    child = this.findControlByProperty(property);
+                    child = child.findControlByProperty(property);
                     if (child) {
                         return child;
                     }

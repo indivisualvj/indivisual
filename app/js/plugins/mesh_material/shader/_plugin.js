@@ -14,9 +14,17 @@
 
             let inst = this;
             this.animation.listener.register('renderer.render', this.id(index), function (renderer) {
-                if (inst.layer.isVisible() && material.uniforms && material.uniforms.uTime) {
-                    material.uniforms.uTime.value = inst.layer.getOscillatePlugin('timestamp').apply({value: 1});
+                if (inst.layer.isVisible() && material.uniforms) {
+                    if (material.uniforms.uTime) {
+                        material.uniforms.uTime.value = inst.layer.getOscillatePlugin('timestamp').apply({value: 1});
+                    }
+                    if (material.uniforms.uColor) {
+                        let color = inst.layer.materialColor;
+                        let sc = inst.layer.shapeColor(false); // fixme get color of current geometry/shape
+                        material.uniforms.uColor.value = new THREE.Color(color || sc);
+                    }
                 }
+
             });
 
             return new THREE.Mesh(geometry, material);

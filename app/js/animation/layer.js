@@ -48,6 +48,7 @@
         ambientLight = false;
         shapes = false;
         shape = false;
+        materialColor;
 
         /**
          *

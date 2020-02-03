@@ -823,13 +823,17 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         * fixme something goes wrong. press on seq_0
          * @param item
          * @param value
          */
         setAllDisplaysTo(item, value, group) {
             let increment = value === false;
-            group = splitToIntArray(this.config.SourceSettings[group]);
+
+            if (group) {
+                group = splitToIntArray(this.config.SourceSettings[group]);
+            } else {
+                group = [];
+            }
 
             let updates = {};
             for (let i = 0; i < this.config.DisplayValues.display.length; i++) {

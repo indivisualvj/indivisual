@@ -15,7 +15,7 @@
                 void main () {
                     float time = uTime/500.0;
                     vec2 iResolution = vec2(1.0);
-                    float w = iResolution.x / 6.;
+                    float w = iResolution.x / 5.;
                     float h = iResolution.y / 6.;
                 
                     float j = mod(vUv.y / h, 4.);

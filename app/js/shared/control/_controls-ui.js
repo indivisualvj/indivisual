@@ -338,20 +338,21 @@
 
         /**
          *
-         * @param v
-         * @param that
+         * @returns {function(...[*]=)}
          */
-        onChange(v, that) {
-            if (that.getProperty() == 'apply' && v === false) {
-                messaging.program.cleanShaderPasses();
-                messaging.program.updateUiPasses();
-            }
+        onChange() {
+            return (v, that) => {
+                if (that.getProperty() == 'apply' && v === false) {
+                    messaging.program.cleanShaderPasses();
+                    messaging.program.updateUiPasses();
+                }
 
-            let passes = messaging.program.settingsManager.get(this.config.ControlSettings.layer, 'passes');
-            let data = {passes: {shaders: passes.getShaderPasses()}};
-            messaging.emitSettings(this.config.ControlSettings.layer, data, false, false, false);
+                let passes = messaging.program.settingsManager.get(this.config.ControlSettings.layer, 'passes');
+                let data = {passes: {shaders: passes.getShaderPasses()}};
+                messaging.emitSettings(this.config.ControlSettings.layer, data, false, false, false);
 
-            HC.log(that.getParent().getLabel() + '/' + that.getLabel(), v);
+                HC.log(that.getParent().getLabel() + '/' + that.getLabel(), v);
+            };
         }
 
         /**

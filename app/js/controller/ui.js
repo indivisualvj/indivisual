@@ -161,7 +161,7 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
 
     control = control || new HC.ShaderPassUi(parent, this.config);
     let shi = control.getInitialSettings() || {}; // fallback 4 cleaned settings from storage
-    let submit = control.onChange;
+    let submit = control.onChange();
 
     for (let skey in sh) {
         let shs = sh[skey];

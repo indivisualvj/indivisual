@@ -23,7 +23,7 @@ HC.Layer.prototype.updateCameraFov = function () {
     let cam = this.getCamera();
     let sina = sinAlpha(this.resolution('half').y * 1.015, this.cameraDefaultDistance());
 
-    cam.fov = sina * statics.DisplaySettings.fov;
+    cam.fov = sina * this.config.DisplaySettings.fov;
 };
 
 /**

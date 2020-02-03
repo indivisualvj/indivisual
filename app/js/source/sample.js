@@ -70,6 +70,11 @@
         animation;
 
         /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
          * @type {HC.Listener}
          */
         listener;
@@ -77,13 +82,16 @@
         /**
          *
          * @param {HC.Animation} animation
+         * @param {HC.Config} config
          * @param index
          */
-        constructor(animation, index) {
+        constructor(animation, config, index) {
             if (animation) {
                 this.animation = animation;
                 this.listener = animation.listener;
+                this.config = animation.config;
             }
+            this.config = config;
             this.index = index;
             this.id = 'sample' + index;
         }
@@ -95,9 +103,9 @@
          * @param height
          */
         update(speed, width, height) {
-            let enabled = statics.SourceSettings[getSampleEnabledKey(this.index)];
-            let record = statics.SourceSettings[getSampleRecordKey(this.index)];
-            let beats = statics.SourceSettings[getSampleBeatKey(this.index)];
+            let enabled = this.config.SourceSettings[getSampleEnabledKey(this.index)];
+            let record = this.config.SourceSettings[getSampleRecordKey(this.index)];
+            let beats = this.config.SourceSettings[getSampleBeatKey(this.index)];
 
             let checkEnabled = this.enabled != enabled;
             let checkBeats = this.beats != beats;
@@ -166,7 +174,7 @@
                 this.duration = Math.ceil(60000 / speed);
                 this.length = this.beats * this.duration;
 
-                let fps = statics.DisplaySettings.fps * 1.25;
+                let fps = this.config.DisplaySettings.fps * 1.25;
                 let frames = IS_MONITOR ? 0 : Math.ceil(this.length / 1000 * fps);
 
                 this.__init(frames);
@@ -272,7 +280,7 @@
                     let step = frameCount / 16;
                     let seconds = frameCount / 60;
                     this._clip.frames = frameCount;
-                    this._clip.duration = Math.ceil(60000 / statics.ControlSettings.tempo);
+                    this._clip.duration = Math.ceil(60000 / this.config.ControlSettings.tempo);
                     this._clip.beats = Math.ceil(seconds * 1000 / this._clip.duration);
 
                     let index = 0;
@@ -325,7 +333,7 @@
                 let seconds = frameCount / 60;
                 this.enabled = true;
                 this.initialized = true;
-                this.duration = Math.ceil(60000 / statics.ControlSettings.tempo);
+                this.duration = Math.ceil(60000 / this.config.ControlSettings.tempo);
                 this.beats = Math.ceil(seconds * 1000 / this.duration);
 
                 this.frameCount = frameCount;

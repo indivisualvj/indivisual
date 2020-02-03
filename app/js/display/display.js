@@ -15,6 +15,11 @@
         animation;
 
         /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
          * @type {HC.DisplayManager}
          */
         displayManager;
@@ -82,10 +87,11 @@
          */
         constructor(animation, index) {
             this.animation = animation;
+            this.config = animation.config;
             this.displayManager = animation.displayManager;
             this.index = index;
             this.id = 'display' + index;
-            var canvas = document.createElement('canvas');
+            let canvas = document.createElement('canvas');
             canvas.id = this.id;
             this.canvas = canvas;
             this.ctx = canvas.getContext('2d', {antialias: false});
@@ -122,27 +128,27 @@
          * @param fallback
          */
         render(fallback) {
-            var ctx = this.ctx;
-            var bounds = this._clipBounds(false);
-            var clip = bounds;
+            let ctx = this.ctx;
+            let bounds = this._clipBounds(false);
+            let clip = bounds;
 
             if (this.clip) {
                 clip = this.clip;
             }
 
-            var image = this._source ? this._source.current(fallback) : fallback;
-            var smearing = this.smear ? 1 : Math.max(statics.DisplaySettings.smearing, this.smearing);
+            let image = this._source ? this._source.current(fallback) : fallback;
+            let smearing = this.smear ? 1 : Math.max(this.config.DisplaySettings.smearing, this.smearing);
 
             if (bounds && smearing == 0 || !image) {
                 this.clear(bounds);
             }
 
-            var br = this.brightness();
+            let br = this.brightness();
             if (smearing > 0) {
-                br -= smearing * (1.0 - statics.DisplaySettings.transparency);
+                br -= smearing * (1.0 - this.config.DisplaySettings.transparency);
 
-                ctx.globalAlpha = Math.max(0.02, 1.0 - smearing) * statics.DisplaySettings.transparency;
-                ctx.fillStyle = statics.DisplaySettings.background;
+                ctx.globalAlpha = Math.max(0.02, 1.0 - smearing) * this.config.DisplaySettings.transparency;
+                ctx.fillStyle = this.config.DisplaySettings.background;
                 ctx.fillRect(
                     bounds.x, bounds.y, bounds.width, bounds.height
                 );
@@ -158,7 +164,7 @@
             }
 
             if (this.blitz > 0) {
-                var color = '#00ffbb';
+                let color = '#00ffbb';
                 if (image && image._color) {
                     color = image._color;
                     color = hslToHex(hslComplementary(hexToHsl(color)));
@@ -183,9 +189,9 @@
             if (this._dirty) {
                 bounds = bounds || this._clipBounds();
                 this.ctx.clearRect(bounds.x, bounds.y, bounds.width, bounds.height);
-                if (!this.transparent && statics.DisplaySettings.clip_context && this.mask) {
-                    this.ctx.drawImage(this.mask.background, 0, 0);
-                }
+                // if (!this.transparent && this.config.DisplaySettings.clip_context && this.mask) {
+                //     this.ctx.drawImage(this.mask.background, 0, 0);
+                // }
                 this._dirty = false;
             }
         }
@@ -232,7 +238,7 @@
         update(width, height, settings) {
 
             if (this.isFixedSize()) {
-                var b = this._source.bounds();
+                let b = this._source.bounds();
                 width = b.width;
                 height = b.height;
             }
@@ -262,8 +268,8 @@
             if (this.transparent) {
                 return false; // durchsichtig
 
-            } else if (statics.DisplaySettings.clip_context && this.mask) {
-                return false; // mask.background
+            // } else if (this.config.DisplaySettings.clip_context && this.mask) {
+            //     return false; // mask.background
             }
 
             return true;
@@ -299,12 +305,12 @@
          */
         updateMask() {
 
-            var canvas = this.canvas;
-            var prefix = canvas.id + '_mask';
+            let canvas = this.canvas;
+            let prefix = canvas.id + '_mask';
 
-            var sh = false;
+            let sh = false;
 
-            switch (statics.DisplaySettings[prefix + '_shape']) {
+            switch (this.config.DisplaySettings[prefix + '_shape']) {
 
                 default:
                     sh = false;
@@ -323,7 +329,7 @@
                     break;
 
                 case 'quad':
-                    var m = Math.min(this.canvas.width, this.canvas.height);
+                    let m = Math.min(this.canvas.width, this.canvas.height);
                     sh = new HC.Mask(this.id, this.canvas, 'rect', {width: m, height: m});
                     break;
 
@@ -366,7 +372,7 @@
             }
             this.mask = sh;
 
-            this.canvas.style.background = this.getSetBackground() ? statics.DisplaySettings.background : 'none';
+            this.canvas.style.background = this.getSetBackground() ? this.config.DisplaySettings.background : 'none';
 
             return sh;
         }
@@ -376,15 +382,15 @@
          */
         updateClip() {
             if (this._source) {
-                var ob = this._clipBounds(true);
-                var mb = this._clipBounds(false);
-                var sb = this._source.bounds(false);
+                let ob = this._clipBounds(true);
+                let mb = this._clipBounds(false);
+                let sb = this._source.bounds(false);
                 if (sb && mb) {
                     // quelle hat eine eigene und unveränderliche größe
-                    var dx = (ob.width - sb.width) / 2;
-                    var dy = (ob.height - sb.height) / 2;
+                    let dx = (ob.width - sb.width) / 2;
+                    let dy = (ob.height - sb.height) / 2;
 
-                    var clip = new HC.Rectangle(mb.x - dx, mb.y - dy, mb.width, mb.height);
+                    let clip = new HC.Rectangle(mb.x - dx, mb.y - dy, mb.width, mb.height);
                     this.clip = clip;
 
                 } else {
@@ -399,7 +405,7 @@
          */
         isFixedSize() {
             if (this._source) {
-                var sb = this._source.bounds(false);
+                let sb = this._source.bounds(false);
                 if (sb) {
                     return true;
                 }
@@ -412,8 +418,8 @@
          */
         loadMask() {
             if (this.mask) {
-                var mask = this.mask;
-                var stored = statics.DisplaySettings[mask.id];
+                let mask = this.mask;
+                let stored = this.config.DisplaySettings[mask.id];
                 if (stored) {
                     try {
                         stored = JSON.parse(stored);
@@ -441,14 +447,14 @@
          * @returns {{sourcePoints: *[], targetPoints: *[]}}
          */
         loadMapping() {
-            var bounds = this._clipBounds(this.keepbounds);
-            var points = this._getMaptasticPoints(bounds);
-            var sourcePoints = points;
-            var targetPoints = false;
-            var stored = this.getMapping();
+            let bounds = this._clipBounds(this.keepbounds);
+            let points = this._getMaptasticPoints(bounds);
+            let sourcePoints = points;
+            let targetPoints = false;
+            let stored = this.getMapping();
             if (stored) {
                 try {
-                    var mapping = JSON.parse(stored);
+                    let mapping = JSON.parse(stored);
                     targetPoints = mapping.targetPoints;
                 } catch (e) {
                 }
@@ -465,7 +471,7 @@
          * @returns {*}
          */
         getMapping() {
-            return statics.DisplaySettings[this.id + '_mapping'];
+            return this.config.DisplaySettings[this.id + '_mapping'];
         }
 
         /**
@@ -475,12 +481,12 @@
          * @private
          */
         _getMaptasticPoints(points) {
-            var l = points.x;
-            var t = points.y;
-            var r = points.width + points.x;
-            var b = points.height + points.y;
+            let l = points.x;
+            let t = points.y;
+            let r = points.width + points.x;
+            let b = points.height + points.y;
 
-            var bounds = [
+            let bounds = [
                 [l, t],
                 [r, t],
                 [r, b],
@@ -499,13 +505,13 @@
          */
         drawBorder(lineWidth, color, mode, speed) {
 
-            var ctx = this.ctx;
-            var points = this.mask ? this.mask.points : this._points;
+            let ctx = this.ctx;
+            let points = this.mask ? this.mask.points : this._points;
             if (!points) {
                 return;
             }
 
-            var prc = false;
+            let prc = false;
             if (speed === false) {
                 prc = this.displayManager.audioAnalyser.volume * 2;
             } else {
@@ -517,7 +523,7 @@
             ctx.strokeStyle = color;
             ctx.lineWidth = lineWidth * 2;
 
-            var pc = points.length / 2;
+            let pc = points.length / 2;
 
             if (pc > 1) {
                 HC.Display.border_modes[mode].apply(ctx, points, pc, speed, prc);

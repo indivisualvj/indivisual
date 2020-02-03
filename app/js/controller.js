@@ -60,14 +60,13 @@ document.addEventListener('DOMContentLoaded', function () {
             controller.config.loadConfig(function () {
 
                 let sets = controller.config.initControlSets();
-                let cm = new HC.LayeredControlSetsManager([], statics.AnimationValues);
-                statics.DataSettings = new HC.Settings({});
+                let cm = new HC.LayeredControlSetsManager([], controller.config.AnimationValues);
                 controller.settingsManager = cm;
                 controller.init(sets);
                 controller.loadSession();
                 controller.initKeyboard();
                 controller.initLogEvents();
-                controller.midi = new HC.Midi(controller, statics);
+                controller.midi = new HC.Midi(controller);
                 controller.midi.init();
 
                 onResize();
@@ -160,6 +159,11 @@ document.addEventListener('DOMContentLoaded', function () {
         settingsManager;
 
         /**
+         * @type {HC.SourceManager}
+         */
+        sourceManager;
+
+        /**
          * @type {HC.Config}
          */
         config;
@@ -189,11 +193,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.sourceSettingsGui,
                 this.animationSettingsGui,
             ];
-            this.beatKeeper = new HC.BeatKeeper();
-            this.explorer = new HC.Explorer(this, statics);
+            this.beatKeeper = new HC.BeatKeeper(null, this.config);
+            this.sourceManager = new HC.SourceManager(null, { config: this.config, sequence: [], sample: [] });
+            this.explorer = new HC.Explorer(this);
 
             let controlSets = sets.controlSets;
-            statics.ControlSettings.session = _HASH; // ugly workaround
+            this.config.ControlSettings.session = _HASH; // ugly workaround
 
             this.addGuifyControllers(
                 controlSets,
@@ -267,7 +272,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.updateData();
                 }
 
-                this.updateControl('layer', statics.ControlSettings.layer, true, false, false);
+                this.updateControl('layer', this.config.ControlSettings.layer, true, false, false);
             });
         }
 
@@ -278,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         migrateSettings0(layer, data, keepPasses) {
 
-            let mappings = HC.LayeredControlSetsManager.mappings(() => {return HC.LayeredControlSetsManager.initAll(statics.AnimationValues);});
+            let mappings = HC.LayeredControlSetsManager.mappings(() => {return HC.LayeredControlSetsManager.initAll(this.config.AnimationValues);});
 
             let passes = this.settingsManager.get(layer, 'passes');
             if (keepPasses !== true) {
@@ -360,7 +365,7 @@ document.addEventListener('DOMContentLoaded', function () {
         shareSettings(folder, datasource) {
 
             let settings = {};
-            let controlSets = this.settingsManager.prepareLayer(statics.ControlSettings.layer);
+            let controlSets = this.settingsManager.prepareLayer(this.config.ControlSettings.layer);
             if (!datasource) {
                 let keys = Object.keys(controlSets[folder]);
 
@@ -375,14 +380,14 @@ document.addEventListener('DOMContentLoaded', function () {
             let data = {};
             data[folder] = settings;
 
-            for (let i = 0; i < statics.ControlValues.layer.length; i++) {
-                if (i == statics.ControlSettings.layer) {
+            for (let i = 0; i < this.config.ControlValues.layer.length; i++) {
+                if (i == this.config.ControlSettings.layer) {
                     continue;
                 }
                 if (this.settingsManager.isDefault(i)) {
                     continue;
                 }
-                if (layerShuffleable(i) != layerShuffleable(statics.ControlSettings.layer)) {
+                if (layerShuffleable(i) != layerShuffleable(this.config.ControlSettings.layer)) {
                     continue;
                 }
 
@@ -403,20 +408,20 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param value
          */
         shareSetting(item, value) {
-            let mappings = HC.LayeredControlSetsManager.mappings(() => {return HC.LayeredControlSetsManager.initAll(statics.AnimationValues);});
+            let mappings = HC.LayeredControlSetsManager.mappings(() => {return HC.LayeredControlSetsManager.initAll(this.config.AnimationValues);});
             let set = mappings[item];
             let data = {};
             data[set] = {};
             data[set][item] = value;
 
-            for (let i = 0; i < statics.ControlValues.layer.length; i++) {
-                if (i == statics.ControlSettings.layer) {
+            for (let i = 0; i < this.config.ControlValues.layer.length; i++) {
+                if (i == this.config.ControlSettings.layer) {
                     continue;
                 }
                 if (this.settingsManager.isDefault(i)) {
                     continue;
                 }
-                if (layerShuffleable(i) != layerShuffleable(statics.ControlSettings.layer)) {
+                if (layerShuffleable(i) != layerShuffleable(this.config.ControlSettings.layer)) {
                     continue;
                 }
 
@@ -453,7 +458,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (force) {
                 for (let k in data) {
                     let value = data[k];
-                    statics.ControlSettingsManager.updateItem(k, value);
+                    this.config.ControlSettingsManager.updateItem(k, value);
                 }
                 this.updateUi(this.controlSettingsGui);
                 this.showDisplayControls();
@@ -478,7 +483,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (force) {
                 for (let k in data) {
                     let value = data[k];
-                    value = statics.DisplaySettingsManager.updateItem(k, value);
+                    value = this.config.DisplaySettingsManager.updateItem(k, value);
                 }
                 this.updateUi(this.displaySettingsGui);
                 this.showDisplayControls();
@@ -503,7 +508,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (force) {
                 for (let k in data) {
                     let value = data[k];
-                    statics.SourceSettingsManager.updateItem(k, value);
+                    this.config.SourceSettingsManager.updateItem(k, value);
                 }
                 this.updateUi(this.sourceSettingsGui);
                 this.showDisplayControls();
@@ -526,6 +531,10 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateSetting(layer, data, display, forward, force) {
 
+            if (layer === undefined) {
+                layer = this.config.ControlSettings.layer;
+            }
+
             let updated = this.settingsManager.updateData(layer, data);
             let property;
             let value;
@@ -545,7 +554,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (display !== false) {
                 this.explainPlugin(property, value);
                 this.updateUi(this.animationSettingsGui);
-                this.explorer.setChanged(statics.ControlSettings.layer+1, true);
+                this.explorer.setChanged(this.config.ControlSettings.layer+1, true);
             }
         }
 
@@ -571,7 +580,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         cleanShaderPasses() {
 
-            let cs = this.settingsManager.get(statics.ControlSettings.layer, 'passes');
+            let cs = this.settingsManager.get(this.config.ControlSettings.layer, 'passes');
             let passes = cs.getShaderPasses();
 
             for (let key in passes) {
@@ -597,14 +606,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.explainPlugin(item, value, HC);
             }
 
-            // if (statics.ControlSettings) {
+            // if (this.config.ControlSettings) {
 
                 if (item == 'beat') {
                     value = this.beatKeeper.trigger(value);
                 }
 
             let tValue = value;
-                value = statics.ControlSettingsManager.updateItem(item, value);
+                value = this.config.ControlSettingsManager.updateItem(item, value);
 
                 if (item == 'layer') {
                     this.updateSettings(value, this.settingsManager.prepareLayer(value), true, false, true);
@@ -622,7 +631,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 } else if (item == 'reset') {
                     if (force) {
-                        this.settingsManager.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
+                        this.settingsManager.reset(splitToIntArray(this.config.ControlSettings.shuffleable));
                     }
                 }
 
@@ -667,7 +676,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // this.explainPlugin(item, value);
             }
 
-            value = statics.DisplaySettingsManager.updateItem(item, value);
+            value = this.config.DisplaySettingsManager.updateItem(item, value);
 
             if (item.match(/display\d+_visible/)) {
                 this.showDisplayControls();
@@ -699,7 +708,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // this.explainPlugin(item, value);
             }
 
-            value = statics.SourceSettingsManager.updateItem(item, value);
+            value = this.config.SourceSettingsManager.updateItem(item, value);
 
             if (display !== false) {
 
@@ -712,7 +721,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         this.updateSource(getSampleRecordKey(smp), false, true, true, false);
 
                         let seq = false;
-                        while ((seq = getSequenceBySample(smp)) !== false) {
+                        while ((seq = this.sourceManager.getSequenceBySample(smp)) !== false) {
                             let key = getSequenceSampleKey(seq);
                             this.updateSource(key, 'off', true, true, false);
                         }
@@ -742,22 +751,22 @@ document.addEventListener('DOMContentLoaded', function () {
             if (data && data.data) {
 
                 for (let key in data.data) {
-                    if (key in statics) {
+                    if (key in this.config) {
                         let sec = data.data[key];
                         for (let tkey in sec) {
                             let type = sec[tkey];
-                            statics[key][tkey] = type;
+                            this.config[key][tkey] = type;
                         }
                     }
                 }
                 this.updateUi(this.sourceSettingsGui);
             }
 
-            if (statics.SourceValues && statics.SourceValues.sequence) {
-                for (let seq = 0; seq < statics.SourceValues.sequence.length; seq++) {
+            if (this.config.SourceValues && this.config.SourceValues.sequence) {
+                for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
 
                     // set sequence inputs without enabled sample to off
-                    if (getSampleEnabledBySequence(seq) === false) {
+                    if (this.sourceManager.getSampleEnabledBySequence(seq) === false) {
                         let key = getSequenceSampleKey(seq);
                         setTimeout(() => {
                             this.updateSource(key, 'off', false, true);
@@ -814,16 +823,16 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         *
+         * fixme something goes wrong. press on seq_0
          * @param item
          * @param value
          */
         setAllDisplaysTo(item, value, group) {
             let increment = value === false;
-            group = splitToIntArray(statics.SourceSettings[group]);
+            group = splitToIntArray(this.config.SourceSettings[group]);
 
             let updates = {};
-            for (let i = 0; i < statics.DisplayValues.display.length; i++) {
+            for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
 
                 if (group.length && group.indexOf(i) < 0) {
                     continue;
@@ -831,81 +840,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 let n = 'display' + i;
                 let nv = n + '_visible';
-                if (statics.DisplaySettings[nv]) {
+                if (this.config.DisplaySettings[nv]) {
                     let key = n + '_' + item;
                     let ns = n + '_static';
-                    if (!statics.DisplaySettings[ns]) {
+                    if (!this.config.DisplaySettings[ns]) {
                         if (increment) {
-                            value = statics.SourceSettings[n + '_' + item];
+                            value = this.config.SourceSettings[n + '_' + item];
                             value++;
-                            if (value >= statics.SourceValues[item].length) {
+                            if (value >= this.config.SourceValues[item].length) {
                                 value = 0;
                             }
                         }
 
                         updates[key] = value;
-                    }
-                }
-            }
-            this.updateSources(updates, true, false, false);
-            this.messaging.emitSources(updates, true, true, false);
-        }
-
-        /**
-         *
-         * @param item
-         * @param value
-         */
-        setAllSequencesTo(item, value) {
-            let increment = value === false;
-            if (increment) {
-                value = 0;
-            }
-            let updates = {};
-            for (let i = 0; i < statics.SourceValues.sequence.length; i++) {
-                let n = 'sequence' + i;
-                let key = new RegExp('^' + n + '_' + item);
-                for (let c in statics.SourceSettings.initial) {
-                    if (c.match(key)) {
-                        updates[c] = value;
-
-                        if (increment) {
-                            value++;
-                            if (value >= statics.SourceValues[item].length) {
-                                value = 0;
-                            }
-                        }
-                    }
-                }
-            }
-            this.updateSources(updates, true, false, false);
-            this.messaging.emitSources(updates, true, true, false);
-        }
-
-        /**
-         *
-         * @param item
-         * @param value
-         */
-        setAllSamplesTo(item, value) {
-            let increment = value === false;
-            if (increment) {
-                value = 0;
-            }
-            let updates = {};
-            for (let i = 0; i < statics.SourceValues.sequence.length; i++) {
-                let n = 'sample' + i;
-                let key = new RegExp('^' + n + '_' + item);
-                for (let c in statics.SourceSettings.initial) {
-                    if (c.match(key)) {
-                        updates[c] = value;
-
-                        if (increment) {
-                            value++;
-                            if (value >= statics.SourceValues[item].length) {
-                                value = 0;
-                            }
-                        }
                     }
                 }
             }
@@ -927,10 +874,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 };
                 st(layer, to);
             }
-            let to = statics.ControlValues.layer.length * 151;
+            let to = this.config.ControlValues.layer.length * 151;
 
             setTimeout(() => {
-                this.updateControl('layer', statics.ControlSettings.layer, true, true, true);
+                this.updateControl('layer', this.config.ControlSettings.layer, true, true, true);
             }, to);
         }
 
@@ -938,7 +885,7 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         pushSources() {
-            this.messaging.emitSources(statics.SourceSettings, true, true, false);
+            this.messaging.emitSources(this.config.SourceSettings, true, true, false);
         }
 
         /**
@@ -963,7 +910,7 @@ document.addEventListener('DOMContentLoaded', function () {
             HC.log('preset', name);
 
             if (layer == undefined) {
-                layer = statics.ControlSettings.layer;
+                layer = this.config.ControlSettings.layer;
             }
 
             this.settingsManager.resetLayer(layer);
@@ -983,7 +930,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (this.settingsManager.get(layer, 'info').hasTutorial()) {
                 new HC.ScriptProcessor(this, name, Object.create(data.info.tutorial)).log();
 
-                data.info.tutorial = {}; // fixme tutorial will be deleted on savePreset
+                data.info.tutorial = {}; // todo tutorial will be deleted on savePreset
             }
 
             this.messaging.emitSettings(layer, data, false, false, true);
@@ -998,9 +945,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             HC.log('passes', name);
 
-            for (let i = 0; i < statics.ControlValues.layer.length; i++) {
+            for (let i = 0; i < this.config.ControlValues.layer.length; i++) {
                 if (!this.settingsManager.isDefault(i)
-                    && layerShuffleable(i) == layerShuffleable(statics.ControlSettings.layer)
+                    && layerShuffleable(i) == layerShuffleable(this.config.ControlSettings.layer)
                 ) {
                     if (!('info' in data)) {
 
@@ -1036,7 +983,7 @@ document.addEventListener('DOMContentLoaded', function () {
         refreshLayerInfo() {
             let preset = [];
 
-            for (let i = 0; i < statics.ControlValues.layer.length; i++) {
+            for (let i = 0; i < this.config.ControlValues.layer.length; i++) {
                 if (this.settingsManager.layers[i]) {
                     let l = this.settingsManager.getLayer(i);
                     if (!this.settingsManager.isDefault(l) && layerShuffleable(i)) {
@@ -1062,11 +1009,11 @@ document.addEventListener('DOMContentLoaded', function () {
         resetFolder(open) {
             let set = open.getKey();
             if (set) {
-                let cs = this.settingsManager.get(statics.ControlSettings.layer, set);
+                let cs = this.settingsManager.get(this.config.ControlSettings.layer, set);
                 if (cs) {
                     cs.reset();
                     let data = cs.prepare();
-                    this.updateSetting(statics.ControlSettings.layer, data, true, true, false);
+                    this.updateSetting(this.config.ControlSettings.layer, data, true, true, false);
                 }
             }
         }

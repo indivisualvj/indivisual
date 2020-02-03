@@ -21,7 +21,7 @@
         apply(shape) {
             let layer = this.layer;
             let matrix = layer.getPatternPlugin('matrix');
-            let s = 1 - 1 / matrix.rowCount(layer) * matrix.gridPosition(shape);
+            let s = 1 - 1 / matrix.rowCount(layer) * matrix.gridPosition(shape).y;
             s *= this.settings.sizing_scale;
             let x = this.settings.sizing_x * s;
             let y = this.settings.sizing_y * s;

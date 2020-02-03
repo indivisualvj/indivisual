@@ -31,7 +31,7 @@
                                     params.mesh = false;
                                     shape.setMesh(params.original);
 
-                                    this.animation.listener.removeId(inst.id(shape.index));
+                                    inst.animation.listener.removeId(inst.id(shape.index));
                                 }
                                 break;
                         }
@@ -83,7 +83,7 @@
                                     shape.setMesh(params.states[0]);
                                     params.states = false;
 
-                                    this.animation.listener.removeId(inst.id(shape.index));
+                                    inst.animation.listener.removeId(inst.id(shape.index));
                                 }
                                 break;
                         }

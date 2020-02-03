@@ -91,7 +91,7 @@
 
         /**
          *
-         * @param controlSet
+         * @param {HC.ControlSet} controlSet
          * @param gui
          */
         constructor(controlSet, gui) {
@@ -127,8 +127,7 @@
             let key = this.controlSet.className();
             let name = this.controlSet.name();
 
-            this.folder = this.gui.addFolder(name, this.controlSet.open);
-            this.folder.setKey(key);
+            this.folder = this.gui.addFolder(key, name, this.controlSet.open);
             this._styleFolder(this.folder, key, 'green');
 
             if (shareListener === true) {
@@ -171,7 +170,7 @@
 
             if (parent) {
                 if (!this.folder.children[parent]) {
-                    folder = this.folder.addFolder(parent, false);
+                    folder = this.folder.addFolder(parent);
                     this._styleFolder(folder, parent,'blue');
                 } else {
                     folder = this.folder.children[parent];
@@ -274,7 +273,7 @@
             data[set][that.getProperty()] = value;
 
             messaging.program.updateSetting(
-                statics.ControlSettings.layer,
+                undefined,
                 data,
                 true,
                 true,
@@ -298,11 +297,18 @@
         name;
 
         /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
          *
          * @param name
+         * @param {HC.Config} config
          */
-        constructor(name) {
+        constructor(name, config) {
             this.name = name;
+            this.config = config;
         }
 
         /**
@@ -332,20 +338,21 @@
 
         /**
          *
-         * @param v
-         * @param that
+         * @returns {function(...[*]=)}
          */
-        onChange(v, that) {
-            if (that.getProperty() == 'apply' && v === false) {
-                messaging.program.cleanShaderPasses();
-                messaging.program.updateUiPasses();
-            }
+        onChange() {
+            return (v, that) => {
+                if (that.getProperty() == 'apply' && v === false) {
+                    messaging.program.cleanShaderPasses();
+                    messaging.program.updateUiPasses();
+                }
 
-            let passes = messaging.program.settingsManager.get(statics.ControlSettings.layer, 'passes');
-            let data = {passes: {shaders: passes.getShaderPasses()}};
-            messaging.emitSettings(statics.ControlSettings.layer, data, false, false, false);
+                let passes = messaging.program.settingsManager.get(this.config.ControlSettings.layer, 'passes');
+                let data = {passes: {shaders: passes.getShaderPasses()}};
+                messaging.emitSettings(this.config.ControlSettings.layer, data, false, false, false);
 
-            HC.log(that.getParent().getLabel() + '/' + that.getLabel(), v);
+                HC.log(that.getParent().getLabel() + '/' + that.getLabel(), v);
+            };
         }
 
         /**
@@ -353,7 +360,7 @@
          * @return {*}
          */
         getInitialSettings() {
-            return statics.ShaderSettings[this.name];
+            return this.config.ShaderSettings[this.name];
         }
 
         /**
@@ -363,8 +370,8 @@
          */
         static onPasses(v, that) {
 
-            if (v !== null && v in statics.Passes) {
-                let name = statics.Passes[v];
+            if (v !== null && v in messaging.program.config.Passes) {
+                let name = messaging.program.config.Passes[v];
                 if (name !== null) {
 
                     setTimeout(() => {
@@ -372,11 +379,11 @@
                     }, 125);
 
                     let ctrl = new HC.ShaderPassUi(name);
-                    let sh = JSON.copy(statics.ShaderSettings[name]);
+                    let sh = JSON.copy(messaging.program.config.ShaderSettings[name]);
                     ctrl.init(sh);
 
                     messaging.program.addShaderPass(
-                        statics.ControlSettings.layer,
+                        messaging.program.config.ControlSettings.layer,
                         ctrl
                     );
                 }

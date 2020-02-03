@@ -11,7 +11,7 @@
         static index = 120;
 
         settings = {
-            coloring_mode: 'off',
+            coloring_mode: 'onergb',
             coloring_volume: 1.0,
             coloring_volume_oscillate: 'off',
             coloring_hue: 0,

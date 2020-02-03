@@ -72,9 +72,9 @@ HC.plugins.shaders = HC.plugins.shaders || {};
                         let v = sProperty.value;
 
                         if (sSetting.type == 'sampler2D') {
-                            let img = statics.overlay_one ? statics.overlay_one.target : false;
+                            let img = this.config.overlay_one ? this.config.overlay_one.target : false;
                             if (img) {
-                                v = statics.overlay_one.target;
+                                v = this.config.overlay_one.target;
                                 glsh.uniforms[skey + '_ready'].value = 1;
 
                             } else {

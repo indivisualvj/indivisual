@@ -4,7 +4,7 @@
         static index = 10;
 
         apply(key) {
-            return this.activate(key, (this.animation.now - this.beatKeeper.beatStartTime) / (60000 / statics.ControlSettings.tempo));
+            return this.activate(key, (this.animation.now - this.beatKeeper.beatStartTime) / (60000 / this.config.ControlSettings.tempo));
         }
     }
 }

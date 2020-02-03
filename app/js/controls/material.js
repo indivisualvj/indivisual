@@ -10,6 +10,12 @@
 
         static index = 110;
 
+        hooks = {
+            onSet: () => {
+                this.properties.material_needs_update = true;
+            }
+        };
+
         settings = {
             mesh_material: 'lambert',
             material_style: 'fill',
@@ -34,10 +40,12 @@
             material_offsety: 0.0,
             material_centerx: .5,
             material_centery: .5,
-            material_rotation: 0.0
+            material_rotation: 0.0,
+            material_needs_update: false
         };
         
         types = {
+            material_needs_update: ['hidden'],
             material_blendequation: ['hidden'],
             material_blendsrc: ['hidden'],
             material_blenddst: ['hidden'],

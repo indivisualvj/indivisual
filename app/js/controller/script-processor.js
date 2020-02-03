@@ -73,12 +73,11 @@
          */
         _getInstance(instance) {
             switch (instance) {
-                default:
-                case 'controller':
-                    return this.instance;
+                case 'messaging':
+                    return messaging;
             }
 
-            return null;
+            return this.instance;
         }
 
         /**

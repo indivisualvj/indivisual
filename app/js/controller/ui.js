@@ -66,10 +66,10 @@ HC.Controller.prototype.addGuifyControllers = function (controlSets, uiClass, pa
  */
 HC.Controller.prototype.addConfigurationSettings = function () {
 
-    for (let k in statics) {
+    for (let k in this.config) {
         if (k.endsWith('Types')) {
-            let object = statics[k];
-            let folder = this.configurationSettingsGui.addFolder(k, false);
+            let object = this.config[k];
+            let folder = this.configurationSettingsGui.addFolder(k);
 
             for (let p in object) {
 
@@ -128,7 +128,7 @@ HC.Controller.prototype.addPassesFolder = function (submit) {
     let ui = new HC.ControlSetGuifyUi(this.settingsManager.getGlobalProperties()['passes'], this.animationSettingsGui);
     let dir = ui.addFolder();
 
-    dir.addSelectController('pass', 'pass', {pass: ''}, statics.Passes, submit);
+    dir.addSelectController('pass', 'pass', {pass: ''}, this.config.Passes, submit);
 };
 
 
@@ -159,9 +159,9 @@ HC.Controller.prototype.addShaderPassController = function (key, control, parent
  */
 HC.Controller.prototype.addShaderController = function (folder, key, sh, parent, control) {
 
-    control = control || new HC.ShaderPassUi(parent);
+    control = control || new HC.ShaderPassUi(parent, this.config);
     let shi = control.getInitialSettings() || {}; // fallback 4 cleaned settings from storage
-    let submit = control.onChange;
+    let submit = control.onChange();
 
     for (let skey in sh) {
         let shs = sh[skey];
@@ -262,7 +262,7 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                     let _label = skey + '_oscillate';
                     opts = _opts(_label, submit, folder, 'oscillate', shs);
                     opts.type = 'select';
-                    opts.options = statics.AnimationValues.oscillate;
+                    opts.options = this.config.AnimationValues.oscillate;
                     opts.dataClass = 'half';
                     opts.cssClasses = 'noclear';
 
@@ -375,10 +375,10 @@ HC.Controller.prototype.explainPlugin = function (item, value, tree) {
 
     if (item in tree) {
         if (value in tree[item]) {
-            var proto = tree[item][value];
-            var desc = proto.tutorial;
+            let proto = tree[item][value];
+            let desc = proto.tutorial;
             if (desc) {
-                var key = item + '.' + value;
+                let key = item + '.' + value;
                 new HC.ScriptProcessor(this, key, desc).log();
             }
         }
@@ -456,7 +456,7 @@ HC.Controller.prototype.scrollToControl = function (control) {
 
     if (control) {
         setTimeout(function () {
-            var container = control.getContainer();
+            let container = control.getContainer();
             container.scrollIntoView();
         }, 125);
     }
@@ -500,7 +500,7 @@ HC.Controller.prototype.updateUiPasses = function () {
     if (passFld && passFld.getChild('pass')) {
         passFld.getChild('pass').setValue(null);
 
-        let cs = this.settingsManager.get(statics.ControlSettings.layer, 'passes');
+        let cs = this.settingsManager.get(this.config.ControlSettings.layer, 'passes');
         let passes = cs.getShaderPasses();
 
         for (let k in passFld.children) {
@@ -512,7 +512,7 @@ HC.Controller.prototype.updateUiPasses = function () {
             let key = cs.getShaderPassKey(k);
             let name = cs.getShaderName(k);
             let sh = cs.getShader(k);
-            let ctrl = new HC.ShaderPassUi(name);
+            let ctrl = new HC.ShaderPassUi(name, this.config);
             ctrl.init(sh);
             this.addShaderPassController(key, ctrl, passFld);
         }
@@ -523,9 +523,9 @@ HC.Controller.prototype.updateUiPasses = function () {
  *
  */
 HC.Controller.prototype.showDisplayControls = function () {
-    for (let i = 0; i < statics.DisplayValues.display.length; i++) {
+    for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
         let key = 'display' + i;
-        let visible = statics.DisplaySettings[key + '_visible'];
+        let visible = this.config.DisplaySettings[key + '_visible'];
 
         let displays = this.displaySettingsGui.children.displays.children;
         let display = displays[key];
@@ -593,12 +593,12 @@ HC.Controller.prototype.updateValuesChanged = function (folder) {
  */
 HC.Controller.prototype.updateThumbs = function () {
 
-    for (let i = 0; i < statics.SourceValues.sample.length; i++) {
+    for (let i = 0; i < this.config.SourceValues.sample.length; i++) {
         let sampleKey = getSampleKey(i);
 
         let data = false;
-        if (sampleKey in statics.DataSettings) {
-            data = statics.DataSettings[sampleKey];
+        if (sampleKey in this.config.DataSettings) {
+            data = this.config.DataSettings[sampleKey];
         }
 
         this.thumbs[i].update(data);
@@ -610,7 +610,7 @@ HC.Controller.prototype.updateThumbs = function () {
  * @param index
  */
 HC.Controller.prototype.loadClip = function (index) {
-    let smp = new HC.Sample(null, index);
+    let smp = new HC.Sample(null, this.config, index);
 
     smp.clip((sample) => {
         let data = {data: {DataSettings: {}}};
@@ -627,11 +627,11 @@ HC.Controller.prototype.updateIndicator = function (seq) {
 
     let clip = this.clips[seq];
 
-    let sample = getSampleBySequence(seq);
+    let sample = this.sourceManager.getSampleBySequence(seq);
     let sampleKey = getSampleKey(sample);
     let data = false;
-    if (sampleKey in statics.DataSettings) {
-        data = statics.DataSettings[sampleKey];
+    if (sampleKey in this.config.DataSettings) {
+        data = this.config.DataSettings[sampleKey];
     }
 
     clip.updateIndicator(data);
@@ -646,15 +646,15 @@ HC.Controller.prototype.updateClip = function (seq) {
 
     let clip = this.clips[seq];
 
-    let sample = getSampleBySequence(seq);
+    let sample = this.sourceManager.getSampleBySequence(seq);
     let sampleKey = getSampleKey(sample);
 
     let data = false;
-    if (sampleKey in statics.DataSettings) {
-        data = statics.DataSettings[sampleKey];
+    if (sampleKey in this.config.DataSettings) {
+        data = this.config.DataSettings[sampleKey];
     }
 
-    let enabled = getSampleEnabledBySequence(seq) && (data != false);
+    let enabled = this.sourceManager.getSampleEnabledBySequence(seq) && (data != false);
 
     clip.update(sample, enabled, data);
 };
@@ -665,8 +665,8 @@ HC.Controller.prototype.updateClip = function (seq) {
 HC.Controller.prototype.initClips = function () {
 
     this.clips = [];
-    for (let seq = 0; seq < statics.SourceValues.sequence.length; seq++) {
-        this.clips.push(new HC.SourceControllerClip(seq));
+    for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
+        this.clips.push(new HC.SourceControllerClip(this, seq));
     }
 
 };
@@ -677,7 +677,7 @@ HC.Controller.prototype.initClips = function () {
 HC.Controller.prototype.initThumbs = function () {
 
     this.thumbs = [];
-    for (let seq = 0; seq < statics.SourceValues.sample.length; seq++) {
-        this.thumbs.push(new HC.SourceControllerThumb(seq));
+    for (let seq = 0; seq < this.config.SourceValues.sample.length; seq++) {
+        this.thumbs.push(new HC.SourceControllerThumb(this, seq));
     }
 };

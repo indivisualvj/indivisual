@@ -15,7 +15,7 @@
             };
 
             if (IS_ANIMATION) { // no mousemove cursor thingy for _SETUP and _MONITOR
-                var to;
+                let to;
                 document.addEventListener('mousemove', function () {
                     document.body.style.cursor = 'default';
                     clearTimeout(to);
@@ -47,7 +47,7 @@
                     return;
                 }
                 if (e.keyCode === 32) { // SPACE = play/pause
-                    animation.updateControl('play', !statics.ControlSettings.play, true, false, false);
+                    animation.updateControl('play', !animation.config.ControlSettings.play, true, false, false);
                 }
             });
 
@@ -67,9 +67,9 @@
          * @param {HC.DisplayManager} displayManager
          */
         init (displayManager) {
-            var onResize = function () {
-                for (var i = 0; i < statics.DisplayValues.display.length; i++) {
-                    var display = displayManager.getDisplay(i);
+            let onResize = function () {
+                for (let i = 0; i < displayManager.config.DisplayValues.display.length; i++) {
+                    let display = displayManager.getDisplay(i);
                     if (display) {
                         if (!display.getMapping()) {
                             displayManager.centerDisplay(i, 1, true, false);

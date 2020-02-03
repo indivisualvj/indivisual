@@ -568,6 +568,12 @@ function _store(data) {
         delete data.data.sample3_record;
         delete data.data.sample4_record;
         delete data.data.sample5_record;
+        delete data.data.sample0_load;
+        delete data.data.sample1_load;
+        delete data.data.sample2_load;
+        delete data.data.sample3_load;
+        delete data.data.sample4_load;
+        delete data.data.sample5_load;
         //delete data.data.monitor;
 
         for (let k in data.data) {

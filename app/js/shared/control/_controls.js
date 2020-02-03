@@ -74,23 +74,32 @@ HC.controls = HC.controls || {};
          */
         events = {};
 
+        hooks = {};
+
+        /**
+         * @type {HC.Config}
+         */
+        config;
+
         /**
          *
          * @param name
+         * @param {HC.Config} config
          */
-        constructor(name) {
+        constructor(name, config) {
             this._className = name;
-            if (!this.__proto__._name) {
+            this.config = config;
+
+            if (!this.constructor._name) {
                 this._name = name;
             } else {
-                this._name = this.__proto__._name;
+                this._name = this.constructor._name;
             }
         }
 
         /**
          *
          * @param pluggedValues
-         * @param reset
          */
         init(pluggedValues) {
             if (!this.properties) {
@@ -107,6 +116,22 @@ HC.controls = HC.controls || {};
                     }
                 }
             }
+        }
+
+        /**
+         *
+         * @returns {string}
+         */
+        name() {
+            return this._name;
+        }
+
+        /**
+         *
+         * @return {string}
+         */
+        className() {
+            return this._className;
         }
 
         /**
@@ -139,6 +164,13 @@ HC.controls = HC.controls || {};
          */
         isDefault() {
             for (let key in this.settings) {
+
+                if (key in this.types) {
+                    if (this.types[key].includes('hidden')) {
+                        return true;
+                    }
+                }
+
                 let set = this.settings[key];
                 let prop = this.properties[key];
 
@@ -198,6 +230,11 @@ HC.controls = HC.controls || {};
          */
         set(key, value) {
             if (key in this.settings) {
+
+                if ('onSet' in this.hooks) {
+                    this.hooks.onSet();
+                }
+
                 this.properties[key] = this.validate(key, value)
             }
 
@@ -278,22 +315,6 @@ HC.controls = HC.controls || {};
                 }
             }
         }
-
-        /**
-         *
-         * @returns {string}
-         */
-        name() {
-            return this._name;
-        }
-
-        /**
-         *
-         * @return {string}
-         */
-        className() {
-            return this._className;
-        }
     }
 }
 
@@ -312,7 +333,7 @@ HC.controls = HC.controls || {};
 
         /**
          *
-         * @param pluggedValues
+         * @param {HC.Config} config
          */
         init(pluggedValues) {
             this.initMembers();

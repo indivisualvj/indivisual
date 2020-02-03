@@ -237,7 +237,7 @@
         }
 
         /**
-         * fixme NOT a final solution!  drops rms by 1! rewrite all plugins and everything...
+         *
          * @param controlSets
          * @returns {Proxy}
          */
@@ -259,22 +259,7 @@
                 },
 
                 get(target, name, receiver) {
-                    let key = mappings[name];
-                    let set = target[key];
-
-                    if (set) {
-                        let props = set.properties;
-
-                        if (name in props) {
-                            return props[name];
-                        }
-                    }
-
-                    // if (DEBUG) {
-                    //     console.error('setting not found: ' + name);
-                    // }
-
-                    return undefined;
+                    return target[mappings[name]].properties[name];
                 },
 
                 set(target, name, value, receiver) {
@@ -329,7 +314,7 @@
          */
         static initAll(pluggedValues) {
             let controlSets = {};
-            for (let key in statics.ControlSets) {
+            for (let key in messaging.program.config.ControlSets) { // statics.ControlSets SORTED
                 let cs = new HC.controls[key](key);
                 cs.init(pluggedValues);
 

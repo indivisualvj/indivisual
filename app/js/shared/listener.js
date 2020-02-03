@@ -17,7 +17,7 @@
          */
         register(event, id, callback) {
 
-            var _func = function (target) {
+            let _func = function (target) {
                 if (callback) {
                     callback(target);
                 }
@@ -58,7 +58,7 @@
          */
         removeId(id) {
             for (let e in this.events) {
-                var event = this.events[e];
+                let event = this.events[e];
 
                 for (let i in event) {
                     if (i === id) {
@@ -75,7 +75,7 @@
          */
         removeLike(prefix) {
             for (let e in this.events) {
-                var event = this.events[e];
+                let event = this.events[e];
 
                 for (let i in event) {
                     let regx = new RegExp('^' + prefix + '');
@@ -101,7 +101,7 @@
          */
         fireEventId(event, id, target) {
             if (event in this.events && id in this.events[event]) {
-                var _call = this.events[event][id];
+                let _call = this.events[event][id];
                 if (_call) {
                     // console.log(event + '.' + id);
                     _call(target);
@@ -116,7 +116,7 @@
          */
         fireId(id, target) {
             for (let e in this.events) {
-                var event = this.events[e];
+                let event = this.events[e];
 
                 for (let i in event) {
                     if (i === id) {

@@ -3,7 +3,7 @@
  * @returns {CanvasTexture}
  */
 HC.Layer.prototype.getMaterialMap = function () {
-    let seq = statics.SourceSettings.material_map;
+    let seq = this.config.SourceSettings.material_map;
     if (seq !== 'none') {
         let plugin = this.getMaterialMapPlugin('sequence');
 

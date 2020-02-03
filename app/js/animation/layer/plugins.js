@@ -2,29 +2,13 @@
  *
  * @param plugin
  * @param name
- * @param dontcry
- * @returns {*|boolean}
+ * @returns {*}
  */
-HC.Layer.prototype.getPlugin = function (plugin, name, dontcry) {
+HC.Layer.prototype.getPlugin = function (plugin, name) {
 
-    if (DEBUG && !dontcry) {
-        if (!(plugin in this.plugins)) {
-            console.error('plugin not found: ' + plugin);
-        }
-        // if (!(this.settings[plugin])) {
-        //     console.error('setting not found: ' + plugin);
-        // }
-    }
+    name = name || this.settings[plugin]; // specific plugin OR value from corresponding setting
 
-    name = name || this.settings[plugin];
-
-    if (DEBUG && !dontcry) {
-        if (!(name in this.plugins[plugin])) {
-            console.error('plugin not found: ' + plugin + '.' + name);
-        }
-    }
-
-    return this.plugins[plugin][name] || false;
+    return this.plugins[plugin][name];// || false;
 };
 
 /**
@@ -408,7 +392,6 @@ HC.Layer.prototype.reloadPlugins = function () {
             let instance = this.loadPlugin(plugin, key);
             instance.construct(this.animation, this, this.settings, plugin, key);
             instance.setControlSets(this.controlSets);
-            // instance.construct(this, this.controlSets, plugin, key);
             instance.inject();
             this.setPlugin(plugin, key, instance);
         }

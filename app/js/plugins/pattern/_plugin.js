@@ -2,6 +2,12 @@ HC.plugins.pattern = HC.plugins.pattern || {};
 {
     HC.PatternPlugin = class Plugin extends HC.AnimationPlugin {
 
+        setControlSets(controlSets) {
+            super.setControlSets(controlSets);
+            // make all such plugins make use of corresponding controlset only
+            this.settings = controlSets.pattern.properties;
+        }
+
         sharedMoverParams(ox, oy, gapx, gapy) { // essential for panning torching bouncing pattern_mover
             if (arguments.length == 4) {
                 this.shared = {

@@ -14,6 +14,11 @@
         animation;
 
         /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
          * @type {HC.Renderer}
          */
         renderer;
@@ -43,6 +48,7 @@
         ambientLight = false;
         shapes = false;
         shape = false;
+        materialColor;
 
         /**
          *
@@ -94,6 +100,7 @@
          */
         constructor (animation, renderer, index) {
             this.animation = animation;
+            this.config = animation.config;
             this.beatKeeper = animation.beatKeeper;
             this.renderer = renderer;
             this.index = index;

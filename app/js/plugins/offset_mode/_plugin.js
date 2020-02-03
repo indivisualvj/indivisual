@@ -1,6 +1,13 @@
 HC.plugins.offset_mode = HC.plugins.offset_mode || {};
 {
     HC.OffsetModePlugin = class Plugin extends HC.AnimationPlugin {
+
+        setControlSets(controlSets) {
+            super.setControlSets(controlSets);
+            // make all such plugins make use of corresponding controlset only
+            this.settings = controlSets.offset.properties;
+        }
+
         after(shape) {
             let layer = this.layer;
             if (this.settings.offset_audio && this.animation.audioManager.isActive()) {

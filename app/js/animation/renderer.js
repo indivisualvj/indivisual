@@ -76,6 +76,11 @@
         listener;
 
         /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
          * @type {HC.BeatKeeper}
          */
         beatKeeper;
@@ -88,6 +93,7 @@
          */
         constructor(animation, config) {
             this.animation = animation;
+            this.config = animation.config;
             this.listener = animation.listener;
             this.beatKeeper = animation.beatKeeper;
             this.layers = config.layers;
@@ -162,7 +168,7 @@
                 let l = new HC.Layer(this.animation, this, i);
 
                 // l.preset = op;
-                l.controlSets = os || HC.LayeredControlSetsManager.initAll(statics.AnimationValues);
+                l.controlSets = os || HC.LayeredControlSetsManager.initAll(this.config.AnimationValues);
                 l.settings = HC.LayeredControlSetsManager.settingsProxy(os || l.controlSets);
 
                 this.layers[i] = l;
@@ -170,7 +176,7 @@
                 this.resetLayer(l);
             }
 
-            this.currentLayer = this.layers[statics.ControlSettings.layer];
+            this.currentLayer = this.layers[this.config.ControlSettings.layer];
 
         }
 
@@ -184,7 +190,7 @@
             if (this.nextLayer) {
 
                 if (this.currentLayer !== this.nextLayer) {
-                    if (!force && statics.ControlSettings.shuffle_mode != 'off') {
+                    if (!force && this.config.ControlSettings.shuffle_mode != 'off') {
                         let speed = this.nextLayer.getCurrentSpeed();
                         if (!speed.starting()) {
                             return;
@@ -315,7 +321,7 @@
         getResolution() {
             let resolution;
 
-            let res = statics.DisplaySettings.resolution;
+            let res = this.config.DisplaySettings.resolution;
             if (res) {
                 let sp = res.split(/[\:x]/);
                 if (sp.length > 1) {

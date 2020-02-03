@@ -1,6 +1,13 @@
 HC.plugins.shape_lookat = HC.plugins.shape_lookat || {};
 {
     HC.ShapeLookatPlugin = class Plugin extends HC.AnimationPlugin {
+
+        setControlSets(controlSets) {
+            super.setControlSets(controlSets);
+            // make all such plugins make use of corresponding controlset only
+            this.settings = controlSets.locking.properties;
+        }
+
         before(shape) {
             let pattern = this.layer.getPatternPlugin();
             if (pattern.shared && pattern.shared.locking && pattern.shared.locking.disabled) {

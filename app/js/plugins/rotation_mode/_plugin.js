@@ -23,5 +23,11 @@ HC.plugins.rotation_mode = HC.plugins.rotation_mode || {};
             tween: false,
             iterations: 0
         };
-    };
+
+        setControlSets(controlSets) {
+            super.setControlSets(controlSets);
+            // make all such plugins make use of corresponding controlset only
+            this.settings = controlSets.rotation.properties;
+        }
+    }
 }

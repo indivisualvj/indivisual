@@ -24,12 +24,18 @@
         renderer;
 
         /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
          *
          * @param {HC.Animation} animation
          * @param index
          */
         constructor(animation, index) {
             this.animation = animation;
+            this.config = animation.config;
             this.displayManager = animation.displayManager;
             this.type = 'Perspective';
             this.index = index;
@@ -111,10 +117,10 @@
                 cam.position.y = lcam.position.y;
                 cam.position.z = lcam.position.z;
                 cam.rotation.x = lcam.rotation.x;
-                cam.rotation.y = lcam.rotation.y + statics.DisplaySettings[key + '_angle'] * RAD;
+                cam.rotation.y = lcam.rotation.y + this.config.DisplaySettings[key + '_angle'] * RAD;
                 cam.rotation.z = lcam.rotation.z;
-                cam.fov = lcam.fov * statics.DisplaySettings[key + '_fov'];
-                cam.zoom = lcam.zoom * statics.DisplaySettings[key + '_zoom'];
+                cam.fov = lcam.fov * this.config.DisplaySettings[key + '_fov'];
+                cam.zoom = lcam.zoom * this.config.DisplaySettings[key + '_zoom'];
 
                 cam.updateProjectionMatrix();
 

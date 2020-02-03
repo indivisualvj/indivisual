@@ -21,13 +21,15 @@
 
         /**
          *
+         * @param key
          * @param name
          * @param open
-         * @returns {HC.GuifyFolder}
+         * @returns {HC.GuifyExplorerFolder}
          */
-        addFolder(name, open) {
-            let folder = new HC.GuifyExplorerFolder(this.gui, null, name, open);
-            this.children[folder.getLabel()] = folder;
+        addFolder(key, name, open) {
+            let folder = new HC.GuifyExplorerFolder(this.gui, null, name || key, open);
+            folder.setKey(key);
+            this.children[key] = folder;
 
             return folder;
         }

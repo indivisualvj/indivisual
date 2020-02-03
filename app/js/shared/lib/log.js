@@ -1,6 +1,6 @@
 // Log
 {
-    var logHistory = {};
+    logHistory = {};
 
     /**
      *
@@ -10,11 +10,11 @@
     HC.logFunction = function (key, func) {
 
         requestAnimationFrame(function () {
-            var co = document.getElementById('log');
+            let co = document.getElementById('log');
             if (co) {
-                var a = HC.logGetAnchor(key);
+                let a = HC.logGetAnchor(key);
                 a.onclick = function (e) {
-                    var co;
+                    let co;
                     if (co = e.target.closest('.expandable')) {
                         e.preventDefault();
                         e.stopPropagation();
@@ -41,7 +41,7 @@
         }
 
         requestAnimationFrame(function () {
-            var co = document.getElementById('log');
+            let co = document.getElementById('log');
             if (co) {
 
                 if (value == false) {
@@ -52,8 +52,8 @@
                     messaging.emitLog(key, value);
                 }
 
-                var txt = '';
-                var elem = false;
+                let txt = '';
+                let elem = false;
                 if (value) {
                     txt = key + ': ' + value;
 
@@ -82,7 +82,7 @@
      *
      */
     HC.clearLog = function () {
-        var co = document.getElementById('log');
+        let co = document.getElementById('log');
         if (co) {
             co.innerHTML = '';
         }
@@ -123,7 +123,7 @@
      * @returns {string}
      */
     HC.logGetAnchor = function (value) {
-        var a = document.createElement('a');
+        let a = document.createElement('a');
         a.innerText = value;
 
         return a;

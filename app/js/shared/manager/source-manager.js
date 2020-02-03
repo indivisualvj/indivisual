@@ -34,18 +34,26 @@
         listener;
 
         /**
-         * @param {HC.Animation} animation
-         * @param config
+         * @type {HC.Config}
          */
-        constructor(animation, config) {
+        config;
+
+        /**
+         * @param {HC.Animation} animation
+         * @param options
+         */
+        constructor(animation, options) {
             this.animation = animation;
-            this.displayManager = animation.displayManager;
-            this.beatKeeper = animation.beatKeeper;
-            this.renderer = animation.renderer;
-            this.listener = animation.listener;
+            if (animation) {
+                this.displayManager = animation.displayManager;
+                this.beatKeeper = animation.beatKeeper;
+                this.renderer = animation.renderer;
+                this.listener = animation.listener;
+            }
+            this.config = options.config;
             this.perspectives = new Array(3);
-            this.samples = config.sample;
-            this.sequences = config.sequence;
+            this.samples = options.sample;
+            this.sequences = options.sequence;
             this.colors = [];
         }
 
@@ -61,7 +69,7 @@
                 display.canvas.style.display = 'block';
                 display.offline = false;
 
-                let type = statics.SourceSettings[display.id + '_source'];
+                let type = this.config.SourceSettings[display.id + '_source'];
                 let sq;
                 switch (type) {
 
@@ -71,19 +79,19 @@
                         break;
 
                     case 'sequence':
-                        sq = statics.SourceSettings[display.id + '_sequence'];
+                        sq = this.config.SourceSettings[display.id + '_sequence'];
                         source = new HC.Source(this.getSequence(sq), display.width(), display.height());
                         this.updateSequence(sq);
                         break;
 
                     case 'perspective':
-                        sq = statics.SourceSettings[display.id + '_sequence'];
+                        sq = this.config.SourceSettings[display.id + '_sequence'];
                         source = new HC.Source(this.getPerspective(sq), display.width(), display.height());
                         this.updatePerspective(sq);
                         break;
 
                     case 'display':
-                        sq = statics.SourceSettings[display.id + '_sequence'];
+                        sq = this.config.SourceSettings[display.id + '_sequence'];
                         source = new HC.Source(this.getDisplay(sq), display.width(), display.height());
                         break;
 
@@ -141,7 +149,7 @@
         updateSequence(i, override) {
             let sequence = this.getSequence(i);
             if (sequence) {
-                let smp = (statics.SourceSettings[sequence.id + '_input']);
+                let smp = (this.config.SourceSettings[sequence.id + '_input']);
                 let os = (override ? false : sequence.sample);
                 sequence.sample = this.getSample(smp);
 
@@ -168,7 +176,7 @@
                 }
                 this.updateSample(smp);
 
-                let overlay = parseInt(statics.SourceSettings[sequence.id + '_overlay']);
+                let overlay = parseInt(this.config.SourceSettings[sequence.id + '_overlay']);
                 if (overlay >= 0) {
                     sequence.overlay = this.getSequence(overlay);
 
@@ -188,10 +196,10 @@
         getSample(i) {
             if (!this.samples[i]) {
 
-                let iKeys = Object.keys(statics.SourceValues.input);
+                let iKeys = Object.keys(this.config.SourceValues.input);
                 let sample = false;
-                if (i < statics.SourceValues.sample.length) {
-                    sample = new HC.Sample(this.animation, i);
+                if (i < this.config.SourceValues.sample.length) {
+                    sample = new HC.Sample(this.animation, this.animation.config, i);
 
                 } else {
                     return;
@@ -295,7 +303,7 @@
 
                 let recordKey = getSampleRecordKey(target.index);
 
-                if (statics.SourceSettings[recordKey]) { // sample
+                if (this.config.SourceSettings[recordKey]) { // sample
                     this.animation.updateSource(recordKey, false, true, true, false);
 
                 }
@@ -320,13 +328,13 @@
         updateSample(i) {
             let sample = this.getSample(i);
             if (sample) {
-                sample.update(statics.ControlSettings.tempo, this.width, this.height);
+                sample.update(this.config.ControlSettings.tempo, this.width, this.height);
 
                 if (!sample.enabled && sample instanceof HC.Sample) {
                     sample.reset();
 
                     let warn = false;
-                    if (sample.index < statics.SourceValues.sample.length) {
+                    if (sample.index < this.config.SourceValues.sample.length) {
                         for (let s = 0; s < this.sequences.length; s++) {
                             let seq = this.getSequence(s);
                             if (seq && seq.sample == sample) { // reset input to off if sample was disabled
@@ -388,8 +396,8 @@
          */
         _storeSample(sample, name, resolution) {
             sample.pointer = 0;
-            var canvas = false;
-            var ctx = false;
+            let canvas = false;
+            let ctx = false;
             if (resolution && resolution != 1.0) {
                 canvas = document.createElement('canvas');
                 canvas.width = sample.width * resolution;
@@ -397,20 +405,20 @@
                 ctx = canvas.getContext('2d');
             }
 
-            var _mov = () => {
+            let _mov = () => {
 
                 if (sample.isReady()) {
                     this.animation.powersave = true;
 
-                    var frame = sample.frames[sample.pointer];
+                    let frame = sample.frames[sample.pointer];
                     if (ctx) {
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
                         ctx.drawImage(frame, 0, 0, frame.width, frame.height, 0, 0, canvas.width, canvas.height);
                         frame = canvas;
                     }
-                    var now = HC.now();
-                    var data = frame.toDataURL('image/png');
-                    var diff = HC.now() - now;
+                    let now = HC.now();
+                    let data = frame.toDataURL('image/png');
+                    let diff = HC.now() - now;
 
                     messaging.sample(name, sample.pointer + '.png', data);
                     sample.pointer++;
@@ -564,8 +572,8 @@
         renderPerspectives() {
             for (let i = 0; i < this.displayManager.displays.length; i++) {
                 let dsp = this.displayManager.displays[i];
-                if (dsp && dsp.visible && getDisplaySource(i) == 'perspective') {
-                    this.getPerspective(getDisplaySequence(i)).next();
+                if (dsp && dsp.visible && this.getDisplaySource(i) == 'perspective') {
+                    this.getPerspective(this.getDisplaySequence(i)).next();
                 }
             }
         }
@@ -583,5 +591,196 @@
                 }
             }
         }
+
+
+        /**
+         *
+         * @param i
+         * @returns {boolean}
+         */
+        getSequenceHasParent(i) {
+
+            let material = this.config.SourceValues.material_map[this.config.SourceSettings.material_map];
+            let key = getSequenceKey(i);
+            if (material == key && messaging.program.renderer) {
+                return true;
+            }
+
+            for (let dpl = 0; dpl < this.config.DisplayValues.display.length; dpl++) {
+                let visible = this.getDisplayVisible(dpl);
+                if (visible) {
+                    let src = this.getDisplaySource(dpl);
+                    if (src == 'sequence') {
+                        let seq = this.getDisplaySequence(dpl);
+                        if (seq == i) {
+                            return true;
+                        }
+                        let ovrly = this.getSequenceOverlay(seq);
+                        if (ovrly == i) {
+                            return true;
+                        }
+
+                        ovrly = this.getSequenceOverlay(ovrly);
+                        if (ovrly == i) {
+                            return true;
+                        }
+
+                        ovrly = this.getSequenceOverlay(ovrly);
+                        if (ovrly == i) {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+
+        /**
+         *
+         * @param i
+         * @returns {string}
+         */
+        getSequenceOverlayKey(i) {
+            return getSequenceKey(i) + '_overlay';
+        }
+
+        /**
+         *
+         * @param i
+         * @returns {*}
+         */
+        getSequenceOverlay(i) {
+            let key = this.getSequenceOverlayKey(i);
+            if (key in this.config.SourceSettings) {
+                let value = this.config.SourceSettings[key];
+                return parseInt(value);
+            }
+
+            return false;
+        }
+
+
+        /**
+         *
+         * @param i
+         * @returns {*}
+         */
+        getDisplaySequence(i) {
+            let key = getDisplaySequenceKey(i);
+            let value = this.config.SourceSettings[key];
+            return value;
+        }
+
+
+        /**
+         *
+         * @param i
+         * @returns {*}
+         */
+        getDisplaySource(i) {
+            let key = getDisplaySourceKey(i);
+            let value = this.config.SourceSettings[key];
+            return value;
+        }
+
+
+        /**
+         *
+         * @param i
+         * @returns {*}
+         */
+        getDisplayVisible(i) {
+            let key = getDisplayVisibleKey(i);
+            let value = this.config.DisplaySettings[key];
+            return value;
+        }
+
+
+        /**
+         *
+         * @param i
+         * @returns {*}
+         */
+        getSampleEnabledBySequence(i) {
+            let s = this.getSampleBySequence(i);
+            let value = this.getSampleEnabledBySample(s);
+
+            return value;
+        }
+
+
+        /**
+         *
+         * @param i
+         * @returns {*}
+         */
+        getSampleEnabledBySample(i) {
+            let key = getSampleEnabledKey(i);
+            if (key in this.config.SourceSettings) {
+                let value = this.config.SourceSettings[key];
+                return value;
+            }
+
+            return false;
+        }
+
+
+        /**
+         *
+         * @param i
+         * @returns {*}
+         */
+        getSequenceBySample(i) {
+            for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
+                let sample = this.getSampleBySequence(seq);
+                if (sample == i) {
+                    return seq;
+                }
+            }
+
+            return false;
+        }
+
+        /**
+         *
+         * @param sequence
+         * @param frames
+         * @param start
+         * @param end
+         */
+        applySequenceSlice(sequence, frames, start, end) {
+            let end2end = frames - end;
+            let prc = (frames - end2end) / frames;
+            let sp = start;
+            let ep = sp + prc * frames;
+            let l = ep - sp;
+            let ve = sp + l;
+            if (ve > frames) {
+                sp -= ve - frames;
+            }
+
+            sequence.start = Math.min(frames - 1, Math.round(sp));
+            sequence.end = Math.min(frames - 1, Math.round(ep));
+            sequence.length = sequence.end - sequence.start;
+        }
+
+        /**
+         *
+         * @param i
+         * @returns {*}
+         */
+        getSampleBySequence(i) {
+            let key = getSequenceSampleKey(i);
+            if (key in this.config.SourceSettings) {
+                let value = this.config.SourceSettings[key];
+
+                return value;
+            }
+
+            return false;
+        }
+
     }
 }

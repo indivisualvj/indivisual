@@ -23,35 +23,35 @@ HC.DisplayController = HC.DisplayController || {};
             transparency: 1.0,
             smearing: 0.0,
             background: '#000000',
-            mask_copy: function () {
+            mask_copy: () => {
                 let updates = {};
-                for (let i = 1; i < statics.DisplayValues.display.length; i++) {
+                for (let i = 1; i < this.config.DisplayValues.display.length; i++) {
                     let v = 'display' + i + '_visible';
-                    if (statics.DisplaySettings[v]) {
+                    if (this.config.DisplaySettings[v]) {
                         let okey = 'display0_mask';
                         let key = 'display' + i + '_mask';
 
-                        updates[key] = statics.DisplaySettings[okey];
+                        updates[key] = this.config.DisplaySettings[okey];
                     }
                 }
                 messaging.program.updateDisplays(updates, true, true, true);
                 messaging.emitDisplays(updates, true, false, true);
             },
-            mask_reset: function () {
+            mask_reset: () => {
                 let updates = {};
-                for (let i = 0; i < statics.DisplayValues.display.length; i++) {
+                for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
                     let key = 'display' + i;
                     let v = key + '_visible';
                     key +=  '_mask';
-                    if (statics.DisplaySettings[v]) {
-                        updates[key] = statics.DisplaySettingsManager.get('video.displayN').getDefault(key);
+                    if (this.config.DisplaySettings[v]) {
+                        updates[key] = this.config.DisplaySettingsManager.get('video.displayN').getDefault(key);
                     }
                 }
                 messaging.program.updateDisplays(updates, true, true, true);
                 messaging.emitDisplays(updates, true, false, true);
             },
-            auto: function () {
-                for (let i = 0; i < statics.DisplayValues.display.length; i++) {
+            auto: () => {
+                for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
                     let key = 'display' + i;
                     key += '_mapping';
                     let data = {};
@@ -59,11 +59,11 @@ HC.DisplayController = HC.DisplayController || {};
                     messaging.emitDisplays(data, true, true, false);
                 }
             },
-            full: function () {
-                for (let i = 0; i < statics.DisplayValues.display.length; i++) {
+            full: () => {
+                for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
                     let key = 'display' + i;
                     let v = key + '_visible';
-                    if (statics.DisplaySettings[v]) {
+                    if (this.config.DisplaySettings[v]) {
                         key += '_' + 1;
                         let data = {};
                         data[key] = 1;
@@ -71,11 +71,11 @@ HC.DisplayController = HC.DisplayController || {};
                     }
                 }
             },
-            half: function () {
-                for (let i = 0; i < statics.DisplayValues.display.length; i++) {
+            half: () => {
+                for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
                     let key = 'display' + i;
                     let v = key + '_visible';
-                    if (statics.DisplaySettings[v]) {
+                    if (this.config.DisplaySettings[v]) {
                         key += '_' + 2;
                         let data = {};
                         data[key] = 2;
@@ -83,11 +83,11 @@ HC.DisplayController = HC.DisplayController || {};
                     }
                 }
             },
-            third: function () {
-                for (let i = 0; i < statics.DisplayValues.display.length; i++) {
+            third: () => {
+                for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
                     let key = 'display' + i;
                     let v = key + '_visible';
-                    if (statics.DisplaySettings[v]) {
+                    if (this.config.DisplaySettings[v]) {
                         key += '_' + 3;
                         let data = {};
                         data[key] = 3;
@@ -278,13 +278,13 @@ HC.DisplayController = HC.DisplayController || {};
             border_speed: 'half',
             border: 0,
             border_color: '#ffffff',
-            trigger_display_visibility: function () {
+            trigger_display_visibility: () => {
                 messaging.program.updateDisplay('trigger_display_visibility', true, true, true, false);
             },
-            force_display_visibility: function () {
+            force_display_visibility: () => {
                 messaging.program.updateDisplay('force_display_visibility', true, true, true, false);
             },
-            reset_display_visibility: function () {
+            reset_display_visibility: () => {
                 messaging.program.updateDisplay('reset_display_visibility', true, true, true, false);
             }
         };

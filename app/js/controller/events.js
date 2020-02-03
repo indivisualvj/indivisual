@@ -88,10 +88,10 @@
  *
  */
 HC.Controller.prototype.initLogEvents = function () {
-    var expandables = document.getElementsByClassName('expandable');
+    let expandables = document.getElementsByClassName('expandable');
 
-    for (var c = 0; c < expandables.length; c++) {
-        var co = expandables[c];
+    for (let c = 0; c < expandables.length; c++) {
+        let co = expandables[c];
         co.onclick = function (evt, close) {
             if (close || co.getAttribute('fixed')) {
                 co.removeAttribute('fixed');
@@ -146,16 +146,16 @@ HC.Controller.prototype.initKeyboard = function () {
     setMnemonics(this.animationSettingsGui);
 
     window.addEventListener('keyup', (e) => {
-        statics.ctrlKey = e.ctrlKey;
-        statics.altKey = e.altKey;
-        statics.shiftKey = e.shiftKey;
+        this.config.ctrlKey = e.ctrlKey;
+        this.config.altKey = e.altKey;
+        this.config.shiftKey = e.shiftKey;
     });
 
     window.addEventListener('keydown', (e) => {
 
-        statics.ctrlKey = e.ctrlKey;
-        statics.altKey = e.altKey;
-        statics.shiftKey = e.shiftKey;
+        this.config.ctrlKey = e.ctrlKey;
+        this.config.altKey = e.altKey;
+        this.config.shiftKey = e.shiftKey;
 
         if (e.ctrlKey && (e.shiftKey || e.altKey)) {
             return;
@@ -166,7 +166,7 @@ HC.Controller.prototype.initKeyboard = function () {
         }
 
         if (e.keyCode == 8) { // BACKSPACE = close folders
-            var open = this.nextOpenFolder();
+            let open = this.nextOpenFolder();
             if (!(open instanceof HC.Guify)) {
                 this.closeAll(open);
                 this.scrollToControl(open);
@@ -181,8 +181,8 @@ HC.Controller.prototype.initKeyboard = function () {
 
         }
 
-        if (e.keyCode in statics.ControlValues.layer_keycodes) {
-            var val = statics.ControlValues.layer_keycodes[e.keyCode];
+        if (e.keyCode in this.config.ControlValues.layer_keycodes) {
+            let val = this.config.ControlValues.layer_keycodes[e.keyCode];
 
             if (e.ctrlKey) {
                 e.preventDefault();
@@ -194,8 +194,8 @@ HC.Controller.prototype.initKeyboard = function () {
             return;
         }
 
-        var char = String.fromCharCode(e.keyCode);
-        var ci;
+        let char = String.fromCharCode(e.keyCode);
+        let ci;
 
         if ((ci = keys.indexOf(char)) > -1) {
             e.preventDefault();

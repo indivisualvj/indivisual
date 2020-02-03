@@ -19,6 +19,7 @@
         mesh;
         geometry;
         normalScale;
+        needsUpdate = true;
 
         /**
          *
@@ -295,6 +296,11 @@
             this.z(this.z() + z);
         }
 
+        /**
+         *
+         * @param plugin
+         * @param emissive
+         */
         updateMaterial(plugin, emissive) {
 
             let settings = this.parent.settings;
@@ -310,19 +316,9 @@
                 }
             }
 
-            if ('shininess' in mat && mat.shininess != settings.material_shininess) {
-                mat.shininess = settings.material_shininess;
-
-            } else if (mat.refractionRatio != settings.material_shininess) {
-                mat.refractionRatio = settings.material_shininess / 100;
-            }
-
-            mat.roughness = settings.material_roughness;
-            mat.metalness = settings.material_metalness;
-
             if (plugin.properties && plugin.properties.map) {
                 if (mat.map != plugin.properties.map) {
-                    var keys = Object.keys(plugin.properties);
+                    let keys = Object.keys(plugin.properties);
                     for (let k in keys) {
                         let key = keys[k];
                         let val = plugin.properties[key];
@@ -343,7 +339,7 @@
 
 
             } else if (mat.map) {
-                var keys = Object.keys(plugin.properties);
+                let keys = Object.keys(plugin.properties);
                 for (let k in keys) {
                     let key = keys[k];
                     if (key in mat) {
@@ -353,25 +349,38 @@
                 mat.needsUpdate = true;
             }
 
-            this._updateMaterialBlending();
-
-            if (mat.flatShading == settings.material_softshading) { // reversed logic!
-                mat.flatShading = !settings.material_softshading; // reversed logic!
-                mat.needsUpdate = true;
-            }
-
-            if (mat.side != settings.material_side) {
-                mat.side = settings.material_side;
-                mat.needsUpdate = true;
-            }
-
-            if (mat.shadowSide != settings.material_shadowside) {
-                mat.shadowSide = settings.material_shadowside;
-                mat.needsUpdate = true;
-            }
-
             this.mesh.castShadow = settings.lighting_shadows;
             this.mesh.receiveShadow = settings.lighting_shadows;
+
+            if (this.needsUpdate) {
+                this.needsUpdate = false;
+                if ('shininess' in mat && mat.shininess != settings.material_shininess) {
+                    mat.shininess = settings.material_shininess;
+
+                } else if (mat.refractionRatio != settings.material_shininess) {
+                    mat.refractionRatio = settings.material_shininess / 100;
+                }
+
+                mat.roughness = settings.material_roughness;
+                mat.metalness = settings.material_metalness;
+
+                this._updateMaterialBlending();
+
+                if (mat.flatShading == settings.material_softshading) { // reversed logic!
+                    mat.flatShading = !settings.material_softshading; // reversed logic!
+                    mat.needsUpdate = true;
+                }
+
+                if (mat.side != settings.material_side) {
+                    mat.side = settings.material_side;
+                    mat.needsUpdate = true;
+                }
+
+                if (mat.shadowSide != settings.material_shadowside) {
+                    mat.shadowSide = settings.material_shadowside;
+                    mat.needsUpdate = true;
+                }
+            }
 
         }
 

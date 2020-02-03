@@ -66,13 +66,15 @@
 
         /**
          *
+         * @param key
          * @param name
          * @param open
          * @returns {HC.GuifyFolder}
          */
-        addFolder(name, open) {
-            let folder = new HC.GuifyFolder(this.gui, this, name, open);
-            this.children[folder.getLabel()] = folder;
+        addFolder(key, name, open) {
+            let folder = new HC.GuifyFolder(this.gui, this, name || key, open);
+            folder.setKey(key);
+            this.children[key] = folder;
 
             return folder;
         }
@@ -163,7 +165,9 @@
          */
         remove() {
             super.remove();
-            this.removeChildren();
+            if (this.isExpanded()) {
+                this.removeChildren();
+            }
         }
 
         /**
@@ -245,7 +249,7 @@
                 let child = this.getChild(k);
 
                 if (child instanceof HC.GuifyFolder) {
-                    child = this.findControlByProperty(property);
+                    child = child.findControlByProperty(property);
                     if (child) {
                         return child;
                     }

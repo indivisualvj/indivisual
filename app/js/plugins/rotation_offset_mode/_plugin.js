@@ -2,5 +2,12 @@ HC.plugins.rotation_offset_mode = HC.plugins.rotation_offset_mode || {};
 
 {
     HC.RotationOffsetModePlugin = class Plugin extends HC.AnimationPlugin {
+
+        setControlSets(controlSets) {
+            super.setControlSets(controlSets);
+            // make all such plugins make use of corresponding controlset only
+            this.settings = controlSets.rotation.properties;
+        }
+
     }
 }

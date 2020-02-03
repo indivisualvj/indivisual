@@ -32,11 +32,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 animation.audioManager = audioManager;
                 let audioAnalyser = new HC.AudioAnalyser(animation);
                 animation.audioAnalyser = audioAnalyser;
-                let beatKeeper = new HC.BeatKeeper(animation);
+                let beatKeeper = new HC.BeatKeeper(animation, animation.config);
                 animation.beatKeeper = beatKeeper;
 
                 let renderer = new HC.Renderer(animation, {
-                    layers: new Array(statics.ControlValues.layer.length)
+                    layers: new Array(animation.config.ControlValues.layer.length)
                 });
                 animation.renderer = renderer;
 
@@ -60,19 +60,20 @@ document.addEventListener('DOMContentLoaded', function () {
                     animation.messaging.emitAttr('#play', 'data-color', '');
                 }
 
-                let cm = new HC.LayeredControlSetsManager(renderer.layers, statics.AnimationValues);
+                let cm = new HC.LayeredControlSetsManager(renderer.layers, animation.config.AnimationValues);
                 animation.settingsManager = cm;
                 renderer.initLayers(false);
 
                 let displayManager = new HC.DisplayManager(animation, {
-                    display: new Array(statics.DisplayValues.display.length)
+                    display: new Array(animation.config.DisplayValues.display.length)
                 });
                 displayManager.resize(renderer.getResolution());
                 animation.displayManager = displayManager;
 
                 let sourceManager = new HC.SourceManager(animation, {
-                    sequence: new Array(statics.SourceValues.sequence.length),
-                    sample: new Array(statics.SourceValues.sample.length)
+                    config: animation.config,
+                    sequence: new Array(animation.config.SourceValues.sequence.length),
+                    sample: new Array(animation.config.SourceValues.sample.length)
                 });
                 sourceManager.resize(renderer.getResolution());
                 animation.sourceManager = sourceManager;
@@ -199,9 +200,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (this.audioManager.isActive()) {
 
-                    if (statics.ControlSettings.peak_bpm_detect && this.audioAnalyser.peakReliable) {
+                    if (this.config.ControlSettings.peak_bpm_detect && this.audioAnalyser.peakReliable) {
 
-                        detectedSpeed = this.beatKeeper.speedByPeakBpm(this.audioAnalyser.firstPeak, this.audioAnalyser.peakBPM, statics.ControlSettings.tempo);
+                        detectedSpeed = this.beatKeeper.speedByPeakBpm(this.audioAnalyser.firstPeak, this.audioAnalyser.peakBPM, this.config.ControlSettings.tempo);
 
                         if (detectedSpeed) {
                             this.audioAnalyser.peakReliable = false;
@@ -219,9 +220,9 @@ document.addEventListener('DOMContentLoaded', function () {
             if (this.audioManager.isActive()) {
                 let config = {
                     useWaveform: this.renderer.currentLayer.settings.audio_usewaveform,
-                    volume: statics.ControlSettings.volume,
-                    // resetPeakCountAfter: statics.ControlSettings.shuffle_every,
-                    tempo: statics.ControlSettings.tempo,
+                    volume: this.config.ControlSettings.volume,
+                    // resetPeakCountAfter: this.config.ControlSettings.shuffle_every,
+                    tempo: this.config.ControlSettings.tempo,
                     minDiff: this.beatKeeper.getSpeed('sixteen').duration,
                     now: this.now,
                     thickness: this.renderer.currentLayer.settings.audio_thickness
@@ -272,10 +273,10 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updatePlay() {
             if (IS_MONITOR) {
-                statics.ControlSettings.play = statics.ControlSettings.monitor;
+                this.config.ControlSettings.play = this.config.ControlSettings.monitor;
             }
 
-            if (statics.ControlSettings.play) {
+            if (this.config.ControlSettings.play) {
                 this.play();
 
             } else {
@@ -303,12 +304,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     this.updateRuntime();
 
-                    this.beatKeeper.updateSpeeds(this.diff, statics.ControlSettings.tempo);
+                    this.beatKeeper.updateSpeeds(this.diff, this.config.ControlSettings.tempo);
 
                     if (this.beatKeeper.getSpeed('sixteen').starting()) {
                         this.doNotDisplay = false;
 
-                    } else if (statics.DisplaySettings.fps < 46) {
+                    } else if (this.config.DisplaySettings.fps < 46) {
                         this.doNotDisplay = false;
 
                     } else {
@@ -324,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         this.ms = this.stats.values().ms;
                     }
 
-                    if (statics.DisplaySettings.fps < 60) {
+                    if (this.config.DisplaySettings.fps < 60) {
                         setTimeout(function () {
                             requestAnimationFrame(render);
                         }, this.duration - this.ms); // substract spent time from timeout
@@ -356,7 +357,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateRuntime() {
             this.now = HC.now() - this.lastUpdate;
             this.diff = this.now - this.last;
-            this.duration = 1000 / statics.DisplaySettings.fps;
+            this.duration = 1000 / this.config.DisplaySettings.fps;
             this.diffPrc = this.diff / (1000 / 60);
             this.rms = this.duration - this.ms;
             this._rmsc++;
@@ -386,7 +387,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateAudio() {
             this.audioAnalyser.reset();
-            let value = statics.ControlSettings.audio;
+            let value = this.config.ControlSettings.audio;
             if (value) {
                 this.audioManager.stop();
                 this.audioManager.initPlugin(value, (source) => {
@@ -426,8 +427,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (gain !== 0) {
                 //console.log('gain', [this.audioAnalyser.volume, this.audioAnalyser.avgVolume, gain]);
-                let vo = Math.min(2, Math.max(0.5, statics.ControlSettings.volume + gain));
-                // statics.ControlSettings.volume = vo;
+                let vo = Math.min(2, Math.max(0.5, this.config.ControlSettings.volume + gain));
+                // this.config.ControlSettings.volume = vo;
                 this.updateControl('volume', vo, false, false, false);
             }
         }
@@ -460,7 +461,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         postStatus(detectedSpeed) {
 
-            if (statics.ControlSettings.beat) {
+            if (this.config.ControlSettings.beat) {
                 let speed = this.beatKeeper.getDefaultSpeed();
                 let color = detectedSpeed ? 'green' : (this.audioAnalyser.peakReliable ? 'yellow' : '');
 
@@ -486,14 +487,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (detectedSpeed) {
                     this.messaging.emitMidi('glow', MIDI_PEAKBPM_FEEDBACK, {timeout: 15000 / detectedSpeed, times: 8});
                 }
-                if (statics.DisplaySettings.display_speed == 'midi') {
+                if (this.config.DisplaySettings.display_speed == 'midi') {
                     this.messaging.emitMidi('clock', MIDI_CLOCK_NEXT, {duration: this.beatKeeper.getDefaultSpeed().duration});
                 }
 
                 if (this.beatKeeper.getSpeed('half').starting()) {
-                    for (let i = 0; i < statics.SourceValues.sequence.length; i++) {
-                        let parent = getSequenceHasParent(i);
-                        let use = getSampleBySequence(i);
+                    for (let i = 0; i < this.config.SourceValues.sequence.length; i++) {
+                        let parent = this.sourceManager.getSequenceHasParent(i);
+                        let use = this.sourceManager.getSampleBySequence(i);
                         if (parent) {
                             this.messaging.emitMidi('glow', MIDI_ROW_TWO[i], {timeout: 125});
                         }
@@ -560,7 +561,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.fullReset(true);
 
                 if (IS_MONITOR) {
-                    new HC.Monitor().init(() => {
+                    new HC.Monitor().init(this.config, () => {
                         this.displayManager.updateDisplay(0);
                         new HC.Animation.ResizeListener().init(this.displayManager);
                     });
@@ -594,6 +595,9 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateSetting(layer, data, display, forward, force) {
 
+            if (layer === undefined) {
+                layer = this.config.ControlSettings.layer;
+            }
             // if (!renderer)return;
 
             let layerIndex = layer;
@@ -685,7 +689,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            value = statics.ControlSettingsManager.updateItem(item, value);
+            value = this.config.ControlSettingsManager.updateItem(item, value);
 
             if (forward === true) {
                 let data = {};
@@ -742,7 +746,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateSource(item, value, display, forward, force) {
 
-            value = statics.SourceSettingsManager.updateItem(item, value);
+            value = this.config.SourceSettingsManager.updateItem(item, value);
 
             if (forward === true) {
                 let data = {};
@@ -753,7 +757,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (display) {
                 let action = false;
                 // if (item.match(/^sample\d+_store/) && value) {
-                //     //var sample =
+                //     //let sample =
                 //     sourceManager.storeSample(number_extract(item, 'sample'), value, 1, false);
                 //     this.updateSource(item, false, false, true, false);
                 //
@@ -773,7 +777,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     action = true;
 
                 } else if (item.match(/display\d+_source/)) {
-                    var display = this.displayManager.getDisplay(numberExtract(item, 'display'));
+                    let display = this.displayManager.getDisplay(numberExtract(item, 'display'));
                     this.sourceManager.updateSource(display);
 
                     if (display && display.isFixedSize()) {
@@ -834,14 +838,14 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.displayManager.centerDisplay(numberExtract(item, 'display'), value);
                     this.updateDisplay(item, false, display, true);
                 }
-                statics.DisplaySettingsManager.updateItem(item, value);
+                this.config.DisplaySettingsManager.updateItem(item, value);
 
             } else {
 
-                value = statics.DisplaySettingsManager.updateItem(item, value);
+                value = this.config.DisplaySettingsManager.updateItem(item, value);
 
                 if (forward === true) {
-                    var data = {};
+                    let data = {};
                     data[item] = value;
                     this.messaging.emitDisplays(data, true, false, force);
                 }
@@ -853,7 +857,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             break;
 
                         case 'mapping':
-                        case 'clip_context':
+                        // case 'clip_context':
                         case 'background':
                             this.displayManager.updateDisplays();
                             break;
@@ -872,7 +876,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (item.match(/^display\d+_/)) {
 
-                    var i = numberExtract(item, 'display');
+                    let i = numberExtract(item, 'display');
 
                     if (item.match(/_mask$/)) { // mask
                         this.displayManager.updateDisplay(i, 'mask');
@@ -903,7 +907,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.renderer.resetLayer(layer);
 
             } else {
-                for (var k in data) {
+                for (let k in data) {
                     let value = {};
                     value[k] = data[k];
                     this.updateSetting(layer, value, display, forward, force);
@@ -919,8 +923,8 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param force
          */
         updateControls(data, display, forward, force) {
-            for (var k in data) {
-                var value = data[k];
+            for (let k in data) {
+                let value = data[k];
                 this.updateControl(k, value, display, forward, force);
             }
         }
@@ -935,15 +939,15 @@ document.addEventListener('DOMContentLoaded', function () {
         updateDisplays(data, display, forward, force) {
 
             if (force) {
-                for (var k in data) {
-                    statics.DisplaySettingsManager.updateItem(k, data[k]);
+                for (let k in data) {
+                    this.config.DisplaySettingsManager.updateItem(k, data[k]);
                 }
                 this.displayManager.reset();
                 // this.fullReset(true);
 
             } else {
-                for (var k in data) {
-                    var value = data[k];
+                for (let k in data) {
+                    let value = data[k];
                     this.updateDisplay(k, value, display, forward, force);
                 }
             }
@@ -958,8 +962,8 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateSources(data, display, forward, force) {
 
-            for (var k in data) {
-                var value = data[k];
+            for (let k in data) {
+                let value = data[k];
                 this.updateSource(k, value, display, forward, force);
             }
 
@@ -979,8 +983,8 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         doShuffle() {
-            var plugin = this.getShuffleModePlugin(statics.ControlSettings.shuffle_mode);
-            var result = plugin.apply();
+            let plugin = this.getShuffleModePlugin(this.config.ControlSettings.shuffle_mode);
+            let result = plugin.apply();
             if (result !== false) {
                 result = plugin.after();
                 if (result !== false) {
@@ -999,7 +1003,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (!this.plugins[name]) {
-                this.plugins[name] = new HC.shuffle_mode[name](this, statics.ControlSettings);
+                this.plugins[name] = new HC.shuffle_mode[name](this, this.config.ControlSettings);
             }
 
             return this.plugins[name];

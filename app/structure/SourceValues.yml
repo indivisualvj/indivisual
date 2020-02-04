@@ -38,6 +38,8 @@ sequence:
   - 3
   - 4
 
+display_source: {}
+
 source:
   animation: animation
   sequence: sequence

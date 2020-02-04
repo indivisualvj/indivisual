@@ -4,9 +4,9 @@
 {
     /**
      *
-     * @type {HC.SourceManager.display_source.Color}
+     * @type {HC.SourceManager.display_source.Black}
      */
-    HC.SourceManager.display_source.color = class Color extends HC.SourceManager.DisplaySourcePlugin {
+    HC.SourceManager.display_source.black = class Black extends HC.SourceManager.DisplaySourcePlugin {
 
         type = 'color';
 
@@ -44,7 +44,7 @@
             this.canvas.width = this.width;
             this.canvas.height = this.height;
 
-            this.canvas.ctx.fillStyle = '#afafaf';
+            this.canvas.ctx.fillStyle = '#000000';
             this.canvas.ctx.fillRect(0, 0, this.width, this.height);
 
             this.canvas.id = this.id + this.canvas.ctx.fillStyle;

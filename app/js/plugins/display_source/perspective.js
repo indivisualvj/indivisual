@@ -35,14 +35,9 @@
         update(width, height) {
             let checkWidth = this.width != width;
             let checkHeight = this.height != height;
-            let needsUpdate = checkWidth || checkHeight;
             this.width = width;
             this.height = height;
             this.renderer.setSize(this.width, this.height);
-
-            if (needsUpdate) {
-                this.init(this.index);
-            }
         }
 
         /**
@@ -51,11 +46,12 @@
          * @returns {*}
          */
         current(fallback) {
-            if (this._last == this.animation.now) {
-                return this.renderer.view;
-            }
-
-            return fallback;
+            // if (this._last == this.animation.now) {
+            //     return this.renderer.view;
+            // }
+            this.next();
+            return this.renderer.view;
+            // return fallback;
         }
 
         /**

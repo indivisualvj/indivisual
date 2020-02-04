@@ -70,14 +70,6 @@
 
         /**
          *
-         * @returns {number}
-         */
-        brightness() {
-            return this.displayManager.brightness();
-        }
-
-        /**
-         *
          * @param fallback
          * @returns {HTMLCanvasElement}
          */

@@ -1,6 +1,10 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+/**
+ *
+ * @type {Object<string, HC.SourceManager.DisplaySourcePlugin>}
+ */
 HC.SourceManager.display_source = {};
 {
     /**
@@ -10,6 +14,8 @@ HC.SourceManager.display_source = {};
     HC.SourceManager.DisplaySourcePlugin = class DisplaySourcePlugin {
 
         static _index = 99;
+
+        cacheable = true;
 
         id;
 
@@ -73,10 +79,16 @@ HC.SourceManager.display_source = {};
         height = 720;
 
         /**
-         *
+         * @type {HC.Display}
+         */
+        display;
+
+        /**
+         * @param {HC.Display}
          * @param {HC.Program} owner
          */
-        constructor(owner) {
+        constructor(display, owner) {
+            this.display = display;
             this.animation = owner;
             this.displayManager = owner.displayManager;
             this.beatKeeper = owner.beatKeeper;
@@ -94,6 +106,14 @@ HC.SourceManager.display_source = {};
          */
         init() {
 
+        }
+
+        /**
+         *
+         * @returns {HC.SourceManager.DisplaySourcePlugin}
+         */
+        getThis() {
+            return this;
         }
 
         /**
@@ -122,7 +142,6 @@ HC.SourceManager.display_source = {};
         bounds(reference) {
             return reference;
         }
-
 
         /**
          *
@@ -153,6 +172,10 @@ HC.SourceManager.display_source = {};
          *
          */
         last() {
+
+        }
+
+        next() {
 
         }
     }

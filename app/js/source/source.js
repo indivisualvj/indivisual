@@ -2,8 +2,6 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /** todo display source! this can be done as plugins? what about g0anim buttons? how to configure?
-
     /**
      *
      * @type {HC.Source}

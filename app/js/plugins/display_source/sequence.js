@@ -68,6 +68,8 @@
             this._canvas.width = this.width;
             this._canvas.height = this.height;
 
+            this.sourceManager.updateSequence(this);
+
             if (this.sample) {
                 let start = this.config.SourceSettings[this.id + '_start'];
                 let end = this.config.SourceSettings[this.id + '_end'];

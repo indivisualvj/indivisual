@@ -38,6 +38,8 @@
          */
         config;
 
+        plugins = {};
+
         /**
          * @param {HC.Animation} animation
          * @param options
@@ -60,6 +62,38 @@
         /**
          *
          * @param display
+         * @returns {HC.SourceManager.DisplaySourcePlugin}
+         */
+        getSourcePlugin(display) {
+
+            let type = this.config.SourceSettings[display.id + '_source'];
+            if (!(type in this.plugins)) {
+                this.plugins[type] = {};
+            }
+
+            let index = this.config.SourceSettings[display.id + '_sequence'];
+            let plugin;
+            if (!(index in this.plugins[type])) {
+                    plugin = new HC.SourceManager.display_source[type](display, this.animation);
+                plugin.init(index);
+
+            } else {
+                plugin = this.plugins[type][index];
+            }
+
+            plugin.update(display.width(), display.height());
+
+            if (plugin.cacheable) {
+                this.plugins[type][index] = plugin;
+            }
+            plugin = plugin.getThis();
+
+            return plugin;
+        }
+
+        /**
+         *
+         * @param display
          * @returns {boolean}
          */
         getSource(display) {
@@ -69,15 +103,15 @@
                 display.canvas.style.display = 'block';
                 display.offline = false;
 
-                let type = this.config.SourceSettings[display.id + '_source'];
+                source = this.getSourcePlugin(display);
+
+                let type = false;//this.config.SourceSettings[display.id + '_source'];
                 let sq;
                 switch (type) {
 
                     case 'animation':
-                    default:
-                        source = new HC.SourceManager.display_source.animation(this.animation);
-                        source.update(this.renderer.resolution.x, this.renderer.resolution.y);
-                        // source = new HC.Source(this.renderer, this.renderer.resolution.x, this.renderer.resolution.y);
+                    // default:
+                        source = new HC.Source(this.renderer, this.renderer.resolution.x, this.renderer.resolution.y);
                         break;
 
                     case 'sequence':
@@ -136,6 +170,9 @@
          * @returns {*}
          */
         getSequence(i) {
+            if (i instanceof HC.SourceManager.DisplaySourcePlugin) {
+                return i;
+            }
             if (!this.sequences[i]) {
                 this.sequences[i] = new HC.Sequence(this.animation, i);
             }
@@ -186,7 +223,7 @@
                     sequence.overlay = false;
                 }
 
-                sequence.update(this.width, this.height);
+                // sequence.update(this.width, this.height);
             }
         }
 
@@ -479,6 +516,9 @@
          * @returns {HC.Color}
          */
         getColor(i) {
+            if (i instanceof HC.SourceManager.DisplaySourcePlugin) {
+                return i;
+            }
             if (!this.colors[i]) {
                 this.colors[i] = new HC.Color(this.animation, i);
             }
@@ -492,6 +532,9 @@
          * @returns {HC.Lighting|*}
          */
         getLighting(i) {
+            if (i instanceof HC.SourceManager.DisplaySourcePlugin) {
+                return i;
+            }
             if (!this.lighting) {
                 this.lighting = new HC.Lighting(this.animation, i);
             }
@@ -505,6 +548,9 @@
          * @returns {*}
          */
         getPerspective(i) {
+            if (i instanceof HC.SourceManager.DisplaySourcePlugin) {
+                return i;
+            }
             if (!this.perspectives[i]) {
                 this.perspectives[i] = new HC.Perspective(this.animation, i);
             }
@@ -569,15 +615,16 @@
         }
 
         /**
-         *
+         * todo check why this was needed? more displays with same perspective?! how to solve it?
          */
         renderPerspectives() {
-            for (let i = 0; i < this.displayManager.displays.length; i++) {
-                let dsp = this.displayManager.displays[i];
-                if (dsp && dsp.visible && this.getDisplaySource(i) == 'perspective') {
-                    this.getPerspective(this.getDisplaySequence(i)).next();
-                }
-            }
+            // for (let i = 0; i < this.displayManager.displays.length; i++) {
+            //     let dsp = this.displayManager.displays[i];
+            //     if (dsp && dsp.visible && this.getDisplaySource(i) == 'perspective') {
+            //         // this.getPerspective(this.getDisplaySequence(i)).next();
+            //         this.getSourcePlugin(this.getDisplaySequence(i)).next();
+            //     }
+            // }
         }
 
         /**

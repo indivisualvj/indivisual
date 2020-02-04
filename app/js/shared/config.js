@@ -101,6 +101,7 @@ HC.Statics = HC.Statics || {};
                 file: 'structure/SourceValues.yml',
                 callback: (data, finished) => {
                     this.SourceValues = jsyaml.load(data.contents);
+                    this._loadDisplaySourcePlugins(this.SourceValues);
                     finished();
                 }
             },
@@ -327,7 +328,7 @@ HC.Statics = HC.Statics || {};
 
             let pluginKeys = Object.keys(plugins);
 
-            pluginKeys.sort(this._sort(plugins, 'Plugin'));
+            pluginKeys.sort(this._sort(plugins, 'DisplaySourcePlugin'));
 
             for (let i = 0; i < pluginKeys.length; i++) {
 
@@ -335,7 +336,7 @@ HC.Statics = HC.Statics || {};
                 let plugin = plugins[pluginKey];
                 let name = plugin.name || pluginKey;
 
-                if (name == 'Plugin') {
+                if (name == 'DisplaySourcePlugin') {
                     name = pluginKey;
                 }
                 if (!(section in settings)) {
@@ -400,6 +401,16 @@ HC.Statics = HC.Statics || {};
         _loadBorderModePlugins(settings) {
             this._loadPlugins(settings, 'border_mode', HC.Display.border_mode);
         }
+
+        /**
+         *
+         * @param settings
+         * @private
+         */
+        _loadDisplaySourcePlugins(settings) {
+            this._loadPlugins(settings, 'display_source', HC.SourceManager.display_source);
+        }
+
 
         /**
          *

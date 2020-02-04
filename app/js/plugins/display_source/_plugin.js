@@ -36,6 +36,11 @@ HC.SourceManager.display_source = {};
         displayManager;
 
         /**
+         * @type {HC.SourceManager}
+         */
+        sourceManager;
+
+        /**
          * @type {HC.Renderer}
          */
         renderer;
@@ -77,6 +82,10 @@ HC.SourceManager.display_source = {};
             this.beatKeeper = owner.beatKeeper;
             this.audioAnalyser = owner.audioAnalyser;
             this.listener = owner.listener;
+            this.sourceManager = owner.sourceManager;
+            if (this.sourceManager) {
+                this.renderer = this.sourceManager.renderer;
+            }
             this.config = owner.config;
         }
 
@@ -118,9 +127,10 @@ HC.SourceManager.display_source = {};
         /**
          *
          * @param fallback
+         * @param passthrough
          * @returns {*}
          */
-        current(fallback) {
+        current(fallback, passthrough) {
             return fallback;
         }
 

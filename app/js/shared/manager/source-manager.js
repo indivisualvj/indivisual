@@ -75,7 +75,9 @@
 
                     case 'animation':
                     default:
-                        source = new HC.Source(this.renderer, this.renderer.resolution.x, this.renderer.resolution.y);
+                        source = new HC.SourceManager.display_source.animation(this.animation);
+                        source.update(this.renderer.resolution.x, this.renderer.resolution.y);
+                        // source = new HC.Source(this.renderer, this.renderer.resolution.x, this.renderer.resolution.y);
                         break;
 
                     case 'sequence':

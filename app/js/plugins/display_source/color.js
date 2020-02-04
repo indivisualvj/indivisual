@@ -44,7 +44,7 @@
             this.canvas.width = this.width;
             this.canvas.height = this.height;
 
-            this.canvas.ctx.fillStyle = '#000000';
+            this.canvas.ctx.fillStyle = '#afafaf';
             this.canvas.ctx.fillRect(0, 0, this.width, this.height);
 
             this.canvas.id = this.id + this.canvas.ctx.fillStyle;

@@ -20,7 +20,7 @@
                     }
                     if (material.uniforms.uColor) {
                         let color = inst.layer.materialColor;
-                        let sc = inst.layer.shapeColor(false); // fixme get color of current geometry/shape
+                        let sc = inst.layer.shapeColor(false);
                         material.uniforms.uColor.value = new THREE.Color(color || sc);
                     }
                 }

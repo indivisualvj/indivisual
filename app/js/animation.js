@@ -96,49 +96,7 @@ document.addEventListener('DOMContentLoaded', function () {
      *
      * @type {HC.Animation}
      */
-    HC.Animation = class Animation extends HC.Messageable {
-
-        /**
-         * @type {HC.Messaging}
-         */
-        messaging;
-
-        /**
-         * @type {HC.Config}
-         */
-        config;
-
-        /**
-         *
-         * @type {HC.SourceManager}
-         */
-        sourceManager;
-
-        /**
-         * @type {HC.AudioManager}
-         */
-        audioManager;
-
-        /**
-         * @type {HC.AudioAnalyser}
-         */
-        audioAnalyser;
-
-        /**
-         * @type {HC.DisplayManager}
-         */
-        displayManager;
-
-        /**
-         * @type {HC.BeatKeeper}
-         */
-        beatKeeper;
-
-        /**
-         * @type {HC.Listener}
-         */
-        listener;
-
+    HC.Animation = class Animation extends HC.Program {
         /**
          * @type {HC.Renderer}
          */

@@ -398,7 +398,7 @@ HC.Statics = HC.Statics || {};
          * @private
          */
         _loadBorderModePlugins(settings) {
-            this._loadPlugins(settings, 'border_mode', HC.Display.border_modes);
+            this._loadPlugins(settings, 'border_mode', HC.Display.border_mode);
         }
 
         /**

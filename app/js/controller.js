@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
      *
      * @type {HC.Controller}
      */
-    HC.Controller = class Controller extends HC.Messageable {
+    HC.Controller = class Controller extends HC.Program {
 
         /**
          * @type {HC.Guify[]}
@@ -142,31 +142,6 @@ document.addEventListener('DOMContentLoaded', function () {
          * @type {HC.Midi}
          */
         midi;
-
-        /**
-         * @type {HC.Messaging}
-         */
-        messaging;
-
-        /**
-         * @type {HC.BeatKeeper}
-         */
-        beatKeeper;
-
-        /**
-         * @type {HC.LayeredControlSetsManager}
-         */
-        settingsManager;
-
-        /**
-         * @type {HC.SourceManager}
-         */
-        sourceManager;
-
-        /**
-         * @type {HC.Config}
-         */
-        config;
 
         /**
          *

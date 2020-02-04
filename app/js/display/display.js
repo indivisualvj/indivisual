@@ -1,7 +1,6 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-
 {
     /**
      *
@@ -526,7 +525,7 @@
             let pc = points.length / 2;
 
             if (pc > 1) {
-                HC.Display.border_modes[mode].apply(ctx, points, pc, speed, prc);
+                HC.Display.border_mode[mode].apply(ctx, points, pc, speed, prc);
                 this._dirty = true;
             }
         }

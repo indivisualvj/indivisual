@@ -482,7 +482,7 @@ HC.SourceController = HC.SourceController || {};
 
 {
     /**
-     *
+     * todo move sample settings to #samples!??
      * @type {HC.SourceController.sample}
      */
     HC.SourceController.sample = class sample extends HC.ControlSet {

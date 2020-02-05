@@ -601,6 +601,7 @@ input:focus, select:focus {
 
 .indicator {
     display: block;
+    position: relative;
     position: absolute;
     left: 0;
     top: 0;
@@ -609,6 +610,17 @@ input:focus, select:focus {
     border-left: 4px solid greenyellow;
     border-right: 4px solid orangered;
     outline: 1000px solid rgba(0,0,0, 0.6);
+    box-sizing: border-box;
+}
+
+.progress {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 100%;
+    border-right: 4px solid cornflowerblue;
     box-sizing: border-box;
 }
 

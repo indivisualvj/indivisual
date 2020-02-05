@@ -170,7 +170,7 @@
         }
 
         /**
-         * 
+         * fixme redesign update process. this is crappy as fuck
          * @private
          */
         _update() {
@@ -267,7 +267,6 @@
                     } else if (this.pointer < this.start) {
                         this.pointer = this.end - 1;
                     }
-
                 }
 
                 // autoflip flipa flip on peak if random hits
@@ -286,13 +285,21 @@
          *
          * @returns {number}
          */
-        updatePointer() {
+        getPointer() {
+            let pointer = Math.round(this.pointer);
             if (this.reversed) {
-                let ds = this.pointer - this.start;
-                return this.end - ds;
+                let ds = pointer - this.start;
+                pointer = this.end - ds;
             }
 
-            return Math.round(this.pointer);
+            if (this.dirty) {
+                let prc = Math.min(100, ((pointer-this.start) / this.length) * 100);
+                if (Math.ceil(prc) % 2 == 0) {
+                    messaging.emitAttr('#' + this.id + '_clip', 'data-progress', prc);
+                }
+            }
+
+            return this.pointer;
         }
 
         /**
@@ -307,7 +314,7 @@
 
             let image = fallback;
             if (this.sample) {
-                let frame = this.sample.getFrame(this.updatePointer());
+                let frame = this.sample.getFrame(this.getPointer());
 
                 image = frame || fallback;
 

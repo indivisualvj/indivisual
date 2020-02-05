@@ -640,6 +640,11 @@ HC.SourceController = HC.SourceController || {};
          */
         indicatorNode;
 
+        /**
+         * @type {HTMLElement}
+         */
+        pointerNode;
+
         sample;
 
         enabled = false;
@@ -683,6 +688,20 @@ HC.SourceController = HC.SourceController || {};
             this.indicatorNode.setAttribute('class', 'indicator');
             this.clipNode.appendChild(this.indicatorNode);
 
+            this.pointerNode = document.createElement('div');
+            this.pointerNode.setAttribute('class', 'progress');
+            this.indicatorNode.appendChild(this.pointerNode);
+
+            let mo = new MutationObserver((mutations) => {
+                mutations.forEach((mutation) => {
+                    if (mutation.attributeName == 'data-progress') {
+                        this.updatePointer(mutation.target.getAttribute(mutation.attributeName));
+                    }
+                });
+            });
+
+            mo.observe(this.clipNode, {attributes: true});
+
             el.appendChild(this.clipNode);
 
             window.addEventListener('resize', this._onResize());
@@ -697,20 +716,18 @@ HC.SourceController = HC.SourceController || {};
          * @param data
          */
         update(sample, enabled, data) {
-
-            let clip = this;
-            let clipSample = clip.sample;
-            let clipEnabled = clip.enabled;
-            clip.sample = sample;
-            clip.enabled = enabled;
+            let clipSample = this.sample;
+            let clipEnabled = this.enabled;
+            this.sample = sample;
+            this.enabled = enabled;
 
             this.setVisible(enabled);
 
             if (data) {
-                clip.clipNode.setAttribute('data-color', 'green');
+                this.clipNode.setAttribute('data-color', 'green');
 
                 if (clipEnabled != enabled || clipSample != sample) {
-                    clip.thumbsNode.innerHTML = '';
+                    this.thumbsNode.innerHTML = '';
 
                 } else {
                     return;
@@ -729,13 +746,13 @@ HC.SourceController = HC.SourceController || {};
 
                     div.appendChild(img);
 
-                    clip.thumbsNode.appendChild(div);
+                    this.thumbsNode.appendChild(div);
 
                 }
 
             } else {
-                clip.clipNode.setAttribute('data-color', 'red');
-                clip.thumbsNode.innerHTML = '';
+                this.clipNode.setAttribute('data-color', 'red');
+                this.thumbsNode.innerHTML = '';
             }
         }
 
@@ -788,6 +805,14 @@ HC.SourceController = HC.SourceController || {};
             }
         }
 
+        /**
+         *
+         * @param progress
+         */
+        updatePointer(progress) {
+            this.pointerNode.style.width = (progress) + '%';
+            this.pointerNode.style.opacity = (progress?1:0).toString();
+        }
 
         /**
          *

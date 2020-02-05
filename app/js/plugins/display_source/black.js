@@ -2,15 +2,14 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.SourceManager.display_source.Black}
-     */
-    HC.SourceManager.display_source.black = class Black extends HC.SourceManager.DisplaySourcePlugin {
 
+    HC.SourceManager.display_source.black = class Plugin extends HC.SourceManager.DisplaySourcePlugin {
+
+        /**
+         *
+         * @type {string}
+         */
         type = 'color';
-
-        _bounds;
 
         /**
          *
@@ -35,7 +34,6 @@
         init(index) {
             this.index = index;
             this.id = this.type + this.index;
-            this._bounds = false;
 
             if (!this.canvas) {
                 this.canvas = document.createElement('canvas');

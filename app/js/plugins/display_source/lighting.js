@@ -4,11 +4,7 @@
 
 // todo make this load itself a set of controlsets? possible?
 {
-    /**
-     *
-     * @type {HC.SourceManager.display_source.Lighting}
-     */
-    HC.SourceManager.display_source.lighting = class Lighting extends HC.SourceManager.DisplaySourcePlugin {
+    HC.SourceManager.display_source.lighting = class Plugin extends HC.SourceManager.DisplaySourcePlugin {
 
         type = 'lighting';
 

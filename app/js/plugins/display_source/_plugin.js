@@ -15,10 +15,25 @@ HC.SourceManager.display_source = {};
 
         static _index = 99;
 
+        /**
+         *
+         * @type {boolean}
+         */
         cacheable = true;
 
+        /**
+         * @type {string}
+         */
         id;
 
+        /**
+         * @type {number}
+         */
+        index;
+
+        /**
+         * @type {string}
+         */
         type;
 
         /**
@@ -79,16 +94,10 @@ HC.SourceManager.display_source = {};
         height = 720;
 
         /**
-         * @type {HC.Display}
-         */
-        display;
-
-        /**
-         * @param {HC.Display}
+         *
          * @param {HC.Program} owner
          */
-        constructor(display, owner) {
-            this.display = display;
+        constructor(owner) {
             this.animation = owner;
             this.displayManager = owner.displayManager;
             this.beatKeeper = owner.beatKeeper;
@@ -104,8 +113,8 @@ HC.SourceManager.display_source = {};
         /**
          *
          */
-        init() {
-
+        init(index) {
+            this.index = index;
         }
 
         /**
@@ -136,11 +145,10 @@ HC.SourceManager.display_source = {};
 
         /**
          *
-         * @param reference
-         * @returns {*}
+         * @returns {boolean|HC.Rectangle}
          */
-        bounds(reference) {
-            return reference;
+        bounds() {
+            return false;
         }
 
         /**
@@ -175,6 +183,9 @@ HC.SourceManager.display_source = {};
 
         }
 
+        /**
+         *
+         */
         next() {
 
         }

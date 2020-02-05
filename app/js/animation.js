@@ -72,10 +72,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 let sourceManager = new HC.SourceManager(animation, {
                     config: animation.config,
-                    sequence: new Array(animation.config.SourceValues.sequence.length),
                     sample: new Array(animation.config.SourceValues.sample.length)
                 });
-                sourceManager.resize(renderer.getResolution());
                 animation.sourceManager = sourceManager;
 
                 new HC.Animation.KeyboardListener().init(animation);
@@ -515,7 +513,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.updateControls(controls, true, false, true);
                 }
 
-                this.sourceManager.updateSequences();
+                this.sourceManager.updatePlugins();
                 this.fullReset(true);
 
                 if (IS_MONITOR) {
@@ -537,16 +535,13 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         fullReset(keepsettings) {
             this.renderer.fullReset(keepsettings);
-            this.sourceManager.resize(this.renderer.getResolution());
             this.displayManager.resize(this.renderer.getResolution());
         }
 
         /**
          *
          * @param layer
-         * @param set
-         * @param property
-         * @param value
+         * @param data
          * @param display
          * @param forward
          * @param force
@@ -731,7 +726,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     action = true;
 
                 } else if (item.match(/^sequence\d+_/)) {
-                    this.sourceManager.updateSequence(numberExtract(item, 'sequence'));
+                    this.sourceManager.updatePluginNr('sequence', numberExtract(item, 'sequence'));
                     action = true;
 
                 } else if (item.match(/display\d+_source/)) {
@@ -753,7 +748,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     action = true;
 
                 } else if (item.match(/^lighting_(mode|color)/)) {
-                    this.sourceManager.getLighting(0).update();
+                    this.sourceManager.updatePlugin('lighting');
                     action = true;
                 }
 

@@ -2,11 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.SourceManager.display_source.Image}
-     */
-    HC.SourceManager.display_source.image = class Image extends HC.SourceManager.DisplaySourcePlugin {
+
+    HC.SourceManager.display_source.image = class Plugin extends HC.SourceManager.DisplaySourcePlugin {
 
         file;
 

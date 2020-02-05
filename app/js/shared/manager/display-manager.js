@@ -457,7 +457,7 @@
                         ? this.settings.border.random
                         : this.config.DisplaySettings.border_mode;
 
-                    switch (bm) {
+                    switch (bm) { // fixme what's happnin'?
                         case 'parent':
                             if (display.visible) {
                                 this.renderBorder(display, false, bm);

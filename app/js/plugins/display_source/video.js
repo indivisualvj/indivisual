@@ -2,11 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.SourceManager.display_source.Video}
-     */
-    HC.SourceManager.display_source.video = class Video extends HC.SourceManager.DisplaySourcePlugin {
+    HC.SourceManager.display_source.video = class Plugin extends HC.SourceManager.DisplaySourcePlugin {
 
         type = 'video';
 

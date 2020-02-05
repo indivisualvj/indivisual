@@ -2,11 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.SourceManager.display_source.Perspective}
-     */
-    HC.SourceManager.display_source.perspective = class Perspective extends HC.SourceManager.DisplaySourcePlugin {
+    HC.SourceManager.display_source.perspective = class Plugin extends HC.SourceManager.DisplaySourcePlugin {
 
         type = 'perspective';
 

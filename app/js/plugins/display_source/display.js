@@ -2,35 +2,48 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.SourceManager.display_source.Display}
-     */
-    HC.SourceManager.display_source.display = class Display extends HC.SourceManager.DisplaySourcePlugin {
+
+    HC.SourceManager.display_source.display = class Plugin extends HC.SourceManager.DisplaySourcePlugin {
 
         type = 'display';
 
+        /**
+         *
+         * @type {boolean}
+         */
         cacheable = false;
+
+        /**
+         * @type {HC.Display}
+         */
+        display;
 
         init(index) {
             this.index = index;
         }
 
+        /**
+         *
+         * @param width
+         * @param height
+         */
         update(width, height) {
-            this.display = this.sourceManager.getDisplay(this.index);
-        }
-
-        current(fallback, passthrough) {
-            return this.display.current();
+            this.display = this.displayManager.getDisplay(this.index);
         }
 
         /**
          *
-         * @param reference
-         * @returns {*}
+         * @param fallback
+         * @param passthrough
+         * @returns {HTMLElement}
          */
-        bounds(reference) {
-            return this.display.bounds();
+        current(fallback, passthrough) {
+            if (this.display) {
+                return this.display.current();
+            }
+
+            return fallback;
         }
+
     }
 }

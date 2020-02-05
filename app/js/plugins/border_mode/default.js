@@ -4,7 +4,7 @@
      *
      * @type {HC.Display.border_mode.visible}
      */
-    HC.Display.border_mode.visible = class visible extends HC.Display.BorderModePlugin  {
+    HC.Display.border_mode.visible = class Plugin extends HC.Display.BorderModePlugin  {
 
         static index = 10;
 
@@ -28,7 +28,7 @@
      *
      * @type {HC.Display.border_mode.parent}
      */
-    HC.Display.border_mode.parent = class parent extends HC.Display.BorderModePlugin  {
+    HC.Display.border_mode.parent = class Plugin extends HC.Display.BorderModePlugin  {
 
         static index = 1;
 
@@ -43,7 +43,7 @@
      *
      * @type {HC.Display.border_mode.randomall}
      */
-    HC.Display.border_mode.randomall = class randomall extends HC.Display.BorderModePlugin  {
+    HC.Display.border_mode.randomall = class Plugin extends HC.Display.BorderModePlugin  {
 
         static index = 999;
         static name = 'random all';
@@ -77,7 +77,7 @@
      *
      * @type {HC.Display.border_mode.randomline}
      */
-    HC.Display.border_mode.randomline = class randomline extends HC.Display.BorderModePlugin  {
+    HC.Display.border_mode.randomline = class Plugin extends HC.Display.BorderModePlugin  {
 
         static name = 'random line';
 

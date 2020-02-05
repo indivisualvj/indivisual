@@ -1,5 +1,12 @@
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
 HC.shuffle_mode = HC.shuffle_mode || {};
 {
+    /**
+     *
+     * @type {HC.ShuffleModePlugin}
+     */
     HC.ShuffleModePlugin = class ShuffleModePlugin {
         settings;
         layer = 0;

@@ -10,6 +10,11 @@
     HC.Mask = class Mask {
 
         /**
+         * @type {Array}
+         */
+        points;
+
+        /**
          *
          * @param prefix
          * @param canvas
@@ -40,7 +45,6 @@
                 this.width = this.ctx.canvas.width;
                 this.height = this.ctx.canvas.height;
             }
-            this.points = false;
         }
 
         /**

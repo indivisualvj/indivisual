@@ -2,14 +2,91 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.SourceManager.display_source.Sequence}
-     */
-    HC.SourceManager.display_source.sequence = class Sequence extends HC.SourceManager.DisplaySourcePlugin {
+    HC.SourceManager.display_source.sequence = class Plugin extends HC.SourceManager.DisplaySourcePlugin {
 
+        /**
+         * 
+         * @type {string}
+         */
         type = 'sequence';
 
+        /**
+         * @type {HC.Sample}
+         */
+        sample;
+
+        /**
+         * 
+         * @type {number}
+         */
+        counter = 0;
+        /**
+         * 
+         * @type {number}
+         */
+        start = 0;
+        /**
+         * 
+         * @type {number}
+         */
+        end = 0;
+        /**
+         * 
+         * @type {number}
+         */
+        length = 0;
+        /**
+         * 
+         * @type {boolean}
+         */
+        speedup = false;
+        /**
+         * 
+         * @type {boolean}
+         */
+        speeddown = false;
+        /**
+         * 
+         * @type {boolean}
+         */
+        passthrough = false;
+        /**
+         * 
+         * @type {number}
+         */
+        speed = 1;
+        /**
+         * 
+         * @type {number}
+         */
+        velocity = 1.0;
+        /**
+         * 
+         * @type {number}
+         */
+        peak = 1;
+        /**
+         * 
+         * @type {{}}
+         */
+        oscillators = {};
+
+        /**
+         *
+         * @type {number}
+         */
+        pointer = 0;
+        /**
+         *
+         * @type {number}
+         */
+        floatPointer = 0.0;
+        /**
+         *
+         * @type {boolean}
+         */
+        dirty = true;
+        
         /**
          *
          * @param index
@@ -17,12 +94,9 @@
         init(index) {
             this.index = index;
             this.id = this.type + this.index;
-            this._pointer = 0;
-            this._floatPointer = 0.0;
-            this._dirty = true;
-            this._canvas = document.createElement('canvas');
-            this._canvas.id = this.id;
-            this._ctx = this._canvas.getContext('2d');
+            this.canvas = document.createElement('canvas');
+            this.canvas.id = this.id;
+            this.canvas.ctx = this.canvas.getContext('2d');
             this.counter = 0;
             this.start = 0;
             this.end = 0;
@@ -31,8 +105,8 @@
             this.speeddown = false;
             this.passthrough = false;
             this.speed = 1;
-            this._velocity = 1.0;
-            this._peak = 1;
+            this.velocity = 1.0;
+            this.peak = 1;
             this.oscillators = {};
             this.loadOscillators();
         }
@@ -43,6 +117,9 @@
          * @param height
          */
         update(width, height) {
+
+            this._update();
+
             this.jump = this.config.SourceSettings[this.id + '_jump'];
             this.audio = this.config.SourceSettings[this.id + '_audio'];
             this.reversed = this.config.SourceSettings[this.id + '_reversed'];
@@ -54,21 +131,15 @@
             this.flipy = (this.config.SourceSettings[this.id + '_flipy']) ? -1 : 1;
             this.flipa = (this.config.SourceSettings[this.id + '_flipa']);
 
-            let osci = this.config.SourceSettings[this.id + '_osci'];
-            this.osci = osci;
-
-            let brightness = this.config.SourceSettings[this.id + '_brightness'];
-            this._brightness = brightness;
-
-            let blendmode = this.config.SourceValues.blendmode[this.config.SourceSettings[this.id + '_blendmode']];
-            this.blendmode = blendmode;
+            this.osci = this.config.SourceSettings[this.id + '_osci'];
+             this._brightness = this.config.SourceSettings[this.id + '_brightness'];
+            this.blendmode = this.config.SourceValues.blendmode[this.config.SourceSettings[this.id + '_blendmode']];
 
             this.width = Math.round(width);
             this.height = Math.round(height);
-            this._canvas.width = this.width;
-            this._canvas.height = this.height;
+            this.canvas.width = this.width;
+            this.canvas.height = this.height;
 
-            this.sourceManager.updateSequence(this);
 
             if (this.sample) {
                 let start = this.config.SourceSettings[this.id + '_start'];
@@ -82,18 +153,60 @@
                     let os = this.start;
                     let oe = this.end;
                     let frames = this.sample.frames.length;
-                    this.animation.sourceManager.applySequenceSlice(this, frames, start, end);
+                    this.sourceManager.applySequenceSlice(this, frames, start, end);
 
                     if (os != this.start) {
-                        this._pointer = this.start;
+                        this.pointer = this.start;
                         this.counter = 0;
 
-                    } else if (oe != this.end && this._pointer > this.end) {
-                        this._pointer = this.start;
+                    } else if (oe != this.end && this.pointer > this.end) {
+                        this.pointer = this.start;
                         this.counter = 0;
                     }
 
-                    this._dirty = true;
+                    this.dirty = true;
+                }
+            }
+        }
+
+        /**
+         * 
+         * @private
+         */
+        _update() {
+            let smp = (this.config.SourceSettings[this.id + '_input']);
+            let os = (this.sample);
+            this.sample = this.sourceManager.getSample(smp);
+
+            if (this.sample) {
+
+                let _indicator = (sequence) => {
+                    let type = [0, 0, 1];
+                    if (sequence.sample) {
+                        type[1] = sequence.sample.last();
+                        type[2] = round(sequence.sample.last() / 50, 0);
+                    }
+                    let conf = {SourceTypes: {}};
+                    conf.SourceTypes[getSequenceStartKey(sequence.index)] = type;
+                    conf.SourceTypes[getSequenceEndKey(sequence.index)] = type;
+                    messaging.emitData(sequence.sample.id, conf);
+
+                    this.animation.updateSource(getSequenceStartKey(sequence.index), 0, false, true);
+                    this.animation.updateSource(getSequenceEndKey(sequence.index), type[1], false, true);
+                };
+
+                if (os != this.sample) {
+                    _indicator(this);
+                }
+                
+                this.sourceManager.updateSample(smp);
+
+                let overlay = parseInt(this.config.SourceSettings[this.id + '_overlay']);
+                if (overlay >= 0) {
+                    this.overlay = this.sourceManager.getSourcePlugin('sequence', overlay);
+
+                } else {
+                    this.overlay = false;
                 }
             }
         }
@@ -105,7 +218,7 @@
         brightness() {
             let v = this._brightness;
 
-            if (this._dirty) {
+            if (this.dirty) {
                 let plugin = this.oscillators[this.osci];
                 if (plugin && plugin.apply) {
                     let shs = {value: v};
@@ -148,11 +261,11 @@
                     }
 
                     // safety first
-                    if (this._pointer >= this.end) {
-                        this._pointer = this.start;
+                    if (this.pointer >= this.end) {
+                        this.pointer = this.start;
 
-                    } else if (this._pointer < this.start) {
-                        this._pointer = this.end - 1;
+                    } else if (this.pointer < this.start) {
+                        this.pointer = this.end - 1;
                     }
 
                 }
@@ -163,7 +276,7 @@
                     this.flipy = randomBool() ? -1 : 1;
                 }
 
-                this._dirty = true;
+                this.dirty = true;
 
                 this._last = this.animation.now;
             }
@@ -173,13 +286,13 @@
          *
          * @returns {number}
          */
-        pointer() {
+        updatePointer() {
             if (this.reversed) {
-                let ds = this._pointer - this.start;
+                let ds = this.pointer - this.start;
                 return this.end - ds;
             }
 
-            return Math.round(this._pointer);
+            return Math.round(this.pointer);
         }
 
         /**
@@ -194,13 +307,13 @@
 
             let image = fallback;
             if (this.sample) {
-                let frame = this.sample.getFrame(this.pointer());
+                let frame = this.sample.getFrame(this.updatePointer());
 
                 image = frame || fallback;
 
             }
 
-            if (this._dirty && image) {
+            if (this.dirty && image) {
 
                 this._draw(this, image);
 
@@ -208,11 +321,11 @@
                     let oimage = this.overlay.current((passthrough || this.overlay.passthrough) ? fallback : false);
                     this._overlay(this.overlay, oimage, this.blendmode);
                 }
-                image = this._canvas;
-                this._dirty = false;
+                image = this.canvas;
+                this.dirty = false;
 
-            } else if (!this._dirty) {
-                image = this._canvas;
+            } else if (!this.dirty) {
+                image = this.canvas;
             }
 
             return image;
@@ -227,17 +340,17 @@
         _draw(instance, image) {
 
             if (image) {
-                let ctx = this._ctx;
+                let ctx = this.canvas.ctx;
                 let br = instance.brightness();
 
                 if (!this.width || !this.height) {
                     this.width = Math.round(image.width);
                     this.height = Math.round(image.height);
-                    this._canvas.width = this.width;
-                    this._canvas.height = this.height;
+                    this.canvas.width = this.width;
+                    this.canvas.height = this.height;
                 }
 
-                this._canvas._color = image._color;
+                this.canvas._color = image._color;
                 ctx.clearRect(0, 0, this.width, this.height);
 
                 if (br > 0) {
@@ -286,7 +399,7 @@
             if (image) {
                 let br = instance.passthrough ? 1 : instance.brightness();
                 if (br > 0) {
-                    let ctx = this._ctx;
+                    let ctx = this.canvas.ctx;
                     ctx.globalAlpha = br;
                     ctx.globalCompositeOperation = blendmode ? blendmode : 'source-over';
                     ctx.drawImage(image, 0, 0, image.width, image.height);//, 0, 0, this.width, this.height);
@@ -328,7 +441,7 @@
             let eprc = this.counter + prcb.prc;
             let prc = eprc / beats;
             let p = this.length * prc;
-            this._pointer = this.start + Math.ceil(p);
+            this.pointer = this.start + Math.ceil(p);
         }
 
         /**
@@ -342,26 +455,26 @@
             let p = Math.max(-1.5, Math.min(1.5, this.speed));
 
             if (this.audioAnalyser.peak) {
-                if (this._velocity < 2 * s) {
-                    this._velocity = 4 * s;
+                if (this.velocity < 2 * s) {
+                    this.velocity = 4 * s;
                 }
 
-            } else if (this._velocity > s) {
-                this._velocity = Math.max(s, this._velocity - this.animation.diff * 0.03 * s);
+            } else if (this.velocity > s) {
+                this.velocity = Math.max(s, this.velocity - this.animation.diff * 0.03 * s);
             }
 
-            p = p * this._velocity;
-            this._floatPointer += p;
-            this._pointer = Math.round(this._floatPointer);
+            p = p * this.velocity;
+            this.floatPointer += p;
+            this.pointer = Math.round(this.floatPointer);
 
             // safety first
-            if (this._pointer < this.start) {
-                this._pointer += this.length;
-                this._floatPointer = this._pointer;
+            if (this.pointer < this.start) {
+                this.pointer += this.length;
+                this.floatPointer = this.pointer;
 
-            } else if (this._pointer >= this.end) {
-                this._pointer -= this.length;
-                this._floatPointer = this._pointer;
+            } else if (this.pointer >= this.end) {
+                this.pointer -= this.length;
+                this.floatPointer = this.pointer;
             }
         }
 
@@ -372,8 +485,8 @@
          */
         _jump(beat) {
             let sample = this.sample;
-            let frame = sample.frames[this._pointer];
-            this._pointer++;
+            let frame = sample.frames[this.pointer];
+            this.pointer++;
 
             if (this.speedup) {
                 beat = this.beatKeeper.getSpeed('sixteen');
@@ -383,11 +496,11 @@
             }
 
             while (frame && frame.prc < beat.prc) {
-                if (this._pointer >= this.end) {
-                    this._pointer = this.start;
+                if (this.pointer >= this.end) {
+                    this.pointer = this.start;
                     break;
                 }
-                frame = sample.frames[this._pointer++];
+                frame = sample.frames[this.pointer++];
             }
         }
 
@@ -404,14 +517,14 @@
             p = Math.min(1, Math.max(-1, p)); // kann aktuell stocken. wäre evtl was für jump+audio oder audio_judder
 
             if (this.jump) {
-                if (this.audioAnalyser.peak && this._peak < 4) {
-                    this._peak = 8;
+                if (this.audioAnalyser.peak && this.peak < 4) {
+                    this.peak = 8;
 
-                } else if (this._peak > 1) {
-                    this._peak = Math.max(1, this._peak - this.animation.diff * 0.05);
+                } else if (this.peak > 1) {
+                    this.peak = Math.max(1, this.peak - this.animation.diff * 0.05);
 
                 }
-                p = Math.round(p * this._peak);
+                p = Math.round(p * this.peak);
 
             } else {
                 p = Math.round(p);
@@ -426,13 +539,13 @@
 
             p = this.speed * p;
 
-            this._pointer += this.speed * (p == 0 ? -1 : p);
+            this.pointer += this.speed * (p == 0 ? -1 : p);
 
-            if (this._pointer < this.start) {
-                this._pointer += this.length;
+            if (this.pointer < this.start) {
+                this.pointer += this.length;
 
-            } else if (this._pointer >= this.end) {
-                this._pointer -= this.length;
+            } else if (this.pointer >= this.end) {
+                this.pointer -= this.length;
             }
         }
 

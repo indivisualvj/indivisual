@@ -1,9 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-
 HC.Statics = HC.Statics || {};
-
 {
     /**
      *
@@ -324,11 +322,11 @@ HC.Statics = HC.Statics || {};
          * @param plugins
          * @private
          */
-        _loadPlugins(settings, section, plugins) {
+        _loadPlugins(settings, section, plugins, className) {
 
             let pluginKeys = Object.keys(plugins);
 
-            pluginKeys.sort(this._sort(plugins, 'DisplaySourcePlugin'));
+            pluginKeys.sort(this._sort(plugins, className||'Plugin'));
 
             for (let i = 0; i < pluginKeys.length; i++) {
 
@@ -336,7 +334,7 @@ HC.Statics = HC.Statics || {};
                 let plugin = plugins[pluginKey];
                 let name = plugin.name || pluginKey;
 
-                if (name == 'DisplaySourcePlugin') {
+                if (name == (className||'Plugin')) {
                     name = pluginKey;
                 }
                 if (!(section in settings)) {

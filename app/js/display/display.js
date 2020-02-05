@@ -25,9 +25,9 @@
 
         /**
          * 
-         * @type {boolean}
+         * @type {HC.Mask}
          */
-        mask = false;
+        mask;
         /**
          * 
          * @type {boolean}
@@ -75,9 +75,22 @@
          */
         _dirty = true;
 
-        _bounds = false;
-        _points = false;
-        _source = false;
+        /**
+         * @type {HC.Rectangle}
+         */
+        _bounds;
+
+        /**
+         * @type {Array}
+         */
+        _points;
+
+        /**
+         *
+         * @type {HC.SourceManager.DisplaySourcePlugin}
+         * @private
+         */
+        _source;
 
         /**
          * 
@@ -383,7 +396,7 @@
             if (this._source) {
                 let ob = this._clipBounds(true);
                 let mb = this._clipBounds(false);
-                let sb = this._source.bounds(false);
+                let sb = this._source.bounds();
                 if (sb && mb) {
                     // quelle hat eine eigene und unveränderliche größe
                     let dx = (ob.width - sb.width) / 2;
@@ -404,7 +417,7 @@
          */
         isFixedSize() {
             if (this._source) {
-                let sb = this._source.bounds(false);
+                let sb = this._source.bounds();
                 if (sb) {
                     return true;
                 }

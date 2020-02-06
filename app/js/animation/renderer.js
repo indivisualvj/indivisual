@@ -106,7 +106,7 @@
          * @param keepSettings
          */
         fullReset(keepSettings) {
-            this.listener.removeEvent('renderer.render');
+            this.listener.removeEvent(EVENT_RENDERER_RENDER);
             this.resize();
             this.initLayers(keepSettings);
             this.setLayer(0);
@@ -374,7 +374,7 @@
         render() {
 
             if (this._last != this.animation.now) {
-                this.animation.listener.fireEvent('renderer.render', this);
+                this.animation.listener.fireEvent(EVENT_RENDERER_RENDER, this);
 
                 this.three.scene.background = this.currentLayer._layer.background;
                 this.three.scene.fog = this.currentLayer._layer.fog;

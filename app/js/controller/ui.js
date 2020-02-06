@@ -610,7 +610,7 @@ HC.Controller.prototype.updateThumbs = function () {
  * @param index
  */
 HC.Controller.prototype.loadClip = function (index) {
-    let smp = new HC.Sample(null, this.config, index);
+    let smp = new HC.Sample(this, index);
 
     smp.clip((sample) => {
         let data = {data: {DataSettings: {}}};
@@ -643,7 +643,7 @@ HC.Controller.prototype.updateIndicator = function (seq) {
  * @param seq
  */
 HC.Controller.prototype.updateClip = function (seq) {
-
+// fixme this can be done before the thumbs have arrived
     let clip = this.clips[seq];
 
     let sample = this.sourceManager.getSampleBySequence(seq);

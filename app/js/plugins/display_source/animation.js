@@ -2,7 +2,6 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-
     HC.SourceManager.display_source.animation = class Plugin extends HC.SourceManager.DisplaySourcePlugin {
 
         /**

@@ -106,14 +106,14 @@
 
             let plugin = false;
             if (display) {
-                display.canvas.style.display = 'block';
-                display.offline = false;
-
                 let type = this.config.SourceSettings[display.id + '_source'];
                 let index = this.config.SourceSettings[display.id + '_sequence'];
 
                 plugin = this.getSourcePlugin(type, index);
                 if (plugin) {
+                    display.offline = false;
+                    display.canvas.style.display = 'block';
+
                     plugin.update(this.displayManager.width, this.displayManager.height);
 
                 } else {
@@ -156,10 +156,9 @@
         getSample(i) {
             if (!this.samples[i]) {
 
-                let iKeys = Object.keys(this.config.SourceValues.input);
                 let sample = false;
                 if (i < this.config.SourceValues.sample.length) {
-                    sample = new HC.Sample(this.animation, this.animation.config, i);
+                    sample = new HC.Sample(this.animation, i);
 
                 } else {
                     return;
@@ -218,7 +217,6 @@
             });
 
             this.listener.register('sample.init.end', sample.id, (target) => {
-                this.animation.powersave = false;
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'green');
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'style', '');
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', 'ready to record');
@@ -250,7 +248,6 @@
             });
 
             this.listener.register('sample.render.error', sample.id, (target) => {
-                this.animation.powersave = false;
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-progress', '');
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'red');
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', '[ERROR!]');
@@ -259,8 +256,6 @@
             });
 
             this.listener.register('sample.render.end', sample.id, (target) => {
-                this.animation.powersave = false;
-
                 let recordKey = getSampleRecordKey(target.index);
 
                 if (this.config.SourceSettings[recordKey]) { // sample
@@ -290,8 +285,7 @@
             if (sample) {
                 sample.update(this.config.ControlSettings.tempo, this.displayManager.width, this.displayManager.height);
 
-                if (!sample.enabled && sample instanceof HC.Sample) {
-                    sample.reset();
+                if (sample instanceof HC.Sample && !sample.enabled) {
 
                     let warn = false;
                     if (sample.index < this.config.SourceValues.sample.length) {
@@ -331,7 +325,7 @@
 
                         this.listener.register('sample.store.progress', sample.id, (target) => {
                             let key = getSampleStoreKey(target.index);
-                            messaging.emitAttr('[data-id="' + key + '"]', 'data-label', target.pointer + '/' + target.frames.length);
+                            messaging.emitAttr('[data-id="' + key + '"]', 'data-label', target.pointer + '/' + target.frameCount);
                             messaging.emitAttr('[data-id="' + key + '"]', 'data-color', 'red');
                         });
                         this.listener.register('sample.store.end', sample.id, (target) => {
@@ -373,8 +367,6 @@
             let _mov = () => {
 
                 if (sample.isReady()) {
-                    this.animation.powersave = true;
-
                     let frame = sample.frames[sample.pointer];
                     if (ctx) {
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -392,14 +384,12 @@
                         this.listener.fireEventId('sample.store.progress', sample.id, sample);
                     }
 
-                    if (sample.pointer < sample.frames.length) {
-
+                    if (sample.pointer < sample.frameCount) { // fixme store every x render event
                         setTimeout(() => {
                             requestAnimationFrame(_mov);
                         }, this.animation.threadTimeout(diff / this.animation.duration));
 
                     } else {
-                        this.animation.powersave = false;
                         this.listener.fireEventId('sample.store.end', sample.id, sample);
                     }
                 }
@@ -415,7 +405,7 @@
             if (sample) {
                 this.listener.register('sample.load.progress', sample.id, function (target) {
                     // let key = getSampleLoadKey(i);
-                    // messaging.emitAttr('[data-id="' + key + '"]', 'data-label', target.pointer + '/' + target.frames.length);
+                    // messaging.emitAttr('[data-id="' + key + '"]', 'data-label', target.pointer + '/' + target.frameCount);
                     // messaging.emitAttr('[data-id="' + key + '"]', 'data-color', 'red');
                 });
                 this.listener.register('sample.load.end', sample.id, function (target) {
@@ -457,6 +447,11 @@
             }
         }
 
+        /**
+         *
+         * @param type
+         * @param index
+         */
         updatePluginNr(type, index) {
             let plugins = this.getPluginInstances(type);
             if (index in plugins) {
@@ -468,25 +463,12 @@
          *
          */
         render() {
+            this.listener.fireEvent(EVENT_SOURCE_MANAGER_RENDER);
             this.renderSamples();
         }
 
         /**
-         * fixme check why this was needed? more displays with same perspective?! how to solve it?
-         */
-        renderPerspectives() {
-            // for (let i = 0; i < this.displayManager.displays.length; i++) {
-            //     let dsp = this.displayManager.displays[i];
-            //     if (dsp && dsp.visible && this.getDisplaySource(i) == 'perspective') {
-            //         // this.getPerspective(this.getDisplaySequence(i)).next();
-            //         this.getSourcePlugin(this.getDisplaySequence(i)).next();
-            //     }
-            // }
-        }
-
-        /**
-         *
-         * @param progress
+         * fixme they might just plug into renderer.render...
          */
         renderSamples() {
             let speed = this.beatKeeper.getDefaultSpeed();
@@ -497,7 +479,6 @@
                 }
             }
         }
-
 
         /**
          *

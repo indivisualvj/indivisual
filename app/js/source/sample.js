@@ -31,11 +31,7 @@
          * @type {boolean}
          */
         initialized = false;
-        /**
-         *
-         * @type {boolean}
-         */
-        initializing = false;
+
         /**
          *
          * @type {boolean}
@@ -52,7 +48,10 @@
          */
         counter = 0;
 
-        frames = false;
+        /**
+         * @type {[]}
+         */
+        frames = [];
         /**
          *
          * @type {number}
@@ -65,7 +64,7 @@
         beats = 4;
 
         /**
-         * @type {HC.Animation}
+         * @type {HC.Program}
          */
         animation;
 
@@ -81,17 +80,13 @@
 
         /**
          *
-         * @param {HC.Animation} animation
-         * @param {HC.Config} config
+         * @param {HC.Program} animation
          * @param index
          */
-        constructor(animation, config, index) {
-            if (animation) {
-                this.animation = animation;
-                this.listener = animation.listener;
-                this.config = animation.config;
-            }
-            this.config = config;
+        constructor(animation, index) {
+            this.animation = animation;
+            this.listener = animation.listener;
+            this.config = animation.config;
             this.index = index;
             this.id = 'sample' + index;
         }
@@ -109,7 +104,7 @@
 
             let checkEnabled = this.enabled != enabled;
             let checkBeats = this.beats != beats;
-            let checkFrames = (!this.frames) || this.frames.length == 0;
+            let checkFrames = this.frames.length == 0;
             let checkWidth = this.width != width;
             let checkHeight = this.height != height;
 
@@ -122,11 +117,11 @@
             this.record = record;
             this.beats = beats;
 
-            if (!record && checkEnabled && enabled && needsUpdate) {
-                this._init(speed);
+            if (!record && checkEnabled && enabled) {
+                this._init(speed, needsUpdate);
 
             } else if (!enabled) {
-                this._init(speed, true);
+                this._reset();
                 this.listener.fireEventId('sample.init.reset', this.id, this);
             }
 
@@ -146,7 +141,7 @@
          * @returns {*}
          */
         getFrame(i) {
-            if (this.isReady() && i > -1 && i < this.frames.length) {
+            if (this.isReady() && i > -1 && i < this.frameCount) {
                 return this.frames[i];
             }
 
@@ -155,30 +150,88 @@
 
         /**
          *
-         * @param speed
-         * @param reset
          * @private
          */
-        _init(speed, reset) {
-            this.initializing = false;
+        _reset() {
+            this.listener.removeEventId(EVENT_RENDERER_RENDER, this.id, this);
             this.initialized = false;
             this.pointer = 0;
             this.started = false;
             this.complete = false;
             this.counter = 0;
             this._clip = false;
-            if (reset || !this.frames) { // performance sparen
-                this.frames = [];
-            }
-            if (!reset) {
-                this.duration = Math.ceil(60000 / speed);
-                this.length = this.beats * this.duration;
+        }
 
-                let fps = this.config.DisplaySettings.fps * 1.25;
-                let frames = IS_MONITOR ? 0 : Math.ceil(this.length / 1000 * fps);
+        /**
+         *
+         * @param speed
+         * @param needsUpdate
+         * @private
+         */
+        _init(speed, needsUpdate) {
 
-                this.__init(frames);
-            }
+            this._reset();
+
+            this.duration = Math.ceil(60000 / speed);
+            this.length = this.beats * this.duration;
+
+            let fps = this.config.DisplaySettings.fps * 1.15;
+            let frames = IS_MONITOR ? 0 : Math.ceil(this.length / 1000 * fps); // fixme no init if monitor oida!
+
+            this.frameCount = frames;
+
+            this.listener.fireEventId('sample.init.start', this.id, this);
+
+            this.listener.register(EVENT_RENDERER_RENDER, this.id, (data) => {
+                if (this.frames.length < this.frameCount) {
+                    let frame = this._createFrame(this.pointer);
+                    this._resetFrame(frame);
+                    this.frames.push(frame);
+
+                    if (this.pointer % 10 == 0) {
+                        this.listener.fireEventId('sample.init.progress', this.id, this);
+                    }
+
+                    this.pointer++;
+
+                } else if (needsUpdate && this.pointer < this.frameCount) {
+                    let frame = this.frames[this.pointer];
+                    this._resetFrame(frame);
+                    this.pointer++;
+
+                } else {
+                    this.initialized = true;
+                    this.pointer = 0;
+                    this.listener.fireEventId('sample.init.end', this.id, this);
+                    this.listener.remove(EVENT_RENDERER_RENDER, this.id);
+                }
+            });
+        }
+
+        /**
+         *
+         * @param index
+         * @returns {HTMLCanvasElement}
+         * @private
+         */
+        _createFrame(index) {
+            let frame = document.createElement('canvas');
+            frame.id = this.id + '_' + index;
+            frame.ctx = frame.getContext('2d');
+
+            return frame;
+        }
+
+        /**
+         *
+         * @param frame
+         * @private
+         */
+        _resetFrame(frame) {
+            frame.width = this.width;
+            frame.height = this.height;
+            frame.ctx.fillStyle = '#000000';
+            frame.ctx.fillRect(0, 0, this.width, this.height);
         }
 
         /**
@@ -187,54 +240,9 @@
          * @private
          */
         __init(frames) {
-            let inst = this;
 
-            if (this.frames.length > frames) {
-                this.frames.splice(frames, this.frames.length - frames);
-            }
 
-            this.frameCount = frames;
-            this.animation.powersave = true;
 
-            let _init = (i) => {
-                if (inst.initializing) {
-                    let cv = document.createElement('canvas');
-                    cv.id = inst.id + '_' + i;
-                    cv.ctx = cv.getContext('2d');
-                    inst.frames.push(cv);
-
-                    cv.width = inst.width;
-                    cv.height = inst.height;
-                    cv.ctx.fillStyle = '#000000';
-                    cv.ctx.fillRect(0, 0, cv.width, cv.height);
-                    if (i % 10 == 0) {
-                        inst.pointer = i;
-                        this.listener.fireEventId('sample.init.progress', inst.id, inst);
-                        this.animation.powersave = true;
-                    }
-
-                    i++;
-                    if (inst.initializing && i < frames) {
-                        setTimeout(function () {
-                            requestAnimationFrame(function () {
-                                _init(i);
-                            });
-                        }, this.animation.threadTimeout(.125));
-
-                    } else {
-                        inst.initialized = true;
-                        inst.pointer = 0;
-                        this.animation.powersave = false;
-                        this.listener.fireEventId('sample.init.end', inst.id, inst);
-                    }
-                }
-            };
-
-            requestAnimationFrame(() => {
-                this.listener.fireEventId('sample.init.start', inst.id, inst);
-                inst.initializing = true;
-                _init(0);
-            });
         }
 
         /**
@@ -242,7 +250,7 @@
          */
         finish() {
 
-            if (this.pointer < this.frames.length / 2) {
+            if (this.pointer < this.frameCount / 2) {
                 this.started = false;
                 this.pointer = 0;
                 this.counter = 0;
@@ -250,13 +258,13 @@
                 this.listener.fireEventId('sample.render.error', this.id, this);
 
             } else {
-                this.frames.splice(this.pointer, this.frames.length - this.pointer);
                 this.complete = true;
                 this.record = false;
+                this.frameCount = this.pointer;
+                this.length = this.frameCount / 60 * 1000;
                 this.pointer = 0;
-                this.length = this.frames.length / 60 * 1000;
                 this.counter = 0;
-
+// fixme do slow gc after render if no one else is in the queue
                 this.listener.fireEventId('sample.render.end', this.id, this);
 
             }
@@ -391,10 +399,9 @@
                     }
                 }
                 if (sample.started) {
-                    this.animation.powersave = true;
                     if (speed.starting()) {
                         if (sample.counter >= sample.beats) {
-                            sample.finish(sample.record);
+                            sample.finish();
 
                         } else {
                             sample.counter++;
@@ -432,11 +439,7 @@
          * @returns {number}
          */
         last() {
-            if (this.frames && this.frames.length > 0) {
-                return this.frames.length - 1;
-            }
-
-            return 0;
+            return Math.max(0, this.frameCount - 1);
         }
     }
 }

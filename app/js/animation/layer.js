@@ -24,6 +24,11 @@
         renderer;
 
         /**
+         * @type {HC.Listener}
+         */
+        listener;
+
+        /**
          * @type {HC.BeatKeeper}
          */
         beatKeeper;
@@ -102,6 +107,7 @@
             this.animation = animation;
             this.config = animation.config;
             this.beatKeeper = animation.beatKeeper;
+            this.listener = animation.listener;
             this.renderer = renderer;
             this.index = index;
 

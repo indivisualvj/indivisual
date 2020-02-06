@@ -79,10 +79,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 new HC.Animation.KeyboardListener().init(animation);
                 new HC.Animation.EventListener().init();
 
-                animation._perspectiveHook = function () {
-                    sourceManager.renderPerspectives();
-                };
-
                 animation.loadSession();
             });
         }
@@ -111,8 +107,6 @@ document.addEventListener('DOMContentLoaded', function () {
             this.now = HC.now();
             this.last = this.now;
             this.running = false;
-            this.offline = false;
-            this.powersave = false;
             this.doNotDisplay = false; // render displays only every second frame if FPS is set to 60
             this.diff = 0;
             this.diffPrc = 1;
@@ -145,6 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         animate() {
 
+            this.listener.fireEvent(EVENT_ANIMATION_ANIMATE);
             /**
              * do general stuff
              */
@@ -207,8 +202,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             this.renderer.switchLayer(IS_MONITOR);
 
-            let hook = this.doNotDisplay ? false : this._perspectiveHook;
-            this.renderer.animate(hook);
+            this.renderer.animate();
 
         }
 
@@ -216,6 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         render() {
+            this.listener.fireEvent(EVENT_ANIMATION_RENDER);
             if (IS_ANIMATION) {
                 this.sourceManager.render();
             }
@@ -464,9 +459,8 @@ document.addEventListener('DOMContentLoaded', function () {
             this.messaging.emitAttr('#layers', 'data-mnemonic', (this.renderer.currentLayer.index + 1));
 
             if (this.stats) {
-                let state = (this.powersave ? 'i' : '') + (this.offline ? 'o' : '');
                 let vals = [
-                    'fps:' + this.fps + state,
+                    'fps:' + this.fps,
                     'rms:' + this.rmsAverage()];
                 this.messaging.emitAttr('#play', 'data-label', vals.join(' / '));
             }
@@ -708,13 +702,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (display) {
-                let action = false;
-                // if (item.match(/^sample\d+_store/) && value) {
-                //     //let sample =
-                //     sourceManager.storeSample(number_extract(item, 'sample'), value, 1, false);
-                //     this.updateSource(item, false, false, true, false);
-                //
-                // } else
                 if (item.match(/^sample\d+_load/) && value) {
                     if (IS_MONITOR || display) {
                         this.sourceManager.loadSample(numberExtract(item, 'sample'), value);
@@ -723,11 +710,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 } else if (item.match(/^sample\d+_/)) {
                     this.sourceManager.updateSample(numberExtract(item, 'sample'));
-                    action = true;
 
                 } else if (item.match(/^sequence\d+_/)) {
                     this.sourceManager.updatePluginNr('sequence', numberExtract(item, 'sequence'));
-                    action = true;
 
                 } else if (item.match(/display\d+_source/)) {
                     let display = this.displayManager.getDisplay(numberExtract(item, 'display'));
@@ -737,24 +722,16 @@ document.addEventListener('DOMContentLoaded', function () {
                         this.displayManager.updateDisplay(display.index, false);
                     }
 
-                    action = true;
-
                 } else if (item.match(/display\d+_sequence/)) {
                     this.sourceManager.updateSource(this.displayManager.getDisplay(numberExtract(item, 'display')));
-                    action = true;
 
                 } else if (item.match(/^lighting_(lights|scale)/)) {
                     this.displayManager.updateDisplays();
-                    action = true;
 
                 } else if (item.match(/^lighting_(mode|color)/)) {
                     this.sourceManager.updatePlugin('lighting');
-                    action = true;
                 }
 
-                if (action) {
-                    this.offline = false;
-                }
             }
         }
 
@@ -839,7 +816,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     } else { // anything else
                         this.displayManager.updateDisplay(i);
-                        this.offline = false;
                     }
                 }
             }

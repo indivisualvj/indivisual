@@ -30,7 +30,7 @@
             mesh.name = this.id(index);
 
             let inst = this;
-            this.animation.listener.register('renderer.render', this.id(index), function (renderer) {
+            this.animation.listener.register(EVENT_RENDERER_RENDER, this.id(index), function (renderer) {
                 if (inst.layer.isVisible()) {
                     mesh.visible = false;
 

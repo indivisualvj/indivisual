@@ -152,7 +152,7 @@
 
                     let os = this.start;
                     let oe = this.end;
-                    let frames = this.sample.frames.length;
+                    let frames = this.sample.frameCount;
                     this.sourceManager.applySequenceSlice(this, frames, start, end);
 
                     if (os != this.start) {
@@ -422,7 +422,7 @@
         _progress(speed) {
             let sample = this.sample;
             let dur = sample.duration;
-            let fd = dur / sample.frames.length;
+            let fd = dur / sample.frameCount;
             let ms = fd * this.length;
             dur /= sample.beats;
             let beats = Math.max(0.25, Math.round(ms / dur));

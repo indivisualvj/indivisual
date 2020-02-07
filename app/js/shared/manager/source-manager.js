@@ -170,7 +170,7 @@
 
                 this.samples[i] = sample;
 
-                this.initSample(sample);
+                this.initSampleEvents(sample);
             }
 
             return this.samples[i];
@@ -180,7 +180,12 @@
          *
          * @param sample
          */
-        initSample(sample) {
+        initSampleEvents(sample) {
+
+            if (IS_MONITOR) {
+                return;
+            }
+
             let thumbKey = getSampleThumbKey(sample.index);
 
             this.listener.register('sample.init.start', sample.id, function (target) {
@@ -309,6 +314,11 @@
          * @param load
          */
         storeSample(i, name, resolution, load) {
+
+            if (IS_MONITOR) {
+                return;
+            }
+
             let sample = this.getSample(i);
             if (sample) {
 
@@ -350,8 +360,10 @@
          */
         _storeSample(sample, name, resolution) {
             sample.pointer = 0;
-            let canvas = false;
-            let ctx = false;
+            /** @type {HTMLCanvasElement} */
+            let canvas;
+            /** @type {RenderingContext} */
+            let ctx;
             if (resolution && resolution != 1.0) {
                 canvas = document.createElement('canvas');
                 canvas.width = sample.width * resolution;
@@ -359,18 +371,19 @@
                 ctx = canvas.getContext('2d');
             }
 
-            let _mov = () => {
+            let loops = 0;
+            let divider = 2;
+            this.listener.register(EVENT_SOURCE_MANAGER_RENDER, name, () => {
+                if (loops % divider === 0) {
 
-                if (sample.isReady()) {
                     let frame = sample.frames[sample.pointer];
                     if (ctx) {
                         ctx.clearRect(0, 0, canvas.width, canvas.height);
                         ctx.drawImage(frame, 0, 0, frame.width, frame.height, 0, 0, canvas.width, canvas.height);
                         frame = canvas;
                     }
-                    let now = HC.now();
+
                     let data = frame.toDataURL('image/png');
-                    let diff = HC.now() - now;
 
                     messaging.sample(name, sample.pointer + '.png', data);
                     sample.pointer++;
@@ -379,17 +392,18 @@
                         this.listener.fireEventId('sample.store.progress', sample.id, sample);
                     }
 
-                    if (sample.pointer < sample.frameCount) { // fixme store every x render event
-                        setTimeout(() => {
-                            requestAnimationFrame(_mov);
-                        }, this.animation.threadTimeout(diff / this.animation.duration));
+                    if (sample.pointer < sample.frameCount) {
 
                     } else {
                         this.listener.fireEventId('sample.store.end', sample.id, sample);
+                        this.listener.removeEventId(EVENT_SOURCE_MANAGER_RENDER, name);
                     }
+
+                    divider = Math.ceil(this.config.DisplaySettings.fps / this.animation.fps) * 2;
                 }
-            };
-            requestAnimationFrame(_mov);
+
+                loops++;
+            });
         }
 
         /**

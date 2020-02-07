@@ -102,6 +102,23 @@
 
         /**
          *
+         * @returns {{}}
+         */
+        prepareFlat() {
+            let sets = this.prepare();
+            let settings = {};
+
+            for (let k in sets) {
+                for (let i in sets[k]) {
+                    settings[i] = sets[k][i];
+                }
+            }
+
+            return settings;
+        }
+
+        /**
+         *
          * @param layer
          * @returns {boolean}
          */

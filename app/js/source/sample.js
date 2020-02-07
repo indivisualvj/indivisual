@@ -201,7 +201,7 @@
             this.length = this.beats * this.duration;
 
             let fps = this.config.DisplaySettings.fps * 1.15;
-            let frames = IS_MONITOR ? 0 : Math.ceil(this.length / 1000 * fps); // fixme no init if monitor oida!
+            let frames = Math.ceil(this.length / 1000 * fps);
 
             this.frameCount = frames;
 
@@ -281,7 +281,7 @@
                 this.pointer = 0;
                 this.counter = 0;
                 this.listener.fireEventId('sample.render.end', this.id, this);
-
+                this.listener.fireEvent(EVENT_SAMPLE_READY, this);
             }
         }
 
@@ -290,7 +290,7 @@
          * @param callback
          * @returns {boolean|*}
          */
-        clip(onload, onfiles) {
+        clip(onfinished, onfiles) {
             if (!this._clip) {
                 this._clip = {id: this.id, ready: false, thumbs: [], frames: 0, beats: 0, duration: 0};
 
@@ -320,16 +320,12 @@
 
                         this._clip.thumbs[image._index] = image;
 
-                        image.onerror = () => {
-                            //frameCount--;
-                        };
                         image.onload = () => {
 
-                            // this._clip.thumbs[this._index] = this;
                             loaded += step; // see if next will bee too much
                             if (loaded >= frameCount) {
                                 this._clip.ready = true;
-                                onload(this);
+                                onfinished(this);
                             }
                         };
                     }
@@ -377,11 +373,16 @@
                     };
                     image.onload = () => {
 
+                        if (!this.enabled) {
+                            return;
+                        }
+
                         let canvas = document.createElement('canvas');
                         let ctx = canvas.getContext('2d');
+                        canvas.ctx = ctx;
                         canvas.width = this.width;
                         canvas.height = this.height;
-                        ctx.drawImage(image, 0, 0, image.width, image.height);
+                        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
 
                         this.frames[image._index] = canvas;
 

@@ -749,25 +749,10 @@ document.addEventListener('DOMContentLoaded', function () {
         updateSequenceUi() {
             if (this.config.SourceValues && this.config.SourceValues.sequence) {
                 for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
-
-                    // let _trigger = (_seq) => {
-                    //
-                    //     clearTimeout(this.thumbTimeouts[_seq]);
-                    //
-                    //     this.thumbTimeouts[_seq] = setTimeout(() => {
-                    //         requestAnimationFrame(() => {
-                                this.updateClip(seq);
-                        //     });
-                        //
-                        // }, 125);
-                        //
-                        // requestAnimationFrame(() => {
-                            this.updateIndicator(seq);
-                //         });
-                //
-                //     };
-                //
-                //     _trigger(seq);
+                    requestAnimationFrame(() => {
+                        this.updateClip(seq);
+                        this.updateIndicator(seq);
+                    });
                 }
             }
         }
@@ -857,7 +842,7 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         pushSources() {
-            this.messaging.emitSources(this.config.SourceSettings, true, true, false);
+            this.messaging.emitSources(this.config.SourceSettingsManager.prepareFlat(), true, true, false);
         }
 
         /**

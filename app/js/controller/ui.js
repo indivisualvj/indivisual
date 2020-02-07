@@ -646,7 +646,7 @@ HC.Controller.prototype.updateIndicator = function (seq) {
  * @param seq
  */
 HC.Controller.prototype.updateClip = function (seq) {
-// fixme this can be done before the thumbs have arrived
+
     /** @type {HC.SourceControllerClip} */
     let clip = this.clips[seq];
 

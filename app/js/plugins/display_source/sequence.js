@@ -180,15 +180,30 @@
             this.sample = this.sourceManager.getSample(smp);
 
             let type = [0, 0, 1];
-            if (this.sample && this.sample.isReady()) {
-                type[1] = this.sample.frameCount;
-                type[2] = round(this.sample.frameCount / 50, 0);
+            if (this.sample) {
+                if (this.sample.isReady()) {
+                    type[1] = this.sample.frameCount - 1;
+                    type[2] = round(this.sample.frameCount / 50, 0);
 
-                let conf = {SourceTypes: {}};
-                conf.SourceTypes[getSequenceStartKey(this.index)] = type;
-                conf.SourceTypes[getSequenceEndKey(this.index)] = type;
-                messaging.emitData(this.sample.id, conf);
+                    let conf = {SourceTypes: {}};
+                    conf.SourceTypes[getSequenceStartKey(this.index)] = type;
+                    conf.SourceTypes[getSequenceEndKey(this.index)] = type;
+                    messaging.emitData(this.sample.id, conf);
+                } else {
+                    this.listener.register(EVENT_SAMPLE_READY, this.id, (target) => {
+                        if (this.sample && this.sample.id === target.id) {
+                            this.listener.removeEventId(EVENT_SAMPLE_READY, this.id);
+                            this.updateSource();
+                        }
+                    });
+                }
             }
+
+            this.listener.register(EVENT_SAMPLE_DISABLED, this.id, (target) => {
+                if (this.sample && this.sample.id === target.id) {
+                    this.animation.updateSource(getSequenceSampleKey(this.index), 'off', true, true);
+                }
+            });
 
             this.animation.updateSource(getSequenceStartKey(this.index), 0, true, true);
             this.animation.updateSource(getSequenceEndKey(this.index), type[1], true, true);

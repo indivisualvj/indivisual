@@ -703,6 +703,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else if (item.match(/^sample\d+_/)) {
                     this.sourceManager.updateSample(numberExtract(item, 'sample'));
 
+                    if (item.match(/sample\d+_enabled/) && !value) {
+                        this.listener.fireEvent(EVENT_SAMPLE_DISABLED, this.sourceManager.getSample(numberExtract(item, 'sample')));
+                    }
+
                 } else if (item.match(/^sequence\d+_input$/)) {
                     this.sourceManager.updatePluginNrSource('sequence', numberExtract(item, 'sequence'));
 

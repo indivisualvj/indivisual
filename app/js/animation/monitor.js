@@ -18,7 +18,7 @@
             config.ControlSettings.play = false;
             config.ControlSettings.monitor = false;
             config.DisplaySettings.fps = 30;
-            config.DisplaySettings.display0_visible = true; // fixme craps around as fuck
+            config.DisplaySettings.display0_visible = true;
 
             if (hook) {
                 hook();

@@ -66,7 +66,7 @@
         /**
          * @type {HC.Program}
          */
-        animation;
+        program;
 
         /**
          * @type {HC.Config}
@@ -79,38 +79,56 @@
         listener;
 
         /**
+         * @type {HC.BeatKeeper}
+         */
+        beatKeeper;
+
+        /**
+         * @type {HC.SourceManager}
+         */
+        sourceManager;
+
+        /**
+         * @type {HC.Renderer}
+         */
+        renderer;
+
+        /**
          *
-         * @param {HC.Program} animation
+         * @param {HC.Program} program
          * @param index
          */
-        constructor(animation, index) {
-            this.animation = animation;
-            this.listener = animation.listener;
-            this.config = animation.config;
+        constructor(program, index) {
+            this.program = program;
+            this.beatKeeper = program.beatKeeper;
+            this.sourceManager = program.sourceManager;
+            this.renderer = program.sourceManager.renderer;
+            this.listener = program.listener;
+            this.config = program.config;
             this.index = index;
             this.id = 'sample' + index;
         }
 
         /**
          *
-         * @param speed
+         * @param tempo
          * @param width
          * @param height
          */
-        update(speed, width, height) {
+        update(tempo, width, height) {
             let enabled = this.config.SourceSettings[getSampleEnabledKey(this.index)];
             let record = this.config.SourceSettings[getSampleRecordKey(this.index)];
             let beats = this.config.SourceSettings[getSampleBeatKey(this.index)];
 
-            let checkEnabled = this.enabled != enabled;
-            let checkBeats = this.beats != beats;
-            let checkFrames = this.frames.length == 0;
-            let checkWidth = this.width != width;
-            let checkHeight = this.height != height;
+            let checkEnabled = this.enabled !== enabled;
+            let checkBeats = this.beats !== beats;
+            let checkFrames = this.frames.length === 0;
+            let checkWidth = this.width !== width;
+            let checkHeight = this.height !== height;
 
             let needsUpdate = checkBeats || checkFrames || checkWidth || checkHeight;
 
-            this.speed = speed;
+            this.speed = tempo;
             this.width = width;
             this.height = height;
             this.enabled = enabled;
@@ -118,11 +136,18 @@
             this.beats = beats;
 
             if (!record && checkEnabled && enabled) {
-                this._init(speed, needsUpdate);
+                this._init(tempo, needsUpdate);
 
             } else if (!enabled) {
                 this._reset();
                 this.listener.fireEventId('sample.init.reset', this.id, this);
+            } else if (record) {
+                if (!this.started) {
+                    this.listener.register(EVENT_SOURCE_MANAGER_RENDER, this.id, (data) => {
+                        let speed = this.beatKeeper.getDefaultSpeed();
+                        this.render(this.renderer.current(), speed, this.renderer.currentColor());
+                    });
+                }
             }
 
         }
@@ -164,15 +189,15 @@
 
         /**
          *
-         * @param speed
+         * @param tempo
          * @param needsUpdate
          * @private
          */
-        _init(speed, needsUpdate) {
+        _init(tempo, needsUpdate) {
 
             this._reset();
 
-            this.duration = Math.ceil(60000 / speed);
+            this.duration = Math.ceil(60000 / tempo);
             this.length = this.beats * this.duration;
 
             let fps = this.config.DisplaySettings.fps * 1.15;
@@ -236,19 +261,10 @@
 
         /**
          *
-         * @param frames
-         * @private
-         */
-        __init(frames) {
-
-
-
-        }
-
-        /**
-         *
          */
         finish() {
+
+            this.listener.removeEventId(EVENT_SOURCE_MANAGER_RENDER, this.id);
 
             if (this.pointer < this.frameCount / 2) {
                 this.started = false;
@@ -264,7 +280,6 @@
                 this.length = this.frameCount / 60 * 1000;
                 this.pointer = 0;
                 this.counter = 0;
-// fixme do slow gc after render if no one else is in the queue
                 this.listener.fireEventId('sample.render.end', this.id, this);
 
             }
@@ -275,7 +290,7 @@
          * @param callback
          * @returns {boolean|*}
          */
-        clip(callback) {
+        clip(onload, onfiles) {
             if (!this._clip) {
                 this._clip = {id: this.id, ready: false, thumbs: [], frames: 0, beats: 0, duration: 0};
 
@@ -290,6 +305,8 @@
                     this._clip.frames = frameCount;
                     this._clip.duration = Math.ceil(60000 / this.config.ControlSettings.tempo);
                     this._clip.beats = Math.ceil(seconds * 1000 / this._clip.duration);
+
+                    onfiles(this._clip);
 
                     let index = 0;
 
@@ -312,7 +329,7 @@
                             loaded += step; // see if next will bee too much
                             if (loaded >= frameCount) {
                                 this._clip.ready = true;
-                                callback(this);
+                                onload(this);
                             }
                         };
                     }

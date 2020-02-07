@@ -135,6 +135,10 @@ HC.SourceManager.display_source = {};
             this.height = height;
         }
 
+        updateSource() {
+
+        }
+
         /**
          *
          * @returns {number}

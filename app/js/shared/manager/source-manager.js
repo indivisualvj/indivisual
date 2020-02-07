@@ -87,7 +87,7 @@
         /**
          *
          * @param type
-         * @returns {number}
+         * @returns {Object<string, HC.SourceManager.DisplaySourcePlugin>}
          */
         getPluginInstances(type) {
             if (!(type in this.plugins)) {
@@ -170,9 +170,7 @@
 
                 this.samples[i] = sample;
 
-                if (IS_ANIMATION) {
-                    this.initSample(sample);
-                }
+                this.initSample(sample);
             }
 
             return this.samples[i];
@@ -260,7 +258,6 @@
 
                 if (this.config.SourceSettings[recordKey]) { // sample
                     this.animation.updateSource(recordKey, false, true, true, false);
-
                 }
 
                 // if (IS_ANIMATION) {
@@ -285,8 +282,7 @@
             if (sample) {
                 sample.update(this.config.ControlSettings.tempo, this.displayManager.width, this.displayManager.height);
 
-                if (sample instanceof HC.Sample && !sample.enabled) {
-
+                if (!sample.enabled) {
                     let warn = false;
                     if (sample.index < this.config.SourceValues.sample.length) {
                         let plugins = this.getPluginInstances('sequence');
@@ -294,7 +290,6 @@
                             let seq = plugins[s];
                             if (seq && seq.sample == sample) { // reset input to off if sample was disabled
                                 warn = true;
-                                break;
                             }
                         }
 
@@ -428,23 +423,20 @@
 
         /**
          *
-         */
-        updatePlugins() {
-            for (let k in HC.SourceManager.display_source) {
-                this.updatePlugin(k);
-            }
-        }
-
-        /**
-         *
          * @param type
+         * @param index
          */
-        updatePlugin(type) {
+        updatePluginNr(type, index) {
             let plugins = this.getPluginInstances(type);
-            for (let s in plugins) {
-                let plugin = plugins[s];
-                plugin.update(this.displayManager.width, this.displayManager.height);
+            let plugin;
+            if (index in plugins) {
+                plugin = plugins[index];
+
+            } else {
+                plugin = this.getSourcePlugin(type, index);
             }
+
+            plugin.update(this.displayManager.width, this.displayManager.height)
         }
 
         /**
@@ -452,10 +444,10 @@
          * @param type
          * @param index
          */
-        updatePluginNr(type, index) {
+        updatePluginNrSource(type, index) {
             let plugins = this.getPluginInstances(type);
             if (index in plugins) {
-                plugins[index].update(this.displayManager.width, this.displayManager.height);
+                plugins[index].updateSource();
             }
         }
 
@@ -464,20 +456,6 @@
          */
         render() {
             this.listener.fireEvent(EVENT_SOURCE_MANAGER_RENDER);
-            this.renderSamples();
-        }
-
-        /**
-         * fixme they might just plug into renderer.render...
-         */
-        renderSamples() {
-            let speed = this.beatKeeper.getDefaultSpeed();
-            for (let i = 0; i < this.samples.length; i++) {
-                let sample = this.samples[i];
-                if (sample && sample.record && sample.enabled && sample.initialized && !sample.complete) {
-                    sample.render(this.renderer.current(), speed, this.renderer.currentColor());
-                }
-            }
         }
 
         /**

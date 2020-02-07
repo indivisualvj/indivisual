@@ -493,21 +493,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }
 
-                // if ('settings' in session) {
-                //     HC.log('settings', 'synced');
-                //     let settings = session.settings;
-                //     for (let k in settings) {
-                //         this.updateSettings(k, settings[k], true, false, true);
-                //     }
-                // }
-
                 if ('controls' in session) {
                     HC.log('controls', 'synced');
                     let controls = session.controls;
                     this.updateControls(controls, true, false, true);
                 }
 
-                this.sourceManager.updatePlugins();
+                this.sourceManager.updateSources();
                 this.fullReset(true);
 
                 if (IS_MONITOR) {
@@ -711,6 +703,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else if (item.match(/^sample\d+_/)) {
                     this.sourceManager.updateSample(numberExtract(item, 'sample'));
 
+                } else if (item.match(/^sequence\d+_input$/)) {
+                    this.sourceManager.updatePluginNrSource('sequence', numberExtract(item, 'sequence'));
+
                 } else if (item.match(/^sequence\d+_/)) {
                     this.sourceManager.updatePluginNr('sequence', numberExtract(item, 'sequence'));
 
@@ -718,7 +713,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     let display = this.displayManager.getDisplay(numberExtract(item, 'display'));
                     this.sourceManager.updateSource(display);
 
-                    if (display && display.isFixedSize()) {
+                    if (display && display.isFixedSize()) { // fixme why this extrawurst?
                         this.displayManager.updateDisplay(display.index, false);
                     }
 
@@ -729,7 +724,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.displayManager.updateDisplays();
 
                 } else if (item.match(/^lighting_(mode|color)/)) {
-                    this.sourceManager.updatePlugin('lighting');
+                    this.sourceManager.updatePluginNr('lighting', 0);
                 }
 
             }

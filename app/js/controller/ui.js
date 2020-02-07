@@ -616,6 +616,10 @@ HC.Controller.prototype.loadClip = function (index) {
         let data = {data: {DataSettings: {}}};
         data.data.DataSettings[getSampleKey(sample.index)] = sample._clip;
         this.updateData(data);
+    }, (clip) => {
+        let data = {data: {DataSettings: {}}};
+        data.data.DataSettings[getSampleKey(smp.index)] = clip;
+        this.updateData(data);
     });
 };
 
@@ -635,7 +639,6 @@ HC.Controller.prototype.updateIndicator = function (seq) {
     }
 
     clip.updateIndicator(data);
-
 };
 
 /**
@@ -644,6 +647,7 @@ HC.Controller.prototype.updateIndicator = function (seq) {
  */
 HC.Controller.prototype.updateClip = function (seq) {
 // fixme this can be done before the thumbs have arrived
+    /** @type {HC.SourceControllerClip} */
     let clip = this.clips[seq];
 
     let sample = this.sourceManager.getSampleBySequence(seq);
@@ -654,7 +658,7 @@ HC.Controller.prototype.updateClip = function (seq) {
         data = this.config.DataSettings[sampleKey];
     }
 
-    let enabled = this.sourceManager.getSampleEnabledBySequence(seq) && (data != false);
+    let enabled = this.sourceManager.getSampleEnabledBySequence(seq) && (data !== false);
 
     clip.update(sample, enabled, data);
 };

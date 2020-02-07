@@ -117,9 +117,6 @@
          * @param height
          */
         update(width, height) {
-
-            this._update();
-
             this.jump = this.config.SourceSettings[this.id + '_jump'];
             this.audio = this.config.SourceSettings[this.id + '_audio'];
             this.reversed = this.config.SourceSettings[this.id + '_reversed'];
@@ -140,7 +137,6 @@
             this.canvas.width = this.width;
             this.canvas.height = this.height;
 
-
             if (this.sample) {
                 let start = this.config.SourceSettings[this.id + '_start'];
                 let end = this.config.SourceSettings[this.id + '_end'];
@@ -149,7 +145,6 @@
                     || this.width != this.sample.width || this.height != this.sample.height;
 
                 if (needsUpdate) {
-
                     let os = this.start;
                     let oe = this.end;
                     let frames = this.sample.frameCount;
@@ -167,48 +162,44 @@
                     this.dirty = true;
                 }
             }
+
+            let overlay = this.getOverlayNr();
+            if (overlay >= 0) {
+                this.overlay = this.sourceManager.getSourcePlugin('sequence', overlay);
+
+            } else {
+                this.overlay = false;
+            }
         }
 
         /**
-         * fixme redesign update process. this is crappy as fuck
-         * @private
+         *
          */
-        _update() {
+        updateSource() {
             let smp = (this.config.SourceSettings[this.id + '_input']);
-            let os = (this.sample);
             this.sample = this.sourceManager.getSample(smp);
 
-            if (this.sample) {
+            let type = [0, 0, 1];
+            if (this.sample && this.sample.isReady()) {
+                type[1] = this.sample.frameCount;
+                type[2] = round(this.sample.frameCount / 50, 0);
 
-                let _indicator = (sequence) => {
-                    let type = [0, 0, 1];
-                    if (sequence.sample) {
-                        type[1] = sequence.sample.last();
-                        type[2] = round(sequence.sample.last() / 50, 0);
-                    }
-                    let conf = {SourceTypes: {}};
-                    conf.SourceTypes[getSequenceStartKey(sequence.index)] = type;
-                    conf.SourceTypes[getSequenceEndKey(sequence.index)] = type;
-                    messaging.emitData(sequence.sample.id, conf);
-
-                    this.animation.updateSource(getSequenceStartKey(sequence.index), 0, false, true);
-                    this.animation.updateSource(getSequenceEndKey(sequence.index), type[1], false, true);
-                };
-
-                if (os != this.sample) {
-                    _indicator(this);
-                }
-                
-                this.sourceManager.updateSample(smp);
-
-                let overlay = parseInt(this.config.SourceSettings[this.id + '_overlay']);
-                if (overlay >= 0) {
-                    this.overlay = this.sourceManager.getSourcePlugin('sequence', overlay);
-
-                } else {
-                    this.overlay = false;
-                }
+                let conf = {SourceTypes: {}};
+                conf.SourceTypes[getSequenceStartKey(this.index)] = type;
+                conf.SourceTypes[getSequenceEndKey(this.index)] = type;
+                messaging.emitData(this.sample.id, conf);
             }
+
+            this.animation.updateSource(getSequenceStartKey(this.index), 0, true, true);
+            this.animation.updateSource(getSequenceEndKey(this.index), type[1], true, true);
+        }
+
+        /**
+         *
+         * @returns {number}
+         */
+        getOverlayNr() {
+            return parseInt(this.config.SourceSettings[this.id + '_overlay']);
         }
 
         /**

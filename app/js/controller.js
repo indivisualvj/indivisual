@@ -694,12 +694,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (!value) { // set record to false if enabled == false
                         let smp = numberExtract(item, 'sample');
                         this.updateSource(getSampleRecordKey(smp), false, true, true, false);
-
-                        let seq = false;
-                        while ((seq = this.sourceManager.getSequenceBySample(smp)) !== false) {
-                            let key = getSequenceSampleKey(seq);
-                            this.updateSource(key, 'off', true, true, false);
-                        }
                     }
 
                 } else if (item.match(/_(load)/)) {
@@ -737,37 +731,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.updateUi(this.sourceSettingsGui);
             }
 
-            if (this.config.SourceValues && this.config.SourceValues.sequence) {
-                for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
-
-                    // set sequence inputs without enabled sample to off
-                    if (this.sourceManager.getSampleEnabledBySequence(seq) === false) {
-                        let key = getSequenceSampleKey(seq);
-                        setTimeout(() => {
-                            this.updateSource(key, 'off', false, true);
-                        }, 125);
-                    }
-
-                    let _trigger = (_seq) => {
-
-                        clearTimeout(this.thumbTimeouts[_seq]);
-
-                        this.thumbTimeouts[_seq] = setTimeout(() => {
-                            requestAnimationFrame(() => {
-                                this.updateClip(_seq);
-                            });
-
-                        }, 125);
-
-                        requestAnimationFrame(() => {
-                            this.updateIndicator(_seq);
-                        });
-
-                    };
-
-                    _trigger(seq);
-                }
-            }
+            this.updateSequenceUi();
 
             clearTimeout(this.thumbTimeouts.samples);
 
@@ -777,6 +741,35 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
             }, 125);
+        }
+
+        /**
+         *
+         */
+        updateSequenceUi() {
+            if (this.config.SourceValues && this.config.SourceValues.sequence) {
+                for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
+
+                    // let _trigger = (_seq) => {
+                    //
+                    //     clearTimeout(this.thumbTimeouts[_seq]);
+                    //
+                    //     this.thumbTimeouts[_seq] = setTimeout(() => {
+                    //         requestAnimationFrame(() => {
+                                this.updateClip(seq);
+                        //     });
+                        //
+                        // }, 125);
+                        //
+                        // requestAnimationFrame(() => {
+                            this.updateIndicator(seq);
+                //         });
+                //
+                //     };
+                //
+                //     _trigger(seq);
+                }
+            }
         }
 
         /**

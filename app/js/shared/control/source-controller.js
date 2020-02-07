@@ -735,19 +735,20 @@ HC.SourceController = HC.SourceController || {};
 
                 let thumbs = data.thumbs;
 
-                for (let i = 0; i < thumbs.length; i++) {
+                if (thumbs) {
+                    for (let i = 0; i < thumbs.length; i++) {
 
-                    let frameIndex = data.thumbs[i]._index;
+                        let frameIndex = data.thumbs[i]._index;
 
-                    let img = data.thumbs[i].cloneNode();
-                    let div = document.createElement('div');
-                    div.setAttribute('class', 'thumb');
-                    div.setAttribute('data-index', frameIndex);
+                        let img = data.thumbs[i].cloneNode();
+                        let div = document.createElement('div');
+                        div.setAttribute('class', 'thumb');
+                        div.setAttribute('data-index', frameIndex);
 
-                    div.appendChild(img);
+                        div.appendChild(img);
 
-                    this.thumbsNode.appendChild(div);
-
+                        this.thumbsNode.appendChild(div);
+                    }
                 }
 
             } else {
@@ -923,7 +924,7 @@ HC.SourceController = HC.SourceController || {};
          */
         update(data) {
             let enabled = this.controller.sourceManager.getSampleEnabledBySample(this.index) && (data != false);
-            if (enabled) {
+            if (enabled && data && data.thumbs) {
                 let src = data.thumbs[Math.round(data.thumbs.length / 2)].src;
                 this.node.style.backgroundImage = 'url(' + src + ')';
                 this.node.style.backgroundPositionX = 'center';

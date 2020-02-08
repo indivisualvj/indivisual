@@ -5,6 +5,8 @@
 
     HC.SourceManager.display_source.black = class Plugin extends HC.SourceManager.DisplaySourcePlugin {
 
+        static index = 40;
+
         /**
          *
          * @type {string}

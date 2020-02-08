@@ -707,31 +707,20 @@ document.addEventListener('DOMContentLoaded', function () {
                         this.listener.fireEvent(EVENT_SAMPLE_DISABLED, this.sourceManager.getSample(numberExtract(item, 'sample')));
                     }
 
-                } else if (item.match(/^sequence\d+_input$/)) {
-                    this.sourceManager.updatePluginNrSource('sequence', numberExtract(item, 'sequence'));
-
-                } else if (item.match(/^sequence\d+_/)) {
-                    this.sourceManager.updatePluginNr('sequence', numberExtract(item, 'sequence'));
-
                 } else if (item.match(/display\d+_source/)) {
                     let display = this.displayManager.getDisplay(numberExtract(item, 'display'));
                     this.sourceManager.updateSource(display);
 
-                    if (display && display.isFixedSize()) { // fixme why this extrawurst?
+                    if (display && display.isFixedSize()) { // fixme extrawurst needed by light display source make lighting listen here!
                         this.displayManager.updateDisplay(display.index, false);
                     }
 
                 } else if (item.match(/display\d+_sequence/)) {
                     this.sourceManager.updateSource(this.displayManager.getDisplay(numberExtract(item, 'display')));
-
-                } else if (item.match(/^lighting_(lights|scale)/)) {
-                    this.displayManager.updateDisplays();
-
-                } else if (item.match(/^lighting_(mode|color)/)) {
-                    this.sourceManager.updatePluginNr('lighting', 0);
                 }
-
             }
+
+            this.listener.fireEvent(EVENT_SOURCE_SETTING_CHANGED, arguments);
         }
 
         /**
@@ -796,9 +785,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             break;
 
                         case 'display_visibility':
-                        case 'border_mode':
                             this.displayManager.settings.visibility.random = false;
-                            this.displayManager.settings.border.random = false;
                             break;
                     }
                 }

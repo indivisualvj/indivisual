@@ -4,6 +4,8 @@
 {
     HC.SourceManager.display_source.perspective = class Plugin extends HC.SourceManager.DisplaySourcePlugin {
 
+        static index = 30;
+
         type = 'perspective';
 
         /**

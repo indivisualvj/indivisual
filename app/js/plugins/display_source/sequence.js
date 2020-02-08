@@ -4,6 +4,8 @@
 {
     HC.SourceManager.display_source.sequence = class Plugin extends HC.SourceManager.DisplaySourcePlugin {
 
+        static index = 10;
+
         /**
          * 
          * @type {string}
@@ -86,7 +88,31 @@
          * @type {boolean}
          */
         dirty = true;
-        
+
+        /**
+         *
+         */
+        construct() {
+            if (this.listener) {
+                this.listener.register(EVENT_SOURCE_SETTING_CHANGED, this.id, (data) => {
+                    let item = data[0];
+                    let value = data[1];
+                    let display = data[2];
+
+                    if (display) {
+                        if (item.startsWith(this.id)) {
+                            if (item.match(/^sequence\d+_input$/)) {
+                                this.sourceManager.updatePluginNrSource('sequence', this.index);
+
+                            } else {
+                                this.sourceManager.updatePluginNr('sequence', this.index);
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
         /**
          *
          * @param index

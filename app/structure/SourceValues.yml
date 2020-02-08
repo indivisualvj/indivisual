@@ -36,18 +36,6 @@ sequence:
   - 3
   - 4
 
-display_source: {}
-
-source:
-  animation: animation
-  sequence: sequence
-  perspective: perspective
-#  camera: camera
-  display: display
-  black: black
-  offline: offline
-  lighting: lighting
-
 material_map:
   none: none
   0: sequence0
@@ -122,7 +110,7 @@ lighting_color:
   magenta: magenta
   yellow: yellow
 
-lighting_type:
+lighting_type: # todo display_source plugin lighting could define plugins on its own maybe?
   off: 'off'
   randomblitzrgb: randomblitz RGB
   randomblitzamber: randomblitz AMBER

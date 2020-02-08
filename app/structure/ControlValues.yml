@@ -1,8 +1,6 @@
 session:
   root: root
 
-audio: {}
-
 layer:
   - 1
   - 2
@@ -24,8 +22,6 @@ layer:
   - 18
   - 19
   - 20
-
-shuffle_mode: {}
 
 layer_keycodes:
   "49": 0

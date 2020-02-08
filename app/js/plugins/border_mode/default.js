@@ -26,21 +26,6 @@
 {
     /**
      *
-     * @type {HC.Display.border_mode.parent}
-     */
-    HC.Display.border_mode.parent = class Plugin extends HC.Display.BorderModePlugin  {
-
-        static index = 1;
-
-        apply (ctx, points, pc, speed, prc) {
-            HC.Display.border_mode.visible.apply(ctx, points, pc, speed, prc);
-        }
-    }
-}
-
-{
-    /**
-     *
      * @type {HC.Display.border_mode.randomall}
      */
     HC.Display.border_mode.randomall = class Plugin extends HC.Display.BorderModePlugin  {

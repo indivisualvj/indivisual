@@ -108,6 +108,15 @@ HC.SourceManager.display_source = {};
                 this.renderer = this.sourceManager.renderer;
             }
             this.config = owner.config;
+
+            this.construct();
+        }
+
+        /**
+         *
+         */
+        construct() {
+
         }
 
         /**

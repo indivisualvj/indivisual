@@ -4,7 +4,7 @@
     if (IS_ANIMATION) {
 
         document.addEventListener('DOMContentLoaded', function () {
-            console.log('HC.audio.soundcloud: adding events for playback on soundcloud url drop');
+            console.log('HC.AudioManager.plugins.soundcloud: adding events for playback on soundcloud url drop');
 
             let script = document.createElement('script');
             script.setAttribute('src', 'https://connect.soundcloud.com/sdk/sdk-3.3.1.js');
@@ -24,7 +24,7 @@
 
                     let url = e.dataTransfer.getData('URL');
                     if (url && url.match(/https:\/\/soundcloud.com.+/)) {
-                        HC.audio.soundcloud.dropEvent = e;
+                        HC.AudioManager.plugins.soundcloud.dropEvent = e;
                         messaging.program.updateControl('audio', 'soundcloud', true, true, false);
                     }
                 };
@@ -37,7 +37,7 @@
         });
     }
 
-    HC.audio.soundcloud = class Plugin extends HC.AudioPlugin {
+    HC.AudioManager.plugins.soundcloud = class Plugin extends HC.AudioPlugin {
         static index = 30;
         static tutorial = {
             howto: {
@@ -47,7 +47,7 @@
         static dropEvent = false;
 
         init(callback) {
-            if (HC.audio.soundcloud.dropEvent) {
+            if (HC.AudioManager.plugins.soundcloud.dropEvent) {
                 if (!this.audioTag) {
                     let audio = document.createElement('audio');
                     audio.crossOrigin = "anonymous";
@@ -66,8 +66,8 @@
                     this.audioTag = audio;
                 }
 
-                this.onDrop(HC.audio.soundcloud.dropEvent, callback);
-                HC.audio.soundcloud.dropEvent = false;
+                this.onDrop(HC.AudioManager.plugins.soundcloud.dropEvent, callback);
+                HC.AudioManager.plugins.soundcloud.dropEvent = false;
 
             } else {
                 // now in tutorial

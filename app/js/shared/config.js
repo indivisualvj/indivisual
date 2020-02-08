@@ -320,6 +320,7 @@ HC.Statics = HC.Statics || {};
          * @param settings
          * @param section
          * @param plugins
+         * @param className
          * @private
          */
         _loadPlugins(settings, section, plugins, className) {
@@ -334,7 +335,7 @@ HC.Statics = HC.Statics || {};
                 let plugin = plugins[pluginKey];
                 let name = plugin.name || pluginKey;
 
-                if (name == (className||'Plugin')) {
+                if (name === (className||'Plugin')) {
                     name = pluginKey;
                 }
                 if (!(section in settings)) {
@@ -379,7 +380,7 @@ HC.Statics = HC.Statics || {};
          * @private
          */
         _loadAudioPlugins(settings) {
-            this._loadPlugins(settings, 'audio', HC.audio);
+            this._loadPlugins(settings, 'audio', HC.AudioManager.plugins);
         }
 
         /**

@@ -29,7 +29,7 @@
                 name = 'microphone';
             }
 
-            this.plugin = new HC.audio[name]().construct(this.context);
+            this.plugin = new HC.AudioManager.plugins[name]().construct(this.context);
             this.plugin.init(callback);
         }
 

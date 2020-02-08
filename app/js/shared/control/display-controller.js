@@ -274,7 +274,7 @@ HC.DisplayController = HC.DisplayController || {};
         settings = {
             display_visibility: 'visible',
             display_speed: 'quarter',
-            border_mode: 'parent',
+            border_mode: 'visible',
             border_speed: 'half',
             border: 0,
             border_color: '#ffffff',

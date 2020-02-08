@@ -3,6 +3,7 @@
  */
 {
     HC.SourceManager.display_source.animation = class Plugin extends HC.SourceManager.DisplaySourcePlugin {
+        static index = 1;
 
         /**
          *

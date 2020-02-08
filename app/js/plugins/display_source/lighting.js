@@ -1,12 +1,33 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-
-// todo make this load itself a set of controlsets? possible?
 {
     HC.SourceManager.display_source.lighting = class Plugin extends HC.SourceManager.DisplaySourcePlugin {
-
+        static index = 99;
         type = 'lighting';
+
+        /**
+         *
+         */
+        construct() {
+            if (this.listener) {
+                this.listener.register(EVENT_SOURCE_SETTING_CHANGED, this.id, (data) => {
+                    let item = data[0];
+                    let value = data[1];
+                    let display = data[2];
+
+                    if (display) {
+                        if (item.match(/^lighting_(lights|scale)/)) {
+                            this.displayManager.updateDisplays();
+
+                        } else if (item.match(/^lighting_(mode|color)/)) {
+                            this.sourceManager.updatePluginNr('lighting', 0);
+                        }
+                    }
+
+                });
+            }
+        }
 
         /**
          *
@@ -14,8 +35,8 @@
          * @param height
          */
         update(width, height) {
-            let pixelUpdate = this.pixel.length != this.config.SourceSettings.lighting_pattern_lights;
-            let scaleUpdate = this.scale != this.config.SourceSettings.lighting_scale;
+            let pixelUpdate = this.pixel.length !== this.config.SourceSettings.lighting_pattern_lights;
+            let scaleUpdate = this.scale !== this.config.SourceSettings.lighting_scale;
             if (pixelUpdate || scaleUpdate) {
                 this.init(this.index);
             }
@@ -71,7 +92,7 @@
          */
         current(fallback) {
 
-            if (this.config.SourceSettings.lighting_type != 'off') {
+            if (this.config.SourceSettings.lighting_type !== 'off') {
                 let index = this.getPixelIndex();
                 let color = this.getFillColor(fallback, index);
 

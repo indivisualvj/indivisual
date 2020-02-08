@@ -453,21 +453,9 @@
                         display.clear();
                     }
 
-                    let bm = this.settings.border.random !== false
-                        ? this.settings.border.random
-                        : this.config.DisplaySettings.border_mode;
+                    let bm = this.config.DisplaySettings.border_mode;
+                    this.renderBorder(display, this.borderSpeed(), bm);
 
-                    switch (bm) { // fixme what's happnin'?
-                        case 'parent':
-                            if (display.visible) {
-                                this.renderBorder(display, false, bm);
-                            }
-                            break;
-
-                        default:
-                            this.renderBorder(display, this.borderSpeed(), bm);
-                            break;
-                    }
                 }
             }
             this.config.DisplaySettings.trigger_display_visibility = false;

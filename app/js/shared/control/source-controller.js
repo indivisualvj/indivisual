@@ -49,37 +49,7 @@ HC.SourceController = HC.SourceController || {};
 
         settings = {
             group0: '',
-            group1: '',
-            g0animation: function () {
-                messaging.program.setAllDisplaysTo('source', 'animation', 'group0');
-            },
-            g0sequence: function () {
-                messaging.program.setAllDisplaysTo('source', 'sequence', 'group0');
-            },
-            g0perspective: function () {
-                messaging.program.setAllDisplaysTo('source', 'perspective', 'group0');
-            },
-            g0black: function () {
-                messaging.program.setAllDisplaysTo('source', 'black', 'group0');
-            },
-            g0offline: function () {
-                messaging.program.setAllDisplaysTo('source', 'offline', 'group0');
-            },
-            g1animation: function () {
-                messaging.program.setAllDisplaysTo('source', 'animation', 'group1');
-            },
-            g1sequence: function () {
-                messaging.program.setAllDisplaysTo('source', 'sequence', 'group1');
-            },
-            g1perspective: function () {
-                messaging.program.setAllDisplaysTo('source', 'perspective', 'group1');
-            },
-            g1black: function () {
-                messaging.program.setAllDisplaysTo('source', 'black', 'group1');
-            },
-            g1offline: function () {
-                messaging.program.setAllDisplaysTo('source', 'offline', 'group1');
-            }
+            group1: ''
         };
 
         types = {
@@ -92,17 +62,6 @@ HC.SourceController = HC.SourceController || {};
 
             group0: ['half', 'clear'],
             group1: ['half'],
-            g0animation: ['quint', 'clear'],
-            g0sequence: ['quint'],
-            g0perspective: ['quint'],
-            g0black: ['quint'],
-            g0offline: ['quint'],
-
-            g1animation: ['quint', 'clear'],
-            g1sequence: ['quint'],
-            g1perspective: ['quint'],
-            g1black: ['quint'],
-            g1offline: ['quint'],
 
             seq_0: ['hex', 'clear'],
             seq_1: ['hex'],
@@ -127,6 +86,9 @@ HC.SourceController = HC.SourceController || {};
          * @param pluggedValues
          */
         createSettings(pluggedValues) {
+
+            this.createGroupSettings(pluggedValues);
+
             // create source settings
             this.createSourceSettings(pluggedValues);
 
@@ -134,6 +96,33 @@ HC.SourceController = HC.SourceController || {};
             this.appendSeqButtons();
 
             this.settings.material_map = 'none';
+        }
+
+        /**
+         *
+         * @param pluggedValues
+         */
+        createGroupSettings(pluggedValues) {
+            let _create = (value, group) => {
+                return function () {
+                    messaging.program.setAllDisplaysTo('source', value, group);
+                }
+            };
+            let _add = (group) => {
+                let first = true;
+                for (let k in pluggedValues.display_source) {
+                    let key = group.replace('roup', '') + k;
+                    this.styles[key] = ['hex'];
+                    if (first) {
+                        this.styles[key][1] = 'clear';
+                        first = false;
+                    }
+                    this.settings[key] = _create(k, group);
+                }
+            };
+
+            _add('group0');
+            _add('group1');
         }
 
         /**
@@ -151,7 +140,7 @@ HC.SourceController = HC.SourceController || {};
                 this.settings[key + '_sequence'] = this.values[okey + '_sequence'];
 
                 // values
-                this.values[key + '_source'] = pluggedValues['source'];
+                this.values[key + '_source'] = pluggedValues['display_source'];
                 this.values[key + '_sequence'] = pluggedValues['sequence'];
 
                 // types

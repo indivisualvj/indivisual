@@ -38,7 +38,7 @@
             this.id = this.type + this.index;
 
             if (!this.canvas) {
-                this.canvas = document.createElement('canvas');
+                this.canvas = new OffscreenCanvas(1, 1);//document.createElement('canvas');
                 this.canvas.ctx = this.canvas.getContext('2d');
             }
             this.canvas.width = this.width;

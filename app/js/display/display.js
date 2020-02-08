@@ -103,7 +103,7 @@
             this.displayManager = animation.displayManager;
             this.index = index;
             this.id = 'display' + index;
-            let canvas = document.createElement('canvas');
+            let canvas = document.createElement('canvas'); // fixme try transferToOffline?
             canvas.id = this.id;
             this.canvas = canvas;
             this.ctx = canvas.getContext('2d', {antialias: false});

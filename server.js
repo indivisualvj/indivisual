@@ -811,6 +811,13 @@ function initGet() {
     /**
      *
      */
+    app.get('*worker/*.js', function (req, res) {
+        res.sendFile(path.resolve('app/js' + req.originalUrl));
+    });
+
+    /**
+     *
+     */
     app.get('/animation.js', function (req, res) {
 
         let sources = [].concat(conf.shared).concat(conf.animation);

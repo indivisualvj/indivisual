@@ -38,6 +38,10 @@
          */
         config;
 
+        /**
+         *
+         * @type {Object.<string, HC.SourceManager.DisplaySourcePlugin>}
+         */
         plugins = {};
 
         /**
@@ -56,6 +60,8 @@
             this.samples = options.sample;
 
             this.initPlugins();
+
+            new Worker('worker/store-worker.js');
         }
 
         /**
@@ -276,10 +282,8 @@
                     this.animation.updateSource(recordKey, false, true, true, false);
                 }
 
-                // if (IS_ANIMATION) {
-                let resolution = 630 / target.width;
-                this.storeSample(target.index, target.id, resolution, true);
-                // }
+                let scale = 320 / target.width;
+                this.storeSample(target.index, target.id, scale, true);
 
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-progress', '');
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'yellow');
@@ -321,10 +325,10 @@
          *
          * @param i
          * @param name
-         * @param resolution
+         * @param scale
          * @param load
          */
-        storeSample(i, name, resolution, load) {
+        storeSample(i, name, scale, load) {
 
             if (IS_MONITOR) {
                 return;
@@ -353,7 +357,7 @@
                                 this.animation.updateSource(getSampleLoadKey(sample.index), sample.id, false, true, false);
                             }
                         });
-                        this._storeSample(sample, name, resolution);
+                        this._storeSample(sample, name, scale);
                     });
                 };
 
@@ -366,24 +370,25 @@
          *
          * @param sample
          * @param name
-         * @param resolution
+         * @param scale
          * @private
          */
-        _storeSample(sample, name, resolution) {
+        _storeSample(sample, name, scale) {
+
             sample.pointer = 0;
-            /** @type {HTMLCanvasElement} */
+            /** @type {OffscreenCanvas} */
             let canvas;
-            /** @type {RenderingContext} */
+            /** @type {OffscreenCanvasRenderingContext2D} */
             let ctx;
-            if (resolution && resolution != 1.0) {
-                canvas = document.createElement('canvas');
-                canvas.width = sample.width * resolution;
-                canvas.height = sample.height * resolution;
+            if (scale && scale !== 1.0) {
+                canvas = new OffscreenCanvas(1, 1);//document.createElement('canvas');
+                canvas.width = sample.width * scale;
+                canvas.height = sample.height * scale;
                 ctx = canvas.getContext('2d');
             }
 
             let loops = 0;
-            let divider = 2;
+            let divider = 4;
             this.listener.register(EVENT_SOURCE_MANAGER_RENDER, name, () => {
                 if (loops % divider === 0) {
 
@@ -394,7 +399,10 @@
                         frame = canvas;
                     }
 
-                    let data = frame.toDataURL('image/png');
+                    let blob = frame.convertToBlob({
+                        type: "image/png"
+                    });
+                    let data = URL.createObjectURL(blob);
 
                     messaging.sample(name, sample.pointer + '.png', data);
                     sample.pointer++;
@@ -410,9 +418,8 @@
                         this.listener.removeEventId(EVENT_SOURCE_MANAGER_RENDER, name);
                     }
 
-                    divider = Math.ceil(this.config.DisplaySettings.fps / this.animation.fps) * 2;
                 }
-
+                divider = Math.ceil(this.config.DisplaySettings.fps / this.animation.fps) * 2;
                 loops++;
             });
         }

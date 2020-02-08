@@ -10,6 +10,7 @@
 
         index;
         id;
+
         /**
          *
          * @type {boolean}
@@ -21,11 +22,13 @@
          * @type {boolean}
          */
         record = false;
+
         /**
          *
          * @type {number}
          */
         pointer = 0;
+
         /**
          *
          * @type {boolean}
@@ -37,11 +40,13 @@
          * @type {boolean}
          */
         started = false;
+
         /**
          *
          * @type {boolean}
          */
         complete = false;
+
         /**
          *
          * @type {number}
@@ -52,11 +57,13 @@
          * @type {[]}
          */
         frames = [];
+
         /**
          *
          * @type {number}
          */
         length = 0;
+
         /**
          *
          * @type {number}
@@ -202,45 +209,50 @@
 
             let fps = this.config.DisplaySettings.fps * 1.15;
             let frames = Math.ceil(this.length / 1000 * fps);
-
             this.frameCount = frames;
 
             this.listener.fireEventId('sample.init.start', this.id, this);
 
+            let loops = 0;
+            let divider = 1;
             this.listener.register(EVENT_RENDERER_RENDER, this.id, (data) => {
-                if (this.frames.length < this.frameCount) {
-                    let frame = this._createFrame(this.pointer);
-                    this._resetFrame(frame);
-                    this.frames.push(frame);
+                if (loops % divider === 0) {
+                    if (this.frames.length < this.frameCount) {
+                        let frame = this._createFrame(this.pointer);
+                        this._resetFrame(frame);
+                        this.frames.push(frame);
 
-                    if (this.pointer % 10 == 0) {
-                        this.listener.fireEventId('sample.init.progress', this.id, this);
+                        if (this.pointer % 10 == 0) {
+                            this.listener.fireEventId('sample.init.progress', this.id, this);
+                        }
+
+                        this.pointer++;
+
+                    } else if (needsUpdate && this.pointer < this.frameCount) {
+                        let frame = this.frames[this.pointer];
+                        this._resizeFrame(frame);
+                        this.pointer++;
+
+                    } else {
+                        this.initialized = true;
+                        this.pointer = 0;
+                        this.listener.remove(EVENT_RENDERER_RENDER, this.id);
+                        this.listener.fireEventId('sample.init.end', this.id, this);
                     }
-
-                    this.pointer++;
-
-                } else if (needsUpdate && this.pointer < this.frameCount) {
-                    let frame = this.frames[this.pointer];
-                    this._resetFrame(frame);
-                    this.pointer++;
-
-                } else {
-                    this.initialized = true;
-                    this.pointer = 0;
-                    this.listener.fireEventId('sample.init.end', this.id, this);
-                    this.listener.remove(EVENT_RENDERER_RENDER, this.id);
                 }
+                divider = Math.ceil(this.config.DisplaySettings.fps / this.program.fps);
+                loops++;
             });
         }
 
         /**
          *
          * @param index
-         * @returns {HTMLCanvasElement}
+         * @returns {OffscreenCanvas}
          * @private
          */
         _createFrame(index) {
-            let frame = document.createElement('canvas');
+            let frame = new OffscreenCanvas(1, 1);
             frame.id = this.id + '_' + index;
             frame.ctx = frame.getContext('2d');
 
@@ -252,11 +264,23 @@
          * @param frame
          * @private
          */
-        _resetFrame(frame) {
+        _resizeFrame(frame) {
             frame.width = this.width;
             frame.height = this.height;
-            frame.ctx.fillStyle = '#000000';
-            frame.ctx.fillRect(0, 0, this.width, this.height);
+        }
+
+        /**
+         *
+         * @param frame
+         * @private
+         */
+        _resetFrame(frame) {
+            this._resizeFrame(frame);
+
+            requestAnimationFrame(() => {
+                frame.ctx.fillStyle = '#000000';
+                frame.ctx.fillRect(0, 0, this.width, this.height);
+            });
         }
 
         /**
@@ -287,8 +311,9 @@
 
         /**
          *
-         * @param callback
-         * @returns {boolean|*}
+         * @param onfinished
+         * @param onfiles
+         * @returns {boolean|{duration: number, frames: number, ready: boolean, beats: number, id: *, thumbs: []}}
          */
         clip(onfinished, onfiles) {
             if (!this._clip) {
@@ -377,7 +402,7 @@
                             return;
                         }
 
-                        let canvas = document.createElement('canvas');
+                        let canvas = new OffscreenCanvas(this.width, this.height);//document.createElement('canvas');  // fixme try transferToOffline?
                         let ctx = canvas.getContext('2d');
                         canvas.ctx = ctx;
                         canvas.width = this.width;

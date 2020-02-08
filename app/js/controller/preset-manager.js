@@ -83,7 +83,7 @@
         }
 
         /**
-         *
+         * fixme did not reset remaining changed layers
          * @param {HC.GuifyExplorerFolder} folder
          */
         loadPresets(folder) {

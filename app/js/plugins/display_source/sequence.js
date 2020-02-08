@@ -91,22 +91,23 @@
 
         /**
          *
+         * @param {HC.SourceManager} sourceManager
          */
-        construct() {
-            if (this.listener) {
-                this.listener.register(EVENT_SOURCE_SETTING_CHANGED, this.id, (data) => {
+        static initListeners(sourceManager) {
+            if (sourceManager.listener) {
+                sourceManager.listener.register(EVENT_SOURCE_SETTING_CHANGED, 'sequence', (data) => {
                     let item = data[0];
                     let value = data[1];
                     let display = data[2];
 
-                    if (display) {
-                        if (item.startsWith(this.id)) {
-                            if (item.match(/^sequence\d+_input$/)) {
-                                this.sourceManager.updatePluginNrSource('sequence', this.index);
+                    if (display && item.startsWith('sequence')) {
+                        let seq = numberExtract(item, 'sequence');
 
-                            } else {
-                                this.sourceManager.updatePluginNr('sequence', this.index);
-                            }
+                        if (item.match(/^sequence\d+_input$/)) {
+                            sourceManager.updatePluginNrSource('sequence', seq);
+
+                        } else {
+                            sourceManager.updatePluginNr('sequence', seq);
                         }
                     }
                 });

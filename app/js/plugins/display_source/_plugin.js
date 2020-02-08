@@ -108,14 +108,13 @@ HC.SourceManager.display_source = {};
                 this.renderer = this.sourceManager.renderer;
             }
             this.config = owner.config;
-
-            this.construct();
         }
 
         /**
          *
+         * @param {HC.SourceManager} sourceManager
          */
-        construct() {
+        static initListeners(sourceManager) {
 
         }
 

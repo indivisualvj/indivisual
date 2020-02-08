@@ -54,6 +54,17 @@
             }
             this.config = options.config;
             this.samples = options.sample;
+
+            this.initPlugins();
+        }
+
+        /**
+         *
+         */
+        initPlugins() {
+            for (let p in HC.SourceManager.display_source) {
+                HC.SourceManager.display_source[p].initListeners(this);
+            }
         }
 
         /**

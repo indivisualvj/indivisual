@@ -37,7 +37,7 @@ HC.SourceManager.display_source = {};
         type;
 
         /**
-         * @type {HTMLElement}
+         * @type {OffscreenCanvas}
          */
         canvas;
 

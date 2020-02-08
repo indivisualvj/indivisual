@@ -39,6 +39,11 @@
         config;
 
         /**
+         * @type {Worker}
+         */
+        worker;
+
+        /**
          *
          * @type {Object.<string, HC.SourceManager.DisplaySourcePlugin>}
          */
@@ -61,7 +66,7 @@
 
             this.initPlugins();
 
-            new Worker('worker/store-worker.js');
+            this.worker = new Worker('worker/store-worker.js');
         }
 
         /**
@@ -339,7 +344,6 @@
 
                 let dir = filePath(SAMPLE_DIR, name);
                 let callback = () => {
-
                     messaging._emit({action: 'unlinkall', dir: dir}, (files) => {
                         console.log('unlinkall', dir, files.length + ' files deleted');
 
@@ -375,53 +379,26 @@
          */
         _storeSample(sample, name, scale) {
 
-            sample.pointer = 0;
-            /** @type {OffscreenCanvas} */
-            let canvas;
-            /** @type {OffscreenCanvasRenderingContext2D} */
-            let ctx;
-            if (scale && scale !== 1.0) {
-                canvas = new OffscreenCanvas(1, 1);//document.createElement('canvas');
-                canvas.width = sample.width * scale;
-                canvas.height = sample.height * scale;
-                ctx = canvas.getContext('2d');
+            let frames = [];
+            for (let i = 0; i < sample.frameCount; i++) {
+                frames[i] = sample.frames[i].transferToImageBitmap();
             }
 
-            let loops = 0;
-            let divider = 4;
-            this.listener.register(EVENT_SOURCE_MANAGER_RENDER, name, () => {
-                if (loops % divider === 0) {
-
-                    let frame = sample.frames[sample.pointer];
-                    if (ctx) {
-                        ctx.clearRect(0, 0, canvas.width, canvas.height);
-                        ctx.drawImage(frame, 0, 0, frame.width, frame.height, 0, 0, canvas.width, canvas.height);
-                        frame = canvas;
-                    }
-
-                    let blob = frame.convertToBlob({
-                        type: "image/png"
-                    });
-                    let data = URL.createObjectURL(blob);
-
-                    messaging.sample(name, sample.pointer + '.png', data);
-                    sample.pointer++;
-
-                    if (sample.pointer % 5 == 0) {
-                        this.listener.fireEventId('sample.store.progress', sample.id, sample);
-                    }
-
-                    if (sample.pointer < sample.frameCount) {
-
-                    } else {
-                        this.listener.fireEventId('sample.store.end', sample.id, sample);
-                        this.listener.removeEventId(EVENT_SOURCE_MANAGER_RENDER, name);
-                    }
-
+            this.worker.onmessage = (ev) => {
+                if (ev.data === sample.id) {
+                    this.listener.fireEventId('sample.store.end', sample.id, sample);
+                    this.worker.onmessage = null;
                 }
-                divider = Math.ceil(this.config.DisplaySettings.fps / this.animation.fps) * 2;
-                loops++;
-            });
+            };
+            this.worker.postMessage({
+                length: sample.frameCount,
+                frames: frames,
+                path: filePath(SAMPLE_DIR, name),
+                scale: scale,
+                sid: messaging.sid,
+                id: sample.id
+            }, frames);
+
         }
 
         /**

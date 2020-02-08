@@ -505,8 +505,8 @@ function _sample(data, callback) {
     _existCreate(dir);
 
     if (data.file) {
-        let contents = data.contents.split(',')[1]; // Get rid of the data:image/png;base64 at the beginning of the file data
-        let buffer = Buffer.from(contents, 'base64');
+        let contents = data.contents;//.split(',')[1]; // Get rid of the data:image/png;base64 at the beginning of the file data
+        let buffer = contents;//Buffer.from(contents, 'base64');
         fs.writeFile(file, buffer.toString('binary'), 'binary', function (err) {
             if (err) {
                 console.log(err);

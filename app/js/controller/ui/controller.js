@@ -200,7 +200,7 @@
             let s = this.getStep();
 
             if (isFloat(s)) {
-                s *= factor;
+                s *= factor||1;
             }
 
             v += s;
@@ -217,7 +217,7 @@
             let s = this.getStep();
 
             if (isFloat(s)) {
-                s *= factor;
+                s *= factor||1;
             }
 
             v -= s;

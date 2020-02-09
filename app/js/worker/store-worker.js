@@ -52,7 +52,6 @@ onmessage = function (ev) {
             frame.convertToBlob({
                 type: "image/png"
             }).then((blob) => {
-                // let data = URL.createObjectURL(blob);
                 sample(path, i + '.png', blob, name, sid);
                 stored++;
                 if (stored >= length) {
@@ -60,5 +59,8 @@ onmessage = function (ev) {
                 }
             });
         }
+
+    } else {
+        self.postMessage({id: ev.data.id, frames: frames}, frames);
     }
 };

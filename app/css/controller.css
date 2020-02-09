@@ -622,6 +622,7 @@ input:focus, select:focus {
     height: 100%;
     border-right: 4px solid cornflowerblue;
     box-sizing: border-box;
+    background: rgba(0, 0, 0, .3)
 }
 
 .thumb {

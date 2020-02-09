@@ -49,17 +49,15 @@ onmessage = function (ev) {
                 frame = canvas;
             }
 
-            requestAnimationFrame(() => {
-                frame.convertToBlob({
-                    type: "image/png"
-                }).then((blob) => {
-                    // let data = URL.createObjectURL(blob);
-                    sample(path, i + '.png', blob, name, sid);
-                    stored++;
-                    if (stored >= length) {
-                        self.postMessage(ev.data.id);
-                    }
-                });
+            frame.convertToBlob({
+                type: "image/png"
+            }).then((blob) => {
+                // let data = URL.createObjectURL(blob);
+                sample(path, i + '.png', blob, name, sid);
+                stored++;
+                if (stored >= length) {
+                    self.postMessage(ev.data.id);
+                }
             });
         }
     }

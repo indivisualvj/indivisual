@@ -103,7 +103,7 @@
             this.displayManager = animation.displayManager;
             this.index = index;
             this.id = 'display' + index;
-            let canvas = document.createElement('canvas'); // fixme try transferToOffline?
+            let canvas = document.createElement('canvas');
             canvas.id = this.id;
             this.canvas = canvas;
             this.ctx = canvas.getContext('2d', {antialias: false});
@@ -201,9 +201,6 @@
             if (this._dirty) {
                 bounds = bounds || this._clipBounds();
                 this.ctx.clearRect(bounds.x, bounds.y, bounds.width, bounds.height);
-                // if (!this.transparent && this.config.DisplaySettings.clip_context && this.mask) {
-                //     this.ctx.drawImage(this.mask.background, 0, 0);
-                // }
                 this._dirty = false;
             }
         }
@@ -276,15 +273,7 @@
          * @returns {boolean}
          */
         getSetBackground() {
-
-            if (this.transparent) {
-                return false; // durchsichtig
-
-            // } else if (this.config.DisplaySettings.clip_context && this.mask) {
-            //     return false; // mask.background
-            }
-
-            return true;
+            return !this.transparent;
         }
 
         /**

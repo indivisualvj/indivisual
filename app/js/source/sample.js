@@ -402,7 +402,7 @@
                             return;
                         }
 
-                        let canvas = new OffscreenCanvas(this.width, this.height);//document.createElement('canvas');  // fixme try transferToOffline?
+                        let canvas = new OffscreenCanvas(this.width, this.height);
                         let ctx = canvas.getContext('2d');
                         canvas.ctx = ctx;
                         canvas.width = this.width;
@@ -461,6 +461,7 @@
                             let ctx = target.ctx;
                             ctx.clearRect(0, 0, sample.width, sample.height);
                             ctx.drawImage(image, 0, 0);
+                            delete target.ctx;
                         }
                     }
                 }

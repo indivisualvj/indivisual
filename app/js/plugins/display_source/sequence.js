@@ -121,7 +121,7 @@
         init(index) {
             this.index = index;
             this.id = this.type + this.index;
-            this.canvas = new OffscreenCanvas(1, 1); //document.createElement('canvas');  // fixme try transferToOffline?
+            this.canvas = new OffscreenCanvas(1, 1);
             this.canvas.id = this.id;
             this.canvas.ctx = this.canvas.getContext('2d');
             this.counter = 0;

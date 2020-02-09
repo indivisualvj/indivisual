@@ -379,25 +379,55 @@
          */
         _storeSample(sample, name, scale) {
 
-            let frames = [];
-            for (let i = 0; i < sample.frameCount; i++) {
-                frames[i] = sample.frames[i].transferToImageBitmap();
+            let canvas;
+            let context;
+            if (scale && scale !== 1.0) {
+                canvas = new OffscreenCanvas(1, 1);
+                context = canvas.getContext('2d');
+                canvas.width = sample.width * scale;
+                canvas.height = sample.height * scale;
             }
-
-            this.worker.onmessage = (ev) => {
-                if (ev.data === sample.id) {
-                    this.listener.fireEventId('sample.store.end', sample.id, sample);
-                    this.worker.onmessage = null;
+            let stored = 0;
+            this.listener.register(EVENT_RENDERER_RENDER, sample.id, (data) => {
+                let frame = sample.frames[stored];
+                if (context) {
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+                    context.drawImage(frame, 0, 0, frame.width, frame.height, 0, 0, canvas.width, canvas.height);
+                    frame = canvas;
                 }
-            };
-            this.worker.postMessage({
-                length: sample.frameCount,
-                frames: frames,
-                path: filePath(SAMPLE_DIR, name),
-                scale: scale,
-                sid: messaging.sid,
-                id: sample.id
-            }, frames);
+
+                frame.convertToBlob({
+                    type: "image/png"
+                }).then((blob) => {
+                    // let data = URL.createObjectURL(blob);
+                    messaging.sample(name, stored + '.png', blob);
+                    stored++;
+                    if (stored >= sample.frameCount) {
+                        this.listener.removeEventId(EVENT_RENDERER_RENDER, sample.id);
+                        this.listener.fireEventId('sample.store.end', sample.id, sample);
+                    }
+                });
+            });
+
+            // not working worker approach
+            // let frames = [];
+            // for (let i = 0; i < sample.frameCount; i++) {
+            //     frames[i] = sample.frames[i].transferToImageBitmap();
+            // }
+            // this.worker.onmessage = (ev) => {
+            //     if (ev.data === sample.id) {
+            //         this.listener.fireEventId('sample.store.end', sample.id, sample);
+            //         this.worker.onmessage = null;
+            //     }
+            // };
+            // this.worker.postMessage({
+            //     length: sample.frameCount,
+            //     frames: frames,
+            //     path: filePath(SAMPLE_DIR, name),
+            //     scale: scale,
+            //     sid: messaging.sid,
+            //     id: sample.id
+            // }, frames);
 
         }
 

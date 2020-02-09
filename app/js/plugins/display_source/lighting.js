@@ -59,7 +59,7 @@
             this.shuffleCounter = 0;
 
             if (!this.canvas) {
-                this.canvas = document.createElement('canvas');
+                this.canvas = new OffscreenCanvas(1, 1);
                 this.canvas.ctx = this.canvas.getContext('2d');
                 this.canvas.id = this.id;
             }

@@ -46,7 +46,7 @@
             }
             edge = nearest;
 
-            let canvas = new OffscreenCanvas(edge, edge);//document.createElement('canvas');  // fixme try transferToOffline?
+            let canvas = new OffscreenCanvas(edge, edge);
             canvas.width = edge;
             canvas.height = edge;
             canvas._ctx = canvas.getContext('2d');

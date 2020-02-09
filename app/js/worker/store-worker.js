@@ -37,7 +37,7 @@ onmessage = function (ev) {
 
     if (frames.length) {
         canvas.width = frames[0].width * scale;
-        canvas.height = frames[0].width * scale;
+        canvas.height = frames[0].height * scale;
 
         let stored = 0;
 

@@ -695,7 +695,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (display) {
                 if (item.match(/^sample\d+_load/) && value) {
-                    if (IS_MONITOR || display) {
+                    if (IS_MONITOR) {
                         this.sourceManager.loadSample(numberExtract(item, 'sample'), value);
                     }
                     this.updateSource(item, false, false, true, false);
@@ -703,7 +703,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 } else if (item.match(/^sample\d+_/)) {
                     this.sourceManager.updateSample(numberExtract(item, 'sample'));
 
-                    if (item.match(/sample\d+_enabled/) && !value) {
+                    if (item.match(/sample\d+_(enabled|record)/)) { // never let samples be selected on enabled/record status change
                         this.listener.fireEvent(EVENT_SAMPLE_DISABLED, this.sourceManager.getSample(numberExtract(item, 'sample')));
                     }
 

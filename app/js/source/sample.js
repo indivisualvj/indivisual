@@ -3,7 +3,7 @@
  */
 {
     /**
-     * fixme runtime 12to16 on sample0 always
+     *
      * @type {HC.Sample}
      */
     HC.Sample = class Sample {
@@ -169,7 +169,7 @@
          * @returns {boolean|*}
          */
         isReady() {
-            return this.enabled && this.initialized && this.complete && this.samples;
+            return this.enabled && this.initialized && this.complete && this.samples.length;
         }
 
         /**
@@ -316,7 +316,7 @@
         }
 
         /**
-         *
+         * fixme sourceman!
          * @param onfinished
          * @param onfiles
          * @returns {boolean|{duration: number, frames: number, ready: boolean, beats: number, id: *, thumbs: []}}
@@ -363,72 +363,6 @@
                 });
             }
             return this._clip;
-        }
-
-        /**
-         *
-         * @param name
-         * @param width
-         * @param height
-         */
-        load(name, width, height) {
-
-            this.width = width;
-            this.height = height;
-
-            let file = filePath(SAMPLE_DIR, name);
-            let loaded = 0;
-
-            messaging._emit({action: 'files', file: file}, (files) => {
-
-                let frameCount = files.length;
-                let seconds = frameCount / 60;
-                this.enabled = true;
-                this.initialized = true;
-                this.duration = Math.ceil(60000 / this.config.ControlSettings.tempo);
-                this.beats = Math.ceil(seconds * 1000 / this.duration);
-
-                this.frameCount = frameCount;
-                this.frames = [];
-
-                for (let i = 0; i < frameCount; i++) {
-                    let file = files[i];
-                    file = filePath(SAMPLE_DIR, name, i + '.png');
-                    let image = new Image();
-                    this.frames.push(image);
-                    image.src = file;
-                    image._index = i;
-
-                    image.onerror = () => {
-                        frameCount--;
-                    };
-                    image.onload = () => {
-
-                        if (!this.enabled) {
-                            return;
-                        }
-
-                        let canvas = new OffscreenCanvas(this.width, this.height);
-                        let ctx = canvas.getContext('2d');
-                        canvas.ctx = ctx;
-                        canvas.width = this.width;
-                        canvas.height = this.height;
-                        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-                        this.frames[image._index] = canvas;
-
-                        loaded++;
-                        this.pointer = loaded;
-                        if (loaded % 10 == 0) {
-                            this.listener.fireEventId('sample.load.progress', this.id, this);
-                        }
-                        if (loaded == frameCount) {
-                            this.finish();
-                            this.listener.fireEventId('sample.load.end', this.id, this);
-                        }
-                    };
-                }
-            });
         }
 
         /**

@@ -110,7 +110,7 @@ lighting_color:
   magenta: magenta
   yellow: yellow
 
-lighting_type: # todo display_source plugin lighting could define plugins on its own maybe?
+lighting_type:
   off: 'off'
   randomblitzrgb: randomblitz RGB
   randomblitzamber: randomblitz AMBER

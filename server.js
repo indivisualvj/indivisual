@@ -551,11 +551,6 @@ function _store(data) {
         }
 
         delete data.data.session;
-        delete data.data.isdefault;
-        delete data.data.initial;
-        delete data.data.reset;
-        delete data.data.layers;
-        delete data.data.settings;
         delete data.data.sample0_enabled;
         delete data.data.sample1_enabled;
         delete data.data.sample2_enabled;
@@ -574,11 +569,19 @@ function _store(data) {
         delete data.data.sample3_load;
         delete data.data.sample4_load;
         delete data.data.sample5_load;
-        //delete data.data.monitor;
 
         for (let k in data.data) {
             let v = data.data[k];
-            settings[k] = v;
+            if (typeof v === 'object') { // most likely to be case with ControlSet
+                if (!(k in settings)) {
+                    settings[k] = {};
+                }
+                for (let i in v) {
+                    settings[k][i] = v[i];
+                }
+            } else { // old structure used for control/display/source settings
+                settings[k] = v;
+            }
         }
 
         session.blocked = false;
@@ -894,6 +897,7 @@ function initGet() {
      *
      */
     app.get('*', function (req, res) {
+        console.log('sending fallback', req.originalUrl);
         res.sendFile(_APP + '/favicon.ico');
     });
 }

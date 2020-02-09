@@ -41,7 +41,12 @@
         /**
          * @type {Worker}
          */
-        worker;
+        storeWorker;
+
+        /**
+         * @type {Worker}
+         */
+        loadWorker;
 
         /**
          *
@@ -66,7 +71,8 @@
 
             this.initPlugins();
 
-            this.worker = new Worker('worker/store-worker.js');
+            this.storeWorker = new Worker('worker/store-worker.js');
+            this.loadWorker = new Worker('worker/load-worker.js');
         }
 
         /**
@@ -283,12 +289,12 @@
             this.listener.register('sample.render.end', sample.id, (target) => {
                 let recordKey = getSampleRecordKey(target.index);
 
-                if (this.config.SourceSettings[recordKey]) { // sample
+                if (this.config.SourceSettings[recordKey]) { // reset smpX_record
                     this.animation.updateSource(recordKey, false, true, true, false);
                 }
 
                 let scale = 320 / target.width;
-                this.storeSample(target.index, target.id, scale, true);
+                this.storeSample(target.index, target.id, scale);
 
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-progress', '');
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', 'yellow');
@@ -331,9 +337,8 @@
          * @param i
          * @param name
          * @param scale
-         * @param load
          */
-        storeSample(i, name, scale, load) {
+        storeSample(i, name, scale) {
 
             if (IS_MONITOR) {
                 return;
@@ -341,7 +346,6 @@
 
             let sample = this.getSample(i);
             if (sample) {
-
                 let dir = filePath(SAMPLE_DIR, name);
                 let callback = () => {
                     messaging._emit({action: 'unlinkall', dir: dir}, (files) => {
@@ -357,7 +361,7 @@
                             messaging.emitAttr('[data-id="' + key + '"]', 'data-label', '');
                             messaging.emitAttr('[data-id="' + key + '"]', 'data-color', '');
 
-                            if (load) {
+                            if (IS_ANIMATION) { // forward load sample to monitor
                                 this.animation.updateSource(getSampleLoadKey(sample.index), sample.id, false, true, false);
                             }
                         });
@@ -379,64 +383,23 @@
          */
         _storeSample(sample, name, scale) {
 
-            // the also working but slower no-worker approach
-            // let canvas;
-            // let context;
-            // if (scale && scale !== 1.0) {
-            //     canvas = new OffscreenCanvas(1, 1);
-            //     context = canvas.getContext('2d');
-            //     canvas.width = sample.width * scale;
-            //     canvas.height = sample.height * scale;
-            // }
-            // let stored = 0;
-            // this.listener.register(EVENT_RENDERER_RENDER, sample.id, (data) => {
-            //     let frame = sample.frames[stored];
-            //     if (context) {
-            //         context.clearRect(0, 0, canvas.width, canvas.height);
-            //         context.drawImage(frame, 0, 0, frame.width, frame.height, 0, 0, canvas.width, canvas.height);
-            //         frame = canvas;
-            //     }
-            //
-            //     frame.convertToBlob({
-            //         type: "image/png"
-            //     }).then((blob) => {
-            //         // let data = URL.createObjectURL(blob);
-            //         messaging.sample(name, stored + '.png', blob);
-            //         stored++;
-            //         if (stored >= sample.frameCount) {
-            //             this.listener.removeEventId(EVENT_RENDERER_RENDER, sample.id);
-            //             this.listener.fireEventId('sample.store.end', sample.id, sample);
-            //         }
-            //     });
-            // });
+            // sample.complete = false;
 
-            // the meanwhile working worker approach
-            // let frames = [];
-            // for (let i = 0; i < sample.frameCount; i++) {
-            //     let frame = sample.frames[i];
-            //     let target = frames[i] = frame.transferToImageBitmap();
-            //     target._color = frame._color;
-            //     target.progress = frame.progress;
-            //     target.prc = frame.prc;
-            // }
-            // sample.frames = frames;
-
-            this.worker.onmessage = (ev) => {
+            this.storeWorker.onmessage = (ev) => {
                 if (ev.data.id === sample.id) {
+                    // sample.complete = true;
+                    this.storeWorker.onmessage = null;
                     sample.samples = ev.data.frames;
                     this.listener.fireEventId('sample.store.end', sample.id, sample);
-                    this.worker.onmessage = null;
                 }
             };
-            this.worker.postMessage({
+            this.storeWorker.postMessage({
                 length: sample.frameCount,
                 frames: sample.samples,
                 path: filePath(SAMPLE_DIR, name),
                 scale: scale,
-                sid: messaging.sid,
                 id: sample.id
             }, sample.samples);
-
         }
 
         /**
@@ -445,18 +408,83 @@
         loadSample(i, name) {
             let sample = this.getSample(i);
             if (sample) {
-                this.listener.register('sample.load.progress', sample.id, function (target) {
-                    // let key = getSampleLoadKey(i);
-                    // messaging.emitAttr('[data-id="' + key + '"]', 'data-label', target.pointer + '/' + target.frameCount);
-                    // messaging.emitAttr('[data-id="' + key + '"]', 'data-color', 'red');
-                });
-                this.listener.register('sample.load.end', sample.id, function (target) {
-                    // let key = getSampleLoadKey(i);
-                    // messaging.emitAttr('[data-id="' + key + '"]', 'data-label', '');
-                    // messaging.emitAttr('[data-id="' + key + '"]', 'data-color', '');
-                });
-                sample.load(name, this.displayManager.width, this.displayManager.height);
+                this._loadSample(sample, name);
             }
+        }
+
+        /**
+         *
+         * @param sample
+         * @param name
+         * @private
+         */
+        _loadSample(sample, name) {
+            sample.width = this.displayManager.width;
+            sample.height = this.displayManager.height;
+
+            let file = filePath(SAMPLE_DIR, name);
+
+            messaging._emit({action: 'files', file: file}, (files) => {
+
+                let frameCount = files.length;
+                sample.enabled = true;
+                sample.initialized = true;
+                sample.duration = Math.ceil(60000 / this.config.ControlSettings.tempo);
+                sample.beats = Math.ceil((frameCount / 60) * 1000 / sample.duration);
+                sample.frameCount = frameCount;
+                sample.frames = [];
+                let blobs = [];
+                for (let i = 0; i < frameCount; i++) {
+                    blobs.push(new ArrayBuffer(0));
+                }
+
+                this.loadWorker.onmessage = (ev) => {
+                    if (ev.data.id === sample.id) {
+                        this.loadWorker.onmessage = null;
+                        let blobs = ev.data.blobs;
+                        sample.samples = [];
+
+                        let loaded = 0;
+                        for (let i = 0; i < blobs.length; i++) {
+
+                            let blob = blobs[i];
+                            let image = new Image();
+                            image._index = i;
+                            image.onload = () => {
+
+                                let canvas = new OffscreenCanvas(sample.width, sample.height);
+                                let ctx = canvas.getContext('2d');
+
+                                ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+
+                                let bmp = canvas.transferToImageBitmap();
+                                bmp._index = image._index;
+                                sample.samples[bmp._index] = bmp;
+
+                                URL.revokeObjectURL(image.src);
+
+                                loaded++;
+                                if (loaded >= frameCount) {
+                                    sample.pointer = sample.frameCount;
+                                    sample.finish();
+                                    this.listener.fireEventId(EVENT_SAMPLE_READY, sample);
+                                }
+                            };
+
+                            let arrayBufferView = new Uint8Array(blob);
+                            blob = new Blob( [ arrayBufferView ], { type: "image/png" } );
+                            image.src = URL.createObjectURL(blob);
+                        }
+                    }
+                };
+                this.loadWorker.postMessage({
+                    length: sample.frameCount,
+                    files: files,
+                    blobs: blobs,
+                    path: filePath(SAMPLE_DIR, name),
+                    id: sample.id
+                }, blobs);
+            });
         }
 
         /**

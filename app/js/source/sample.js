@@ -303,11 +303,7 @@
                 this.listener.fireEventId('sample.render.error', this.id, this);
 
             } else {
-                let overflow = this.samples.splice(this.pointer);
-                for (let i = 0; i < overflow.length; i++) {
-                    overflow[i].close();
-                }
-
+                this.samples.splice(this.pointer);
                 this.complete = true;
                 this.record = false;
                 this.frameCount = this.pointer;

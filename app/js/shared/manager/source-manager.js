@@ -379,55 +379,63 @@
          */
         _storeSample(sample, name, scale) {
 
-            let canvas;
-            let context;
-            if (scale && scale !== 1.0) {
-                canvas = new OffscreenCanvas(1, 1);
-                context = canvas.getContext('2d');
-                canvas.width = sample.width * scale;
-                canvas.height = sample.height * scale;
-            }
-            let stored = 0;
-            this.listener.register(EVENT_RENDERER_RENDER, sample.id, (data) => {
-                let frame = sample.frames[stored];
-                if (context) {
-                    context.clearRect(0, 0, canvas.width, canvas.height);
-                    context.drawImage(frame, 0, 0, frame.width, frame.height, 0, 0, canvas.width, canvas.height);
-                    frame = canvas;
-                }
+            // the also working but slower no-worker approach
+            // let canvas;
+            // let context;
+            // if (scale && scale !== 1.0) {
+            //     canvas = new OffscreenCanvas(1, 1);
+            //     context = canvas.getContext('2d');
+            //     canvas.width = sample.width * scale;
+            //     canvas.height = sample.height * scale;
+            // }
+            // let stored = 0;
+            // this.listener.register(EVENT_RENDERER_RENDER, sample.id, (data) => {
+            //     let frame = sample.frames[stored];
+            //     if (context) {
+            //         context.clearRect(0, 0, canvas.width, canvas.height);
+            //         context.drawImage(frame, 0, 0, frame.width, frame.height, 0, 0, canvas.width, canvas.height);
+            //         frame = canvas;
+            //     }
+            //
+            //     frame.convertToBlob({
+            //         type: "image/png"
+            //     }).then((blob) => {
+            //         // let data = URL.createObjectURL(blob);
+            //         messaging.sample(name, stored + '.png', blob);
+            //         stored++;
+            //         if (stored >= sample.frameCount) {
+            //             this.listener.removeEventId(EVENT_RENDERER_RENDER, sample.id);
+            //             this.listener.fireEventId('sample.store.end', sample.id, sample);
+            //         }
+            //     });
+            // });
 
-                frame.convertToBlob({
-                    type: "image/png"
-                }).then((blob) => {
-                    // let data = URL.createObjectURL(blob);
-                    messaging.sample(name, stored + '.png', blob);
-                    stored++;
-                    if (stored >= sample.frameCount) {
-                        this.listener.removeEventId(EVENT_RENDERER_RENDER, sample.id);
-                        this.listener.fireEventId('sample.store.end', sample.id, sample);
-                    }
-                });
-            });
-
-            // not working worker approach
+            // the meanwhile working worker approach
             // let frames = [];
             // for (let i = 0; i < sample.frameCount; i++) {
-            //     frames[i] = sample.frames[i].transferToImageBitmap();
+            //     let frame = sample.frames[i];
+            //     let target = frames[i] = frame.transferToImageBitmap();
+            //     target._color = frame._color;
+            //     target.progress = frame.progress;
+            //     target.prc = frame.prc;
             // }
-            // this.worker.onmessage = (ev) => {
-            //     if (ev.data === sample.id) {
-            //         this.listener.fireEventId('sample.store.end', sample.id, sample);
-            //         this.worker.onmessage = null;
-            //     }
-            // };
-            // this.worker.postMessage({
-            //     length: sample.frameCount,
-            //     frames: frames,
-            //     path: filePath(SAMPLE_DIR, name),
-            //     scale: scale,
-            //     sid: messaging.sid,
-            //     id: sample.id
-            // }, frames);
+            // sample.frames = frames;
+
+            this.worker.onmessage = (ev) => {
+                if (ev.data.id === sample.id) {
+                    sample.samples = ev.data.frames;
+                    this.listener.fireEventId('sample.store.end', sample.id, sample);
+                    this.worker.onmessage = null;
+                }
+            };
+            this.worker.postMessage({
+                length: sample.frameCount,
+                frames: sample.samples,
+                path: filePath(SAMPLE_DIR, name),
+                scale: scale,
+                sid: messaging.sid,
+                id: sample.id
+            }, sample.samples);
 
         }
 

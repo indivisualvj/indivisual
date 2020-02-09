@@ -117,16 +117,21 @@
          */
         initThreeJs() {
             if (!this.three.renderer) {
-                let conf = {alpha: true, antialias: ANTIALIAS};
+                let canvas = new OffscreenCanvas(1, 1);
+
+                let conf = {alpha: true, antialias: ANTIALIAS, canvas: canvas};
                 this.three.renderer = new THREE.WebGLRenderer(conf);
                 this.three.renderer.shadowMap.enabled = true;
                 this.three.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-                this.three.renderer.view = this.three.renderer.domElement;
-                this.three.renderer.view.id = 'threeWebGL';
 
-                this.three.renderer.view.addEventListener('webglcontextlost', () => {
+                /** @type {HTMLCanvasElement} */
+                canvas.id = 'threeWebGL';
+                canvas.style = {width: 1, height: 1};
+                canvas.addEventListener('webglcontextlost', () => {
                     this.animation.listener.fireEvent('webglcontextlost');
                 });
+
+                this.three.renderer.view = canvas;
 
                 this.three.scene = new THREE.Scene();
                 this.three.perspective0 = new THREE.PerspectiveCamera(50, 1, 0.1, 500000);

@@ -43,7 +43,7 @@ onmessage = function (ev) {
 
         for (let i = 0; i < length; i++) {
             let frame = frames[i];
-            if (context) {
+            if (scale && scale !== 1.0) {
                 context.clearRect(0, 0, canvas.width, canvas.height);
                 context.drawImage(frame, 0, 0, frame.width, frame.height, 0, 0, canvas.width, canvas.height);
                 frame = canvas;
@@ -56,7 +56,7 @@ onmessage = function (ev) {
                 sample(path, i + '.png', blob, name, sid);
                 stored++;
                 if (stored >= length) {
-                    self.postMessage(ev.data.id);
+                    self.postMessage({id: ev.data.id, frames: frames}, frames);
                 }
             });
         }

@@ -3,7 +3,7 @@
  */
 {
     /**
-     * 
+     * fixme runtime 12to16 on sample0 always
      * @type {HC.Sample}
      */
     HC.Sample = class Sample {
@@ -54,9 +54,14 @@
         counter = 0;
 
         /**
-         * @type {[]}
+         * @type {Array.<OffscreenCanvas>}
          */
         frames = [];
+
+        /**
+         * @type {Array.<ImageBitmap>}
+         */
+        samples = [];
 
         /**
          *
@@ -164,7 +169,7 @@
          * @returns {boolean|*}
          */
         isReady() {
-            return this.enabled && this.initialized && this.complete && this.frames;
+            return this.enabled && this.initialized && this.complete && this.samples;
         }
 
         /**
@@ -174,7 +179,7 @@
          */
         getFrame(i) {
             if (this.isReady() && i > -1 && i < this.frameCount) {
-                return this.frames[i];
+                return this.samples[i];
             }
 
             return false;
@@ -230,7 +235,7 @@
 
                     } else if (needsUpdate && this.pointer < this.frameCount) {
                         let frame = this.frames[this.pointer];
-                        this._resizeFrame(frame);
+                        this._resetFrame(frame);
                         this.pointer++;
 
                     } else {
@@ -253,6 +258,7 @@
          */
         _createFrame(index) {
             let frame = new OffscreenCanvas(1, 1);
+            frame.index = index;
             frame.id = this.id + '_' + index;
             frame.ctx = frame.getContext('2d');
 
@@ -278,8 +284,7 @@
             this._resizeFrame(frame);
 
             requestAnimationFrame(() => {
-                frame.ctx.fillStyle = '#000000';
-                frame.ctx.fillRect(0, 0, this.width, this.height);
+                frame.ctx.clearRect(0, 0, frame.width, frame.height);
             });
         }
 
@@ -298,6 +303,10 @@
                 this.listener.fireEventId('sample.render.error', this.id, this);
 
             } else {
+
+                // this.frames.splice(this.pointer);
+                this.samples.splice(this.pointer);
+
                 this.complete = true;
                 this.record = false;
                 this.frameCount = this.pointer;
@@ -453,15 +462,18 @@
 
                     }
                     if (!sample.complete) {
-                        let target = sample.frames[sample.pointer++];
+                        let target = sample.frames[sample.pointer];
                         if (target && target.ctx) {
+                            let ctx = target.ctx;
+                            ctx.drawImage(image, 0, 0);
+                            target = target.transferToImageBitmap();
                             target._color = color;
                             target.progress = sample.counter + speed.prc;
                             target.prc = speed.prc;
-                            let ctx = target.ctx;
-                            ctx.clearRect(0, 0, sample.width, sample.height);
-                            ctx.drawImage(image, 0, 0);
-                            delete target.ctx;
+
+                            sample.samples[sample.pointer] = target;
+
+                            sample.pointer++;
                         }
                     }
                 }

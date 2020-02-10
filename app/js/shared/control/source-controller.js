@@ -771,22 +771,23 @@ HC.SourceController = HC.SourceController || {};
                 let width = 0;
                 let beats = 0;
                 if (data) {
+                    let length = data.length;
                     let start = this.getSequenceStart(this.index);
                     let end = this.getSequenceEnd(this.index);
-                    let frames = data.frames;
                     let sequence = {
                         start: 0,
                         end: 0,
                         length: 0
                     };
-                    this.controller.sourceManager.applySequenceSlice(sequence, frames, start, end);
 
-                    let frameDuration = data.duration / frames;
+                    this.controller.sourceManager.applySequenceSlice(sequence, length, start, end);
+
+                    let frameDuration = data.duration / length;
                     let beatDuration = data.duration / data.beats;
                     let sliceDuration = sequence.length * frameDuration;
                     beats = sliceDuration / beatDuration;
-                    width = sequence.length / frames * 100;
-                    left = sequence.start / frames * 100;
+                    width = sequence.length / length * 100;
+                    left = sequence.start / length * 100;
                 }
 
                 indicatorNode.setAttribute('data-label', beats.toFixed(2));

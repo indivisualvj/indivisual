@@ -615,7 +615,7 @@ HC.Controller.prototype.loadClip = function (index) {
     this.sourceManager.loadClip(smp,
     (clip) => {
         let data = {data: {DataSettings: {}}};
-        data.data.DataSettings[getSampleKey(smp.index)] = clip;
+        data.data.DataSettings[smp.id] = clip;
         this.updateData(data);
     });
 };
@@ -626,6 +626,7 @@ HC.Controller.prototype.loadClip = function (index) {
  */
 HC.Controller.prototype.updateIndicator = function (seq) {
 
+    /** @type {HC.SourceControllerClip} */
     let clip = this.clips[seq];
 
     let sample = this.sourceManager.getSampleBySequence(seq);

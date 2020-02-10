@@ -514,8 +514,7 @@ function _sample(data, callback) {
 
             } else {
                 //console.log(file + ' written');
-                //callback(file + ' written');
-
+                callback(file + ' written');
             }
         });
     }

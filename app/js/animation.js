@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 animation.beatKeeper = beatKeeper;
 
                 let renderer = new HC.Renderer(animation, {
-                    layers: new Array(animation.config.ControlValues.layer.length)
+                    layers: new Array(animation.config.ControlValues.layers)
                 });
                 animation.renderer = renderer;
 
@@ -45,16 +45,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         // now reset...
                         HC.log('HC.Renderer', 'another context loss...', true, true);
 
-                        if (DEBUG) {
-                            for (let i in MIDI_ROW_ONE) { // glContext messed up... make that clear
-                                animation.messaging.emitMidi('glow', MIDI_ROW_ONE[i], {timeout: 500, times: 15});
-                                animation.messaging.emitMidi('glow', MIDI_ROW_TWO[i], {timeout: 500, times: 15});
-                                animation.messaging.emitAttr('#play', 'data-color', 'red');
-                            }
-
-                        } else {
-                            window.location.reload(true);
+                        for (let i = 0; i < animation.config.SourceValues.sample.length; i++) {
+                            animation.updateSource(getSampleKey(i), false, true, true, false);
                         }
+                        animation.updateSource('material_map', 'none', true, true, false);
                     });
 
                     animation.messaging.emitAttr('#play', 'data-color', '');
@@ -704,7 +698,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.sourceManager.updateSample(numberExtract(item, 'sample'));
 
                     if (item.match(/sample\d+_(enabled|record)/)) { // never let samples be selected on enabled/record status change
-                        this.listener.fireEvent(EVENT_SAMPLE_DISABLED, this.sourceManager.getSample(numberExtract(item, 'sample')));
+                        this.listener.fireEvent(EVENT_SAMPLE_STATUS_CHANGED, this.sourceManager.getSample(numberExtract(item, 'sample')));
                     }
 
                 } else if (item.match(/display\d+_source/)) {

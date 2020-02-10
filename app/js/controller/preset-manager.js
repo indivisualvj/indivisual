@@ -89,9 +89,8 @@
         loadPresets(folder) {
             let children = Object.keys(folder.children);
             let dflt = [];
-            let layers = this.config.ControlValues.layer;
 
-            for (let i = 0; dflt.length < layers.length && i < children.length; i++) {
+            for (let i = 0; dflt.length < this.config.ControlValues.layers && i < children.length; i++) {
                 let child = folder.getChild(children[i]);
                 if (!child.getLabel().match(/^_.+/)) {
                     dflt.push(child);
@@ -102,7 +101,7 @@
             HC.clearLog();
 
             let di = 0;
-            for (let i = 0; i < layers.length; i++) {
+            for (let i = 0; i < this.config.ControlValues.layers; i++) {
                 if (!layerShuffleable(i)) {
                     continue;
                 }

@@ -174,8 +174,8 @@
                 if (needsUpdate) {
                     let os = this.start;
                     let oe = this.end;
-                    let frames = this.sample.frameCount;
-                    this.sourceManager.applySequenceSlice(this, frames, start, end);
+                    let frameCount = this.sample.frameCount;
+                    this.sourceManager.applySequenceSlice(this, frameCount, start, end);
 
                     if (os != this.start) {
                         this.pointer = this.start;
@@ -226,13 +226,13 @@
                 }
             }
 
-            this.listener.register(EVENT_SAMPLE_DISABLED, this.id, (target) => {
+            this.listener.register(EVENT_SAMPLE_STATUS_CHANGED, this.id, (target) => {
                 if (this.sample && this.sample.id === target.id) {
                     this.animation.updateSource(getSequenceSampleKey(this.index), 'off', true, true);
                 }
             });
 
-            this.animation.updateSource(getSequenceStartKey(this.index), 0, true, true);
+            this.animation.updateSource(getSequenceStartKey(this.index), 0, false, true);
             this.animation.updateSource(getSequenceEndKey(this.index), type[1], true, true);
         }
 
@@ -525,7 +525,7 @@
          */
         _jump(beat) {
             let sample = this.sample;
-            let frame = sample.frames[this.pointer];
+            let frame = sample.samples[this.pointer];
             this.pointer++;
 
             if (this.speedup) {
@@ -540,7 +540,7 @@
                     this.pointer = this.start;
                     break;
                 }
-                frame = sample.frames[this.pointer++];
+                frame = sample.samples[this.pointer++];
             }
         }
 

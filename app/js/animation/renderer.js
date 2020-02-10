@@ -154,8 +154,7 @@
             this.three.scene.add(this._layers);
 
             for (let i = 0; i < this.layers.length; i++) {
-                let op = false;
-                let os = false;
+                let oldControlSets = false;
                 let ol = this.layers[i];
 
                 if (ol) {
@@ -164,21 +163,19 @@
                      * those layers are there to record samples while animation is offline or to test certain settings/setups
                      */
                     if ((keepsettings || !layerShuffleable(i))) {
-                        // op = this.layers[i].preset;
-                        os = this.layers[i].controlSets;
+                        oldControlSets = this.layers[i].controlSets;
                     }
                     ol.dispose();
                 }
 
-                let l = new HC.Layer(this.animation, this, i);
+                let layer = new HC.Layer(this.animation, this, i);
 
-                // l.preset = op;
-                l.controlSets = os || HC.LayeredControlSetsManager.initAll(this.config.AnimationValues);
-                l.settings = HC.LayeredControlSetsManager.settingsProxy(os || l.controlSets);
+                layer.controlSets = oldControlSets || HC.LayeredControlSetsManager.initAll(this.config.AnimationValues);
+                layer.settings = HC.LayeredControlSetsManager.settingsProxy(oldControlSets || layer.controlSets);
 
-                this.layers[i] = l;
+                this.layers[i] = layer;
 
-                this.resetLayer(l);
+                this.resetLayer(layer);
             }
 
             this.currentLayer = this.layers[this.config.ControlSettings.layer];

@@ -293,7 +293,7 @@
                     this.animation.updateSource(recordKey, false, true, true, false);
                 }
 
-                let scale = 320 / target.width;
+                let scale = 320 / target.canvas.width;
                 this.storeSample(target.index, target.id, scale);
 
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-progress', '');
@@ -301,6 +301,14 @@
                 messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', 'loading thumbs');
                 messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {delay: 50});
                 messaging.emitMidi('off', MIDI_SAMPLE_FEEDBACK);
+            });
+
+            this.listener.register(EVENT_SAMPLE_STATUS_CHANGED, sample.id, (target) => {
+                if (!target.enabled) {
+                    messaging.emitAttr('[id="' + thumbKey + '"]', 'data-progress', '');
+                    messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', '');
+                    messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', '');
+                }
             });
         }
 
@@ -389,13 +397,13 @@
                 if (ev.data.id === sample.id) {
                     // sample.complete = true;
                     this.storeWorker.onmessage = null;
-                    sample.samples = ev.data.frames;
+                    sample.samples = ev.data.samples;
                     this.listener.fireEventId('sample.store.end', sample.id, sample);
                 }
             };
             this.storeWorker.postMessage({
                 length: sample.frameCount,
-                frames: sample.samples,
+                samples: sample.samples,
                 path: filePath(SAMPLE_DIR, name),
                 scale: scale,
                 id: sample.id
@@ -432,7 +440,6 @@
                 sample.duration = Math.ceil(60000 / this.config.ControlSettings.tempo);
                 sample.beats = Math.ceil((frameCount / 60) * 1000 / sample.duration);
                 sample.frameCount = frameCount;
-                sample.frames = [];
                 let blobs = [];
                 for (let i = 0; i < frameCount; i++) {
                     blobs.push(new ArrayBuffer(0));
@@ -494,7 +501,7 @@
          */
         loadClip(sample, callback) {
             if (!sample._clip) {
-                sample._clip = {id: sample.id, ready: false, thumbs: [], frames: 0, beats: 0, duration: 0};
+                sample._clip = {id: sample.id, ready: false, thumbs: [], length: 0, beats: 0, duration: 0};
 
                 let file = filePath(SAMPLE_DIR, sample.id);
 
@@ -504,11 +511,9 @@
                     let frameCount = files.length;
                     let step = frameCount / 16;
                     let seconds = frameCount / 60;
-                    sample._clip.frames = frameCount;
+                    sample._clip.length = frameCount;
                     sample._clip.duration = Math.ceil(60000 / sample.config.ControlSettings.tempo);
                     sample._clip.beats = Math.ceil(seconds * 1000 / sample._clip.duration);
-
-                    callback(sample._clip);
 
                     let index = 0;
 
@@ -550,14 +555,7 @@
          * @param index
          */
         updatePluginNr(type, index) {
-            let plugins = this.getPluginInstances(type);
-            let plugin;
-            if (index in plugins) {
-                plugin = plugins[index];
-
-            } else {
-                plugin = this.getSourcePlugin(type, index);
-            }
+            let plugin = this.getPluginNrInstance(type, index);
 
             plugin.update(this.displayManager.width, this.displayManager.height)
         }
@@ -568,10 +566,28 @@
          * @param index
          */
         updatePluginNrSource(type, index) {
+            let plugin = this.getPluginNrInstance(type, index);
+
+            plugin.updateSource();
+        }
+
+        /**
+         *
+         * @param type
+         * @param index
+         * @returns {HC.SourceManager.DisplaySourcePlugin}
+         */
+        getPluginNrInstance(type, index) {
             let plugins = this.getPluginInstances(type);
+            let plugin;
             if (index in plugins) {
-                plugins[index].updateSource();
+                plugin = plugins[index];
+
+            } else {
+                plugin = this.getSourcePlugin(type, index);
             }
+
+            return plugin;
         }
 
         /**
@@ -734,23 +750,23 @@
         /**
          *
          * @param sequence
-         * @param frames
+         * @param length
          * @param start
          * @param end
          */
-        applySequenceSlice(sequence, frames, start, end) {
-            let end2end = frames - end;
-            let prc = (frames - end2end) / frames;
+        applySequenceSlice(sequence, length, start, end) {
+            let end2end = length - end;
+            let prc = (length - end2end) / length;
             let sp = start;
-            let ep = sp + prc * frames;
+            let ep = sp + prc * length;
             let l = ep - sp;
             let ve = sp + l;
-            if (ve > frames) {
-                sp -= ve - frames;
+            if (ve > length) {
+                sp -= ve - length;
             }
 
-            sequence.start = Math.min(frames - 1, Math.round(sp));
-            sequence.end = Math.min(frames - 1, Math.round(ep));
+            sequence.start = Math.min(length - 1, Math.round(sp));
+            sequence.end = Math.min(length - 1, Math.round(ep));
             sequence.length = sequence.end - sequence.start;
         }
 

@@ -29,7 +29,7 @@
         next() {
             this.layer++;
 
-            if (this.layer >= this.config.ControlValues.layer.length) {
+            if (this.layer >= this.config.ControlValues.layers) {
                 this.layer = 0;
             }
         }
@@ -44,7 +44,7 @@
             this.layer--;
 
             if (this.layer < 0) {
-                this.layer = this.config.ControlValues.layer.length - 1;
+                this.layer = this.config.ControlValues.layers - 1;
             }
         }
     }
@@ -56,7 +56,7 @@
 
         next() {
             let pile = [];
-            for(let i = 0; i < this.config.ControlValues.layer.length; i++) {
+            for(let i = 0; i < this.config.ControlValues.layers; i++) {
                 if (layerShuffleable(i) && !this.animation.settingsManager.isDefault(i)) {
                     pile.push(i);
                 }

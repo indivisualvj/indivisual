@@ -78,6 +78,12 @@ HC.Statics = HC.Statics || {};
                 callback: (data, finished) => {
                     let settings = jsyaml.load(data.contents);
 
+                    settings.layers = 20;
+                    settings.layer = {};
+                    for (let i = 0; i < 20; i++) {
+                        settings.layer[i] = (i+1);
+                    }
+
                     this._loadAudioPlugins(settings);
                     this._loadShufflePlugins(settings);
                     this._loadControlSets();

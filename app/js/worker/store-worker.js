@@ -30,37 +30,41 @@ let sample = function (path, file, data, from, sid, callback) {
 
 onmessage = function (ev) {
     let length = ev.data.length;
-    let frames = ev.data.frames;
+    let samples = ev.data.samples;
     let scale = ev.data.scale;
     let path = ev.data.path;
     let sid = ev.data.sid;
 
-    if (frames.length) {
-        canvas.width = frames[0].width * scale;
-        canvas.height = frames[0].height * scale;
+    if (samples.length) {
+        canvas.width = samples[0].width * scale;
+        canvas.height = samples[0].height * scale;
 
         let stored = 0;
 
         for (let i = 0; i < length; i++) {
-            let frame = frames[i];
-            if (scale && scale !== 1.0) {
-                context.clearRect(0, 0, canvas.width, canvas.height);
-                context.drawImage(frame, 0, 0, frame.width, frame.height, 0, 0, canvas.width, canvas.height);
-                frame = canvas;
-            }
+            let frame = samples[i];
 
-            frame.convertToBlob({
-                type: "image/png"
-            }).then((blob) => {
-                sample(path, i + '.png', blob, name, sid);
-                stored++;
-                if (stored >= length) {
-                    self.postMessage({id: ev.data.id, frames: frames}, frames);
+            setTimeout(() => {
+                if (scale && scale !== 1.0) {
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+                    context.drawImage(frame, 0, 0, frame.width, frame.height, 0, 0, canvas.width, canvas.height);
+                    frame = canvas;
                 }
-            });
+
+                frame.convertToBlob({
+                    type: "image/png"
+                }).then((blob) => {
+                    sample(path, i + '.png', blob, name, sid, () => {
+                        stored++;
+                        if (stored >= length) {
+                            self.postMessage({id: ev.data.id, samples: samples}, samples);
+                        }
+                    });
+                });
+            }, i*2);
         }
 
     } else {
-        self.postMessage({id: ev.data.id, frames: frames}, frames);
+        self.postMessage({id: ev.data.id, samples: samples}, samples);
     }
 };

@@ -53,10 +53,10 @@
          */
         counter = 0;
 
-        /**
-         * @type {Array.<OffscreenCanvas>}
-         */
-        frames = [];
+        // /**
+        //  * @type {Array.<OffscreenCanvas>}
+        //  */
+        // frames = [];
 
         /**
          * @type {Array.<ImageBitmap>}
@@ -106,6 +106,16 @@
         renderer;
 
         /**
+         * @type {OffscreenCanvas}
+         */
+        canvas;
+
+        /**
+         * @type {OffscreenCanvasRenderingContext2D}
+         */
+        context;
+
+        /**
          *
          * @param {HC.Program} program
          * @param index
@@ -119,6 +129,9 @@
             this.config = program.config;
             this.index = index;
             this.id = 'sample' + index;
+            
+            this.canvas = new OffscreenCanvas(1, 1);
+            this.context = this.canvas.getContext('2d');
         }
 
         /**
@@ -134,25 +147,25 @@
 
             let checkEnabled = this.enabled !== enabled;
             let checkBeats = this.beats !== beats;
-            let checkFrames = this.frames.length === 0;
-            let checkWidth = this.width !== width;
-            let checkHeight = this.height !== height;
+            // let checkFrames = this.frames.length === 0;
+            // let checkWidth = this.canvas.width !== width;
+            // let checkHeight = this.canvas.height !== height;
 
-            let needsUpdate = checkBeats || checkFrames || checkWidth || checkHeight;
+            // let needsUpdate = checkBeats || checkFrames;// || checkWidth || checkHeight;
 
-            this.speed = tempo;
-            this.width = width;
-            this.height = height;
             this.enabled = enabled;
+            // this.speed = tempo;
+            this.canvas.width = width;
+            this.canvas.height = height;
             this.record = record;
             this.beats = beats;
 
             if (!record && checkEnabled && enabled) {
-                this._init(tempo, needsUpdate);
+                this._init(tempo);//, needsUpdate);
 
             } else if (!enabled) {
                 this._reset();
-                this.listener.fireEventId('sample.init.reset', this.id, this);
+                // this.listener.fireEventId('sample.init.reset', this.id, this);
             } else if (record) {
                 if (!this.started) {
                     this.listener.register(EVENT_SOURCE_MANAGER_RENDER, this.id, (data) => {
@@ -213,41 +226,44 @@
             this.length = this.beats * this.duration;
 
             let fps = this.config.DisplaySettings.fps * 1.15;
-            let frames = Math.ceil(this.length / 1000 * fps);
-            this.frameCount = frames;
+            let frameCount = Math.ceil(this.length / 1000 * fps);
+            this.frameCount = frameCount;
 
             this.listener.fireEventId('sample.init.start', this.id, this);
 
-            let loops = 0;
-            let divider = 1;
-            this.listener.register(EVENT_RENDERER_RENDER, this.id, (data) => {
-                if (loops % divider === 0) {
-                    if (this.frames.length < this.frameCount) {
-                        let frame = this._createFrame(this.pointer);
-                        this._resetFrame(frame);
-                        this.frames.push(frame);
+            // let loops = 0;
+            // let divider = 1;
+            // for (let i = 0; i < this.frameCount; i++) {
+            //     this.listener.register(EVENT_RENDERER_RENDER, this.id, (data) => {
+                //     if (loops % divider === 0) {
+                // if (this.frames.length < this.frameCount) {
+                //     let frame = this._createFrame(this.pointer);
+                //     this._resetFrame(frame);
+                //     this.frames.push(frame);
+                //
+                //     this.pointer++;
+                //
+                // } else if (needsUpdate && this.pointer < this.frameCount) {
+                //     let frame = this.frames[this.pointer];
+                //     this._resetFrame(frame);
+                //     this.pointer++;
+                //
+                // } else {
+                    this.initialized = true;
+                //     this.pointer = 0;
+                //     this.listener.remove(EVENT_RENDERER_RENDER, this.id);
+                    this.listener.fireEventId('sample.init.end', this.id, this);
+                    // break;
+                // }
 
-                        if (this.pointer % 10 == 0) {
-                            this.listener.fireEventId('sample.init.progress', this.id, this);
-                        }
+                // if (this.pointer % 10 == 0) {
+                //     this.listener.fireEventId('sample.init.progress', this.id, this);
+                // }
+            // }
+            // divider = Math.ceil(this.config.DisplaySettings.fps / this.program.fps);
+            // loops++;
+            // });
 
-                        this.pointer++;
-
-                    } else if (needsUpdate && this.pointer < this.frameCount) {
-                        let frame = this.frames[this.pointer];
-                        this._resetFrame(frame);
-                        this.pointer++;
-
-                    } else {
-                        this.initialized = true;
-                        this.pointer = 0;
-                        this.listener.remove(EVENT_RENDERER_RENDER, this.id);
-                        this.listener.fireEventId('sample.init.end', this.id, this);
-                    }
-                }
-                divider = Math.ceil(this.config.DisplaySettings.fps / this.program.fps);
-                loops++;
-            });
         }
 
         /**
@@ -256,37 +272,37 @@
          * @returns {OffscreenCanvas}
          * @private
          */
-        _createFrame(index) {
-            let frame = new OffscreenCanvas(1, 1);
-            frame.index = index;
-            frame.id = this.id + '_' + index;
-            frame.ctx = frame.getContext('2d');
-
-            return frame;
-        }
-
-        /**
-         *
-         * @param frame
-         * @private
-         */
-        _resizeFrame(frame) {
-            frame.width = this.width;
-            frame.height = this.height;
-        }
+        // _createFrame(index) {
+        //     let frame = new OffscreenCanvas(1, 1);
+        //     frame.index = index;
+        //     frame.id = this.id + '_' + index;
+        //     frame.ctx = frame.getContext('2d');
+        //
+        //     return frame;
+        // }
 
         /**
          *
          * @param frame
          * @private
          */
-        _resetFrame(frame) {
-            this._resizeFrame(frame);
+        // _resizeFrame(frame) {
+        //     frame.width = this.canvas.width;
+        //     frame.height = this.canvas.height;
+        // }
 
-            requestAnimationFrame(() => {
-                frame.ctx.clearRect(0, 0, frame.width, frame.height);
-            });
-        }
+        /**
+         *
+         * @param frame
+         * @private
+         */
+        // _resetFrame(frame) {
+        //     this._resizeFrame(frame);
+        //
+        //     requestAnimationFrame(() => {
+        //         frame.ctx.clearRect(0, 0, frame.width, frame.height);
+        //     });
+        // }
 
         /**
          *
@@ -324,7 +340,7 @@
         render(image, speed, color) {
 
             let sample = this;
-            if (image && sample.frames) {
+            if (image && sample.samples) {
                 if (!sample.started) {
                     if (speed.starting()) {
                         this.listener.fireEventId('sample.render.start', sample.id, sample);
@@ -343,9 +359,9 @@
 
                     }
                     if (!sample.complete) {
-                        let target = sample.frames[sample.pointer];
-                        if (target && target.ctx) {
-                            let ctx = target.ctx;
+                        let target = this.canvas;//sample.frames[sample.pointer];
+                        // if (target && target.ctx) {
+                            let ctx = this.context;//target.ctx;
                             ctx.drawImage(image, 0, 0);
                             target = target.transferToImageBitmap();
                             target._color = color;
@@ -355,7 +371,7 @@
                             sample.samples[sample.pointer] = target;
 
                             sample.pointer++;
-                        }
+                        // }
                     }
                 }
             } else {

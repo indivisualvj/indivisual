@@ -25,7 +25,7 @@ IS_MONITOR = G_INSTANCE === _MONITOR;
 
 EVENT_SOURCE_SETTING_CHANGED = 'source.setting.changed';
 EVENT_SAMPLE_READY = 'sample.ready';
-EVENT_SAMPLE_DISABLED = 'sample.disabled';
+EVENT_SAMPLE_STATUS_CHANGED = 'sample.disabled';
 EVENT_RENDERER_RENDER = 'renderer.render';
 EVENT_LAYER_ANIMATE = 'layer.animate';
 EVENT_SOURCE_MANAGER_RENDER = 'source-manager.render';

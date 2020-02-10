@@ -355,7 +355,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let data = {};
             data[folder] = settings;
 
-            for (let i = 0; i < this.config.ControlValues.layer.length; i++) {
+            for (let i = 0; i < this.config.ControlValues.layers; i++) {
                 if (i == this.config.ControlSettings.layer) {
                     continue;
                 }
@@ -389,7 +389,7 @@ document.addEventListener('DOMContentLoaded', function () {
             data[set] = {};
             data[set][item] = value;
 
-            for (let i = 0; i < this.config.ControlValues.layer.length; i++) {
+            for (let i = 0; i < this.config.ControlValues.layers; i++) {
                 if (i == this.config.ControlSettings.layer) {
                     continue;
                 }
@@ -731,12 +731,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.updateUi(this.sourceSettingsGui);
             }
 
-            this.updateSequenceUi();
-
             clearTimeout(this.thumbTimeouts.samples);
 
             this.thumbTimeouts.samples = setTimeout(() => {
                 requestAnimationFrame(() => {
+                    this.updateSequenceUi();
                     this.updateThumbs();
                 });
 
@@ -831,7 +830,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 };
                 st(layer, to);
             }
-            let to = this.config.ControlValues.layer.length * 151;
+            let to = this.config.ControlValues.layers * 151;
 
             setTimeout(() => {
                 this.updateControl('layer', this.config.ControlSettings.layer, true, true, true);
@@ -902,7 +901,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             HC.log('passes', name);
 
-            for (let i = 0; i < this.config.ControlValues.layer.length; i++) {
+            for (let i = 0; i < this.config.ControlValues.layers; i++) {
                 if (!this.settingsManager.isDefault(i)
                     && layerShuffleable(i) == layerShuffleable(this.config.ControlSettings.layer)
                 ) {
@@ -940,7 +939,7 @@ document.addEventListener('DOMContentLoaded', function () {
         refreshLayerInfo() {
             let preset = [];
 
-            for (let i = 0; i < this.config.ControlValues.layer.length; i++) {
+            for (let i = 0; i < this.config.ControlValues.layers; i++) {
                 if (this.settingsManager.layers[i]) {
                     let l = this.settingsManager.getLayer(i);
                     if (!this.settingsManager.isDefault(l) && layerShuffleable(i)) {

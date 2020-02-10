@@ -489,6 +489,54 @@
 
         /**
          *
+         * @param sample
+         * @param callback
+         */
+        loadClip(sample, callback) {
+            if (!sample._clip) {
+                sample._clip = {id: sample.id, ready: false, thumbs: [], frames: 0, beats: 0, duration: 0};
+
+                let file = filePath(SAMPLE_DIR, sample.id);
+
+                messaging.files(file, (files) => {
+
+                    let loaded = 0;
+                    let frameCount = files.length;
+                    let step = frameCount / 16;
+                    let seconds = frameCount / 60;
+                    sample._clip.frames = frameCount;
+                    sample._clip.duration = Math.ceil(60000 / sample.config.ControlSettings.tempo);
+                    sample._clip.beats = Math.ceil(seconds * 1000 / sample._clip.duration);
+
+                    callback(sample._clip);
+
+                    let index = 0;
+
+                    for (let i = 0; i < frameCount; i += step) {
+                        let ri = Math.floor(i);
+                        let file = files[ri];
+                        file = filePath(SAMPLE_DIR, sample.id, ri + '.png');
+                        let image = new Image();
+                        image.src = file;
+                        image._index = index++;
+
+                        sample._clip.thumbs[image._index] = image;
+
+                        image.onload = () => {
+
+                            loaded += step; // see if next will bee too much
+                            if (loaded >= frameCount) {
+                                sample._clip.ready = true;
+                                callback(sample._clip);
+                            }
+                        };
+                    }
+                });
+            }
+        }
+
+        /**
+         *
          */
         updateSources() {
             for (let i = 0; i < this.displayManager.displays.length; i++) {

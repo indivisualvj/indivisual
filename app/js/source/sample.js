@@ -316,56 +316,6 @@
         }
 
         /**
-         * fixme sourceman!
-         * @param onfinished
-         * @param onfiles
-         * @returns {boolean|{duration: number, frames: number, ready: boolean, beats: number, id: *, thumbs: []}}
-         */
-        clip(onfinished, onfiles) {
-            if (!this._clip) {
-                this._clip = {id: this.id, ready: false, thumbs: [], frames: 0, beats: 0, duration: 0};
-
-                let file = filePath(SAMPLE_DIR, this.id);
-
-                messaging.files(file, (files) => {
-
-                    let loaded = 0;
-                    let frameCount = files.length;
-                    let step = frameCount / 16;
-                    let seconds = frameCount / 60;
-                    this._clip.frames = frameCount;
-                    this._clip.duration = Math.ceil(60000 / this.config.ControlSettings.tempo);
-                    this._clip.beats = Math.ceil(seconds * 1000 / this._clip.duration);
-
-                    onfiles(this._clip);
-
-                    let index = 0;
-
-                    for (let i = 0; i < frameCount; i += step) {
-                        let ri = Math.floor(i);
-                        let file = files[ri];
-                        file = filePath(SAMPLE_DIR, this.id, ri + '.png');
-                        let image = new Image();
-                        image.src = file;
-                        image._index = index++;
-
-                        this._clip.thumbs[image._index] = image;
-
-                        image.onload = () => {
-
-                            loaded += step; // see if next will bee too much
-                            if (loaded >= frameCount) {
-                                this._clip.ready = true;
-                                onfinished(this);
-                            }
-                        };
-                    }
-                });
-            }
-            return this._clip;
-        }
-
-        /**
          *
          * @param image
          * @param speed

@@ -612,11 +612,8 @@ HC.Controller.prototype.updateThumbs = function () {
 HC.Controller.prototype.loadClip = function (index) {
     let smp = new HC.Sample(this, index);
 
-    smp.clip((sample) => {
-        let data = {data: {DataSettings: {}}};
-        data.data.DataSettings[getSampleKey(sample.index)] = sample._clip;
-        this.updateData(data);
-    }, (clip) => {
+    this.sourceManager.loadClip(smp,
+    (clip) => {
         let data = {data: {DataSettings: {}}};
         data.data.DataSettings[getSampleKey(smp.index)] = clip;
         this.updateData(data);

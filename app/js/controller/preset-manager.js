@@ -263,7 +263,8 @@
                 name = input;
                 this.filesystem.mkdir(STORAGE_DIR, name, false, (result) => {
                     HC.log(result);
-                    ctrl.addFolder(name);
+                    let folder = ctrl.addFolder(name);
+                    folder.finishLayout({}, this);
                 });
             }
         }

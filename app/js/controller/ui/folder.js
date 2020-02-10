@@ -240,8 +240,7 @@
         /**
          *
          * @param property
-         * @param parent
-         * @return {*|boolean|HC.GuifyFolder|boolean}
+         * @returns {HC.GuifyItem|boolean}
          */
         findControlByProperty(property) {
 

@@ -860,6 +860,11 @@ HC.SourceController = HC.SourceController || {};
         node;
 
         /**
+         * @type {HTMLElement}
+         */
+        controls;
+
+        /**
          * @type {number}
          */
         index;
@@ -890,6 +895,12 @@ HC.SourceController = HC.SourceController || {};
             this.node = document.createElement('div');
             this.node.id = 'sample' + this.index + '_thumb';
             this.node.setAttribute('class', 'sample control');
+
+            // fixme try to create controller and add container here
+            this.controls = document.createElement('div');
+            this.controls.classList.add('controls');
+            this.controls.innerHTML = document.getElementById('controls-template').innerHTML;
+            this.node.appendChild(this.controls);
 
             el.appendChild(this.node);
 

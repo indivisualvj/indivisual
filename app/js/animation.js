@@ -95,6 +95,11 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         settingsManager;
 
+        /**
+         * @type {HC.Monitor}
+         */
+        monitor;
+
 
         constructor(name) {
             super(name);
@@ -220,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         updatePlay() {
-            if (IS_MONITOR) {
+            if (this.monitor) {
                 this.config.ControlSettings.play = this.config.ControlSettings.monitor;
             }
 
@@ -500,9 +505,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.fullReset(true);
 
                 if (IS_MONITOR) {
-                    new HC.Monitor().init(this.config, () => {
+                    this.monitor = new HC.Monitor();
+                    this.monitor.init(this.config, () => {
                         this.displayManager.updateDisplay(0);
                         new HC.Animation.ResizeListener().init(this.displayManager);
+                        this.updatePlay();
                     });
                 } else {
                     new HC.Animation.ResizeListener().init(this.displayManager);
@@ -657,7 +664,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     //     break;
 
                     case 'monitor':
-                        if (!IS_MONITOR) {
+                        if (!this.monitor) {
                             break;
                         }
                     case 'play':
@@ -692,7 +699,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (display) {
                 if (item.match(/^sample\d+_load/) && value) {
-                    if (IS_MONITOR) {
+                    if (this.monitor) {
                         this.sourceManager.loadSample(numberExtract(item, 'sample'), value);
                     }
                     this.updateSource(item, false, false, true, false);

@@ -50,8 +50,8 @@ document.addEventListener('DOMContentLoaded', function () {
     messaging.connect(function (reconnect, controller) {
 
         setTimeout(() => {
-            document.getElementById(_MONITOR).setAttribute('src', 'monitor.html#' + messaging.sid);
-        }, 250);
+            document.querySelector('iframe.monitor').setAttribute('src', 'monitor.html#' + messaging.sid);
+        }, 1500);
 
         HC.log(controller.name, 'connected', true, true);
 
@@ -88,12 +88,12 @@ document.addEventListener('DOMContentLoaded', function () {
         guis;
 
         /**
-         * @type {HC.SourceControllerClip[]}
+         * @type {HC.SourceControllerSequence[]}
          */
         clips;
 
         /**
-         * @type {HC.SourceControllerThumb[]}
+         * @type {HC.SourceControllerSample[]}
          */
         thumbs;
 
@@ -118,6 +118,11 @@ document.addEventListener('DOMContentLoaded', function () {
          * @type {HC.Guify}
          */
         configurationSettingsGui;
+
+        /**
+         * @type {HC.Monitor}
+         */
+        monitor;
 
         /**
          *
@@ -156,6 +161,9 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param sets
          */
         init(sets) {
+
+            this.monitor = new HC.Monitor();
+            this.monitor.activate(false);
             this.controlSettingsGui = new HC.Guify('ControlSettings', true);
             this.displaySettingsGui = new HC.Guify('DisplaySettings');
             this.sourceSettingsGui = new HC.Guify('SourceSettings');
@@ -581,59 +589,59 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.explainPlugin(item, value, HC);
             }
 
-            // if (this.config.ControlSettings) {
-
-                if (item == 'beat') {
-                    value = this.beatKeeper.trigger(value);
-                }
+            if (item == 'beat') {
+                value = this.beatKeeper.trigger(value);
+            }
 
             let tValue = value;
-                value = this.config.ControlSettingsManager.updateItem(item, value);
+            value = this.config.ControlSettingsManager.updateItem(item, value);
 
-                if (item == 'layer') {
-                    this.updateSettings(value, this.settingsManager.prepareLayer(value), true, false, true);
+            if (item == 'layer') {
+                this.updateSettings(value, this.settingsManager.prepareLayer(value), true, false, true);
 
-                    this.explorer.setSelected(value+1, true);
+                this.explorer.setSelected(value+1, true);
 
-                    let config = {
-                        action: 'attr',
-                        query: '#layer',
-                        key: 'data-mnemonic',
-                        value: value + 1
-                    };
+                let config = {
+                    action: 'attr',
+                    query: '#layer',
+                    key: 'data-mnemonic',
+                    value: value + 1
+                };
 
-                    this.messaging.onAttr(config);
+                this.messaging.onAttr(config);
 
-                } else if (item == 'reset') {
-                    if (force) {
-                        this.settingsManager.reset(splitToIntArray(this.config.ControlSettings.shuffleable));
-                    }
+            } else if (item == 'reset') {
+                if (force) {
+                    this.settingsManager.reset(splitToIntArray(this.config.ControlSettings.shuffleable));
+                }
+            }
+
+            if (forward) {
+                if (typeof value === 'function') { // reset to
+                    value = tValue;
+                }
+                let data = {};
+                data[item] = value;
+                this.messaging.emitControls(data, true, false, force);
+            }
+
+            if (display !== false) {
+
+                if (item.match(/_(sequence|sample|source)/)) {
+                    this.updateData();
+
+                } else if (item === 'monitor') {
+                    this.monitor.activate(value);
                 }
 
-                if (forward) {
-                    if (typeof value === 'function') { // reset to
-                        value = tValue;
-                    }
-                    let data = {};
-                    data[item] = value;
-                    this.messaging.emitControls(data, true, false, force);
-                }
+                this.updateUi(this.controlSettingsGui);
+            }
 
-                if (display !== false) {
+            if (item == 'session' && value != _HASH) {
+                document.location.hash = value;
+                document.location.reload();
+            }
 
-                    if (item.match(/_(sequence|sample|source)/)) {
-                        this.updateData();
-                    }
-
-                    this.updateUi(this.controlSettingsGui);
-                }
-
-                if (item == 'session' && value != _HASH) {
-                    document.location.hash = value;
-                    document.location.reload();
-
-                }
-            // }
         }
 
         /**

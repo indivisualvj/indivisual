@@ -211,6 +211,26 @@ HC.SourceController = HC.SourceController || {};
             sequence4_overlay: 'off',
             sequence4_brightness: 1.0,
             sequence4_blendmode: '0',
+            sequence0_osci: 'off',
+            sequence0_speed: 1.0,
+            sequence1_osci: 'off',
+            sequence1_speed: 1.0,
+            sequence2_osci: 'off',
+            sequence2_speed: 1.0,
+            sequence3_osci: 'off',
+            sequence3_speed: 1.0,
+            sequence4_osci: 'off',
+            sequence4_speed: 1.0,
+            sequence0_start: 0,
+            sequence1_start: 0,
+            sequence2_start: 0,
+            sequence3_start: 0,
+            sequence4_start: 0,
+            sequence0_end: 0,
+            sequence1_end: 0,
+            sequence2_end: 0,
+            sequence3_end: 0,
+            sequence4_end: 0,
             sequence0_jump: false,
             sequence1_jump: false,
             sequence2_jump: false,
@@ -256,26 +276,6 @@ HC.SourceController = HC.SourceController || {};
             sequence2_passthrough: false,
             sequence3_passthrough: false,
             sequence4_passthrough: false,
-            sequence0_speed: 1.0,
-            sequence1_speed: 1.0,
-            sequence2_speed: 1.0,
-            sequence3_speed: 1.0,
-            sequence4_speed: 1.0,
-            sequence0_osci: 'off',
-            sequence1_osci: 'off',
-            sequence2_osci: 'off',
-            sequence3_osci: 'off',
-            sequence4_osci: 'off',
-            sequence0_start: 0,
-            sequence1_start: 0,
-            sequence2_start: 0,
-            sequence3_start: 0,
-            sequence4_start: 0,
-            sequence0_end: 0,
-            sequence1_end: 0,
-            sequence2_end: 0,
-            sequence3_end: 0,
-            sequence4_end: 0,
         };
 
         types = {
@@ -284,56 +284,11 @@ HC.SourceController = HC.SourceController || {};
             sequence2_brightness: [0, 1, 0.02],
             sequence3_brightness: [0, 1, 0.02],
             sequence4_brightness: [0, 1, 0.02],
-            sequence0_speed: [-2, 2, 0.1, 'hidden'],
-            sequence1_speed: [-2, 2, 0.1, 'hidden'],
-            sequence2_speed: [-2, 2, 0.1, 'hidden'],
-            sequence3_speed: [-2, 2, 0.1, 'hidden'],
-            sequence4_speed: [-2, 2, 0.1, 'hidden'],
-            sequence0_jump: ['hidden'],
-            sequence1_jump: ['hidden'],
-            sequence2_jump: ['hidden'],
-            sequence3_jump: ['hidden'],
-            sequence4_jump: ['hidden'],
-            sequence0_audio: ['hidden'],
-            sequence1_audio: ['hidden'],
-            sequence2_audio: ['hidden'],
-            sequence3_audio: ['hidden'],
-            sequence4_audio: ['hidden'],
-            sequence0_reversed: ['hidden'],
-            sequence1_reversed: ['hidden'],
-            sequence2_reversed: ['hidden'],
-            sequence3_reversed: ['hidden'],
-            sequence4_reversed: ['hidden'],
-            sequence0_speedup: ['hidden'],
-            sequence1_speedup: ['hidden'],
-            sequence2_speedup: ['hidden'],
-            sequence3_speedup: ['hidden'],
-            sequence4_speedup: ['hidden'],
-            sequence0_speeddown: ['hidden'],
-            sequence1_speeddown: ['hidden'],
-            sequence2_speeddown: ['hidden'],
-            sequence3_speeddown: ['hidden'],
-            sequence4_speeddown: ['hidden'],
-            sequence0_flipx: ['hidden'],
-            sequence1_flipx: ['hidden'],
-            sequence2_flipx: ['hidden'],
-            sequence3_flipx: ['hidden'],
-            sequence4_flipx: ['hidden'],
-            sequence0_flipy: ['hidden'],
-            sequence1_flipy: ['hidden'],
-            sequence2_flipy: ['hidden'],
-            sequence3_flipy: ['hidden'],
-            sequence4_flipy: ['hidden'],
-            sequence0_flipa: ['hidden'],
-            sequence1_flipa: ['hidden'],
-            sequence2_flipa: ['hidden'],
-            sequence3_flipa: ['hidden'],
-            sequence4_flipa: ['hidden'],
-            sequence0_passthrough: ['hidden'],
-            sequence1_passthrough: ['hidden'],
-            sequence2_passthrough: ['hidden'],
-            sequence3_passthrough: ['hidden'],
-            sequence4_passthrough: ['hidden'],
+            sequence0_speed: [-2, 2, 0.1],
+            sequence1_speed: [-2, 2, 0.1],
+            sequence2_speed: [-2, 2, 0.1],
+            sequence3_speed: [-2, 2, 0.1],
+            sequence4_speed: [-2, 2, 0.1],
             sequence0_start: [0, 100, 1, 'hidden'],
             sequence1_start: [0, 100, 1, 'hidden'],
             sequence2_start: [0, 100, 1, 'hidden'],
@@ -344,24 +299,74 @@ HC.SourceController = HC.SourceController || {};
             sequence2_end: [0, 100, 1, 'hidden'],
             sequence3_end: [0, 100, 1, 'hidden'],
             sequence4_end: [0, 100, 1, 'hidden'],
-            sequence0_osci: ['hidden'],
-            sequence1_osci: ['hidden'],
-            sequence2_osci: ['hidden'],
-            sequence3_osci: ['hidden'],
-            sequence4_osci: ['hidden'],
-            sequence0_reset: ['hidden'],
-            sequence1_reset: ['hidden'],
-            sequence2_reset: ['hidden'],
-            sequence3_reset: ['hidden'],
-            sequence4_reset: ['hidden'],
-            sequence0_rereset: ['hidden'],
-            sequence1_rereset: ['hidden'],
-            sequence2_rereset: ['hidden'],
-            sequence3_rereset: ['hidden'],
-            sequence4_rereset: ['hidden'],
         };
         
         styles = {
+            sequence0_speed: ['half'],
+            sequence1_speed: ['half'],
+            sequence2_speed: ['half'],
+            sequence3_speed: ['half'],
+            sequence4_speed: ['half'],
+            sequence0_osci: ['half', 'clear'],
+            sequence1_osci: ['half', 'clear'],
+            sequence2_osci: ['half', 'clear'],
+            sequence3_osci: ['half', 'clear'],
+            sequence4_osci: ['half', 'clear'],
+            sequence0_reset: ['hex'],
+            sequence1_reset: ['hex'],
+            sequence2_reset: ['hex'],
+            sequence3_reset: ['hex'],
+            sequence4_reset: ['hex'],
+            sequence0_rereset: ['hex'],
+            sequence1_rereset: ['hex'],
+            sequence2_rereset: ['hex'],
+            sequence3_rereset: ['hex'],
+            sequence4_rereset: ['hex'],
+            sequence0_jump: ['hex'],
+            sequence1_jump: ['hex'],
+            sequence2_jump: ['hex'],
+            sequence3_jump: ['hex'],
+            sequence4_jump: ['hex'],
+            sequence0_audio: ['hex'],
+            sequence1_audio: ['hex'],
+            sequence2_audio: ['hex'],
+            sequence3_audio: ['hex'],
+            sequence4_audio: ['hex'],
+            sequence0_reversed: ['hex'],
+            sequence1_reversed: ['hex'],
+            sequence2_reversed: ['hex'],
+            sequence3_reversed: ['hex'],
+            sequence4_reversed: ['hex'],
+            sequence0_speedup: ['hex'],
+            sequence1_speedup: ['hex'],
+            sequence2_speedup: ['hex'],
+            sequence3_speedup: ['hex'],
+            sequence4_speedup: ['hex'],
+            sequence0_speeddown: ['hex'],
+            sequence1_speeddown: ['hex'],
+            sequence2_speeddown: ['hex'],
+            sequence3_speeddown: ['hex'],
+            sequence4_speeddown: ['hex'],
+            sequence0_flipx: ['hex'],
+            sequence1_flipx: ['hex'],
+            sequence2_flipx: ['hex'],
+            sequence3_flipx: ['hex'],
+            sequence4_flipx: ['hex'],
+            sequence0_flipy: ['hex'],
+            sequence1_flipy: ['hex'],
+            sequence2_flipy: ['hex'],
+            sequence3_flipy: ['hex'],
+            sequence4_flipy: ['hex'],
+            sequence0_flipa: ['hex'],
+            sequence1_flipa: ['hex'],
+            sequence2_flipa: ['hex'],
+            sequence3_flipa: ['hex'],
+            sequence4_flipa: ['hex'],
+            sequence0_passthrough: ['third'],
+            sequence1_passthrough: ['third'],
+            sequence2_passthrough: ['third'],
+            sequence3_passthrough: ['third'],
+            sequence4_passthrough: ['third'],
             sequence0_input: ['half', 'clear'],
             sequence1_input: ['half', 'clear'],
             sequence2_input: ['half', 'clear'],
@@ -564,9 +569,9 @@ HC.SourceController = HC.SourceController || {};
 {
     /**
      *
-     * @type {HC.SourceControllerClip}
+     * @type {HC.SourceControllerSequence}
      */
-    HC.SourceControllerClip = class SourceControllerClip {
+    HC.SourceControllerSequence = class SourceControllerSequence {
 
         /**
          * @type {number}
@@ -591,6 +596,11 @@ HC.SourceController = HC.SourceController || {};
         /**
          * @type {HTMLElement}
          */
+        controlsNode;
+
+        /**
+         * @type {HTMLElement}
+         */
         pointerNode;
 
         sample;
@@ -601,6 +611,11 @@ HC.SourceController = HC.SourceController || {};
          * @type {HC.Controller}
          */
         controller;
+
+        /**
+         * @type {HC.SourceManager}
+         */
+        sourceManager;
 
         /**
          * @type {HC.Config}
@@ -614,6 +629,7 @@ HC.SourceController = HC.SourceController || {};
          */
         constructor(controller, index) {
             this.controller = controller;
+            this.sourceManager = controller.sourceManager;
             this.config = controller.config;
             this.index = index;
 
@@ -625,7 +641,7 @@ HC.SourceController = HC.SourceController || {};
             let sequenceKey = 'sequence' + this.index;
             this.clipNode = document.createElement('div');
             this.clipNode.id = sequenceKey;
-            this.clipNode.setAttribute('data-title', sequenceKey);
+            // this.clipNode.setAttribute('data-title', sequenceKey);
             this.clipNode.setAttribute('class', 'sequence control');
 
             this.thumbsNode  = document.createElement('div');
@@ -643,6 +659,8 @@ HC.SourceController = HC.SourceController || {};
             this.pointerNode.setAttribute('class', 'progress');
             this.indicatorNode.appendChild(this.pointerNode);
 
+            this.initControls();
+
             let mo = new MutationObserver((mutations) => {
                 mutations.forEach((mutation) => {
                     if (mutation.attributeName == 'data-progress') {
@@ -658,6 +676,42 @@ HC.SourceController = HC.SourceController || {};
             window.addEventListener('resize', this._onResize());
 
             this.setVisible(false);
+        }
+
+        initControls() {
+            this.controlsNode = document.createElement('div');
+            this.controlsNode.setAttribute('class', 'controls');
+
+            let sequenceKey = getSequenceKey(this.index);
+            let ctrl = this.controller.sourceSettingsGui.findControlByProperty(getSequenceSampleKey(this.index));
+            this.controlsNode.appendChild(ctrl.getContainer());
+            ctrl = this.controller.sourceSettingsGui.findControlByProperty(this.sourceManager.getSequenceOverlayKey(this.index));
+            this.controlsNode.appendChild(ctrl.getContainer());
+            ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_passthrough');
+            this.controlsNode.appendChild(ctrl.getContainer());
+            ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_flipa');
+            this.controlsNode.appendChild(ctrl.getContainer());
+            ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_flipx');
+            this.controlsNode.appendChild(ctrl.getContainer());
+            ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_flipy');
+            this.controlsNode.appendChild(ctrl.getContainer());
+            ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_audio');
+            this.controlsNode.appendChild(ctrl.getContainer());
+            ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_jump');
+            this.controlsNode.appendChild(ctrl.getContainer());
+            ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_reversed');
+            this.controlsNode.appendChild(ctrl.getContainer());
+            ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_speeddown');
+            this.controlsNode.appendChild(ctrl.getContainer());
+            ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_speedup');
+            this.controlsNode.appendChild(ctrl.getContainer());
+
+            let clear = document.createElement('div');
+            clear.classList.add('guify-component-container');
+            clear.classList.add('clear');
+            this.controlsNode.appendChild(clear);
+
+            this.clipNode.appendChild(this.controlsNode);
         }
 
         /**
@@ -794,10 +848,11 @@ HC.SourceController = HC.SourceController || {};
          */
         _onResize() {
             let func = (e) => {
-                let el = this.clipNode;
+                let el = this.thumbsNode;
                 let ow = el.clientWidth;
                 let nh = (ow / 5 * 9 / 16);
                 el.style.height = nh + 'px';
+                this.indicatorNode.style.height = el.style.height;
             };
 
             func();
@@ -810,9 +865,9 @@ HC.SourceController = HC.SourceController || {};
 {
     /**
      *
-     * @type {HC.SourceControllerThumb}
+     * @type {HC.SourceControllerSample}
      */
-    HC.SourceControllerThumb = class SourceControllerThumb {
+    HC.SourceControllerSample = class SourceControllerSample {
 
         /**
          * @type {HTMLElement}

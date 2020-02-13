@@ -9,6 +9,18 @@
     HC.Monitor = class Monitor {
 
         /**
+         * @type {HTMLElement}
+         */
+        node;
+
+        /**
+         *
+         */
+        constructor() {
+            this.node = document.getElementById('monitor');
+        }
+
+        /**
          * 
          * @param {HC.Config} config
          * @param {function} hook
@@ -22,6 +34,15 @@
 
             if (hook) {
                 hook();
+            }
+        }
+
+        activate(enable) {
+            if (enable) {
+                this.node.style.height = null;
+
+            } else {
+                this.node.style.height = this.node.clientHeight/2 + 'px';
             }
         }
     }

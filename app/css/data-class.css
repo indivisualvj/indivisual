@@ -1,0 +1,129 @@
+
+[data-class="half"] {
+    width: 49% !important;
+    box-sizing: border-box;
+    float: left;
+    margin-right: 0%;
+    clear: none !important;
+}
+
+[data-class="third"] {
+    width: 32.3333% !important;
+    box-sizing: border-box;
+    float: left;
+    margin-right: 0%;
+    clear: none !important;
+}
+
+[data-class="quarter"] {
+    width: 22% !important;
+    box-sizing: border-box;
+    float: left;
+    margin-right: 0%;
+    clear: none !important;
+}
+
+[data-class="quint"] {
+    width: 19% !important;
+    box-sizing: border-box;
+    float: left;
+    margin-right: 0%;
+    clear: none !important;
+}
+
+[data-class="hex"] {
+    width: 15.666% !important;
+    box-sizing: border-box;
+    float: left;
+    margin-right: 0%;
+    clear: none !important;
+}
+
+[data-class="eight"] {
+    width: 12.5% !important;
+    box-sizing: border-box;
+    float: left;
+    margin-right: 0%;
+    clear: none !important;
+}
+
+[data-class="zero"] {
+    width: 1px !important;
+    padding: 0;
+    box-sizing: border-box;
+    float: left;
+    margin-right: 0%;
+    clear: none !important;
+}
+
+[data-class="eighty"] {
+    width: 11.5% !important;
+    box-sizing: border-box;
+    float: left;
+    margin-right: 0%;
+    clear: none !important;
+}
+
+[data-class="fifty"] {
+    width: 49.5% !important;
+    box-sizing: border-box;
+    float: left;
+    margin-right: 0%;
+    clear: none !important;
+}
+
+[data-class="fourty"] {
+    width: 39.5% !important;
+    box-sizing: border-box;
+    float: left;
+    margin-right: 0%;
+    clear: none !important;
+}
+
+[data-class="thirty"] {
+    width: 29.5% !important;
+    box-sizing: border-box;
+    float: left;
+    margin-right: 0%;
+    clear: none !important;
+}
+
+[data-class="twentyfive"] {
+    width: 24.5% !important;
+    box-sizing: border-box;
+    float: left;
+    margin-right: 0%;
+    clear: none !important;
+}
+
+[data-class="twenty"] {
+    width: 19.5% !important;
+    box-sizing: border-box;
+    float: left;
+    margin-right: 0%;
+    clear: none !important;
+}
+
+[data-class="fifteen"] {
+    width: 14.5% !important;
+    box-sizing: border-box;
+    float: left;
+    margin-right: 0%;
+    clear: none !important;
+}
+
+[data-class="ten"] {
+    width: 9.5% !important;
+    box-sizing: border-box;
+    float: left;
+    margin-right: 0%;
+    clear: none !important;
+}
+
+[data-class="five"] {
+    width: 4.5% !important;
+    box-sizing: border-box;
+    float: left;
+    margin-right: 0%;
+    clear: none !important;
+}

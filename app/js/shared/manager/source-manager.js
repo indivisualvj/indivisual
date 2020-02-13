@@ -210,7 +210,7 @@
          */
         initSampleEvents(sample) {
 
-            if (IS_MONITOR) {
+            if (this.animation.monitor) {
                 return;
             }
 
@@ -338,7 +338,7 @@
          */
         storeSample(i, name, scale) {
 
-            if (IS_MONITOR) {
+            if (this.animation.monitor) {
                 return;
             }
 

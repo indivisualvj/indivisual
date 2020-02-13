@@ -574,7 +574,7 @@ function _store(data) {
                     settings[k] = {};
                 }
                 for (let i in v) {
-                    settings[k][i] = v[i];
+                    settings[k][i] = v[i]; // fixme sequence rereset/reset TypeError: Cannot assign to read only property '0' of string 'off'
                 }
             } else { // old structure used for control/display/source settings
                 settings[k] = v;

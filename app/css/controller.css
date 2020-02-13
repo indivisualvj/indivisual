@@ -1,3 +1,5 @@
+@import "data-class.css";
+
 *::-webkit-scrollbar-corner {
     height: 0;
     display: none;
@@ -83,15 +85,20 @@ body {
 }
 
 #monitor {
+    transition: all 125ms;
+    height: 22vw;
+}
+
+.monitor {
     box-sizing: border-box;
     width: 100%;
-    height: 25vw;
+    height: 100%;
     margin: 0 0 4px 0;
     padding: 1px;
     max-height: 328px;
 }
 
-#blockfocus {
+.blockfocus {
     position: absolute;
     z-index: 999;
     box-sizing: border-box;
@@ -99,7 +106,7 @@ body {
     top: 0;
     left: 0;
     width: 100%;
-    height: 25vw;
+    height: 100%;
     margin: 0 0 4px 0;
     padding: 3px;
     max-height: 328px;
@@ -361,158 +368,6 @@ input:focus, select:focus {
     color: #e61d5f !important;
 }
 
-[data-class="half"] {
-    width: 50% !important;
-    box-sizing: border-box;
-    float: left;
-    margin-right: 0%;
-    clear: none !important;
-}
-
-[data-class="third"] {
-    width: 33.29% !important;
-    box-sizing: border-box;
-    float: left;
-    margin-right: 0%;
-    clear: none !important;
-}
-
-[data-class="quarter"] {
-    width: 25% !important;
-    box-sizing: border-box;
-    float: left;
-    margin-right: 0%;
-    clear: none !important;
-}
-
-[data-class="quint"] {
-    width: 20% !important;
-    box-sizing: border-box;
-    float: left;
-    margin-right: 0%;
-    clear: none !important;
-}
-
-[data-class="hex"] {
-    width: 16.6% !important;
-    box-sizing: border-box;
-    float: left;
-    margin-right: 0%;
-    clear: none !important;
-}
-
-[data-class="eight"] {
-    width: 12.5% !important;
-    box-sizing: border-box;
-    float: left;
-    margin-right: 0%;
-    clear: none !important;
-}
-
-[data-class="zero"] {
-    width: 1px !important;
-    padding: 0;
-    box-sizing: border-box;
-    float: left;
-    margin-right: 0%;
-    clear: none !important;
-}
-
-[data-class="eighty"] {
-    width: 79.5% !important;
-    box-sizing: border-box;
-    float: left;
-    margin-right: 0%;
-    clear: none !important;
-}
-
-[data-class="fifty"] {
-    width: 49.5% !important;
-    box-sizing: border-box;
-    float: left;
-    margin-right: 0%;
-    clear: none !important;
-}
-
-[data-class="fourty"] {
-    width: 39.5% !important;
-    box-sizing: border-box;
-    float: left;
-    margin-right: 0%;
-    clear: none !important;
-}
-
-[data-class="thirty"] {
-    width: 29.5% !important;
-    box-sizing: border-box;
-    float: left;
-    margin-right: 0%;
-    clear: none !important;
-}
-
-[data-class="twentyfive"] {
-    width: 24.5% !important;
-    box-sizing: border-box;
-    float: left;
-    margin-right: 0%;
-    clear: none !important;
-}
-
-[data-class="twenty"] {
-    width: 19.5% !important;
-    box-sizing: border-box;
-    float: left;
-    margin-right: 0%;
-    clear: none !important;
-}
-
-[data-class="fifteen"] {
-    width: 14.5% !important;
-    box-sizing: border-box;
-    float: left;
-    margin-right: 0%;
-    clear: none !important;
-}
-
-[data-class="ten"] {
-    width: 9.5% !important;
-    box-sizing: border-box;
-    float: left;
-    margin-right: 0%;
-    clear: none !important;
-}
-
-[data-class="five"] {
-    width: 4.5% !important;
-    box-sizing: border-box;
-    float: left;
-    margin-right: 0%;
-    clear: none !important;
-}
-
-.guify-main [data-class="half"] {
-    width: 49% !important;
-}
-
-.guify-main [data-class="third"] {
-    width: 32.3333% !important;
-}
-
-.guify-main [data-class="quarter"] {
-    width: 24% !important;
-}
-
-.guify-main [data-class="quint"] {
-    width: 19% !important;
-}
-
-.guify-main [data-class="eight"] {
-    width: 11.5% !important;
-}
-
-.guify-main [data-class="hex"] {
-    width: 15.666% !important;
-}
 
 [data-color="red"] {
     border-left: 6px solid rgba(255, 10, 10, 0.7) !important;
@@ -628,6 +483,10 @@ input:focus, select:focus {
 
 #sequences [data-label]:after {
     background: rgba(35, 35, 35, 0.5);
+}
+
+#sequences .sequence .controls {
+    padding: 1% 0% 0% 1%;
 }
 
 
@@ -750,8 +609,7 @@ input[type=checkbox].guify-checkbox_hxzak + label {
         height: 35vw;
     }
 
-    #blockfocus {
-        height: 35vw;
+    .blockfocus {
         max-width: 100%;
     }
 

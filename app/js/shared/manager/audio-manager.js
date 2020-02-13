@@ -24,7 +24,7 @@
          */
         initPlugin(name, callback) {
 
-            // this is 1 ugly workaround
+            // fixme better automated audio and then never start audio if monitor
             if (IS_MONITOR && name !== 'off') {
                 name = 'microphone';
             }

@@ -578,7 +578,7 @@
 
             p = this.speed * p;
 
-            this.pointer += this.speed * (p == 0 ? -1 : p);
+            this.pointer += Math.round(this.speed * (p == 0 ? -1 : p));
 
             if (this.pointer < this.start) {
                 this.pointer += this.length;

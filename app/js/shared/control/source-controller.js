@@ -495,7 +495,7 @@ HC.SourceController = HC.SourceController || {};
             sample4_beats: 4,
             sample5_enabled: false,
             sample5_record: false,
-            sample5_beats: 8,
+            sample5_beats: 4,
             sample0_load: false,
             sample1_load: false,
             sample2_load: false,

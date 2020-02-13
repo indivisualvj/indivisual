@@ -484,7 +484,7 @@
         sample(dir, file, data) {
             let path = filePath(SAMPLE_DIR, dir);
             let conf = {
-                action: 'sample',
+                action: 'write',
                 dir: path,
                 file: file,
                 contents: data

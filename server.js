@@ -219,7 +219,7 @@ io.sockets.on('connection', function (socket) {
     /**
      *
      */
-    socket.on('sample', _sample);
+    socket.on('write', _writeBinary);
 
     /**
      *
@@ -497,7 +497,7 @@ function _save(data, callback) {
  * @param callback
  * @private
  */
-function _sample(data, callback) {
+function _writeBinary(data, callback) {
 
     let dir = data.dir;
     let file = filePath(dir, data.file);
@@ -505,12 +505,10 @@ function _sample(data, callback) {
     _existCreate(dir);
 
     if (data.file) {
-        let contents = data.contents;//.split(',')[1]; // Get rid of the data:image/png;base64 at the beginning of the file data
-        let buffer = contents;//Buffer.from(contents, 'base64');
+        let buffer = data.contents;
         fs.writeFile(file, buffer.toString('binary'), 'binary', function (err) {
             if (err) {
                 console.log(err);
-                //callback('error: ' + err)
 
             } else {
                 //console.log(file + ' written');

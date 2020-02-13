@@ -12,19 +12,19 @@ let context = canvas.getContext('2d');
  * @param data
  * @param from
  * @param sid
+ * @param callback
  */
-let sample = function (path, file, data, from, sid, callback) {
+let write = function (path, file, data, from, sid, callback) {
     let conf = {
-        action: 'sample',
+        action: 'write',
         dir: path,
         file: file,
-        contents: data
+        contents: data,
+        sid: sid,
+        from: from
     };
 
-    conf.sid = sid;
-    conf.from = from;
-    socket.emit('sample', conf, callback);
-
+    socket.emit('write', conf, callback);
 };
 
 
@@ -54,7 +54,7 @@ onmessage = function (ev) {
                 frame.convertToBlob({
                     type: "image/png"
                 }).then((blob) => {
-                    sample(path, i + '.png', blob, name, sid, () => {
+                    write(path, i + '.png', blob, name, sid, () => {
                         stored++;
                         if (stored >= length) {
                             self.postMessage({id: ev.data.id, samples: samples}, samples);

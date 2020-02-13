@@ -127,8 +127,8 @@ body {
 }
 
 .expandable[fixed] {
-    width: 200% !important;
-    height: 125% !important;
+    width: 175% !important;
+    height: 175% !important;
     cursor: zoom-out !important;
 }
 

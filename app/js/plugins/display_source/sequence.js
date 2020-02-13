@@ -378,7 +378,6 @@
          * @private
          */
         _draw(instance, image) {
-// fixme draw in worker !?
             if (image) {
                 let ctx = this.canvas.ctx;
                 let br = instance.brightness();

@@ -705,7 +705,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     let display = this.displayManager.getDisplay(numberExtract(item, 'display'));
                     this.sourceManager.updateSource(display);
 
-                    if (display && display.isFixedSize()) { // fixme extrawurst needed by light display source make lighting listen here!
+                    if (display && display.isFixedSize()) { // fixme what is it? needed by light display source make lighting manage it!
                         this.displayManager.updateDisplay(display.index, false);
                     }
 

@@ -515,42 +515,6 @@ HC.SourceController = HC.SourceController || {};
         };
 
         styles = {
-            // sample0_enabled: ['quarter', 'clear'],
-            // sample1_enabled: ['quarter', 'clear'],
-            // sample2_enabled: ['quarter', 'clear'],
-            // sample3_enabled: ['quarter', 'clear'],
-            // sample4_enabled: ['quarter', 'clear'],
-            // sample5_enabled: ['quarter', 'clear'],
-
-            // sample0_record: ['quarter'],
-            // sample1_record: ['quarter'],
-            // sample2_record: ['quarter'],
-            // sample3_record: ['quarter'],
-            // sample4_record: ['quarter'],
-            // sample5_record: ['quarter'],
-
-            // sample0_beats: ['half'],
-            // sample1_beats: ['half'],
-            // sample2_beats: ['half'],
-            // sample3_beats: ['half'],
-            // sample4_beats: ['half'],
-            // sample5_beats: ['half'],
-
-            // sample0_store: ['quint'],
-            // sample1_store: ['quint'],
-            // sample2_store: ['quint'],
-            // sample3_store: ['quint'],
-            // sample4_store: ['quint'],
-            // sample5_store: ['quint'],
-            //
-            //
-            // sample0_reset: ['quarter'],
-            // sample1_reset: ['quarter'],
-            // sample2_reset: ['quarter'],
-            // sample3_reset: ['quarter'],
-            // sample4_reset: ['quarter'],
-            // sample5_reset: ['quarter'],
-
             bts_2: ['quint'],
             bts_4: ['quint'],
             bts_8: ['quint'],
@@ -573,12 +537,7 @@ HC.SourceController = HC.SourceController || {};
         createSampleSettings(pluggedValues) {
             for (let i in pluggedValues.sample) {
                 let beatKey = getSampleBeatKey(i);
-
                 this.values[beatKey] = pluggedValues.beats;
-
-                // this.settings[getSampleEnabledKey(i)] = false;
-                // this.settings[getSampleRecordKey(i)] = false;
-                // this.settings[beatKey] = 8;
             }
         }
     }
@@ -665,19 +624,22 @@ HC.SourceController = HC.SourceController || {};
             let el = document.getElementById('sequences');
             let sequenceKey = 'sequence' + this.index;
             this.clipNode = document.createElement('div');
-            this.clipNode.id = sequenceKey + '_clip';
+            this.clipNode.id = sequenceKey;
             this.clipNode.setAttribute('data-title', sequenceKey);
             this.clipNode.setAttribute('class', 'sequence control');
 
             this.thumbsNode  = document.createElement('div');
+            this.thumbsNode.id = sequenceKey + '_thumbs';
             this.thumbsNode.setAttribute('class', 'thumbs');
             this.clipNode.appendChild(this.thumbsNode);
 
             this.indicatorNode = document.createElement('div');
+            this.indicatorNode.id = sequenceKey + '_indicator';
             this.indicatorNode.setAttribute('class', 'indicator');
             this.clipNode.appendChild(this.indicatorNode);
 
             this.pointerNode = document.createElement('div');
+            this.pointerNode.id = sequenceKey + '_pointer';
             this.pointerNode.setAttribute('class', 'progress');
             this.indicatorNode.appendChild(this.pointerNode);
 
@@ -713,7 +675,6 @@ HC.SourceController = HC.SourceController || {};
             this.setVisible(enabled);
 
             if (data) {
-                this.clipNode.setAttribute('data-color', 'green');
 
                 if (clipEnabled != enabled || clipSample != sample) {
                     this.thumbsNode.innerHTML = '';
@@ -741,7 +702,6 @@ HC.SourceController = HC.SourceController || {};
                 }
 
             } else {
-                this.clipNode.setAttribute('data-color', 'red');
                 this.thumbsNode.innerHTML = '';
             }
         }
@@ -875,12 +835,18 @@ HC.SourceController = HC.SourceController || {};
         controller;
 
         /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
          *
          * @param {HC.Controller} controller
          * @param index
          */
         constructor(controller, index) {
             this.controller = controller;
+            this.config = controller.config;
             this.index = index;
 
             this.init();
@@ -893,8 +859,9 @@ HC.SourceController = HC.SourceController || {};
             let el = document.getElementById('samples');
 
             this.node = document.createElement('div');
-            this.node.id = 'sample' + this.index + '_thumb';
+            this.node.id = 'sample' + this.index;
             this.node.setAttribute('class', 'sample control');
+            this.node.setAttribute('draggable', 'true');
 
             this.controls = document.createElement('div');
             this.controls.classList.add('controls');
@@ -915,6 +882,8 @@ HC.SourceController = HC.SourceController || {};
 
             el.appendChild(this.node);
 
+            this.initDragAndDrop();
+
             window.addEventListener('resize', this._onResize);
 
             this._onResize();
@@ -932,6 +901,67 @@ HC.SourceController = HC.SourceController || {};
 
         /**
          *
+         */
+        initDragAndDrop() {
+
+            let sequences;
+            let currentSequence;
+
+            let _dragover = (e) => {
+
+                if (currentSequence) {
+                    currentSequence.style.borderColor = null;
+                }
+
+                currentSequence = e.target.parentElement;
+                currentSequence.style.borderColor = 'red';
+
+            };
+
+            let _enableSequences = (display) => {
+                if (sequences) {
+                    sequences.forEach((sequence) => {
+                        sequence.parentElement.style.display = display ? 'block' : 'none';
+                        sequence.parentElement.style.borderColor = null;
+
+                        if (display) {
+                            sequence.addEventListener('dragover', _dragover);
+
+                        } else {
+                            sequence.removeEventListener('dragover', _dragover);
+                        }
+                    });
+                }
+            };
+
+            this.node.addEventListener('dragstart', (e) => {
+
+                let enabledKey = getSampleEnabledKey(this.index);
+                if (!this.config.SourceSettingsManager.get('sample').get(enabledKey)) {
+                    e.stopPropagation();
+                    return false;
+                }
+
+                _enableSequences(false);
+                sequences = document.querySelectorAll('#sequences > div > [id^="sequence"]');
+                _enableSequences(true);
+            });
+
+            this.node.addEventListener('dragend', (e) => {
+                _enableSequences(false);
+
+                if (currentSequence) {
+                    let seq = numberExtract(currentSequence.id, 'sequence');
+                    let smp = this.index;
+                    this.controller.updateSource(getSequenceSampleKey(seq), smp, true, true, false);
+
+                    currentSequence = null;
+                }
+            });
+        }
+
+        /**
+         *
          * @param data
          */
         update(data) {
@@ -942,7 +972,6 @@ HC.SourceController = HC.SourceController || {};
                 this.node.style.backgroundPositionX = 'center';
                 this.node.style.backgroundPositionY = 'center';
                 this.node.style.backgroundSize = '50%';
-                this.node.setAttribute('data-color', 'green');
                 this.node.setAttribute('data-label', 'ready to play');
 
             } else {

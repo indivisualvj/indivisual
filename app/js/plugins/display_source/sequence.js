@@ -271,7 +271,7 @@
          */
         next(speed) {
 
-            if (this._last != this.animation.now) {
+            if (this._last !== this.animation.now) {
 
                 let sample = this.sample;
 
@@ -327,8 +327,8 @@
 
             if (this.dirty) {
                 let prc = Math.min(100, ((pointer-this.start) / this.length) * 100);
-                if (Math.ceil(prc) % 2 == 0) {
-                    messaging.emitAttr('#' + this.id + '_clip', 'data-progress', prc);
+                if (Math.ceil(prc) % 2 === 0) {
+                    messaging.emitAttr('#' + this.id, 'data-progress', prc);
                 }
             }
 
@@ -357,7 +357,7 @@
 
                 this._draw(this, image);
 
-                if (this.overlay && this.overlay != this && this.overlay.overlay != this) {
+                if (this.overlay && this.overlay !== this && this.overlay.overlay !== this) {
                     let oimage = this.overlay.current((passthrough || this.overlay.passthrough) ? fallback : false);
                     this._overlay(this.overlay, oimage, this.blendmode);
                 }
@@ -406,15 +406,15 @@
                     let flipx = instance.flipx;
                     let flipy = instance.flipy;
                     let flipped = false;
-                    if (flipx != 1) {
+                    if (flipx !== 1) {
                         flipped = true;
                         ctx.scale(flipx, 1);
                     }
-                    if (flipy != 1) {
+                    if (flipy !== 1) {
                         flipped = true;
                         ctx.scale(1, flipy);
                     }
-                    if (image.width != this.width || image.height != this.height) {
+                    if (image.width !== this.width || image.height !== this.height) {
                         ctx.drawImage(image, 0, 0, image.width, image.height, 0, 0, this.width * flipx, this.height * flipy);
 
                     } else {

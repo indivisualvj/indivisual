@@ -427,7 +427,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     ];
                     this.messaging.emitAttr('#audio', 'data-label', au.join(' / '));
                 }
-                //messaging.emitAttr('#beat', 'data-color', 'red', 'green');<
+
                 this.messaging.emitMidi('glow', MIDI_BEAT_FEEDBACK, {timeout: 125});
                 if (detectedSpeed) {
                     this.messaging.emitMidi('glow', MIDI_PEAKBPM_FEEDBACK, {timeout: 15000 / detectedSpeed, times: 8});

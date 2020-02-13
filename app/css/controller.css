@@ -20,11 +20,10 @@ body {
     height: 100vh;
     box-sizing: border-box;
 
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
+    /*-webkit-touch-callout: none;*/
+    /*-webkit-user-select: none;*/
+    /*-khtml-user-select: none;*/
+    /*-moz-user-select: none;*/
     user-select: none;
 
     overflow: hidden;
@@ -527,6 +526,9 @@ input:focus, select:focus {
     border-left: 6px solid rgba(10, 255, 10, 0.7) !important;
 }
 
+[data-background="blue"] {
+    background-color: #2fa1d6;
+}
 
 [color="red"]:after {
     color: rgba(255, 10, 10, 0.7) !important;
@@ -552,6 +554,7 @@ input:focus, select:focus {
 }
 
 #samples .sample {
+    cursor: move;
     position: relative;
     display: inline-block;
     box-sizing: border-box;
@@ -561,6 +564,7 @@ input:focus, select:focus {
 }
 
 #samples .sample .controls {
+    cursor: default;
     z-index: 999;
     left: 0;
     display: none;
@@ -596,7 +600,7 @@ input:focus, select:focus {
 }
 
 #sequences {
-
+    user-select: initial;
 }
 
 #sequences .sequence {
@@ -654,7 +658,7 @@ input:focus, select:focus {
     top: 0;
     width: 0;
     height: 100%;
-    border-right: 4px solid cornflowerblue;
+    border-right: 4px solid #2fa1d6;
     box-sizing: border-box;
     background: rgba(0, 0, 0, .3)
 }

@@ -562,50 +562,32 @@ input:focus, select:focus {
 
 #samples .sample .controls {
     z-index: 999;
+    left: 0;
+    display: none;
+    top: -123%;
     width: 100%;
     height: 100%;
+    padding: 8%;
     position: absolute;
     background-color: rgba(0, 0, 0, 0.0) !important;
     border: 1px solid transparent !important;
     transition: all 125ms;
 }
 
-#samples .sample .controls:hover {
+#samples .sample:hover .controls {
+    display: block;
     border: 1px solid #2fa1d6 !important;
     background-color: rgba(0, 0, 0, 0.8) !important;
+    width: 120%;
 }
 
-#samples .sample .controls div {
+#samples .sample .controls .guify-component-container {
     position: relative;
-    display: none;
-    width: 100%;
-    height: 20px;
+    opacity: 0;
 }
 
-#samples .sample .controls div * {
-    position: absolute;
-    right: 5px;
-    top: 0px;
-}
-
-#samples .sample .controls div input {
-}
-
-#samples .sample .controls div select {
-    display: block;
-    width: 50%;
-}
-
-#samples .sample .controls div[name]:before {
-    position: absolute;
-    left: 5px;
-    top: 2px;
-    content: attr(name);
-    color: white;
-}
-
-#samples .sample .controls:hover div {
-    display: block;
+#samples .sample:hover .controls .guify-component-container {
+    opacity: 1;
 }
 
 #samples [data-label]:after {

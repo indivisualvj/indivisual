@@ -305,6 +305,7 @@
 
             this.listener.register(EVENT_SAMPLE_STATUS_CHANGED, sample.id, (target) => {
                 if (!target.enabled) {
+                    let thumbKey = getSampleThumbKey(target.index);
                     messaging.emitAttr('[id="' + thumbKey + '"]', 'data-progress', '');
                     messaging.emitAttr('[id="' + thumbKey + '"]', 'data-color', '');
                     messaging.emitAttr('[id="' + thumbKey + '"]', 'data-label', '');

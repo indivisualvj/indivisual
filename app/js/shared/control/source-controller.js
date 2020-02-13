@@ -471,7 +471,7 @@ HC.SourceController = HC.SourceController || {};
 
 {
     /**
-     * todo move sample settings to #samples!??
+     *
      * @type {HC.SourceController.sample}
      */
     HC.SourceController.sample = class sample extends HC.ControlSet {
@@ -515,26 +515,26 @@ HC.SourceController = HC.SourceController || {};
         };
 
         styles = {
-            sample0_enabled: ['quarter', 'clear'],
-            sample1_enabled: ['quarter', 'clear'],
-            sample2_enabled: ['quarter', 'clear'],
-            sample3_enabled: ['quarter', 'clear'],
-            sample4_enabled: ['quarter', 'clear'],
-            sample5_enabled: ['quarter', 'clear'],
+            // sample0_enabled: ['quarter', 'clear'],
+            // sample1_enabled: ['quarter', 'clear'],
+            // sample2_enabled: ['quarter', 'clear'],
+            // sample3_enabled: ['quarter', 'clear'],
+            // sample4_enabled: ['quarter', 'clear'],
+            // sample5_enabled: ['quarter', 'clear'],
 
-            sample0_record: ['quarter'],
-            sample1_record: ['quarter'],
-            sample2_record: ['quarter'],
-            sample3_record: ['quarter'],
-            sample4_record: ['quarter'],
-            sample5_record: ['quarter'],
+            // sample0_record: ['quarter'],
+            // sample1_record: ['quarter'],
+            // sample2_record: ['quarter'],
+            // sample3_record: ['quarter'],
+            // sample4_record: ['quarter'],
+            // sample5_record: ['quarter'],
 
-            sample0_beats: ['half'],
-            sample1_beats: ['half'],
-            sample2_beats: ['half'],
-            sample3_beats: ['half'],
-            sample4_beats: ['half'],
-            sample5_beats: ['half'],
+            // sample0_beats: ['half'],
+            // sample1_beats: ['half'],
+            // sample2_beats: ['half'],
+            // sample3_beats: ['half'],
+            // sample4_beats: ['half'],
+            // sample5_beats: ['half'],
 
             // sample0_store: ['quint'],
             // sample1_store: ['quint'],
@@ -896,10 +896,21 @@ HC.SourceController = HC.SourceController || {};
             this.node.id = 'sample' + this.index + '_thumb';
             this.node.setAttribute('class', 'sample control');
 
-            // fixme try to create controller and add container here
             this.controls = document.createElement('div');
             this.controls.classList.add('controls');
-            this.controls.innerHTML = document.getElementById('controls-template').innerHTML;
+
+            this.controller.sourceSettingsGui.findFolderByKey('sample').setVisible(false);
+
+            let ctrl = this.controller.sourceSettingsGui.findControlByProperty(getSampleEnabledKey(this.index));
+            ctrl.setMnemonic(null); // keyboard initialization happens after init thumbs...
+            this.controls.appendChild(ctrl.getContainer());
+            ctrl = this.controller.sourceSettingsGui.findControlByProperty(getSampleRecordKey(this.index));
+            ctrl.setMnemonic(null);
+            this.controls.appendChild(ctrl.getContainer());
+            ctrl = this.controller.sourceSettingsGui.findControlByProperty(getSampleBeatKey(this.index));
+            ctrl.setMnemonic(null);
+            this.controls.appendChild(ctrl.getContainer());
+
             this.node.appendChild(this.controls);
 
             el.appendChild(this.node);

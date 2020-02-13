@@ -45,7 +45,13 @@
          */
         setMnemonic(key) {
             this.mnemonic = key;
-            this.getContainer().setAttribute('data-mnemonic', key)
+
+            if (key) {
+                this.getContainer().setAttribute('data-mnemonic', key)
+
+            } else {
+                this.getContainer().removeAttribute('data-mnemonic');
+            }
         }
 
         /**

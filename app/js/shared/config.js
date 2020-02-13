@@ -244,26 +244,6 @@ HC.Statics = HC.Statics || {};
             this.SourceValues = this.SourceSettingsManager.valuesProxy(this.SourceValues);
 
             this.DataSettings = {};
-            // this.ShaderSettings = statics.ShaderSettings;
-            //
-            // statics.ControlSettingsManager = this.ControlSettingsManager;
-            // statics.ControlSettings = this.ControlSettings;
-            // statics.ControlTypes = this.ControlTypes;
-            // statics.ControlValues = this.ControlValues;
-            // statics.DisplaySettingsManager = this.DisplaySettingsManager;
-            // statics.DisplaySettings = this.DisplaySettings;
-            // statics.DisplayTypes = this.DisplayTypes;
-            // statics.DisplayValues = this.DisplayValues;
-            // statics.SourceSettingsManager = this.SourceSettingsManager;
-            // statics.SourceSettings = this.SourceSettings;
-            // statics.SourceTypes = this.SourceTypes;
-            // statics.SourceValues = this.SourceValues;
-            // statics.DataSettings = this.DataSettings;
-
-
-            // this.MidiController = statics.MidiController;
-            // this.Passes = statics.Passes;
-            // this.AnimationValues = statics.AnimationValues;
             
             return {
                 controlSets: controlSets,

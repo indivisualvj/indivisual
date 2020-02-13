@@ -131,6 +131,9 @@ document.addEventListener('DOMContentLoaded', function () {
             this.messaging = messaging;
         }
 
+        /**
+         *
+         */
         animate() {
 
             this.listener.fireEvent(EVENT_ANIMATION_ANIMATE);
@@ -479,7 +482,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.updateSources(sources, true, false, true);
                 }
 
-                if ('settings' in session) {
+                if ('settings' in session) { // fixme does not work!!!
                     HC.log('settings', 'synced');
                     let settings = session.settings;
                     for (let k in settings) {

@@ -83,7 +83,7 @@
         }
 
         /**
-         * fixme did not reset remaining changed layers
+         *
          * @param {HC.GuifyExplorerFolder} folder
          */
         loadPresets(folder) {
@@ -92,9 +92,7 @@
 
             for (let i = 0; dflt.length < this.config.ControlValues.layers && i < children.length; i++) {
                 let child = folder.getChild(children[i]);
-                if (!child.getLabel().match(/^_.+/)) {
-                    dflt.push(child);
-                }
+                dflt.push(child);
             }
             this.explorer.resetPresets();
 
@@ -110,8 +108,9 @@
                     this._loadPreset(dflt[di], i, di, di == dflt.length - 1);
                     di++;
 
-                } else {
-                    this.controller.updatePreset(false, this.settingsManager.prepareLayer(this.config.ControlSettings.layer));
+                } else if (!this.settingsManager.isDefault(i)) {
+                    this.settingsManager.setLayerProperties(i, false);
+                    this.controller.updatePreset(false, this.settingsManager.prepareLayer(i));
                 }
             }
         }

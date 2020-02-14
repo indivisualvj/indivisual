@@ -547,37 +547,19 @@ function _store(data) {
             settings = section;
         }
 
-        delete data.data.session;
-        delete data.data.sample0_enabled;
-        delete data.data.sample1_enabled;
-        delete data.data.sample2_enabled;
-        delete data.data.sample3_enabled;
-        delete data.data.sample4_enabled;
-        delete data.data.sample5_enabled;
-        delete data.data.sample0_record;
-        delete data.data.sample1_record;
-        delete data.data.sample2_record;
-        delete data.data.sample3_record;
-        delete data.data.sample4_record;
-        delete data.data.sample5_record;
-        delete data.data.sample0_load;
-        delete data.data.sample1_load;
-        delete data.data.sample2_load;
-        delete data.data.sample3_load;
-        delete data.data.sample4_load;
-        delete data.data.sample5_load;
-
         for (let k in data.data) {
             let v = data.data[k];
-            if (typeof v === 'object') { // most likely to be case with ControlSet
+            if (typeof v === 'object') { // most likely to be case with ControlSets
                 if (!(k in settings)) {
                     settings[k] = {};
                 }
                 for (let i in v) {
-                    settings[k][i] = v[i]; // fixme sequence rereset/reset TypeError: Cannot assign to read only property '0' of string 'off'
+                    if (!(conf.unstorable.includes(k)))
+                        settings[k][i] = v[i];
                 }
             } else { // old structure used for control/display/source settings
-                settings[k] = v;
+                if (!(conf.unstorable.includes(k)))
+                    settings[k] = v;
             }
         }
 

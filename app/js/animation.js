@@ -487,7 +487,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.updateSources(sources, true, false, true);
                 }
 
-                if ('settings' in session) { // fixme does not work!!!
+                if ('settings' in session) {
                     HC.log('settings', 'synced');
                     let settings = session.settings;
                     for (let k in settings) {
@@ -643,14 +643,17 @@ document.addEventListener('DOMContentLoaded', function () {
             if (display) {
                 switch (item) {
                     case 'reset':
-                        if (this.renderer) {
-                            if (force) {
-                                this.beatKeeper.reset();
-                                this.fullReset(false);
+                        if (value) {
+                            if (this.renderer) {
+                                if (force) {
+                                    this.beatKeeper.reset();
+                                    this.fullReset(false);
 
-                            } else {
-                                this.renderer.resetLayer(this.renderer.currentLayer);
+                                } else {
+                                    this.renderer.resetLayer(this.renderer.currentLayer);
+                                }
                             }
+                            this.updateControl('reset', false, false, true, false);
                         }
                         break;
 
@@ -715,7 +718,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     let display = this.displayManager.getDisplay(numberExtract(item, 'display'));
                     this.sourceManager.updateSource(display);
 
-                    if (display && display.isFixedSize()) { // fixme what is it? needed by light display source make lighting manage it!
+                    if (display && display.isFixedSize()) { // todo what is it? needed by light display source make lighting manage it!
                         this.displayManager.updateDisplay(display.index, false);
                     }
 

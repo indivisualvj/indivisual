@@ -312,16 +312,16 @@ HC.SourceController = HC.SourceController || {};
             sequence2_osci: ['half', 'clear'],
             sequence3_osci: ['half', 'clear'],
             sequence4_osci: ['half', 'clear'],
-            sequence0_reset: ['hex'],
-            sequence1_reset: ['hex'],
-            sequence2_reset: ['hex'],
-            sequence3_reset: ['hex'],
-            sequence4_reset: ['hex'],
-            sequence0_rereset: ['hex'],
-            sequence1_rereset: ['hex'],
-            sequence2_rereset: ['hex'],
-            sequence3_rereset: ['hex'],
-            sequence4_rereset: ['hex'],
+            sequence0_reset: ['quarter'],
+            sequence1_reset: ['quarter'],
+            sequence2_reset: ['quarter'],
+            sequence3_reset: ['quarter'],
+            sequence4_reset: ['quarter'],
+            sequence0_rereset: ['quarter'],
+            sequence1_rereset: ['quarter'],
+            sequence2_rereset: ['quarter'],
+            sequence3_rereset: ['quarter'],
+            sequence4_rereset: ['quarter'],
             sequence0_jump: ['hex'],
             sequence1_jump: ['hex'],
             sequence2_jump: ['hex'],
@@ -455,10 +455,11 @@ HC.SourceController = HC.SourceController || {};
                 let key = getSequenceKey(seq);
                 this.settings[key + '_rereset'] = () => {
                     let updates = {};
-                    updates[key + '_overlay'] = this.values[key + '_overlay'];
-                    updates[key + '_input'] = this.values[key + '_input'];
-                    updates[key + '_blendmode'] = this.values[key + '_blendmode'];
-                    updates[key + '_osci'] = this.values[key + '_osci'];
+                    updates[key + '_overlay'] = this.settings[key + '_overlay'];
+                    updates[key + '_input'] = this.settings[key + '_input'];
+                    updates[key + '_blendmode'] = this.settings[key + '_blendmode'];
+                    updates[key + '_osci'] = this.settings[key + '_osci'];
+                    updates[key + '_brightness'] = this.settings[key + '_brightness'];
 
                     messaging.program.updateSources(updates, true, false, false);
                     messaging.emitSources(updates, true, true, false);
@@ -643,6 +644,7 @@ HC.SourceController = HC.SourceController || {};
             this.clipNode.id = sequenceKey;
             // this.clipNode.setAttribute('data-title', sequenceKey);
             this.clipNode.setAttribute('class', 'sequence control');
+            this.clipNode.setAttribute('data-sequence', this.index.toString());
 
             this.thumbsNode  = document.createElement('div');
             this.thumbsNode.id = sequenceKey + '_thumbs';
@@ -915,6 +917,7 @@ HC.SourceController = HC.SourceController || {};
 
             this.node = document.createElement('div');
             this.node.id = 'sample' + this.index;
+            this.node.setAttribute('data-sample', this.index.toString());
             this.node.setAttribute('class', 'sample control');
             this.node.setAttribute('draggable', 'true');
 
@@ -976,8 +979,14 @@ HC.SourceController = HC.SourceController || {};
             let _enableSequences = (display) => {
                 if (sequences) {
                     sequences.forEach((sequence) => {
-                        sequence.parentElement.style.display = display ? 'block' : 'none';
-                        sequence.parentElement.style.borderColor = null;
+                        sequence = sequence.parentNode;
+                        let seq = parseInt(sequence.getAttribute('data-sequence'));
+                        let sequenceInput = this.config.SourceSettingsManager.get('sequence').get(getSequenceSampleKey(seq));
+                        if (sequenceInput && sequenceInput !== 'off') {
+                            display = true;
+                        }
+                        sequence.style.display = display ? 'block' : 'none';
+                        sequence.style.borderColor = null;
 
                         if (display) {
                             sequence.addEventListener('dragover', _dragover);
@@ -1006,10 +1015,11 @@ HC.SourceController = HC.SourceController || {};
                 _enableSequences(false);
 
                 if (currentSequence) {
-                    let seq = numberExtract(currentSequence.id, 'sequence');
-                    let smp = this.index;
-                    this.controller.updateSource(getSequenceSampleKey(seq), smp, true, true, false);
-
+                    let seq = parseInt(currentSequence.getAttribute('data-sequence'));
+                    if (isNumber(seq)) {
+                        let smp = this.index;
+                        this.controller.updateSource(getSequenceSampleKey(seq), smp, true, true, false);
+                    }
                     currentSequence = null;
                 }
             });

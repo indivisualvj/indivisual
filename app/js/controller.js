@@ -589,14 +589,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.explainPlugin(item, value, HC);
             }
 
-            if (item == 'beat') {
+            if (item === 'beat') {
                 value = this.beatKeeper.trigger(value);
             }
 
             let tValue = value;
             value = this.config.ControlSettingsManager.updateItem(item, value);
 
-            if (item == 'layer') {
+            if (item === 'layer') {
                 this.updateSettings(value, this.settingsManager.prepareLayer(value), true, false, true);
 
                 this.explorer.setSelected(value+1, true);
@@ -610,8 +610,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 this.messaging.onAttr(config);
 
-            } else if (item == 'reset') {
-                if (force) {
+            } else if (item === 'reset') {
+                if (value && force) {
                     this.settingsManager.reset(splitToIntArray(this.config.ControlSettings.shuffleable));
                 }
             }

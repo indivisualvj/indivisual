@@ -494,7 +494,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         this.updateSettings(k, settings[k], true, false, true);
                     }
                 }
-
+// fixme still not working perfectly eg. rhythm not getting loaded
                 if ('controls' in session) {
                     HC.log('controls', 'synced');
                     let controls = session.controls;

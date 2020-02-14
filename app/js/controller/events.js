@@ -68,6 +68,7 @@
                 if (this.codes.includes(e.keyCode) && !(/INPUT|TEXTAREA|SELECT|BUTTON/.test(e.target.nodeName))) {
                     e.preventDefault();
                     e.stopPropagation();
+                    e.stopImmediatePropagation();
                     this.callback(e);
                 }
             });

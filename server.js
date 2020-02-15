@@ -140,28 +140,28 @@ io.sockets.on('connection', function (socket) {
     socket.on('controls', function (data) {
         _log('controls', data);
         if (_emit(data)) {
-            _store(data);
+            _store(data, conf.unstorable.controls);
         }
     });
 
     socket.on('displays', function (data) {
         _log('displays', data);
         if (_emit(data)) {
-            _store(data);
+            _store(data, conf.unstorable.displays);
         }
     });
 
     socket.on('sources', function (data) {
         _log('sources', data);
         if (_emit(data)) {
-            _store(data);
+            _store(data, conf.unstorable.sources);
         }
     });
 
     socket.on('settings', function (data) {
         _log('settings', data);
         if (_emit(data)) {
-            _store(data);
+            _store(data, conf.unstorable.settings);
         }
     });
 
@@ -521,9 +521,10 @@ function _writeBinary(data, callback) {
 /**
  *
  * @param data
+ * @param unstorable
  * @private
  */
-function _store(data) {
+function _store(data, unstorable = []) {
     let proceed = function (data) {
         let session = sessions[data.sid];
 
@@ -554,11 +555,11 @@ function _store(data) {
                     settings[k] = {};
                 }
                 for (let i in v) {
-                    if (!(conf.unstorable.includes(k)))
+                    if (!(unstorable.includes(k)))
                         settings[k][i] = v[i];
                 }
             } else { // old structure used for control/display/source settings
-                if (!(conf.unstorable.includes(k)))
+                if (!(unstorable.includes(k)))
                     settings[k] = v;
             }
         }

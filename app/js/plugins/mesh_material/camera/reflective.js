@@ -28,7 +28,7 @@
             geometry.computeBoundingBox();
             let box3 = geometry.boundingBox;
             let height = box3.max.y - box3.min.y;
-            console.log(height);
+
             let cubecam = new THREE.CubeCamera(1, 100000, 2 * height * this.settings.material_volume);
             cubecam.renderTarget.texture.generateMipmaps = true;
             cubecam.renderTarget.texture.minFilter = THREE.LinearMipMapLinearFilter;

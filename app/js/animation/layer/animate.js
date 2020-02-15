@@ -45,9 +45,9 @@ HC.Layer.prototype.animate = function (hook) {
 
     this.listener.fireEvent(EVENT_LAYER_ANIMATE);
 
-    if (this.shapes === false) { // todo not so cool män
-        this.resetShapes();
-    }
+    // if (this.shapes === false) { // todo not so cool män
+    //     this.resetShapes();
+    // }
 
     this.tween.update(this.animation.now - this.lastUpdate, false);
 

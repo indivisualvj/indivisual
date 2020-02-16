@@ -125,7 +125,6 @@ Many thanks to:
 - https://github.com/mrdoob/three.js
 - https://github.com/tweenjs/tween.js
 - https://github.com/glowbox/maptasticjs
-- https://github.com/vuejs/vue
 - https://github.com/colejd/guify
 - https://github.com/mrdoob/stats.js
 - https://github.com/nodejs/node

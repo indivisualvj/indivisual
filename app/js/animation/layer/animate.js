@@ -43,9 +43,11 @@ HC.Layer.prototype.animateShape = function (shape) {
  */
 HC.Layer.prototype.animate = function (hook) {
 
-    if (this.shapes === false) {
-        this.resetShapes();
-    }
+    this.listener.fireEvent(EVENT_LAYER_ANIMATE);
+
+    // if (this.shapes === false) { // todo not so cool män
+    //     this.resetShapes();
+    // }
 
     this.tween.update(this.animation.now - this.lastUpdate, false);
 
@@ -73,10 +75,6 @@ HC.Layer.prototype.animate = function (hook) {
 
     this.doLighting(this.materialColor);
     this.doBackground();
-
-    if (hook) {
-        hook();
-    }
 
     this.doOscillate(false);
 };

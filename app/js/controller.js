@@ -50,8 +50,8 @@ document.addEventListener('DOMContentLoaded', function () {
     messaging.connect(function (reconnect, controller) {
 
         setTimeout(() => {
-            document.getElementById(_MONITOR).setAttribute('src', 'monitor.html#' + messaging.sid);
-        }, 250);
+            document.querySelector('iframe.monitor').setAttribute('src', 'monitor.html#' + messaging.sid);
+        }, 1500);
 
         HC.log(controller.name, 'connected', true, true);
 
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
      *
      * @type {HC.Controller}
      */
-    HC.Controller = class Controller extends HC.Messageable {
+    HC.Controller = class Controller extends HC.Program {
 
         /**
          * @type {HC.Guify[]}
@@ -88,12 +88,12 @@ document.addEventListener('DOMContentLoaded', function () {
         guis;
 
         /**
-         * @type {HC.SourceControllerClip[]}
+         * @type {HC.SourceControllerSequence[]}
          */
         clips;
 
         /**
-         * @type {HC.SourceControllerThumb[]}
+         * @type {HC.SourceControllerSample[]}
          */
         thumbs;
 
@@ -120,6 +120,11 @@ document.addEventListener('DOMContentLoaded', function () {
         configurationSettingsGui;
 
         /**
+         * @type {HC.Monitor}
+         */
+        monitor;
+
+        /**
          *
          * @type {{}}
          */
@@ -144,31 +149,6 @@ document.addEventListener('DOMContentLoaded', function () {
         midi;
 
         /**
-         * @type {HC.Messaging}
-         */
-        messaging;
-
-        /**
-         * @type {HC.BeatKeeper}
-         */
-        beatKeeper;
-
-        /**
-         * @type {HC.LayeredControlSetsManager}
-         */
-        settingsManager;
-
-        /**
-         * @type {HC.SourceManager}
-         */
-        sourceManager;
-
-        /**
-         * @type {HC.Config}
-         */
-        config;
-
-        /**
          *
          * @param name
          */
@@ -181,6 +161,9 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param sets
          */
         init(sets) {
+
+            this.monitor = new HC.Monitor();
+            this.monitor.activate(false);
             this.controlSettingsGui = new HC.Guify('ControlSettings', true);
             this.displaySettingsGui = new HC.Guify('DisplaySettings');
             this.sourceSettingsGui = new HC.Guify('SourceSettings');
@@ -194,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.animationSettingsGui,
             ];
             this.beatKeeper = new HC.BeatKeeper(null, this.config);
-            this.sourceManager = new HC.SourceManager(null, { config: this.config, sequence: [], sample: [] });
+            this.sourceManager = new HC.SourceManager(null, { config: this.config, sample: [] });
             this.explorer = new HC.Explorer(this);
 
             let controlSets = sets.controlSets;
@@ -380,7 +363,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let data = {};
             data[folder] = settings;
 
-            for (let i = 0; i < this.config.ControlValues.layer.length; i++) {
+            for (let i = 0; i < this.config.ControlValues.layers; i++) {
                 if (i == this.config.ControlSettings.layer) {
                     continue;
                 }
@@ -414,7 +397,7 @@ document.addEventListener('DOMContentLoaded', function () {
             data[set] = {};
             data[set][item] = value;
 
-            for (let i = 0; i < this.config.ControlValues.layer.length; i++) {
+            for (let i = 0; i < this.config.ControlValues.layers; i++) {
                 if (i == this.config.ControlSettings.layer) {
                     continue;
                 }
@@ -606,59 +589,59 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.explainPlugin(item, value, HC);
             }
 
-            // if (this.config.ControlSettings) {
-
-                if (item == 'beat') {
-                    value = this.beatKeeper.trigger(value);
-                }
+            if (item === 'beat') {
+                value = this.beatKeeper.trigger(value);
+            }
 
             let tValue = value;
-                value = this.config.ControlSettingsManager.updateItem(item, value);
+            value = this.config.ControlSettingsManager.updateItem(item, value);
 
-                if (item == 'layer') {
-                    this.updateSettings(value, this.settingsManager.prepareLayer(value), true, false, true);
+            if (item === 'layer') {
+                this.updateSettings(value, this.settingsManager.prepareLayer(value), true, false, true);
 
-                    this.explorer.setSelected(value+1, true);
+                this.explorer.setSelected(value+1, true);
 
-                    let config = {
-                        action: 'attr',
-                        query: '#layer',
-                        key: 'data-mnemonic',
-                        value: value + 1
-                    };
+                let config = {
+                    action: 'attr',
+                    query: '#layer',
+                    key: 'data-mnemonic',
+                    value: value + 1
+                };
 
-                    this.messaging.onAttr(config);
+                this.messaging.onAttr(config);
 
-                } else if (item == 'reset') {
-                    if (force) {
-                        this.settingsManager.reset(splitToIntArray(this.config.ControlSettings.shuffleable));
-                    }
+            } else if (item === 'reset') {
+                if (value && force) {
+                    this.settingsManager.reset(splitToIntArray(this.config.ControlSettings.shuffleable));
+                }
+            }
+
+            if (forward) {
+                if (typeof value === 'function') { // reset to
+                    value = tValue;
+                }
+                let data = {};
+                data[item] = value;
+                this.messaging.emitControls(data, true, false, force);
+            }
+
+            if (display !== false) {
+
+                if (item.match(/_(sequence|sample|source)/)) {
+                    this.updateData();
+
+                } else if (item === 'monitor') {
+                    this.monitor.activate(value);
                 }
 
-                if (forward) {
-                    if (typeof value === 'function') { // reset to
-                        value = tValue;
-                    }
-                    let data = {};
-                    data[item] = value;
-                    this.messaging.emitControls(data, true, false, force);
-                }
+                this.updateUi(this.controlSettingsGui);
+            }
 
-                if (display !== false) {
+            if (item == 'session' && value != _HASH) {
+                document.location.hash = value;
+                document.location.reload();
+            }
 
-                    if (item.match(/_(sequence|sample|source)/)) {
-                        this.updateData();
-                    }
-
-                    this.updateUi(this.controlSettingsGui);
-                }
-
-                if (item == 'session' && value != _HASH) {
-                    document.location.hash = value;
-                    document.location.reload();
-
-                }
-            // }
         }
 
         /**
@@ -719,12 +702,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (!value) { // set record to false if enabled == false
                         let smp = numberExtract(item, 'sample');
                         this.updateSource(getSampleRecordKey(smp), false, true, true, false);
-
-                        let seq = false;
-                        while ((seq = this.sourceManager.getSequenceBySample(smp)) !== false) {
-                            let key = getSequenceSampleKey(seq);
-                            this.updateSource(key, 'off', true, true, false);
-                        }
                     }
 
                 } else if (item.match(/_(load)/)) {
@@ -762,46 +739,29 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.updateUi(this.sourceSettingsGui);
             }
 
-            if (this.config.SourceValues && this.config.SourceValues.sequence) {
-                for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
-
-                    // set sequence inputs without enabled sample to off
-                    if (this.sourceManager.getSampleEnabledBySequence(seq) === false) {
-                        let key = getSequenceSampleKey(seq);
-                        setTimeout(() => {
-                            this.updateSource(key, 'off', false, true);
-                        }, 125);
-                    }
-
-                    let _trigger = (_seq) => {
-
-                        clearTimeout(this.thumbTimeouts[_seq]);
-
-                        this.thumbTimeouts[_seq] = setTimeout(() => {
-                            requestAnimationFrame(() => {
-                                this.updateClip(_seq);
-                            });
-
-                        }, 125);
-
-                        requestAnimationFrame(() => {
-                            this.updateIndicator(_seq);
-                        });
-
-                    };
-
-                    _trigger(seq);
-                }
-            }
-
             clearTimeout(this.thumbTimeouts.samples);
 
             this.thumbTimeouts.samples = setTimeout(() => {
                 requestAnimationFrame(() => {
+                    this.updateSequenceUi();
                     this.updateThumbs();
                 });
 
             }, 125);
+        }
+
+        /**
+         *
+         */
+        updateSequenceUi() {
+            if (this.config.SourceValues && this.config.SourceValues.sequence) {
+                for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
+                    requestAnimationFrame(() => {
+                        this.updateClip(seq);
+                        this.updateIndicator(seq);
+                    });
+                }
+            }
         }
 
         /**
@@ -878,7 +838,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 };
                 st(layer, to);
             }
-            let to = this.config.ControlValues.layer.length * 151;
+            let to = this.config.ControlValues.layers * 151;
 
             setTimeout(() => {
                 this.updateControl('layer', this.config.ControlSettings.layer, true, true, true);
@@ -889,7 +849,7 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         pushSources() {
-            this.messaging.emitSources(this.config.SourceSettings, true, true, false);
+            this.messaging.emitSources(this.config.SourceSettingsManager.prepareFlat(), true, true, false);
         }
 
         /**
@@ -949,7 +909,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             HC.log('passes', name);
 
-            for (let i = 0; i < this.config.ControlValues.layer.length; i++) {
+            for (let i = 0; i < this.config.ControlValues.layers; i++) {
                 if (!this.settingsManager.isDefault(i)
                     && layerShuffleable(i) == layerShuffleable(this.config.ControlSettings.layer)
                 ) {
@@ -987,7 +947,7 @@ document.addEventListener('DOMContentLoaded', function () {
         refreshLayerInfo() {
             let preset = [];
 
-            for (let i = 0; i < this.config.ControlValues.layer.length; i++) {
+            for (let i = 0; i < this.config.ControlValues.layers; i++) {
                 if (this.settingsManager.layers[i]) {
                     let l = this.settingsManager.getLayer(i);
                     if (!this.settingsManager.isDefault(l) && layerShuffleable(i)) {

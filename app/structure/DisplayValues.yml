@@ -59,8 +59,6 @@ display_speed:
   midi: midi
 #  random: random
 
-border_mode: {}
-
 border_speed:
   peak: peak
   full: fulls

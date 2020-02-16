@@ -25,7 +25,10 @@
 
         apply(geometry, index) {
 
-            let cubecam = new THREE.CubeCamera(1, 100000, 256);
+            geometry.computeBoundingBox();
+            let box3 = geometry.boundingBox;
+            let height = box3.max.y - box3.min.y;
+            let cubecam = new THREE.CubeCamera(1, 100000, 2 * height * this.settings.material_volume);
             cubecam.renderTarget.texture.generateMipmaps = true;
             cubecam.renderTarget.texture.minFilter = THREE.LinearMipMapLinearFilter;
             cubecam.renderTarget.texture.mapping = THREE.CubeRefractionMapping;
@@ -36,7 +39,7 @@
             mesh.name = this.id(index);
 
             let inst = this;
-            this.animation.listener.register('renderer.render', this.id(index), function (renderer) {
+            this.animation.listener.register(EVENT_RENDERER_RENDER, this.id(index), function (renderer) {
                 if (inst.layer.isVisible()) {
                     mesh.visible = false;
 

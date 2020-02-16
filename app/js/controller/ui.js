@@ -610,11 +610,12 @@ HC.Controller.prototype.updateThumbs = function () {
  * @param index
  */
 HC.Controller.prototype.loadClip = function (index) {
-    let smp = new HC.Sample(null, this.config, index);
+    let smp = new HC.Sample(this, index);
 
-    smp.clip((sample) => {
+    this.sourceManager.loadClip(smp,
+    (clip) => {
         let data = {data: {DataSettings: {}}};
-        data.data.DataSettings[getSampleKey(sample.index)] = sample._clip;
+        data.data.DataSettings[smp.id] = clip;
         this.updateData(data);
     });
 };
@@ -625,6 +626,7 @@ HC.Controller.prototype.loadClip = function (index) {
  */
 HC.Controller.prototype.updateIndicator = function (seq) {
 
+    /** @type {HC.SourceControllerSequence} */
     let clip = this.clips[seq];
 
     let sample = this.sourceManager.getSampleBySequence(seq);
@@ -635,7 +637,6 @@ HC.Controller.prototype.updateIndicator = function (seq) {
     }
 
     clip.updateIndicator(data);
-
 };
 
 /**
@@ -644,6 +645,7 @@ HC.Controller.prototype.updateIndicator = function (seq) {
  */
 HC.Controller.prototype.updateClip = function (seq) {
 
+    /** @type {HC.SourceControllerSequence} */
     let clip = this.clips[seq];
 
     let sample = this.sourceManager.getSampleBySequence(seq);
@@ -654,7 +656,7 @@ HC.Controller.prototype.updateClip = function (seq) {
         data = this.config.DataSettings[sampleKey];
     }
 
-    let enabled = this.sourceManager.getSampleEnabledBySequence(seq) && (data != false);
+    let enabled = this.sourceManager.getSampleEnabledBySequence(seq) && (data !== false);
 
     clip.update(sample, enabled, data);
 };
@@ -666,7 +668,7 @@ HC.Controller.prototype.initClips = function () {
 
     this.clips = [];
     for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
-        this.clips.push(new HC.SourceControllerClip(this, seq));
+        this.clips.push(new HC.SourceControllerSequence(this, seq));
     }
 
 };
@@ -678,6 +680,6 @@ HC.Controller.prototype.initThumbs = function () {
 
     this.thumbs = [];
     for (let seq = 0; seq < this.config.SourceValues.sample.length; seq++) {
-        this.thumbs.push(new HC.SourceControllerThumb(this, seq));
+        this.thumbs.push(new HC.SourceControllerSample(this, seq));
     }
 };

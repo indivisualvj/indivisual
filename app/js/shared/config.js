@@ -1,9 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-
 HC.Statics = HC.Statics || {};
-
 {
     /**
      *
@@ -80,6 +78,12 @@ HC.Statics = HC.Statics || {};
                 callback: (data, finished) => {
                     let settings = jsyaml.load(data.contents);
 
+                    settings.layers = 20;
+                    settings.layer = {};
+                    for (let i = 0; i < 20; i++) {
+                        settings.layer[i] = (i+1);
+                    }
+
                     this._loadAudioPlugins(settings);
                     this._loadShufflePlugins(settings);
                     this._loadControlSets();
@@ -101,6 +105,7 @@ HC.Statics = HC.Statics || {};
                 file: 'structure/SourceValues.yml',
                 callback: (data, finished) => {
                     this.SourceValues = jsyaml.load(data.contents);
+                    this._loadDisplaySourcePlugins(this.SourceValues);
                     finished();
                 }
             },
@@ -239,26 +244,6 @@ HC.Statics = HC.Statics || {};
             this.SourceValues = this.SourceSettingsManager.valuesProxy(this.SourceValues);
 
             this.DataSettings = {};
-            // this.ShaderSettings = statics.ShaderSettings;
-            //
-            // statics.ControlSettingsManager = this.ControlSettingsManager;
-            // statics.ControlSettings = this.ControlSettings;
-            // statics.ControlTypes = this.ControlTypes;
-            // statics.ControlValues = this.ControlValues;
-            // statics.DisplaySettingsManager = this.DisplaySettingsManager;
-            // statics.DisplaySettings = this.DisplaySettings;
-            // statics.DisplayTypes = this.DisplayTypes;
-            // statics.DisplayValues = this.DisplayValues;
-            // statics.SourceSettingsManager = this.SourceSettingsManager;
-            // statics.SourceSettings = this.SourceSettings;
-            // statics.SourceTypes = this.SourceTypes;
-            // statics.SourceValues = this.SourceValues;
-            // statics.DataSettings = this.DataSettings;
-
-
-            // this.MidiController = statics.MidiController;
-            // this.Passes = statics.Passes;
-            // this.AnimationValues = statics.AnimationValues;
             
             return {
                 controlSets: controlSets,
@@ -321,13 +306,14 @@ HC.Statics = HC.Statics || {};
          * @param settings
          * @param section
          * @param plugins
+         * @param className
          * @private
          */
-        _loadPlugins(settings, section, plugins) {
+        _loadPlugins(settings, section, plugins, className) {
 
             let pluginKeys = Object.keys(plugins);
 
-            pluginKeys.sort(this._sort(plugins, 'Plugin'));
+            pluginKeys.sort(this._sort(plugins, className||'Plugin'));
 
             for (let i = 0; i < pluginKeys.length; i++) {
 
@@ -335,7 +321,7 @@ HC.Statics = HC.Statics || {};
                 let plugin = plugins[pluginKey];
                 let name = plugin.name || pluginKey;
 
-                if (name == 'Plugin') {
+                if (name === (className||'Plugin')) {
                     name = pluginKey;
                 }
                 if (!(section in settings)) {
@@ -380,7 +366,7 @@ HC.Statics = HC.Statics || {};
          * @private
          */
         _loadAudioPlugins(settings) {
-            this._loadPlugins(settings, 'audio', HC.audio);
+            this._loadPlugins(settings, 'audio', HC.AudioManager.plugins);
         }
 
         /**
@@ -398,8 +384,18 @@ HC.Statics = HC.Statics || {};
          * @private
          */
         _loadBorderModePlugins(settings) {
-            this._loadPlugins(settings, 'border_mode', HC.Display.border_modes);
+            this._loadPlugins(settings, 'border_mode', HC.Display.border_mode);
         }
+
+        /**
+         *
+         * @param settings
+         * @private
+         */
+        _loadDisplaySourcePlugins(settings) {
+            this._loadPlugins(settings, 'display_source', HC.SourceManager.display_source);
+        }
+
 
         /**
          *

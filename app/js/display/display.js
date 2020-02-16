@@ -1,7 +1,6 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-
 {
     /**
      *
@@ -26,9 +25,9 @@
 
         /**
          * 
-         * @type {boolean}
+         * @type {HC.Mask}
          */
-        mask = false;
+        mask;
         /**
          * 
          * @type {boolean}
@@ -76,9 +75,22 @@
          */
         _dirty = true;
 
-        _bounds = false;
-        _points = false;
-        _source = false;
+        /**
+         * @type {HC.Rectangle}
+         */
+        _bounds;
+
+        /**
+         * @type {Array}
+         */
+        _points;
+
+        /**
+         *
+         * @type {HC.SourceManager.DisplaySourcePlugin}
+         * @private
+         */
+        _source;
 
         /**
          * 
@@ -189,9 +201,6 @@
             if (this._dirty) {
                 bounds = bounds || this._clipBounds();
                 this.ctx.clearRect(bounds.x, bounds.y, bounds.width, bounds.height);
-                // if (!this.transparent && this.config.DisplaySettings.clip_context && this.mask) {
-                //     this.ctx.drawImage(this.mask.background, 0, 0);
-                // }
                 this._dirty = false;
             }
         }
@@ -264,15 +273,7 @@
          * @returns {boolean}
          */
         getSetBackground() {
-
-            if (this.transparent) {
-                return false; // durchsichtig
-
-            // } else if (this.config.DisplaySettings.clip_context && this.mask) {
-            //     return false; // mask.background
-            }
-
-            return true;
+            return !this.transparent;
         }
 
         /**
@@ -384,7 +385,7 @@
             if (this._source) {
                 let ob = this._clipBounds(true);
                 let mb = this._clipBounds(false);
-                let sb = this._source.bounds(false);
+                let sb = this._source.bounds();
                 if (sb && mb) {
                     // quelle hat eine eigene und unveränderliche größe
                     let dx = (ob.width - sb.width) / 2;
@@ -405,7 +406,7 @@
          */
         isFixedSize() {
             if (this._source) {
-                let sb = this._source.bounds(false);
+                let sb = this._source.bounds();
                 if (sb) {
                     return true;
                 }
@@ -526,7 +527,7 @@
             let pc = points.length / 2;
 
             if (pc > 1) {
-                HC.Display.border_modes[mode].apply(ctx, points, pc, speed, prc);
+                HC.Display.border_mode[mode].apply(ctx, points, pc, speed, prc);
                 this._dirty = true;
             }
         }

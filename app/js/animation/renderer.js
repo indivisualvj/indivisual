@@ -106,7 +106,7 @@
          * @param keepSettings
          */
         fullReset(keepSettings) {
-            this.listener.removeEvent('renderer.render');
+            this.listener.removeEvent(EVENT_RENDERER_RENDER);
             this.resize();
             this.initLayers(keepSettings);
             this.setLayer(0);
@@ -117,16 +117,21 @@
          */
         initThreeJs() {
             if (!this.three.renderer) {
-                let conf = {alpha: true, antialias: ANTIALIAS};
+                let canvas = new OffscreenCanvas(1, 1);
+
+                let conf = {alpha: true, antialias: ANTIALIAS, canvas: canvas};
                 this.three.renderer = new THREE.WebGLRenderer(conf);
                 this.three.renderer.shadowMap.enabled = true;
                 this.three.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-                this.three.renderer.view = this.three.renderer.domElement;
-                this.three.renderer.view.id = 'threeWebGL';
 
-                this.three.renderer.view.addEventListener('webglcontextlost', () => {
+                /** @type {HTMLCanvasElement} */
+                canvas.id = 'threeWebGL';
+                canvas.style = {width: 1, height: 1};
+                canvas.addEventListener('webglcontextlost', () => {
                     this.animation.listener.fireEvent('webglcontextlost');
                 });
+
+                this.three.renderer.view = canvas;
 
                 this.three.scene = new THREE.Scene();
                 this.three.perspective0 = new THREE.PerspectiveCamera(50, 1, 0.1, 500000);
@@ -149,8 +154,7 @@
             this.three.scene.add(this._layers);
 
             for (let i = 0; i < this.layers.length; i++) {
-                let op = false;
-                let os = false;
+                let oldControlSets = false;
                 let ol = this.layers[i];
 
                 if (ol) {
@@ -159,21 +163,19 @@
                      * those layers are there to record samples while animation is offline or to test certain settings/setups
                      */
                     if ((keepsettings || !layerShuffleable(i))) {
-                        // op = this.layers[i].preset;
-                        os = this.layers[i].controlSets;
+                        oldControlSets = this.layers[i].controlSets;
                     }
                     ol.dispose();
                 }
 
-                let l = new HC.Layer(this.animation, this, i);
+                let layer = new HC.Layer(this.animation, this, i);
 
-                // l.preset = op;
-                l.controlSets = os || HC.LayeredControlSetsManager.initAll(this.config.AnimationValues);
-                l.settings = HC.LayeredControlSetsManager.settingsProxy(os || l.controlSets);
+                layer.controlSets = oldControlSets || HC.LayeredControlSetsManager.initAll(this.config.AnimationValues);
+                layer.settings = HC.LayeredControlSetsManager.settingsProxy(oldControlSets || layer.controlSets);
 
-                this.layers[i] = l;
+                this.layers[i] = layer;
 
-                this.resetLayer(l);
+                this.resetLayer(layer);
             }
 
             this.currentLayer = this.layers[this.config.ControlSettings.layer];
@@ -374,7 +376,7 @@
         render() {
 
             if (this._last != this.animation.now) {
-                this.animation.listener.fireEvent('renderer.render', this);
+                this.animation.listener.fireEvent(EVENT_RENDERER_RENDER, this);
 
                 this.three.scene.background = this.currentLayer._layer.background;
                 this.three.scene.fog = this.currentLayer._layer.fog;

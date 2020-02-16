@@ -42,15 +42,6 @@ function getSampleEnabledKey(i) {
  * @param i
  * @returns {string}
  */
-function getSampleThumbKey(i) {
-    return getSampleKey(i) + '_thumb';
-}
-
-/**
- *
- * @param i
- * @returns {string}
- */
 function getSampleRecordKey(i) {
     return getSampleKey(i) + '_record';
 }

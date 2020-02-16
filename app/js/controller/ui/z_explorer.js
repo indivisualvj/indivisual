@@ -72,7 +72,7 @@
         /**
          *
          * @param data
-         * @param {HC.PresetManager} owner
+         * @param {HC.PresetManager} presetMan
          */
         finishLayout(data, presetMan) {
 

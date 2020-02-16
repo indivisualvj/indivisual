@@ -38,5 +38,39 @@
   "defaults": {
     "displays": {"display0_visible":true},
     "controls": {"play":true,"audio":"off"}
+  },
+  
+  "unstorable": {
+    "controls": [
+      "session",
+      "reset",
+      "layer",
+      "audio"
+    ],
+    "displays": [
+
+    ],
+    "sources": [
+      "sample0_enabled",
+      "sample1_enabled",
+      "sample2_enabled",
+      "sample3_enabled",
+      "sample4_enabled",
+      "sample5_enabled",
+      "sample0_record",
+      "sample1_record",
+      "sample2_record",
+      "sample3_record",
+      "sample4_record",
+      "sample5_record",
+      "sample0_load",
+      "sample1_load",
+      "sample2_load",
+      "sample3_load",
+      "sample4_load",
+      "sample5_load"
+    ],
+    "settings": [
+    ]
   }
 }

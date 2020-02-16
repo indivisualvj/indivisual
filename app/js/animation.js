@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 animation.beatKeeper = beatKeeper;
 
                 let renderer = new HC.Renderer(animation, {
-                    layers: new Array(animation.config.ControlValues.layer.length)
+                    layers: new Array(animation.config.ControlValues.layers)
                 });
                 animation.renderer = renderer;
 
@@ -45,16 +45,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         // now reset...
                         HC.log('HC.Renderer', 'another context loss...', true, true);
 
-                        if (DEBUG) {
-                            for (let i in MIDI_ROW_ONE) { // glContext messed up... make that clear
-                                animation.messaging.emitMidi('glow', MIDI_ROW_ONE[i], {timeout: 500, times: 15});
-                                animation.messaging.emitMidi('glow', MIDI_ROW_TWO[i], {timeout: 500, times: 15});
-                                animation.messaging.emitAttr('#play', 'data-color', 'red');
-                            }
-
-                        } else {
-                            window.location.reload(true);
+                        for (let i = 0; i < animation.config.SourceValues.sample.length; i++) {
+                            animation.updateSource(getSampleKey(i), false, true, true, false);
                         }
+                        animation.updateSource('material_map', 'none', true, true, false);
                     });
 
                     animation.messaging.emitAttr('#play', 'data-color', '');
@@ -72,18 +66,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 let sourceManager = new HC.SourceManager(animation, {
                     config: animation.config,
-                    sequence: new Array(animation.config.SourceValues.sequence.length),
                     sample: new Array(animation.config.SourceValues.sample.length)
                 });
-                sourceManager.resize(renderer.getResolution());
                 animation.sourceManager = sourceManager;
 
                 new HC.Animation.KeyboardListener().init(animation);
                 new HC.Animation.EventListener().init();
-
-                animation._perspectiveHook = function () {
-                    sourceManager.renderPerspectives();
-                };
 
                 animation.loadSession();
             });
@@ -96,49 +84,7 @@ document.addEventListener('DOMContentLoaded', function () {
      *
      * @type {HC.Animation}
      */
-    HC.Animation = class Animation extends HC.Messageable {
-
-        /**
-         * @type {HC.Messaging}
-         */
-        messaging;
-
-        /**
-         * @type {HC.Config}
-         */
-        config;
-
-        /**
-         *
-         * @type {HC.SourceManager}
-         */
-        sourceManager;
-
-        /**
-         * @type {HC.AudioManager}
-         */
-        audioManager;
-
-        /**
-         * @type {HC.AudioAnalyser}
-         */
-        audioAnalyser;
-
-        /**
-         * @type {HC.DisplayManager}
-         */
-        displayManager;
-
-        /**
-         * @type {HC.BeatKeeper}
-         */
-        beatKeeper;
-
-        /**
-         * @type {HC.Listener}
-         */
-        listener;
-
+    HC.Animation = class Animation extends HC.Program {
         /**
          * @type {HC.Renderer}
          */
@@ -149,14 +95,17 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         settingsManager;
 
+        /**
+         * @type {HC.Monitor}
+         */
+        monitor;
+
 
         constructor(name) {
             super(name);
             this.now = HC.now();
             this.last = this.now;
             this.running = false;
-            this.offline = false;
-            this.powersave = false;
             this.doNotDisplay = false; // render displays only every second frame if FPS is set to 60
             this.diff = 0;
             this.diffPrc = 1;
@@ -187,8 +136,12 @@ document.addEventListener('DOMContentLoaded', function () {
             this.messaging = messaging;
         }
 
+        /**
+         *
+         */
         animate() {
 
+            this.listener.fireEvent(EVENT_ANIMATION_ANIMATE);
             /**
              * do general stuff
              */
@@ -251,8 +204,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             this.renderer.switchLayer(IS_MONITOR);
 
-            let hook = this.doNotDisplay ? false : this._perspectiveHook;
-            this.renderer.animate(hook);
+            this.renderer.animate();
 
         }
 
@@ -260,6 +212,7 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         render() {
+            this.listener.fireEvent(EVENT_ANIMATION_RENDER);
             if (IS_ANIMATION) {
                 this.sourceManager.render();
             }
@@ -272,7 +225,7 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         updatePlay() {
-            if (IS_MONITOR) {
+            if (this.monitor) {
                 this.config.ControlSettings.play = this.config.ControlSettings.monitor;
             }
 
@@ -482,7 +435,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     ];
                     this.messaging.emitAttr('#audio', 'data-label', au.join(' / '));
                 }
-                //messaging.emitAttr('#beat', 'data-color', 'red', 'green');<
+
                 this.messaging.emitMidi('glow', MIDI_BEAT_FEEDBACK, {timeout: 125});
                 if (detectedSpeed) {
                     this.messaging.emitMidi('glow', MIDI_PEAKBPM_FEEDBACK, {timeout: 15000 / detectedSpeed, times: 8});
@@ -508,9 +461,8 @@ document.addEventListener('DOMContentLoaded', function () {
             this.messaging.emitAttr('#layers', 'data-mnemonic', (this.renderer.currentLayer.index + 1));
 
             if (this.stats) {
-                let state = (this.powersave ? 'i' : '') + (this.offline ? 'o' : '');
                 let vals = [
-                    'fps:' + this.fps + state,
+                    'fps:' + this.fps,
                     'rms:' + this.rmsAverage()];
                 this.messaging.emitAttr('#play', 'data-label', vals.join(' / '));
             }
@@ -543,27 +495,21 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }
 
-                // if ('settings' in session) {
-                //     HC.log('settings', 'synced');
-                //     let settings = session.settings;
-                //     for (let k in settings) {
-                //         this.updateSettings(k, settings[k], true, false, true);
-                //     }
-                // }
-
                 if ('controls' in session) {
                     HC.log('controls', 'synced');
                     let controls = session.controls;
                     this.updateControls(controls, true, false, true);
                 }
 
-                this.sourceManager.updateSequences();
+                this.sourceManager.updateSources();
                 this.fullReset(true);
 
                 if (IS_MONITOR) {
-                    new HC.Monitor().init(this.config, () => {
+                    this.monitor = new HC.Monitor();
+                    this.monitor.init(this.config, () => {
                         this.displayManager.updateDisplay(0);
                         new HC.Animation.ResizeListener().init(this.displayManager);
+                        this.updatePlay();
                     });
                 } else {
                     new HC.Animation.ResizeListener().init(this.displayManager);
@@ -579,16 +525,13 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         fullReset(keepsettings) {
             this.renderer.fullReset(keepsettings);
-            this.sourceManager.resize(this.renderer.getResolution());
             this.displayManager.resize(this.renderer.getResolution());
         }
 
         /**
          *
          * @param layer
-         * @param set
-         * @param property
-         * @param value
+         * @param data
          * @param display
          * @param forward
          * @param force
@@ -700,14 +643,17 @@ document.addEventListener('DOMContentLoaded', function () {
             if (display) {
                 switch (item) {
                     case 'reset':
-                        if (this.renderer) {
-                            if (force) {
-                                this.beatKeeper.reset();
-                                this.fullReset(false);
+                        if (value) {
+                            if (this.renderer) {
+                                if (force) {
+                                    this.beatKeeper.reset();
+                                    this.fullReset(false);
 
-                            } else {
-                                this.renderer.resetLayer(this.renderer.currentLayer);
+                                } else {
+                                    this.renderer.resetLayer(this.renderer.currentLayer);
+                                }
                             }
+                            this.updateControl('reset', false, false, true, false);
                         }
                         break;
 
@@ -721,7 +667,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     //     break;
 
                     case 'monitor':
-                        if (!IS_MONITOR) {
+                        if (!this.monitor) {
                             break;
                         }
                     case 'play':
@@ -755,54 +701,33 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (display) {
-                let action = false;
-                // if (item.match(/^sample\d+_store/) && value) {
-                //     //let sample =
-                //     sourceManager.storeSample(number_extract(item, 'sample'), value, 1, false);
-                //     this.updateSource(item, false, false, true, false);
-                //
-                // } else
                 if (item.match(/^sample\d+_load/) && value) {
-                    if (IS_MONITOR || display) {
+                    if (this.monitor) {
                         this.sourceManager.loadSample(numberExtract(item, 'sample'), value);
                     }
                     this.updateSource(item, false, false, true, false);
 
                 } else if (item.match(/^sample\d+_/)) {
                     this.sourceManager.updateSample(numberExtract(item, 'sample'));
-                    action = true;
 
-                } else if (item.match(/^sequence\d+_/)) {
-                    this.sourceManager.updateSequence(numberExtract(item, 'sequence'));
-                    action = true;
+                    if (item.match(/sample\d+_(enabled|record)/)) { // never let samples be selected on enabled/record status change
+                        this.listener.fireEvent(EVENT_SAMPLE_STATUS_CHANGED, this.sourceManager.getSample(numberExtract(item, 'sample')));
+                    }
 
                 } else if (item.match(/display\d+_source/)) {
                     let display = this.displayManager.getDisplay(numberExtract(item, 'display'));
                     this.sourceManager.updateSource(display);
 
-                    if (display && display.isFixedSize()) {
+                    if (display && display.isFixedSize()) { // todo what is it? needed by light display source make lighting manage it!
                         this.displayManager.updateDisplay(display.index, false);
                     }
 
-                    action = true;
-
                 } else if (item.match(/display\d+_sequence/)) {
                     this.sourceManager.updateSource(this.displayManager.getDisplay(numberExtract(item, 'display')));
-                    action = true;
-
-                } else if (item.match(/^lighting_(lights|scale)/)) {
-                    this.displayManager.updateDisplays();
-                    action = true;
-
-                } else if (item.match(/^lighting_(mode|color)/)) {
-                    this.sourceManager.getLighting(0).update();
-                    action = true;
-                }
-
-                if (action) {
-                    this.offline = false;
                 }
             }
+
+            this.listener.fireEvent(EVENT_SOURCE_SETTING_CHANGED, arguments);
         }
 
         /**
@@ -867,9 +792,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             break;
 
                         case 'display_visibility':
-                        case 'border_mode':
                             this.displayManager.settings.visibility.random = false;
-                            this.displayManager.settings.border.random = false;
                             break;
                     }
                 }
@@ -886,7 +809,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     } else { // anything else
                         this.displayManager.updateDisplay(i);
-                        this.offline = false;
                     }
                 }
             }

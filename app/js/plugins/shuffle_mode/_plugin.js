@@ -1,5 +1,12 @@
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
 HC.shuffle_mode = HC.shuffle_mode || {};
 {
+    /**
+     *
+     * @type {HC.ShuffleModePlugin}
+     */
     HC.ShuffleModePlugin = class ShuffleModePlugin {
         settings;
         layer = 0;
@@ -32,7 +39,7 @@ HC.shuffle_mode = HC.shuffle_mode || {};
         }
 
         after() {
-            for(let i = 0; i < this.config.ControlValues.layer.length && !this.validate(); i++) {
+            for(let i = 0; i < this.config.ControlValues.layers && !this.validate(); i++) {
                 this.next();
             }
 

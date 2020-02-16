@@ -4,7 +4,7 @@
 
 {
     /**
-     *
+     * todo better timing? https://tonejs.github.io/docs/r13/Transport
      * @type {HC.BeatKeeper}
      */
     HC.BeatKeeper = class BeatKeeper {

@@ -124,7 +124,9 @@
                 layer = parseInt(layer);
 
                 while (!(layer in this.layers)) {
-                    this.layers.push({});
+                    this.layers.push({
+                        shuffleable: true
+                    });
                 }
 
                 layer = this.layers[layer];

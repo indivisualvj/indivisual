@@ -16,7 +16,7 @@
 
         /**
          *
-         * @param controlSet
+         * @param {HC.ControlSet} controlSet
          */
         constructor(controlSet) {
             this.controlSet = controlSet
@@ -24,14 +24,13 @@
 
         /**
          *
-         * @param key
-         * @param control
-         * @param datasource
+         * @param {HTMLElement} element
+         * @param {string} key
+         * @param {boolean} dataSource
          * @private
          */
-        _addShareListener(key, control, datasource) {
-            let ul = control.getContainer();
-            let li = ul.lastChild;
+        _addShareListener(element, key, dataSource) {
+            let li = element.lastChild;
             let ac = document.createElement('div');
             ac.setAttribute('class', 'actions');
 
@@ -60,7 +59,7 @@
 
             sh.addEventListener('click', function (e) {
                 // share to all layers
-                messaging.program.shareSettings(key, datasource);
+                messaging.program.shareSettings(key, dataSource);
                 e.preventDefault();
                 e.stopPropagation();
             });
@@ -131,12 +130,19 @@
             this._styleFolder(this.folder, key, 'green');
 
             if (shareListener === true) {
-                this._addShareListener(key, this.folder, false);
+                this._addShareListener(this.folder.getContainer(), key, false);
             }
 
             return this.folder;
         }
 
+        /**
+         *
+         * @param folder
+         * @param key
+         * @param border
+         * @private
+         */
         _styleFolder(folder, key, border) {
             let container = folder.getFolderContainer();
 
@@ -147,6 +153,11 @@
             }
         }
 
+        /**
+         *
+         * @param folder
+         * @private
+         */
         _finishFolder(folder) {
             let clear = document.createElement('div');
             clear.classList.add('guify-component-container');

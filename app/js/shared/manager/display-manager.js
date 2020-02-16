@@ -69,10 +69,10 @@
          *
          */
         initBorderModePlugins() {
-            for (let k in HC.Display.border_modes) {
-                let plugin = HC.Display.border_modes[k];
+            for (let k in HC.Display.border_mode) {
+                let plugin = HC.Display.border_mode[k];
                 plugin = new plugin(this);
-                HC.Display.border_modes[k] = plugin;
+                HC.Display.border_mode[k] = plugin;
                 plugin.init();
             }
         }
@@ -453,21 +453,9 @@
                         display.clear();
                     }
 
-                    let bm = this.settings.border.random !== false
-                        ? this.settings.border.random
-                        : this.config.DisplaySettings.border_mode;
+                    let bm = this.config.DisplaySettings.border_mode;
+                    this.renderBorder(display, this.borderSpeed(), bm);
 
-                    switch (bm) {
-                        case 'parent':
-                            if (display.visible) {
-                                this.renderBorder(display, false, bm);
-                            }
-                            break;
-
-                        default:
-                            this.renderBorder(display, this.borderSpeed(), bm);
-                            break;
-                    }
                 }
             }
             this.config.DisplaySettings.trigger_display_visibility = false;

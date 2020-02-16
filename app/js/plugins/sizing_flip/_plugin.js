@@ -1,6 +1,12 @@
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
 HC.plugins.sizing_flip = HC.plugins.sizing_flip || {};
-
 {
+    /**
+     *
+     * @type {HC.Plugin}
+     */
     HC.SizingFlipPlugin = class Plugin extends HC.AnimationPlugin {
 
         setControlSets(controlSets) {

@@ -58,8 +58,37 @@
 
         after() {
             if (this.properties && this.properties.map) {
-                let map = this.properties.map;
-                this.updateTexture(map, 'material');
+                let map;
+                if ((map = this.properties.map)) {
+                    this.updateTexture(map, 'material');
+                }
+                if ((map = this.properties.aoMap)) {
+                    this.updateTexture(map, 'material');
+                }
+                if ((map = this.properties.emissiveMap)) {
+                    this.updateTexture(map, 'material');
+                }
+                if ((map = this.properties.alphaMap)) {
+                    this.updateTexture(map, 'material');
+                }
+                if ((map = this.properties.bumpMap)) {
+                    this.updateTexture(map, 'material');
+                }
+                if ((map = this.properties.displacementMap)) {
+                    this.updateTexture(map, 'material');
+                }
+                if ((map = this.properties.lightMap)) {
+                    this.updateTexture(map, 'material');
+                }
+                if ((map = this.properties.metalnessMap)) {
+                    this.updateTexture(map, 'material');
+                }
+                if ((map = this.properties.normalMap)) {
+                    this.updateTexture(map, 'material');
+                }
+                if ((map = this.properties.roughnessMap)) {
+                    this.updateTexture(map, 'material');
+                }
             }
         }
     }

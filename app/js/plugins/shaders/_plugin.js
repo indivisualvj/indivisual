@@ -174,7 +174,7 @@ HC.plugins.shaders = HC.plugins.shaders || {};
                         }
 
                     } else { // one level deeper
-                        return this.apply(skey, sProperty, sSetting);
+                        this.apply(skey, sProperty, sSetting);
                     }
                 }
             }

@@ -5,6 +5,7 @@ samples
 storage/*
 !storage/_demos
 !storage/_tutorials
+!storage/space-oddity
 storage/*/\.*
 
 .idea

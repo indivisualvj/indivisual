@@ -6,6 +6,7 @@ storage/*
 !storage/_demos
 !storage/_tutorials
 !storage/space-oddity
+!storage/ambient
 storage/*/\.*
 
 .idea

@@ -22,6 +22,11 @@
             return false;
         }
 
+        /**
+         *
+         * @param {THREE.Texture} map
+         * @param image
+         */
         updateTexture(map, image) {
             let img = map.image;
             if (img) {
@@ -37,6 +42,10 @@
             map.needsUpdate = true;
         }
 
+        /**
+         *
+         * @param image
+         */
         initTexture(image) {
             let edge = Math.min(image.width, image.height);
             let nearest = THREE.Math.floorPowerOfTwo(edge);

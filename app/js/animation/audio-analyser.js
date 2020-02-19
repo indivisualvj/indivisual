@@ -302,6 +302,37 @@
 
         /**
          *
+         * @param speeds
+         */
+        fakeVolume(speeds) {
+            let v = 0;
+            let i = 0;
+            let m = HC.Osci.sinInOut(speeds['quarter'].prc) / 2.2;
+            for (let k in speeds) {
+                let prc = speeds[k].prc * 600;
+                let w = m / ++i;
+                v += w * HC.Osci.sinInOut(prc);
+            }
+
+            let last = this.volume || .1;
+            let reduce = (.1 - (.1 * .8)) * this.animation.diffPrc;
+            v = Math.max(v, last - reduce);
+            this.volume = v;
+            this.volumes = [this.volume];
+        }
+
+        /**
+         *
+         * @param {number} index
+         * @returns {number}
+         */
+        getVolume(index) {
+            let i = index % this.volumes.length;
+            return this.volumes[i];
+        }
+
+        /**
+         *
          */
         reset() {
             this.volume = 0;

@@ -191,7 +191,7 @@
 
             if (this.nextLayer) {
 
-                if (this.currentLayer !== this.nextLayer) {
+                if (this.currentLayer !== this.nextLayer) { // fixme often does not switch in eg forward (beat)
                     if (!force && this.config.ControlSettings.shuffle_mode != 'off') {
                         let speed = this.nextLayer.getCurrentSpeed();
                         if (!speed.starting()) {

@@ -23,12 +23,6 @@
          * @param callback
          */
         initPlugin(name, callback) {
-
-            // fixme better automated audio and then never start audio if monitor
-            if (IS_MONITOR && name !== 'off') {
-                name = 'microphone';
-            }
-
             this.plugin = new HC.AudioManager.plugins[name]().construct(this.context);
             this.plugin.init(callback);
         }

@@ -72,8 +72,7 @@ HC.Shape.prototype.initPlugins = function () {
          * @returns {*}
          */
         shapeVolume(shape) {
-            let i = shape.index % this.audioAnalyser.volumes.length;
-            return this.audioAnalyser.volumes[i];
+            return this.audioAnalyser.getVolume(shape.index);
         }
 
         /**

@@ -325,9 +325,9 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         fakeAudio() {
             let speed = this.beatKeeper.getSpeed('half');
-            this.audioAnalyser.volume = Math.random();
-            this.audioAnalyser.volumes = new Array(this.audioAnalyser.binCount).fill(0).map(Math.random);
-            if (speed.progress <= 0) {
+            this.audioAnalyser.fakeVolume(this.beatKeeper.speeds);
+
+            if (speed.starting()) {
                 this.audioAnalyser.peak = true;
 
             } else {
@@ -675,7 +675,9 @@ document.addEventListener('DOMContentLoaded', function () {
                         break;
 
                     case 'audio':
-                        this.updateAudio();
+                        if (!this.monitor) {
+                            this.updateAudio();
+                        }
                         break;
                 }
             }

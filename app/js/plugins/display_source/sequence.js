@@ -332,7 +332,7 @@
                 }
             }
 
-            return this.pointer;
+            return pointer;
         }
 
         /**

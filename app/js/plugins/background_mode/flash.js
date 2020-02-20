@@ -30,6 +30,8 @@
 
             if ((this.audioAnalyser.peak || speed.prc == 0 || randomInt(0, round(this.config.DisplaySettings.fps * .75)) == 0)) {
                 if (randomBool(10)) {
+                    // todo try to fade to this.displayBackground
+                    // this.displayBackground = hexToHsl(this.config.DisplaySettings.background);
                     this.backflash = hexToHsl(color || this.settings.background_color);
                     this.backflash.l = this.settings.background_volume > 0 ? 75 : 5;
                     this.layer.setBackground(new THREE.Color(this.current(hslToHex(this.backflash))));

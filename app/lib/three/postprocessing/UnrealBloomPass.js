@@ -18,7 +18,7 @@ THREE.UnrealBloomPass = function ( resolution, strength, radius, threshold ) {
 	this.strength = ( strength !== undefined ) ? strength : 1;
 	this.radius = radius;
 	this.threshold = threshold;
-	this.opacify = 0; // fixme does not work anymore...
+	this.opacify = 0;
 	this.resolution = ( resolution !== undefined ) ? new THREE.Vector2( resolution.x, resolution.y ) : new THREE.Vector2( 256, 256 );
 
 	// create color only once here, reuse it later inside the render function
@@ -139,8 +139,6 @@ THREE.UnrealBloomPass = function ( resolution, strength, radius, threshold ) {
 	this.oldClearColor = new THREE.Color();
 	this.oldClearAlpha = 1;
 
-	this.basic = new THREE.MeshBasicMaterial();
-
 	this.fsQuad = new THREE.Pass.FullScreenQuad( null );
 
 };
@@ -203,8 +201,8 @@ THREE.UnrealBloomPass.prototype = Object.assign( Object.create( THREE.Pass.proto
 
 		if ( this.renderToScreen ) {
 
-			this.fsQuad.material = this.basic;
-			this.basic.map = readBuffer.texture;
+			this.fsQuad.material = this.materialCopy;
+			this.copyUniforms[ "tDiffuse" ].value = readBuffer.texture;
 
 			renderer.setRenderTarget( null );
 			renderer.clear();
@@ -386,17 +384,17 @@ THREE.UnrealBloomPass.prototype = Object.assign( Object.create( THREE.Pass.proto
 				\
 				void main() {\
 					vec4 col = bloomStrength * ( lerpBloomFactor(bloomFactors[0]) * vec4(bloomTintColors[0], 1.0) * texture2D(blurTexture1, vUv) + \
-													 lerpBloomFactor(bloomFactors[1]) * vec4(bloomTintColors[1], 1.0) * texture2D(blurTexture2, vUv) + \
-													 lerpBloomFactor(bloomFactors[2]) * vec4(bloomTintColors[2], 1.0) * texture2D(blurTexture3, vUv) + \
-													 lerpBloomFactor(bloomFactors[3]) * vec4(bloomTintColors[3], 1.0) * texture2D(blurTexture4, vUv) + \
-													 lerpBloomFactor(bloomFactors[4]) * vec4(bloomTintColors[4], 1.0) * texture2D(blurTexture5, vUv) );\
+												 lerpBloomFactor(bloomFactors[1]) * vec4(bloomTintColors[1], 1.0) * texture2D(blurTexture2, vUv) + \
+												 lerpBloomFactor(bloomFactors[2]) * vec4(bloomTintColors[2], 1.0) * texture2D(blurTexture3, vUv) + \
+												 lerpBloomFactor(bloomFactors[3]) * vec4(bloomTintColors[3], 1.0) * texture2D(blurTexture4, vUv) + \
+												 lerpBloomFactor(bloomFactors[4]) * vec4(bloomTintColors[4], 1.0) * texture2D(blurTexture5, vUv) );\
 					if (opacify) {\
-					float sum = col.r + col.g + col.b;\
-					float opc = sqrt(sum/3.0);\
-					gl_FragColor = vec4(col.rgb, opc);\
+						float sum = col.r + col.g + col.b;\
+						float opc = sqrt(sum/3.0);\
+						gl_FragColor = vec4(col.rgb, opc);\
 					}\
 					else {\
-					gl_FragColor = col;\
+						gl_FragColor = col;\
 					}\
 				}"
 		} );

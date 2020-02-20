@@ -259,15 +259,13 @@
         }
 
         /**
-         * Render current and all transvisible layers
-         * @param hook
+         *
          */
-        animate(hook) {
+        animate() {
             for (let l in this.layers) {
                 let layer = this.layers[l];
                 if (layer == this.currentLayer || layer.settings.layer_transvisible) {
-                    layer.animate(hook);
-                    hook = undefined;
+                    layer.animate();
                 }
             }
         }

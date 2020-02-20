@@ -45,10 +45,6 @@ HC.Layer.prototype.animate = function (hook) {
 
     this.listener.fireEvent(EVENT_LAYER_ANIMATE);
 
-    // if (this.shapes === false) { // todo not so cool män
-    //     this.resetShapes();
-    // }
-
     this.tween.update(this.animation.now - this.lastUpdate, false);
 
     this.doOscillate(true);
@@ -63,7 +59,7 @@ HC.Layer.prototype.animate = function (hook) {
     this.animateShape(this.shape);
     this.doPatternRotation(); // preset current pattern euler from layer's shape rotation
 
-    let shapeNeedsUpdate = this.settings.material_needs_update;
+    let shapeNeedsUpdate = this.settings.material_needs_update; // todo bound to lastchange todo for CS
 
     for (let i = 0; i < this.shapes.length; i++) {
         let shape = this.shapes[i];

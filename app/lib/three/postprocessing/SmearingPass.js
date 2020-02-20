@@ -53,14 +53,14 @@ THREE.SmearingPass.prototype = {
 
         this.quad.material = this.material;
 
-        if (this.renderToScreen) {
-            renderer.render(this.scene, this.camera);
-
-        } else {
-            renderer.render(this.scene, this.camera, writeBuffer, this.clear);
+        renderer.setRenderTarget(this.renderToScreen ? null : writeBuffer);
+        if (this.clear) {
+            renderer.clear();
         }
+        renderer.render(this.scene, this.camera);
 
-        renderer.render(this.scene, this.camera, this.targetSwitch ? this.target1 : this.target2);
+        renderer.setRenderTarget(this.targetSwitch ? this.target1 : this.target2);
+        renderer.render(this.scene, this.camera);
 
         this.targetSwitch = !this.targetSwitch;
     },

@@ -45,13 +45,15 @@
                     this.texture = this.target2.texture;
                     this.material.map = this.texture;
                     // this.material.needsUpdate = true;
-                    this.layer.three.renderer.render(this.layer.three.scene, this.layer.three.camera, this.target1);
+                    this.layer.three.renderer.setRenderTarget(this.target1);
+                    this.layer.three.renderer.render(this.layer.three.scene, this.layer.three.camera);
 
                 } else {
                     this.texture = this.target1.texture;
                     this.material.map = this.texture;
                     // this.material.needsUpdate = true;
-                    this.layer.three.renderer.render(this.layer.three.scene, this.layer.three.camera, this.target2);
+                    this.layer.three.renderer.setRenderTarget(this.target2);
+                    this.layer.three.renderer.render(this.layer.three.scene, this.layer.three.camera);
                 }
 
                 this.counter ++;

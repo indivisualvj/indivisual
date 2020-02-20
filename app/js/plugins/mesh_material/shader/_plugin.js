@@ -12,29 +12,25 @@
             let material = new THREE.ShaderMaterial(this.shader);
             material.color = new THREE.Color();
 
-            let inst = this;
-            this.animation.listener.register(EVENT_RENDERER_RENDER, this.id(index), function (renderer) {
-                if (inst.layer.isVisible() && material.uniforms) {
+            let mesh = new THREE.Mesh(geometry, material);
+            mesh.onBeforeRender = () => {
+                if (this.layer.isVisible() && material.uniforms) {
                     if (material.uniforms.uTime) {
-                        material.uniforms.uTime.value = inst.layer.getOscillatePlugin('timestamp').apply({value: 1});
+                        material.uniforms.uTime.value = this.layer.getOscillatePlugin('timestamp').apply({value: 1});
                     }
                     if (material.uniforms.uColor) {
-                        let color = inst.layer.materialColor;
-                        let sc = inst.layer.shapeColor(false);
+                        let color = this.layer.materialColor;
+                        let sc = this.layer.shapeColor(false);
                         material.uniforms.uColor.value = new THREE.Color(color || sc);
                     }
                 }
 
-            });
+            };
 
-            return new THREE.Mesh(geometry, material);
+            return mesh;
         }
 
         reset() {
-            if (this.active) {
-                this.active = false;
-                this.animation.listener.removeLike(this.id());
-            }
         }
     }
 }

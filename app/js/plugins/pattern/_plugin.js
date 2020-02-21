@@ -30,7 +30,9 @@ HC.plugins.pattern = HC.plugins.pattern || {};
         boundsCheck(shape, extend, depthMultiplier, velocity) {
 
             let direction = new THREE.Vector3(0, 0, 0);
-            // check greedy!?
+            // todo bounds check using box/geometry (layer.playground (settings?[layer_playground_volume/size])
+            //  place it shortly behind camera
+            //  example: https://threejs.org/examples/?q=webx#webxr_vr_multiview
 
             // bounds _check
             let mx = this.layer.resolution('half').x + (extend || 0);

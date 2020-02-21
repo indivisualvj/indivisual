@@ -39,10 +39,10 @@
 
         activate(enable) {
             if (enable) {
-                this.node.style.height = null;
+                this.node.style.paddingTop = null;
 
             } else {
-                this.node.style.height = this.node.clientHeight/2 + 'px';
+                this.node.style.paddingTop = this.node.clientHeight/2 + 'px';
             }
         }
     }

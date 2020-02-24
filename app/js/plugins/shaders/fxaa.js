@@ -13,7 +13,7 @@
         updateResolution() {
             if (this.pass) {
                 this.pass.uniforms.resolution.value.x = this.valueByWidth(1);
-                this.pass.uniforms.resolution.value.y = this.valueByHeight();
+                this.pass.uniforms.resolution.value.y = this.valueByHeight(1);
             }
         }
 

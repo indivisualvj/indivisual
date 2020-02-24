@@ -191,7 +191,7 @@
 
             if (this.nextLayer) {
 
-                if (this.currentLayer !== this.nextLayer) { // fixme often does not switch in eg forward (beat)
+                if (this.currentLayer !== this.nextLayer) { // fixme instead of not switching in between, try to update layer tweens to beatkeeper speeds percenteages
                     if (!force && this.config.ControlSettings.shuffle_mode != 'off') {
                         let speed = this.nextLayer.getCurrentSpeed();
                         if (!speed.starting()) {

@@ -7,7 +7,7 @@
  * aspect: vec2 of (1/width, 1/height)
  */
 // todo auschecken
-THREE.EdgeShader2 = {
+THREE.SobelFilter = {
 
 	uniforms: {
 
@@ -33,8 +33,6 @@ THREE.EdgeShader2 = {
 		"uniform sampler2D tDiffuse;",
 		"varying vec2 vUv;",
 		"uniform vec2 aspect;",
-
-
 		"vec2 texel = vec2(1.0 / aspect.x, 1.0 / aspect.y);",
 
 		"mat3 G[2];",

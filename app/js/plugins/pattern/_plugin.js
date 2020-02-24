@@ -32,6 +32,7 @@ HC.plugins.pattern = HC.plugins.pattern || {};
             let direction = new THREE.Vector3(0, 0, 0);
             // todo bounds check using box/geometry (layer.playground (settings?[layer_playground_volume/size])
             //  place it shortly behind camera
+            //  will it be less greedy?
             //  example: https://threejs.org/examples/?q=webx#webxr_vr_multiview
 
             // bounds _check

@@ -381,20 +381,20 @@
          */
         static onPasses(v, that) {
 
-            if (v !== null && v in messaging.program.config.Passes) {
-                let name = messaging.program.config.Passes[v];
+            if (v !== null && v in messaging.program.config.AnimationValues.shaders) {
+                let name = messaging.program.config.AnimationValues.shaders[v];
                 if (name !== null) {
 
                     setTimeout(() => {
                         that.setValue(0);
                     }, 125);
 
-                    let ctrl = new HC.ShaderPassUi(name);
-                    let sh = JSON.copy(messaging.program.config.ShaderSettings[name]);
+                    let ctrl = new HC.ShaderPassUi(v);
+                    let sh = JSON.copy(messaging.program.config.ShaderSettings[v]);
                     ctrl.init(sh);
 
                     messaging.program.addShaderPass(
-                        messaging.program.config.ControlSettings.layer,
+                        undefined,
                         ctrl
                     );
                 }

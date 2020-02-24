@@ -128,7 +128,8 @@ HC.Controller.prototype.addPassesFolder = function (submit) {
     let ui = new HC.ControlSetGuifyUi(this.settingsManager.getGlobalProperties()['passes'], this.animationSettingsGui);
     let dir = ui.addFolder();
 
-    dir.addSelectController('pass', 'pass', {pass: ''}, this.config.Passes, submit);
+    // dir.addSelectController('pass', 'pass', {pass: ''}, this.config.Passes, submit);
+    dir.addSelectController('pass', 'pass', {pass: ''}, this.config.AnimationValues.shaders, submit);
 };
 
 

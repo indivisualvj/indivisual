@@ -119,7 +119,11 @@ HC.Layer.prototype.doMaterialMap = function () {
     let map = this.settings.material_input;
     let color = false;
 
-    if (seq !== 'none') {
+    if (seq === 'webcam') {
+        let plugin = this.getMaterialMapPlugin('webcam');
+        color = this.doPlugin(plugin, map);
+
+    } else if (seq !== 'none') {
         let plugin = this.getMaterialMapPlugin('sequence');
         // color = plugin.apply(parseInt(seq));
         color = this.doPlugin(plugin, parseInt(seq));

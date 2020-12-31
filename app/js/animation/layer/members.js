@@ -4,7 +4,12 @@
  */
 HC.Layer.prototype.getMaterialMap = function () {
     let seq = this.config.SourceSettings.material_map;
-    if (seq !== 'none') {
+    if (seq === 'webcam') {
+        let plugin = this.getMaterialMapPlugin('webcam');
+
+        return plugin;
+
+    } else if (seq !== 'none') {
         let plugin = this.getMaterialMapPlugin('sequence');
 
         return plugin;

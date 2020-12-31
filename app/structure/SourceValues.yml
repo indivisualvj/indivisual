@@ -43,6 +43,7 @@ material_map:
   2: sequence2
   3: sequence3
   4: sequence4
+  webcam: webcam
 
 oscillator:
   off: off

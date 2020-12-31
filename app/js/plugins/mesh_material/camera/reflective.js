@@ -28,14 +28,19 @@
             geometry.computeBoundingBox();
             let box3 = geometry.boundingBox;
             let height = box3.max.y - box3.min.y;
-
-            let cubecam = new THREE.CubeCamera(1, 100000, 2 * height * this.settings.material_volume);
-            cubecam.renderTarget.texture.generateMipmaps = true;
-            cubecam.renderTarget.texture.minFilter = THREE.LinearMipMapLinearFilter;
+            let cubeRenderTarget = new THREE.WebGLCubeRenderTarget( height * this.settings.material_volume, {
+                format: THREE.RGBFormat,
+                generateMipmaps: true,
+                minFilter: THREE.LinearMipmapLinearFilter
+            } );
+            let cubecam = new THREE.CubeCamera(1, 100000, cubeRenderTarget);
+            // cubecam.renderTarget = cubeRenderTarget;
+            // cubecam.renderTarget.texture.generateMipmaps = true;
+            // cubecam.renderTarget.texture.minFilter = THREE.LinearMipMapLinearFilter;
 
             this.cameras.add(cubecam);
 
-            let material = new THREE.MeshPhysicalMaterial({envMap: cubecam.renderTarget.texture});
+            let material = new THREE.MeshPhysicalMaterial({envMap: cubeRenderTarget.texture});
             let mesh = new THREE.Mesh(geometry, material);
             mesh.name = this.id(index);
 

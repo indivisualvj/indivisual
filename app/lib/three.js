@@ -17897,7 +17897,7 @@
 				target = new Color();
 			}
 
-			return target.copy(background.getClearColor());
+			return background.getClearColor(target);
 		};
 
 		this.setClearColor = function () {

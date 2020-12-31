@@ -3,7 +3,7 @@
  * @param obj
  */
 function threeDispose(obj) {
-    if (obj.dispose) {
+    if (!(obj instanceof THREE.Scene) && obj.dispose) {
         obj.dispose();
     }
     if (obj.material) {

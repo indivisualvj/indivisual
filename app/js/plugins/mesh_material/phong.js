@@ -3,7 +3,7 @@
         static index = 3;
 
         apply(geometry) {
-            let material = new THREE.MeshPhongMaterial();
+            let material = garbageman.addMaterial(new THREE.MeshPhongMaterial());
             return new THREE.Mesh(geometry, material);
         }
     }

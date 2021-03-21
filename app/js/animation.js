@@ -559,7 +559,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 // complete layer reset:
                 case 'shape_sizedivider':
                 case 'pattern_shapes':
-                    this.renderer.resetLayer(layer);
+                    layer.resetShapes();
                     break;
 
                 // shader reset

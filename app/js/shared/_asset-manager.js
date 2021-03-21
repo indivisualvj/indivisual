@@ -13,6 +13,9 @@
         cubes = {};
         videos = {};
 
+        textures = [];
+        maxTextures = 10;
+
         /**
          *
          */
@@ -167,7 +170,12 @@
          * @param error
          */
         loadTexture(url, callback, error) {
-            new THREE.TextureLoader().load(url, function (tex) {
+            new THREE.TextureLoader().load(url, (tex) => {
+                // if (this.textures.length > this.maxTextures) {
+                //     let tex = this.textures.shift();
+                //     threeDispose(tex);
+                // }
+                this.textures.push(tex);
                 callback(tex);
             }, false, error);
         }
@@ -298,6 +306,15 @@
 
                 }, error);
             }
+        }
+
+        disposeAllTextures() {
+            for (let i = 0; i < this.textures.length; i++) {
+                this.textures[i].dispose();
+                this.textures[i] = null;
+            }
+
+            this.textures = [];
         }
 
         /**

@@ -79,6 +79,28 @@
     }
 }
 {
+    HC.plugins.oscillate.cosinus32 = class Plugin extends HC.OscillatePlugin {
+        static name = 'cosinus -1/1 (32)';
+        static index = 50;
+
+        apply(key) {
+            let speed = this.beatKeeper.getSpeed('32');
+            return this.activate(key, HC.Osci.cosinus(speed.prc));
+        }
+    }
+}
+{
+    HC.plugins.oscillate.cosinus64 = class Plugin extends HC.OscillatePlugin {
+        static name = 'cosinus -1/1 (64)';
+        static index = 50;
+
+        apply(key) {
+            let speed = this.beatKeeper.getSpeed('64');
+            return this.activate(key, HC.Osci.cosinus(speed.prc));
+        }
+    }
+}
+{
     HC.plugins.oscillate.oscillator = class Plugin extends HC.OscillatePlugin {
         static name = 'oscillate';
         static index = 50;

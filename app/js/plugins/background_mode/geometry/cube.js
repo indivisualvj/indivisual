@@ -14,10 +14,10 @@
                 res.multiplyScalar(2.5);
                 let geo = new THREE.BoxBufferGeometry(res.x, res.y, res.x);
 
-                let mat = new THREE.MeshPhysicalMaterial({
+                let mat = garbageman.addMaterial(new THREE.MeshPhysicalMaterial({
                     color: color,
                     side: THREE.DoubleSide
-                });
+                }));
                 let mesh = new THREE.Mesh(geo, mat);
                 mesh.scale.multiplyScalar(this.settings.background_volume);
                 mesh.scale.x *= -1;

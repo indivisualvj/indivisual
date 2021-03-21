@@ -4,7 +4,7 @@
         static name = 'points';
 
         apply(geometry, index) {
-            let material = new THREE.PointsMaterial();
+            let material = garbageman.addMaterial(new THREE.PointsMaterial());
             let mesh = new THREE.Points(geometry, material);
 
             return mesh;
@@ -17,7 +17,7 @@
         static name = 'points (edges only)';
 
         apply(geometry, index) {
-            let material = new THREE.PointsMaterial();
+            let material = garbageman.addMaterial(new THREE.PointsMaterial());
             let g = new THREE.EdgesGeometry(geometry);
             let mesh = new THREE.Points(g, material);
             g.userData.geometry = geometry;

@@ -6,7 +6,7 @@
  */
 HC.Layer.prototype.nextShape = function (index, dummy) {
     let mesh = dummy
-        ? new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial())
+        ? new THREE.Mesh(new THREE.BoxGeometry(), garbageman.addMaterial(new THREE.MeshBasicMaterial()))
         : this.nextMesh(index);
 
     let shape = new HC.Shape(mesh, index, randomColor());

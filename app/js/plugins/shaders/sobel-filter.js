@@ -22,18 +22,13 @@
                 "resolution":    { type: "v2", value: new THREE.Vector2( 512, 512 ) },
             },
 
-            vertexShader: [
-
-                "varying vec2 vUv;",
-
-                "void main() {",
-
-                "vUv = uv;",
-                "gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
-
-                "}"
-
-            ].join( "\n" ),
+            vertexShader: `
+                varying vec2 vUv;
+                void main() {
+                    vUv = vec2( uv.x, uv.y );
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+                }`
+            ,
 
             fragmentShader: [
 

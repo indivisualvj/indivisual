@@ -132,9 +132,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
-         * @type {*[]}
+         * @type {{}}
          */
-        thumbTimeouts = [];
+        thumbTimeouts = {
+            samples: null,
+        };
 
         /**
          *

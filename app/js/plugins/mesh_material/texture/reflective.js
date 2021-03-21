@@ -14,7 +14,7 @@
 
             let inst = this;
             let file = this.settings.background_input;
-            let material = new THREE.MeshPhysicalMaterial({envMap: null});
+            let material = garbageman.addMaterial(new THREE.MeshPhysicalMaterial({envMap: null}));
             let mesh = new THREE.Mesh(geometry, material);
             mesh.name = this.id(index);
 

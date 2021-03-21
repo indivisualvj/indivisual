@@ -14,10 +14,10 @@
                 res.multiplyScalar(this.settings.background_volume);
                 let geo = new THREE.SphereBufferGeometry(res.length() * 2, 16, 16);
                 geo.rotateY(Math.PI / 2);
-                let mat = new THREE.MeshPhysicalMaterial({
+                let mat = garbageman.addMaterial(new THREE.MeshPhysicalMaterial({
                     color: color,
                     side: THREE.DoubleSide
-                });
+                }));
                 let mesh = new THREE.Mesh(geo, mat);
                 mesh.receiveShadow = true;
 

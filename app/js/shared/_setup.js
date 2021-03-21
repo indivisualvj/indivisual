@@ -50,3 +50,5 @@ if (TWEEN) {
  * @type {HC.AssetManager}
  */
 assetman = new HC.AssetManager(); // todo put into config ?!
+garbageman = new HC.GarbageCollector(); // todo put into config ?!
+

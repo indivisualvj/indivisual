@@ -2,6 +2,7 @@
     HC.plugins.shaders.bleepy_blocks = class Plugin extends HC.ShaderPlugin {
         static index = 200;
         static name = 'bleepy-blocks';
+
         create() {
             if (!this.pass) {
                 this.pass = new THREE.ShaderPass(this.shader);

@@ -40,7 +40,7 @@
                     };
                 }
 
-                params.osci.rhythm = this.settings.rhythm;
+                params.osci.rhythm = this.settings.rhythm; // fixme undefined!
 
                 let multiplier = this.settings.shape_transform_volume * 15;
                 let vertices = shape.getVertices();

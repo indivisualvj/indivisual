@@ -40,7 +40,7 @@
                     };
                 }
 
-                params.osci.rhythm = this.settings.rhythm; // fixme undefined!
+                params.osci.rhythm = this.controlSets.audio.get('rhythm');
 
                 let multiplier = this.settings.shape_transform_volume * 15;
                 let vertices = shape.getVertices();
@@ -64,7 +64,7 @@
                         vtcb._rumble.y += this.animation.diffPrc * randomFloat(0, .25 * Math.PI, 2, true);
                         vtcb._rumble.z += this.animation.diffPrc * randomFloat(0, .25 * Math.PI, 2, true);
 
-                        let w1 = multiplier * HC.Osci.wobble(this.beatKeeper.rhythmDivider(params.osci.rhythm), vtcb._rumble.x, params.osci);
+                        let w1 = multiplier * HC.Osci.wobble(this.beatKeeper, vtcb._rumble.x, params.osci);
                         let w2 = multiplier * HC.Osci.wobble(this.beatKeeper, vtcb._rumble.y, params.osci);
                         let w3 = multiplier * HC.Osci.wobble(this.beatKeeper, vtcb._rumble.z, params.osci);
 

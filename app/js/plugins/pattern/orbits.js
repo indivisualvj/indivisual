@@ -46,7 +46,7 @@
             if (this.settings.pattern_limit && !firstRun) {
                 let position = shape.position();
 
-                let distance = position.distanceTo(patternCenterVector);
+                let distance = position.distanceTo(layer.patternCenterVector());
                 speed = shape.size() / distance * 25;
             }
 

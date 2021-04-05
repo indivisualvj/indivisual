@@ -23,6 +23,9 @@
                         let sc = this.layer.shapeColor(false);
                         material.uniforms.uColor.value = new THREE.Color(color || sc);
                     }
+                    if (material.uniforms.audio) {
+                        material.uniforms.audio.value = this.audioAnalyser.getFrequencyRangeValues();
+                    }
                 }
 
             };

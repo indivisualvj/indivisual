@@ -20,6 +20,17 @@
         peakData = [];
 
         /**
+         * @type {Object}
+         */
+        frequencyRange = {
+            bass: [20, 140],
+            lowMid: [140, 400],
+            mid: [400, 2600],
+            highMid: [2600, 5200],
+            treble: [5200, 14000],
+        };
+
+        /**
          *
          * @type {number}
          */
@@ -185,8 +196,6 @@
                  this.volumeSum = this.avgVolume;
                 this.volumeCount = 1;
             }
-
-
         }
 
         /**
@@ -209,11 +218,6 @@
 
             if (stepNow > this.peakThreshold && this.volume > 0.1 && diff > config.minDiff) {
                 this.peak = true;
-                // this.peakCount++;
-
-                // if (this.peakCount > config.resetPeakCountAfter) {
-                //     this.peakCount = 0;
-                // }
 
                 // add this.peakData
                 let i = this.peakData.length;
@@ -329,6 +333,30 @@
         getVolume(index) {
             let i = index % this.volumes.length;
             return this.volumes[i];
+        }
+
+        getFrequencyRangeValue(_frequencyRange) {
+            const nyquist = 48000 / 2;
+            const lowIndex = Math.round(_frequencyRange[0] / nyquist * this.volumes.length);
+            const highIndex = Math.round(_frequencyRange[1] / nyquist * this.volumes.length);
+            let total = 0;
+            let numFrequencies = 0;
+
+            for (let i = lowIndex; i <= highIndex; i++) {
+                total += this.volumes[i];
+                numFrequencies += 1;
+            }
+            return total / numFrequencies;
+        }
+
+        getFrequencyRangeValues() {
+            return [
+                this.getFrequencyRangeValue(this.frequencyRange.bass),
+                this.getFrequencyRangeValue(this.frequencyRange.lowMid),
+                this.getFrequencyRangeValue(this.frequencyRange.mid),
+                this.getFrequencyRangeValue(this.frequencyRange.highMid),
+                this.getFrequencyRangeValue(this.frequencyRange.treble),
+            ];
         }
 
         /**

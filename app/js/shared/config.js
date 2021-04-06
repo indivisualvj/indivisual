@@ -68,8 +68,8 @@ HC.Statics = HC.Statics || {};
                         this.Passes.push(sh);
                     }
                     this._loadRhythms(settings);
-
                     this.AnimationValues = settings;
+                    this.AnimationValues.shaders[''] = '';
                     finished();
                 }
             },

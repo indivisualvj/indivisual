@@ -22,7 +22,7 @@
         reset() {
             if (this.cameras) {
                 this.layer.three.scene.remove(this.cameras);
-                this.cameras.traverse(threeDispose); // todo: are all webglrendertargets disposed here?
+                this.cameras.traverse(threeDispose);
                 this.cameras = undefined;
 
                 this.animation.listener.removeLike(this.id());

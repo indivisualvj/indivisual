@@ -63,7 +63,7 @@ HC.Osci = {
      * @param negative
      */
     step(pa, steps, speed, onpeak, negative) {
-        if ((onpeak && messaging.program.audioAnalyser.peak) || (!onpeak && speed.starting())) {  // todo eliminate audio call
+        if ((onpeak && messaging.program.audioAnalyser.peak) || (!onpeak && speed.starting())) {
             let n = pa.next;
             while (n == pa.next) {
                 n = (randomInt(0, steps, negative) / steps);
@@ -76,7 +76,7 @@ HC.Osci = {
         let diff = pa.next - pa.value;
 
         if (Math.abs(diff) > 0.01) {
-            let step = diff / 0.075 * messaging.program.diff / (speed.duration * 2);  // todo eliminate animation call
+            let step = diff / 0.075 * messaging.program.diff / (speed.duration * 2);
             pa.value += step;
         }
     },
@@ -95,7 +95,7 @@ HC.Osci = {
         let bpm = 60000 / messaging.program.config.ControlSettings.tempo;
         let div = beatKeeper.rhythmDivider(settings.rhythm) / 2;
         func = func || Math.sin;
-        progress = progress || Math.PI * messaging.program.now; // todo eliminate animation call
+        progress = progress || Math.PI * beatKeeper.now();
 
         if (settings.osci1_period !== 0) {
             let pr = progress / (bpm * settings.osci1_period);

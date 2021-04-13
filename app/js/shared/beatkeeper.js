@@ -66,7 +66,7 @@
                 let full = 60000 / this.tempo * 4;
                 let duration = full / speed.divider;
                 let beats = speed.beats;
-                let elapsed = this.animation.now - this.beatStartTime;
+                let elapsed = this.now() - this.beatStartTime;
                 let estimated = duration * beats;
                 let offset = elapsed - estimated;
 
@@ -215,7 +215,7 @@
             }
 
             this.tempo = tempo;
-            this.tween.update(this.animation.now, false);
+            this.tween.update(this.now(), false);
 
         }
 
@@ -228,7 +228,7 @@
             let unit = this.getDefaultSpeed();
             let duration = 60000 / speed;
             let beats = unit.beats;
-            let elapsed = this.animation.now - (this.beatStartTime);
+            let elapsed = this.now() - (this.beatStartTime);
             let estimated = duration * beats;
             let offset = elapsed - estimated;
             let offbeat = Math.abs(offset) > duration;
@@ -268,7 +268,7 @@
          *
          */
         reset() {
-            this.resetCounters(this.animation.now);
+            this.resetCounters(this.now());
             this.resetTrigger();
         }
 
@@ -306,6 +306,10 @@
                 s.pitch = 0;
                 this._tween(s);
             }
+        }
+
+        now() {
+            return this.animation.now;
         }
 
         static initSpeeds() {

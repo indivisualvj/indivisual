@@ -929,7 +929,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     // this.migrateSettings1(layer, data, true, false, true);
 
                     } else {
-                        let nu = data.passes;
+                        let nu = data.passes.shaders;
                         let passes = this.settingsManager.get(i, 'passes');
 
                         for (let k in nu) {

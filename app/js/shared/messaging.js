@@ -65,10 +65,8 @@
         }
 
         on(event, callback) {
-            let that = this;
-
-            this.socket.on(event, function (data) {
-                callback(data, that);
+            this.socket.on(event, (data) => {
+                callback(data, this);
             });
         }
 
@@ -84,11 +82,13 @@
 
             this.socket.once('connect', () => {
                 this._join();
-                callback(false);
+                this.program.setMessaging(this);
+                callback(false, this.program);
 
                 this.socket.on('connect', () => {
                     this._join();
-                    callback(true);
+                    this.program.setMessaging(this);
+                    callback(true, this.program);
                 });
             });
         }
@@ -107,9 +107,11 @@
          * @param that
          */
         onSettings(data, that) {
-            requestAnimationFrame(function () {
-                that.program.updateSettings(data.layer, data.data, data.controls, data.forward, data.force);
-            });
+            if (that.program.ready) {
+                requestAnimationFrame(function () {
+                    that.program.updateSettings(data.layer, data.data, data.controls, data.forward, data.force);
+                });
+            }
         }
 
         /**
@@ -118,9 +120,11 @@
          * @param that
          */
         onControls(data, that) {
-            requestAnimationFrame(function () {
-                that.program.updateControls(data.data, data.controls, data.forward, data.force);
-            });
+            if (that.program.ready) {
+                requestAnimationFrame(function () {
+                    that.program.updateControls(data.data, data.controls, data.forward, data.force);
+                });
+            }
         }
 
         /**
@@ -129,9 +133,11 @@
          * @param that
          */
         onDisplays(data, that) {
-            requestAnimationFrame(function () {
-                that.program.updateDisplays(data.data, data.controls, data.forward, data.force);
-            });
+            if (that.program.ready) {
+                requestAnimationFrame(function () {
+                    that.program.updateDisplays(data.data, data.controls, data.forward, data.force);
+                });
+            }
         }
 
         /**
@@ -140,16 +146,18 @@
          * @param that
          */
         onSources(data, that) {
-            requestAnimationFrame(function () {
-                that.program.updateSources(data.data, data.controls, data.forward, data.force);
-            });
+            if (that.program.ready) {
+                requestAnimationFrame(function () {
+                    that.program.updateSources(data.data, data.controls, data.forward, data.force);
+                });
+            }
         }
 
         /**
          *
          * @param data
          */
-        onAttr(data) {
+        onAttr(data, that) {
             let key = data.query.replace(/[^a-z0-9]+/gi, '') + data.key;
 
             requestAnimationFrame(() => {
@@ -166,11 +174,11 @@
 
                     if (data.resetValue != undefined) {
 
-                        if (this.timeouts[key]) {
-                            clearTimeout(this.timeouts[key]);
+                        if (that.timeouts[key]) {
+                            clearTimeout(that.timeouts[key]);
                         }
 
-                        this.timeouts[key] = setTimeout(() => {
+                        that.timeouts[key] = setTimeout(() => {
 
                             if (data.resetValue == '') {
                                 elem.removeAttribute(data.key);
@@ -178,7 +186,7 @@
                             } else {
                                 elem.setAttribute(data.key, data.resetValue);
                             }
-                            delete this.timeouts[key];
+                            delete that.timeouts[key];
                         }, data.timeout ? data.timeout : 125);
                     }
                 }
@@ -234,7 +242,7 @@
          * @param value
          * @param resetValue
          */
-        emitAttr(query, key, value, resetValue) {
+        emitAttr(query, key, value, resetValue, timeout) {
             let config = {
                 action: 'attr',
                 query: query,
@@ -242,6 +250,11 @@
                 value: value,
                 resetValue: resetValue
             };
+
+            if (timeout) {
+                config.timeout = timeout;
+            }
+
             this._emit(config);
         }
 
@@ -270,11 +283,6 @@
          */
         emitControls(data, display, forward, force) {
             if (data) {
-                if (data instanceof HC.Settings) {
-                    data = data.prepare();
-                }
-
-                statics.ControlSettings.clean(data, statics.ControlSettings.initial);
 
                 let config = {
                     action: 'controls',
@@ -297,11 +305,6 @@
          */
         emitDisplays(data, display, forward, force) {
             if (data) {
-                if (data instanceof HC.Settings) {
-                    data = data.prepare();
-                }
-
-                statics.DisplaySettings.clean(data, statics.DisplaySettings.initial);
 
                 let config = {
                     action: 'displays',
@@ -324,12 +327,6 @@
          */
         emitSources(data, display, forward, force) {
             if (data) {
-                if (data instanceof HC.Settings) {
-                    data = data.prepare();
-                }
-
-                statics.SourceSettings.clean(data, statics.SourceSettings.initial);
-
                 let config = {
                     action: 'sources',
                     data: data,
@@ -351,24 +348,16 @@
          * @param force
          */
         emitSettings(layer, data, display, forward, force) {
-            if (data) {
-                if (data instanceof HC.Settings) {
-                    data = data.prepare();
-                }
+            let config = {
+                action: 'settings',
+                data: data,
+                controls: display,
+                forward: forward,
+                force: force,
+                layer: layer
+            };
 
-                statics.AnimationSettings.clean(data, statics.AnimationSettings.initial);
-
-                let config = {
-                    action: 'settings',
-                    data: data,
-                    controls: display,
-                    forward: forward,
-                    force: force,
-                    layer: layer
-                };
-
-                this._emit(config);
-            }
+            this._emit(config);
         }
 
         /**
@@ -402,6 +391,8 @@
          * @param callback
          */
         sync(callback) {
+
+            this.program.ready = true;
 
             HC.log(this.program.name, 'syncing...', true);
 
@@ -493,7 +484,7 @@
         sample(dir, file, data) {
             let path = filePath(SAMPLE_DIR, dir);
             let conf = {
-                action: 'sample',
+                action: 'write',
                 dir: path,
                 file: file,
                 contents: data

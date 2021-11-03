@@ -2,95 +2,78 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-var messaging = false;
-var audio = false;
-var audioman = false;
-var beatkeeper = false;
-var animation = false;
-var renderer = false;
-var displayman = false;
-var sourceman = false;
-var listener = false;
-var sm = false;
+/**
+ *
+ * @type {HC.Messaging}
+ */
+let messaging;
 
 /**
  *
  */
 document.addEventListener('DOMContentLoaded', function () {
 
-    animation = new HC.Animation(G_INSTANCE);
+    let animation = new HC.Animation(G_INSTANCE);
     messaging = new HC.Messaging(animation);
+    let config = new HC.Config(messaging);
+    animation.config = config;
 
-    messaging.connect(function (reconnect) {
+    messaging.connect(function (reconnect, animation) {
 
         HC.log(animation.name, 'connected', true, true);
 
         if (!reconnect) {
-            loadResources(setupResources(), function () {
+            config.loadConfig(() => {
+                animation.config.initControlSets();
 
-                HC.DisplayController.createAllControls();
-                HC.SourceController.createAllControls();
+                let listener = new HC.Listener();
+                animation.listener = listener;
+                let audioManager = new HC.AudioManager();
+                animation.audioManager = audioManager;
+                let audioAnalyser = new HC.AudioAnalyser(animation);
+                animation.audioAnalyser = audioAnalyser;
+                let beatKeeper = new HC.BeatKeeper(animation, animation.config);
+                animation.beatKeeper = beatKeeper;
 
-                listener = new HC.Listener();
-                audioman = new HC.AudioManager();
-                audio = new HC.AudioAnalyser(audioman.audioContext);
-                beatkeeper = new HC.Beatkeeper();
-
-                renderer = new HC.Renderer({
-                    layers: new Array(statics.ControlValues.layer.length)
+                let renderer = new HC.Renderer(animation, {
+                    layers: new Array(animation.config.ControlValues.layers)
                 });
+                animation.renderer = renderer;
 
                 if (IS_ANIMATION) {
-                    listener.register('webglcontextlost', animation.name, function () {
+                    animation.listener.register('webglcontextlost', animation.name, function () {
                         // now reset...
                         HC.log('HC.Renderer', 'another context loss...', true, true);
 
-                        if (DEBUG) {
-                            for (let i in MIDI_ROW_ONE) { // glContext messed up... make that clear
-                                messaging.emitMidi('glow', MIDI_ROW_ONE[i], {timeout: 500, times: 15});
-                                messaging.emitMidi('glow', MIDI_ROW_TWO[i], {timeout: 500, times: 15});
-                            }
-
-                        } else {
-                            window.location.reload(true);
+                        for (let i = 0; i < animation.config.SourceValues.sample.length; i++) {
+                            animation.updateSource(getSampleKey(i), false, true, true, false);
                         }
+                        animation.updateSource('material_map', 'none', true, true, false);
                     });
+
+                    animation.messaging.emitAttr('#play', 'data-color', '');
                 }
 
-                sm = new HC.SettingsManager(statics.AnimationSettings, renderer.layers);
+                let cm = new HC.LayeredControlSetsManager(renderer.layers, animation.config.AnimationValues);
+                animation.settingsManager = cm;
+                renderer.initLayers(false);
 
-                displayman = new HC.DisplayManager({
-                    display: new Array(statics.DisplayValues.display.length)
+                let displayManager = new HC.DisplayManager(animation, {
+                    display: new Array(animation.config.DisplayValues.display.length)
                 });
-                displayman.resize(renderer.getResolution());
+                displayManager.resize(renderer.getResolution());
+                animation.displayManager = displayManager;
 
-                sourceman = new HC.SourceManager({
-                    sequence: new Array(statics.SourceValues.sequence.length),
-                    sample: new Array(statics.SourceValues.sample.length),
-                    video: new Array(statics.DisplayValues.video.length)
+                let sourceManager = new HC.SourceManager(animation, {
+                    config: animation.config,
+                    sample: new Array(animation.config.SourceValues.sample.length)
                 });
-                sourceman.resize(renderer.getResolution());
+                animation.sourceManager = sourceManager;
 
-                new HC.Animation.KeyboardListener().init();
+                new HC.Animation.KeyboardListener().init(animation);
                 new HC.Animation.EventListener().init();
 
-                animation._perspectiveHook = function () {
-                    sourceman.renderPerspectives();
-                };
-
-                let callback = function (data) {
-                    animation.loadSession(data);
-
-                    if (IS_MONITOR) {
-                        new HC.Monitor().init(function () {
-                            displayman.updateDisplay(0);
-                            new HC.Animation.ResizeListener().init();
-                        });
-                    } else {
-                        new HC.Animation.ResizeListener().init();
-                    }
-                };
-                messaging.sync(callback);
+                animation.loadSession();
             });
         }
     });
@@ -99,18 +82,30 @@ document.addEventListener('DOMContentLoaded', function () {
 {
     /**
      *
-     * @param name
-     * @constructor
+     * @type {HC.Animation}
      */
-    HC.Animation = class Animation {
+    HC.Animation = class Animation extends HC.Program {
+        /**
+         * @type {HC.Renderer}
+         */
+        renderer;
+
+        /**
+         * @type {HC.LayeredControlSetsManager}
+         */
+        settingsManager;
+
+        /**
+         * @type {HC.Monitor}
+         */
+        monitor;
+
 
         constructor(name) {
-            this.name = name;
+            super(name);
             this.now = HC.now();
             this.last = this.now;
             this.running = false;
-            this.offline = false;
-            this.powersave = false;
             this.doNotDisplay = false; // render displays only every second frame if FPS is set to 60
             this.diff = 0;
             this.diffPrc = 1;
@@ -133,27 +128,39 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         }
 
+        /**
+         *
+         * @param {HC.Messaging} messaging
+         */
+        setMessaging(messaging) {
+            this.messaging = messaging;
+        }
+
+        /**
+         *
+         */
         animate() {
 
+            this.listener.fireEvent(EVENT_ANIMATION_ANIMATE);
             /**
              * do general stuff
              */
-            let speed = beatkeeper.getDefaultSpeed();
+            let speed = this.beatKeeper.getDefaultSpeed();
 
-            if (IS_ANIMATION && speed.prc == 0) {
+            if (IS_ANIMATION && speed.starting()) {
 
                 let detectedSpeed = false;
 
-                if (audioman.isActive()) {
+                if (this.audioManager.isActive()) {
 
-                    if (statics.ControlSettings.peak_bpm_detect && audio.peakReliable) {
+                    if (this.config.ControlSettings.peak_bpm_detect && this.audioAnalyser.peakReliable) {
 
-                        detectedSpeed = beatkeeper.speedByPeakBpm(audio.firstPeak, audio.peakBPM, statics.ControlSettings.tempo);
+                        detectedSpeed = this.beatKeeper.speedByPeakBpm(this.audioAnalyser.firstPeak, this.audioAnalyser.peakBPM, this.config.ControlSettings.tempo);
 
                         if (detectedSpeed) {
-                            audio.peakReliable = false;
-                            messaging.emitLog('peakBPM', detectedSpeed);
-                            animation.updateControl('tempo', detectedSpeed, true, true);
+                            this.audioAnalyser.peakReliable = false;
+                            this.messaging.emitLog('peakBPM', detectedSpeed);
+                            this.updateControl('tempo', detectedSpeed, true, true);
                         }
                     }
 
@@ -163,26 +170,26 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.postStatus(detectedSpeed);
             }
 
-            if (audioman.isActive()) {
+            if (this.audioManager.isActive()) {
                 let config = {
-                    useWaveform: renderer.currentLayer.settings.audio_usewaveform,
-                    volume: statics.ControlSettings.volume,
-                    // resetPeakCountAfter: statics.ControlSettings.shuffle_every,
-                    tempo: statics.ControlSettings.tempo,
-                    minDiff: beatkeeper.getSpeed('sixteen').duration,
+                    useWaveform: this.renderer.currentLayer.settings.audio_usewaveform,
+                    volume: this.config.ControlSettings.volume,
+                    // resetPeakCountAfter: this.config.ControlSettings.shuffle_every,
+                    tempo: this.config.ControlSettings.tempo,
+                    minDiff: this.beatKeeper.getSpeed('sixteen').duration,
                     now: this.now,
-                    thickness: renderer.currentLayer.settings.audio_thickness
+                    thickness: this.renderer.currentLayer.settings.audio_thickness
                 };
-                audio.update(config);
+                this.audioAnalyser.update(config);
 
             } else {
                 this.fakeAudio();
             }
 
-            if (audio.peak) {
-                messaging.emitMidi('glow', MIDI_PEAK_FEEDBACK, {timeout: 125});
+            if (this.audioAnalyser.peak) {
+                this.messaging.emitMidi('glow', MIDI_PEAK_FEEDBACK, {timeout: 125});
 
-                listener.fireEvent('audio.peak', audio);
+                this.listener.fireEvent('audio.peak', this.audioAnalyser);
             }
 
             /**
@@ -195,10 +202,9 @@ document.addEventListener('DOMContentLoaded', function () {
             if (IS_ANIMATION) {
                 this.doShuffle();
             }
-            renderer.switchLayer(IS_MONITOR);
+            this.renderer.switchLayer(IS_MONITOR);
 
-            let hook = this.doNotDisplay ? false : this._perspectiveHook;
-            renderer.animate(hook);
+            this.renderer.animate();
 
         }
 
@@ -206,11 +212,12 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         render() {
+            this.listener.fireEvent(EVENT_ANIMATION_RENDER);
             if (IS_ANIMATION) {
-                sourceman.render();
+                this.sourceManager.render();
             }
             if (!this.doNotDisplay) {
-                displayman.render();
+                this.displayManager.render();
             }
         }
 
@@ -218,22 +225,15 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         updatePlay() {
-            if (IS_MONITOR) {
-                statics.ControlSettings.play = statics.ControlSettings.monitor;
+            if (this.monitor) {
+                this.config.ControlSettings.play = this.config.ControlSettings.monitor;
             }
 
-            if (statics.ControlSettings.play) {
+            if (this.config.ControlSettings.play) {
                 this.play();
 
             } else {
                 this.pause();
-            }
-
-            if (statics.ControlSettings.play) {
-                sourceman.startVideos();
-
-            } else {
-                sourceman.stopVideos();
             }
         }
 
@@ -245,10 +245,10 @@ document.addEventListener('DOMContentLoaded', function () {
             this.running = true;
 
             if (this.lastUpdate) {
-                this.lastUpdate = animation.now - this.lastUpdate;
+                this.lastUpdate = this.now - this.lastUpdate;
             }
-            beatkeeper.play();
-            renderer.resumeLayers();
+            this.beatKeeper.play();
+            this.renderer.resumeLayers();
 
             let render = () => {
                 if (this.running) {
@@ -257,12 +257,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                     this.updateRuntime();
 
-                    beatkeeper.updateSpeeds(this.diff, statics.ControlSettings.tempo);
+                    this.beatKeeper.updateSpeeds(this.diff, this.config.ControlSettings.tempo);
 
-                    if (beatkeeper.getSpeed('sixteen').prc == 0) {
+                    if (this.beatKeeper.getSpeed('sixteen').starting()) {
                         this.doNotDisplay = false;
 
-                    } else if (statics.DisplaySettings.fps < 46) {
+                    } else if (this.config.DisplaySettings.fps < 46) {
                         this.doNotDisplay = false;
 
                     } else {
@@ -278,7 +278,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         this.ms = this.stats.values().ms;
                     }
 
-                    if (statics.DisplaySettings.fps < 60) {
+                    if (this.config.DisplaySettings.fps < 60) {
                         setTimeout(function () {
                             requestAnimationFrame(render);
                         }, this.duration - this.ms); // substract spent time from timeout
@@ -288,8 +288,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
                 } else {
-                    renderer.pauseLayers();
-                    beatkeeper.stop();
+                    this.renderer.pauseLayers();
+                    this.beatKeeper.stop();
                 }
             };
 
@@ -301,7 +301,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         pause() {
             this.running = false;
-            this.lastUpdate = this.now;
+            this.lastUpdate = this.now; // todo use todo use THREE.Clock.start/stop! getElapsedTime!
         }
 
         /**
@@ -310,49 +310,47 @@ document.addEventListener('DOMContentLoaded', function () {
         updateRuntime() {
             this.now = HC.now() - this.lastUpdate;
             this.diff = this.now - this.last;
-            this.duration = 1000 / statics.DisplaySettings.fps;
-            this.diffPrc = this.diff / (1000 / 60);
+            this.duration = 1000 / this.config.DisplaySettings.fps;
+            this.diffPrc = this.diff / (1000 / 60); // todo use THREE.Clock.getDelta!
             this.rms = this.duration - this.ms;
             this._rmsc++;
             this._rmss += this.rms;
             this.last = this.now;
 
-            listener.fireEvent('animation.updateRuntime', this);
+            this.listener.fireEvent('animation.updateRuntime', this);
         }
 
         /**
          *
          */
         fakeAudio() {
-            let speed = beatkeeper.getSpeed('half');
-            audio.volume = Math.random();
-            audio.volumes = new Array(audio.binCount).fill(0).map(Math.random);
-            if (speed.progress <= 0) {
-                audio.peak = true;
-                // audio.peakCount += speed.beats;
-                //
-                // if (audio.peakCount > statics.ControlSettings.shuffle_every) { // doubled due to audio off
-                //     audio.peakCount = 0;
-                // }
+            let speed = this.beatKeeper.getSpeed('half');
+            this.audioAnalyser.fakeVolume(this.beatKeeper.speeds);
+
+            if (speed.starting()) {
+                this.audioAnalyser.peak = true;
 
             } else {
-                audio.peak = false;
+                this.audioAnalyser.peak = false;
             }
         }
 
+        /**
+         *
+         */
         updateAudio() {
-            audio.reset();
-            let value = statics.ControlSettings.audio;
+            this.audioAnalyser.reset();
+            let value = this.config.ControlSettings.audio;
             if (value) {
-                audioman.stop();
-                audioman.initPlugin(value, function (source) {
-                    let analyser = audio.createAnalyser(audioman.context);
+                this.audioManager.stop();
+                this.audioManager.initPlugin(value, (source) => {
+                    let analyser = this.audioAnalyser.createAnalyser(this.audioManager.context);
                     source.connect(analyser);
-                    audioman.start();
+                    this.audioManager.start();
                 });
 
             } else {
-                audioman.stop();
+                this.audioManager.stop();
             }
         }
 
@@ -361,30 +359,30 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         autoVolume() {
             let gain = 0;
-            if (audio.avgVolume < 0.10) {
+            if (this.audioAnalyser.avgVolume < 0.10) {
                 gain += 0.1;
 
-            } else if (audio.avgVolume < 0.20) {
+            } else if (this.audioAnalyser.avgVolume < 0.20) {
                 gain += 0.05;
 
-            } else if (audio.avgVolume < 0.26) {
+            } else if (this.audioAnalyser.avgVolume < 0.26) {
                 gain += 0.005;
 
-            } else if (audio.avgVolume > 0.46) {
+            } else if (this.audioAnalyser.avgVolume > 0.46) {
                 gain -= 0.1;
 
-            } else if (audio.avgVolume > 0.36) {
+            } else if (this.audioAnalyser.avgVolume > 0.36) {
                 gain -= 0.05;
 
-            } else if (audio.avgVolume > 0.30) {
+            } else if (this.audioAnalyser.avgVolume > 0.30) {
                 gain -= 0.005;
             }
 
             if (gain !== 0) {
-                //console.log('gain', [audio.volume, audio.avgVolume, gain]);
-                let vo = Math.min(2, Math.max(0.5, statics.ControlSettings.volume + gain));
-                // statics.ControlSettings.volume = vo;
-                animation.updateControl('volume', vo, false, false, false);
+                //console.log('gain', [this.audioAnalyser.volume, this.audioAnalyser.avgVolume, gain]);
+                let vo = Math.min(2, Math.max(0.5, this.config.ControlSettings.volume + gain));
+                // this.config.ControlSettings.volume = vo;
+                this.updateControl('volume', vo, false, false, false);
             }
         }
 
@@ -416,102 +414,109 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         postStatus(detectedSpeed) {
 
-            let color = detectedSpeed ? 'green' : (audio.peakReliable ? 'yellow' : 'red');
-            messaging.emitAttr('#sync', 'data-color', color);
+            if (this.config.ControlSettings.beat) {
+                let speed = this.beatKeeper.getDefaultSpeed();
+                let color = detectedSpeed ? 'green' : (this.audioAnalyser.peakReliable ? 'yellow' : '');
 
-            if (statics.ControlSettings.beat) {
-                let speed = beatkeeper.getDefaultSpeed();
-                let btk = ['bpm:' + beatkeeper.bpm,
+                this.messaging.emitAttr('#beat', 'color', color, '', speed.duration);
+
+                let btk = ['bpm:' + this.beatKeeper.bpm,
                     'b:' + speed.beats,
                     'd:' + speed.duration.toFixed(0),
-                    'p:' + beatkeeper.speeds.quarter.pitch.toFixed(0)
+                    'p:' + this.beatKeeper.speeds.quarter.pitch.toFixed(0)
                 ];
 
-                messaging.emitAttr('#beat', 'data-label', btk.join(' / '));
+                this.messaging.emitAttr('#beat', 'data-label', btk.join(' / '));
 
-                let vo = round(audio.avgVolume, 2) + '';
-                messaging.emitAttr('#audio', 'data-mnemonic', vo);
-
-                if (audioman.isActive()) {
+                if (this.audioManager.isActive()) {
                     let au = [
-                        audio.peakBPM.toFixed(2),
+                        round(this.audioAnalyser.avgVolume, 2) + '',
+                        this.audioAnalyser.peakBPM.toFixed(2),
                     ];
-                    messaging.emitAttr('#audio', 'data-label', au.join(' / '));
-                }
-                //messaging.emitAttr('#beat', 'data-color', 'red', 'green');<
-                messaging.emitMidi('glow', MIDI_BEAT_FEEDBACK, {timeout: 125});
-                if (detectedSpeed) {
-                    messaging.emitMidi('glow', MIDI_PEAKBPM_FEEDBACK, {timeout: 15000 / detectedSpeed, times: 8});
-                }
-                if (statics.DisplaySettings.display_speed == 'midi') {
-                    messaging.emitMidi('clock', MIDI_CLOCK_NEXT, {duration: beatkeeper.getDefaultSpeed().duration});
+                    this.messaging.emitAttr('#audio', 'data-label', au.join(' / '));
                 }
 
-                if (beatkeeper.getSpeed('half').prc == 0) {
-                    for (let i = 0; i < statics.SourceValues.sequence.length; i++) {
-                        let parent = getSequenceHasParent(i);
-                        let use = getSampleBySequence(i);
+                this.messaging.emitMidi('glow', MIDI_BEAT_FEEDBACK, {timeout: 125});
+                if (detectedSpeed) {
+                    this.messaging.emitMidi('glow', MIDI_PEAKBPM_FEEDBACK, {timeout: 15000 / detectedSpeed, times: 8});
+                }
+                if (this.config.DisplaySettings.display_speed == 'midi') {
+                    this.messaging.emitMidi('clock', MIDI_CLOCK_NEXT, {duration: this.beatKeeper.getDefaultSpeed().duration});
+                }
+
+                if (this.beatKeeper.getSpeed('half').starting()) {
+                    for (let i = 0; i < this.config.SourceValues.sequence.length; i++) {
+                        let parent = this.sourceManager.getSequenceHasParent(i);
+                        let use = this.sourceManager.getSampleBySequence(i);
                         if (parent) {
-                            messaging.emitMidi('glow', MIDI_ROW_TWO[i], {timeout: 125});
+                            this.messaging.emitMidi('glow', MIDI_ROW_TWO[i], {timeout: 125});
                         }
                         if (use != 'off') {
-                            messaging.emitMidi('glow', MIDI_ROW_ONE[use], {timeout: 125});
+                            this.messaging.emitMidi('glow', MIDI_ROW_ONE[use], {timeout: 125});
                         }
                     }
                 }
             }
 
-            // let sh = statics.ControlSettings.shuffle;
-            // let count = statics.ControlSettings.shuffle_usepeak ? audio.peakCount :
-            //     (statics.shuffle.counter % statics.ControlSettings.shuffle_every);
-            // messaging.emitAttr('#layer', 'data-label', count + (sh ? 's' : ''));
+            this.messaging.emitAttr('#layers', 'data-mnemonic', (this.renderer.currentLayer.index + 1));
 
-            let layerDisplayValue = (statics.ControlSettings.layer + 1);
-            messaging.emitAttr('#layers', 'data-mnemonic', layerDisplayValue);
-
-            if (animation.stats) {
-                let state = (animation.powersave ? 'i' : '') + (animation.offline ? 'o' : '');
+            if (this.stats) {
                 let vals = [
-                    'fps:' + animation.fps + state,
-                    'rms:' + animation.rmsAverage()];
-                messaging.emitAttr('#play', 'data-label', vals.join(' / '));
+                    'fps:' + this.fps,
+                    'rms:' + this.rmsAverage()];
+                this.messaging.emitAttr('#play', 'data-label', vals.join(' / '));
             }
         }
 
         /**
          *
-         * @param session
          */
-        loadSession(session) {
+        loadSession() {
 
-            if ('displays' in session) {
-                HC.log('displays', 'synced');
-                let displays = session.displays;
-                this.updateDisplays(displays, true, false, true);
-            }
+            let callback = (session) => {
 
-            if ('sources' in session) {
-                HC.log('sources', 'synced');
-                let sources = session.sources;
-                this.updateSources(sources, true, false, true);
-            }
-
-            if ('settings' in session) {
-                HC.log('settings', 'synced');
-                let settings = session.settings;
-                for (let k in settings) {
-                    this.updateSettings(k, settings[k], true, false, true);
+                if ('displays' in session) {
+                    HC.log('displays', 'synced');
+                    let displays = session.displays;
+                    this.updateDisplays(displays, true, false, true);
                 }
-            }
 
-            if ('controls' in session) {
-                HC.log('controls', 'synced');
-                let controls = session.controls;
-                this.updateControls(controls, true, false, true);
-            }
+                if ('sources' in session) {
+                    HC.log('sources', 'synced');
+                    let sources = session.sources;
+                    this.updateSources(sources, true, false, true);
+                }
 
-            sourceman.updateSequences();
-            this.fullReset(true);
+                if ('settings' in session) {
+                    HC.log('settings', 'synced');
+                    let settings = session.settings;
+                    for (let k in settings) {
+                        this.updateSettings(k, settings[k], true, false, true);
+                    }
+                }
+
+                if ('controls' in session) {
+                    HC.log('controls', 'synced');
+                    let controls = session.controls;
+                    this.updateControls(controls, true, false, true);
+                }
+
+                this.sourceManager.updateSources();
+                this.fullReset(true);
+
+                if (IS_MONITOR) {
+                    this.monitor = new HC.Monitor();
+                    this.monitor.init(this.config, () => {
+                        this.displayManager.updateDisplay(0);
+                        new HC.Animation.ResizeListener().init(this.displayManager);
+                        this.updatePlay();
+                    });
+                } else {
+                    new HC.Animation.ResizeListener().init(this.displayManager);
+                }
+            };
+
+            this.messaging.sync(callback);
         }
 
         /**
@@ -519,86 +524,90 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param keepsettings
          */
         fullReset(keepsettings) {
-            renderer.fullReset(keepsettings);
-            sourceman.resize(renderer.getResolution());
-            displayman.resize(renderer.getResolution());
+            this.renderer.fullReset(keepsettings);
+            this.displayManager.resize(this.renderer.getResolution());
         }
 
         /**
          *
          * @param layer
-         * @param item
-         * @param value
+         * @param data
          * @param display
          * @param forward
          * @param force
          */
-        updateSetting(layer, item, value, display, forward, force) {
+        updateSetting(layer, data, display, forward, force) {
 
-            if (statics.AnimationSettings.contains(item)) {
-
-                value = sm.update(layer, item, value);
-
-                let layerIndex = layer;
-                layer = renderer.layers[layer];
-
-                switch (item) {
-
-                    // complete layer reset:
-                    case 'shape_sizedivider':
-                    case 'pattern_shapes':
-                        renderer.resetLayer(layer);
-                        break;
-
-                    // shader reset
-                    case 'shaders':
-                        layer.updateShaders();
-                        break;
-
-                    case 'lighting_ambient':
-                        layer.resetAmbientLight();
-                        break;
-
-                    case 'lighting_type':
-                    case 'lighting_pattern_lights':
-                        layer.resetLighting();
-                        break;
-
-                    case 'lighting_fog':
-                        layer.resetFog();
-                        break;
-
-                    // reload shapes
-                    case 'pattern':
-                    case 'pattern_mover':
-                    case 'shape_modifier':
-                    case 'shape_modifier_volume':
-                    case 'shape_geometry':
-                    case 'shape_transform':
-                    case 'mesh_material':
-                    case 'material_mapping':
-                    case 'shape_moda':
-                    case 'shape_modb':
-                    case 'shape_modc':
-                        layer.resetShapes();
-                        break;
-
-                    // special case for shapetastic
-                    case 'shape_vertices':
-                        if (display) {
-                            layer.resetShapes();
-                        }
-                        break;
-                }
-
-                if (forward === true) {
-                    let data = {};
-                    data[item] = value;
-                    messaging.emitSettings(layerIndex, data, true, false, force);
-                }
-
-                listener.fireEvent('animation.updateSetting', {layer: layer, item: item, value: value});
+            if (layer === undefined) {
+                layer = this.config.ControlSettings.layer;
             }
+            // if (!renderer)return;
+
+            let layerIndex = layer;
+            layer = this.renderer.layers[layer];
+
+            let updated = this.settingsManager.updateData(layer, data);
+            let property;
+            let value;
+            if (isArray(updated)) {
+                property = updated[0].property;
+                value = updated[0].value;
+            }
+
+            switch (property) {
+
+                // complete layer reset:
+                case 'shape_sizedivider':
+                case 'pattern_shapes':
+                    this.renderer.resetLayer(layer);
+                    break;
+
+                // shader reset
+                case 'shaders':
+                    layer.updateShaderPasses();
+                    break;
+
+                case 'lighting_ambient':
+                    layer.resetAmbientLight();
+                    break;
+
+                case 'lighting_type':
+                case 'lighting_pattern_lights':
+                    layer.resetLighting();
+                    break;
+
+                case 'lighting_fog':
+                    layer.resetFog();
+                    break;
+
+                // reload shapes
+                case 'pattern':
+                case 'pattern_mover':
+                case 'shape_modifier':
+                case 'shape_modifier_volume':
+                case 'shape_geometry':
+                case 'shape_transform':
+                case 'mesh_material':
+                case 'material_mapping':
+                case 'shape_moda':
+                case 'shape_modb':
+                case 'shape_modc':
+                    layer.resetShapes();
+                    break;
+
+                // special case for shapetastic
+                case 'shape_vertices':
+                    if (display) {
+                        layer.resetShapes();
+                    }
+                    break;
+            }
+
+            if (forward === true) {
+                this.messaging.emitSettings(layerIndex, data, true, false, force);
+            }
+
+            this.listener.fireEvent('animation.updateSetting', {layer: layer, item: property, value: value});
         }
 
         /**
@@ -612,69 +621,64 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateControl(item, value, display, forward, force) {
 
-            if (statics.ControlSettings && statics.ControlSettings.contains(item)) {
+            if (item == 'beat') {
+                value = this.beatKeeper.trigger(value);
 
-                if (item == 'beat') {
-                    value = beatkeeper.trigger(value, true, statics.ControlSettings.tempo, true);
+            } else if (item == 'session' && value != _HASH) {
+                document.location.hash = value;
+                setTimeout(function () {
+                    document.location.reload();
+                }, 250);
+                return;
+            }
 
-                } else if (item == 'session' && value != _HASH) {
-                    document.location.hash = value;
-                    setTimeout(function () {
-                        document.location.reload();
-                    }, 250);
-                    return;
-                }
+            value = this.config.ControlSettingsManager.updateItem(item, value);
 
-                value = statics.ControlSettings.update(item, value);
+            if (forward === true) {
+                let data = {};
+                data[item] = value;
+                this.messaging.emitControls(data, true, false, force);
+            }
 
-                if (forward === true) {
-                    let data = {};
-                    data[item] = value;
-                    messaging.emitControls(data, true, false, force);
-                }
-
-                if (display) {
-                    switch (item) {
-                        case 'reset':
-                            if (renderer) {
+            if (display) {
+                switch (item) {
+                    case 'reset':
+                        if (value) {
+                            if (this.renderer) {
                                 if (force) {
-                                    beatkeeper.reset();
+                                    this.beatKeeper.reset();
                                     this.fullReset(false);
 
                                 } else {
-                                    renderer.resetLayer(renderer.currentLayer);
+                                    this.renderer.resetLayer(this.renderer.currentLayer);
                                 }
                             }
-                            break;
+                            this.updateControl('reset', false, false, true, false);
+                        }
+                        break;
 
-                        case 'layer':
-                            // audio.peakCount = 0; // disable shuffle for [shuffle every] count of peaks
-                            renderer.nextLayer = renderer.layers[value];
-                            break;
+                    case 'layer':
+                        // audio.peakCount = 0; // disable shuffle for [shuffle every] count of peaks
+                        this.renderer.nextLayer = this.renderer.layers[value];
+                        break;
 
-                        case 'tempo':
-                            sourceman.updateVideos(value);
-                            break;
+                    // case 'tempo':
+                    //
+                    //     break;
 
-                        case 'monitor':
-                            if (!IS_MONITOR) {
-                                break;
-                            }
-                        case 'play':
-                            this.updatePlay();
+                    case 'monitor':
+                        if (!this.monitor) {
                             break;
+                        }
+                    case 'play':
+                        this.updatePlay();
+                        break;
 
-                        case 'audio':
+                    case 'audio':
+                        if (!this.monitor) {
                             this.updateAudio();
-                            break;
-
-                        case 'shuffle':
-                            if (value) {
-                                this.shuffleLayer(false);
-                            }
-                            break;
-
-                    }
+                        }
+                        break;
                 }
             }
         }
@@ -690,66 +694,42 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateSource(item, value, display, forward, force) {
 
-            if (statics.SourceSettings.contains(item)) {
+            value = this.config.SourceSettingsManager.updateItem(item, value);
 
-                value = statics.SourceSettings.update(item, value);
+            if (forward === true) {
+                let data = {};
+                data[item] = value;
+                this.messaging.emitSources(data, true, false, force);
+            }
 
-                if (forward === true) {
-                    let data = {};
-                    data[item] = value;
-                    messaging.emitSources(data, true, false, force);
-                }
+            if (display) {
+                if (item.match(/^sample\d+_load/) && value) {
+                    if (this.monitor) {
+                        this.sourceManager.loadSample(numberExtract(item, 'sample'), value);
+                    }
+                    this.updateSource(item, false, false, true, false);
 
-                if (display) {
-                    let action = false;
-                    // if (item.match(/^sample\d+_store/) && value) {
-                    //     //var sample =
-                    //     sourceman.storeSample(number_extract(item, 'sample'), value, 1, false);
-                    //     this.updateSource(item, false, false, true, false);
-                    //
-                    // } else
-                    if (item.match(/^sample\d+_load/) && value) {
-                        if (IS_MONITOR || display) {
-                            sourceman.loadSample(numberExtract(item, 'sample'), value);
-                        }
-                        this.updateSource(item, false, false, true, false);
+                } else if (item.match(/^sample\d+_/)) {
+                    this.sourceManager.updateSample(numberExtract(item, 'sample'));
 
-                    } else if (item.match(/^sample\d+_/)) {
-                        sourceman.updateSample(numberExtract(item, 'sample'));
-                        action = true;
-
-                    } else if (item.match(/^sequence\d+_/)) {
-                        sourceman.updateSequence(numberExtract(item, 'sequence'));
-                        action = true;
-
-                    } else if (item.match(/display\d+_source/)) {
-                        var display = displayman.getDisplay(numberExtract(item, 'display'));
-                        sourceman.updateSource(display);
-
-                        if (display && display.isFixedSize()) {
-                            displayman.updateDisplay(display.index, false);
-                        }
-
-                        action = true;
-
-                    } else if (item.match(/display\d+_sequence/)) {
-                        sourceman.updateSource(displayman.getDisplay(numberExtract(item, 'display')));
-                        action = true;
-
-                    } else if (item.match(/^lighting_(lights|scale)/)) {
-                        displayman.updateDisplays();
-                        action = true;
-
-                    } else if (item.match(/^lighting_(mode|color)/)) {
-                        sourceman.getLighting(0).update();
-                        action = true;
+                    if (item.match(/sample\d+_(enabled|record)/)) { // never let samples be selected on enabled/record status change
+                        this.listener.fireEvent(EVENT_SAMPLE_STATUS_CHANGED, this.sourceManager.getSample(numberExtract(item, 'sample')));
                     }
 
-                    if (action) {
-                        animation.offline = false;
+                } else if (item.match(/display\d+_source/)) {
+                    let display = this.displayManager.getDisplay(numberExtract(item, 'display'));
+                    this.sourceManager.updateSource(display);
+
+                    if (display && display.isFixedSize()) { // todo what is it? needed by light display source make lighting manage it!
+                        this.displayManager.updateDisplay(display.index, false);
                     }
+
+                } else if (item.match(/display\d+_sequence/)) {
+                    this.sourceManager.updateSource(this.displayManager.getDisplay(numberExtract(item, 'display')));
                 }
             }
+
+            this.listener.fireEvent(EVENT_SOURCE_SETTING_CHANGED, arguments);
         }
 
         /**
@@ -765,8 +745,8 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param data
          */
         updateMidi(data) {
-            if (listener && data.command == 'message') {
-                listener.fireEvent('midi.message', data.data);
+            if (this.listener && data.command == 'message') {
+                this.listener.fireEvent('midi.message', data.data);
             }
         }
 
@@ -782,19 +762,19 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (item.match(/^display\d+_\d/)) { // resize
                 if (value) {
-                    displayman.centerDisplay(numberExtract(item, 'display'), value);
+                    this.displayManager.centerDisplay(numberExtract(item, 'display'), value);
                     this.updateDisplay(item, false, display, true);
                 }
-                statics.DisplaySettings.update(item, value);
+                this.config.DisplaySettingsManager.updateItem(item, value);
 
-            } else if (statics.DisplaySettings.contains(item)) {
+            } else {
 
-                value = statics.DisplaySettings.update(item, value);
+                value = this.config.DisplaySettingsManager.updateItem(item, value);
 
                 if (forward === true) {
-                    var data = {};
+                    let data = {};
                     data[item] = value;
-                    messaging.emitDisplays(data, true, false, force);
+                    this.messaging.emitDisplays(data, true, false, force);
                 }
 
                 if (display) {
@@ -804,36 +784,33 @@ document.addEventListener('DOMContentLoaded', function () {
                             break;
 
                         case 'mapping':
-                        case 'clip_context':
+                        // case 'clip_context':
                         case 'background':
-                            displayman.updateDisplays();
+                            this.displayManager.updateDisplays();
                             break;
 
                         case 'brightness':
-                            displayman.brightness(value);
+                            this.displayManager.brightness(value);
                             break;
 
                         case 'display_visibility':
-                        case 'border_mode':
-                            statics.display.visibility.random = false;
-                            statics.display.border.random = false;
+                            this.displayManager.settings.visibility.random = false;
                             break;
                     }
                 }
 
                 if (item.match(/^display\d+_/)) {
 
-                    var i = numberExtract(item, 'display');
+                    let i = numberExtract(item, 'display');
 
                     if (item.match(/_mask$/)) { // mask
-                        displayman.updateDisplay(i, 'mask');
+                        this.displayManager.updateDisplay(i, 'mask');
 
                     } else if (item.match(/_mapping/)) { // mapping
-                        displayman.updateDisplay(i, 'mapping'); // avoid removing/adding maptastic layer
+                        this.displayManager.updateDisplay(i, 'mapping'); // avoid removing/adding maptastic layer
 
                     } else { // anything else
-                        displayman.updateDisplay(i);
-                        animation.offline = false;
+                        this.displayManager.updateDisplay(i);
                     }
                 }
             }
@@ -849,16 +826,15 @@ document.addEventListener('DOMContentLoaded', function () {
         updateSettings(layer, data, display, forward, force) {
 
             if (force) {
-                for (var k in data) {
-                    sm.update(layer, k, data[k]);
-                }
+                this.settingsManager.updateData(layer, data);
 
-                renderer.resetLayer(layer);
+                this.renderer.resetLayer(layer);
 
             } else {
-                for (var k in data) {
-                    var value = data[k];
-                    this.updateSetting(layer, k, value, display, forward, force);
+                for (let k in data) {
+                    let value = {};
+                    value[k] = data[k];
+                    this.updateSetting(layer, value, display, forward, force);
                 }
             }
         }
@@ -871,8 +847,8 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param force
          */
         updateControls(data, display, forward, force) {
-            for (var k in data) {
-                var value = data[k];
+            for (let k in data) {
+                let value = data[k];
                 this.updateControl(k, value, display, forward, force);
             }
         }
@@ -887,15 +863,15 @@ document.addEventListener('DOMContentLoaded', function () {
         updateDisplays(data, display, forward, force) {
 
             if (force) {
-                for (var k in data) {
-                    statics.DisplaySettings.update(k, data[k]);
+                for (let k in data) {
+                    this.config.DisplaySettingsManager.updateItem(k, data[k]);
                 }
-                displayman.reset();
+                this.displayManager.reset();
                 // this.fullReset(true);
 
             } else {
-                for (var k in data) {
-                    var value = data[k];
+                for (let k in data) {
+                    let value = data[k];
                     this.updateDisplay(k, value, display, forward, force);
                 }
             }
@@ -910,15 +886,15 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateSources(data, display, forward, force) {
 
-            for (var k in data) {
-                var value = data[k];
+            for (let k in data) {
+                let value = data[k];
                 this.updateSource(k, value, display, forward, force);
             }
 
         }
 
         /**
-         * Keep in mind: If durations in HC.Beatkeeper.speeds change due to pitching, this will not return usable values for smooth animations.
+         * Keep in mind: If durations in HC.BeatKeeper.speeds change due to pitching, this will not return usable values for smooth animations.
          * @param duration
          * @param divider
          * @returns {number}
@@ -931,13 +907,12 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         doShuffle() {
-            var plugin = this.getShuffleModePlugin(statics.ControlSettings.shuffle_mode);
-
-            var result = plugin.apply();
+            let plugin = this.getShuffleModePlugin(this.config.ControlSettings.shuffle_mode);
+            let result = plugin.apply();
             if (result !== false) {
                 result = plugin.after();
                 if (result !== false) {
-                    renderer.nextLayer = renderer.layers[result];
+                    this.renderer.nextLayer = this.renderer.layers[result];
                 }
             }
         }
@@ -952,7 +927,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (!this.plugins[name]) {
-                this.plugins[name] = new HC.shuffle_mode[name](statics.ControlSettings);
+                this.plugins[name] = new HC.shuffle_mode[name](this, this.config.ControlSettings);
             }
 
             return this.plugins[name];

@@ -1,6 +1,13 @@
 HC.plugins.lighting_pattern = HC.plugins.lighting_pattern || {};
 {
     HC.LightingPatternPlugin = class Plugin extends HC.AnimationPlugin {
+
+        setControlSets(controlSets) {
+            super.setControlSets(controlSets);
+            // make all such plugins make use of corresponding controlset only
+            this.settings = controlSets.lighting_pattern.properties;
+        }
+
         centerVector() {
             let v = this.layer.cameraDefaultDistance();
             return new THREE.Vector3(

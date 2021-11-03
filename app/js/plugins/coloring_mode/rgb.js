@@ -1,10 +1,12 @@
 {
     HC.plugins.coloring_mode.onergb = class Plugin extends HC.ColoringModePlugin {
 
+        static index = 12;
+
         apply (shape) {
             if (this.isFirstShape(shape)) {
 
-                let prc = (animation.now - beatkeeper.beatStartTime) / (60000 / statics.ControlSettings.tempo) / 100 * this.settings.coloring_volume;
+                let prc = (this.animation.now - this.beatKeeper.beatStartTime) / (60000 / this.config.ControlSettings.tempo) / 100 * this.settings.coloring_volume;
                 prc = HC.Osci.sinInOut(prc) * 5;
 
                 prc *= RAD * 180 * this.settings.coloring_volume;

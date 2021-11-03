@@ -6,7 +6,7 @@
  * @returns {*}
  */
 function randomInt(min, max, negative) {
-    var v = Math.floor(Math.random() * (max - min + 1)) + min;
+    let v = Math.floor(Math.random() * (max - min + 1)) + min;
     if (negative) {
         v *= (randomBool() ? 1 : -1);
     }
@@ -36,7 +36,7 @@ function randomBool(distraction) {
  * @returns {number}
  */
 function randomFloat(min, max, digits, negative) {
-    var v = round(Math.random() * (max - min) + min, digits);
+    let v = round(Math.random() * (max - min) + min, digits);
     if (negative) {
         v *= (randomBool() ? 1 : -1);
     }
@@ -51,7 +51,7 @@ function randomFloat(min, max, digits, negative) {
  * @returns {number}
  */
 function round(v, digits) {
-    var p = Math.pow(10, digits || 0);
+    let p = Math.pow(10, digits || 0);
     v = Math.round(p * v);
     v = v / p;
 
@@ -89,11 +89,11 @@ function clamp(value, min, max) {
  */
 function cropAtoB(aw, ah, bw, bh) {
     // positive values mean a is bigger, negative values mean b is smaller
-    var dx = (aw - bw) / 2;
-    var dy = (ah - bh) / 2;
+    let dx = (aw - bw) / 2;
+    let dy = (ah - bh) / 2;
 
-    var w = Math.min(bw, aw);
-    var h = Math.min(bh, ah);
+    let w = Math.min(bw, aw);
+    let h = Math.min(bh, ah);
     return {
         readArea: new HC.Rectangle(Math.max(0, dx), Math.max(0, dy), w, h),
         writeArea: new HC.Rectangle(Math.max(0, -dx), Math.max(0, -dy), w, h)
@@ -108,8 +108,8 @@ function cropAtoB(aw, ah, bw, bh) {
  * @returns {number}
  */
 function sinAlpha(a, b) {
-    var c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
-    var sina = Math.asin(a / c) * 2 * DEG;
+    let c = Math.sqrt(Math.pow(a, 2) + Math.pow(b, 2));
+    let sina = Math.asin(a / c) * 2 * DEG;
 
     return sina;
 }
@@ -124,10 +124,10 @@ function sinAlpha(a, b) {
  * @returns {number}
  */
 function heightFromThreeSides(a, b, c) {
-    var upper = (Math.pow(b, 2) + Math.pow(c, 2) - Math.pow(a, 2));
-    var lower = 2 * b * c;
-    var alpha = Math.acos(upper / lower);
-    var hc = b * Math.sin(alpha);
+    let upper = (Math.pow(b, 2) + Math.pow(c, 2) - Math.pow(a, 2));
+    let lower = 2 * b * c;
+    let alpha = Math.acos(upper / lower);
+    let hc = b * Math.sin(alpha);
     return hc;
 }
 
@@ -141,9 +141,9 @@ function heightFromThreeSides(a, b, c) {
  */
 function gammaFromThreeSides(a, b, c) {
     //
-    var upper = (Math.pow(a, 2) + Math.pow(b, 2) - Math.pow(c, 2));
-    var lower = 2 * a * b;
-    var gamma = Math.acos(upper / lower);
+    let upper = (Math.pow(a, 2) + Math.pow(b, 2) - Math.pow(c, 2));
+    let lower = 2 * a * b;
+    let gamma = Math.acos(upper / lower);
     return gamma * 180 / Math.PI;
 }
 
@@ -156,9 +156,9 @@ function gammaFromThreeSides(a, b, c) {
  */
 function gammaFromThreePoints(vectorGamma, vectorBeta, vectorAlpha) {
 
-    var a = vectorGamma.distanceTo(vectorBeta);
-    var b = vectorGamma.distanceTo(vectorAlpha);
-    var c = vectorAlpha.distanceTo(vectorBeta);
+    let a = vectorGamma.distanceTo(vectorBeta);
+    let b = vectorGamma.distanceTo(vectorAlpha);
+    let c = vectorAlpha.distanceTo(vectorBeta);
 
     if (a == 0 && b == 0 && c == 0) {
         return 0;

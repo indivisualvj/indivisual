@@ -1,3 +1,7 @@
+/**
+ * inspired by maptastic
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
 var Shapetastic = function(inst) {
 
     var ctx = inst.canvas.ctx;
@@ -588,7 +592,7 @@ var Shapetastic = function(inst) {
 
         vertices = vertices.slice(1, vertices.length - 1);
 
-        animation.updateSetting(statics.ControlSettings.layer, 'shape_vertices', vertices, jo, jo);
+        messaging.program.updateSetting(statics.ControlSettings.layer, 'shape_vertices', vertices, jo, jo); // todo inject animation
     };
 
     /**

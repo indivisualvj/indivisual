@@ -28,8 +28,6 @@ beats:
   2: 2
   4: 4
   8: 8
-  16: 16
-  32: 32
 
 sequence:
   - 0
@@ -38,17 +36,6 @@ sequence:
   - 3
   - 4
 
-source:
-  animation: animation
-  sequence: sequence
-  perspective: perspective
-#  video: video
-#  camera: camera
-  display: display
-  black: black
-  offline: offline
-  lighting: lighting
-
 material_map:
   none: none
   0: sequence0
@@ -56,6 +43,7 @@ material_map:
   2: sequence2
   3: sequence3
   4: sequence4
+  webcam: webcam
 
 oscillator:
   off: off

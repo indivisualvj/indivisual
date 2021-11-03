@@ -11,8 +11,8 @@
             let layer = this.layer;
 
             if (this.isFirstShape(shape)) {
-                let jump = 0.4 * animation.diff;
-                if (audio.peak) {
+                let jump = 0.4 * this.animation.diff;
+                if (this.audioAnalyser.peak) {
                     jump *= 4;
                 }
                 this.mover.a += randomInt(-10, 10);

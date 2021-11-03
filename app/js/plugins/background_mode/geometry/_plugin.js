@@ -27,6 +27,12 @@
             if (this.mesh) {
                 this.mesh.traverse(threeDispose);
             }
+            if (this.target1) {
+                this.target1.dispose();
+            }
+            if (this.target2) {
+                this.target2.dispose();
+            }
         }
     }
 }

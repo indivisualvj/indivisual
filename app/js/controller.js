@@ -2,13 +2,11 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-var messaging = false;
-var explorer = false;
-var controller = false;
-var midi = false;
-var beatkeeper = false;
-var layers = false;
-var sm = false;
+/**
+ *
+ * @type {HC.Messaging}
+ */
+let messaging;
 
 /**
  *
@@ -16,25 +14,25 @@ var sm = false;
 document.addEventListener('DOMContentLoaded', function () {
 
     onResize = function () {
-        var columns = document.querySelectorAll('.left');
-        var allover = document.body.clientHeight - 20;
+        let columns = document.querySelectorAll('.left');
+        let allover = document.body.clientHeight - 20;
 
-        for (var i = 0; i < columns.length; i++) {
-            var col = columns[i];
+        for (let i = 0; i < columns.length; i++) {
+            let col = columns[i];
 
             // calcuclate heights of FH elements to figure out the rest
-            var cells = col.querySelectorAll('.item.fh');
-            var reserved = 0;
-            var ii = 0;
+            let cells = col.querySelectorAll('.item.fh');
+            let reserved = 0;
+            let ii = 0;
 
             for (ii = 0; ii < cells.length; ii++) {
                 reserved += cells[ii].clientHeight;
             }
 
-            var spare = allover - reserved;
+            let spare = allover - reserved;
 
             cells = col.querySelectorAll('.item:not(.fh)');
-            var cc = cells.length;
+            let cc = cells.length;
 
             for (ii = 0; ii < cells.length; ii++) {
                 cells[ii].style.height = (spare / cc) + 'px';
@@ -44,84 +42,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
     window.addEventListener('resize', onResize);
 
-    controller = new HC.Controller(G_INSTANCE);
+    let controller = new HC.Controller(G_INSTANCE);
     messaging = new HC.Messaging(controller);
-    messaging.connect(function (reconnect) {
+    let config = new HC.Config(messaging);
+    controller.config = config;
 
-        document.getElementById(_MONITOR).setAttribute('src', 'monitor.html#' + messaging.sid);
+    messaging.connect(function (reconnect, controller) {
+
+        setTimeout(() => {
+            document.querySelector('iframe.monitor').setAttribute('src', 'monitor.html#' + messaging.sid);
+        }, 1500);
 
         HC.log(controller.name, 'connected', true, true);
 
         if (!reconnect) {
 
-            loadResources(setupResources(), function () {
+            controller.config.loadConfig(function () {
 
-                layers = new Array(statics.ControlValues.layer.length);
-                sm = new HC.SettingsManager(statics.AnimationSettings, layers);
-
-                statics.ControlController = new HC.ControlController();
-                statics.DisplayController = new HC.DisplayController();
-                statics.SourceController = new HC.SourceController();
-
-                controller.init();
-                controller.addControllers(statics.ControlController,
-                    statics.ControlSettings,
-                    statics.ControlValues,
-                    statics.ControlTypes,
-                    function (value) {
-                        controller.updateControl(this.property, value, true, true, false);
-                    }
-                );
-                controller.addControllers(statics.DisplayController,
-                    statics.DisplaySettings,
-                    statics.DisplayValues,
-                    statics.DisplayTypes,
-                    function (value) {
-                        controller.updateDisplay(this.property, value, true, true, false);
-                    }
-                );
-                controller.addControllers(statics.SourceController,
-                    statics.SourceSettings,
-                    statics.SourceValues,
-                    statics.SourceTypes,
-                    function (value) {
-                        controller.updateSource(this.property, value, true, true, false);
-                    }
-                );
-                controller.addControllers(statics.AnimationController,
-                    statics.AnimationSettings,
-                    statics.AnimationValues,
-                    statics.AnimationTypes,
-                    function (value) {
-                        controller.updateSetting(statics.ControlSettings.layer, this.property, value, true, true, false);
-                    }, true
-                );
-                controller.addShaderControllers(function (v) {
-                    controller.updateSetting(
-                        statics.ControlSettings.layer,
-                        'shaders',
-                        statics.AnimationSettings.shaders,
-                        true,
-                        true,
-                        false
-                    );
-
-                    // HC.log(this.__gui.name + '/' + this.property, v); fixme
-                });
-
-                explorer = new HC.Explorer();
-                explorer.init();
-                explorer.load();
-
-                beatkeeper = new HC.Beatkeeper();
-
-                messaging.sync(function (data) {
-                    controller.loadSession(data);
-                });
-
+                let sets = controller.config.initControlSets();
+                let cm = new HC.LayeredControlSetsManager([], controller.config.AnimationValues);
+                controller.settingsManager = cm;
+                controller.init(sets);
+                controller.loadSession();
                 controller.initKeyboard();
                 controller.initLogEvents();
-                midi = controller.initMidi(controller);
+                controller.midi = new HC.Midi(controller);
+                controller.midi.init();
 
                 onResize();
             });
@@ -129,67 +75,240 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-(function () {
-    
-    var inst;
+{
     /**
      *
-     * @param name
-     * @constructor
+     * @type {HC.Controller}
      */
-    HC.Controller = function (name) {
-        inst = this;
-        this.name = name;
-        this.gui = false;
-        this.synced = {};
-        this.thumbTimeouts = [];
-    };
+    HC.Controller = class Controller extends HC.Program {
 
-    HC.Controller.prototype = {
+        /**
+         * @type {HC.Guify[]}
+         */
+        guis;
+
+        /**
+         * @type {HC.SourceControllerSequence[]}
+         */
+        clips;
+
+        /**
+         * @type {HC.SourceControllerSample[]}
+         */
+        thumbs;
+
+        /**
+         * @type {HC.Guify}
+         */
+        controlSettingsGui;
+        /**
+         * @type {HC.Guify}
+         */
+        displaySettingsGui;
+        /**
+         * @type {HC.Guify}
+         */
+        sourceSettingsGui;
+        /**
+         * @type {HC.Guify}
+         */
+        animationSettingsGui;
+
+        /**
+         * @type {HC.Guify}
+         */
+        configurationSettingsGui;
+
+        /**
+         * @type {HC.Monitor}
+         */
+        monitor;
+
+        /**
+         *
+         * @type {{}}
+         */
+        synced = {};
+
+        /**
+         *
+         * @type {{}}
+         */
+        thumbTimeouts = {
+            samples: null,
+        };
+
+        /**
+         *
+         * @type {boolean}
+         */
+        ready = false;
+
+        /**
+         *
+         * @type {HC.Midi}
+         */
+        midi;
+
+        /**
+         *
+         * @param name
+         */
+        constructor(name) {
+            super(name);
+        }
+
+        /**
+         *
+         * @param sets
+         */
+        init(sets) {
+
+            this.monitor = new HC.Monitor();
+            this.monitor.activate(false);
+            this.controlSettingsGui = new HC.Guify('ControlSettings', true);
+            this.displaySettingsGui = new HC.Guify('DisplaySettings');
+            this.sourceSettingsGui = new HC.Guify('SourceSettings');
+            this.animationSettingsGui = new HC.Guify('AnimationSettings');
+            this.configurationSettingsGui = new HC.Guify('ConfigurationSettings');
+
+            this.guis = [
+                this.controlSettingsGui,
+                this.displaySettingsGui,
+                this.sourceSettingsGui,
+                this.animationSettingsGui,
+            ];
+            this.beatKeeper = new HC.BeatKeeper(null, this.config);
+            this.sourceManager = new HC.SourceManager(null, { config: this.config, sample: [] });
+            this.explorer = new HC.Explorer(this);
+
+            let controlSets = sets.controlSets;
+            this.config.ControlSettings.session = _HASH; // ugly workaround
+
+            this.addGuifyControllers(
+                controlSets,
+                HC.ControlControllerUi,
+                this.controlSettingsGui
+            );
+
+            let displaySets = sets.displaySets;
+
+            this.addGuifyDisplayControllers(
+                HC.DisplayController,
+                displaySets,
+                HC.DisplayControllerUi,
+                this.displaySettingsGui
+            );
+
+            let sourceSets = sets.sourceSets;
+
+            this.addGuifyControllers(
+                sourceSets,
+                HC.SourceControllerUi,
+                this.sourceSettingsGui
+            );
+
+            this.addConfigurationSettings();
+            this.initStatusBar();
+            this.initClips();
+            this.initThumbs();
+
+            this.addAnimationControllers(this.settingsManager.getGlobalProperties());
+            this.addPassesFolder(HC.ShaderPassUi.onPasses);
+        }
+
+        /**
+         *
+         * @param {HC.Messaging} messaging
+         */
+        setMessaging(messaging) {
+            this.messaging = messaging;
+        }
 
         /**
          *
          */
-        init: function () {
-            this.gui = new dat.GUI({autoPlace: false});
-            document.getElementById('controller').appendChild(this.gui.domElement);
-        },
-
-        /**
-         *
-         * @param session
-         */
-        loadSession: function (session) {
-
-            if ('controls' in session) {
-                HC.log('controls', 'synced');
-                var controls = session.controls;
-                this.updateControls(controls, true, false, true);
-            }
-            if ('displays' in session) {
-                HC.log('displays', 'synced');
-                var displays = session.displays;
-                this.updateDisplays(displays, true, false, true);
-            }
-            if ('sources' in session) {
-                HC.log('sources', 'synced');
-                var sources = session.sources;
-                this.updateSources(sources, true, false, true);
-            }
-            if ('settings' in session) {
-                HC.log('settings', 'synced');
-                var settings = session.settings;
-                for (var k in settings) {
-                    this.updateSettings(k, settings[k], true, false, true);
+        loadSession() {
+            this.messaging.sync((session) => {
+                if ('controls' in session) {
+                    HC.log('controls', 'synced');
+                    let controls = session.controls;
+                    this.updateControls(controls, true, false, true);
                 }
-            }
-            if ('data' in session) {
-                HC.log('data', 'synced');
-                this.updateData();
+                if ('displays' in session) {
+                    HC.log('displays', 'synced');
+                    let displays = session.displays;
+                    this.updateDisplays(displays, true, false, true);
+                }
+                if ('sources' in session) {
+                    HC.log('sources', 'synced');
+                    let sources = session.sources;
+                    this.updateSources(sources, true, false, true);
+                }
+                if ('settings' in session) {
+                    HC.log('settings', 'synced');
+                    let settings = session.settings;
+                    for (let k in settings) {
+                        this.updateSettings(k, settings[k], true, false, true);
+                    }
+                }
+                if ('data' in session) {
+                    HC.log('data', 'synced');
+                    this.updateData();
+                }
+
+                this.updateControl('layer', this.config.ControlSettings.layer, true, false, false);
+            });
+        }
+
+        /**
+         *
+         * @param layer
+         * @param data
+         */
+        migrateSettings0(layer, data, keepPasses) {
+
+            let mappings = HC.LayeredControlSetsManager.mappings(() => {return HC.LayeredControlSetsManager.initAll(this.config.AnimationValues);});
+
+            let passes = this.settingsManager.get(layer, 'passes');
+            if (keepPasses !== true) {
+                passes.removeShaderPasses();
             }
 
-            this.updateControl('layer', statics.ControlSettings.layer, true, false, false);
-        },
+            for (let k in data) {
+                let value = data[k];
+                if (k == 'shaders' || k == 'passes') {
+                    // sort shaders by index
+                    delete value._template;
+                    delete value.isdefault;
+                    delete value.initial;
+                    let keys = Object.keys(value);
+                    keys.sort(function (a, b) {
+                        let ia = value[a].index;
+                        let ib = value[b].index;
+
+                        return ia - ib;
+                    });
+
+                    for (let key in keys) {
+                        let name = keys[key];
+                        let sh = value[name];
+                        if (sh.apply) {
+                            let pass = {};
+                            pass[name] = sh;
+                            passes.addShaderPass(pass);
+                        }
+                    }
+                } else {
+                    let set = mappings[k];
+                    if (set) {
+                        this.settingsManager.update(layer, set, k, value);
+                    }
+                }
+
+            }
+            this.updateUi(this.animationSettingsGui);
+        }
 
         /**
          *
@@ -198,19 +317,17 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param forward
          * @param force
          */
-        updateSettings: function (layer, data, display, forward, force) {
+        updateSettings(layer, data, display, forward, force) {
 
             if (force) {
-                for (var k in data) {
-                    var value = data[k];
-                    sm.update(layer, k, value);
-                }
-                this.updateUi();
+                this.settingsManager.updateData(layer, data);
+                this.updateUi(this.animationSettingsGui);
 
             } else {
-                for (var k in data) {
-                    var value = data[k];
-                    this.updateSetting(layer, k, value, display, false, false);
+                for (let k in data) {
+                    let value = {};
+                    value[k] = data[k];
+                    this.updateSetting(layer, value, display, false, false);
                 }
             }
 
@@ -223,86 +340,96 @@ document.addEventListener('DOMContentLoaded', function () {
                  *
                  */
             }
-        },
+        }
 
         /**
          *
          * @param folder
          * @param datasource
          */
-        shareSettings: function (folder, datasource) {
+        shareSettings(folder, datasource) {
 
+            let settings = {};
+            let controlSets = this.settingsManager.prepareLayer(this.config.ControlSettings.layer);
             if (!datasource) {
-                var keys = Object.keys(statics.AnimationController[folder]);
-                var settings = {};
+                let keys = Object.keys(controlSets[folder]);
 
-                for (var i = 0; i < keys.length; i++) {
-                    settings[keys[i]] = statics.AnimationSettings[keys[i]];
+                for (let i = 0; i < keys.length; i++) {
+                    settings[keys[i]] = controlSets[folder][keys[i]];
                 }
 
             } else {
-                settings = {};
-                settings[folder] = statics.AnimationSettings[folder];
+                settings[folder] = controlSets[folder];
             }
 
-            for (var i = 0; i < layers.length; i++) {
-                if (i != statics.ControlSettings.layer
-                    && (i in layers)
-                    && layers[i].settings
-                    && !layers[i].settings.isDefault()
-                    && layerShuffleable(i) == layerShuffleable(statics.ControlSettings.layer)
-                ) {
-                    this.updateSettings(i, settings, true, false, true);
+            let data = {};
+            data[folder] = settings;
 
-                    if (layers[i]._preset) {
-                        explorer.setChanged(i, true);
-                    }
-
-                    messaging.emitSettings(i, settings, false, false, true);
+            for (let i = 0; i < this.config.ControlValues.layers; i++) {
+                if (i == this.config.ControlSettings.layer) {
+                    continue;
                 }
+                if (this.settingsManager.isDefault(i)) {
+                    continue;
+                }
+                if (layerShuffleable(i) != layerShuffleable(this.config.ControlSettings.layer)) {
+                    continue;
+                }
+
+                this.updateSettings(i, data, true, false, true);
+
+                if (this.settingsManager.layers[i]._preset) {
+                    this.explorer.setChanged(i+1, true);
+                }
+
+                this.messaging.emitSettings(i, data, false, false, true);
+
             }
-        },
+        }
 
         /**
          *
          * @param item
          * @param value
          */
-        shareSetting: function (item, value) {
-            var data = {};
-            data[item] = value;
+        shareSetting(item, value) {
+            let mappings = HC.LayeredControlSetsManager.mappings(() => {return HC.LayeredControlSetsManager.initAll(this.config.AnimationValues);});
+            let set = mappings[item];
+            let data = {};
+            data[set] = {};
+            data[set][item] = value;
 
-            for (var i = 0; i < layers.length; i++) {
-                if (i != statics.ControlSettings.layer
-                    && (i in layers)
-                    && layers[i].settings
-                    && !layers[i].settings.isDefault()
-                    && layerShuffleable(i) == layerShuffleable(statics.ControlSettings.layer)
-                ) {
-
-                    this.updateSettings(i, data, true, false, true);
-
-                    if (layers[i]._preset) {
-                        explorer.setChanged(i, true);
-                    }
-
-                    messaging.emitSettings(i, data, false, false, true);
+            for (let i = 0; i < this.config.ControlValues.layers; i++) {
+                if (i == this.config.ControlSettings.layer) {
+                    continue;
                 }
+                if (this.settingsManager.isDefault(i)) {
+                    continue;
+                }
+                if (layerShuffleable(i) != layerShuffleable(this.config.ControlSettings.layer)) {
+                    continue;
+                }
+
+                this.updateSettings(i, data, false, false, true);
+
+                this.explorer.setChanged(i+1, true);
+                this.messaging.emitSettings(i, data, false, false, true);
             }
-        },
+        }
 
         /**
          *
          * @param dir
          * @param value
          */
-        setSynchronized: function (dir, value) {
+        setSynchronized(dir, value) {
 
-            for (var key in statics.AnimationController[dir]) {
+            let controlSets = this.settingsManager.prepareLayer(0);
+            for (let key in controlSets[dir]) {
                 this.synced[key] = value;
             }
 
-        },
+        }
 
         /**
          *
@@ -311,23 +438,23 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param forward (notused)
          * @param force
          */
-        updateControls: function (data, display, forward, force) {
+        updateControls(data, display, forward, force) {
 
             if (force) {
-                for (var k in data) {
-                    var value = data[k];
-                    statics.ControlSettings.update(k, value);
+                for (let k in data) {
+                    let value = data[k];
+                    this.config.ControlSettingsManager.updateItem(k, value);
                 }
-                this.updateUi();
+                this.updateUi(this.controlSettingsGui);
                 this.showDisplayControls();
 
             } else {
-                for (var k in data) {
-                    var value = data[k];
+                for (let k in data) {
+                    let value = data[k];
                     this.updateControl(k, value, display, false, false);
                 }
             }
-        },
+        }
 
         /**
          *
@@ -336,23 +463,23 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param forward (notused)
          * @param force
          */
-        updateDisplays: function (data, display, forward, force) {
+        updateDisplays(data, display, forward, force) {
 
             if (force) {
-                for (var k in data) {
-                    var value = data[k];
-                    statics.DisplaySettings.update(k, value);
+                for (let k in data) {
+                    let value = data[k];
+                    value = this.config.DisplaySettingsManager.updateItem(k, value);
                 }
-                this.updateUi();
+                this.updateUi(this.displaySettingsGui);
                 this.showDisplayControls();
 
             } else {
-                for (var k in data) {
-                    var value = data[k];
+                for (let k in data) {
+                    let value = data[k];
                     this.updateDisplay(k, value, display, false, false);
                 }
             }
-        },
+        }
 
         /**
          *
@@ -361,61 +488,96 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param forward (notused)
          * @param force
          */
-        updateSources: function (data, display, forward, force) {
+        updateSources(data, display, forward, force) {
 
             if (force) {
-                for (var k in data) {
-                    var value = data[k];
-                    statics.SourceSettings.update(k, value);
+                for (let k in data) {
+                    let value = data[k];
+                    this.config.SourceSettingsManager.updateItem(k, value);
                 }
-                this.updateUi();
+                this.updateUi(this.sourceSettingsGui);
                 this.showDisplayControls();
 
             } else {
-                for (var k in data) {
-                    var value = data[k];
+                for (let k in data) {
+                    let value = data[k];
                     this.updateSource(k, value, display, forward, false);
                 }
             }
-        },
+        }
 
         /**
          *
          * @param layer
-         * @param item
-         * @param value
+         * @param data
          * @param display
          * @param forward
          * @param force
+         */
+        updateSetting(layer, data, display, forward, force) {
+
+            if (layer === undefined) {
+                layer = this.config.ControlSettings.layer;
+            }
+
+            let updated = this.settingsManager.updateData(layer, data);
+            let property;
+            let value;
+            if (isArray(updated)) {
+                property = updated[0].property;
+                value = updated[0].value;
+            }
+
+            if (property in this.synced && this.synced[property]) {
+                this.shareSetting(property, value);
+            }
+
+            if (forward) {
+                this.messaging.emitSettings(layer, data, display, false, false);
+            }
+
+            if (display !== false) {
+                this.explainPlugin(property, value);
+                this.updateUi(this.animationSettingsGui);
+                this.explorer.setChanged(this.config.ControlSettings.layer+1, true);
+            }
+        }
+
+        /**
+         *
+         * @param layer
+         * @param ctrl
+         */
+        addShaderPass(layer, ctrl) {
+            if (layer === undefined) {
+                layer = this.config.ControlSettings.layer;
+            }
+            let passes = this.settingsManager.get(layer, 'passes');
+            let pass = {};
+            pass[ctrl.name] = ctrl.getShader();
+            passes.addShaderPass(pass);
+
+            this.updateUi(this.animationSettingsGui);
+
+            let data = {passes: {shaders: passes.getShaderPasses()}};
+            this.messaging.emitSettings(layer, data, false, false, false);
+        }
+
+        /**
          *
          */
-        updateSetting: function (layer, item, value, display, forward, force) {
+        cleanShaderPasses() {
 
-            if (typeof value != 'object') {
-                HC.log(item, value);
-                this.explainPlugin(item, value);
-            }
+            let cs = this.settingsManager.get(this.config.ControlSettings.layer, 'passes');
+            let passes = cs.getShaderPasses();
 
-            if (statics.AnimationSettings.contains(item)) {
-
-                value = sm.update(layer, item, value);
-
-                if (item in this.synced && this.synced[item]) {
-                    this.shareSetting(item, value);
-                }
-
-                if (forward) {
-                    var data = {};
-                    data[item] = value;
-                    messaging.emitSettings(layer, data, display, false, false);
-                }
-
-                if (display !== false) {
-                    this.updateUi(item);
-                    explorer.setChanged(statics.ControlSettings.layer, true);
+            for (let key in passes) {
+                let sh = cs.getShader(key);
+                if (!sh || sh.apply === false) {
+                    cs.removeShaderPass(key);
                 }
             }
-        },
+        }
 
         /**
          *
@@ -425,66 +587,67 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param forward
          * @param force
          */
-        updateControl: function (item, value, display, forward, force) {
+        updateControl(item, value, display, forward, force) {
 
             if (typeof value != 'object') {
                 HC.log(item, value);
                 this.explainPlugin(item, value, HC);
             }
 
-            if (statics.ControlSettings && statics.ControlSettings.contains(item)) {
+            if (item === 'beat') {
+                value = this.beatKeeper.trigger(value);
+            }
 
-                if (item == 'beat') {
-                    value = beatkeeper.trigger(value, true, statics.ControlSettings.tempo, false);
-                }
+            let tValue = value;
+            value = this.config.ControlSettingsManager.updateItem(item, value);
 
-                value = statics.ControlSettings.update(item, value);
+            if (item === 'layer') {
+                this.updateSettings(value, this.settingsManager.prepareLayer(value), true, false, true);
 
-                if (item == 'layer') {
-                    var l = sm.get(value);
+                this.explorer.setSelected(value+1, true);
 
-                    this.updateSettings(value, l.settings.prepare(), true, false, true);
+                let config = {
+                    action: 'attr',
+                    query: '#layer',
+                    key: 'data-mnemonic',
+                    value: value + 1
+                };
 
-                    explorer.resetLoaded();
-                    explorer.setLoaded(value, true);
+                this.messaging.onAttr(config);
 
-                    var config = {
-                        action: 'attr',
-                        query: '#layer',
-                        key: 'data-mnemonic',
-                        value: value + 1
-                    };
-
-                    messaging.onAttr(config);
-
-                } else if (item == 'reset') {
-                    if (force) {
-                        sm.reset(splitToShuffleable(statics.ControlSettings.shuffleable));
-                    }
-                }
-
-                if (forward) {
-                    var data = {};
-                    data[item] = value;
-                    messaging.emitControls(data, true, false, force);
-                }
-
-                if (display !== false) {
-
-                    if (item.match(/_(sequence|sample|source)/)) {
-                        this.updateData();
-                    }
-
-                    this.updateUi(item);
-                }
-
-                if (item == 'session' && value != _HASH) {
-                    document.location.hash = value;
-                    document.location.reload();
-
+            } else if (item === 'reset') {
+                if (value && force) {
+                    this.settingsManager.reset(splitToIntArray(this.config.ControlSettings.shuffleable));
                 }
             }
-        },
+
+            if (forward) {
+                if (typeof value === 'function') { // reset to
+                    value = tValue;
+                }
+                let data = {};
+                data[item] = value;
+                this.messaging.emitControls(data, true, false, force);
+            }
+
+            if (display !== false) {
+
+                if (item.match(/_(sequence|sample|source)/)) {
+                    this.updateData();
+
+                } else if (item === 'monitor') {
+                    this.monitor.activate(value);
+                }
+
+                this.updateUi(this.controlSettingsGui);
+            }
+
+            if (item == 'session' && value != _HASH) {
+                document.location.hash = value;
+                document.location.reload();
+            }
+
+        }
 
         /**
          *
@@ -494,33 +657,29 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param forward
          * @param force
          */
-        updateDisplay: function (item, value, display, forward, force) {
+        updateDisplay(item, value, display, forward, force) {
 
             if (typeof value != 'object') {
                 HC.log(item, value);
                 // this.explainPlugin(item, value);
             }
 
-            if (statics.DisplaySettings.contains(item)) {
+            value = this.config.DisplaySettingsManager.updateItem(item, value);
 
-                value = statics.DisplaySettings.update(item, value);
-
-                if (item.match(/display\d+_visible/)) {
-                    this.showDisplayControls();
-                }
-
-                if (forward) {
-                    var data = {};
-                    data[item] = value;
-                    messaging.emitDisplays(data, true, false, force);
-                }
-
-                if (display !== false) {
-                    this.updateUi(item);
-                }
-
+            if (item.match(/display\d+_visible/)) {
+                this.showDisplayControls();
             }
-        },
+
+            if (forward) {
+                let data = {};
+                data[item] = value;
+                this.messaging.emitDisplays(data, true, false, force);
+            }
+
+            if (display !== false) {
+                this.updateUi(this.displaySettingsGui);
+            }
+        }
 
         /**
          *
@@ -530,394 +689,302 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param forward
          * @param force
          */
-        updateSource: function (item, value, display, forward, force) {
+        updateSource(item, value, display, forward, force) {
 
             if (typeof value != 'object') {
                 HC.log(item, value);
                 // this.explainPlugin(item, value);
             }
 
-            if (statics.SourceSettings.contains(item)) {
+            value = this.config.SourceSettingsManager.updateItem(item, value);
 
-                value = statics.SourceSettings.update(item, value);
+            if (display !== false) {
 
-                if (forward) {
-                    var data = {};
-                    data[item] = value;
-                    messaging.emitSources(data, true, false, force);
-                }
+                if (item.match(/_(start|end|sequence|input|source)$/)) {
+                    this.updateData();
 
-                if (display !== false) {
-
-                    if (item.match(/_(start|end|input|sequence|source)/)) {
-                        this.updateData();
-
-                    } else if (item.match(/_(enabled)/)) {
-                        if (!value) { // set record to false if enabled == false
-                            var smp = numberExtract(item, 'sample');
-                            this.updateSource(getSampleRecordKey(smp), false, true, true, false);
-                        }
-
-                    } else if (item.match(/_(load)/)) {
-                        this.loadClip(numberExtract(item, 'sample'));
+                } else if (item.match(/_(enabled)/)) {
+                    if (!value) { // set record to false if enabled == false
+                        let smp = numberExtract(item, 'sample');
+                        this.updateSource(getSampleRecordKey(smp), false, true, true, false);
                     }
 
-                    this.updateUi(item);
+                } else if (item.match(/_(load)/)) {
+                    let smp = numberExtract(item, 'sample');
+                    this.loadClip(smp);
                 }
 
+                this.updateUi(this.sourceSettingsGui);
             }
-        },
+
+            if (forward) {
+                let data = {};
+                data[item] = value;
+                this.messaging.emitSources(data, true, false, force);
+            }
+        }
 
         /**
          *
          * @param data
          */
-        updateData: function (data) {
+        updateData(data) {
 
             if (data && data.data) {
 
-                for (var key in data.data) {
-                    if (key in statics) {
-                        var sec = data.data[key];
-                        for (var tkey in sec) {
-                            var type = sec[tkey];
-                            statics[key][tkey] = type;
+                for (let key in data.data) {
+                    if (key in this.config) {
+                        let sec = data.data[key];
+                        for (let tkey in sec) {
+                            let type = sec[tkey];
+                            this.config[key][tkey] = type;
                         }
                     }
                 }
-                controller.updateUi();
+                this.updateUi(this.sourceSettingsGui);
             }
 
-            if (statics.SourceValues && statics.SourceValues.sequence) {
-                for (var seq = 0; seq < statics.SourceValues.sequence.length; seq++) {
+            clearTimeout(this.thumbTimeouts.samples);
 
-                    var _trigger = function (_seq) {
-
-                        clearTimeout(inst.thumbTimeouts[_seq]);
-
-                        inst.thumbTimeouts[_seq] = setTimeout(function () {
-                            requestAnimationFrame(function () {
-                                inst.updateClip(_seq);
-                            });
-
-                        }, 125);
-
-                        requestAnimationFrame(function () {
-                            inst.updateIndicator(_seq);
-                        });
-
-                    };
-
-                    _trigger(seq);
-                }
-            }
-
-            clearTimeout(inst.thumbTimeouts.samples);
-
-            inst.thumbTimeouts.samples = setTimeout(function () {
-                requestAnimationFrame(function () {
-                    inst.updateThumbs();
+            this.thumbTimeouts.samples = setTimeout(() => {
+                requestAnimationFrame(() => {
+                    this.updateSequenceUi();
+                    this.updateThumbs();
                 });
 
             }, 125);
+        }
 
-        },
+        /**
+         *
+         */
+        updateSequenceUi() {
+            if (this.config.SourceValues && this.config.SourceValues.sequence) {
+                for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
+                    requestAnimationFrame(() => {
+                        this.updateClip(seq);
+                        this.updateIndicator(seq);
+                    });
+                }
+            }
+        }
 
         /**
          *
          * @param data
          */
-        updateMidi: function (data) {
-            if (midi) {
+        updateMidi(data) {
+            if (this.midi) {
                 if (data.command == 'glow') {
-                    midi.glow(data.data, data.conf);
+                    this.midi.glow(data.data, data.conf);
 
                 } else if (data.command == 'off') {
-                    midi.off(data.data);
+                    this.midi.off(data.data);
 
                 } else if (data.command == 'clock') {
-                    midi.clock(data.data, data.conf);
+                    this.midi.clock(data.data, data.conf);
                 }
             }
-        },
+        }
 
         /**
-         *
          * @param item
          * @param value
          */
-        setAllDisplaysTo: function (item, value, group) {
-            var increment = value === false;
-            if (increment) {
-                value = 0;
-            }
-            group = splitToIntArray(statics.SourceSettings[group]);
+        setAllDisplaysTo(item, value, group) {
+            let increment = value === false;
 
-            var updates = {};
-            for (var i = 0; i < statics.DisplayValues.display.length; i++) {
+            if (group) {
+                group = splitToIntArray(this.config.SourceSettings[group]);
+            } else {
+                group = [];
+            }
+
+            let updates = {};
+            for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
 
                 if (group.length && group.indexOf(i) < 0) {
                     continue;
                 }
 
-                var n = 'display' + i;
-                var nv = n + '_visible';
-                if (statics.DisplaySettings[nv]) {
-                    var key = new RegExp('^' + n + '_' + item);
-                    var ns = n + '_static';
-                    if (!statics.DisplaySettings[ns]) {
-                        for (var c in statics.SourceSettings.initial) {
-                            if (c.match(key)) {
-                                updates[c] = value;
-
-                                if (increment) {
-                                    value++;
-                                    if (value >= statics.SourceValues[item].length) {
-                                        value = 0;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            this.updateSources(updates, true, false, false);
-            messaging.emitSources(updates, true, true, false);
-        },
-
-        /**
-         *
-         * @param item
-         * @param value
-         */
-        setAllSequencesTo: function (item, value) {
-            var increment = value === false;
-            if (increment) {
-                value = 0;
-            }
-            var updates = {};
-            for (var i = 0; i < statics.SourceValues.sequence.length; i++) {
-                var n = 'sequence' + i;
-                var key = new RegExp('^' + n + '_' + item);
-                for (var c in statics.SourceSettings.initial) {
-                    if (c.match(key)) {
-                        updates[c] = value;
-
+                let n = 'display' + i;
+                let nv = n + '_visible';
+                if (this.config.DisplaySettings[nv]) {
+                    let key = n + '_' + item;
+                    let ns = n + '_static';
+                    if (!this.config.DisplaySettings[ns]) {
                         if (increment) {
+                            value = this.config.SourceSettings[n + '_' + item];
                             value++;
-                            if (value >= statics.SourceValues[item].length) {
+                            if (value >= this.config.SourceValues[item].length) {
                                 value = 0;
                             }
                         }
+
+                        updates[key] = value;
                     }
                 }
             }
             this.updateSources(updates, true, false, false);
-            messaging.emitSources(updates, true, true, false);
-        },
+            this.messaging.emitSources(updates, true, true, false);
+        }
 
         /**
-         *
-         * @param item
-         * @param value
+         * question push even if monitor is enabled? how do it nicely?
          */
-        setAllSamplesTo: function (item, value) {
-            var increment = value === false;
-            if (increment) {
-                value = 0;
-            }
-            var updates = {};
-            for (var i = 0; i < statics.SourceValues.sequence.length; i++) {
-                var n = 'sample' + i;
-                var key = new RegExp('^' + n + '_' + item);
-                for (var c in statics.SourceSettings.initial) {
-                    if (c.match(key)) {
-                        updates[c] = value;
+        syncLayers() {
+            for (let layer in this.settingsManager.layers) {
+                let to = parseInt(layer) * 150;
 
-                        if (increment) {
-                            value++;
-                            if (value >= statics.SourceValues[item].length) {
-                                value = 0;
-                            }
-                        }
-                    }
-                }
-            }
-            this.updateSources(updates, true, false, false);
-            messaging.emitSources(updates, true, true, false);
-        },
-
-        /**
-         *
-         */
-        syncLayers: function () {
-            for (var layer in layers) {
-                var to = parseInt(layer) * 150;
-
-                var st = function (layer, to) {
-                    setTimeout(function () {
-                        inst.syncLayer(layer);
+                let st = (layer, to) => {
+                    setTimeout(() => {
+                        this.syncLayer(layer);
                     }, to);
                 };
                 st(layer, to);
             }
-            var to = statics.ControlValues.layer.length * 151;
+            let to = this.config.ControlValues.layers * 151;
 
-            setTimeout(function () {
-                inst.updateControl('layer', statics.ControlSettings.layer, true, true, true);
+            setTimeout(() => {
+                this.updateControl('layer', this.config.ControlSettings.layer, true, true, true);
             }, to);
-        },
+        }
 
         /**
          *
          */
-        pushSources: function () {
-            messaging.emitSources(statics.SourceSettings, true, true, false);
-        },
+        pushSources() {
+            this.messaging.emitSources(this.config.SourceSettingsManager.prepareFlat(), true, true, false);
+        }
 
         /**
          *
          * @param layer
          */
-        syncLayer: function (layer) {
-            var settings = layers[layer].settings;
+        syncLayer(layer) {
+            let settings = this.settingsManager.prepareLayer(layer);
 
             if (settings) {
-                settings = settings.prepare();
-                messaging.emitSettings(layer, settings, true, false, true);
+                this.messaging.emitSettings(layer, settings, true, false, true);
             }
-        },
+        }
 
         /**
          *
          * @param name
          * @param data
          */
-        preset: function (name, data, layer) {
+        updatePreset(name, data, layer) {
 
             HC.log('preset', name);
 
-            var dflt = statics.AnimationSettings.defaults();
-            // todo preserve tutorial from being wiped here?
-            dflt.clean(data, dflt);
-            dflt.update(false, data);
-
             if (layer == undefined) {
-                layer = statics.ControlSettings.layer;
+                layer = this.config.ControlSettings.layer;
             }
 
-            this.updateSettings(layer, dflt.prepare(), true, false, true);
-            messaging.emitSettings(layer, statics.AnimationSettings.prepare(), false, false, true);
-        },
+            this.settingsManager.resetLayer(layer);
+
+            if (!('info' in data)) {
+                this.migrateSettings0(layer, data);
+
+            // example!
+            // } else if ('info' in data && data.info.version > 1.99) {
+                // this.migrateSettings1(layer, data, true, false, true);
+
+            } else {
+                this.updateSettings(layer, data, false, false, true);
+            }
+
+            data = this.settingsManager.prepareLayer(layer);
+            if (this.settingsManager.get(layer, 'info').hasTutorial()) {
+                new HC.ScriptProcessor(this, name, Object.create(data.info.tutorial)).log();
+
+                data.info.tutorial = {}; // todo tutorial will be deleted on savePreset
+            }
+
+            this.messaging.emitSettings(layer, data, false, false, true);
+        }
 
         /**
          *
          * @param name
          * @param data
          */
-        shaders: function (name, data, reset) {
+        transferShaderPasses(name, data) {
 
-            HC.log('shaders', name);
+            HC.log('passes', name);
 
-            var shaders = data.shaders;
-            var nu = {};
-            for (var n in shaders) {
-                var shd = shaders[n];
-                if (shd) {
-                    if (reset) {
-                        nu[n] = shd;
-
-                    } else if (shd.apply) {
-                        shd.index += 100;
-                        nu[n] = shd;
-                    }
-                }
-            }
-
-            shaders = nu;
-
-            for (var i = 0; i < layers.length; i++) {
-                if ((i in layers)
-                    && layers[i].settings
-                    && layers[i].settings.shaders
-                    && !layers[i].settings.isDefault()
-                    && layerShuffleable(i) == layerShuffleable(statics.ControlSettings.layer)
+            for (let i = 0; i < this.config.ControlValues.layers; i++) {
+                if (!this.settingsManager.isDefault(i)
+                    && layerShuffleable(i) == layerShuffleable(this.config.ControlSettings.layer)
                 ) {
-                    var settings = {shaders: shaders};
-                    this.updateSettings(i, settings, true, false, true);
+                    if (!('info' in data)) {
 
-                    if (layers[i]._preset) {
-                        explorer.setChanged(i, true);
+                        let shaders = {shaders: data.shaders};
+
+                        this.migrateSettings0(i, shaders, true);
+
+                    // example!
+                    // } else if ('info' in data && data.info.version > 1.99) {
+                    // this.migrateSettings1(layer, data, true, false, true);
+
+                    } else {
+                        let nu = data.passes.shaders;
+                        let passes = this.settingsManager.get(i, 'passes');
+
+                        for (let k in nu) {
+                            passes.addShaderPass(nu[k]);
+                        }
                     }
 
-                    messaging.emitSettings(i, settings, false, false, true);
+                    if (this.settingsManager.layers[i]._preset) {
+                        this.explorer.setChanged(i+1, true);
+                    }
+
+                    this.messaging.emitSettings(i, this.settingsManager.prepareLayer(i), false, false, true);
                 }
             }
-        },
+        }
 
         /**
          *
          */
-        refreshLayerInfo: function () {
-            var preset = [];
+        refreshLayerInfo() {
+            let preset = [];
 
-            for (var i = 0; i < layers.length; i++) {
-                if (layers[i]) {
-                    var l = layers[i];
-
-                    if (l.settings) {
-                        var s = l.settings;
-
-                        if (!s.isDefault() && layerShuffleable(i)) {
-                            preset.push(i + 1);
-                        }
+            for (let i = 0; i < this.config.ControlValues.layers; i++) {
+                if (this.settingsManager.layers[i]) {
+                    let l = this.settingsManager.getLayer(i);
+                    if (!this.settingsManager.isDefault(l) && layerShuffleable(i)) {
+                        preset.push(i + 1);
                     }
                 }
             }
 
-            var config = {
+            let config = {
                 action: 'attr',
                 query: '#layers',
                 key: 'data-label',
                 value: preset.join('|')
             };
 
-            messaging.onAttr(config);
-        },
+            this.messaging.onAttr(config);
+        }
 
         /**
          *
-         * @param open
+         * @param open {HC.GuifyFolder}
          */
-        resetFolder: function (open) {
-            var rst = {};
-            var controls = false;
-            for (var i = 0; i < open.__controllers.length; i++) {
-                var ctl = open.__controllers[i];
-
-                if ('play' in ctl.object) {
-                    controls = true;
-                    if (statics.ControlSettings.contains(ctl.property)) {
-                        var val = statics.ControlSettings.initial[ctl.property];
-                        rst[ctl.property] = val;
-                    }
-
-                } else {
-                    if (statics.AnimationSettings.contains(ctl.property)) {
-                        var val = statics.AnimationSettings.initial[ctl.property];
-                        rst[ctl.property] = val;
-                    }
+        resetFolder(open) {
+            let set = open.getKey();
+            if (set) {
+                let cs = this.settingsManager.get(this.config.ControlSettings.layer, set);
+                if (cs) {
+                    cs.reset();
+                    let data = cs.prepare();
+                    this.updateSetting(this.config.ControlSettings.layer, data, true, true, false);
                 }
-            }
-
-            if (controls) {
-                controller.updateControls(rst, true, false);
-                messaging.emitControls(rst, true, false, false);
-
-            } else {
-                controller.updateSettings(statics.ControlSettings.layer, rst, true, false, false);
-                messaging.emitSettings(statics.ControlSettings.layer, rst, true, false, false);
             }
         }
     }
-})();
+}

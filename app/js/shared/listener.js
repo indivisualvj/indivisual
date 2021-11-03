@@ -1,5 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
+ *
+ *
+ * TODO: what about that? https://github.com/mrdoob/eventdispatcher.js
+ *
  */
 {
     /**
@@ -17,7 +21,7 @@
          */
         register(event, id, callback) {
 
-            var _func = function (target) {
+            let _func = function (target) {
                 if (callback) {
                     callback(target);
                 }
@@ -58,7 +62,7 @@
          */
         removeId(id) {
             for (let e in this.events) {
-                var event = this.events[e];
+                let event = this.events[e];
 
                 for (let i in event) {
                     if (i === id) {
@@ -68,6 +72,16 @@
             }
         }
 
+        /**
+         *
+         * @param event
+         * @param id
+         */
+        removeEventId(event, id) {
+            if (event in this.events && id in this.events[event]) {
+                delete this.events[event][id];
+            }
+        }
 
         /**
          *
@@ -75,7 +89,7 @@
          */
         removeLike(prefix) {
             for (let e in this.events) {
-                var event = this.events[e];
+                let event = this.events[e];
 
                 for (let i in event) {
                     let regx = new RegExp('^' + prefix + '');
@@ -101,28 +115,23 @@
          */
         fireEventId(event, id, target) {
             if (event in this.events && id in this.events[event]) {
-                var _call = this.events[event][id];
-                if (_call) {
-                    // console.log(event + '.' + id);
-                    _call(target);
-                }
+                this.bruteFireEventId(event, id, target);
+
+            } else {
+                // console.warn('unknown event', event, id);
             }
         }
 
         /**
          *
+         * @param event
          * @param id
          * @param target
          */
-        fireId(id, target) {
-            for (let e in this.events) {
-                var event = this.events[e];
-
-                for (let i in event) {
-                    if (i === id) {
-                        this.fireEventId(e, i, target);
-                    }
-                }
+        bruteFireEventId(event, id, target) {
+            let _call = this.events[event][id];
+            if (_call) {
+                _call(target);
             }
         }
 
@@ -134,7 +143,7 @@
         fireEvent(event, target) {
             if (event in this.events) {
                 for (let id in this.events[event]) {
-                    this.fireEventId(event, id, target);
+                    this.bruteFireEventId(event, id, target);
                 }
             }
         }

@@ -23,12 +23,12 @@
                 let geo = new THREE.SphereBufferGeometry(res.length() * 2, 16, 16);
                 geo.rotateY(Math.PI / 2);
 
-                this.material = new THREE.MeshBasicMaterial({
+                this.material = garbageman.addMaterial(new THREE.MeshBasicMaterial({
                     color: color,
                     side: THREE.DoubleSide,
                     map: this.target1.texture,
                     transparent: true
-                });
+                }));
 
                 let mesh = new THREE.Mesh(geo, this.material);
                 mesh.scale.multiplyScalar(this.settings.background_volume);
@@ -45,13 +45,15 @@
                     this.texture = this.target2.texture;
                     this.material.map = this.texture;
                     // this.material.needsUpdate = true;
-                    this.layer.three.renderer.render(this.layer.three.scene, this.layer.three.camera, this.target1);
+                    this.layer.three.renderer.setRenderTarget(this.target1);
+                    this.layer.three.renderer.render(this.layer.three.scene, this.layer.three.camera);
 
                 } else {
                     this.texture = this.target1.texture;
                     this.material.map = this.texture;
                     // this.material.needsUpdate = true;
-                    this.layer.three.renderer.render(this.layer.three.scene, this.layer.three.camera, this.target2);
+                    this.layer.three.renderer.setRenderTarget(this.target2);
+                    this.layer.three.renderer.render(this.layer.three.scene, this.layer.three.camera);
                 }
 
                 this.counter ++;

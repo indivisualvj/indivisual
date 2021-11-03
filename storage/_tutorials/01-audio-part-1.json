@@ -2,10 +2,10 @@
 "uuid":"",
 "tutorial":{
   "enable audio": {
-    "text": "First you have to enable audio in the g_controls folder.",
+    "text": "First you have to enable audio in the controls folder.",
     "exec": [
       "controller,closeAll",
-      "controller,toggleByProperty,audio",
+      "controller,openTreeByProperty,audio",
       "controller,updateControl,audio,soundcloud,true,true,true"
     ]
   },
@@ -13,8 +13,8 @@
     "text": "Audio flags are checkboxes placed within several folders such as pattern/coloring/filter/sizing/offset and shaders. Enable them and also try to check and uncheck the sync and limit flags.",
     "exec": [
       "controller,closeAll",
-      "controller,toggleByProperty,sizing_audio",
-      "controller,updateSetting,0,sizing_audio,true,true,true"
+      "controller,openTreeByProperty,sizing_audio",
+      "controller,updateSetting,0,{\"sizing\": {\"sizing_audio\": true}},true,true,true"
     ]
   }
 },
@@ -152,7 +152,7 @@
 "lighting_ambient":false,
 "lighting_ambient_intensity":1,
 "lighting_bottom":false,
-"lighting_color":"#fff",
+"lighting_color":"#ffffff",
 "lighting_intensity":1,
 "lighting_pattern":"ring",
 "lighting_pattern_lights":1,

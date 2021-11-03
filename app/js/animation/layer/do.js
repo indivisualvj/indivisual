@@ -6,12 +6,12 @@
  * @param shape
  */
 HC.Layer.prototype.doPattern = function (shape) {
-    var mover = this.getPatternMoverPlugin();
+    let mover = this.getPatternMoverPlugin();
     if (mover && mover.before) {
         mover.before(shape);
     }
 
-    var pattern = this.getPatternPlugin();
+    let pattern = this.getPatternPlugin();
     this.doPlugin(pattern, shape);
 
     if (mover) {
@@ -31,7 +31,7 @@ HC.Layer.prototype.doPattern = function (shape) {
  */
 HC.Layer.prototype.doRotationOffset = function (shape) {
 
-    var plugin = this.getRotationOffsetModePlugin();
+    let plugin = this.getRotationOffsetModePlugin();
     this.doPlugin(plugin, shape);
 
 };
@@ -41,7 +41,7 @@ HC.Layer.prototype.doRotationOffset = function (shape) {
  * @param shape
  */
 HC.Layer.prototype.doPairing = function (shape) {
-    var plugin = this.getShapePairingPlugin();
+    let plugin = this.getShapePairingPlugin();
     this.doPlugin(plugin, shape);
 };
 
@@ -59,8 +59,8 @@ HC.Layer.prototype.doOverlay = function (shape) {
         && this.settings.pattern_overlay_volume != 0
     ) {
 
-        var nu = false;
-        var index = shape.index;
+        let nu = false;
+        let index = shape.index;
 
         if (this.shapeCache
             && this.shapeCache.length
@@ -71,9 +71,9 @@ HC.Layer.prototype.doOverlay = function (shape) {
         } else {
             nu = this.nextShape(index, true);
 
-            var speed = this.getShapeRhythmPlugin();
-            var delay = this.getShapeDelayPlugin();
-            var direction = this.getRotationDirectionPlugin();
+            let speed = this.getShapeRhythmPlugin();
+            let delay = this.getShapeDelayPlugin();
+            let direction = this.getRotationDirectionPlugin();
             speed.params(nu, speed.params(shape));
             delay.params(nu, delay.params(shape));
             direction.params(nu, direction.params(shape));
@@ -85,15 +85,15 @@ HC.Layer.prototype.doOverlay = function (shape) {
             }
         }
 
-        var plugin = this.getPatternOverlayPlugin();
+        let plugin = this.getPatternOverlayPlugin();
         this.doPlugin(plugin, nu);
 
         if (this.settings.pattern_overlay_volume != 1) {
-            var fade = ((2 * Math.abs(this.settings.pattern_overlay_volume)) - 1);
+            let fade = ((2 * Math.abs(this.settings.pattern_overlay_volume)) - 1);
 
-            var dx = (nu.x() - shape.x()) / 2;
-            var dy = (nu.y() - shape.y()) / 2;
-            var dz = (nu.z() - shape.z()) / 2;
+            let dx = (nu.x() - shape.x()) / 2;
+            let dy = (nu.y() - shape.y()) / 2;
+            let dz = (nu.z() - shape.z()) / 2;
 
             dx += dx * fade;
             dy += dy * fade;
@@ -115,17 +115,21 @@ HC.Layer.prototype.doOverlay = function (shape) {
  */
 HC.Layer.prototype.doMaterialMap = function () {
 
-    var seq = statics.SourceSettings.material_map;
-    var map = this.settings.material_input;
-    var color = false;
+    let seq = this.config.SourceSettings.material_map;
+    let map = this.settings.material_input;
+    let color = false;
 
-    if (seq !== 'none') {
-        var plugin = this.getMaterialMapPlugin('sequence');
+    if (seq === 'webcam') {
+        let plugin = this.getMaterialMapPlugin('webcam');
+        color = this.doPlugin(plugin, map);
+
+    } else if (seq !== 'none') {
+        let plugin = this.getMaterialMapPlugin('sequence');
         // color = plugin.apply(parseInt(seq));
         color = this.doPlugin(plugin, parseInt(seq));
 
     } else {
-        var plugin = this.getMaterialMapPlugin('texture');
+        let plugin = this.getMaterialMapPlugin('texture');
         color = this.doPlugin(plugin, map);
     }
 
@@ -138,14 +142,14 @@ HC.Layer.prototype.doMaterialMap = function () {
  */
 HC.Layer.prototype.doColoring = function (shape) {
 
-    var proceed = true;
-    var filter = this.getFilterModePlugin();
+    let proceed = true;
+    let filter = this.getFilterModePlugin();
     if (filter && filter.before) {
         proceed = filter.before(shape);
     }
 
     if (proceed !== false) {
-        var coloring = this.getColoringModePlugin();
+        let coloring = this.getColoringModePlugin();
         proceed = this.doPlugin(coloring, shape);
 
         if (proceed !== false && filter && filter.apply) {
@@ -155,7 +159,7 @@ HC.Layer.prototype.doColoring = function (shape) {
             }
         }
     }
-    var color = shape.color;
+    let color = shape.color;
     shape.opacity(color.o * this.settings.coloring_opacity);
 
     return proceed;
@@ -167,15 +171,14 @@ HC.Layer.prototype.doColoring = function (shape) {
  */
 HC.Layer.prototype.doMaterial = function (shape) {
 
-    var style = this.getMaterialStylePlugin();
+    let style = this.getMaterialStylePlugin();
     this.doPlugin(style, shape);
 
     shape.strokeWidth(this.settings.material_volume);
 
     try {
-        var map = this.getMaterialMap();
+        let map = this.getMaterialMap();
         shape.updateMaterial(map, this.settings.coloring_emissive);
-
     } catch (e) {
         console.error(e);
     }
@@ -185,7 +188,7 @@ HC.Layer.prototype.doMaterial = function (shape) {
  *
  */
 HC.Layer.prototype.doBackground = function () {
-    var plugin = this.getBackgroundModePlugin();
+    let plugin = this.getBackgroundModePlugin();
     this.doPlugin(plugin);
 };
 
@@ -206,13 +209,13 @@ HC.Layer.prototype.doLighting = function (materialColor) {
  */
 HC.Layer.prototype.doLockingShapeRotation = function (shape) {
 
-    var roto = this.shape.rotation();
-    var plugin = this.getPatternRotationPlugin();
+    let roto = this.shape.rotation();
+    let plugin = this.getPatternRotationPlugin();
     if (plugin.shared && plugin.shared.locking.disabled) {
         roto = plugin.getShapeEuler(shape);
     }
 
-    var eu = {x: 0, y: 0, z: 0};
+    let eu = {x: 0, y: 0, z: 0};
 
     if (this.settings.locking_shapex) {
         eu.x = roto.x * this.settings.locking_shapex_multiplier;
@@ -236,7 +239,7 @@ HC.Layer.prototype.doLockingShapeRotation = function (shape) {
  * @param shape
  */
 HC.Layer.prototype.doShapeLookat = function (shape) {
-    var plugin = this.getShapeLookatPlugin();
+    let plugin = this.getShapeLookatPlugin();
     this.doPlugin(plugin, shape);
 };
 
@@ -246,10 +249,10 @@ HC.Layer.prototype.doShapeLookat = function (shape) {
  */
 HC.Layer.prototype.doSizing = function (shape) {
 
-    var sizing = this.getSizingModePlugin();
+    let sizing = this.getSizingModePlugin();
     this.doPlugin(sizing, shape);
 
-    var flip = this.getSizingFlipPlugin();
+    let flip = this.getSizingFlipPlugin();
     this.doPlugin(flip, shape);
 
 };
@@ -259,13 +262,14 @@ HC.Layer.prototype.doSizing = function (shape) {
  * @param enable
  */
 HC.Layer.prototype.doOscillate = function (enable) {
-    for (var i = 0; i < statics.oscillator.length; i++) {
-        var key = statics.oscillator[i];
-        var okey = key + '_oscillate';
-        if (okey in this.settings) {
-            var osci = this.settings[okey];
+    let oscillator = HC.LayeredControlSetsManager.getAllOsciProperties();
+    for (let i = 0; i < oscillator.length; i++) {
+        let key = oscillator[i];
+        let okey = key + '_oscillate';
+        if (this.settings[okey] !== undefined) {
+            let osci = this.settings[okey];
             if (osci in HC.plugins.oscillate) {
-                var plugin = this.getOscillatePlugin(osci);
+                let plugin = this.getOscillatePlugin(osci);
                 if (plugin && plugin.apply) {
                     if (enable) {
                         plugin.store(key);
@@ -286,7 +290,7 @@ HC.Layer.prototype.doOscillate = function (enable) {
  */
 HC.Layer.prototype.doShapeTransform = function (shape) {
 
-    var plugin = this.getShapeTransformPlugin();
+    let plugin = this.getShapeTransformPlugin();
     this.doPlugin(plugin, shape);
 };
 
@@ -295,11 +299,11 @@ HC.Layer.prototype.doShapeTransform = function (shape) {
  */
 HC.Layer.prototype.doShaders = function () {
 
-    var shaders = this.shaders();
+    let shaders = this.shaders();
     if (shaders) {
-        var last;
-        for (var i = 0; i < shaders.length; i++) {
-            var plugin = shaders[i];
+        let last;
+        for (let i = 0; i < shaders.length; i++) {
+            let plugin = shaders[i];
             if (plugin.apply(false, false)) {
                 last = plugin;
             }
@@ -321,7 +325,7 @@ HC.Layer.prototype.doShaders = function () {
  */
 HC.Layer.prototype.doOffsetMode = function (shape) {
 
-    var plugin = this.getOffsetModePlugin();
+    let plugin = this.getOffsetModePlugin();
     this.doPlugin(plugin, shape);
 };
 
@@ -333,7 +337,7 @@ HC.Layer.prototype.doOffsetMode = function (shape) {
  */
 HC.Layer.prototype.doPlugin = function (plugin, params) {
 
-    var result = true;
+    let result = true;
     if (plugin && plugin.apply) {
         if (plugin.before) {
             if (params) {
@@ -374,17 +378,17 @@ HC.Layer.prototype.doPlugin = function (plugin, params) {
  *
  */
 HC.Layer.prototype.doCameraMode = function () {
-    var plugin = this.getCameraModePlugin();
+    let plugin = this.getCameraModePlugin();
     this.doPlugin(plugin);
 
-    listener.fireEvent('layer.doCameraMode', this.getCamera());
+    this.renderer.listener.fireEvent('layer.doCameraMode', this.getCamera());
 };
 
 /**
  *
  */
 HC.Layer.prototype.doPatternRotation = function () {
-    var plugin = this.getPatternRotationPlugin();
+    let plugin = this.getPatternRotationPlugin();
     this.doPlugin(plugin);
 };
 

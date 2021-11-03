@@ -48,9 +48,9 @@
                 params.velocity.z = randomFloat(0.03, 0.4, 3, true);
             }
 
-            let vx = params.velocity.x * animation.diff * this.settings.pattern_paddingx;
-            let vy = params.velocity.y * animation.diff * this.settings.pattern_paddingy;
-            let vz = params.velocity.z * animation.diff * this.settings.pattern_paddingz;
+            let vx = params.velocity.x * this.animation.diff * this.settings.pattern_paddingx;
+            let vy = params.velocity.y * this.animation.diff * this.settings.pattern_paddingy;
+            let vz = params.velocity.z * this.animation.diff * this.settings.pattern_paddingz;
 
             shape.move(vx, vy, vz);
         }

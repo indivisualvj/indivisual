@@ -5,7 +5,7 @@
         beats = 0;
 
         apply() {
-            this.beats += (beatkeeper.getDefaultSpeed().prc==0?1:0);
+            this.beats += (this.beatKeeper.getDefaultSpeed().prc==0?1:0);
             let every = this.settings.shuffle_every;
 
             if (this.beats >= every) {
@@ -20,7 +20,7 @@
         next() {
             this.layer++;
 
-            if (this.layer >= statics.ControlValues.layer.length) {
+            if (this.layer >= this.config.ControlValues.layers) {
                 this.layer = 0;
             }
         }
@@ -35,7 +35,7 @@
             this.layer--;
 
             if (this.layer < 0) {
-                this.layer = statics.ControlValues.layer.length - 1;
+                this.layer = this.config.ControlValues.layers - 1;
             }
         }
     }
@@ -47,13 +47,15 @@
 
         next() {
             let pile = [];
-            for(let i = 0; i < statics.ControlValues.layer.length; i++) {
-                if (layerShuffleable(i) && !renderer.layers[i].settings.isDefault()) {
+            for(let i = 0; i < this.config.ControlValues.layers; i++) {
+                if (layerShuffleable(i) && !this.animation.settingsManager.isDefault(i)) {
                     pile.push(i);
                 }
             }
 
-            this.layer = pile[randomInt(0, pile.length-1, false)];
+            if (pile.length) {
+                this.layer = pile[randomInt(0, pile.length - 1, false)];
+            }
         }
     }
 }

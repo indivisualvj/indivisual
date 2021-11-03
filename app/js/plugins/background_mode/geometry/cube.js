@@ -14,10 +14,10 @@
                 res.multiplyScalar(2.5);
                 let geo = new THREE.BoxBufferGeometry(res.x, res.y, res.x);
 
-                let mat = new THREE.MeshPhysicalMaterial({
+                let mat = garbageman.addMaterial(new THREE.MeshPhysicalMaterial({
                     color: color,
                     side: THREE.DoubleSide
-                });
+                }));
                 let mesh = new THREE.Mesh(geo, mat);
                 mesh.scale.multiplyScalar(this.settings.background_volume);
                 mesh.scale.x *= -1;
@@ -29,7 +29,7 @@
                 let file = assetman.getImage(this.settings.background_input);
                 if (file) {
                     assetman.loadMaterialMap(mat, filePath(IMAGE_DIR, file), function (mat) {
-                        // tex.wrapS = THREE.RepeatWrapping; // todo assign to all ..maps?
+                        // tex.wrapS = THREE.RepeatWrapping;
                         // tex.repeat.x = -1;
 
                         if (!mat.emissiveMap) {

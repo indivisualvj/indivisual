@@ -1,0 +1,12 @@
+{
+  "map": "map.jpg",
+  "aoMap": "ao.jpg",
+  "displacementMap": "disp.png",
+  "displacementScale": 10,
+  "displacementBias": 1,
+  "metalnessMap": null,
+  "normalMap": "normal.jpg",
+  "roughnessMap": "rough.jpg",
+  "roughness": 0.3,
+  "metalness": 0.8
+}

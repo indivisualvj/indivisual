@@ -6,8 +6,6 @@
             if (!this.pass) {
                 this.pass = new THREE.ShaderPass(THREE.RepeatShader);
             }
-            this.pass.uniforms.resolution.value.x = this.layer.resolution().x;
-            this.pass.uniforms.resolution.value.y = this.layer.resolution().y;
 
             return this.pass;
         }
@@ -15,7 +13,6 @@
         static settings = {
             apply: false,
             random: false,
-            index: 0,
             divider: {
                 x: {
                     value: 2,

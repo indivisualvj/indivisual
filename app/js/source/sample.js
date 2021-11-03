@@ -1,336 +1,398 @@
-(function () {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+{
     /**
      *
-     * @param index
-     * @constructor
+     * @type {HC.Sample}
      */
-    HC.Sample = function (index) {
-        this.index = index;
-        this.id = 'sample' + index;
-        this.enabled = false;
-        this.record = false;
-        this.pointer = 0;
-        this.initialized = false;
-        this.initializing = false;
-        this.started = false;
-        this.complete = false;
-        this.counter = 0;
-        this.frames = false;
-        this.length = 0;
-        this.beats = 4;
-    };
+    HC.Sample = class Sample {
 
-    HC.Sample.prototype = {
+        index;
+        id;
 
         /**
          *
-         * @param speed
+         * @type {boolean}
+         */
+        enabled = false;
+
+        /**
+         *
+         * @type {boolean}
+         */
+        record = false;
+
+        /**
+         *
+         * @type {number}
+         */
+        pointer = 0;
+
+        /**
+         *
+         * @type {boolean}
+         */
+        initialized = false;
+
+        /**
+         *
+         * @type {boolean}
+         */
+        started = false;
+
+        /**
+         *
+         * @type {boolean}
+         */
+        complete = false;
+
+        /**
+         *
+         * @type {number}
+         */
+        counter = 0;
+
+        // /**
+        //  * @type {Array.<OffscreenCanvas>}
+        //  */
+        // frames = [];
+
+        /**
+         * @type {Array.<ImageBitmap>}
+         */
+        samples = [];
+
+        /**
+         *
+         * @type {number}
+         */
+        length = 0;
+
+        /**
+         *
+         * @type {number}
+         */
+        beats = 4;
+
+        /**
+         * @type {HC.Program}
+         */
+        program;
+
+        /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
+         * @type {HC.Listener}
+         */
+        listener;
+
+        /**
+         * @type {HC.BeatKeeper}
+         */
+        beatKeeper;
+
+        /**
+         * @type {HC.SourceManager}
+         */
+        sourceManager;
+
+        /**
+         * @type {HC.Renderer}
+         */
+        renderer;
+
+        /**
+         * @type {OffscreenCanvas}
+         */
+        canvas;
+
+        /**
+         * @type {OffscreenCanvasRenderingContext2D}
+         */
+        context;
+
+        /**
+         *
+         * @param {HC.Program} program
+         * @param index
+         */
+        constructor(program, index) {
+            this.program = program;
+            this.beatKeeper = program.beatKeeper;
+            this.sourceManager = program.sourceManager;
+            this.renderer = program.sourceManager.renderer;
+            this.listener = program.listener;
+            this.config = program.config;
+            this.index = index;
+            this.id = 'sample' + index;
+            
+            this.canvas = new OffscreenCanvas(1, 1);
+            this.context = this.canvas.getContext('2d');
+        }
+
+        /**
+         *
+         * @param tempo
          * @param width
          * @param height
          */
-        update: function (speed, width, height) {
-            var enabled = statics.SourceSettings[getSampleEnabledKey(this.index)];
-            var record = statics.SourceSettings[getSampleRecordKey(this.index)];
-            var beats = statics.SourceSettings[getSampleBeatKey(this.index)];
+        update(tempo, width, height) {
+            let enabled = this.config.SourceSettings[getSampleEnabledKey(this.index)];
+            let record = this.config.SourceSettings[getSampleRecordKey(this.index)];
+            let beats = this.config.SourceSettings[getSampleBeatKey(this.index)];
 
-            var checkEnabled = this.enabled != enabled;
-            var checkBeats = this.beats != beats;
-            var checkFrames = (!this.frames) || this.frames.length == 0;
-            var checkWidth = this.width != width;
-            var checkHeight = this.height != height;
+            let checkEnabled = this.enabled !== enabled;
+            let checkBeats = this.beats !== beats;
+            // let checkFrames = this.frames.length === 0;
+            // let checkWidth = this.canvas.width !== width;
+            // let checkHeight = this.canvas.height !== height;
 
-            var needsUpdate = checkBeats || checkFrames || checkWidth || checkHeight;
+            // let needsUpdate = checkBeats || checkFrames;// || checkWidth || checkHeight;
 
-            this.speed = speed;
-            this.width = width;
-            this.height = height;
             this.enabled = enabled;
+            // this.speed = tempo;
+            this.canvas.width = width;
+            this.canvas.height = height;
             this.record = record;
             this.beats = beats;
 
-            if (!record && checkEnabled && enabled && needsUpdate) {
-                this._init(speed);
+            if (!record && checkEnabled && enabled) {
+                this._init(tempo);//, needsUpdate);
 
             } else if (!enabled) {
-                this._init(speed, true);
-                listener.fireEventId('sample.init.reset', this.id, this);
+                this._reset();
+                // this.listener.fireEventId('sample.init.reset', this.id, this);
+            } else if (record) {
+                if (!this.started) {
+                    this.listener.register(EVENT_SOURCE_MANAGER_RENDER, this.id, (data) => {
+                        let speed = this.beatKeeper.getDefaultSpeed();
+                        this.render(this.renderer.current(), speed, this.renderer.currentColor());
+                    });
+                }
             }
 
-        },
+        }
 
         /**
          *
          * @returns {boolean|*}
          */
-        isReady: function () {
-            return this.enabled && this.initialized && this.complete && this.frames;
-        },
+        isReady() {
+            return this.enabled && this.initialized && this.complete && this.samples.length;
+        }
 
         /**
          *
          * @param i
          * @returns {*}
          */
-        getFrame: function (i) {
-            if (this.isReady() && i > -1 && i < this.frames.length) {
-                return this.frames[i];
+        getFrame(i) {
+            if (this.isReady() && i > -1 && i < this.frameCount) {
+                return this.samples[i];
             }
 
             return false;
-        },
+        }
 
         /**
          *
-         * @param speed
-         * @param reset
          * @private
          */
-        _init: function (speed, reset) {
-            this.initializing = false;
+        _reset() {
+            this.listener.removeEventId(EVENT_RENDERER_RENDER, this.id, this);
             this.initialized = false;
             this.pointer = 0;
             this.started = false;
             this.complete = false;
             this.counter = 0;
             this._clip = false;
-            if (reset || !this.frames) { // performance sparen
-                this.frames = [];
-            }
-            if (!reset) {
-                this.duration = Math.ceil(60000 / speed);
-                this.length = this.beats * this.duration;
-
-                var fps = statics.DisplaySettings.fps * 1.25;
-                var frames = IS_MONITOR ? 0 : Math.ceil(this.length / 1000 * fps);
-
-                this.__init(frames);
-            }
-        },
+        }
 
         /**
          *
-         * @param frames
+         * @param tempo
+         * @param needsUpdate
          * @private
          */
-        __init: function (frames) {
-            var inst = this;
+        _init(tempo, needsUpdate) {
 
-            if (this.frames.length > frames) {
-                this.frames.splice(frames, this.frames.length - frames);
-            }
+            this._reset();
 
-            this.frameCount = frames;
-            animation.powersave = true;
+            this.duration = Math.ceil(60000 / tempo);
+            this.length = this.beats * this.duration;
 
-            var _init = function (i) {
-                if (inst.initializing) {
-                    var cv = document.createElement('canvas');
-                    cv.id = inst.id + '_' + i;
-                    cv.ctx = cv.getContext('2d');
-                    inst.frames.push(cv);
+            let fps = this.config.DisplaySettings.fps * 1.15;
+            let frameCount = Math.ceil(this.length / 1000 * fps);
+            this.frameCount = frameCount;
 
-                    cv.width = inst.width;
-                    cv.height = inst.height;
-                    cv.ctx.fillStyle = '#000000';
-                    cv.ctx.fillRect(0, 0, cv.width, cv.height);
-                    if (i % 10 == 0) {
-                        inst.pointer = i;
-                        listener.fireEventId('sample.init.progress', inst.id, inst);
-                        animation.powersave = true;
-                    }
+            this.listener.fireEventId('sample.init.start', this.id, this);
 
-                    i++;
-                    if (inst.initializing && i < frames) {
-                        setTimeout(function () {
-                            requestAnimationFrame(function () {
-                                _init(i);
-                            });
-                        }, animation.threadTimeout(.125));
+            // let loops = 0;
+            // let divider = 1;
+            // for (let i = 0; i < this.frameCount; i++) {
+            //     this.listener.register(EVENT_RENDERER_RENDER, this.id, (data) => {
+                //     if (loops % divider === 0) {
+                // if (this.frames.length < this.frameCount) {
+                //     let frame = this._createFrame(this.pointer);
+                //     this._resetFrame(frame);
+                //     this.frames.push(frame);
+                //
+                //     this.pointer++;
+                //
+                // } else if (needsUpdate && this.pointer < this.frameCount) {
+                //     let frame = this.frames[this.pointer];
+                //     this._resetFrame(frame);
+                //     this.pointer++;
+                //
+                // } else {
+                    this.initialized = true;
+                //     this.pointer = 0;
+                //     this.listener.remove(EVENT_RENDERER_RENDER, this.id);
+                    this.listener.fireEventId('sample.init.end', this.id, this);
+                    // break;
+                // }
 
-                    } else {
-                        inst.initialized = true;
-                        inst.pointer = 0;
-                        animation.powersave = false;
-                        listener.fireEventId('sample.init.end', inst.id, inst);
-                    }
-                }
-            };
+                // if (this.pointer % 10 == 0) {
+                //     this.listener.fireEventId('sample.init.progress', this.id, this);
+                // }
+            // }
+            // divider = Math.ceil(this.config.DisplaySettings.fps / this.program.fps);
+            // loops++;
+            // });
 
-            requestAnimationFrame(function () {
-                listener.fireEventId('sample.init.start', inst.id, inst);
-                inst.initializing = true;
-                _init(0);
-            });
-        },
+        }
+
+        /**
+         *
+         * @param index
+         * @returns {OffscreenCanvas}
+         * @private
+         */
+        // _createFrame(index) {
+        //     let frame = new OffscreenCanvas(1, 1);
+        //     frame.index = index;
+        //     frame.id = this.id + '_' + index;
+        //     frame.ctx = frame.getContext('2d');
+        //
+        //     return frame;
+        // }
+
+        /**
+         *
+         * @param frame
+         * @private
+         */
+        // _resizeFrame(frame) {
+        //     frame.width = this.canvas.width;
+        //     frame.height = this.canvas.height;
+        // }
+
+        /**
+         *
+         * @param frame
+         * @private
+         */
+        // _resetFrame(frame) {
+        //     this._resizeFrame(frame);
+        //
+        //     requestAnimationFrame(() => {
+        //         frame.ctx.clearRect(0, 0, frame.width, frame.height);
+        //     });
+        // }
 
         /**
          *
          */
-        finish: function () {
+        finish() {
 
-            if (this.pointer < this.frames.length / 2) {
+            this.listener.removeEventId(EVENT_SOURCE_MANAGER_RENDER, this.id);
+
+            if (this.pointer < this.frameCount / 2) {
                 this.started = false;
                 this.pointer = 0;
                 this.counter = 0;
 
-                listener.fireEventId('sample.render.error', this.id, this);
+                this.listener.fireEventId('sample.render.error', this.id, this);
 
             } else {
-                this.frames.splice(this.pointer, this.frames.length - this.pointer);
+                this.samples.splice(this.pointer);
                 this.complete = true;
                 this.record = false;
+                this.frameCount = this.pointer;
+                this.length = this.frameCount / 60 * 1000;
                 this.pointer = 0;
-                this.length = this.frames.length / 60 * 1000;
                 this.counter = 0;
-
-                listener.fireEventId('sample.render.end', this.id, this);
-
+                this.listener.fireEventId('sample.render.end', this.id, this);
+                this.listener.fireEvent(EVENT_SAMPLE_READY, this);
             }
-        },
-
-        /**
-         *
-         * @param callback
-         * @returns {boolean|*}
-         */
-        clip: function (callback) {
-            if (!this._clip) {
-                var inst = this;
-                inst._clip = {id: inst.id, ready: false, thumbs: [], frames: 0, beats: 0, duration: 0};
-
-                var file = filePath(SAMPLE_DIR, inst.id);
-                var loaded = 0;
-
-                messaging.files(file, function (files) {
-
-                    var frameCount = files.length;
-                    var step = frameCount / 15;
-                    var seconds = frameCount / 60;
-                    inst._clip.frames = frameCount;
-                    inst._clip.duration = Math.ceil(60000 / statics.ControlSettings.tempo);
-                    inst._clip.beats = Math.ceil(seconds * 1000 / inst._clip.duration);
-
-                    var index = 0;
-
-                    for (var i = 0; i < frameCount; i += step) {
-                        var ri = Math.floor(i);
-                        var file = files[ri];
-                        file = filePath(SAMPLE_DIR, inst.id, ri + '.png');
-                        var image = new Image();
-                        image.src = file;
-                        image._index = index++;
-
-                        image.onerror = function () {
-                            //frameCount--;
-                        };
-                        image.onload = function () {
-
-                            inst._clip.thumbs[this._index] = this;
-                            loaded += step;
-                            if (loaded >= frameCount) {
-                                inst._clip.ready = true;
-                                callback(inst);
-                            }
-                        };
-                    }
-                });
-            }
-            return this._clip;
-        },
-
-        /**
-         *
-         * @param name
-         * @param speed
-         * @param width
-         * @param height
-         */
-        load: function (name, width, height) {
-
-            this.width = width;
-            this.height = height;
-
-            var file = filePath(SAMPLE_DIR, name);
-            var loaded = 0;
-            var inst = this;
-
-            messaging._emit({action: 'files', file: file}, function (files) {
-
-                var frameCount = files.length;
-                var seconds = frameCount / 60;
-                inst.enabled = true;
-                inst.initialized = true;
-                inst.duration = Math.ceil(60000 / statics.ControlSettings.tempo);
-                inst.beats = Math.ceil(seconds * 1000 / inst.duration);
-
-                inst.frameCount = frameCount;
-                inst.frames = [];
-
-                for (var i = 0; i < frameCount; i++) {
-                    var file = files[i];
-                    file = filePath(SAMPLE_DIR, name, i + '.png');
-                    var image = new Image();
-                    inst.frames.push(image);
-                    image.src = file;
-                    image._index = i;
-
-                    image.onerror = function () {
-                        frameCount--;
-                    };
-                    image.onload = function () {
-
-                        var canvas = document.createElement('canvas');
-                        var ctx = canvas.getContext('2d');
-                        canvas.width = this.width;
-                        canvas.height = this.height;
-                        ctx.drawImage(this, 0, 0, this.width, this.height);
-
-                        inst.frames[this._index] = canvas;
-
-                        loaded++;
-                        inst.pointer = loaded;
-                        if (loaded % 10 == 0) {
-                            listener.fireEventId('sample.load.progress', inst.id, inst);
-                        }
-                        if (loaded == frameCount) {
-                            inst.finish();
-                            listener.fireEventId('sample.load.end', inst.id, inst);
-                        }
-                    };
-                }
-            });
-        },
+        }
 
         /**
          *
          * @param image
-         * @param progress
+         * @param speed
          * @param color
          */
-        render: function (image, progress, color) {
+        render(image, speed, color) {
 
-            renderSample(this, image, progress, color);
+            let sample = this;
+            if (image && sample.samples) {
+                if (!sample.started) {
+                    if (speed.starting()) {
+                        this.listener.fireEventId('sample.render.start', sample.id, sample);
+                        sample.started = true;
+                    }
+                }
+                if (sample.started) {
+                    if (speed.starting()) {
+                        if (sample.counter >= sample.beats) {
+                            sample.finish();
 
-        },
+                        } else {
+                            sample.counter++;
+                            this.listener.fireEventId('sample.render.progress', sample.id, sample);
+                        }
+
+                    }
+                    if (!sample.complete) {
+                        let target = this.canvas;//sample.frames[sample.pointer];
+                        // if (target && target.ctx) {
+                            let ctx = this.context;//target.ctx;
+                            ctx.drawImage(image, 0, 0);
+                            target = target.transferToImageBitmap();
+                            target._color = color;
+                            target.progress = sample.counter + speed.prc;
+                            target.prc = speed.prc;
+
+                            sample.samples[sample.pointer] = target;
+
+                            sample.pointer++;
+                        // }
+                    }
+                }
+            } else {
+                this.listener.fireEventId('sample.render.error', sample.id, sample);
+            }
+
+        }
 
         /**
          *
          */
-        reset: function () {
+        reset() {
 
-        },
+        }
 
         /**
          *
          * @returns {number}
          */
-        last: function () {
-            if (this.frames && this.frames.length > 0) {
-                return this.frames.length - 1;
-            }
-
-            return 0;
+        last() {
+            return Math.max(0, this.frameCount - 1);
         }
-    };
-
-}());
+    }
+}

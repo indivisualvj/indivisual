@@ -72,7 +72,7 @@ THREE.FilmShader = {
 			"vec4 cTextureScreen = texture2D( tDiffuse, vUv );",
 
 			// make some noise
-			"float x = vUv.x * vUv.y * time *  1000.0;",
+			"float x = vUv.x * vUv.y * time *  10.0;",
 			"x = mod( x, 13.0 ) * mod( x, 123.0 );",
 			"float dx = mod( x, 0.01 );",
 

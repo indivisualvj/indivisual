@@ -2,7 +2,7 @@
     HC.plugins.material_map.sequence = class Plugin extends HC.MaterialMapPlugin {
 
         apply(i) {
-            let seq = sourceman.getSequence(i);
+            let seq = this.animation.sourceManager.getSequence(i);
             let image = seq.current(this.layer.renderer.current(), true);
 
             if (image) {
@@ -22,6 +22,11 @@
             return false;
         }
 
+        /**
+         *
+         * @param {THREE.Texture} map
+         * @param image
+         */
         updateTexture(map, image) {
             let img = map.image;
             if (img) {
@@ -37,6 +42,10 @@
             map.needsUpdate = true;
         }
 
+        /**
+         *
+         * @param image
+         */
         initTexture(image) {
             let edge = Math.min(image.width, image.height);
             let nearest = THREE.Math.floorPowerOfTwo(edge);
@@ -46,7 +55,7 @@
             }
             edge = nearest;
 
-            let canvas = document.createElement('canvas');
+            let canvas = new OffscreenCanvas(edge, edge);
             canvas.width = edge;
             canvas.height = edge;
             canvas._ctx = canvas.getContext('2d');

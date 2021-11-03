@@ -1,5 +1,5 @@
 
-masking_shape:
+display_mask_shape:
   off: 'off'
 #  circle: circle
   triangle: triangle
@@ -32,12 +32,7 @@ display:
   - 14
   - 15
 
-video:
-  - 0
-  - 1
-  - 2
-  - 3
-  - 4
+video: {}
 
 display_visibility:
   visible: visible
@@ -63,18 +58,6 @@ display_speed:
   eight: eights
   midi: midi
 #  random: random
-
-border_mode:
-  parent: parent
-  visible: visible
-  growcw: grow clockwise
-  growacw: grow anti-clockwise
-  jumpcw: jump clockwise
-  jumpacw: jump anti-clockwise
-  linecw: line clockwise
-  lineacw: line anti-clockwise
-  randomline: random line
-  randomall: random all
 
 border_speed:
   peak: peak

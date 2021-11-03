@@ -23,7 +23,7 @@
             }
 
             let speed = params.velocity;
-            let acc = 1.05;// * animation.diff / 20;
+            let acc = 1.05;// * this.animation.diff / 20;
             speed *= acc * this.settings.pattern_paddingy * this.settings.pattern_padding;
             params.velocity = speed;
 
@@ -56,7 +56,7 @@
             }
 
             let speed = params.velocity;
-            let acc = 1.05;// * animation.diff / 20;
+            let acc = 1.05;// * this.animation.diff / 20;
             speed *= acc * this.settings.pattern_paddingx * this.settings.pattern_padding;
             params.velocity = speed;
 

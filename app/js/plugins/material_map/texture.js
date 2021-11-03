@@ -36,7 +36,7 @@
                     let inst = this;
                     let path = filePath(IMAGE_DIR, file);
                     this.loading = true;
-
+// fixme whatch the video on canvas and see what can be done https://www.youtube.com/watch?time_continue=68&v=wkDd-x0EkFU&feature=emb_logo
                     assetman.loadMaterialMap(this.properties, path, function (mat) {
                         inst.file = file;
                         inst.loading = false;
@@ -58,8 +58,37 @@
 
         after() {
             if (this.properties && this.properties.map) {
-                let map = this.properties.map;
-                this.updateTexture(map, 'material');
+                let map;
+                if ((map = this.properties.map)) {
+                    this.updateTexture(map, 'material');
+                }
+                if ((map = this.properties.aoMap)) {
+                    this.updateTexture(map, 'material');
+                }
+                if ((map = this.properties.emissiveMap)) {
+                    this.updateTexture(map, 'material');
+                }
+                if ((map = this.properties.alphaMap)) {
+                    this.updateTexture(map, 'material');
+                }
+                if ((map = this.properties.bumpMap)) {
+                    this.updateTexture(map, 'material');
+                }
+                if ((map = this.properties.displacementMap)) {
+                    this.updateTexture(map, 'material');
+                }
+                if ((map = this.properties.lightMap)) {
+                    this.updateTexture(map, 'material');
+                }
+                if ((map = this.properties.metalnessMap)) {
+                    this.updateTexture(map, 'material');
+                }
+                if ((map = this.properties.normalMap)) {
+                    this.updateTexture(map, 'material');
+                }
+                if ((map = this.properties.roughnessMap)) {
+                    this.updateTexture(map, 'material');
+                }
             }
         }
     }

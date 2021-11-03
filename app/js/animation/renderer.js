@@ -1,9 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-
 {
-
     /**
      *
      * @type {HC.Renderer}
@@ -12,35 +10,105 @@
 
         /**
          *
+         * @type {string}
+         */
+        type = 'animation';
+
+        /**
+         * @type {Array}
+         */
+        layers;
+
+        /**
+         *
+         * @type {number}
+         */
+        flipx = 1;
+
+        /**
+         *
+         * @type {number}
+         */
+        flipy = 1;
+
+        /**
+         *
+         * @type {{aspect: number, x: number, y: number}}
+         */
+        resolution = {x: 1280, y: 720, aspect: 1280 / 720};
+
+        /**
+         *
+         * @type {{renderer: THREE.WebGLRenderer, perspective2: THREE.PerspectiveCamera, perspective0: THREE.PerspectiveCamera, perspective1: THREE.PerspectiveCamera, scene: THREE.Scene}}
+         */
+        three = {
+            renderer: null,
+            scene: null,
+            perspective0: null,
+            perspective1: null,
+            perspective2: null
+        };
+
+        /**
+         * @type {Object}
+         */
+        currentLayer;
+
+        /**
+         * @type {Object}
+         */
+        nextLayer;
+
+        /**
+         *
+         * @type {boolean}
+         */
+        layerSwitched = false;
+
+        /**
+         * @type {HC.Animation}
+         */
+        animation;
+
+        /**
+         * @type {HC.Listener}
+         */
+        listener;
+
+        /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
+         * @type {HC.BeatKeeper}
+         */
+        beatKeeper;
+
+
+        /**
+         *
+         * @param {HC.Animation} animation
          * @param config
          */
-        constructor(config) {
-            this.type = 'animation';
+        constructor(animation, config) {
+            this.animation = animation;
+            this.config = animation.config;
+            this.listener = animation.listener;
+            this.beatKeeper = animation.beatKeeper;
             this.layers = config.layers;
-            this.flipx = 1;
-            this.flipy = 1;
-            this.resolution = {x: 1280, y: 720, aspect: 1280 / 720};
-            this.three = {
-                renderer: false,
-                scene: false
-            };
-            this.currentLayer = false;
-            this.nextLayer = false;
-            this.lastLayer = false;
-            this.layerSwitched = false;
 
             this.initThreeJs();
-            this.initLayers(false);
         }
 
         /**
          *
-         * @param keepsettings
+         * @param keepSettings
          */
-        fullReset(keepsettings) {
-            listener.removeEvent('renderer.render');
+        fullReset(keepSettings) {
+            this.listener.removeEvent(EVENT_RENDERER_RENDER);
             this.resize();
-            this.initLayers(keepsettings);
+            this.initLayers(keepSettings);
             this.setLayer(0);
         }
 
@@ -49,16 +117,21 @@
          */
         initThreeJs() {
             if (!this.three.renderer) {
-                var conf = {alpha: true, antialias: ANTIALIAS};
+                let canvas = new OffscreenCanvas(1, 1);
+
+                let conf = {alpha: true, antialias: ANTIALIAS, canvas: canvas};
                 this.three.renderer = new THREE.WebGLRenderer(conf);
                 this.three.renderer.shadowMap.enabled = true;
                 this.three.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-                this.three.renderer.view = this.three.renderer.domElement;
-                this.three.renderer.view.id = 'threeWebGL';
 
-                this.three.renderer.view.addEventListener('webglcontextlost', function () {
-                    listener.fireEvent('webglcontextlost');
+                /** @type {HTMLCanvasElement} */
+                canvas.id = 'threeWebGL';
+                canvas.style = {width: 1, height: 1};
+                canvas.addEventListener('webglcontextlost', () => {
+                    this.animation.listener.fireEvent('webglcontextlost');
                 });
+
+                this.three.renderer.view = canvas;
 
                 this.three.scene = new THREE.Scene();
                 this.three.perspective0 = new THREE.PerspectiveCamera(50, 1, 0.1, 500000);
@@ -80,10 +153,9 @@
             this._layers = new THREE.Group();
             this.three.scene.add(this._layers);
 
-            for (var i = 0; i < this.layers.length; i++) {
-                var op = false;
-                var os = false;
-                var ol = this.layers[i];
+            for (let i = 0; i < this.layers.length; i++) {
+                let oldControlSets = false;
+                let ol = this.layers[i];
 
                 if (ol) {
                     /**
@@ -91,23 +163,22 @@
                      * those layers are there to record samples while animation is offline or to test certain settings/setups
                      */
                     if ((keepsettings || !layerShuffleable(i))) {
-                        op = this.layers[i].preset;
-                        os = this.layers[i].settings;
+                        oldControlSets = this.layers[i].controlSets;
                     }
                     ol.dispose();
                 }
 
-                var l = new HC.Layer(this, i);
+                let layer = new HC.Layer(this.animation, this, i);
 
-                l.preset = op;
-                l.settings = os || statics.AnimationSettings.defaults();
+                layer.controlSets = oldControlSets || HC.LayeredControlSetsManager.initAll(this.config.AnimationValues);
+                layer.settings = HC.LayeredControlSetsManager.settingsProxy(oldControlSets || layer.controlSets);
 
-                this.layers[i] = l;
+                this.layers[i] = layer;
 
-                this.resetLayer(l);
+                this.resetLayer(layer);
             }
 
-            this.currentLayer = this.layers[statics.ControlSettings.layer];
+            this.currentLayer = this.layers[this.config.ControlSettings.layer];
 
         }
 
@@ -120,11 +191,10 @@
 
             if (this.nextLayer) {
 
-                if (this.currentLayer !== this.nextLayer) {
-
-                    if (!force && statics.ControlSettings.shuffle) {
-                        var speed = this.nextLayer.getCurrentSpeed();
-                        if (speed.prc != 0) {
+                if (this.currentLayer !== this.nextLayer) { // fixme instead of not switching in between, try to update layer tweens to beatkeeper speeds percenteages
+                    if (!force && this.config.ControlSettings.shuffle_mode != 'off') {
+                        let speed = this.nextLayer.getCurrentSpeed();
+                        if (!speed.starting()) {
                             return;
                         } else {
 
@@ -156,10 +226,10 @@
          */
         setLayer(index) {
 
-            for (var i in this.layers) {
+            for (let i in this.layers) {
                 i = parseInt(i);
-                var layer = this.layers[i];
-                var transvisible = layer.settings.layer_transvisible;
+                let layer = this.layers[i];
+                let transvisible = layer.settings.layer_transvisible;
 
                 if (i == index || transvisible) {
                     this._layers.add(layer._layer);
@@ -174,7 +244,7 @@
          *
          */
         pauseLayers() {
-            for (var i = 0; i < this.layers.length; i++) {
+            for (let i = 0; i < this.layers.length; i++) {
                 this.layers[i].pause();
             }
         }
@@ -183,21 +253,19 @@
          *
          */
         resumeLayers() {
-            for (var i = 0; i < this.layers.length; i++) {
+            for (let i = 0; i < this.layers.length; i++) {
                 this.layers[i].resume();
             }
         }
 
         /**
-         * Render current and all transvisible layers
-         * @param hook
+         *
          */
-        animate(hook) {
-            for (var l in this.layers) {
-                var layer = this.layers[l];
+        animate() {
+            for (let l in this.layers) {
+                let layer = this.layers[l];
                 if (layer == this.currentLayer || layer.settings.layer_transvisible) {
-                    layer.animate(hook);
-                    hook = undefined;
+                    layer.animate();
                 }
             }
         }
@@ -206,6 +274,7 @@
          *
          * @param layer
          */
+
         resetLayer(layer) {
 
             if (isNumber(layer) || isString(layer)) {
@@ -221,7 +290,7 @@
          *
          */
         resize() {
-            var res = this.getResolution();
+            let res = this.getResolution();
             this.resolution = res;
 
             if (this.three.scene) {
@@ -238,7 +307,7 @@
             }
 
             if (this.three.perspective0) {
-                var aspect = res.aspect;
+                let aspect = res.aspect;
                 this.three.perspective0.aspect = aspect;
                 this.three.perspective1.aspect = aspect;
                 this.three.perspective2.aspect = aspect;
@@ -250,15 +319,15 @@
          * @returns {{aspect: number, x: number, y: number}}
          */
         getResolution() {
-            var resolution;
+            let resolution;
 
-            var res = statics.DisplaySettings.resolution;
+            let res = this.config.DisplaySettings.resolution;
             if (res) {
-                var sp = res.split(/[\:x]/);
+                let sp = res.split(/[\:x]/);
                 if (sp.length > 1) {
-                    var w = parseInt(sp[0]);
-                    var h = parseInt(sp[1]);
-                    resolution = {x: w, y: h, aspect: w / h};
+                    let w = parseInt(sp[0]);
+                    let h = parseInt(sp[1]);
+                    resolution = {x: w, y: h, aspect: w / h, diameter: new THREE.Vector2(w, h).length()};
                 }
             }
 
@@ -272,7 +341,7 @@
         current() {
             this.render();
 
-            var renderer = this.three.renderer;
+            let renderer = this.three.renderer;
             if (renderer && renderer.view) {
                 renderer.view._color = this.currentLayer.shapeColor(false);
                 return renderer.view;
@@ -287,7 +356,7 @@
          * @returns {*}
          */
         brightness() {
-            return displayman.brightness();
+            return this.animation.displayManager.brightness();
         }
 
         /**
@@ -304,8 +373,8 @@
          */
         render() {
 
-            if (this._last != animation.now) {
-                listener.fireEvent('renderer.render', this);
+            if (this._last != this.animation.now) {
+                this.animation.listener.fireEvent(EVENT_RENDERER_RENDER, this);
 
                 this.three.scene.background = this.currentLayer._layer.background;
                 this.three.scene.fog = this.currentLayer._layer.fog;
@@ -318,7 +387,7 @@
                     this.three.renderer.render(this.three.scene, this.currentLayer.three.camera, this.three.target);
                 }
 
-                this._last = animation.now;
+                this._last = this.animation.now;
             }
         }
 
@@ -327,7 +396,7 @@
          * @returns {*}
          */
         currentColor() {
-            var hc = this.currentLayer.shapeColor(false);
+            let hc = this.currentLayer.shapeColor(false);
 
             return hc;
         }

@@ -7,6 +7,12 @@ HC.plugins.background_mode = HC.plugins.background_mode || {};
     HC.BackgroundModePlugin = class BackgroundModePlugin extends HC.AnimationTexturePlugin {
         static background = [];
 
+        setControlSets(controlSets) {
+            super.setControlSets(controlSets);
+            // make all such plugins make use of corresponding controlset only
+            this.settings = controlSets.background.properties;
+        }
+
         /**
          *
          * @param background

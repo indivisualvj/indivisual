@@ -1,5 +1,5 @@
 {
-    HC.audio.microphone = class Plugin extends HC.AudioPlugin {
+    HC.AudioManager.plugins.microphone = class Plugin extends HC.AudioPlugin {
         static index = 10;
         static tutorial = {
             howto: {

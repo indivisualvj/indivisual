@@ -13,7 +13,6 @@
         static settings = {
             apply: false,
             random: false,
-            index: 0,
             blurX: {
                 value: 0.1,
                 _type: [0, 500, 0.1],

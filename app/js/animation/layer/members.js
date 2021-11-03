@@ -3,14 +3,19 @@
  * @returns {CanvasTexture}
  */
 HC.Layer.prototype.getMaterialMap = function () {
-    var seq = statics.SourceSettings.material_map;
-    if (seq !== 'none') {
-        var plugin = this.getMaterialMapPlugin('sequence');
+    let seq = this.config.SourceSettings.material_map;
+    if (seq === 'webcam') {
+        let plugin = this.getMaterialMapPlugin('webcam');
+
+        return plugin;
+
+    } else if (seq !== 'none') {
+        let plugin = this.getMaterialMapPlugin('sequence');
 
         return plugin;
 
     } else {
-        var plugin = this.getMaterialMapPlugin('texture');
+        let plugin = this.getMaterialMapPlugin('texture');
 
         return plugin;
     }
@@ -24,8 +29,8 @@ HC.Layer.prototype.getMaterialMap = function () {
  * @param z
  */
 HC.Layer.prototype.positionIn3dSpace = function (shape, x, y, z) {
-    var cp = new THREE.Vector3(x, y, z);
-    var plugin = this.getPatternRotationPlugin();
+    let cp = new THREE.Vector3(x, y, z);
+    let plugin = this.getPatternRotationPlugin();
     plugin.positionIn3dSpace(shape, cp);
 };
 
@@ -37,7 +42,7 @@ HC.Layer.prototype.positionIn3dSpace = function (shape, x, y, z) {
  * @param z
  */
 HC.Layer.prototype.positionIn2dSpace = function (shape, x, y, z) {
-    var cp = new THREE.Vector3(x, y, z);
+    let cp = new THREE.Vector3(x, y, z);
     cp.add(this.patternCenterVector(true));
     shape.position().copy(cp);
 };
@@ -69,7 +74,7 @@ HC.Layer.prototype.rotation = function (x, y, z) {
  * @param z
  */
 HC.Layer.prototype.position = function (x, y, z) {
-    var cdd = this.cameraDefaultDistance(.25);
+    let cdd = this.cameraDefaultDistance(.25);
     this._rotation.position.set(this.resolution('half').x + x * cdd, -this.resolution('half').y - y * cdd, z * cdd);
 };
 
@@ -82,14 +87,15 @@ HC.Layer.prototype.position = function (x, y, z) {
 HC.Layer.prototype.shaders = function (sh) {
 
     if (sh !== undefined) {
-        var composer = this._composer;
+        let composer = this._composer;
         composer.passes = [composer.passes[0]];
 
         composer.reset();
 
         if (sh && sh.length) {
-            for (var i = 0; i < sh.length; i++) {
-                var pass = sh[i].create();
+            let i = 0
+            for (; i < sh.length; i++) {
+                let pass = sh[i].create();
                 composer.addPass(pass);
                 pass.renderToScreen = false;
             }
@@ -139,7 +145,7 @@ HC.Layer.prototype.random2dPosition = function (depthMultiplier, reduce) {
  * @returns {*|boolean}
  */
 HC.Layer.prototype.getCurrentSpeed = function () {
-    return beatkeeper.getSpeed(this.settings.rhythm);
+    return this.beatKeeper.getSpeed(this.settings.rhythm);
 };
 
 /**

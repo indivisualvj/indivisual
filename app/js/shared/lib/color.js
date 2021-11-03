@@ -4,11 +4,11 @@
  */
 function randomColor() {
 
-    var vh = randomInt(0, 360);
-    var vs = randomInt(50, 100);
-    var vl = randomInt(25, 55);
+    let vh = randomInt(0, 360);
+    let vs = randomInt(50, 100);
+    let vl = randomInt(25, 55);
 
-    var no = randomFloat(0.6, 0.9, 2, false);
+    let no = randomFloat(0.6, 0.9, 2, false);
 
     return {h: vh, s: vs, l: vl, o: no};
 }
@@ -19,9 +19,9 @@ function randomColor() {
  * @returns {{s, h, l}}
  */
 function hexToHsl(hex) {
-    var hex3 = /^([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/;
-    var hex6 = /^([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/;
-    var color = {r: 255, g: 255, b: 255};
+    let hex3 = /^([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/;
+    let hex6 = /^([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/;
+    let color = {r: 255, g: 255, b: 255};
 
     hex = hex.substr(1);
     if ((match = hex6.exec(hex))) {
@@ -49,20 +49,20 @@ function hexToHsl(hex) {
  */
 function rgbToHsl(color) {
     if ('r' in color) {
-        var r = color.r;
-        var g = color.g;
-        var b = color.b;
+        let r = color.r;
+        let g = color.g;
+        let b = color.b;
         r = bound01(r, 255);
         g = bound01(g, 255);
         b = bound01(b, 255);
 
-        var max = Math.max(r, g, b), min = Math.min(r, g, b);
-        var h, s, l = (max + min) / 2;
+        let max = Math.max(r, g, b), min = Math.min(r, g, b);
+        let h, s, l = (max + min) / 2;
 
         if (max == min) {
             h = s = 0; // achromatic
         } else {
-            var d = max - min;
+            let d = max - min;
             s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
             switch (max) {
                 case r:
@@ -91,10 +91,10 @@ function rgbToHsl(color) {
  * @returns {{r: number, b: number, g: number}}
  */
 function hslToRgb(color) {
-    var h = color.h,
+    let h = color.h,
         s = color.s,
         l = color.l;
-    var r, g, b;
+    let r, g, b;
 
     h = bound01(h, 360);
     s = bound01(s, 100);
@@ -112,8 +112,8 @@ function hslToRgb(color) {
     if (s === 0) {
         r = g = b = l; // achromatic
     } else {
-        var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
-        var p = 2 * l - q;
+        let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        let p = 2 * l - q;
         r = hue2rgb(p, q, h + 1 / 3);
         g = hue2rgb(p, q, h);
         b = hue2rgb(p, q, h - 1 / 3);
@@ -128,7 +128,7 @@ function hslToRgb(color) {
  * @returns {string}
  */
 function hslToHex(color) {
-    var c = hslToRgb(color);
+    let c = hslToRgb(color);
 
     return '#' + rgbToHex(c.r, c.g, c.b);
 }
@@ -142,7 +142,7 @@ function hslToHex(color) {
  */
 function rgbToHex(r, g, b) {
 
-    var hex = [
+    let hex = [
         pad2(Math.round(r).toString(16)),
         pad2(Math.round(g).toString(16)),
         pad2(Math.round(b).toString(16))

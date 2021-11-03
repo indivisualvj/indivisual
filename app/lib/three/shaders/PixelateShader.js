@@ -28,7 +28,6 @@ THREE.PixelateShader = {
 	fragmentShader: [
 
         'varying vec2 vUv;',
-        //'varying vec4 vColor;',
         'uniform vec2 resolution;',
         'uniform vec2 size;',
         'uniform sampler2D tDiffuse;',

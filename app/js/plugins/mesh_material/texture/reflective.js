@@ -14,7 +14,7 @@
 
             let inst = this;
             let file = this.settings.background_input;
-            let material = new THREE.MeshPhysicalMaterial({envMap: null});
+            let material = garbageman.addMaterial(new THREE.MeshPhysicalMaterial({envMap: null}));
             let mesh = new THREE.Mesh(geometry, material);
             mesh.name = this.id(index);
 
@@ -29,7 +29,7 @@
             this.cubeTextureFromBackgroundInput(_onLoad);
 
             let id = this.id(index);
-            listener.register('animation.updateSetting', id, function (data) {
+            this.animation.listener.register('animation.updateSetting', id, function (data) {
                 if (data.layer === inst.layer) {
                     switch (data.item) {
                         case 'background_input':
@@ -46,7 +46,7 @@
         }
 
         dispose() {
-            listener.removeLike(this.id());
+            this.animation.listener.removeLike(this.id());
         }
     }
 }

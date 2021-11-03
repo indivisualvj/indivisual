@@ -4,6 +4,12 @@ HC.plugins.pattern_rotation = HC.plugins.pattern_rotation || {};
         euler = new THREE.Euler();
         vector = new THREE.Vector3();
 
+        setControlSets(controlSets) {
+            super.setControlSets(controlSets);
+            // make all such plugins make use of corresponding controlset only
+            this.settings = controlSets.locking.properties;
+        }
+
         before() {
             let roto = this.layer.shape.rotation();
             let rove = roto.toVector3();

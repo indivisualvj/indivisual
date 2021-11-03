@@ -5,11 +5,11 @@
  * @returns {HC.Shape}
  */
 HC.Layer.prototype.nextShape = function (index, dummy) {
-    var mesh = dummy
-        ? new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial())
+    let mesh = dummy
+        ? new THREE.Mesh(new THREE.BoxGeometry(), garbageman.addMaterial(new THREE.MeshBasicMaterial()))
         : this.nextMesh(index);
 
-    var shape = new HC.Shape(mesh, index, randomColor());
+    let shape = new HC.Shape(mesh, index, randomColor());
     if (dummy) {
         shape.setVisible(false);
     }
@@ -32,7 +32,7 @@ HC.Layer.prototype.nextShape = function (index, dummy) {
  * @param geometry
  */
 HC.Layer.prototype.nextShapeModifier = function (geometry) {
-    var modifier = this.getShapeModifierPlugin();
+    let modifier = this.getShapeModifierPlugin();
     return this.doPlugin(modifier, geometry);
 };
 
@@ -41,7 +41,7 @@ HC.Layer.prototype.nextShapeModifier = function (geometry) {
  * @param shape
  */
 HC.Layer.prototype.nextShapeDirection = function (shape) {
-    var direction = this.getRotationDirectionPlugin();
+    let direction = this.getRotationDirectionPlugin();
     this.doPlugin(direction, shape);
 };
 
@@ -52,17 +52,17 @@ HC.Layer.prototype.nextShapeDirection = function (shape) {
  */
 HC.Layer.prototype.nextMesh = function (index) {
 
-    var geometry = this.nextGeometry();
+    let geometry = this.nextGeometry();
     geometry = this.nextShapeModifier(geometry);
 
     if (geometry) {
-        var plugin = this.getMeshMaterialPlugin();
+        let plugin = this.getMeshMaterialPlugin();
         if (plugin) {
             if (plugin.before) {
                 geometry = plugin.before(geometry);
             }
 
-            var mesh = plugin.apply(geometry, index);
+            let mesh = plugin.apply(geometry, index);
 
             if (plugin.after) {
                 plugin.after(mesh);
@@ -77,13 +77,13 @@ HC.Layer.prototype.nextMesh = function (index) {
 
 /**
  *
- * @returns {*}
+ * @returns {THREE.Geometry}
  */
 HC.Layer.prototype.nextGeometry = function () {
-    var plugin = this.getShapeGeometryPlugin();
+    let plugin = this.getShapeGeometryPlugin();
     if (plugin && plugin.apply) {
 
-        var geometry = plugin.apply();
+        let geometry = plugin.apply();
 
         if (plugin.after) {
             plugin.after(geometry);
@@ -102,7 +102,7 @@ HC.Layer.prototype.nextGeometry = function () {
  */
 HC.Layer.prototype.nextShapeDelay = function (shape) {
 
-    var delay = this.getShapeDelayPlugin();
+    let delay = this.getShapeDelayPlugin();
     this.doPlugin(delay, shape);
 
 };
@@ -113,13 +113,13 @@ HC.Layer.prototype.nextShapeDelay = function (shape) {
  */
 HC.Layer.prototype.nextShapeRhythm = function (shape) {
 
-    if (statics.ControlSettings.beat) {
-        var plugin = this.getShapeRhythmPlugin();
+    if (this.config.ControlSettings.beat) {
+        let plugin = this.getShapeRhythmPlugin();
         this.doPlugin(plugin, shape);
 
     } else {
-        var max = 200000 / statics.ControlSettings.tempo;
-        var min = max / 1.5;
+        let max = 200000 / this.config.ControlSettings.tempo;
+        let min = max / 1.5;
         this.getShapeRhythmPlugin().params(shape).duration = randomInt(min, max);
     }
 };
@@ -129,6 +129,6 @@ HC.Layer.prototype.nextShapeRhythm = function (shape) {
  * @param shape
  */
 HC.Layer.prototype.nextShapeRotation = function (shape) {
-    var rotation = this.getRotationModePlugin();
+    let rotation = this.getRotationModePlugin();
     this.doPlugin(rotation, shape);
 };

@@ -6,6 +6,12 @@ HC.plugins.shape_delay = HC.plugins.shape_delay || {};
             delay: 0
         };
 
+        setControlSets(controlSets) {
+            super.setControlSets(controlSets);
+            // make all such plugins make use of corresponding controlset only
+            this.settings = controlSets.shape.properties;
+        }
+
         before(shape) {
             let params = this.params(shape);
             params.delay = 0;

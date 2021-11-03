@@ -7,7 +7,7 @@
             let layer = this.layer;
             let params = this.params(shape);
 
-            let keys = Object.keys(statics.AnimationValues.rotation_direction);
+            let keys = Object.keys(this.config.AnimationValues.rotation_direction);
             params.mode = keys[randomInt(1, keys.length - 1)];
 
             let plugin = layer.getRotationDirectionPlugin(params.mode);

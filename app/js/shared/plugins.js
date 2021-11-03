@@ -15,11 +15,11 @@ HC.Shape.prototype.initPlugins = function () {
 
     if (!HC.Shape.prototype._plugins) {
         HC.Shape.prototype._plugins = {};
-        var plugins = Object.keys(HC.Shape.prototype.injected.plugins);
-        for (var p = 0; p < plugins.length; p++) {
-            var key = plugins[p];
-            var plugin = HC.Shape.prototype.injected.plugins[key];
-            var clone = JSON.parse(JSON.stringify(plugin));
+        let plugins = Object.keys(HC.Shape.prototype.injected.plugins);
+        for (let p = 0; p < plugins.length; p++) {
+            let key = plugins[p];
+            let plugin = HC.Shape.prototype.injected.plugins[key];
+            let clone = JSON.parse(JSON.stringify(plugin));
             HC.Shape.prototype._plugins[key] = clone;
         }
     }
@@ -33,8 +33,32 @@ HC.Shape.prototype.initPlugins = function () {
      */
     HC.AnimationPlugin = class AnimationPlugin {
 
+        /**
+         * @type {HC.Animation}
+         */
+        animation;
+
+        /**
+         * @type {HC.Config}
+         */
+        config;
+
+        /**
+         * @type {HC.BeatKeeper}
+         */
+        beatKeeper;
+
+        /**
+         * @type {HC.AudioAnalyser}
+         */
+        audioAnalyser;
+
+        /**
+         * @type {HC.Layer}
+         */
         layer;
         settings;
+        controlSets;
         tree;
         key;
         
@@ -42,13 +66,48 @@ HC.Shape.prototype.initPlugins = function () {
             return this.layer.index + '.' + this.tree + '.' + this.key + (suffix!==undefined?'.' + suffix:'');
         }
 
-        construct(layer, settings, tree, key) {
+        /**
+         *
+         * @param {HC.Shape} shape
+         * @returns {*}
+         */
+        shapeVolume(shape) {
+            return this.audioAnalyser.getVolume(shape.index);
+        }
+
+        /**
+         *
+         * @param {HC.Animation} animation
+         * @param {HC.Layer} layer
+         * @param settings
+         * @param tree
+         * @param key
+         * @returns {HC.AnimationPlugin}
+         */
+        construct(animation, layer, settings, tree, key) {
+            this.animation = animation;
+            this.config = animation.config;
+            this.beatKeeper = animation.beatKeeper;
+            this.audioAnalyser = animation.audioAnalyser;
             this.layer = layer;
             this.settings = settings;
             this.tree = tree;
             this.key = key;
 
+            this.init();
+
             return this;
+        }
+
+        /**
+         * use this for custom code on construction
+         */
+        init() {
+            //
+        }
+
+        setControlSets(controlSets) {
+            this.controlSets = controlSets;
         }
 
         inject() {
@@ -73,14 +132,14 @@ HC.Shape.prototype.initPlugins = function () {
 
         tweenShape(shape, from, to) {
 
-            var speed = this.layer.getShapeSpeed(shape);
-            var delay = this.layer.getShapeDelay(shape);
+            let speed = this.layer.getShapeSpeed(shape);
+            let delay = this.layer.getShapeDelay(shape);
 
-            var duration = speed.duration;
-            var dly = delay.delay;
+            let duration = speed.duration;
+            let dly = delay.delay;
 
             // tweens may never be longer than their superordinate delay + duration
-            var time = speed.speed.duration - speed.duration - delay.delay - speed.speed.progress;
+            let time = speed.speed.duration - speed.duration - delay.delay - speed.speed.progress;
             if (time < 0) {
                 time = Math.abs(time) + 5;
                 if (delay.delay > time) {
@@ -101,7 +160,7 @@ HC.Shape.prototype.initPlugins = function () {
          * @param tween
          */
         tweenStart(tween) {
-            tween.start(animation.now - this.layer.lastUpdate);
+            tween.start(this.animation.now - this.layer.lastUpdate);
         }
 
         /**
@@ -146,12 +205,12 @@ HC.Shape.prototype.initPlugins = function () {
     HC.AnimationTexturePlugin = class AnimationTexturePlugin extends HC.AnimationPlugin {
         /**
          *
-         * @param texture
+         * @param {THREE.Texture} texture
          * @param prefix
          */
         updateTexture(texture, prefix) {
             let wraps = THREE[this.settings[prefix + '_wraps']];
-            if (texture.wrapS != wraps) {
+            if (texture.wrapS != wraps) { // todo controlsets last change instead!?
                 texture.wrapS = wraps;
                 if (texture.image) {
                     texture.needsUpdate = true;

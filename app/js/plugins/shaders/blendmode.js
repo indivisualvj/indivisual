@@ -13,7 +13,6 @@
         static settings = {
             apply: false,
             random: false,
-            index: 0,
             strength: {
                 value: 0.5,
                 _type: [-2, 2, 0.01],

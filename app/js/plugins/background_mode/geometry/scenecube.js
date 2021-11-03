@@ -23,12 +23,12 @@
                 res.multiplyScalar(2.5);
                 let geo = new THREE.BoxBufferGeometry(res.x, res.y, res.x);
 
-                this.material = new THREE.MeshBasicMaterial({
+                this.material = garbageman.addMaterial(new THREE.MeshBasicMaterial({
                     color: color,
                     side: THREE.DoubleSide,
                     map: this.target1.texture,
                     transparent: true
-                });
+                }));
 
                 let mesh = new THREE.Mesh(geo, this.material);
                 mesh.scale.multiplyScalar(this.settings.background_volume);
@@ -44,14 +44,18 @@
                 if (this.counter % 2) {
                     this.texture = this.target2.texture;
                     this.material.map = this.texture;
-                    // this.material.needsUpdate = true;
-                    this.layer.three.renderer.render(this.layer.three.scene, this.layer.three.camera, this.target1);
+                    // this.layer.three.renderer.clear();
+                    this.layer.three.renderer.setRenderTarget(this.target1);
+                    this.layer.three.renderer.render(this.layer.three.scene, this.layer.three.camera);
+                    this.layer.three.renderer.setRenderTarget(null);
 
                 } else {
                     this.texture = this.target1.texture;
                     this.material.map = this.texture;
-                    // this.material.needsUpdate = true;
-                    this.layer.three.renderer.render(this.layer.three.scene, this.layer.three.camera, this.target2);
+                    // this.layer.three.renderer.clear();
+                    this.layer.three.renderer.setRenderTarget(this.target2);
+                    this.layer.three.renderer.render(this.layer.three.scene, this.layer.three.camera);
+                    this.layer.three.renderer.setRenderTarget(null);
                 }
 
                 this.counter ++;

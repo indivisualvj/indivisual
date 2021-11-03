@@ -6,7 +6,6 @@
         apply(shape) {
             let layer = this.layer;
 
-
             let params = this.params(shape);
 
             let firstRun = false;
@@ -47,11 +46,11 @@
             if (this.settings.pattern_limit && !firstRun) {
                 let position = shape.position();
 
-                let distance = position.distanceTo(patternCenterVector);
+                let distance = position.distanceTo(layer.patternCenterVector());
                 speed = shape.size() / distance * 25;
             }
 
-            params.groundAngle += speed * animation.diff;
+            params.groundAngle += speed * this.animation.diff;
             if (params.groundAngle - params.startAngle > 360) {
                 params.groundAngle -= 360;
             }

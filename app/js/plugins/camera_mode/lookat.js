@@ -16,7 +16,7 @@
 
         apply(peak, setPosition) {
             let layer = this.layer;
-            let speed = beatkeeper.getSpeed('double');
+            let speed = this.beatKeeper.getSpeed('double');
             let cam = layer.getCamera();
 
             let dd = layer.cameraDefaultDistance();
@@ -29,7 +29,7 @@
                 );
             }
 
-            if (!this.shape || (!peak && speed.prc == 0) || (peak && audio.peak && randomBool())) {
+            if (!this.shape || (!peak && speed.prc == 0) || (peak && this.audioAnalyser.peak && randomBool())) {
 
                 let shape = layer.getRandomShape();
                 if (shape != this.shape) {
@@ -47,7 +47,7 @@
                 cam.quaternion.copy(this.quatFrom);
 
                 let distance = cam.position.distanceTo(this.targetLook);
-                let step = animation.getFrameDurationPercent(speed.duration, .25);
+                let step = this.animation.getFrameDurationPercent(speed.duration, .25);
                 let angle = cam.quaternion.angleTo(this.quatTo);
                 let m = Math.sqrt(angle + step);
 

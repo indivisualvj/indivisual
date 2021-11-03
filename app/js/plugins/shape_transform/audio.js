@@ -18,10 +18,7 @@
 
                     let x = 1, y = 1, z = 1;
 
-                    let v = this.settings.shape_sync ? audio.volume : audio.volumes[ai++];
-                    if (ai >= audio.volumes.length) { // cycle through frequency volumes until all vertices have data
-                        ai = 0;
-                    }
+                    let v = this.settings.shape_sync ? this.audioAnalyser.volume : this.audioAnalyser.getVolume(ai++);
 
                     v *= this.settings.shape_transform_volume;
 

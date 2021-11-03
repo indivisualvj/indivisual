@@ -4,7 +4,7 @@
     if (IS_ANIMATION) {
 
         document.addEventListener('DOMContentLoaded', function () {
-            console.log('HC.audio.spotify: initializing spotify');
+            console.log('HC.AudioManager.plugins.spotify: initializing spotify');
 
             let script = document.createElement('script');
             script.setAttribute('src', 'https://sdk.scdn.co/spotify-player.js');
@@ -12,9 +12,9 @@
             script.onload = function () {
 
                 window.onSpotifyWebPlaybackSDKReady = function () {
-                    console.log('HC.audio.spotify: SpotifyWebPlaybackSDK ready');
+                    console.log('HC.AudioManager.plugins.spotify: SpotifyWebPlaybackSDK ready');
 
-                    HC.audio.soundcloud.sdkReady = true;
+                    HC.AudioManager.plugins.soundcloud.sdkReady = true;
                 };
 
             };
@@ -23,7 +23,7 @@
         });
     }
 
-    HC.audio.spotify = class Plugin extends HC.AudioPlugin {
+    HC.AudioManager.plugins.spotify = class Plugin extends HC.AudioPlugin {
         static index = 30;
         static tutorial = {
 
@@ -31,7 +31,7 @@
         static sdkReady = false;
 
         init(callback) {
-            if (HC.audio.soundcloud.sdkReady) {
+            if (HC.AudioManager.plugins.soundcloud.sdkReady) {
                 let player = new Spotify.Player({
                     name: 'Indivisual Spotify Player',
                     getOAuthToken: function () {return SPOTIFY_ACCESS_TOKEN; }
@@ -76,8 +76,8 @@
             //         this.audioTag = audio;
             //     }
             //
-            //     this.onDrop(HC.audio.soundcloud.dropEvent, callback);
-            //     HC.audio.soundcloud.dropEvent = false;
+            //     this.onDrop(HC.AudioManager.plugins.soundcloud.dropEvent, callback);
+            //     HC.AudioManager.plugins.soundcloud.dropEvent = false;
             //
             }
         }

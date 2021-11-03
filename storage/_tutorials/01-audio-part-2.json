@@ -5,8 +5,8 @@
     "text": "You can also reduce speed of audio reactions by raising audio_thickness.",
     "exec": [
       "controller,closeAll",
-      "controller,toggleByProperty,audio_thickness",
-      "controller,updateSetting,0,audio_thickness,0.9,true,true"
+      "controller,openTreeByProperty,audio_thickness",
+      "controller,updateSetting,0,{\"audio\": {\"audio_thickness\": 0.9}},true,true"
     ]
   },
   "further steps": {
@@ -145,7 +145,7 @@
 "lighting_ambient":false,
 "lighting_ambient_intensity":1,
 "lighting_bottom":false,
-"lighting_color":"#fff",
+"lighting_color":"#ffffff",
 "lighting_intensity":1,
 "lighting_pattern":"ring",
 "lighting_pattern_lights":1,

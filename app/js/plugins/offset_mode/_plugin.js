@@ -1,13 +1,20 @@
 HC.plugins.offset_mode = HC.plugins.offset_mode || {};
 {
-    class Plugin extends HC.AnimationPlugin {
+    HC.OffsetModePlugin = class Plugin extends HC.AnimationPlugin {
+
+        setControlSets(controlSets) {
+            super.setControlSets(controlSets);
+            // make all such plugins make use of corresponding controlset only
+            this.settings = controlSets.offset.properties;
+        }
+
         after(shape) {
             let layer = this.layer;
-            if (this.settings.offset_audio && audioman.isActive()) {
+            if (this.settings.offset_audio && this.animation.audioManager.isActive()) {
                 let of = shape.offset();
-                let vo = audio.volume;
+                let vo = this.audioAnalyser.volume;
                 if (!this.settings.offset_sync) {
-                    vo = shape.shapeVolume();
+                    vo = this.shapeVolume(shape);
                 }
 
                 of.multiplyScalar(vo);
@@ -21,6 +28,4 @@ HC.plugins.offset_mode = HC.plugins.offset_mode || {};
             }
         }
     }
-
-    HC.OffsetModePlugin = Plugin;
 }

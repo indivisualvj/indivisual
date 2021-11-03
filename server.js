@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 'use strict';
 
 let fs = require('fs');
@@ -55,7 +56,7 @@ let targetsGroups = {
     controller: ['controls', 'displays', 'sources', 'settings', 'log', 'attr', 'midi', 'data'],
     client: ['controls', 'displays', 'sources', 'settings', 'log', 'midi'],
     setup: ['displays', 'data', 'settings'],
-    monitor: ['displays', 'controls', 'settings', 'sources'], // displays added to have updates on resolution. animation.prepareMonitor takes care of the other settings.
+    monitor: ['displays', 'controls', 'settings', 'sources'], // displays added to have updates on resolution. HC.Monitor.init() takes care of the other settings.
     log: ['log']
 };
 
@@ -140,28 +141,28 @@ io.sockets.on('connection', function (socket) {
     socket.on('controls', function (data) {
         _log('controls', data);
         if (_emit(data)) {
-            _store(data);
+            _store(data, conf.unstorable.controls);
         }
     });
 
     socket.on('displays', function (data) {
         _log('displays', data);
         if (_emit(data)) {
-            _store(data);
+            _store(data, conf.unstorable.displays);
         }
     });
 
     socket.on('sources', function (data) {
         _log('sources', data);
         if (_emit(data)) {
-            _store(data);
+            _store(data, conf.unstorable.sources);
         }
     });
 
     socket.on('settings', function (data) {
         _log('settings', data);
         if (_emit(data)) {
-            _store(data);
+            _store(data, conf.unstorable.settings);
         }
     });
 
@@ -219,7 +220,7 @@ io.sockets.on('connection', function (socket) {
     /**
      *
      */
-    socket.on('sample', _sample);
+    socket.on('write', _writeBinary);
 
     /**
      *
@@ -497,7 +498,7 @@ function _save(data, callback) {
  * @param callback
  * @private
  */
-function _sample(data, callback) {
+function _writeBinary(data, callback) {
 
     let dir = data.dir;
     let file = filePath(dir, data.file);
@@ -505,17 +506,14 @@ function _sample(data, callback) {
     _existCreate(dir);
 
     if (data.file) {
-        let contents = data.contents.split(',')[1]; // Get rid of the data:image/png;base64 at the beginning of the file data
-        let buffer = Buffer.from(contents, 'base64');
+        let buffer = data.contents;
         fs.writeFile(file, buffer.toString('binary'), 'binary', function (err) {
             if (err) {
                 console.log(err);
-                //callback('error: ' + err)
 
             } else {
                 //console.log(file + ' written');
-                //callback(file + ' written');
-
+                callback(file + ' written');
             }
         });
     }
@@ -524,9 +522,10 @@ function _sample(data, callback) {
 /**
  *
  * @param data
+ * @param unstorable
  * @private
  */
-function _store(data) {
+function _store(data, unstorable = []) {
     let proceed = function (data) {
         let session = sessions[data.sid];
 
@@ -550,29 +549,20 @@ function _store(data) {
             settings = section;
         }
 
-        delete data.data.session;
-        delete data.data.isdefault;
-        delete data.data.initial;
-        delete data.data.reset;
-        delete data.data.layers;
-        delete data.data.settings;
-        delete data.data.sample0_enabled;
-        delete data.data.sample1_enabled;
-        delete data.data.sample2_enabled;
-        delete data.data.sample3_enabled;
-        delete data.data.sample4_enabled;
-        delete data.data.sample5_enabled;
-        delete data.data.sample0_record;
-        delete data.data.sample1_record;
-        delete data.data.sample2_record;
-        delete data.data.sample3_record;
-        delete data.data.sample4_record;
-        delete data.data.sample5_record;
-        //delete data.data.monitor;
-
         for (let k in data.data) {
             let v = data.data[k];
-            settings[k] = v;
+            if (typeof v === 'object') { // most likely to be case with ControlSets
+                if (!(k in settings)) {
+                    settings[k] = {};
+                }
+                for (let i in v) {
+                    if (!(unstorable.includes(k)))
+                        settings[k][i] = v[i];
+                }
+            } else { // old structure used for control/display/source settings
+                if (!(unstorable.includes(k)))
+                    settings[k] = v;
+            }
         }
 
         session.blocked = false;
@@ -805,6 +795,13 @@ function initGet() {
     /**
      *
      */
+    app.get('*worker/*.js', function (req, res) {
+        res.sendFile(path.resolve('app/js' + req.originalUrl));
+    });
+
+    /**
+     *
+     */
     app.get('/animation.js', function (req, res) {
 
         let sources = [].concat(conf.shared).concat(conf.animation);
@@ -881,6 +878,7 @@ function initGet() {
      *
      */
     app.get('*', function (req, res) {
+        console.log('sending fallback', req.originalUrl);
         res.sendFile(_APP + '/favicon.ico');
     });
 }

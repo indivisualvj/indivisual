@@ -6,7 +6,7 @@
         apply(shape, onpeak) {
             let params = this.params(shape);
             let s = 1;
-            if (!params.size || (onpeak && audio.peak && randomInt(0, 3) === 0)) {
+            if (!params.size || (onpeak && this.audioAnalyser.peak && randomInt(0, 3) === 0)) {
                 s = randomFloat(0.1, 2.0, 2, false);
                 params.size = s;
 

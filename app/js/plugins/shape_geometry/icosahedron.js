@@ -8,7 +8,7 @@
             sphere: {
                 text: 'to create a sphere set the level of detail to 3',
                 action: function () {
-                    controller.updateSetting(statics.ControlSettings.layer, 'shape_moda', 3, true, true, false);
+                    this.animation.updateSetting(this.config.ControlSettings.layer, {shape:{shape_moda: 3}}, true, true, false);
                 }
             }
         };

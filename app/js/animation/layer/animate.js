@@ -4,16 +4,16 @@
  */
 HC.Layer.prototype.animateShape = function (shape) {
 
-    var duration = this.getShapeRhythmPlugin();
-    var delay = this.getShapeDelayPlugin();
+    let duration = this.getShapeRhythmPlugin();
+    let delay = this.getShapeDelayPlugin();
 
     // wait until delay is over
     if (!delay.finished(shape)) {
-        delay.update(shape, animation.diff);
+        delay.update(shape, this.animation.diff);
 
         // wait until duration is over
     } else if (!duration.finished(shape)) {
-        duration.update(shape, animation.diff);
+        duration.update(shape, this.animation.diff);
 
         // reconfigure when finished
     } else {
@@ -43,11 +43,9 @@ HC.Layer.prototype.animateShape = function (shape) {
  */
 HC.Layer.prototype.animate = function (hook) {
 
-    if (this.shapes === false) {
-        this.resetShapes();
-    }
+    this.listener.fireEvent(EVENT_LAYER_ANIMATE);
 
-    this.tween.update(animation.now - this.lastUpdate, false);
+    this.tween.update(this.animation.now - this.lastUpdate, false);
 
     this.doOscillate(true);
 
@@ -56,23 +54,23 @@ HC.Layer.prototype.animate = function (hook) {
 
     this.doCameraMode();
 
-    var materialColor = this.doMaterialMap();
+    this.materialColor = this.doMaterialMap();
 
     this.animateShape(this.shape);
     this.doPatternRotation(); // preset current pattern euler from layer's shape rotation
 
-    for (var i = 0; i < this.shapes.length; i++) {
-        var shape = this.shapes[i];
+    let shapeNeedsUpdate = this.settings.material_needs_update; // todo bound to lastchange todo for CS
 
+    for (let i = 0; i < this.shapes.length; i++) {
+        let shape = this.shapes[i];
         this.animateShape(shape, true);
+        shape.needsUpdate = shapeNeedsUpdate;
     }
 
-    this.doLighting(materialColor);
+    this.settings.material_needs_update = false;
+
+    this.doLighting(this.materialColor);
     this.doBackground();
-
-    if (hook) {
-        hook();
-    }
 
     this.doOscillate(false);
 };

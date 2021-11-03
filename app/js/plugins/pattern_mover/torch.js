@@ -25,7 +25,7 @@
             let oy = shared.offset.y;
 
             if (this.isFirstShape(shape)) {
-                let jump = 0.1 * animation.diff * this.settings.pattern_padding;
+                let jump = 0.1 * this.animation.diff * this.settings.pattern_padding;
                 this.mover.a += randomInt(-10, 10);
                 let a = 90 + this.mover.a * 0.98;
                 let x = Math.sin(a * RAD) * jump;

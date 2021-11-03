@@ -4,10 +4,10 @@
 
 {
     /**
-     *
-     * @type {HC.Beatkeeper}
+     * todo better timing? https://tonejs.github.io/docs/r13/Transport
+     * @type {HC.BeatKeeper}
      */
-    HC.Beatkeeper = class Beatkeeper {
+    HC.BeatKeeper = class BeatKeeper {
 
         beatStartTime = 0;
         firstTrigger = false;
@@ -15,94 +15,36 @@
         timeout = false;
         bpm = 0;
         tempo = 120;
+
+        /**
+         * @type {TWEEN.Group}
+         */
         tween;
 
-        speeds = {
-            "64": {
-                duration: 0,
-                progress: 0,
-                prc: 1,
-                beats: 0,
-                divider: 1 / 64,
-                visible: false
-            },
-            "32": {
-                duration: 0,
-                progress: 0,
-                prc: 1,
-                beats: 0,
-                divider: 1 / 32,
-                visible: false
-            },
-            hexa: {
-                duration: 0,
-                progress: 0,
-                prc: 1,
-                beats: 0,
-                divider: 1 / 16
-            },
-            octa: {
-                duration: 0,
-                progress: 0,
-                prc: 1,
-                beats: 0,
-                divider: 1 / 8
-            },
-            quad: {
-                duration: 0,
-                progress: 0,
-                prc: 1,
-                beats: 0,
-                divider: 1 / 4
-            },
-            double: {
-                duration: 0,
-                progress: 0,
-                prc: 1,
-                beats: 0,
-                divider: 1 / 2
-            },
-            full: {
-                duration: 0,
-                progress: 0,
-                prc: 1,
-                beats: 0,
-                divider: 1
-            },
-            half: {
-                duration: 0,
-                progress: 0,
-                prc: 1,
-                beats: 0,
-                divider: 2
-            },
-            quarter: {
-                duration: 0,
-                progress: 0,
-                prc: 1,
-                beats: 0,
-                divider: 4
-            },
-            eight: {
-                duration: 0,
-                progress: 0,
-                prc: 1,
-                beats: 0,
-                divider: 8
-            },
-            sixteen: {
-                duration: 0,
-                progress: 0,
-                prc: 1,
-                beats: 0,
-                divider: 16
-            }
-        };
+        /**
+         * @type {HC.Animation}
+         */
+        animation;
+
+        /**
+         * @type {HC.Config}
+         */
+        config;
 
         /**
          *
+         * @type {Object.<string, HC.Speed>}
          */
-        constructor() {
+        speeds = HC.BeatKeeper.initSpeeds();
+
+        /**
+         *
+         * @param {HC.Animation} animation
+         * @param {HC.Config} config
+         */
+        constructor(animation, config) {
+            this.animation = animation;
+            this.config = config;
             this.tween = new TWEEN.Group();
         }
 
@@ -124,7 +66,7 @@
                 let full = 60000 / this.tempo * 4;
                 let duration = full / speed.divider;
                 let beats = speed.beats;
-                let elapsed = animation.now - this.beatStartTime;
+                let elapsed = this.now() - this.beatStartTime;
                 let estimated = duration * beats;
                 let offset = elapsed - estimated;
 
@@ -158,35 +100,31 @@
         }
 
         /**
-         * §
+         *
          * @param value
-         * @param override
-         * @param speed
          * @param forward
-         * @returns {boolean|*|statics.ControlSettings.beat}
+         * @returns {*}
          */
-        trigger(value, override, speed, forward) {
+        trigger(value) {
 
             if (this.timeout) { // following trigger
                 clearTimeout(this.timeout);
                 let diff = HC.now() - this.firstTrigger;
                 let bpm = this.triggerCounter / (diff / 60000);
 
-                statics.ControlSettings.beat = true;
                 this.triggerCounter++;
+
+                this.config.ControlSettings.beat = true;
 
                 this.timeout = setTimeout(() => {
                     this.resetCounters(this.firstTrigger);
                     this.resetTrigger();
                 }, 1333);
 
-                if (forward) {
-                    statics.ControlSettings.tempo = bpm;
-                    messaging.emitControls({tempo: bpm}, true, false);
+                messaging.program.updateControl('tempo', bpm, true, false, false);
+                // this.config.ControlSettings.tempo = bpm;
+                // messaging.emitControls({tempo: bpm}, true, false);
 
-                } else {
-                    messaging.emitControls({tempo: bpm}, true, false);
-                }
 
             } else { // first trigger
                 this.firstTrigger = HC.now();
@@ -194,12 +132,12 @@
 
                 clearTimeout(this.timeout);
                 this.timeout = setTimeout(() => {
-                    statics.ControlSettings.beat = value;
+                    this.config.ControlSettings.beat = value;
                     this.resetTrigger();
                 }, 1333);
             }
 
-            return statics.ControlSettings.beat;
+            return this.config.ControlSettings.beat;
         }
 
         /**
@@ -249,7 +187,8 @@
                 speed = this.speeds[rhythm];
 
             } else {
-                speed = this.getDefaultSpeed();
+                throw new Error('rhythm ' + rhythm + ' not found!');
+                // speed = this.getDefaultSpeed();
             }
 
             return speed;
@@ -271,12 +210,12 @@
         updateSpeeds(diff, tempo) {
 
             let dflt = this.getDefaultSpeed();
-            if (dflt.prc == 0) {
+            if (dflt.starting()) {
                 this.updatePitch(tempo);
             }
 
             this.tempo = tempo;
-            this.tween.update(animation.now, false);
+            this.tween.update(this.now(), false);
 
         }
 
@@ -289,7 +228,7 @@
             let unit = this.getDefaultSpeed();
             let duration = 60000 / speed;
             let beats = unit.beats;
-            let elapsed = animation.now - (this.beatStartTime);
+            let elapsed = this.now() - (this.beatStartTime);
             let estimated = duration * beats;
             let offset = elapsed - estimated;
             let offbeat = Math.abs(offset) > duration;
@@ -312,7 +251,7 @@
          */
         resetCounters(beatStartTime) {
             this.beatStartTime = beatStartTime;
-            let duration = 60000 / statics.ControlSettings.tempo;
+            let duration = 60000 / this.config.ControlSettings.tempo;
             let elapsed = HC.now() - this.beatStartTime;
             let ebeats = Math.floor((elapsed / duration) / 4);
 
@@ -329,7 +268,7 @@
          *
          */
         reset() {
-            this.resetCounters(animation.now);
+            this.resetCounters(this.now());
             this.resetTrigger();
         }
 
@@ -351,7 +290,6 @@
             return rhythm != 1;
         }
 
-
         /**
          *
          */
@@ -368,6 +306,50 @@
                 s.pitch = 0;
                 this._tween(s);
             }
+        }
+
+        now() {
+            return this.animation.now;
+        }
+
+        static initSpeeds() {
+            return {
+                "64": new HC.Speed(1 / 64, false),
+                "32": new HC.Speed(1 / 32, false),
+                hexa: new HC.Speed(1 / 16, true),
+                octa: new HC.Speed(1 / 8, true),
+                quad: new HC.Speed(1 / 4, true),
+                double: new HC.Speed(1 / 2, true),
+                full: new HC.Speed(1, true),
+                half: new HC.Speed(2, true),
+                quarter: new HC.Speed(4, true),
+                eight: new HC.Speed(8, true),
+                sixteen: new HC.Speed(16, true)
+            };
+        }
+    }
+}
+
+{
+    /**
+     *
+     * @type {HC.Speed}
+     */
+    HC.Speed = class Speed {
+        duration = 0;
+        progress = 0;
+        prc = 1;
+        beats = 0;
+        divider;
+        visible = true;
+
+        constructor(divider, visible) {
+            this.divider = divider;
+            this.visible = visible;
+        }
+
+        starting() {
+            return this.prc == 0;
         }
     }
 }

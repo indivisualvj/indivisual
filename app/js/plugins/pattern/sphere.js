@@ -13,9 +13,9 @@
             if (this.settings.pattern_audio) {
                 let or = radius;
                 if (this.settings.pattern_sync) {
-                    radius *= audio.volume;
+                    radius *= this.audioAnalyser.volume;
                 } else {
-                    radius *= shape.shapeVolume();
+                    radius *= this.shapeVolume(shape);
                 }
 
                 if (this.settings.pattern_limit) {
@@ -89,16 +89,16 @@
 
             let v = this.settings.pattern_audio == true
                 ? ((this.settings.pattern_sync == false
-                    ? shape.shapeVolume() : audio.volume) * this.settings.pattern_padding) : 1;
+                    ? this.shapeVolume(shape) : this.audioAnalyser.volume) * this.settings.pattern_padding) : 1;
 
-            if (audio.peak) {
+            if (this.audioAnalyser.peak) {
                 params.velocity *= 1.5;
 
             } else if (params.velocity > 1.5) {
                 params.velocity *= 0.9;
             }
 
-            let frame = params.velocity * animation.diff / 350;
+            let frame = params.velocity * this.animation.diff / 350;
 
             shape.move(
                 params.initial.x * frame,
@@ -144,18 +144,18 @@
             if (speed.progress < 1) { //
                 params.velocity *= -1;
 
-            } else if (audioman.isActive()) {
-                if (audio.peak) {
+            } else if (this.animation.audioManager.isActive()) {
+                if (this.audioAnalyser.peak) {
                     params.volume = this.settings.pattern_sync == false
-                        ? shape.shapeVolume() : audio.volume;
+                        ? this.shapeVolume(shape) : this.audioAnalyser.volume;
                     params.velocity *= -1;
 
                 } else if (params.volume > 0) {
-                    params.volume -= 0.00001 * animation.diff;
+                    params.volume -= 0.00001 * this.animation.diff;
                 }
             }
 
-            let frame = params.velocity * animation.diff / 250;
+            let frame = params.velocity * this.animation.diff / 250;
 
             shape.move(
                 params.initial.x * frame,

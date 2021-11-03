@@ -12,21 +12,28 @@
             let material = new THREE.ShaderMaterial(this.shader);
             material.color = new THREE.Color();
 
-            let inst = this;
-            listener.register('renderer.render', this.id(index), function (renderer) {
-                if (inst.layer.isVisible() && material.uniforms && material.uniforms.uTime) {
-                    material.uniforms.uTime.value = inst.layer.getOscillatePlugin('timestamp').apply({value: 1});
+            let mesh = new THREE.Mesh(geometry, material);
+            mesh.onBeforeRender = () => {
+                if (this.layer.isVisible() && material.uniforms) {
+                    if (material.uniforms.uTime) {
+                        material.uniforms.uTime.value = this.layer.getOscillatePlugin('timestamp').apply({value: 1});
+                    }
+                    if (material.uniforms.uColor) {
+                        let color = this.layer.materialColor;
+                        let sc = this.layer.shapeColor(false);
+                        material.uniforms.uColor.value = new THREE.Color(color || sc);
+                    }
+                    if (material.uniforms.audio) {
+                        material.uniforms.audio.value = this.audioAnalyser.getFrequencyRangeValues();
+                    }
                 }
-            });
 
-            return new THREE.Mesh(geometry, material);
+            };
+
+            return mesh;
         }
 
         reset() {
-            if (this.active) {
-                this.active = false;
-                listener.removeLike(this.id());
-            }
         }
     }
 }

@@ -13,14 +13,13 @@
         updateResolution() {
             if (this.pass) {
                 this.pass.uniforms.resolution.value.x = this.valueByWidth(1);
-                this.pass.uniforms.resolution.value.y = this.valueByHeight();
+                this.pass.uniforms.resolution.value.y = this.valueByHeight(1);
             }
         }
 
         static settings = {
             apply: false,
             random: false,
-            index: 1000,
             resolution: {
                 x: {
                     value: 1,

@@ -1,7 +1,0 @@
-apply: [quarter]
-random: [quarter]
-index: [half]
-
-_audio: [quarter]
-_oscillate: [half]
-_stepwise: [quarter]

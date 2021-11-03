@@ -37,16 +37,16 @@
                 params.threshold = shape.y();
                 params.velocity.y *= -0.1;
                 let shapeDir = layer.getShapeDirection(shape);
-                params.velocity.x += shapeDir * this.settings.pattern_paddingx * animation.diff / 50;
+                params.velocity.x += shapeDir * this.settings.pattern_paddingx * this.animation.diff / 50;
 
             } else {
-                params.velocity.y += animation.diff / 20;
+                params.velocity.y += this.animation.diff / 20;
             }
 
             shape.move(
-                params.velocity.x * animation.diff / 10,
-                params.velocity.y * animation.diff / 150,
-                0.5 * animation.diff
+                params.velocity.x * this.animation.diff / 10,
+                params.velocity.y * this.animation.diff / 150,
+                0.5 * this.animation.diff
             );
         }
     }

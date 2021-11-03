@@ -1,12 +1,19 @@
 HC.plugins.sizing_mode = HC.plugins.sizing_mode || {};
 {
     HC.SizingModePlugin = class Plugin extends HC.AnimationPlugin {
+
+        setControlSets(controlSets) {
+            super.setControlSets(controlSets);
+            // make all such plugins make use of corresponding controlset only
+            this.settings = controlSets.sizing.properties;
+        }
+
         after(shape) {
             if (this.settings.sizing_audio) {
                 let of = shape.scale();
-                let vo = audio.volume;
+                let vo = this.audioAnalyser.volume;
                 if (!this.settings.sizing_sync) {
-                    vo = shape.shapeVolume();
+                    vo = this.shapeVolume(shape);
                 }
 
                 of.multiplyScalar(vo);

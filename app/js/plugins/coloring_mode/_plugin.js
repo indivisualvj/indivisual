@@ -2,6 +2,12 @@ HC.plugins.coloring_mode = HC.plugins.coloring_mode || {};
 {
     HC.ColoringModePlugin = class Plugin extends HC.AnimationPlugin {
 
+        setControlSets(controlSets) {
+            super.setControlSets(controlSets);
+            // make all such plugins make use of corresponding controlset only
+            this.settings = controlSets.coloring.properties;
+        }
+
         before(shape) {
             // let locked = this.shapeColoringModeLocked(shape);
             // if (locked) {
@@ -15,10 +21,10 @@ HC.plugins.coloring_mode = HC.plugins.coloring_mode || {};
             c.s *= this.settings.coloring_sat;
             c.l *= this.settings.coloring_lum * 2;
 
-            if (this.settings.coloring_audio && audioman.isActive()) {
-                let v = audio.volume;
+            if (this.settings.coloring_audio && this.animation.audioManager.isActive()) {
+                let v = this.audioAnalyser.volume;
                 if (!this.settings.coloring_sync) {
-                    v = shape.shapeVolume();
+                    v = this.shapeVolume(shape);
                 }
 
                 c.h += v * 180;

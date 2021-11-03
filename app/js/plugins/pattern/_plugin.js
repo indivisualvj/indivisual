@@ -2,6 +2,12 @@ HC.plugins.pattern = HC.plugins.pattern || {};
 {
     HC.PatternPlugin = class Plugin extends HC.AnimationPlugin {
 
+        setControlSets(controlSets) {
+            super.setControlSets(controlSets);
+            // make all such plugins make use of corresponding controlset only
+            this.settings = controlSets.pattern.properties;
+        }
+
         sharedMoverParams(ox, oy, gapx, gapy) { // essential for panning torching bouncing pattern_mover
             if (arguments.length == 4) {
                 this.shared = {
@@ -24,9 +30,12 @@ HC.plugins.pattern = HC.plugins.pattern || {};
         boundsCheck(shape, extend, depthMultiplier, velocity) {
 
             let direction = new THREE.Vector3(0, 0, 0);
-            // todo greedy?
+            // todo bounds check using box/geometry (layer.playground (settings?[layer_playground_volume/size])
+            //  place it shortly behind camera
+            //  will it be less greedy?
+            //  example: https://threejs.org/examples/?q=webx#webxr_vr_multiview
 
-            // bounds check
+            // bounds _check
             let mx = this.layer.resolution('half').x + (extend || 0);
             let my = this.layer.resolution('half').y + (extend || 0);
             let mz = this.layer.cameraDefaultDistance(depthMultiplier || 0);

@@ -8,14 +8,14 @@
      * @type {HC.Animation.EventListener}
      */
     HC.Animation.EventListener = class EventListener {
-        init (hook) {
+        init () {
 
             document.onselectstart = function () {
                 return false;
             };
 
             if (IS_ANIMATION) { // no mousemove cursor thingy for _SETUP and _MONITOR
-                var to;
+                let to;
                 document.addEventListener('mousemove', function () {
                     document.body.style.cursor = 'default';
                     clearTimeout(to);
@@ -23,10 +23,6 @@
                         document.body.style.cursor = 'none';
                     }, 2000);
                 });
-            }
-
-            if (hook) {
-                hook();
             }
         }
     }
@@ -38,7 +34,12 @@
      * @type {HC.Animation.KeyboardListener}
      */
     HC.Animation.KeyboardListener = class KeyboardListener {
-        init (hook) {
+
+        /**
+         *
+         * @param {HC.Animation} animation
+         */
+        init (animation) {
 
             window.addEventListener('keydown', function (e) {
 
@@ -46,13 +47,10 @@
                     return;
                 }
                 if (e.keyCode === 32) { // SPACE = play/pause
-                    animation.updateControl('play', !statics.ControlSettings.play, true, false, false);
+                    animation.updateControl('play', !animation.config.ControlSettings.play, true, false, false);
                 }
             });
 
-            if (hook) {
-                hook();
-            }
         }
     }
 }
@@ -64,23 +62,23 @@
      */
     HC.Animation.ResizeListener = class ResizeListener {
 
-        init (hook) {
-            var onResize = function () {
-                for (var i = 0; i < statics.DisplayValues.display.length; i++) {
-                    var display = displayman.getDisplay(i);
+        /**
+         *
+         * @param {HC.DisplayManager} displayManager
+         */
+        init (displayManager) {
+            let onResize = function () {
+                for (let i = 0; i < displayManager.config.DisplayValues.display.length; i++) {
+                    let display = displayManager.getDisplay(i);
                     if (display) {
                         if (!display.getMapping()) {
-                            displayman.centerDisplay(i, 1, true, false);
+                            displayManager.centerDisplay(i, 1, true, false);
                         }
                     }
                 }
             };
 
             window.addEventListener('resize', onResize);
-
-            if (hook) {
-                hook();
-            }
         }
     }
 }

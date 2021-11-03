@@ -1,33 +1,48 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-
 {
     /**
      *
      * @type {HC.ScriptProcessor}
      */
     HC.ScriptProcessor = class ScriptProcessor {
-        constructor(key, desc) {
+
+        /**
+         * @type {HC.Controller}
+         */
+        instance;
+
+        /**
+         *
+         * @param {HC.Controller} instance
+         * @param key
+         * @param desc
+         */
+        constructor(instance, key, desc) {
+            this.instance = instance;
             this.key = key;
             this.desc = desc;
             this.load();
         }
 
+        /**
+         *
+         */
         load() {
-            for (var i in this.desc) {
-                var d = this.desc[i];
+            for (let i in this.desc) {
+                let d = this.desc[i];
 
                 if (d.exec) {
-                    var calls = [];
-                    for (var e in d.exec) {
-                        var ex = d.exec[e];
+                    let calls = [];
+                    for (let e in d.exec) {
+                        let ex = d.exec[e];
 
                         ex = ex.split(',');
 
-                        var instance = ex.shift();
-                        var func = ex.shift();
-                        var args = parseArray(ex);
+                        let instance = ex.shift();
+                        let func = ex.shift();
+                        let args = parseArray(ex);
 
                         instance = this._getInstance(instance);
 
@@ -35,11 +50,11 @@
                     }
                     d.calls = calls;
 
-                    var inst = this;
-                    var _create = function (d) {
+                    let inst = this;
+                    let _create = function (d) {
                         return function () {
-                            for (var i in d.calls) {
-                                var c = d.calls[i];
+                            for (let i in d.calls) {
+                                let c = d.calls[i];
                                 inst._call(c.instance, c.func, c.args);
                             }
                         };
@@ -50,14 +65,28 @@
             }
         }
 
+        /**
+         *
+         * @param instance
+         * @returns {null|HC.Controller}
+         * @private
+         */
         _getInstance(instance) {
             switch (instance) {
-                default:
-                case 'controller':
-                    return controller;
+                case 'messaging':
+                    return messaging;
             }
+
+            return this.instance;
         }
 
+        /**
+         *
+         * @param instance
+         * @param func
+         * @param args
+         * @private
+         */
         _call(instance, func, args) {
 
             if (args && args.length) {
@@ -86,13 +115,16 @@
             }
         }
 
+        /**
+         *
+         */
         log() {
 
             HC.clearLog();
             HC.log(HC.logGetRed('tutorial'), this.key);
 
-            for (var i in this.desc) {
-                var d = this.desc[i];
+            for (let i in this.desc) {
+                let d = this.desc[i];
 
                 HC.log(HC.logGetRed(i), HC.logGetYellow(d.text));
 
@@ -102,9 +134,12 @@
             }
         }
 
+        /**
+         *
+         */
         execute() {
-            for (var i in this.desc) {
-                var d = this.desc[i];
+            for (let i in this.desc) {
+                let d = this.desc[i];
                 if (d.action) {
                     d.action();
                 }

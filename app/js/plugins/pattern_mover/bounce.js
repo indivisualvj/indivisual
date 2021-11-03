@@ -28,7 +28,7 @@
                 let jump = this.settings.pattern_padding * shapeDir;
 
                 let speed = layer.getCurrentSpeed();
-                jump *= animation.diffPrc * (layer.shapeSize(1) * shape.size() * speed.prc) / 4;
+                jump *= this.animation.diffPrc * (layer.shapeSize(1) * shape.size() * speed.prc) / 4;
 
                 if (vertical) {
                     this.mover.y += jump;

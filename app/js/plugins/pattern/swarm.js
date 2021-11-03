@@ -12,26 +12,27 @@
             tween: false,
             timeout: false
         };
-
-        constructor(layer) {
-            super();
-            this.randshapes = this.randshapes(layer.shapeCount());
-        }
+        randshapes = false;
+        diameter = false;
 
         before(shape) {
-            let layer = this.layer;
+            if (!this.randshapes) {
+                this.randshapes = this._randshapes(this.layer.shapeCount());
+                this.diameter = this.animation.renderer.getResolution().diameter;
+            }
+
             let params = this.params(shape);
             if (!params.targetLook) {
                 this.settings.pattern_padding *= 2;
-                layer.getPatternPlugin('cube').apply(shape);
+                this.layer.getPatternPlugin('cube').apply(shape);
                 this.settings.pattern_padding /= 2;
 
                 params.targetLook = new THREE.Vector3();
                 this.randPosition(params);
             }
-            params.speed = layer.getShapeSpeed(shape);
+            params.speed = this.layer.getShapeSpeed(shape);
             if (!params.speed) {
-                params.speed = layer.getCurrentSpeed();
+                params.speed = this.layer.getCurrentSpeed();
             }
         }
 
@@ -57,19 +58,21 @@
             shape.getWorldPosition(wp);
             let dist = wp.distanceTo(params.targetLook);
 
-            let s = 20 * this.settings.pattern_padding * animation.getFrameDurationPercent(speed.duration, .125 / 4);
+            let s = 20 * this.settings.pattern_padding * this.animation.getFrameDurationPercent(speed.duration, .125 / 4);
             let m = this.settings.pattern_limit ? 1 : Math.min(1, dist / layer.shapeSize(2));
             let v = s * m;
-            if (audioman.isActive() && this.settings.pattern_audio) {
+            if (this.animation.audioManager.isActive() && this.settings.pattern_audio) {
                 if (this.settings.pattern_sync) {
-                    v *= audio.volume;
+                    v *= this.audioAnalyser.volume;
                 } else {
-                    v *= shape.shapeVolume();
+                    v *= this.shapeVolume(shape);
                 }
 
                 v *= 2;
             }
-            shape.sceneObject().translateZ(Math.sqrt(v));
+
+            let step = Math.sqrt(v) * this.diameter/250;
+            shape.sceneObject().translateZ(step);
 
         }
 
@@ -96,7 +99,7 @@
             params.shape = false;
 
             let dir = this.boundsCheck(shape);
-            if (dir.length() || this.shapeFollowers(shape) || (peak && audio.peak)) {
+            if (dir.length() || this.shapeFollowers(shape) || (peak && this.audioAnalyser.peak)) {
                 // shape is out of bounds or already followed: turn to point inbound
                 this.randPosition(params, shape);
 
@@ -134,7 +137,7 @@
             params.quatTo = new THREE.Quaternion().copy(cam.quaternion);
             cam.quaternion.copy(params.quatFrom);
 
-            let step = animation.getFrameDurationPercent(speed.duration, .25);
+            let step = this.animation.getFrameDurationPercent(speed.duration, .25);
             let angle = cam.quaternion.angleTo(params.quatTo);
             let m = Math.sqrt(angle + step * this.settings.pattern_padding);
 
@@ -146,7 +149,13 @@
             }
         }
 
-        randshapes(shapecount) {
+        /**
+         *
+         * @param shapecount
+         * @returns {HC.plugins.pattern.Plugin}
+         * @private
+         */
+        _randshapes(shapecount) {
             this.shapecount = shapecount;
             this.shapes = {};
 

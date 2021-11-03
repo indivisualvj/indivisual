@@ -18,11 +18,17 @@
             steprect: {
                 text: 'Set overlapping shapes to 4. Set number of edges to 4. Set direction to 2. Set material_blending to normal or additive and reduce coloring_opacity to make the single steps shine through',
                 action: function () {
-                    controller.updateSetting(statics.ControlSettings.layer, 'shape_moda', 4, true, true);
-                    controller.updateSetting(statics.ControlSettings.layer, 'shape_modb', 2, true, true);
-                    controller.updateSetting(statics.ControlSettings.layer, 'shape_modc', 4, true, true);
-                    controller.updateSetting(statics.ControlSettings.layer, 'coloring_opacity', .5, true, true);
-                    controller.updateSetting(statics.ControlSettings.layer, 'material_blending', 'NormalBlending', true, true, true);
+                    let data = {
+                        shape: {
+                            shape_moda: 4,
+                            shape_modb: 2,
+                            shape_modc: 4
+                        },
+                        coloring:{coloring_opacity: .5},
+                        material:{material_blending: 'NormalBlending'}
+                    };
+                    this.animation.updateSettings(this.config.ControlSettings.layer, data, false, false, true);
+                    messaging.emitSettings(this.config.ControlSettings.layer, data, false, false, true);
                 },
             }
         };

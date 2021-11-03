@@ -6,29 +6,46 @@
                 text: 'set shape_geometry to icosahedron and level of detail (shape_moda) to 3',
                 action: function () {
                     let data = {
-                        shape_geometry: 'icosahedron',
-                        shape_moda: 3
+                        shape: {
+                            shape_geometry: 'icosahedron',
+                            shape_moda: 3
+                        }
                     };
-                    controller.updateSettings(statics.ControlSettings.layer, data, true, false, true);
-                    messaging.emitSettings(statics.ControlSettings.layer, data, true, true, true);
+                    this.animation.updateSettings(this.config.ControlSettings.layer, data, true, false, true);
+                    messaging.emitSettings(this.config.ControlSettings.layer, data, true, true, true);
                 }
             }
         };
 
+        /**
+         *
+         * @param {THREE.Geometry} geometry
+         * @param index
+         * @returns {THREE.Mesh}
+         */
         apply(geometry, index) {
 
-            let cubecam = new THREE.CubeCamera(1, 100000, 256);
-            cubecam.renderTarget.texture.generateMipmaps = true;
-            cubecam.renderTarget.texture.minFilter = THREE.LinearMipMapLinearFilter;
+            geometry.computeBoundingBox();
+            let box3 = geometry.boundingBox;
+            let height = box3.max.y - box3.min.y;
+            let cubeRenderTarget = new THREE.WebGLCubeRenderTarget( height * this.settings.material_volume, {
+                format: THREE.RGBFormat,
+                generateMipmaps: true,
+                minFilter: THREE.LinearMipmapLinearFilter
+            } );
+            let cubecam = new THREE.CubeCamera(1, 100000, cubeRenderTarget);
+            // cubecam.renderTarget = cubeRenderTarget;
+            // cubecam.renderTarget.texture.generateMipmaps = true;
+            // cubecam.renderTarget.texture.minFilter = THREE.LinearMipMapLinearFilter;
 
             this.cameras.add(cubecam);
 
-            let material = new THREE.MeshPhysicalMaterial({envMap: cubecam.renderTarget.texture});
+            let material = garbageman.addMaterial(new THREE.MeshPhysicalMaterial({envMap: cubeRenderTarget.texture}));
             let mesh = new THREE.Mesh(geometry, material);
             mesh.name = this.id(index);
 
             let inst = this;
-            listener.register('renderer.render', this.id(index), function (renderer) {
+            this.animation.listener.register(EVENT_RENDERER_RENDER, this.id(index), function (renderer) {
                 if (inst.layer.isVisible()) {
                     mesh.visible = false;
 

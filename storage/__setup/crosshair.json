@@ -209,7 +209,7 @@
         "rotation_z": false,
         "rotation_z_random": false,
         "rotation_z_volume": 1,
-        "rotation_offset_mode": "chess45lr",
+        "rotation_offset_mode": "chess90",
         "rotation_offsetx": 0,
         "rotation_offsetx_oscillate": "off",
         "rotation_offsety": 0,

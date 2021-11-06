@@ -2,6 +2,7 @@ node_modules
 bin
 sessions
 samples
+storage/*/\.*
 
 .idea
 .settings

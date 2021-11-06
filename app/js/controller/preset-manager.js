@@ -285,7 +285,7 @@
                 if (suffix) {
                     name += suffix;
                 }
-                this.filesystem.rename(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), name, (result) => {
+                this.filesystem.rename(STORAGE_DIR, ctrl.getParent() ? ctrl.getParent().getLabel() : null, ctrl.getLabel(), name, (result) => {
                     HC.log(result);
                     ctrl.setLabel(name);
                 });

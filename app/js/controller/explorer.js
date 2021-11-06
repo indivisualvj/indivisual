@@ -75,7 +75,7 @@
                         let child = children[k];
 
                         if (child.type == 'folder') {
-                            let folder = parent.addFolder(child.name, false);
+                            let folder = parent.addFolder(child.name, null, false);
                             _insert(child.children, folder);
                             folder.finishLayout(child, this.presetMan);
 
@@ -94,10 +94,13 @@
          *
          */
         reload() {
-            for (let k in this.gui.children) {
-                let child = this.gui.children[k];
-                child.remove();
-            }
+
+            this.gui.removeChildren();
+
+            // for (let k in this.gui.children) {
+            //     let child = this.gui.children[k];
+            //     child.remove();
+            // }
 
             this.load();
         }

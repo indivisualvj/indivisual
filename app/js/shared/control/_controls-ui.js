@@ -119,8 +119,8 @@
 
         /**
          *
-         * @param parent
-         * @returns {guify}
+         * @param shareListener
+         * @returns {HC.GuifyFolder}
          */
         addFolder(shareListener) {
             let key = this.controlSet.className();

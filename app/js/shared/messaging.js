@@ -495,6 +495,7 @@
 
         /**
          *
+         * @param base
          * @param dir
          * @param file
          * @param callback
@@ -512,8 +513,10 @@
 
         /**
          *
+         * @param base
          * @param dir
          * @param file
+         * @param nu
          * @param callback
          */
         rename(base, dir, file, nu, callback) {

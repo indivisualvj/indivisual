@@ -8,6 +8,7 @@ storage/*
 !storage/_tutorials
 !storage/space-oddity
 !storage/ambient
+!storage/wamslerroom-2021
 storage/*/\.*
 
 .idea

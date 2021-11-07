@@ -87,7 +87,7 @@ HC.Layer.prototype.position = function (x, y, z) {
 HC.Layer.prototype.shaders = function (sh) {
 
     if (sh !== undefined) {
-        let composer = this._composer;
+        let composer = this.three.composer;
         composer.passes = [composer.passes[0]];
 
         composer.reset();

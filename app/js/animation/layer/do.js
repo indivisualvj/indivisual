@@ -311,10 +311,10 @@ HC.Layer.prototype.doShaders = function () {
         }
 
         if (last) {
-            this._composer.passes[0].renderToScreen = false;
+            this.three.composer.passes[0].renderToScreen = false;
             last.pass.renderToScreen = true;
         } else {
-            this._composer.passes[0].renderToScreen = true;
+            this.three.composer.passes[0].renderToScreen = true;
         }
     }
 };

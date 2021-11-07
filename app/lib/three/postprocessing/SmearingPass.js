@@ -4,10 +4,10 @@
 
 THREE.SmearingPass = function () {
 
-    var shader = THREE.SmearingShader;
+    let shader = THREE.SmearingShader;
     this.uniforms = THREE.UniformsUtils.clone(shader.uniforms);
 
-    var parameters = {
+    let parameters = {
         minFilter: THREE.LinearFilter,
         magFilter: THREE.LinearFilter,
         format: THREE.RGBAFormat,
@@ -45,7 +45,7 @@ THREE.SmearingPass = function () {
 
 THREE.SmearingPass.prototype = {
 
-    render: function (renderer, writeBuffer, readBuffer, delta) {
+    render: function (renderer, writeBuffer, readBuffer) {
 
         this.uniforms.tCurrent.value = readBuffer.texture;
 
@@ -75,49 +75,37 @@ THREE.SmearingPass.prototype = {
 THREE.SmearingShader = {
 
     uniforms: {
-
         "tLast": {type: "t", value: null},
         "tCurrent": {type: "t", value: null},
         "opacity": {type: "f", value: .8}
-
     },
 
-    vertexShader: [
+    vertexShader: `
+        varying vec2 vUv;
+        void main() {
+            vUv = uv;
+            gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+        }
+    `,
 
-        "varying vec2 vUv;",
+    fragmentShader: `
 
-        "void main() {",
+        uniform float opacity;
+        uniform sampler2D tCurrent;
+        uniform sampler2D tLast;
+        varying vec2 vUv;
 
-        "vUv = uv;",
-        "gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
-
-        "}"
-
-    ].join("\n"),
-
-    fragmentShader: [
-
-        "uniform float opacity;",
-
-        "uniform sampler2D tCurrent;",
-        "uniform sampler2D tLast;",
-
-        "varying vec2 vUv;",
-
-        "void main() {",
-
-        "vec4 nu = texture2D( tCurrent, vUv );",
-        "vec4 old = texture2D( tLast, vUv );",
-        "float sum = nu.r + nu.g + nu.b;",
-        "if (sum > 0.0) {",
-        // "nu /= 2.0;",
-        "gl_FragColor = nu;",
-        "} else {",
-        "gl_FragColor = old * opacity;",
-        "}",
-
-        "}"
-
-    ].join("\n")
+        void main() {
+            vec4 nu = texture2D( tCurrent, vUv );
+            vec4 old = texture2D( tLast, vUv );
+            float sum = nu.r + nu.g + nu.b;
+            if (sum > 0.0) {
+                // nu /= 2.0;
+                gl_FragColor = nu;
+            } else {
+                gl_FragColor = old * opacity;
+            }
+        }
+    `
 
 };

@@ -692,14 +692,47 @@ HC.SourceController = HC.SourceController || {};
             this.controlsNode = this.settingsFolder.getFolderContainer();
 
             let ctrl = this.controller.sourceSettingsGui.findControlByProperty(getSequenceSampleKey(this.index));
+            ctrl.getContainer().removeAttribute('data-mnemonic');
             this.controlsNode.appendChild(ctrl.getContainer());
+
+            ctrl = this.controller.sourceSettingsGui.findControlByProperty(this.sourceManager.getSequenceOverlayKey(this.index));
+            ctrl.getContainer().removeAttribute('data-mnemonic');
+            this.controlsNode.appendChild(ctrl.getContainer());
+
+            ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_passthrough');
+            ctrl.getContainer().removeAttribute('data-mnemonic');
+            this.controlsNode.appendChild(ctrl.getContainer());
+
+            ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_flipa');
+            ctrl.getContainer().removeAttribute('data-mnemonic');
+            this.controlsNode.appendChild(ctrl.getContainer());
+
+            ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_flipx');
+            ctrl.getContainer().removeAttribute('data-mnemonic');
+            this.controlsNode.appendChild(ctrl.getContainer());
+
+            ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_flipy');
+            ctrl.getContainer().removeAttribute('data-mnemonic');
+            this.controlsNode.appendChild(ctrl.getContainer());
+
+            ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_audio');
+            ctrl.getContainer().removeAttribute('data-mnemonic');
+            this.controlsNode.appendChild(ctrl.getContainer());
+
             ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_jump');
+            ctrl.getContainer().removeAttribute('data-mnemonic');
             this.controlsNode.appendChild(ctrl.getContainer());
+
             ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_reversed');
+            ctrl.getContainer().removeAttribute('data-mnemonic');
             this.controlsNode.appendChild(ctrl.getContainer());
+
             ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_speeddown');
+            ctrl.getContainer().removeAttribute('data-mnemonic');
             this.controlsNode.appendChild(ctrl.getContainer());
+
             ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_speedup');
+            ctrl.getContainer().removeAttribute('data-mnemonic');
             this.controlsNode.appendChild(ctrl.getContainer());
 
             let clear = document.createElement('div');
@@ -724,7 +757,6 @@ HC.SourceController = HC.SourceController || {};
             this.setVisible(enabled);
 
             if (data) {
-
                 if (clipEnabled !== enabled || clipSample !== sample) {
                     this.thumbsNode.innerHTML = '';
 
@@ -751,6 +783,8 @@ HC.SourceController = HC.SourceController || {};
                 }
 
             } else {
+                this.updateIndicator(null);
+                this.updatePointer(0);
                 this.thumbsNode.innerHTML = '';
             }
         }
@@ -760,13 +794,7 @@ HC.SourceController = HC.SourceController || {};
          * @param v
          */
         setVisible(v) {
-            // if (v) {
-                // this.clipNode.style.display = '';
-                this._onResize();
-
-            // } else {
-            //     this.clipNode.style.display = 'none';
-            // }
+            this._onResize();
         }
 
         /**
@@ -777,7 +805,7 @@ HC.SourceController = HC.SourceController || {};
             let indicatorNode = this.indicatorNode;
             if (indicatorNode) {
                 let left = 0;
-                let width = 0;
+                let width = .5;
                 let beats = 0;
                 if (data) {
                     let length = data.length;
@@ -954,7 +982,6 @@ HC.SourceController = HC.SourceController || {};
             let currentSequence;
 
             this.node.addEventListener('dragstart', (e) => {
-                console.log('dragstart');
                 let enabledKey = getSampleEnabledKey(this.index);
                 if (!this.config.SourceSettingsManager.get('sample').get(enabledKey)) {
                     e.stopPropagation();
@@ -963,33 +990,38 @@ HC.SourceController = HC.SourceController || {};
                 }
                 e.dataTransfer.setData('text/plain', enabledKey);
                 e.dataTransfer.dropEffect = 'link';
+                e.dataTransfer.effectAllowed = 'link';
 
                 e.dataTransfer.setDragImage(new Image(0, 0), 0, 0);
-                this.node.classList.add('dragging');
                 this.controller.sequenceSettingsGui.setOpen(true);
                 for (let key in this.controller.sequenceSettingsGui.children) {
                     this.controller.sequenceSettingsGui.getChild(key).setOpen(true);
                 }
 
                 sequences.forEach((sequence) => {
-                    sequence.addEventListener('dragover', (e) => {
-                        currentSequence = e.target;
-                        currentSequence.parentNode.style.borderColor = 'red';
-                    });
+                    sequence._dragOver = (e) => {
+                        if ((currentSequence = e.target.ancestorOfClass('sequence'))) {
+                            currentSequence.style.borderColor = 'red';
+                        }
+                    };
+                    sequence.addEventListener('dragover', sequence._dragOver);
                 });
             });
 
             this.node.addEventListener('dragend', (e) => {
-
-                this.node.classList.remove('dragging');
-                if (currentSequence && e.target === currentSequence) {
-                    let seq = parseInt(currentSequence.parentNode.getAttribute('data-sequence'));
+                if (e.dataTransfer.dropEffect === 'link' && currentSequence) {
+                    let seq = parseInt(currentSequence.getAttribute('data-sequence'));
                     if (isNumber(seq)) {
                         let smp = this.index;
                         this.controller.updateSource(getSequenceSampleKey(seq), smp, true, true, false);
                     }
                     currentSequence = null;
                 }
+
+                sequences.forEach((sequence) => {
+                    sequence.style.borderColor = '';
+                    sequence.removeEventListener('dragover', sequence._dragOver);
+                });
             });
         }
 

@@ -680,7 +680,7 @@ HC.Controller.prototype.initThumbs = function () {
 
     this.sequenceSettingsGui.setOpen(true);
 
-    let sequences = document.querySelectorAll('#SequenceSettings .sequence .thumbs');
+    let sequences = document.querySelectorAll('#SequenceSettings .sequence');
     this.thumbs = [];
     for (let seq = 0; seq < this.config.SourceValues.sample.length; seq++) {
         let sample = new HC.SourceControllerSample(this, seq);
@@ -690,11 +690,12 @@ HC.Controller.prototype.initThumbs = function () {
     }
 
     document.body.addEventListener('dragover', (e) => {
-        if (!e.target.classList.contains('thumbs')) {
-
+        if (!e.target.ancestorOfClass('sequence')) {
+            e.dataTransfer.dropEffect = 'none';
+            e.preventDefault();
             sequences.forEach((sequence) => {
-                sequence.parentNode.style.border = '';
-            })
+                sequence.style.border = '';
+            });
         }
         e.preventDefault();
     });

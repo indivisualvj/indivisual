@@ -444,10 +444,6 @@ input:focus, select:focus {
     height: 120%;
 }
 
-#samples .sample.dragging .controls {
-    display: none !important;
-}
-
 #samples .sample .controls .guify-component-container {
     position: relative;
     opacity: 0;

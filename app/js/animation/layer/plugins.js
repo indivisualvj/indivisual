@@ -153,7 +153,7 @@ HC.Layer.prototype.getRotationOffsetModePlugin = function (name) {
  * @returns {*|boolean}
  */
 HC.Layer.prototype.getRotationModePlugin = function (name) {
-    return this.getPlugin('rotation_mode', name || 'default');
+    return this.getPlugin('rotation_mode', name);
 };
 
 /**

@@ -2,7 +2,7 @@
     HC.plugins.coloring_mode.reactivergb = class Plugin extends HC.ColoringModePlugin {
         static name = 'reactive RGB';
 
-        apply(shape, reactive, radial) {
+        apply(shape, reactive, radial, grow) {
             let layer = this.layer;
 
             let color = shape.color;
@@ -29,13 +29,15 @@
             }
 
             let prc;
-            if (radial) {
+            if (radial === true) {
                 let ps = new THREE.Vector2(shape.x(), shape.y());
                 let dv = layer.resolution('half');
                 ps.sub(dv);
 
                 prc = (reactive ? 6 : 3) * (layer.resolution('half').length() - ps.length()) / layer.resolution('half').length();
 
+            } else if (grow === true) {
+                prc = 2 * (shape.index / layer.shapeCount());
             } else {
                 prc = m1 * (1 + gridPosition.y) / matrix.rowCount(layer); // original KEEP!
             }
@@ -58,26 +60,6 @@
         apply(shape) {
             let layer = this.layer;
             layer.getColoringModePlugin('reactivergb').apply(shape, true, true);
-        }
-    }
-}
-{
-    HC.plugins.coloring_mode.floatrgb = class Plugin extends HC.ColoringModePlugin {
-        static name = 'float RGB';
-
-        apply(shape) {
-            let layer = this.layer;
-            layer.getColoringModePlugin('reactivergb').apply(shape, false, false);
-        }
-    }
-}
-{
-    HC.plugins.coloring_mode.floatrgbc = class Plugin extends HC.ColoringModePlugin {
-        static name = 'float RGB center';
-
-        apply(shape) {
-            let layer = this.layer;
-            layer.getColoringModePlugin('reactivergb').apply(shape, false, true);
         }
     }
 }

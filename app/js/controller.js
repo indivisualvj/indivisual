@@ -120,6 +120,11 @@ document.addEventListener('DOMContentLoaded', function () {
         configurationSettingsGui;
 
         /**
+         * @type {HC.Guify}
+         */
+        sequenceSettingsGui;
+
+        /**
          * @type {HC.Monitor}
          */
         monitor;
@@ -169,6 +174,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.controlSettingsGui = new HC.Guify('ControlSettings', true);
             this.displaySettingsGui = new HC.Guify('DisplaySettings');
             this.sourceSettingsGui = new HC.Guify('SourceSettings');
+            this.sequenceSettingsGui = new HC.Guify('SequenceSettings');
             this.animationSettingsGui = new HC.Guify('AnimationSettings');
             // this.configurationSettingsGui = new HC.Guify('ConfigurationSettings');
 

@@ -83,11 +83,6 @@
         three;
 
         /**
-         * @type {THREE.EffectComposer}
-         */
-        _composer;
-
-        /**
          * @type {TWEEN.Group}
          */
         tween;
@@ -116,15 +111,19 @@
             this._layer.name = '_layer' + index;
 
             let three = renderer.three;
+            let camera = new THREE.PerspectiveCamera(50, 1, 0.1, 500000);
+            let composer = new THREE.EffectComposer(three.renderer, three.target);
+            let renderPass = new THREE.RenderPass(three.scene, camera, null);
+            composer.addPass(renderPass);
 
             this.three = {
                 renderer: three.renderer,
                 target: three.target,
                 scene: three.scene,
-                camera: new THREE.PerspectiveCamera(50, 1, 0.1, 500000)
+                camera: camera,
+                renderPass: renderPass,
+                composer: composer,
             };
-            this._composer = new THREE.EffectComposer(this.three.renderer, this.three.target);
-            this._composer.addPass(new THREE.RenderPass(this.three.scene, this.three.camera, null));
 
             this.resetSizes(renderer.resolution);
         }
@@ -204,8 +203,8 @@
 
             this.initBoundaries(resolution);
 
-            if (this._composer) {
-                this._composer.setSize(this.resolution().x, this.resolution().y);
+            if (this.three.composer) {
+                this.three.composer.setSize(this.resolution().x, this.resolution().y);
             }
         }
 

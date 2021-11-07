@@ -44,6 +44,7 @@
         three = {
             renderer: null,
             scene: null,
+            target: undefined,
             perspective0: null,
             perspective1: null,
             perspective2: null
@@ -381,7 +382,7 @@
 
                 if (this.currentLayer.shaders()) {
                     this.currentLayer.doShaders();
-                    this.currentLayer._composer.render();
+                    this.currentLayer.three.composer.render();
 
                 } else {
                     this.three.renderer.render(this.three.scene, this.currentLayer.three.camera, this.three.target);

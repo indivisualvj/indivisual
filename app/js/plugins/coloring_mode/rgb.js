@@ -1,6 +1,6 @@
 {
     HC.plugins.coloring_mode.onergb = class Plugin extends HC.ColoringModePlugin {
-
+        static name = 'one RGB';
         static index = 12;
 
         apply (shape) {
@@ -21,5 +21,33 @@
             copyHsl(this.color, shape.color);
         }
 
+    }
+}
+{
+    HC.plugins.coloring_mode.floatrgb = class Plugin extends HC.ColoringModePlugin {
+        static name = 'float RGB';
+
+        apply(shape) {
+            this.layer.getColoringModePlugin('reactivergb').apply(shape, false, false);
+        }
+    }
+}
+{
+    HC.plugins.coloring_mode.floatrgbc = class Plugin extends HC.ColoringModePlugin {
+        static name = 'float RGB center';
+
+        apply(shape) {
+            this.layer.getColoringModePlugin('reactivergb').apply(shape, false, true);
+        }
+    }
+}
+{
+    HC.plugins.coloring_mode.growrgb = class Plugin extends HC.ColoringModePlugin {
+
+        static name = 'grow RGB';
+
+        apply (shape) {
+            this.layer.getColoringModePlugin('reactivergb').apply(shape, false, false, true);
+        }
     }
 }

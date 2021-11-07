@@ -170,7 +170,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.displaySettingsGui = new HC.Guify('DisplaySettings');
             this.sourceSettingsGui = new HC.Guify('SourceSettings');
             this.animationSettingsGui = new HC.Guify('AnimationSettings');
-            this.configurationSettingsGui = new HC.Guify('ConfigurationSettings');
+            // this.configurationSettingsGui = new HC.Guify('ConfigurationSettings');
 
             this.guis = [
                 this.controlSettingsGui,
@@ -208,7 +208,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.sourceSettingsGui
             );
 
-            this.addConfigurationSettings();
+            // this.addConfigurationSettings();
             this.initStatusBar();
             this.initClips();
             this.initThumbs();

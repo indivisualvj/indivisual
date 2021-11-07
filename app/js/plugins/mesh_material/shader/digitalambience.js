@@ -1,7 +1,7 @@
 // srtuss 2014 / https://www.shadertoy.com/view/MdXXW2
 {
     HC.plugins.mesh_material.digitalambience = class Plugin extends HC.MeshShaderMaterialPlugin {
-
+        static name = 'digital-ambience';
         shader = {
             uniforms: {
                 uTime: {type: 'f', value: 1.0}

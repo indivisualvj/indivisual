@@ -37,8 +37,10 @@
                     color -= col.zyx *(1.0-smoothstep( rad*0.95, rad, dis )) * f;
                 }
 
-
-                gl_FragColor = vec4(color,1.0);
+                float distR = 1.0 - color.r;
+                float distG = 1.0 - color.g;
+                float distB = 1.0 - color.b;
+                gl_FragColor = vec4(color, -.75+(distR+distG+distB));
             }`
             ,
             vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"

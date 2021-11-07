@@ -680,11 +680,26 @@ HC.Controller.prototype.initThumbs = function () {
 
     this.sequenceSettingsGui.setOpen(true);
 
+    let sequences = document.querySelectorAll('#SequenceSettings .sequence .thumbs');
     this.thumbs = [];
     for (let seq = 0; seq < this.config.SourceValues.sample.length; seq++) {
-        this.thumbs.push(new HC.SourceControllerSample(this, seq));
+        let sample = new HC.SourceControllerSample(this, seq);
+        sample.init();
+        sample.initDragAndDrop(sequences);
+        this.thumbs.push(sample);
     }
+
+    document.body.addEventListener('dragover', (e) => {
+        if (!e.target.classList.contains('thumbs')) {
+
+            sequences.forEach((sequence) => {
+                sequence.parentNode.style.border = '';
+            })
+        }
+        e.preventDefault();
+    });
 
     window.dispatchEvent(new Event('resize'));
     this.sequenceSettingsGui.setOpen(false);
 };
+0

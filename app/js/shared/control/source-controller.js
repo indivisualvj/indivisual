@@ -690,8 +690,6 @@ HC.SourceController = HC.SourceController || {};
 
             this.settingsFolder = this.controller.sequenceSettingsGui.addFolder(sequenceKey, sequenceKey, true);
             this.controlsNode = this.settingsFolder.getFolderContainer();
-            // this.controlsNode = document.createElement('div');
-            // this.controlsNode.setAttribute('class', 'controls');
 
             let ctrl = this.controller.sourceSettingsGui.findControlByProperty(getSequenceSampleKey(this.index));
             this.controlsNode.appendChild(ctrl.getContainer());
@@ -709,7 +707,6 @@ HC.SourceController = HC.SourceController || {};
             clear.classList.add('clear');
             this.controlsNode.appendChild(clear);
 
-            // this.clipNode.appendChild(this.controlsNode);
         }
 
         /**
@@ -728,7 +725,7 @@ HC.SourceController = HC.SourceController || {};
 
             if (data) {
 
-                if (clipEnabled != enabled || clipSample != sample) {
+                if (clipEnabled !== enabled || clipSample !== sample) {
                     this.thumbsNode.innerHTML = '';
 
                 } else {
@@ -901,8 +898,6 @@ HC.SourceController = HC.SourceController || {};
             this.controller = controller;
             this.config = controller.config;
             this.index = index;
-
-            this.init();
         }
 
         /**
@@ -936,8 +931,6 @@ HC.SourceController = HC.SourceController || {};
 
             el.appendChild(this.node);
 
-            this.initDragAndDrop();
-
             window.addEventListener('resize', this._onResize);
 
             this._onResize();
@@ -956,62 +949,41 @@ HC.SourceController = HC.SourceController || {};
         /**
          *
          */
-        initDragAndDrop() {
+        initDragAndDrop(sequences) {
 
-            let sequences;
             let currentSequence;
 
-            let _dragover = (e) => {
-
-                if (currentSequence) {
-                    currentSequence.style.borderColor = null;
-                }
-
-                currentSequence = e.target.parentElement;
-                currentSequence.style.borderColor = 'red';
-
-            };
-
-            let _enableSequences = (display) => {
-                if (sequences) {
-                    sequences.forEach((sequence) => {
-                        sequence = sequence.parentNode;
-                        let seq = parseInt(sequence.getAttribute('data-sequence'));
-                        let sequenceInput = this.config.SourceSettingsManager.get('sequence').get(getSequenceSampleKey(seq));
-                        if (sequenceInput && sequenceInput !== 'off') {
-                            display = true;
-                        }
-                        sequence.style.display = display ? 'block' : 'none';
-                        sequence.style.borderColor = null;
-
-                        if (display) {
-                            sequence.addEventListener('dragover', _dragover);
-
-                        } else {
-                            sequence.removeEventListener('dragover', _dragover);
-                        }
-                    });
-                }
-            };
-
             this.node.addEventListener('dragstart', (e) => {
-
+                console.log('dragstart');
                 let enabledKey = getSampleEnabledKey(this.index);
                 if (!this.config.SourceSettingsManager.get('sample').get(enabledKey)) {
                     e.stopPropagation();
+                    e.preventDefault();
                     return false;
                 }
+                e.dataTransfer.setData('text/plain', enabledKey);
+                e.dataTransfer.dropEffect = 'link';
 
-                _enableSequences(false);
-                sequences = document.querySelectorAll('#SequenceSettings .sequence .thumbs');
-                _enableSequences(true);
+                e.dataTransfer.setDragImage(new Image(0, 0), 0, 0);
+                this.node.classList.add('dragging');
+                this.controller.sequenceSettingsGui.setOpen(true);
+                for (let key in this.controller.sequenceSettingsGui.children) {
+                    this.controller.sequenceSettingsGui.getChild(key).setOpen(true);
+                }
+
+                sequences.forEach((sequence) => {
+                    sequence.addEventListener('dragover', (e) => {
+                        currentSequence = e.target;
+                        currentSequence.parentNode.style.borderColor = 'red';
+                    });
+                });
             });
 
             this.node.addEventListener('dragend', (e) => {
-                // _enableSequences(false);
 
-                if (currentSequence) {
-                    let seq = parseInt(currentSequence.getAttribute('data-sequence'));
+                this.node.classList.remove('dragging');
+                if (currentSequence && e.target === currentSequence) {
+                    let seq = parseInt(currentSequence.parentNode.getAttribute('data-sequence'));
                     if (isNumber(seq)) {
                         let smp = this.index;
                         this.controller.updateSource(getSequenceSampleKey(seq), smp, true, true, false);
@@ -1026,7 +998,7 @@ HC.SourceController = HC.SourceController || {};
          * @param data
          */
         update(data) {
-            let enabled = this.controller.sourceManager.getSampleEnabledBySample(this.index) && (data != false);
+            let enabled = this.controller.sourceManager.getSampleEnabledBySample(this.index) && (data !== false);
             if (enabled && data && data.thumbs) {
                 let src = data.thumbs[Math.round(data.thumbs.length / 2)].src;
                 this.node.style.backgroundImage = 'url(' + src + ')';

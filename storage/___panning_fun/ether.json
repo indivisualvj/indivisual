@@ -12,12 +12,12 @@
         "layer_positiony_oscillate": "off",
         "layer_positionz": 0,
         "layer_positionz_oscillate": "off",
-        "layer_rotationx": 0,
-        "layer_rotationx_oscillate": "off",
-        "layer_rotationy": 0,
-        "layer_rotationy_oscillate": "off",
-        "layer_rotationz": 0,
-        "layer_rotationz_oscillate": "off"
+        "layer_rotationx": -180,
+        "layer_rotationx_oscillate": "onoffdouble",
+        "layer_rotationy": 180,
+        "layer_rotationy_oscillate": "onoffdouble",
+        "layer_rotationz": 1,
+        "layer_rotationz_oscillate": "oscillator"
     },
     "audio": {
         "audio_thickness": 0,
@@ -109,11 +109,11 @@
     },
     "pattern": {
         "pattern": "matrix",
-        "pattern_shapes": 1,
-        "pattern_padding": 0,
+        "pattern_shapes": 6,
+        "pattern_padding": 1,
         "pattern_padding_oscillate": "off",
         "pattern_centerx": 0,
-        "pattern_paddingx": 1,
+        "pattern_paddingx": 4.27,
         "pattern_centery": 0,
         "pattern_paddingy": 1,
         "pattern_centerz": 0,
@@ -121,14 +121,14 @@
         "pattern_limit": false,
         "pattern_audio": false,
         "pattern_sync": true,
-        "pattern_mover": "off",
+        "pattern_mover": "pan",
         "pattern_overlay": "off",
         "pattern_overlay_volume": 0,
         "pattern_overlay_volume_oscillate": "off"
     },
     "shape": {
         "shape_geometry": "tile",
-        "shape_sizedivider": 1,
+        "shape_sizedivider": 6,
         "shape_moda": 0,
         "shape_modb": 0,
         "shape_modc": 0,
@@ -144,7 +144,7 @@
         "shape_delay": "off"
     },
     "material": {
-        "mesh_material": "blue_dots",
+        "mesh_material": "ether",
         "material_style": "fill",
         "material_blending": "NormalBlending",
         "material_blendequation": "AddEquation",
@@ -198,7 +198,7 @@
     "rotation": {
         "rotation_mode": "default",
         "rotation_sync": true,
-        "rotation_direction": "random",
+        "rotation_direction": "right",
         "rotation_easing": "off",
         "rotation_x": false,
         "rotation_x_random": false,
@@ -209,10 +209,10 @@
         "rotation_z": false,
         "rotation_z_random": false,
         "rotation_z_volume": 1,
-        "rotation_offset_mode": "off",
+        "rotation_offset_mode": "chess90",
         "rotation_offsetx": 0,
         "rotation_offsetx_oscillate": "off",
-        "rotation_offsety": 0,
+        "rotation_offsety": 2,
         "rotation_offsety_oscillate": "off",
         "rotation_offsetz": 0,
         "rotation_offsetz_oscillate": "off"
@@ -236,7 +236,7 @@
     },
     "sizing": {
         "sizing_mode": "off",
-        "sizing_scale": 1,
+        "sizing_scale": 4.5,
         "sizing_scale_oscillate": "off",
         "sizing_x": 1,
         "sizing_x_oscillate": "off",

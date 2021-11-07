@@ -171,7 +171,7 @@
         "material_needs_update": true
     },
     "coloring": {
-        "coloring_mode": "floatrgb",
+        "coloring_mode": "growrgb",
         "coloring_volume": 1,
         "coloring_volume_oscillate": "off",
         "coloring_hue": 0,

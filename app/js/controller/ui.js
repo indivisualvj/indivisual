@@ -678,8 +678,13 @@ HC.Controller.prototype.initClips = function () {
  */
 HC.Controller.prototype.initThumbs = function () {
 
+    this.sequenceSettingsGui.setOpen(true);
+
     this.thumbs = [];
     for (let seq = 0; seq < this.config.SourceValues.sample.length; seq++) {
         this.thumbs.push(new HC.SourceControllerSample(this, seq));
     }
+
+    window.dispatchEvent(new Event('resize'));
+    this.sequenceSettingsGui.setOpen(false);
 };

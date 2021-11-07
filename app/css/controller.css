@@ -458,11 +458,11 @@ input:focus, select:focus {
     background: rgba(35, 35, 35, 0.5);
 }
 
-#sequences {
+#SequenceSettings {
     user-select: initial;
 }
 
-#sequences .sequence {
+#SequenceSettings .sequence {
     position: relative;
     width: 100%;
     height: 18%;
@@ -470,7 +470,7 @@ input:focus, select:focus {
     box-sizing: border-box;
 }
 
-#sequences .sequence[data-title]:before {
+#SequenceSettings .sequence[data-title]:before {
     content: attr(data-title);
     color: #ffffff;
     background: #232323;
@@ -484,18 +484,18 @@ input:focus, select:focus {
     z-index: 1;
 }
 
-#sequences [data-label]:after {
+#SequenceSettings [data-label]:after {
     background: rgba(35, 35, 35, 0.5);
 }
 
-#sequences .sequence .controls {
+#SequenceSettings .sequence .controls {
     padding: 1% 0% 0% 1%;
 }
-
 
 .thumbs {
     position: relative;
     height: 100%;
+    min-height: 42px;
     white-space: nowrap;
     background: #2e2e2e;
 }

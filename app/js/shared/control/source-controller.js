@@ -600,6 +600,11 @@ HC.SourceController = HC.SourceController || {};
         controlsNode;
 
         /**
+         * @type {HC.GuifyFolder}
+         */
+        settingsFolder;
+
+        /**
          * @type {HTMLElement}
          */
         pointerNode;
@@ -638,8 +643,8 @@ HC.SourceController = HC.SourceController || {};
         }
 
         init() {
-            let el = document.getElementById('sequences');
             let sequenceKey = 'sequence' + this.index;
+
             this.clipNode = document.createElement('div');
             this.clipNode.id = sequenceKey;
             // this.clipNode.setAttribute('data-title', sequenceKey);
@@ -673,31 +678,22 @@ HC.SourceController = HC.SourceController || {};
 
             mo.observe(this.clipNode, {attributes: true});
 
-            el.appendChild(this.clipNode);
+            this.controlsNode.appendChild(this.clipNode);
 
             window.addEventListener('resize', this._onResize());
 
-            this.setVisible(false);
+            this.setVisible(true);
         }
 
         initControls() {
-            this.controlsNode = document.createElement('div');
-            this.controlsNode.setAttribute('class', 'controls');
-
             let sequenceKey = getSequenceKey(this.index);
+
+            this.settingsFolder = this.controller.sequenceSettingsGui.addFolder(sequenceKey, sequenceKey, true);
+            this.controlsNode = this.settingsFolder.getFolderContainer();
+            // this.controlsNode = document.createElement('div');
+            // this.controlsNode.setAttribute('class', 'controls');
+
             let ctrl = this.controller.sourceSettingsGui.findControlByProperty(getSequenceSampleKey(this.index));
-            this.controlsNode.appendChild(ctrl.getContainer());
-            ctrl = this.controller.sourceSettingsGui.findControlByProperty(this.sourceManager.getSequenceOverlayKey(this.index));
-            this.controlsNode.appendChild(ctrl.getContainer());
-            ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_passthrough');
-            this.controlsNode.appendChild(ctrl.getContainer());
-            ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_flipa');
-            this.controlsNode.appendChild(ctrl.getContainer());
-            ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_flipx');
-            this.controlsNode.appendChild(ctrl.getContainer());
-            ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_flipy');
-            this.controlsNode.appendChild(ctrl.getContainer());
-            ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_audio');
             this.controlsNode.appendChild(ctrl.getContainer());
             ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_jump');
             this.controlsNode.appendChild(ctrl.getContainer());
@@ -713,7 +709,7 @@ HC.SourceController = HC.SourceController || {};
             clear.classList.add('clear');
             this.controlsNode.appendChild(clear);
 
-            this.clipNode.appendChild(this.controlsNode);
+            // this.clipNode.appendChild(this.controlsNode);
         }
 
         /**
@@ -767,13 +763,13 @@ HC.SourceController = HC.SourceController || {};
          * @param v
          */
         setVisible(v) {
-            if (v) {
-                this.clipNode.style.display = '';
+            // if (v) {
+                // this.clipNode.style.display = '';
                 this._onResize();
 
-            } else {
-                this.clipNode.style.display = 'none';
-            }
+            // } else {
+            //     this.clipNode.style.display = 'none';
+            // }
         }
 
         /**
@@ -1007,12 +1003,12 @@ HC.SourceController = HC.SourceController || {};
                 }
 
                 _enableSequences(false);
-                sequences = document.querySelectorAll('#sequences > div > [id^="sequence"]');
+                sequences = document.querySelectorAll('#SequenceSettings .sequence .thumbs');
                 _enableSequences(true);
             });
 
             this.node.addEventListener('dragend', (e) => {
-                _enableSequences(false);
+                // _enableSequences(false);
 
                 if (currentSequence) {
                     let seq = parseInt(currentSequence.getAttribute('data-sequence'));

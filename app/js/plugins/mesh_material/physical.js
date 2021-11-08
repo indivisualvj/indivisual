@@ -3,7 +3,7 @@
         static index = 5;
 
         apply(geometry) {
-            let material = garbageman.addMaterial(new THREE.MeshPhysicalMaterial());
+            let material = materialman.addMaterial(new THREE.MeshPhysicalMaterial());
             return new THREE.Mesh(geometry, material);
         }
     }

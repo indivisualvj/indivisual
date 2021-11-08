@@ -3,7 +3,7 @@
  * @param min
  * @param max
  * @param negative
- * @returns {*}
+ * @returns {number}
  */
 function randomInt(min, max, negative) {
     let v = Math.floor(Math.random() * (max - min + 1)) + min;

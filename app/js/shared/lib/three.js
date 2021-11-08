@@ -3,25 +3,35 @@
  * @param obj
  */
 function threeDispose(obj) {
+    let disposable;
     if (!(obj instanceof THREE.Scene) && obj.dispose) {
-        obj.dispose();
+        disposable = obj;
     }
     if (obj.renderTarget) {
-        obj.renderTarget.dispose();
+        disposable = obj.renderTarget;
     }
     if (obj.material) {
-        obj.material.dispose();
+        disposable = obj.material;
 
         let keys = Object.keys(obj.material);
         for(let k in keys) {
             let key = keys[k];
             if (obj.material[key] instanceof THREE.Texture) {
-                console.log('material texture dispose')
-                obj.material[key].dispose();
+                requestAnimationFrame(() => {
+                    // console.log('material texture dispose', obj.material[key].uuid);
+                    obj.material[key].dispose();
+                });
             }
         }
     }
     if (obj.geometry) {
-        obj.geometry.dispose();
+        disposable = obj.geometry;
+    }
+
+    if (disposable) {
+        requestAnimationFrame(() => {
+            // console.log('dispose', disposable.uuid);
+            disposable.dispose();
+        });
     }
 }

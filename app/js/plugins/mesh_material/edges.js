@@ -4,7 +4,7 @@
         // static name = 'line (no transform)';
 
         apply(geometry) {
-            let material = garbageman.addMaterial(new THREE.LineBasicMaterial());
+            let material = materialman.addMaterial(new THREE.LineBasicMaterial());
             let g = new THREE.EdgesGeometry(geometry);
             let mesh = new THREE.LineSegments(g, material);
             g.userData.geometry = geometry;

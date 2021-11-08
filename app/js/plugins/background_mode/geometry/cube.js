@@ -14,7 +14,7 @@
                 res.multiplyScalar(2.5);
                 let geo = new THREE.BoxBufferGeometry(res.x, res.y, res.x);
 
-                let mat = garbageman.addMaterial(new THREE.MeshPhysicalMaterial({
+                let mat = materialman.addMaterial(new THREE.MeshPhysicalMaterial({
                     color: color,
                     side: THREE.DoubleSide
                 }));

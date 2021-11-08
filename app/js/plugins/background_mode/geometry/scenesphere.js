@@ -23,7 +23,7 @@
                 let geo = new THREE.SphereBufferGeometry(res.length() * 2, 16, 16);
                 geo.rotateY(Math.PI / 2);
 
-                this.material = garbageman.addMaterial(new THREE.MeshBasicMaterial({
+                this.material = materialman.addMaterial(new THREE.MeshBasicMaterial({
                     color: color,
                     side: THREE.DoubleSide,
                     map: this.target1.texture,

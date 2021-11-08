@@ -125,7 +125,6 @@
                 this.three.renderer.shadowMap.enabled = true;
                 this.three.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-                /** @type {HTMLCanvasElement} */
                 canvas.id = 'threeWebGL';
                 canvas.style = {width: 1, height: 1};
                 canvas.addEventListener('webglcontextlost', () => {
@@ -193,7 +192,7 @@
             if (this.nextLayer) {
 
                 if (this.currentLayer !== this.nextLayer) { // fixme instead of not switching in between, try to update layer tweens to beatkeeper speeds percenteages
-                    if (!force && this.config.ControlSettings.shuffle_mode != 'off') {
+                    if (!force && this.config.ControlSettings.shuffle_mode !== 'off') {
                         let speed = this.nextLayer.getCurrentSpeed();
                         if (!speed.starting()) {
                             return;
@@ -232,7 +231,7 @@
                 let layer = this.layers[i];
                 let transvisible = layer.settings.layer_transvisible;
 
-                if (i == index || transvisible) {
+                if (i === index || transvisible) {
                     this._layers.add(layer._layer);
 
                 } else {
@@ -265,7 +264,7 @@
         animate() {
             for (let l in this.layers) {
                 let layer = this.layers[l];
-                if (layer == this.currentLayer || layer.settings.layer_transvisible) {
+                if (layer === this.currentLayer || layer.settings.layer_transvisible) {
                     layer.animate();
                 }
             }
@@ -374,7 +373,7 @@
          */
         render() {
 
-            if (this._last != this.animation.now) {
+            if (this._last !== this.animation.now) {
                 this.animation.listener.fireEvent(EVENT_RENDERER_RENDER, this);
 
                 this.three.scene.background = this.currentLayer._layer.background;
@@ -394,12 +393,10 @@
 
         /**
          *
-         * @returns {*}
+         * @returns {string}
          */
         currentColor() {
-            let hc = this.currentLayer.shapeColor(false);
-
-            return hc;
+            return this.currentLayer.shapeColor(false);
         }
     }
 }

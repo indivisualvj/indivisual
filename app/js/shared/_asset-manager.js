@@ -159,7 +159,9 @@
          */
         loadFont(url, callback) {
             new THREE.FontLoader().load(url, function (font) {
-                callback(font);
+                requestAnimationFrame(() => {
+                    callback(font);
+                });
             });
         }
 
@@ -171,12 +173,10 @@
          */
         loadTexture(url, callback, error) {
             new THREE.TextureLoader().load(url, (tex) => {
-                // if (this.textures.length > this.maxTextures) {
-                //     let tex = this.textures.shift();
-                //     threeDispose(tex);
-                // }
                 this.textures.push(tex);
-                callback(tex);
+                requestAnimationFrame(() => {
+                    callback(tex);
+                });
             }, false, error);
         }
 
@@ -210,7 +210,9 @@
                 });
 
                 new THREE.CubeTextureLoader().setPath(filePath(url, '')).load(images, function (tex) {
-                    callback(tex);
+                    requestAnimationFrame(() => {
+                        callback(tex);
+                    });
                 }, false, error);
             });
         }
@@ -241,7 +243,9 @@
                         let _load = function (key) {
 
                             if (!key) {
-                                callback(material);
+                                requestAnimationFrame(() => {
+                                    callback(material);
+                                });
 
                             } else {
                                 let val = json[key];
@@ -293,7 +297,9 @@
                 assetman.loadMaterial(path, function (mat) {
 
                     _assign(target, mat);
-                    callback(target);
+                    requestAnimationFrame(() => {
+                        callback(target);
+                    });
 
                 }, error);
 
@@ -302,7 +308,9 @@
                 assetman.loadTexture(path, function (tex) {
                     let mat = { map: tex };
                     _assign(target, mat);
-                    callback(target);
+                    requestAnimationFrame(() => {
+                        callback(target);
+                    });
 
                 }, error);
             }

@@ -2,13 +2,11 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-
-    let inst;
     /**
      *
-     * @type {HC.GarbageCollector}
+     * @type {HC.MaterialManager}
      */
-    HC.GarbageCollector = class MaterialManager {
+    HC.MaterialManager = class MaterialManager {
         materials = [];
         maxInstances = 10;
 
@@ -16,23 +14,20 @@
          *
          */
         constructor() {
-            inst = this;
         }
 
         addMaterial(material) {
-            // if (this.materials.length >= this.maxInstances) {
-            //     let mat = this.materials.shift();
-            //     threeDispose(mat);
-            // }
-
-            this.materials.push(material);
+            // this.materials.push(material);
 
             return material;
         }
 
         disposeAll() {
             for (let i = 0; i < this.materials.length; i++) {
-                this.materials[i].dispose();
+                requestAnimationFrame(() => {
+                    console.log('dispose loaded material', this.materials[i].uuid);
+                    this.materials[i].dispose();
+                });
                 this.materials[i] = null;
             }
 

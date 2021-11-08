@@ -68,3 +68,5 @@ onmessage = function (ev) {
         self.postMessage({id: ev.data.id, samples: samples}, samples);
     }
 };
+
+console.log(name + ' loaded');

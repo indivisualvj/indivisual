@@ -128,11 +128,23 @@
          */
         updateLight(i, color) {
 
-            let speed = this.beatKeeper.getSpeed(this.config.SourceSettings.lighting_speed);
+            let bs = this.config.SourceSettings.lighting_speed;
+            let speed;
+            if (bs === 'peak') {
+                if (this.audioAnalyser.peak) {
+                    speed = {prc: 0};
+
+                } else {
+                    speed = {prc: 1};
+                }
+            } else {
+                speed = this.beatKeeper.getSpeed(bs);
+            }
+
             let redo = speed.starting();
             let m = this.lighting_type;
 
-            if (redo && i == 0 && this.config.SourceSettings.lighting_type == 'randomall'
+            if (redo && i === 0 && this.config.SourceSettings.lighting_type === 'randomall'
                 && this.shuffleCounter >= this.config.ControlSettings.shuffle_every - 1) {
                 this.shuffleCounter = 0;
 
@@ -158,7 +170,7 @@
                 this.pixel[i].color = color;
 
             } else if (m.match(/^randomblitz/)) {
-                if (redo && this.pixel[i].brightness == 0.0) {
+                if (redo && this.pixel[i].brightness === 0.0) {
                     let on = randomInt(0, this.pixel.length, false) > this.pixel.length / 1.5;
                     this.pixel[i].brightness = on ? 1.0 : 0.0;
 
@@ -169,7 +181,7 @@
                 this.pixel[i].color = color;
 
             } else if (m.match(/^randomoneon/)) {
-                if (redo && i == 0) {
+                if (redo && i === 0) {
                     for (let f = 0; f < this.pixel.length; f++) {
                         this.pixel[f].brightness = 0.0;
                     }
@@ -182,11 +194,11 @@
 
             } else if (m.match(/^strobemodulo/)) {
 
-                if (redo && this.pixel[i].brightness == 0.0) {
-                    if (i == 0) {
+                if (redo && this.pixel[i].brightness === 0.0) {
+                    if (i === 0) {
                         this._strobeModuloOdd = !this._strobeModuloOdd;
                     }
-                    if ((this._strobeModuloOdd && i % 2 == 1) || (!this._strobeModuloOdd && i % 2 == 0)) {
+                    if ((this._strobeModuloOdd && i % 2 === 1) || (!this._strobeModuloOdd && i % 2 === 0)) {
                         this.pixel[i].brightness = 1.0;
                         this.pixel[i].color = color;
                     }
@@ -211,28 +223,28 @@
             if (index > 0) {
                 color = '#ffffff';
 
-            } else if (lc == 'red') {
+            } else if (lc === 'red') {
                 color = '#ff0000';
 
-            } else if (lc == 'green') {
+            } else if (lc === 'green') {
                 color = '#00ff00';
 
-            } else if (lc == 'blue') {
+            } else if (lc === 'blue') {
                 color = '#0000ff';
 
-            } else if (lc == 'cyan') {
+            } else if (lc === 'cyan') {
                 color = 'cyan';
 
-            } else if (lc == 'magenta') {
+            } else if (lc === 'magenta') {
                 color = 'magenta';
 
-            } else if (lc == 'yellow') {
+            } else if (lc === 'yellow') {
                 color = 'yellow';
 
-            } else if (lc == 'complementary') {
+            } else if (lc === 'complementary') {
                 color = hslToHex(hslComplementary(hexToHsl(color)));
 
-            } else if (lc == 'hsl') {
+            } else if (lc === 'hsl') {
                 color = hslToHex({h: 180, s: 100, l: 50}, false);
 
             }

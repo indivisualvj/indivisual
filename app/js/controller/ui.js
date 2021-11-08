@@ -478,10 +478,11 @@ HC.Controller.prototype.updateUi = function (control) {
         this.updateValuesChanged(this.displaySettingsGui);
         this.updateValuesChanged(this.sourceSettingsGui);
         this.updateValuesChanged(this.animationSettingsGui);
+        this.updateValuesChanged(this.sequenceSettingsGui);
         return;
     }
 
-    if (control == this.animationSettingsGui) {
+    if (control === this.animationSettingsGui) {
         this.updateUiPasses();
     }
 
@@ -558,6 +559,7 @@ HC.Controller.prototype.updateValuesChanged = function (folder) {
         this.updateValuesChanged(this.displaySettingsGui);
         this.updateValuesChanged(this.sourceSettingsGui);
         this.updateValuesChanged(this.animationSettingsGui);
+        this.updateValuesChanged(this.sequenceSettingsGui);
         return;
     }
 

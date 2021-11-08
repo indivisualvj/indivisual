@@ -19,6 +19,11 @@
         config;
 
         /**
+         * @type boolean
+         */
+        ready = false;
+
+        /**
          * @type {HC.Renderer}
          */
         renderer;
@@ -193,6 +198,7 @@
             this.resetBackground();
             this.updateShaders();
             this.updateShaderPasses();
+
         }
 
         /**
@@ -212,7 +218,6 @@
          *
          */
         resetShapes() {
-
             this.resetPlugins();
             this.initRotator();
             this.resetAnimation();
@@ -242,7 +247,6 @@
          *
          */
         dispose() {
-
             let sc = this.three.scene;
             this.settings = false;
             this.controlSets = false;
@@ -289,7 +293,7 @@
 
         /**
          *
-         * @returns {*}
+         * @returns {null|Array}
          */
         updateShaders() {
             let shaders = null;
@@ -311,7 +315,7 @@
                         while (shaders.length < sh.index) {
                             shaders.push(false);
                         }
-                        if (li == 0 && sh.index == 0) { // append
+                        if (li === 0 && sh.index === 0) { // append
                             shaders.push(plugin);
 
                         } else { // insert
@@ -339,7 +343,7 @@
 
         /**
          *
-         * @returns {*}
+         * @returns {null|Array}
          */
         updateShaderPasses() {
             let shaders = null;

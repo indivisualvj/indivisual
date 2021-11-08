@@ -26,6 +26,7 @@
         /**
          *
          * @param nu
+         * @param key
          * @returns {*}
          */
         addImages(nu, key) {
@@ -57,6 +58,7 @@
         /**
          *
          * @param nu
+         * @param key
          * @returns {*}
          */
         addCubes(nu, key) {
@@ -173,8 +175,8 @@
          */
         loadTexture(url, callback, error) {
             new THREE.TextureLoader().load(url, (tex) => {
-                this.textures.push(tex);
                 requestAnimationFrame(() => {
+                    this.textures.push(tex);
                     callback(tex);
                 });
             }, false, error);
@@ -255,7 +257,7 @@
                                         tex.name = val;
                                         _load(keys[i++]);
 
-                                    }, function (err) {
+                                    }, function () {
                                         material[key] = undefined;
                                         _load(keys[i++]);
                                     });
@@ -291,13 +293,11 @@
                 }
             };
 
-
             // complex
             if (path.match(/.+\.mat$/i)) {
                 assetman.loadMaterial(path, function (mat) {
-
-                    _assign(target, mat);
                     requestAnimationFrame(() => {
+                        _assign(target, mat);
                         callback(target);
                     });
 
@@ -307,8 +307,8 @@
             } else {
                 assetman.loadTexture(path, function (tex) {
                     let mat = { map: tex };
-                    _assign(target, mat);
                     requestAnimationFrame(() => {
+                        _assign(target, mat);
                         callback(target);
                     });
 
@@ -318,8 +318,10 @@
 
         disposeAllTextures() {
             for (let i = 0; i < this.textures.length; i++) {
-                this.textures[i].dispose();
-                this.textures[i] = null;
+                requestAnimationFrame(() => {
+                    this.textures[i].dispose();
+                    this.textures[i] = null;
+                });
             }
 
             this.textures = [];

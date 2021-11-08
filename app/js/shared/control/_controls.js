@@ -184,7 +184,7 @@ HC.controls = HC.controls || {};
                         return false;
                     }
 
-                } else if (set !== prop) {
+                } else if (set != prop) { // yeah but keep it alone! !== does not work ;)
                     // console.log('no default', set, prop);
                     return false;
                 }

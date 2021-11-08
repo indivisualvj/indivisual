@@ -5,7 +5,7 @@
         "tutorial": "[object Object]"
     },
     "layer": {
-        "layer_transvisible": false,
+        "layer_transvisible": true,
         "layer_positionx": 0,
         "layer_positionx_oscillate": "off",
         "layer_positiony": 0,
@@ -109,8 +109,8 @@
     },
     "pattern": {
         "pattern": "matrix",
-        "pattern_shapes": 1,
-        "pattern_padding": 1,
+        "pattern_shapes": 12,
+        "pattern_padding": 0,
         "pattern_padding_oscillate": "off",
         "pattern_centerx": 0,
         "pattern_paddingx": 1,
@@ -127,11 +127,11 @@
         "pattern_overlay_volume_oscillate": "off"
     },
     "shape": {
-        "shape_geometry": "ring",
+        "shape_geometry": "polygon",
         "shape_sizedivider": 1,
         "shape_moda": 32,
         "shape_modb": 0,
-        "shape_modc": 6,
+        "shape_modc": 0,
         "shape_limit": false,
         "shape_sync": true,
         "shape_vertices": "",
@@ -144,19 +144,19 @@
         "shape_delay": "off"
     },
     "material": {
-        "mesh_material": "lambert",
+        "mesh_material": "edges",
         "material_style": "fill",
-        "material_blending": "NormalBlending",
+        "material_blending": "NoBlending",
         "material_blendequation": "AddEquation",
         "material_blendsrc": "SrcAlphaFactor",
         "material_blenddst": "OneMinusSrcAlphaFactor",
-        "material_side": 2,
+        "material_side": 0,
         "material_shininess": 2,
-        "material_volume": 1,
+        "material_volume": 5,
         "material_roughness": 0.5,
         "material_metalness": 0.5,
         "material_softshading": false,
-        "material_shadowside": 2,
+        "material_shadowside": 1,
         "material_input": "texture",
         "material_mapping": "default",
         "material_wraps": "ClampToEdgeWrapping",
@@ -235,8 +235,8 @@
         "locking_shapez_multiplier": 1
     },
     "sizing": {
-        "sizing_mode": "off",
-        "sizing_scale": 1,
+        "sizing_mode": "grow",
+        "sizing_scale": 3.5,
         "sizing_scale_oscillate": "off",
         "sizing_x": 1,
         "sizing_x_oscillate": "off",

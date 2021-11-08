@@ -109,7 +109,7 @@
         fullReset(keepSettings) {
             this.listener.removeEvent(EVENT_RENDERER_RENDER);
             this.resize();
-            this.initLayers(keepSettings);
+            this.initLayers(keepSettings, true);
             this.setLayer(0);
         }
 
@@ -144,7 +144,12 @@
             }
         }
 
-        initLayers(keepsettings) {
+        /**
+         *
+         * @param keepsettings
+         * @param slow
+         */
+        initLayers(keepsettings, slow) {
 
             if (this._layers) {
                 this.three.scene.remove(this._layers);
@@ -155,6 +160,9 @@
 
             for (let i = 0; i < this.layers.length; i++) {
                 let oldControlSets = false;
+                /**
+                 * @type {HC.Layer}
+                 */
                 let ol = this.layers[i];
 
                 if (ol) {
@@ -175,7 +183,7 @@
 
                 this.layers[i] = layer;
 
-                this.resetLayer(layer);
+                this.resetLayer(layer, slow);
             }
 
             this.currentLayer = this.layers[this.config.ControlSettings.layer];
@@ -274,7 +282,6 @@
          *
          * @param layer
          */
-
         resetLayer(layer) {
 
             if (isNumber(layer) || isString(layer)) {

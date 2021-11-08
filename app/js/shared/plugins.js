@@ -19,12 +19,14 @@ HC.Shape.prototype.initPlugins = function () {
         for (let p = 0; p < plugins.length; p++) {
             let key = plugins[p];
             let plugin = HC.Shape.prototype.injected.plugins[key];
-            let clone = JSON.parse(JSON.stringify(plugin));
-            HC.Shape.prototype._plugins[key] = clone;
+            HC.Shape.prototype._plugins[key] = clone(plugin);
+            // HC.Shape.prototype._plugins[key] = Object.assign({}, plugin);
+            // HC.Shape.prototype._plugins[key] = JSON.copy(plugin);
         }
     }
-
-    this.plugins = JSON.parse(JSON.stringify(HC.Shape.prototype._plugins));
+    this.plugins = clone(HC.Shape.prototype._plugins);
+    // this.plugins = Object.assign({}, HC.Shape.prototype._plugins);
+    // this.plugins = JSON.copy(HC.Shape.prototype._plugins);
 };
 {
     /**

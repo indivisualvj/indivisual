@@ -101,7 +101,7 @@
         update() {
 
             this.canvas.style.clipPath = '';
-            this.canvas.width = this.canvas.width;
+            // this.canvas.width = this.canvas.width;
 
             // bounds
             let x1 = this.canvas.width;

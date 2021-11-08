@@ -644,6 +644,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else if (item === 'reset') {
                 if (value && force) {
                     this.settingsManager.reset(splitToIntArray(this.config.ControlSettings.shuffleable));
+                    this.refreshLayerInfo();
                 }
             }
 
@@ -668,7 +669,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.updateUi(this.controlSettingsGui);
             }
 
-            if (item == 'session' && value != _HASH) {
+            if (item === 'session' && value !== _HASH) {
                 document.location.hash = value;
                 document.location.reload();
             }

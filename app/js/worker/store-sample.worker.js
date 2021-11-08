@@ -1,4 +1,4 @@
-let name = 'store-worker';
+let name = 'store-sample-worker';
 
 importScripts('../worker/socket.io-connect.js');
 

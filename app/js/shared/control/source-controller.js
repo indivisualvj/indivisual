@@ -187,7 +187,7 @@ HC.SourceController = HC.SourceController || {};
      *
      * @type {HC.SourceController.sequence0}
      */
-    HC.SourceController.sequence0 = class sequence extends HC.ControlSet {
+    HC.SourceController.sequence0 = class sequence extends HC.ControlSet { // fixme could be iterable but overwritten to create resets?
         static index = 20;
         prefix = 0;
         settings = {
@@ -220,8 +220,8 @@ HC.SourceController = HC.SourceController || {};
         styles = {
             sequence0_speed: ['half'],
             sequence0_osci: ['half', 'clear'],
-            sequence0_reset: ['eight'],
-            sequence0_rereset: ['eight'],
+            sequence0_reset: ['hex'],
+            sequence0_rereset: ['third'],
             sequence0_jump: ['hex'],
             sequence0_audio: ['hex'],
             sequence0_reversed: ['hex'],
@@ -230,7 +230,7 @@ HC.SourceController = HC.SourceController || {};
             sequence0_flipx: ['hex'],
             sequence0_flipy: ['hex'],
             sequence0_flipa: ['hex'],
-            sequence0_passthrough: ['third'],
+            sequence0_passthrough: ['hex'],
             sequence0_input: ['half', 'clear'],
             sequence0_overlay: ['half'],
             sequence0_blendmode: ['half'],
@@ -353,8 +353,8 @@ HC.SourceController = HC.SourceController || {};
         styles = {
             sequence1_speed: ['half'],
             sequence1_osci: ['half', 'clear'],
-            sequence1_reset: ['quarter'],
-            sequence1_rereset: ['quarter'],
+            sequence1_reset: ['hex'],
+            sequence1_rereset: ['third'],
             sequence1_jump: ['hex'],
             sequence1_audio: ['hex'],
             sequence1_reversed: ['hex'],
@@ -363,7 +363,7 @@ HC.SourceController = HC.SourceController || {};
             sequence1_flipx: ['hex'],
             sequence1_flipy: ['hex'],
             sequence1_flipa: ['hex'],
-            sequence1_passthrough: ['third'],
+            sequence1_passthrough: ['hex'],
             sequence1_input: ['half', 'clear'],
             sequence1_overlay: ['half'],
             sequence1_blendmode: ['half'],
@@ -487,8 +487,8 @@ HC.SourceController = HC.SourceController || {};
         styles = {
             sequence2_speed: ['half'],
             sequence2_osci: ['half', 'clear'],
-            sequence2_reset: ['quarter'],
-            sequence2_rereset: ['quarter'],
+            sequence2_reset: ['hex'],
+            sequence2_rereset: ['third'],
             sequence2_jump: ['hex'],
             sequence2_audio: ['hex'],
             sequence2_reversed: ['hex'],
@@ -497,7 +497,7 @@ HC.SourceController = HC.SourceController || {};
             sequence2_flipx: ['hex'],
             sequence2_flipy: ['hex'],
             sequence2_flipa: ['hex'],
-            sequence2_passthrough: ['third'],
+            sequence2_passthrough: ['hex'],
             sequence2_input: ['half', 'clear'],
             sequence2_overlay: ['half'],
             sequence2_blendmode: ['half'],
@@ -620,8 +620,8 @@ HC.SourceController = HC.SourceController || {};
         styles = {
             sequence3_speed: ['half'],
             sequence3_osci: ['half', 'clear'],
-            sequence3_reset: ['quarter'],
-            sequence3_rereset: ['quarter'],
+            sequence3_reset: ['hex'],
+            sequence3_rereset: ['third'],
             sequence3_jump: ['hex'],
             sequence3_audio: ['hex'],
             sequence3_reversed: ['hex'],
@@ -630,7 +630,7 @@ HC.SourceController = HC.SourceController || {};
             sequence3_flipx: ['hex'],
             sequence3_flipy: ['hex'],
             sequence3_flipa: ['hex'],
-            sequence3_passthrough: ['third'],
+            sequence3_passthrough: ['hex'],
             sequence3_input: ['half', 'clear'],
             sequence3_overlay: ['half'],
             sequence3_blendmode: ['half'],
@@ -753,8 +753,8 @@ HC.SourceController = HC.SourceController || {};
         styles = {
             sequence4_speed: ['half'],
             sequence4_osci: ['half', 'clear'],
-            sequence4_reset: ['quarter'],
-            sequence4_rereset: ['quarter'],
+            sequence4_reset: ['hex'],
+            sequence4_rereset: ['third'],
             sequence4_jump: ['hex'],
             sequence4_audio: ['hex'],
             sequence4_reversed: ['hex'],
@@ -763,7 +763,7 @@ HC.SourceController = HC.SourceController || {};
             sequence4_flipx: ['hex'],
             sequence4_flipy: ['hex'],
             sequence4_flipa: ['hex'],
-            sequence4_passthrough: ['third'],
+            sequence4_passthrough: ['hex'],
             sequence4_input: ['half', 'clear'],
             sequence4_overlay: ['half'],
             sequence4_blendmode: ['half'],

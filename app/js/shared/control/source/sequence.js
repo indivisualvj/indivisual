@@ -121,52 +121,8 @@
         initControls() {
             let sequenceKey = getSequenceKey(this.index);
 
-            this.settingsFolder = this.controller.sequenceSettingsGui.addFolder(sequenceKey, sequenceKey, true);
+            this.settingsFolder = this.controller.sequenceSettingsGui.getChild(sequenceKey);
             this.controlsNode = this.settingsFolder.getFolderContainer();
-
-            // let ctrl = this.controller.sourceSettingsGui.findControlByProperty(getSequenceSampleKey(this.index));
-            // ctrl.getContainer().removeAttribute('data-mnemonic');
-            // this.controlsNode.appendChild(ctrl.getContainer());
-            //
-            // ctrl = this.controller.sourceSettingsGui.findControlByProperty(this.sourceManager.getSequenceOverlayKey(this.index));
-            // ctrl.getContainer().removeAttribute('data-mnemonic');
-            // this.controlsNode.appendChild(ctrl.getContainer());
-            //
-            // ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_passthrough');
-            // ctrl.getContainer().removeAttribute('data-mnemonic');
-            // this.controlsNode.appendChild(ctrl.getContainer());
-            //
-            // ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_flipa');
-            // ctrl.getContainer().removeAttribute('data-mnemonic');
-            // this.controlsNode.appendChild(ctrl.getContainer());
-            //
-            // ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_flipx');
-            // ctrl.getContainer().removeAttribute('data-mnemonic');
-            // this.controlsNode.appendChild(ctrl.getContainer());
-            //
-            // ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_flipy');
-            // ctrl.getContainer().removeAttribute('data-mnemonic');
-            // this.controlsNode.appendChild(ctrl.getContainer());
-            //
-            // ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_audio');
-            // ctrl.getContainer().removeAttribute('data-mnemonic');
-            // this.controlsNode.appendChild(ctrl.getContainer());
-            //
-            // ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_jump');
-            // ctrl.getContainer().removeAttribute('data-mnemonic');
-            // this.controlsNode.appendChild(ctrl.getContainer());
-            //
-            // ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_reversed');
-            // ctrl.getContainer().removeAttribute('data-mnemonic');
-            // this.controlsNode.appendChild(ctrl.getContainer());
-            //
-            // ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_speeddown');
-            // ctrl.getContainer().removeAttribute('data-mnemonic');
-            // this.controlsNode.appendChild(ctrl.getContainer());
-            //
-            // ctrl = this.controller.sourceSettingsGui.findControlByProperty(sequenceKey + '_speedup');
-            // ctrl.getContainer().removeAttribute('data-mnemonic');
-            // this.controlsNode.appendChild(ctrl.getContainer());
 
             let clear = document.createElement('div');
             clear.classList.add('guify-component-container');

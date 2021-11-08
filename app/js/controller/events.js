@@ -145,6 +145,7 @@ HC.Controller.prototype.initKeyboard = function () {
     setMnemonics(this.displaySettingsGui);
     setMnemonics(this.sourceSettingsGui);
     setMnemonics(this.animationSettingsGui);
+    setMnemonics(this.sequenceSettingsGui);
 
     window.addEventListener('keyup', (e) => {
         this.config.ctrlKey = e.ctrlKey;
@@ -166,7 +167,7 @@ HC.Controller.prototype.initKeyboard = function () {
             return;
         }
 
-        if (e.keyCode == 8) { // BACKSPACE = close folders
+        if (e.key === 'Backspace') { // = close folders
             let open = this.nextOpenFolder();
             if (!(open instanceof HC.Guify)) {
                 this.closeAll(open);

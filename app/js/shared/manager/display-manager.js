@@ -247,7 +247,7 @@
                     this._addDisplay(i);
 
                     if (IS_SETUP) {
-                        if (i == 0) {
+                        if (i === 0) {
                             if (this.shapetastic) {
                                 this.shapetastic.destroy();
                             }
@@ -378,7 +378,7 @@
                 let lw = this.config.DisplaySettings.border * 1;
                 let color = this.config.DisplaySettings.border_color;
 
-                if (color == '') {
+                if (color === '') {
                     let canvas = display.getSource() ? display.getSource().current() : false;
                     color = (canvas && canvas._color) ? canvas._color : this.renderer.currentLayer.shapeColor(false);
                 }
@@ -390,8 +390,6 @@
 
         /**
          *
-         * @param width
-         * @param height
          * @param resolution
          */
         resize(resolution) {
@@ -568,20 +566,20 @@
 
                 case 'randomoneon':
                     if ((speed === false && this.audioAnalyser.peak) || speed === 0) {
-                        if (index == 0) {
+                        if (index === 0) {
                             this.settings.visibility.index = randomInt(0, this.displayMap.length - 1);
                         }
                     }
-                    redo = this.settings.visibility.index == index ? 1 : 0;
+                    redo = this.settings.visibility.index === index ? 1 : 0;
                     break;
 
                 case 'randomoneoff':
                     if ((speed === false && this.audioAnalyser.peak) || speed === 0) {
-                        if (index == 0) {
+                        if (index === 0) {
                             this.settings.visibility.index = randomInt(0, this.displayMap.length - 1);
                         }
                     }
-                    redo = this.settings.visibility.index == index ? 0 : 1;
+                    redo = this.settings.visibility.index === index ? 0 : 1;
                     break;
 
                 case 'randomflash':
@@ -610,7 +608,6 @@
                     } else {
                         redo = -2;
                     }
-                    break;
                     break;
 
                 case 'stackf': //stack forward
@@ -646,7 +643,7 @@
                 case 'stackoof': // stack one off forward
                     this.visibilityStack(index, 1, speed);
                     var i = this.settings.visibility.index;
-                    if (index == i) {
+                    if (index === i) {
                         redo = 0;
                     } else {
                         redo = 1;
@@ -656,7 +653,7 @@
                 case 'stackoor': // stack one off reversed
                     this.visibilityStack(index, -1, speed);
                     var i = this.settings.visibility.index;
-                    if (index == i) {
+                    if (index === i) {
                         redo = 0;
                     } else {
                         redo = 1;
@@ -686,7 +683,7 @@
         visibilitySpeed() {
             let speed = false;
             let ds = this.config.DisplaySettings.display_speed;
-            if (ds == 'midi') {
+            if (ds === 'midi') {
                 if (this.config.DisplaySettings.trigger_display_visibility
                     || this.config.DisplaySettings.force_display_visibility
                 ) {
@@ -696,8 +693,17 @@
                     speed = {prc: 1};
                 }
 
-            } else if (ds == 'layer') {
+            } else if (ds === 'layer') {
                 if (this.renderer.layerSwitched) {
+                    speed = {prc: 0};
+                    this.config.DisplaySettings.force_display_visibility = true;
+
+                } else {
+                    speed = {prc: 1};
+                }
+
+            } else if (ds === 'peak') {
+                if (this.audioAnalyser.peak) {
                     speed = {prc: 0};
                     this.config.DisplaySettings.force_display_visibility = true;
 
@@ -722,7 +728,18 @@
          * @returns {boolean}
          */
         borderSpeed() {
-            let speed = this.beatKeeper.getSpeed(this.config.DisplaySettings.border_speed);
+            let bs = this.config.DisplaySettings.border_speed;
+            let speed;
+            if (bs === 'peak') {
+                if (this.audioAnalyser.peak) {
+                    speed = {prc: 0};
+
+                } else {
+                    speed = {prc: 1};
+                }
+            } else {
+                speed = this.beatKeeper.getSpeed(bs);
+            }
             return speed;
         }
 
@@ -734,7 +751,7 @@
          */
         visibilityStack(index, dir, speed) {
 
-            if (index == 0 && ((speed === false && this.audioAnalyser.peak) || speed === 0)) {
+            if (index === 0 && ((speed === false && this.audioAnalyser.peak) || speed === 0)) {
 
                 let i = this.settings.visibility.index;
 

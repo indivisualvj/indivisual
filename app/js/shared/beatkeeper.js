@@ -349,7 +349,7 @@
         }
 
         starting() {
-            return this.prc == 0;
+            return this.prc === 0;
         }
     }
 }

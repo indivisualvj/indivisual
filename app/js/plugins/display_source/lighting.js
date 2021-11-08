@@ -98,9 +98,8 @@
 
                 this.canvas.ctx.clearRect(0, 0, 4 * this.pixel.length * this.scale, 1 * this.scale);
 
-                let speed = this.beatKeeper.getSpeed(this.config.SourceSettings.lighting_speed);
-                let redo = speed.starting();
-                if (redo) {
+                let speed = this.lightingSpeed();
+                if (speed.prc === 0) {
                     this.shuffleCounter++;
                 }
 
@@ -121,13 +120,7 @@
             return this.canvas;
         }
 
-        /**
-         *
-         * @param i
-         * @param color
-         */
-        updateLight(i, color) {
-
+        lightingSpeed() {
             let bs = this.config.SourceSettings.lighting_speed;
             let speed;
             if (bs === 'peak') {
@@ -141,7 +134,17 @@
                 speed = this.beatKeeper.getSpeed(bs);
             }
 
-            let redo = speed.starting();
+            return speed;
+        }
+
+        /**
+         *
+         * @param i
+         * @param color
+         */
+        updateLight(i, color) {
+            let speed = this.lightingSpeed();
+            let redo = speed.prc === 0;
             let m = this.lighting_type;
 
             if (redo && i === 0 && this.config.SourceSettings.lighting_type === 'randomall'
@@ -153,7 +156,7 @@
                 this.lighting_type = k[c];
             }
 
-            if (m.match(redo && /^all/)) {
+            if (redo && m.match(/^all/)) {
                 this.pixel[i].brightness = 1.0;
                 this.pixel[i].color = color;
 

@@ -118,8 +118,7 @@ HC.Statics = HC.Statics || {};
                     // create MIDI_ constants
                     let constants = settings.Default.constants;
                     for (let c in constants) {
-                        let co = constants[c];
-                        window[c] = co;
+                        window[c] = constants[c];
                     }
 
                     this.MidiController = settings;
@@ -173,8 +172,7 @@ HC.Statics = HC.Statics || {};
                     let cubes = assetman.addCubes(files, 'name');
                     // add cubes into AnimationValues by name
                     for (let i in cubes) {
-                        let name = i + '.cube';
-                        this.AnimationValues.background_input[i] = name;
+                        this.AnimationValues.background_input[i] = name = i + '.cube';
                     }
 
                     finished();
@@ -243,15 +241,12 @@ HC.Statics = HC.Statics || {};
             this.SourceTypes = this.SourceSettingsManager.typesProxy();
             this.SourceValues = this.SourceSettingsManager.valuesProxy(this.SourceValues);
 
-            let sequenceSets = this.initSequenceControlSets();
-            
             this.DataSettings = {};
             
             return {
                 controlSets: controlSets,
                 displaySets: displaySets,
                 sourceSets: sourceSets,
-                sequenceSets: sequenceSets,
             };
         }
 
@@ -291,18 +286,12 @@ HC.Statics = HC.Statics || {};
         /**
          *
          */
-        initSequenceControlSets() {
-            return this._initControlSets(HC.SequenceController, this.SourceValues);
-        }
-
-        /**
-         *
-         */
         _initControlSets(tree, values) {
             let instances = {};
 
             for (let cs in tree) {
                 let set = tree[cs];
+                /*** @type {HC.ControlSet} */
                 let inst = new set(cs, this);
                 inst.init(values);
                 instances[cs] = inst;
@@ -361,7 +350,7 @@ HC.Statics = HC.Statics || {};
                 let plugin = HC.controls[key];
                 let name = plugin._name || key;
 
-                if (name == 'ControlSet') {
+                if (name === 'ControlSet') {
                     name = key;
                 }
 
@@ -464,7 +453,8 @@ HC.Statics = HC.Statics || {};
         /**
          *
          * @param plugins
-         * @returns {function(...[*]=)}
+         * @param className
+         * @returns {(function(*, *): (*))|*}
          * @private
          */
         _sort (plugins, className) {
@@ -482,7 +472,7 @@ HC.Statics = HC.Statics || {};
                 }
 
                 let cmpi = ai - bi;
-                if (cmpi == 0) {
+                if (cmpi === 0) {
                     return an.localeCompare(bn);
                 }
                 return cmpi;

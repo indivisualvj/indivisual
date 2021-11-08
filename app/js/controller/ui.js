@@ -1,6 +1,6 @@
 /**
  *
- * @param actions
+ * @param controlSets
  */
 HC.Controller.prototype.addAnimationControllers = function (controlSets) {
 
@@ -424,6 +424,7 @@ HC.Controller.prototype.closeAll = function (control) {
 /**
  *
  * @param ci
+ * @param char
  * @param shiftKey
  */
 HC.Controller.prototype.toggleByKey = function (ci, char, shiftKey) {

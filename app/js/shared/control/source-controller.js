@@ -201,12 +201,13 @@ HC.SourceController = HC.SourceController || {};
             sequence0_end: 0,
             sequence0_jump: false,
             sequence0_audio: false,
-            sequence0_reversed: false,
-            sequence0_speedup: false,
-            sequence0_speeddown: false,
             sequence0_flipx: false,
             sequence0_flipy: false,
             sequence0_flipa: false,
+            sequence0_reversed: false,
+            sequence0_speedup: false,
+            sequence0_speeddown: false,
+
             sequence0_passthrough: false,
         };
 
@@ -215,22 +216,24 @@ HC.SourceController = HC.SourceController || {};
             sequence0_speed: [-2, 2, 0.1],
             sequence0_start: [0, 100, 1, 'hidden'],
             sequence0_end: [0, 100, 1, 'hidden'],
+            sequence0_X: ['hidden'],
+            sequence0_XX: ['hidden'],
         };
 
         styles = {
             sequence0_speed: ['half'],
             sequence0_osci: ['half', 'clear'],
-            sequence0_reset: ['hex'],
-            sequence0_rereset: ['third'],
-            sequence0_jump: ['hex'],
-            sequence0_audio: ['hex'],
-            sequence0_reversed: ['hex'],
-            sequence0_speedup: ['hex'],
-            sequence0_speeddown: ['hex'],
-            sequence0_flipx: ['hex'],
-            sequence0_flipy: ['hex'],
-            sequence0_flipa: ['hex'],
-            sequence0_passthrough: ['hex'],
+            sequence0_X: ['half'],
+            sequence0_XX: ['half'],
+            sequence0_jump: ['quint'],
+            sequence0_audio: ['quint'],
+            sequence0_reversed: ['quarter'],
+            sequence0_speedup: ['quarter'],
+            sequence0_speeddown: ['quarter'],
+            sequence0_flipx: ['quint'],
+            sequence0_flipy: ['quint'],
+            sequence0_flipa: ['quint'],
+            sequence0_passthrough: ['quarter'],
             sequence0_input: ['half', 'clear'],
             sequence0_overlay: ['half'],
             sequence0_blendmode: ['half'],
@@ -270,7 +273,7 @@ HC.SourceController = HC.SourceController || {};
         createResets(pluggedValues)  {
             let _reset = (seq) => {
                 let key = getSequenceKey(seq);
-                this.settings[key + '_reset'] = () => {
+                this.settings[key +  '_X'] = () => {
                     let updates = {};
                     updates[key + '_jump'] = false;
                     updates[key + '_audio'] = false;
@@ -297,7 +300,7 @@ HC.SourceController = HC.SourceController || {};
 
             let _rereset = (seq) => {
                 let key = getSequenceKey(seq);
-                this.settings[key + '_rereset'] = () => {
+                this.settings[key +  '_XX'] = () => {
                     let updates = {};
                     updates[key + '_overlay'] = this.settings[key + '_overlay'];
                     updates[key + '_input'] = this.settings[key + '_input'];
@@ -334,12 +337,12 @@ HC.SourceController = HC.SourceController || {};
             sequence1_end: 0,
             sequence1_jump: false,
             sequence1_audio: false,
-            sequence1_reversed: false,
-            sequence1_speedup: false,
-            sequence1_speeddown: false,
             sequence1_flipx: false,
             sequence1_flipy: false,
             sequence1_flipa: false,
+            sequence1_reversed: false,
+            sequence1_speedup: false,
+            sequence1_speeddown: false,
             sequence1_passthrough: false,
         };
 
@@ -348,22 +351,24 @@ HC.SourceController = HC.SourceController || {};
             sequence1_speed: [-2, 2, 0.1],
             sequence1_start: [0, 100, 1, 'hidden'],
             sequence1_end: [0, 100, 1, 'hidden'],
+            sequence1_X: ['hidden'],
+            sequence1_XX: ['hidden'],
         };
 
         styles = {
             sequence1_speed: ['half'],
             sequence1_osci: ['half', 'clear'],
-            sequence1_reset: ['hex'],
-            sequence1_rereset: ['third'],
-            sequence1_jump: ['hex'],
-            sequence1_audio: ['hex'],
-            sequence1_reversed: ['hex'],
-            sequence1_speedup: ['hex'],
-            sequence1_speeddown: ['hex'],
-            sequence1_flipx: ['hex'],
-            sequence1_flipy: ['hex'],
-            sequence1_flipa: ['hex'],
-            sequence1_passthrough: ['hex'],
+            sequence1_X: ['hex'],
+            sequence1_XX: ['half'],
+            sequence1_jump: ['quint'],
+            sequence1_audio: ['quint'],
+            sequence1_reversed: ['quarter'],
+            sequence1_speedup: ['quarter'],
+            sequence1_speeddown: ['quarter'],
+            sequence1_flipx: ['quint'],
+            sequence1_flipy: ['quint'],
+            sequence1_flipa: ['quint'],
+            sequence1_passthrough: ['quarter'],
             sequence1_input: ['half', 'clear'],
             sequence1_overlay: ['half'],
             sequence1_blendmode: ['half'],
@@ -403,7 +408,7 @@ HC.SourceController = HC.SourceController || {};
         createResets(pluggedValues)  {
             let _reset = (seq) => {
                 let key = getSequenceKey(seq);
-                this.settings[key + '_reset'] = () => {
+                this.settings[key +  '_X'] = () => {
                     let updates = {};
                     updates[key + '_jump'] = false;
                     updates[key + '_audio'] = false;
@@ -430,7 +435,7 @@ HC.SourceController = HC.SourceController || {};
 
             let _rereset = (seq) => {
                 let key = getSequenceKey(seq);
-                this.settings[key + '_rereset'] = () => {
+                this.settings[key +  '_XX'] = () => {
                     let updates = {};
                     updates[key + '_overlay'] = this.settings[key + '_overlay'];
                     updates[key + '_input'] = this.settings[key + '_input'];
@@ -468,12 +473,12 @@ HC.SourceController = HC.SourceController || {};
             sequence2_end: 0,
             sequence2_jump: false,
             sequence2_audio: false,
-            sequence2_reversed: false,
-            sequence2_speedup: false,
-            sequence2_speeddown: false,
             sequence2_flipx: false,
             sequence2_flipy: false,
             sequence2_flipa: false,
+            sequence2_reversed: false,
+            sequence2_speedup: false,
+            sequence2_speeddown: false,
             sequence2_passthrough: false,
         };
 
@@ -482,22 +487,24 @@ HC.SourceController = HC.SourceController || {};
             sequence2_speed: [-2, 2, 0.1],
             sequence2_start: [0, 100, 1, 'hidden'],
             sequence2_end: [0, 100, 1, 'hidden'],
+            sequence2_X: ['hidden'],
+            sequence2_XX: ['hidden'],
         };
 
         styles = {
             sequence2_speed: ['half'],
             sequence2_osci: ['half', 'clear'],
-            sequence2_reset: ['hex'],
-            sequence2_rereset: ['third'],
-            sequence2_jump: ['hex'],
-            sequence2_audio: ['hex'],
-            sequence2_reversed: ['hex'],
-            sequence2_speedup: ['hex'],
-            sequence2_speeddown: ['hex'],
-            sequence2_flipx: ['hex'],
-            sequence2_flipy: ['hex'],
-            sequence2_flipa: ['hex'],
-            sequence2_passthrough: ['hex'],
+            sequence2_X: ['half'],
+            sequence2_XX: ['half'],
+            sequence2_jump: ['quint'],
+            sequence2_audio: ['quint'],
+            sequence2_reversed: ['quarter'],
+            sequence2_speedup: ['quarter'],
+            sequence2_speeddown: ['quarter'],
+            sequence2_flipx: ['quint'],
+            sequence2_flipy: ['quint'],
+            sequence2_flipa: ['quint'],
+            sequence2_passthrough: ['quarter'],
             sequence2_input: ['half', 'clear'],
             sequence2_overlay: ['half'],
             sequence2_blendmode: ['half'],
@@ -537,7 +544,7 @@ HC.SourceController = HC.SourceController || {};
         createResets(pluggedValues)  {
             let _reset = (seq) => {
                 let key = getSequenceKey(seq);
-                this.settings[key + '_reset'] = () => {
+                this.settings[key +  '_X'] = () => {
                     let updates = {};
                     updates[key + '_jump'] = false;
                     updates[key + '_audio'] = false;
@@ -564,7 +571,7 @@ HC.SourceController = HC.SourceController || {};
 
             let _rereset = (seq) => {
                 let key = getSequenceKey(seq);
-                this.settings[key + '_rereset'] = () => {
+                this.settings[key +  '_XX'] = () => {
                     let updates = {};
                     updates[key + '_overlay'] = this.settings[key + '_overlay'];
                     updates[key + '_input'] = this.settings[key + '_input'];
@@ -601,12 +608,12 @@ HC.SourceController = HC.SourceController || {};
             sequence3_end: 0,
             sequence3_jump: false,
             sequence3_audio: false,
-            sequence3_reversed: false,
-            sequence3_speedup: false,
-            sequence3_speeddown: false,
             sequence3_flipx: false,
             sequence3_flipy: false,
             sequence3_flipa: false,
+            sequence3_reversed: false,
+            sequence3_speedup: false,
+            sequence3_speeddown: false,
             sequence3_passthrough: false,
         };
 
@@ -615,22 +622,24 @@ HC.SourceController = HC.SourceController || {};
             sequence3_speed: [-2, 2, 0.1],
             sequence3_start: [0, 100, 1, 'hidden'],
             sequence3_end: [0, 100, 1, 'hidden'],
+            sequence3_X: ['hidden'],
+            sequence3_XX: ['hidden'],
         };
 
         styles = {
             sequence3_speed: ['half'],
             sequence3_osci: ['half', 'clear'],
-            sequence3_reset: ['hex'],
-            sequence3_rereset: ['third'],
-            sequence3_jump: ['hex'],
-            sequence3_audio: ['hex'],
-            sequence3_reversed: ['hex'],
-            sequence3_speedup: ['hex'],
-            sequence3_speeddown: ['hex'],
-            sequence3_flipx: ['hex'],
-            sequence3_flipy: ['hex'],
-            sequence3_flipa: ['hex'],
-            sequence3_passthrough: ['hex'],
+            sequence3_X: ['half'],
+            sequence3_XX: ['half'],
+            sequence3_jump: ['quint'],
+            sequence3_audio: ['quint'],
+            sequence3_reversed: ['quarter'],
+            sequence3_speedup: ['quarter'],
+            sequence3_speeddown: ['quarter'],
+            sequence3_flipx: ['quint'],
+            sequence3_flipy: ['quint'],
+            sequence3_flipa: ['quint'],
+            sequence3_passthrough: ['quarter'],
             sequence3_input: ['half', 'clear'],
             sequence3_overlay: ['half'],
             sequence3_blendmode: ['half'],
@@ -670,7 +679,7 @@ HC.SourceController = HC.SourceController || {};
         createResets(pluggedValues)  {
             let _reset = (seq) => {
                 let key = getSequenceKey(seq);
-                this.settings[key + '_reset'] = () => {
+                this.settings[key +  '_X'] = () => {
                     let updates = {};
                     updates[key + '_jump'] = false;
                     updates[key + '_audio'] = false;
@@ -697,7 +706,7 @@ HC.SourceController = HC.SourceController || {};
 
             let _rereset = (seq) => {
                 let key = getSequenceKey(seq);
-                this.settings[key + '_rereset'] = () => {
+                this.settings[key +  '_XX'] = () => {
                     let updates = {};
                     updates[key + '_overlay'] = this.settings[key + '_overlay'];
                     updates[key + '_input'] = this.settings[key + '_input'];
@@ -734,12 +743,12 @@ HC.SourceController = HC.SourceController || {};
             sequence4_end: 0,
             sequence4_jump: false,
             sequence4_audio: false,
-            sequence4_reversed: false,
-            sequence4_speedup: false,
-            sequence4_speeddown: false,
             sequence4_flipx: false,
             sequence4_flipy: false,
             sequence4_flipa: false,
+            sequence4_reversed: false,
+            sequence4_speedup: false,
+            sequence4_speeddown: false,
             sequence4_passthrough: false,
         };
 
@@ -748,22 +757,24 @@ HC.SourceController = HC.SourceController || {};
             sequence4_speed: [-2, 2, 0.1],
             sequence4_start: [0, 100, 1, 'hidden'],
             sequence4_end: [0, 100, 1, 'hidden'],
+            sequence4_X: ['hidden'],
+            sequence4_XX: ['hidden'],
         };
 
         styles = {
             sequence4_speed: ['half'],
             sequence4_osci: ['half', 'clear'],
-            sequence4_reset: ['hex'],
-            sequence4_rereset: ['third'],
-            sequence4_jump: ['hex'],
-            sequence4_audio: ['hex'],
-            sequence4_reversed: ['hex'],
-            sequence4_speedup: ['hex'],
-            sequence4_speeddown: ['hex'],
-            sequence4_flipx: ['hex'],
-            sequence4_flipy: ['hex'],
-            sequence4_flipa: ['hex'],
-            sequence4_passthrough: ['hex'],
+            sequence4_X: ['half'],
+            sequence4_XX: ['half'],
+            sequence4_jump: ['quint'],
+            sequence4_audio: ['quint'],
+            sequence4_reversed: ['quarter'],
+            sequence4_speedup: ['quarter'],
+            sequence4_speeddown: ['quarter'],
+            sequence4_flipx: ['quint'],
+            sequence4_flipy: ['quint'],
+            sequence4_flipa: ['quint'],
+            sequence4_passthrough: ['quarter'],
             sequence4_input: ['half', 'clear'],
             sequence4_overlay: ['half'],
             sequence4_blendmode: ['half'],
@@ -803,7 +814,7 @@ HC.SourceController = HC.SourceController || {};
         createResets(pluggedValues)  {
             let _reset = (seq) => {
                 let key = getSequenceKey(seq);
-                this.settings[key + '_reset'] = () => {
+                this.settings[key +  '_X'] = () => {
                     let updates = {};
                     updates[key + '_jump'] = false;
                     updates[key + '_audio'] = false;
@@ -830,7 +841,7 @@ HC.SourceController = HC.SourceController || {};
 
             let _rereset = (seq) => {
                 let key = getSequenceKey(seq);
-                this.settings[key + '_rereset'] = () => {
+                this.settings[key +  '_XX'] = () => {
                     let updates = {};
                     updates[key + '_overlay'] = this.settings[key + '_overlay'];
                     updates[key + '_input'] = this.settings[key + '_input'];

@@ -1,4 +1,4 @@
-let name = 'store-worker';
+let name = 'store-sample-worker';
 
 importScripts('../worker/socket.io-connect.js');
 
@@ -68,3 +68,5 @@ onmessage = function (ev) {
         self.postMessage({id: ev.data.id, samples: samples}, samples);
     }
 };
+
+console.log(name + ' loaded');

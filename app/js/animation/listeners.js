@@ -46,7 +46,7 @@
                 if (e.ctrlKey || e.altKey || e.shiftKey) {
                     return;
                 }
-                if (e.keyCode === 32) { // SPACE = play/pause
+                if (e.key === 'Space') { // SPACE = play/pause
                     animation.updateControl('play', !animation.config.ControlSettings.play, true, false, false);
                 }
             });

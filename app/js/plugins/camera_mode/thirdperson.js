@@ -5,7 +5,7 @@
         apply() {
             let layer = this.layer;
 
-            if (layer.shapes.length == 0) return;
+            if (layer.shapes.length === 0) return;
             let camera = layer.getCamera();
             let shape = layer.shapes[0];
             let lookAt = new THREE.Vector3();

@@ -14,7 +14,7 @@ HC.Layer.prototype.getPlugin = function (plugin, name) {
 /**
  *
  * @param name
- * @returns {*}
+ * @returns {HC.MaterialMapPlugin}
  */
 HC.Layer.prototype.getMaterialMapPlugin = function (name) {
     return this.getPlugin('material_map', name);

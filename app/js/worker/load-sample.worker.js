@@ -1,4 +1,4 @@
-let name = 'load-worker';
+let name = 'load-sample-worker';
 
 onmessage = function (ev) {
     let length = ev.data.length;

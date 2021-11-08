@@ -4,7 +4,7 @@
 
         apply(shape) {
             let a = 45;
-            if (shape.index % 2 == 0) {
+            if (shape.index % 2 === 0) {
             } else {
                 a *= -1;
             }
@@ -23,7 +23,7 @@
 
         apply(shape) {
             let a = 90;
-            if (shape.index % 2 == 0) {
+            if (shape.index % 2 === 0) {
             } else {
                 a *= -1;
             }
@@ -45,7 +45,7 @@
 
             let a = 90;
             let gridPosition = layer.getPatternPlugin('matrix').gridPosition(shape);
-            if (gridPosition.y % 2 == 0) {
+            if (gridPosition.y % 2 === 0) {
             } else {
                 a *= -1;
             }
@@ -66,7 +66,7 @@
             let layer = this.layer;
             let gridPosition = layer.getPatternPlugin('matrix').gridPosition(shape);
             let a = 90;
-            if (gridPosition.x % 2 == 0) {
+            if (gridPosition.x % 2 === 0) {
             } else {
                 a *= -1;
             }

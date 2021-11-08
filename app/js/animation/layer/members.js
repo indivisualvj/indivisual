@@ -1,24 +1,18 @@
 /**
  *
- * @returns {CanvasTexture}
+ * @returns {HC.MaterialMapPlugin}
  */
 HC.Layer.prototype.getMaterialMap = function () {
     let seq = this.config.SourceSettings.material_map;
     if (seq === 'webcam') {
-        let plugin = this.getMaterialMapPlugin('webcam');
-
-        return plugin;
+        return this.getMaterialMapPlugin('webcam');
 
     } else if (seq !== 'none') {
-        let plugin = this.getMaterialMapPlugin('sequence');
+        return this.getMaterialMapPlugin('sequence');
 
-        return plugin;
-
-    } else {
-        let plugin = this.getMaterialMapPlugin('texture');
-
-        return plugin;
     }
+
+    return this.getMaterialMapPlugin('texture');
 };
 
 /**

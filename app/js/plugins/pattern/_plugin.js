@@ -9,7 +9,7 @@ HC.plugins.pattern = HC.plugins.pattern || {};
         }
 
         sharedMoverParams(ox, oy, gapx, gapy) { // essential for panning torching bouncing pattern_mover
-            if (arguments.length == 4) {
+            if (arguments.length === 4) {
                 this.shared = {
                     gap: {
                         x: gapx,

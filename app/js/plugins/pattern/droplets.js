@@ -14,7 +14,7 @@
             if (!params.velocity || Math.abs(params.velocity) < 0.001) {
 
                 layer.getPatternPlugin('lineh').apply(shape);
-                if (randomInt(0, 15) == 0) {
+                if (randomInt(0, 15) === 0) {
                     params.velocity = randomFloat(1.11, 1.66, 2, true);
 
                 } else {
@@ -47,7 +47,7 @@
             if (!params.velocity || Math.abs(params.velocity) < 0.001) {
 
                 layer.getPatternPlugin('linev').apply(shape);
-                if (randomInt(0, 15) == 0) {
+                if (randomInt(0, 15) === 0) {
                     params.velocity = randomFloat(1.11, 1.66, 2, true);
 
                 } else {

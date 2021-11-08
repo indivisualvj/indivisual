@@ -272,7 +272,7 @@
                 let vtc = vtcs[i];
                 let vec = new THREE.Vector3(round(multiplier * vtc[0], 0), round(multiplier * vtc[1], 0), 0);
                 geometry.vertices.push(vec);
-                if (i % 3 == 0) geometry.faces.push(new THREE.Face3(i + 0, i + 1, i + 2));
+                if (i % 3 === 0) geometry.faces.push(new THREE.Face3(i + 0, i + 1, i + 2));
             }
 
             geometry.computeFaceNormals();

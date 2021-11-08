@@ -198,7 +198,7 @@
         scaleX(v) {
             if (v !== undefined) {
 
-                if (v == 0) {
+                if (v === 0) {
                     this.sceneScale().scale.x = 0.001;
                 } else {
                     this.sceneScale().scale.x = v;
@@ -211,7 +211,7 @@
         scaleY(v) {
             if (v !== undefined) {
 
-                if (v == 0) {
+                if (v === 0) {
                     this.sceneScale().scale.y = 0.001;
                 } else {
                     this.sceneScale().scale.y = v;
@@ -224,7 +224,7 @@
         scaleZ(v) {
             if (v !== undefined) {
 
-                if (v == 0) {
+                if (v === 0) {
                     this.sceneScale().scale.z = 0.001;
                 } else {
                     this.sceneScale().scale.z = v;

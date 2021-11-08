@@ -7,7 +7,7 @@
 
             let params = this.params(shape);
 
-            if (shape.index % 2 == 1 && !params.mesh) {
+            if (shape.index % 2 === 1 && !params.mesh) {
                 let mesh = this.layer.getMeshMaterialPlugin('edges').apply(shape.getGeometry());
                 mesh.name = 'edges';
                 params.mesh = mesh;

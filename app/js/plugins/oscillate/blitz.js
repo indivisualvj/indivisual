@@ -51,7 +51,7 @@
             if (pa > 0) {
                 pa = Math.max(0, pa - (1 /this.animation.diff) * 0.65);
 
-            } else if (speed.prc == 0) {
+            } else if (speed.prc === 0) {
                 pa = (pa ? 0 : 1);
             }
 
@@ -73,7 +73,7 @@
             if (pa > 0) {
                 pa = Math.max(0, pa - (1 /this.animation.diff) * 0.65);
 
-            } else if (speed.prc == 0) {
+            } else if (speed.prc === 0) {
                 pa = (pa ? 0 : 1);
             }
 
@@ -94,7 +94,7 @@
             if (pa > 0) {
                 pa = Math.max(0, pa - (1 / this.animation.diff) * 1.3);
 
-            } else if (speed.prc == 0) {
+            } else if (speed.prc === 0) {
                 pa = (pa ? 0 : 1);
             }
 
@@ -116,7 +116,7 @@
             if (pa > 0) {
                 pa = Math.max(0, pa - (1 / this.animation.diff) * 2.6);
 
-            } else if (speed.prc == 0) {
+            } else if (speed.prc === 0) {
                 pa = (pa ? 0 : 1);
             }
 

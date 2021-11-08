@@ -80,7 +80,7 @@ HC.Statics = HC.Statics || {};
 
                     settings.layers = 20;
                     settings.layer = {};
-                    for (let i = 0; i < 20; i++) {
+                    for (let i = 0; i < settings.layers; i++) {
                         settings.layer[i] = (i+1);
                     }
 

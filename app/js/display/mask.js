@@ -101,7 +101,7 @@
         update() {
 
             this.canvas.style.clipPath = '';
-            this.canvas.width = this.canvas.width;
+            // this.canvas.width = this.canvas.width;
 
             // bounds
             let x1 = this.canvas.width;
@@ -130,7 +130,6 @@
             let clipPath = this.points.join(', ');
             clipPath = 'polygon(' + clipPath.replace(/([^,]+), ([^,]+)/gi, '$1px $2px') + ')';
             this.canvas.style.clipPath = clipPath;
-            this.canvas.style.transform = 'transform:scaleZ(1)';
         }
     }
 }

@@ -2,7 +2,7 @@
     "info": {
         "name": 0,
         "version": 1,
-        "tutorial": {}
+        "tutorial": "[object Object]"
     },
     "layer": {
         "layer_transvisible": false,
@@ -150,7 +150,7 @@
         "material_blendequation": "AddEquation",
         "material_blendsrc": "SrcAlphaFactor",
         "material_blenddst": "OneMinusSrcAlphaFactor",
-        "material_side": 2,
+        "material_side": 0,
         "material_shininess": 100,
         "material_volume": 1,
         "material_roughness": 0.5,
@@ -167,7 +167,8 @@
         "material_offsety": 0,
         "material_centerx": 0.5,
         "material_centery": 0.5,
-        "material_rotation": 0
+        "material_rotation": 0,
+        "material_needs_update": true
     },
     "coloring": {
         "coloring_mode": "floatrgbc",

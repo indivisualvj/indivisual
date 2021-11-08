@@ -26,14 +26,10 @@ document.addEventListener('DOMContentLoaded', function () {
             config.loadConfig(() => {
                 animation.config.initControlSets();
 
-                let listener = new HC.Listener();
-                animation.listener = listener;
-                let audioManager = new HC.AudioManager();
-                animation.audioManager = audioManager;
-                let audioAnalyser = new HC.AudioAnalyser(animation);
-                animation.audioAnalyser = audioAnalyser;
-                let beatKeeper = new HC.BeatKeeper(animation, animation.config);
-                animation.beatKeeper = beatKeeper;
+                animation.listener = new HC.Listener();
+                animation.audioManager = new HC.AudioManager();
+                animation.audioAnalyser = new HC.AudioAnalyser(animation);
+                animation.beatKeeper = new HC.BeatKeeper(animation, animation.config);
 
                 let renderer = new HC.Renderer(animation, {
                     layers: new Array(animation.config.ControlValues.layers)
@@ -54,8 +50,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     animation.messaging.emitAttr('#play', 'data-color', '');
                 }
 
-                let cm = new HC.LayeredControlSetsManager(renderer.layers, animation.config.AnimationValues);
-                animation.settingsManager = cm;
+                animation.settingsManager = new HC.LayeredControlSetsManager(
+                    renderer.layers,
+                    animation.config.AnimationValues
+                );
                 renderer.initLayers(false);
 
                 let displayManager = new HC.DisplayManager(animation, {
@@ -64,11 +62,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 displayManager.resize(renderer.getResolution());
                 animation.displayManager = displayManager;
 
-                let sourceManager = new HC.SourceManager(animation, {
+                animation.sourceManager = new HC.SourceManager(animation, {
                     config: animation.config,
                     sample: new Array(animation.config.SourceValues.sample.length)
                 });
-                animation.sourceManager = sourceManager;
 
                 new HC.Animation.KeyboardListener().init(animation);
                 new HC.Animation.EventListener().init();
@@ -440,7 +437,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (detectedSpeed) {
                     this.messaging.emitMidi('glow', MIDI_PEAKBPM_FEEDBACK, {timeout: 15000 / detectedSpeed, times: 8});
                 }
-                if (this.config.DisplaySettings.display_speed == 'midi') {
+                if (this.config.DisplaySettings.display_speed === 'midi') {
                     this.messaging.emitMidi('clock', MIDI_CLOCK_NEXT, {duration: this.beatKeeper.getDefaultSpeed().duration});
                 }
 
@@ -451,7 +448,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (parent) {
                             this.messaging.emitMidi('glow', MIDI_ROW_TWO[i], {timeout: 125});
                         }
-                        if (use != 'off') {
+                        if (use !== 'off') {
                             this.messaging.emitMidi('glow', MIDI_ROW_ONE[use], {timeout: 125});
                         }
                     }
@@ -490,8 +487,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 if ('settings' in session) {
                     HC.log('settings', 'synced');
                     let settings = session.settings;
+
                     for (let k in settings) {
-                        this.updateSettings(k, settings[k], true, false, true);
+                        this.updateSettings(k, settings[k], true, false, true, false);
                     }
                 }
 
@@ -621,10 +619,10 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateControl(item, value, display, forward, force) {
 
-            if (item == 'beat') {
+            if (item === 'beat') {
                 value = this.beatKeeper.trigger(value);
 
-            } else if (item == 'session' && value != _HASH) {
+            } else if (item === 'session' && value !== _HASH) {
                 document.location.hash = value;
                 setTimeout(function () {
                     document.location.reload();
@@ -745,7 +743,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param data
          */
         updateMidi(data) {
-            if (this.listener && data.command == 'message') {
+            if (this.listener && data.command === 'message') {
                 this.listener.fireEvent('midi.message', data.data);
             }
         }
@@ -818,17 +816,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
+         * @param layer
          * @param data
          * @param display
          * @param forward
          * @param force
+         * @param reset
          */
-        updateSettings(layer, data, display, forward, force) {
+        updateSettings(layer, data, display, forward, force, reset) {
 
             if (force) {
                 this.settingsManager.updateData(layer, data);
 
-                this.renderer.resetLayer(layer);
+                if (false !== reset) {
+                    this.renderer.resetLayer(layer);
+                }
 
             } else {
                 for (let k in data) {

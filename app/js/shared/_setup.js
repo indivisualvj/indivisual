@@ -46,9 +46,11 @@ if (TWEEN) {
 }
 
 /**
- *
  * @type {HC.AssetManager}
  */
 assetman = new HC.AssetManager();
-garbageman = new HC.GarbageCollector();
+/**
+ * @type {HC.MaterialManager}
+ */
+materialman = new HC.MaterialManager();
 

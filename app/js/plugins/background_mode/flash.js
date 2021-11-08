@@ -24,11 +24,11 @@
                     this.layer.setBackground(this.current(false));
                 }
 
-            } else if (this.current() != false) {
+            } else if (this.current() !== false) {
                 this.layer.setBackground(this.current(false));
             }
 
-            if ((this.audioAnalyser.peak || speed.prc == 0 || randomInt(0, round(this.config.DisplaySettings.fps * .75)) == 0)) {
+            if ((this.audioAnalyser.peak || speed.prc === 0 || randomInt(0, round(this.config.DisplaySettings.fps * .75)) === 0)) {
                 if (randomBool(10)) {
                     // todo try to fade to this.displayBackground
                     // this.displayBackground = hexToHsl(this.config.DisplaySettings.background);

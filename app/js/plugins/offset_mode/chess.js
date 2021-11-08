@@ -6,7 +6,7 @@
 
             let m = layer.shapeSize(.5);
 
-            if (shape.index % 2 == 0) {
+            if (shape.index % 2 === 0) {
                 m = -layer.shapeSize(.5);
             }
 

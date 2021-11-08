@@ -464,7 +464,7 @@ input:focus, select:focus {
 
 #SequenceSettings .sequence {
     position: relative;
-    width: 100%;
+    width: 99%;
     height: 18%;
     overflow: hidden;
     box-sizing: border-box;

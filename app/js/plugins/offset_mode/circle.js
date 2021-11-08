@@ -17,7 +17,7 @@
             let y = this.settings.offset_y * Math.cos(RAD * va) * layer.shapeSize(.5);
             let z = this.settings.offset_z * Math.cos(RAD * (90 + va)) * layer.shapeSize(.5);
 
-            if (chess && shape.index % 2 == 0) {
+            if (chess && shape.index % 2 === 0) {
                 x *= -1;
                 y *= -1;
                 z *= -1;

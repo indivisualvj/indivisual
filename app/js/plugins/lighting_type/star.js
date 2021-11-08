@@ -7,8 +7,8 @@
             light.shadow.camera.far = 10000;
 
             let sphere = new THREE.SphereBufferGeometry(this.layer.shapeSize(.5), 16, 16);
-            let material = garbageman.addMaterial(new THREE.MeshBasicMaterial({color: 0xffffff}));
-            garbageman.addMaterial(material);
+            let material = materialman.addMaterial(new THREE.MeshBasicMaterial({color: 0xffffff}));
+            materialman.addMaterial(material);
             material.color = light.color;
             let mesh = new THREE.Mesh(sphere, material);
             light.add(mesh);

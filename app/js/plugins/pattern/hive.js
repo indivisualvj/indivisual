@@ -16,13 +16,13 @@
             let ox = (-gapx * matrix.columnCount(layer)) / 2;
             let oy = (-gapy * matrix.rowCount(layer)) / 2;
 
-            if (gridPosition.y % 2 == 0) {
-                if (shape.index % 2 == 0) {
+            if (gridPosition.y % 2 === 0) {
+                if (shape.index % 2 === 0) {
                     oy -= nh / 2 * this.settings.pattern_padding * this.settings.pattern_paddingx;
                 }
 
             } else {
-                if (shape.index % 2 == 1) {
+                if (shape.index % 2 === 1) {
                     oy -= nh / 2 * this.settings.pattern_padding * this.settings.pattern_paddingy;
                 }
             }
@@ -56,7 +56,7 @@
             let ox = (-gapx * matrix.columnCount(layer)) / 2;
             let oy = (-gapy * matrix.rowCount(layer)) / 2;
 
-            if (shape.index % 2 == 1) {
+            if (shape.index % 2 === 1) {
                 oy -= layer.shapeSize(.5) * 0.5 * this.settings.pattern_padding * this.settings.pattern_paddingx;
             }
 
@@ -87,7 +87,7 @@
             let ox = -gapx * matrix.columnCount(layer) / 2;
             let oy = -gapy * matrix.rowCount(layer) / 2;
 
-            if (gridPosition.y % 2 == 1) {
+            if (gridPosition.y % 2 === 1) {
                 ox -= layer.shapeSize(.5);
             }
 

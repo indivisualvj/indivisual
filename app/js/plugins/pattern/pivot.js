@@ -20,7 +20,7 @@
                 params.centered = true;
             }
 
-            if (!this.points || (this.isFirstShape(shape) && this.layer.getShapeSpeed(shape).prc == 0)) {
+            if (!this.points || (this.isFirstShape(shape) && this.layer.getShapeSpeed(shape).prc === 0)) {
                 this.points = this.points || [];
                 let numPoints = 12;//clamp(this.layer.settings.pattern_shapes, 12, 24);
                 for (let i = 0; i < numPoints; i++)  {
@@ -34,7 +34,7 @@
                     this.points[i] = p;
 
                     let g = new THREE.CircleGeometry(this.layer.shapeSize(.125/2), 12);
-                    let mat = garbageman.addMaterial(new THREE.MeshPhongMaterial({emissive: 0xffffff}));
+                    let mat = materialman.addMaterial(new THREE.MeshPhongMaterial({emissive: 0xffffff}));
                     let m = new THREE.Mesh(g, mat);
                     this.layer._shapes.add(m);
                     m.position.copy(p);

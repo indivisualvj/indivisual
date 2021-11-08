@@ -3,7 +3,7 @@
         static name = 'chess45';
 
         apply(shape) {
-            if (shape.index % 2 == 0) {
+            if (shape.index % 2 === 0) {
                 let a = 45;
 
                 let x = a * this.settings.rotation_offsetx;
@@ -20,7 +20,7 @@
         static name = 'chess90';
 
         apply(shape) {
-            if (shape.index % 2 == 0) {
+            if (shape.index % 2 === 0) {
                 let a = 90;
 
                 let x = a * this.settings.rotation_offsetx;
@@ -40,7 +40,7 @@
             let layer = this.layer;
 
             let gridPosition = layer.getPatternPlugin('matrix').gridPosition(shape);
-            if (gridPosition.y % 2 == 0) {
+            if (gridPosition.y % 2 === 0) {
                 let a = 90;
 
                 let x = a * this.settings.rotation_offsetx;
@@ -59,7 +59,7 @@
         apply(shape) {
             let layer = this.layer;
             let gridPosition = layer.getPatternPlugin('matrix').gridPosition(shape);
-            if (gridPosition.x % 2 == 0) {
+            if (gridPosition.x % 2 === 0) {
                 let a = 90;
 
                 let x = a * this.settings.rotation_offsetx;

@@ -1,6 +1,6 @@
 /**
  *
- * @param actions
+ * @param controlSets
  */
 HC.Controller.prototype.addAnimationControllers = function (controlSets) {
 
@@ -284,10 +284,13 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
 HC.Controller.prototype.nextOpenFolder = function (control) {
 
     if (!control) {
-        return this.nextOpenFolder(this.controlSettingsGui) ||
-        this.nextOpenFolder(this.displaySettingsGui) ||
-        this.nextOpenFolder(this.sourceSettingsGui) ||
-        this.nextOpenFolder(this.animationSettingsGui) || this.controlSettingsGui;
+        return this.nextOpenFolder(this.controlSettingsGui)
+            || this.nextOpenFolder(this.displaySettingsGui)
+            || this.nextOpenFolder(this.sourceSettingsGui)
+            || this.nextOpenFolder(this.animationSettingsGui)
+            || this.nextOpenFolder(this.sequenceSettingsGui)
+            || this.controlSettingsGui
+        ;
     }
 
     if (control instanceof HC.Guify && !control.isExpanded()) {
@@ -392,10 +395,9 @@ HC.Controller.prototype.explainPlugin = function (item, value, tree) {
 HC.Controller.prototype.closeAll = function (control) {
 
     if (!control) {
-        this.closeAll(this.controlSettingsGui);
-        this.closeAll(this.displaySettingsGui);
-        this.closeAll(this.sourceSettingsGui);
-        this.closeAll(this.animationSettingsGui);
+        this.guis.forEach((gui) => {
+            this.closeAll(gui);
+        })
         return;
     }
 
@@ -424,6 +426,7 @@ HC.Controller.prototype.closeAll = function (control) {
 /**
  *
  * @param ci
+ * @param char
  * @param shiftKey
  */
 HC.Controller.prototype.toggleByKey = function (ci, char, shiftKey) {
@@ -665,9 +668,9 @@ HC.Controller.prototype.updateClip = function (seq) {
  * 
  */
 HC.Controller.prototype.initClips = function () {
-
     this.clips = [];
     for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
+        // fixme: this needs to be done in SequenceControllerUi
         this.clips.push(new HC.SourceControllerSequence(this, seq));
     }
 

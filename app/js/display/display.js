@@ -151,7 +151,7 @@
             let image = this._source ? this._source.current(fallback) : fallback;
             let smearing = this.smear ? 1 : Math.max(this.config.DisplaySettings.smearing, this.smearing);
 
-            if (bounds && smearing == 0 || !image) {
+            if (bounds && smearing === 0 || !image) {
                 this.clear(bounds);
             }
 
@@ -424,7 +424,7 @@
                 if (stored) {
                     try {
                         stored = JSON.parse(stored);
-                        if ((stored.points.length - 2) / 2 == mask.sides) {
+                        if ((stored.points.length - 2) / 2 === mask.sides) {
                             mask.points = stored.points;
                             mask.update();
 
@@ -449,8 +449,7 @@
          */
         loadMapping() {
             let bounds = this._clipBounds(this.keepbounds);
-            let points = this._getMaptasticPoints(bounds);
-            let sourcePoints = points;
+            let sourcePoints = this._getMaptasticPoints(bounds);
             let targetPoints = false;
             let stored = this.getMapping();
             if (stored) {

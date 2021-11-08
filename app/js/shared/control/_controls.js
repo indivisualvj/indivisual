@@ -179,12 +179,12 @@ HC.controls = HC.controls || {};
 
                 if (st === 'object' && sp === 'object') {
                     // compare by json
-                    if (JSON.stringify(set) != JSON.stringify(prop)) {
+                    if (JSON.stringify(set) !== JSON.stringify(prop)) {
                         // console.log('no default', set, prop);
                         return false;
                     }
 
-                } else if (set != prop) {
+                } else if (set !== prop) {
                     // console.log('no default', set, prop);
                     return false;
                 }
@@ -266,11 +266,11 @@ HC.controls = HC.controls || {};
 
                 if (otype !== type) {
                     // cast to whatever
-                    if (type == 'string' && otype != 'string') {
+                    if (type === 'string' && otype !== 'string') {
                         value = parse(value);
 
                         // cast to string
-                    } else if (type != 'string' && otype == 'string') {
+                    } else if (type !== 'string' && otype === 'string') {
                         value = value.toString();
 
                         // fallback to original
@@ -333,7 +333,7 @@ HC.controls = HC.controls || {};
 
         /**
          *
-         * @param {HC.Config} config
+         * @param {HC.Config} pluggedValues
          */
         init(pluggedValues) {
             this.initMembers();
@@ -346,8 +346,7 @@ HC.controls = HC.controls || {};
          */
         initMembers() {
             for (let member in this.members) {
-                let settings = {...this[member]}; // clone by spread (ES6)
-                this.members[member] = settings;
+                this.members[member] = {...this[member]}; // clone by spread (ES6)
             }
         }
 
@@ -379,8 +378,7 @@ HC.controls = HC.controls || {};
 
             for (let k in settings) {
                 let key = k.replace(regex, prefix + i);
-                let v = (value !== undefined) ? value : settings[k];
-                this[member][key] = v;
+                this[member][key] = (value !== undefined) ? value : settings[k];
 
                 // console.log(member, k, key, v);
             }

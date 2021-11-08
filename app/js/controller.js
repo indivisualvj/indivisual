@@ -183,6 +183,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.displaySettingsGui,
                 this.sourceSettingsGui,
                 this.animationSettingsGui,
+                this.sequenceSettingsGui,
             ];
             this.beatKeeper = new HC.BeatKeeper(null, this.config);
             this.sourceManager = new HC.SourceManager(null, { config: this.config, sample: [] });
@@ -212,6 +213,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 sourceSets,
                 HC.SourceControllerUi,
                 this.sourceSettingsGui
+            );
+
+            let sequenceSets = sets.sequenceSets;
+
+            this.addGuifyControllers(
+                sequenceSets,
+                HC.SequenceControllerUi,
+                this.sequenceSettingsGui
             );
 
             // this.addConfigurationSettings();

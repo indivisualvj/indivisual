@@ -243,12 +243,15 @@ HC.Statics = HC.Statics || {};
             this.SourceTypes = this.SourceSettingsManager.typesProxy();
             this.SourceValues = this.SourceSettingsManager.valuesProxy(this.SourceValues);
 
+            let sequenceSets = this.initSequenceControlSets();
+            
             this.DataSettings = {};
             
             return {
                 controlSets: controlSets,
                 displaySets: displaySets,
-                sourceSets: sourceSets
+                sourceSets: sourceSets,
+                sequenceSets: sequenceSets,
             };
         }
 
@@ -283,6 +286,13 @@ HC.Statics = HC.Statics || {};
          */
         initSourceControlSets() {
             return this._initControlSets(HC.SourceController, this.SourceValues);
+        }
+
+        /**
+         *
+         */
+        initSequenceControlSets() {
+            return this._initControlSets(HC.SequenceController, this.SourceValues);
         }
 
         /**

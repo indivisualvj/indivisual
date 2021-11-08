@@ -130,6 +130,7 @@
             let clipPath = this.points.join(', ');
             clipPath = 'polygon(' + clipPath.replace(/([^,]+), ([^,]+)/gi, '$1px $2px') + ')';
             this.canvas.style.clipPath = clipPath;
+            this.canvas.style.transform = 'transform:scaleZ(1)';
         }
     }
 }

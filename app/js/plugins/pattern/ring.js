@@ -50,7 +50,7 @@
 
             let x, y, z = shape.z();
 
-            if (z == 0 || z > layer.cameraDefaultDistance()) {
+            if (z === 0 || z > layer.cameraDefaultDistance()) {
                 z = randomInt(-100000, -5000, false);
 
             } else {

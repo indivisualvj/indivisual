@@ -30,7 +30,7 @@
             let prc = (speed.prc - 0.5);
             let v = Math.pow(prc, 2) * 4 * pa;
 
-            if (round(v, 1) == 0) {
+            if (round(v, 1) === 0) {
                 pa *= -1;
                 this.params(key, pa);
             }

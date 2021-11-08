@@ -73,7 +73,7 @@
                 speed.pitch = offset;
                 speed.duration = clamp(duration - offset, duration * .85, duration * 1.15);
 
-                // if (DEBUG && Math.abs(offset) > duration && speed.divider == 4) {
+                // if (DEBUG && Math.abs(offset) > duration && speed.divider === 4) {
                 //     console.log(
                 //         this.speeds.eight.pitch.toFixed(2),
                 //         this.speeds.quarter.pitch.toFixed(2),

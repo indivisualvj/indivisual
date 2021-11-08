@@ -13,7 +13,7 @@ HC.plugins.lighting_lookat = HC.plugins.lighting_lookat || {};
         }
 
         isFirstShape(light) {
-            return light.userData.index == 0;
+            return light.userData.index === 0;
         }
 
         centerVector() {

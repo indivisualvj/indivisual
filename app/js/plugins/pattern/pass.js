@@ -25,11 +25,11 @@
                 if (this.layer.settings.pattern_sync) {
                     this.dir = -1;
 
-                } else if ((!peak && layer.getCurrentSpeed().prc == 0) || (peak && this.audioAnalyser.peak)) {
+                } else if ((!peak && layer.getCurrentSpeed().prc === 0) || (peak && this.audioAnalyser.peak)) {
                     this.dir = randomBool() ? -1 : 1;
                 }
             }
-            if (!params.velocity || shapeSpeed.prc == 0) {
+            if (!params.velocity || shapeSpeed.prc === 0) {
                 params.velocity = randomFloat(2, 3, 3);
             }
 

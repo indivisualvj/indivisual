@@ -27,7 +27,7 @@
         apply(shape) {
             let layer = this.layer;
             let params = this.params(shape);
-            if (shape.index % 2 == 1) {
+            if (shape.index % 2 === 1) {
                 params.delay = layer.getShapeDuration(shape) / 4;
             }
         }
@@ -40,7 +40,7 @@
         apply(shape) {
             let layer = this.layer;
             let params = this.params(shape);
-            if (shape.index % 2 == 1) {
+            if (shape.index % 2 === 1) {
                 params.delay = layer.getShapeDuration(shape) / 2;
             }
         }
@@ -115,13 +115,13 @@
             let layer = this.layer;
             let params = this.params(shape);
             if (this.switcher) {
-                if (shape.index % 2 == 1) {
+                if (shape.index % 2 === 1) {
                     let rp = layer.getShapeSpeed(shape);
                     params.delay = rp.duration;
                     rp.duration = 0;
                 }
             } else {
-                if (shape.index % 2 == 0) {
+                if (shape.index % 2 === 0) {
                     let rp = layer.getShapeSpeed(shape);
                     params.delay = rp.duration;
                     rp.duration = 0;

@@ -23,7 +23,7 @@
             let params = this.params(shape);
             let speed = layer.getShapeSpeed(shape);
 
-            if (!params.tween && speed.prc == 0) {
+            if (!params.tween && speed.prc === 0) {
 
                 if (this.isFirstShape(shape)) {
                     this.orientation = randomBool();

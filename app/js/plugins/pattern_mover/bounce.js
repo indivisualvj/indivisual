@@ -92,7 +92,7 @@
         apply(shape) {
             let layer = this.layer;
             let speed = this.layer.getShapeSpeed(shape);
-            if (this.isFirstShape(shape) && speed.prc == 0) {
+            if (this.isFirstShape(shape) && speed.prc === 0) {
                 this.dir = randomBool();
             }
             if (this.dir) {

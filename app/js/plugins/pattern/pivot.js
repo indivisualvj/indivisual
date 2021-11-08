@@ -20,7 +20,7 @@
                 params.centered = true;
             }
 
-            if (!this.points || (this.isFirstShape(shape) && this.layer.getShapeSpeed(shape).prc == 0)) {
+            if (!this.points || (this.isFirstShape(shape) && this.layer.getShapeSpeed(shape).prc === 0)) {
                 this.points = this.points || [];
                 let numPoints = 12;//clamp(this.layer.settings.pattern_shapes, 12, 24);
                 for (let i = 0; i < numPoints; i++)  {

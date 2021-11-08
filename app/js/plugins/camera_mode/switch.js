@@ -12,7 +12,7 @@
 
             cam.zoom = this.settings.camera_mode_volume;
 
-            if ((!peak && speed.prc == 0) || (peak && this.audioAnalyser.peak && randomBool())) {
+            if ((!peak && speed.prc === 0) || (peak && this.audioAnalyser.peak && randomBool())) {
                 let pos = cam.position;
 
                 pos.copy(this.layer.random3dPosition());

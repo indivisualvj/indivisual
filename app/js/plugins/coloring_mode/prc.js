@@ -9,7 +9,7 @@
 
             if (step && times) {
                 let prc = round(1 / times, 1);
-                if (speed.prc == 0) {
+                if (speed.prc === 0) {
                     if (grow === false) {
                         color.h = 1;
 
@@ -18,7 +18,7 @@
                     }
 
                 }
-                if (round(speed.prc, 1) % prc == 0) {
+                if (round(speed.prc, 1) % prc === 0) {
 
                     if (grow === false) {
                         color.h = 1 - Math.min(1, speed.prc);

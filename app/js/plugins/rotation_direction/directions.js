@@ -56,7 +56,7 @@
         static name = 'left & right';
 
         apply(shape) {
-            this.params(shape).dir = (shape.index % 2 == 0) ? -1 : 1;
+            this.params(shape).dir = (shape.index % 2 === 0) ? -1 : 1;
         }
     }
 }

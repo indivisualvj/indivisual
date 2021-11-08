@@ -29,7 +29,7 @@
                 );
             }
 
-            if (!this.shape || (!peak && speed.prc == 0) || (peak && this.audioAnalyser.peak && randomBool())) {
+            if (!this.shape || (!peak && speed.prc === 0) || (peak && this.audioAnalyser.peak && randomBool())) {
 
                 let shape = layer.getRandomShape();
                 if (shape != this.shape) {

@@ -12,7 +12,7 @@
             let speed = layer.getShapeSpeed(shape);
             let params = this.params(shape);
 
-            if (!params.tween && speed.prc == 0) {
+            if (!params.tween && speed.prc === 0) {
 
                 let size = layer.shapeSize(1);
                 let hsc = Math.floor(layer.shapeCount() / 2);

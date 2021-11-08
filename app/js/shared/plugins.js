@@ -191,7 +191,7 @@ HC.Shape.prototype.initPlugins = function () {
          * @returns {boolean}
          */
         isFirstShape(shape) {
-            return shape.index == 0;
+            return shape.index === 0;
         }
 
         /**

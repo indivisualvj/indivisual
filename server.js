@@ -803,6 +803,15 @@ function initGet() {
     /**
      *
      */
+    app.get('/node_modules/*.js', function (req, res) {
+        let url = req.originalUrl.replace('/', '');
+        url = path.resolve(url);
+        res.sendFile(url);
+    });
+
+    /**
+     *
+     */
     app.get('/app/lib/*', function (req, res) {
         let url = req.originalUrl.replace('/', '') + '.js';
         url = path.resolve(url);

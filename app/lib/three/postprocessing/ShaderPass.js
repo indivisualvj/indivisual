@@ -55,7 +55,6 @@ THREE.ShaderPass.prototype = Object.assign( Object.create( THREE.Pass.prototype 
 		} else {
 
 			renderer.setRenderTarget( writeBuffer );
-			// TODO: Avoid using autoClear properties, see https://github.com/mrdoob/three.js/pull/15571#issuecomment-465669600
 			if ( this.clear ) renderer.clear( renderer.autoClearColor, renderer.autoClearDepth, renderer.autoClearStencil );
 			this.fsQuad.render( renderer );
 

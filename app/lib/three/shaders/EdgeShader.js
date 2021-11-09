@@ -6,38 +6,21 @@
  *
  * aspect: vec2 of (1/width, 1/height)
  */
-// todo auschecken
+
 THREE.EdgeShader = {
 
 	uniforms: {
-
 		"tDiffuse": { type: "t", value: null },
 		"aspect":    { type: "v2", value: new THREE.Vector2( 512, 512 ) },
 	},
 
-	vertexShader: [
-
-		"varying vec2 vUv;",
-
-		"void main() {",
-
-			"vUv = uv;",
-			"gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
-
-		"}"
-
-	].join( "\n" ),
+	vertexShader: `varying vec2 vUv; void main() {vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 ); }`,
 
 	fragmentShader: [
-
 		"uniform sampler2D tDiffuse;",
 		"varying vec2 vUv;",
-
 		"uniform vec2 aspect;",
-
-		"vec2 texel = vec2(1.0 / aspect.x, 1.0 / aspect.y);",
-
-
+		"const vec2 texel = vec2(1.0 / aspect.x, 1.0 / aspect.y);",
 		"mat3 G[9];",
 
 		// hard coded matrix values!!!! as suggested in https://github.com/neilmendoza/ofxPostProcessing/blob/master/src/EdgePass.cpp#L45
@@ -54,7 +37,6 @@ THREE.EdgeShader = {
 
 		"void main(void)",
 		"{",
-
 			"G[0] = g0,",
 			"G[1] = g1,",
 			"G[2] = g2,",
@@ -67,13 +49,13 @@ THREE.EdgeShader = {
 
 			"mat3 I;",
 			"float cnv[9];",
-			"vec3 sample;",
+			"vec3 sampleVar;",
 
 			/* fetch the 3x3 neighbourhood and use the RGB vector's length as intensity value */
 			"for (float i=0.0; i<3.0; i++) {",
 				"for (float j=0.0; j<3.0; j++) {",
-					"sample = texture2D(tDiffuse, vUv + texel * vec2(i-1.0,j-1.0) ).rgb;",
-					"I[int(i)][int(j)] = length(sample);",
+					"sampleVar = texture2D(tDiffuse, vUv + texel * vec2(i-1.0,j-1.0) ).rgb;",
+					"I[int(i)][int(j)] = length(sampleVar);",
 				"}",
 			"}",
 

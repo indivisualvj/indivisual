@@ -208,22 +208,14 @@ document.addEventListener('DOMContentLoaded', function () {
             );
 
             let sourceSets = sets.sourceSets;
-            sourceSets.sequence0.visible = false;
-            sourceSets.sequence1.visible = false;
-            sourceSets.sequence2.visible = false;
-            sourceSets.sequence3.visible = false;
-            sourceSets.sequence4.visible = false;
+            sourceSets.sequenceN.visible = false;
             this.addGuifyControllers(
                 sourceSets,
                 HC.SourceControllerUi,
                 this.sourceSettingsGui
             );
 
-            sourceSets.sequence0.visible = true;
-            sourceSets.sequence1.visible = true;
-            sourceSets.sequence2.visible = true;
-            sourceSets.sequence3.visible = true;
-            sourceSets.sequence4.visible = true;
+            sourceSets.sequenceN.visible = true;
             sourceSets.lighting.visible = false;
             sourceSets.sample.visible = false;
             sourceSets.source.visible = false;

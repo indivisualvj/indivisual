@@ -6,6 +6,7 @@
   "dependencies": {
     "command-line-args": "^5.0.2",
     "express": "^4.16.4",
+    "js-yaml": "^4.1.0",
     "socket.io": "^2.4.0",
     "three": "0.124"
   },

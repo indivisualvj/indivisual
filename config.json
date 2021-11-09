@@ -21,7 +21,7 @@
     "js/controller"
   ],
 
-  "postprocessing": [
+  "addons": [
     "lib/three/shaders",
     "lib/three/postprocessing"
   ],

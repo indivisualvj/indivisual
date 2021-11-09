@@ -90,7 +90,7 @@ let groupsCheckups = {
 };
 
 if (process.argv.length > 2) {
-    if (process.argv[2] == 'log') {
+    if (process.argv[2] === 'log') {
         log[process.argv[3]] = true;
         console.log('log', log);
     }
@@ -359,7 +359,7 @@ function _validSource (source, action) {
 
     if (source in sourcesGroups) {
         let group = sourcesGroups[source];
-        if (group.indexOf(action) != -1) {
+        if (group.indexOf(action) !== -1) {
             pass = true;
         }
     }
@@ -380,7 +380,7 @@ function _validTarget(target, action, session) {
 
     if (target in targetsGroups) {
         let group = targetsGroups[target];
-        if (group.indexOf(action) != -1) {
+        if (group.indexOf(action) !== -1) {
             if (target in groupsCheckups) {
                 let checkups = groupsCheckups[target];
                 pass = true;
@@ -613,7 +613,7 @@ function _load(data, callback, forceCallback) {
 function _sources(req, sources) {
 
     let compress = false;
-    let name = req.originalUrl;
+    let name = req.originalUrl.replace('bin/', '');
 
     let file = _BIN + name; // do not use file_path! req originalUrl already contains leading slash ...
 
@@ -688,6 +688,7 @@ function _concat(files, file) {
 /**
  *
  * @param dir
+ * @param callback
  * @private
  */
 function _unlinkAll(dir, callback) {
@@ -802,7 +803,25 @@ function initGet() {
     /**
      *
      */
-    app.get('/animation.js', function (req, res) {
+    app.get('/node_modules/*.js', function (req, res) {
+        let url = req.originalUrl.replace('/', '');
+        url = path.resolve(url);
+        res.sendFile(url);
+    });
+
+    /**
+     *
+     */
+    app.get('/app/lib/*', function (req, res) {
+        let url = req.originalUrl.replace('/', '') + '.js';
+        url = path.resolve(url);
+        res.sendFile(url);
+    });
+
+    /**
+     *
+     */
+    app.get('/bin/animation.js', function (req, res) {
 
         let sources = [].concat(conf.shared).concat(conf.animation);
         let file = _sources(req, sources);
@@ -814,7 +833,7 @@ function initGet() {
     /**
      *
      */
-    app.get('/controller.js', function (req, res) {
+    app.get('/bin/controller.js', function (req, res) {
 
         let sources = [].concat(conf.shared).concat(conf.controller);
         let file = _sources(req, sources);
@@ -825,9 +844,9 @@ function initGet() {
     /**
      *
      */
-    app.get('/postprocessing.js', function (req, res) {
+    app.get('/bin/addons.js', function (req, res) {
 
-        let sources = [].concat(conf.postprocessing);
+        let sources = [].concat(conf.addons);
         let file = _sources(req, sources);
 
         res.sendFile(file);
@@ -883,17 +902,15 @@ function initGet() {
     });
 }
 
-/**
- *
- * @param pathArray
- * @returns {Socket|string}
- * @private
- */
 function filePath() {
     let args = Array.prototype.slice.call(arguments);
     return args.join('/');
 }
 
+/**
+ *
+ * @private
+ */
 function _setup() {
 
     console.log('setting up environment...');
@@ -909,6 +926,8 @@ function _setup() {
 /**
  *
  * @param dir
+ * @param feedback
+ * @returns {string}
  * @private
  */
 function _existCreate(dir, feedback) {

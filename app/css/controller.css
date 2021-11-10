@@ -508,6 +508,7 @@ input:focus, select:focus {
     top: 0;
     width: 0;
     height: 100%;
+    min-height: 42px;
     border-left: 4px solid greenyellow;
     border-right: 4px solid orangered;
     outline: 1000px solid rgba(0,0,0, 0.6);
@@ -530,6 +531,7 @@ input:focus, select:focus {
     position: relative;
     display: inline-block;
     width: 6.25%;
+    min-height: 42px;
     height: 100%;
     overflow: hidden;
     outline: 1px solid #efefef;

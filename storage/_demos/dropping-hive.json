@@ -2,7 +2,7 @@
     "info": {
         "name": 0,
         "version": 1,
-        "tutorial": {}
+        "tutorial": "[object Object]"
     },
     "layer": {
         "layer_transvisible": false,
@@ -46,7 +46,7 @@
         "lighting_fog": true,
         "lighting_shadows": true,
         "lighting_fog_near": 888,
-        "lighting_fog_far": 1199
+        "lighting_fog_far": 6016
     },
     "lighting_lookat": {
         "lighting_lookat": "straight",

@@ -37,7 +37,7 @@
 
             let reduce = params.multiplier > 0;
 
-            if ((peak && this.audioAnalyser.peak) || (!peak && speed.prc == 0)) {
+            if ((peak && this.audioAnalyser.peak) || (!peak && speed.prc === 0)) {
                 reduce = true;
                 if (params.multiplier <= 0) {
                     params.multiplier = 1;

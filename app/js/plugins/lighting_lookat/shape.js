@@ -3,7 +3,7 @@
         apply(light, peak) {
             if (this.isFirstShape(light)) {
                 let speed = this.layer.getCurrentSpeed();
-                if (!this.shape || (!peak && speed.prc == 0) || (peak && this.audioAnalyser.peak && randomBool())) {
+                if (!this.shape || (!peak && speed.prc === 0) || (peak && this.audioAnalyser.peak && randomBool())) {
                     this.shape = this.layer.getRandomShape();
                 }
             }
@@ -31,7 +31,7 @@
                 params.shape = false;
             }
 
-            if (!params.shape || (!peak && speed.prc == 0) || (peak && this.audioAnalyser.peak && randomBool())) {
+            if (!params.shape || (!peak && speed.prc === 0) || (peak && this.audioAnalyser.peak && randomBool())) {
                 params.shape = this.layer.getRandomShape();
                 params.speed = this.layer.getShapeSpeed(params.shape).speed;
             }

@@ -27,7 +27,7 @@
 
             file = assetman.getImage(file);
 
-            if (this.properties.map && this.file != file) {
+            if (this.properties.map && this.file !== file) {
                 this.reset();
             }
 
@@ -36,7 +36,7 @@
                     let inst = this;
                     let path = filePath(IMAGE_DIR, file);
                     this.loading = true;
-// fixme whatch the video on canvas and see what can be done https://www.youtube.com/watch?time_continue=68&v=wkDd-x0EkFU&feature=emb_logo
+
                     assetman.loadMaterialMap(this.properties, path, function (mat) {
                         inst.file = file;
                         inst.loading = false;

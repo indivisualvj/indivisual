@@ -208,22 +208,14 @@ document.addEventListener('DOMContentLoaded', function () {
             );
 
             let sourceSets = sets.sourceSets;
-            sourceSets.sequence0.visible = false;
-            sourceSets.sequence1.visible = false;
-            sourceSets.sequence2.visible = false;
-            sourceSets.sequence3.visible = false;
-            sourceSets.sequence4.visible = false;
+            sourceSets.sequenceN.visible = false;
             this.addGuifyControllers(
                 sourceSets,
                 HC.SourceControllerUi,
                 this.sourceSettingsGui
             );
 
-            sourceSets.sequence0.visible = true;
-            sourceSets.sequence1.visible = true;
-            sourceSets.sequence2.visible = true;
-            sourceSets.sequence3.visible = true;
-            sourceSets.sequence4.visible = true;
+            sourceSets.sequenceN.visible = true;
             sourceSets.lighting.visible = false;
             sourceSets.sample.visible = false;
             sourceSets.source.visible = false;
@@ -644,6 +636,7 @@ document.addEventListener('DOMContentLoaded', function () {
             } else if (item === 'reset') {
                 if (value && force) {
                     this.settingsManager.reset(splitToIntArray(this.config.ControlSettings.shuffleable));
+                    this.refreshLayerInfo();
                 }
             }
 
@@ -668,7 +661,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.updateUi(this.controlSettingsGui);
             }
 
-            if (item == 'session' && value != _HASH) {
+            if (item === 'session' && value !== _HASH) {
                 document.location.hash = value;
                 document.location.reload();
             }

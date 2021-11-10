@@ -17,7 +17,7 @@
 
         init(random) {
             let layer = this.layer;
-            let reset = randomInt(0, 6) == 0;
+            let reset = randomInt(0, 6) === 0;
             let inx = [];
             this.index = [];
 
@@ -73,7 +73,7 @@
                 params.oz = params.nz = shape.z();
                 params.ni = index + 1;
 
-                if (index == 0) {
+                if (index === 0) {
                     this.init(random);
                 }
 
@@ -83,7 +83,7 @@
             let speed = layer.getShapeSpeed(shape);
             let prc = speed.prc;
 
-            if (!shuffle && prc == 0) {
+            if (!shuffle && prc === 0) {
                 let bro = layer.shapes[0];
 
                 if (params.ni < layer.shapeCount()) {
@@ -101,8 +101,8 @@
                 }
 
             } else if (shuffle) {
-                if (prc == 0) {
-                    if (index == 0) {
+                if (prc === 0) {
+                    if (index === 0) {
                         this.init(random);
                     }
 
@@ -180,7 +180,7 @@
 
         init() {
             let layer = this.layer;
-            let reset = randomInt(0, 6) == 0;
+            let reset = randomInt(0, 6) === 0;
             let inx = [];
             this.index = [];
 
@@ -226,7 +226,7 @@
                 params.oz = params.nz = shape.z();
                 params.ni = index + 1;
 
-                if (index == 0) {
+                if (index === 0) {
                     this.init();
                 }
 
@@ -236,8 +236,8 @@
             let speed = layer.getShapeSpeed(shape);
             let prc = speed.prc;
 
-            if (prc == 0) {
-                if (index == 0) {
+            if (prc === 0) {
+                if (index === 0) {
                     this.init();
                 }
 
@@ -314,7 +314,7 @@
 
         init() {
             let layer = this.layer;
-            let reset = randomInt(0, 6) == 0;
+            let reset = randomInt(0, 6) === 0;
             let inx = [];
             this.index = [];
 
@@ -361,7 +361,7 @@
                 params.oz = params.nz = shape.z();
                 params.ni = index + 1;
 
-                if (index == 0) {
+                if (index === 0) {
                     this.init();
                 }
 
@@ -371,8 +371,8 @@
             let speed = layer.getShapeSpeed(shape);
             let prc = speed.prc;
 
-            if (prc == 0) {
-                if (index == 0) {
+            if (prc === 0) {
+                if (index === 0) {
                     this.init();
                 }
 

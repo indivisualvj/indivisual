@@ -120,8 +120,6 @@ Just open a pull request or an issue.
 ## Used Libraries and Credits
 Many thanks to:
 
-- Google for their lightning fast browser/engine
-- All the people contributing to web browser technology
 - https://github.com/mrdoob/three.js
 - https://github.com/tweenjs/tween.js
 - https://github.com/glowbox/maptasticjs
@@ -131,3 +129,5 @@ Many thanks to:
 - https://github.com/yarnpkg/yarn
 - https://www.shadertoy.com/
 - https://uberviz.io/viz/word-problems/
+- Google for their lightning fast browser/engine
+- All the people contributing to web technology

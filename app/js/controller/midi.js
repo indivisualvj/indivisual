@@ -183,7 +183,7 @@
             this.data = message.data; // this gives us our [command/channel, note, velocity] data.
 
             let dataId = this._dataId(this.data);
-            if (this.data[2] == 127) {
+            if (this.data[2] === 127) {
                 this.midi_pressed[dataId] = this.data[2];
                 clearTimeout(this.midi_timeouts[dataId]);
 
@@ -191,7 +191,7 @@
                 delete this.midi_pressed[dataId];
             }
 
-            if (this.data[0] == 248) {
+            if (this.data[0] === 248) {
 
                 if (this.clockcounter < 96) {
                     this.clockcounter++;
@@ -222,7 +222,7 @@
             let id = this.data[1];
             let vel = (2 in this.data ? this.data[2] : 127);
 
-            if (vel == 126 || vel == 1) { // glow/off
+            if (vel === 126 || vel === 1) { // glow/off
                 return;
             }
 

@@ -79,9 +79,9 @@
         lookAt(shape, peak) {
             let params = this.params(shape);
             let speed = params.speed;
-            params.timeout = (speed.prc == 0 && speed.speed.beats % 4 == 0);
+            params.timeout = (speed.prc === 0 && speed.speed.beats % 4 === 0);
 
-            let restart = speed.prc == 0;
+            let restart = speed.prc === 0;
 
             if ((!params.tween && restart) || params.timeout) {
                 this.nextTarget(shape, peak);

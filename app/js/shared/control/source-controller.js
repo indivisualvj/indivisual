@@ -185,92 +185,122 @@ HC.SourceController = HC.SourceController || {};
 {
     /**
      *
-     * @type {HC.SourceController.sequence0}
+     * @type {HC.SourceController.sequenceN}
      */
-    HC.SourceController.sequence0 = class sequence extends HC.ControlSet { // fixme could be iterable but overwritten to create resets?
+    HC.SourceController.sequenceN = class sequenceN extends HC.IterableControlSet {
         static index = 20;
-        prefix = 0;
+        prefix = 'sequence';
+        folders = [];
         settings = {
-            sequence0_input: 'off',
-            sequence0_overlay: 'off',
-            sequence0_brightness: 1.0,
-            sequence0_blendmode: '0',
-            sequence0_osci: 'off',
-            sequence0_speed: 1.0,
-            sequence0_start: 0,
-            sequence0_end: 0,
-            sequence0_jump: false,
-            sequence0_audio: false,
-            sequence0_reversed: false,
-            sequence0_speedup: false,
-            sequence0_speeddown: false,
-            sequence0_flipx: false,
-            sequence0_flipy: false,
-            sequence0_flipa: false,
-            sequence0_passthrough: false,
+            sequence_input: 'off',
+            sequence_overlay: 'off',
+            sequence_brightness: 1.0,
+            sequence_blendmode: '0',
+            sequence_osci: 'off',
+            sequence_speed: 1.0,
+            sequence_start: 0,
+            sequence_end: 0,
+            sequence_jump: false,
+            sequence_audio: false,
+            sequence_flipx: false,
+            sequence_flipy: false,
+            sequence_flipa: false,
+            sequence_reversed: false,
+            sequence_speedup: false,
+            sequence_speeddown: false,
+            sequence_passthrough: false,
         };
 
         types = {
-            sequence0_brightness: [0, 1, 0.02],
-            sequence0_speed: [-2, 2, 0.1],
-            sequence0_start: [0, 100, 1, 'hidden'],
-            sequence0_end: [0, 100, 1, 'hidden'],
+            sequence_brightness: [0, 1, 0.02],
+            sequence_speed: [-2, 2, 0.1], // fixme sequence speed not working
+            sequence_start: [0, 100, 1, 'hidden'],
+            sequence_end: [0, 100, 1, 'hidden'],
+            sequence_X: ['hidden'],
+            sequence_XX: ['hidden'],
         };
 
         styles = {
-            sequence0_speed: ['half'],
-            sequence0_osci: ['half', 'clear'],
-            sequence0_reset: ['hex'],
-            sequence0_rereset: ['third'],
-            sequence0_jump: ['hex'],
-            sequence0_audio: ['hex'],
-            sequence0_reversed: ['hex'],
-            sequence0_speedup: ['hex'],
-            sequence0_speeddown: ['hex'],
-            sequence0_flipx: ['hex'],
-            sequence0_flipy: ['hex'],
-            sequence0_flipa: ['hex'],
-            sequence0_passthrough: ['hex'],
-            sequence0_input: ['half', 'clear'],
-            sequence0_overlay: ['half'],
-            sequence0_blendmode: ['half'],
-            sequence0_brightness: ['half', 'clear'],
+            sequence_speed: ['half'],
+            sequence_osci: ['half', 'clear'],
+            sequence_X: ['half'],
+            sequence_XX: ['half'],
+            sequence_jump: ['quint'],
+            sequence_audio: ['quint'],
+            sequence_reversed: ['quarter'],
+            sequence_speedup: ['quarter'],
+            sequence_speeddown: ['quarter'],
+            sequence_flipx: ['quint'],
+            sequence_flipy: ['quint'],
+            sequence_flipa: ['quint'],
+            sequence_passthrough: ['quarter'],
+            sequence_input: ['half', 'clear'],
+            sequence_overlay: ['half'],
+            sequence_blendmode: ['half'],
+            sequence_brightness: ['half', 'clear'],
         };
 
         values = {
+            sequence_osci: 'oscillator',
+            sequence_input: 'input',
+            sequence_overlay: 'overlay',
+            sequence_blendmode: 'blendmode',
+        };
+
+        prefixes = {
 
         };
 
-        init(pluggedValues) {
-            this.createValues(pluggedValues);
-            super.init(pluggedValues);
-        }
+        parents = {
+            sequence_input: '',
+            sequence_overlay: '',
+            sequence_brightness: '',
+            sequence_blendmode: '',
+            sequence_osci: '',
+            sequence_speed: '',
+            sequence_start: '',
+            sequence_end: '',
+            sequence_jump: '',
+            sequence_audio: '',
+            sequence_flipx: '',
+            sequence_flipy: '',
+            sequence_flipa: '',
+            sequence_reversed: '',
+            sequence_speedup: '',
+            sequence_speeddown: '',
+            sequence_passthrough: '',
+        };
 
-        /**
-         *
-         * @param pluggedValues
-         */
-        createValues(pluggedValues) {
-
-            let k = this.prefix;
-            {
-                this.values['sequence' + k + '_input'] = pluggedValues.input;
-                this.values['sequence' + k + '_overlay'] = pluggedValues.overlay;
-                this.values['sequence' + k + '_blendmode'] = pluggedValues.blendmode;
-                this.values['sequence' + k + '_osci'] = pluggedValues.oscillator;
+        createSettings(pluggedValues) {
+            for (let member in this.members) {
+                this[member] = {};
             }
 
-            this.createResets(pluggedValues);
+            for (let k in this.members.values) {
+                let key = this.members.values[k];
+                this.members.values[k] = this.config.SourceValues[key];
+            }
+
+            for (let i = 0; i < pluggedValues[this.prefix].length; i++) {
+                this._create('settings', i, this.members.settings);
+                this._create('types', i, this.members.types);
+                this._create('styles', i, this.members.styles);
+                this._create('values', i, this.members.values);
+                this._create('parents', i, this.members.parents, this.prefix + i);
+                this._create('folders', i, {sequence: true});
+                this.createResets(i, pluggedValues);
+            }
         }
 
         /**
          *
+         * @param index
          * @param pluggedValues
          */
-        createResets(pluggedValues)  {
+        createResets(index, pluggedValues)  {
             let _reset = (seq) => {
                 let key = getSequenceKey(seq);
-                this.settings[key + '_reset'] = () => {
+                this.settings[key +  '_X'] = () => {
                     let updates = {};
                     updates[key + '_jump'] = false;
                     updates[key + '_audio'] = false;
@@ -293,11 +323,11 @@ HC.SourceController = HC.SourceController || {};
                 };
             };
 
-            _reset(0);
+            _reset(index);
 
             let _rereset = (seq) => {
                 let key = getSequenceKey(seq);
-                this.settings[key + '_rereset'] = () => {
+                this.settings[key +  '_XX'] = () => {
                     let updates = {};
                     updates[key + '_overlay'] = this.settings[key + '_overlay'];
                     updates[key + '_input'] = this.settings[key + '_input'];
@@ -310,540 +340,7 @@ HC.SourceController = HC.SourceController || {};
                 };
             };
 
-            _rereset(0);
-        }
-    }
-}
-
-{
-    /**
-     *
-     * @type {HC.SourceController.sequence1}
-     */
-    HC.SourceController.sequence1 = class sequence extends HC.ControlSet {
-        static index = 20;
-        prefix = 1;
-        settings = {
-            sequence1_input: 'off',
-            sequence1_overlay: 'off',
-            sequence1_brightness: 1.0,
-            sequence1_blendmode: '0',
-            sequence1_osci: 'off',
-            sequence1_speed: 1.0,
-            sequence1_start: 0,
-            sequence1_end: 0,
-            sequence1_jump: false,
-            sequence1_audio: false,
-            sequence1_reversed: false,
-            sequence1_speedup: false,
-            sequence1_speeddown: false,
-            sequence1_flipx: false,
-            sequence1_flipy: false,
-            sequence1_flipa: false,
-            sequence1_passthrough: false,
-        };
-
-        types = {
-            sequence1_brightness: [0, 1, 0.02],
-            sequence1_speed: [-2, 2, 0.1],
-            sequence1_start: [0, 100, 1, 'hidden'],
-            sequence1_end: [0, 100, 1, 'hidden'],
-        };
-
-        styles = {
-            sequence1_speed: ['half'],
-            sequence1_osci: ['half', 'clear'],
-            sequence1_reset: ['hex'],
-            sequence1_rereset: ['third'],
-            sequence1_jump: ['hex'],
-            sequence1_audio: ['hex'],
-            sequence1_reversed: ['hex'],
-            sequence1_speedup: ['hex'],
-            sequence1_speeddown: ['hex'],
-            sequence1_flipx: ['hex'],
-            sequence1_flipy: ['hex'],
-            sequence1_flipa: ['hex'],
-            sequence1_passthrough: ['hex'],
-            sequence1_input: ['half', 'clear'],
-            sequence1_overlay: ['half'],
-            sequence1_blendmode: ['half'],
-            sequence1_brightness: ['half', 'clear'],
-        };
-
-        values = {
-
-        };
-
-        init(pluggedValues) {
-            this.createValues(pluggedValues);
-            super.init(pluggedValues);
-        }
-
-        /**
-         *
-         * @param pluggedValues
-         */
-        createValues(pluggedValues) {
-
-            let k = this.prefix;
-            {
-                this.values['sequence' + k + '_input'] = pluggedValues.input;
-                this.values['sequence' + k + '_overlay'] = pluggedValues.overlay;
-                this.values['sequence' + k + '_blendmode'] = pluggedValues.blendmode;
-                this.values['sequence' + k + '_osci'] = pluggedValues.oscillator;
-            }
-
-            this.createResets(pluggedValues);
-        }
-
-        /**
-         *
-         * @param pluggedValues
-         */
-        createResets(pluggedValues)  {
-            let _reset = (seq) => {
-                let key = getSequenceKey(seq);
-                this.settings[key + '_reset'] = () => {
-                    let updates = {};
-                    updates[key + '_jump'] = false;
-                    updates[key + '_audio'] = false;
-                    updates[key + '_flipa'] = false;
-                    updates[key + '_flipx'] = false;
-                    updates[key + '_flipy'] = false;
-                    updates[key + '_speedup'] = false;
-                    updates[key + '_speeddown'] = false;
-                    updates[key + '_reversed'] = false;
-                    updates[key + '_passthrough'] = false;
-                    updates[key + '_speed'] = 1.0;
-
-                    updates[getSequenceStartKey(seq)] = 0;
-
-                    let endKey = getSequenceEndKey(seq);
-                    updates[endKey] = 0;
-
-                    messaging.program.updateSources(updates, true, false, false);
-                    messaging.emitSources(updates, true, true, false);
-                };
-            };
-
-            _reset(1);
-
-            let _rereset = (seq) => {
-                let key = getSequenceKey(seq);
-                this.settings[key + '_rereset'] = () => {
-                    let updates = {};
-                    updates[key + '_overlay'] = this.settings[key + '_overlay'];
-                    updates[key + '_input'] = this.settings[key + '_input'];
-                    updates[key + '_blendmode'] = this.settings[key + '_blendmode'];
-                    updates[key + '_osci'] = this.settings[key + '_osci'];
-                    updates[key + '_brightness'] = this.settings[key + '_brightness'];
-
-                    messaging.program.updateSources(updates, true, false, false);
-                    messaging.emitSources(updates, true, true, false);
-                };
-            };
-
-            _rereset(1);
-
-        }
-    }
-}
-
-{
-    /**
-     *
-     * @type {HC.SourceController.sequence2}
-     */
-    HC.SourceController.sequence2 = class sequence extends HC.ControlSet {
-        static index = 20;
-        prefix = 2;
-        settings = {
-            sequence2_input: 'off',
-            sequence2_overlay: 'off',
-            sequence2_brightness: 1.0,
-            sequence2_blendmode: '0',
-            sequence2_osci: 'off',
-            sequence2_speed: 1.0,
-            sequence2_start: 0,
-            sequence2_end: 0,
-            sequence2_jump: false,
-            sequence2_audio: false,
-            sequence2_reversed: false,
-            sequence2_speedup: false,
-            sequence2_speeddown: false,
-            sequence2_flipx: false,
-            sequence2_flipy: false,
-            sequence2_flipa: false,
-            sequence2_passthrough: false,
-        };
-
-        types = {
-            sequence2_brightness: [0, 1, 0.02],
-            sequence2_speed: [-2, 2, 0.1],
-            sequence2_start: [0, 100, 1, 'hidden'],
-            sequence2_end: [0, 100, 1, 'hidden'],
-        };
-
-        styles = {
-            sequence2_speed: ['half'],
-            sequence2_osci: ['half', 'clear'],
-            sequence2_reset: ['hex'],
-            sequence2_rereset: ['third'],
-            sequence2_jump: ['hex'],
-            sequence2_audio: ['hex'],
-            sequence2_reversed: ['hex'],
-            sequence2_speedup: ['hex'],
-            sequence2_speeddown: ['hex'],
-            sequence2_flipx: ['hex'],
-            sequence2_flipy: ['hex'],
-            sequence2_flipa: ['hex'],
-            sequence2_passthrough: ['hex'],
-            sequence2_input: ['half', 'clear'],
-            sequence2_overlay: ['half'],
-            sequence2_blendmode: ['half'],
-            sequence2_brightness: ['half', 'clear'],
-        };
-
-        values = {
-
-        };
-
-        init(pluggedValues) {
-            this.createValues(pluggedValues);
-            super.init(pluggedValues);
-        }
-
-        /**
-         *
-         * @param pluggedValues
-         */
-        createValues(pluggedValues) {
-
-            let k = this.prefix;
-            {
-                this.values['sequence' + k + '_input'] = pluggedValues.input;
-                this.values['sequence' + k + '_overlay'] = pluggedValues.overlay;
-                this.values['sequence' + k + '_blendmode'] = pluggedValues.blendmode;
-                this.values['sequence' + k + '_osci'] = pluggedValues.oscillator;
-            }
-
-            this.createResets(pluggedValues);
-        }
-
-        /**
-         *
-         * @param pluggedValues
-         */
-        createResets(pluggedValues)  {
-            let _reset = (seq) => {
-                let key = getSequenceKey(seq);
-                this.settings[key + '_reset'] = () => {
-                    let updates = {};
-                    updates[key + '_jump'] = false;
-                    updates[key + '_audio'] = false;
-                    updates[key + '_flipa'] = false;
-                    updates[key + '_flipx'] = false;
-                    updates[key + '_flipy'] = false;
-                    updates[key + '_speedup'] = false;
-                    updates[key + '_speeddown'] = false;
-                    updates[key + '_reversed'] = false;
-                    updates[key + '_passthrough'] = false;
-                    updates[key + '_speed'] = 1.0;
-
-                    updates[getSequenceStartKey(seq)] = 0;
-
-                    let endKey = getSequenceEndKey(seq);
-                    updates[endKey] = 0;
-
-                    messaging.program.updateSources(updates, true, false, false);
-                    messaging.emitSources(updates, true, true, false);
-                };
-            };
-
-            _reset(2);
-
-            let _rereset = (seq) => {
-                let key = getSequenceKey(seq);
-                this.settings[key + '_rereset'] = () => {
-                    let updates = {};
-                    updates[key + '_overlay'] = this.settings[key + '_overlay'];
-                    updates[key + '_input'] = this.settings[key + '_input'];
-                    updates[key + '_blendmode'] = this.settings[key + '_blendmode'];
-                    updates[key + '_osci'] = this.settings[key + '_osci'];
-                    updates[key + '_brightness'] = this.settings[key + '_brightness'];
-
-                    messaging.program.updateSources(updates, true, false, false);
-                    messaging.emitSources(updates, true, true, false);
-                };
-            };
-
-            _rereset(2);
-        }
-    }
-}
-
-{
-    /**
-     *
-     * @type {HC.SourceController.sequence3}
-     */
-    HC.SourceController.sequence3 = class sequence extends HC.ControlSet {
-        static index = 20;
-        prefix = 3;
-        settings = {
-            sequence3_input: 'off',
-            sequence3_overlay: 'off',
-            sequence3_brightness: 1.0,
-            sequence3_blendmode: '0',
-            sequence3_osci: 'off',
-            sequence3_speed: 1.0,
-            sequence3_start: 0,
-            sequence3_end: 0,
-            sequence3_jump: false,
-            sequence3_audio: false,
-            sequence3_reversed: false,
-            sequence3_speedup: false,
-            sequence3_speeddown: false,
-            sequence3_flipx: false,
-            sequence3_flipy: false,
-            sequence3_flipa: false,
-            sequence3_passthrough: false,
-        };
-
-        types = {
-            sequence3_brightness: [0, 1, 0.02],
-            sequence3_speed: [-2, 2, 0.1],
-            sequence3_start: [0, 100, 1, 'hidden'],
-            sequence3_end: [0, 100, 1, 'hidden'],
-        };
-
-        styles = {
-            sequence3_speed: ['half'],
-            sequence3_osci: ['half', 'clear'],
-            sequence3_reset: ['hex'],
-            sequence3_rereset: ['third'],
-            sequence3_jump: ['hex'],
-            sequence3_audio: ['hex'],
-            sequence3_reversed: ['hex'],
-            sequence3_speedup: ['hex'],
-            sequence3_speeddown: ['hex'],
-            sequence3_flipx: ['hex'],
-            sequence3_flipy: ['hex'],
-            sequence3_flipa: ['hex'],
-            sequence3_passthrough: ['hex'],
-            sequence3_input: ['half', 'clear'],
-            sequence3_overlay: ['half'],
-            sequence3_blendmode: ['half'],
-            sequence3_brightness: ['half', 'clear'],
-        };
-
-        values = {
-
-        };
-
-        init(pluggedValues) {
-            this.createValues(pluggedValues);
-            super.init(pluggedValues);
-        }
-
-        /**
-         *
-         * @param pluggedValues
-         */
-        createValues(pluggedValues) {
-
-            let k = this.prefix;
-            {
-                this.values['sequence' + k + '_input'] = pluggedValues.input;
-                this.values['sequence' + k + '_overlay'] = pluggedValues.overlay;
-                this.values['sequence' + k + '_blendmode'] = pluggedValues.blendmode;
-                this.values['sequence' + k + '_osci'] = pluggedValues.oscillator;
-            }
-
-            this.createResets(pluggedValues);
-        }
-
-        /**
-         *
-         * @param pluggedValues
-         */
-        createResets(pluggedValues)  {
-            let _reset = (seq) => {
-                let key = getSequenceKey(seq);
-                this.settings[key + '_reset'] = () => {
-                    let updates = {};
-                    updates[key + '_jump'] = false;
-                    updates[key + '_audio'] = false;
-                    updates[key + '_flipa'] = false;
-                    updates[key + '_flipx'] = false;
-                    updates[key + '_flipy'] = false;
-                    updates[key + '_speedup'] = false;
-                    updates[key + '_speeddown'] = false;
-                    updates[key + '_reversed'] = false;
-                    updates[key + '_passthrough'] = false;
-                    updates[key + '_speed'] = 1.0;
-
-                    updates[getSequenceStartKey(seq)] = 0;
-
-                    let endKey = getSequenceEndKey(seq);
-                    updates[endKey] = 0;
-
-                    messaging.program.updateSources(updates, true, false, false);
-                    messaging.emitSources(updates, true, true, false);
-                };
-            };
-
-            _reset(3);
-
-            let _rereset = (seq) => {
-                let key = getSequenceKey(seq);
-                this.settings[key + '_rereset'] = () => {
-                    let updates = {};
-                    updates[key + '_overlay'] = this.settings[key + '_overlay'];
-                    updates[key + '_input'] = this.settings[key + '_input'];
-                    updates[key + '_blendmode'] = this.settings[key + '_blendmode'];
-                    updates[key + '_osci'] = this.settings[key + '_osci'];
-                    updates[key + '_brightness'] = this.settings[key + '_brightness'];
-
-                    messaging.program.updateSources(updates, true, false, false);
-                    messaging.emitSources(updates, true, true, false);
-                };
-            };
-
-            _rereset(3);
-        }
-    }
-}
-
-{
-    /**
-     *
-     * @type {HC.SourceController.sequence4}
-     */
-    HC.SourceController.sequence4 = class sequence extends HC.ControlSet {
-        static index = 20;
-        prefix = 4;
-        settings = {
-            sequence4_input: 'off',
-            sequence4_overlay: 'off',
-            sequence4_brightness: 1.0,
-            sequence4_blendmode: '0',
-            sequence4_osci: 'off',
-            sequence4_speed: 1.0,
-            sequence4_start: 0,
-            sequence4_end: 0,
-            sequence4_jump: false,
-            sequence4_audio: false,
-            sequence4_reversed: false,
-            sequence4_speedup: false,
-            sequence4_speeddown: false,
-            sequence4_flipx: false,
-            sequence4_flipy: false,
-            sequence4_flipa: false,
-            sequence4_passthrough: false,
-        };
-
-        types = {
-            sequence4_brightness: [0, 1, 0.02],
-            sequence4_speed: [-2, 2, 0.1],
-            sequence4_start: [0, 100, 1, 'hidden'],
-            sequence4_end: [0, 100, 1, 'hidden'],
-        };
-
-        styles = {
-            sequence4_speed: ['half'],
-            sequence4_osci: ['half', 'clear'],
-            sequence4_reset: ['hex'],
-            sequence4_rereset: ['third'],
-            sequence4_jump: ['hex'],
-            sequence4_audio: ['hex'],
-            sequence4_reversed: ['hex'],
-            sequence4_speedup: ['hex'],
-            sequence4_speeddown: ['hex'],
-            sequence4_flipx: ['hex'],
-            sequence4_flipy: ['hex'],
-            sequence4_flipa: ['hex'],
-            sequence4_passthrough: ['hex'],
-            sequence4_input: ['half', 'clear'],
-            sequence4_overlay: ['half'],
-            sequence4_blendmode: ['half'],
-            sequence4_brightness: ['half', 'clear'],
-        };
-
-        values = {
-
-        };
-
-        init(pluggedValues) {
-            this.createValues(pluggedValues);
-            super.init(pluggedValues);
-        }
-
-        /**
-         *
-         * @param pluggedValues
-         */
-        createValues(pluggedValues) {
-
-            let k = this.prefix;
-            {
-                this.values['sequence' + k + '_input'] = pluggedValues.input;
-                this.values['sequence' + k + '_overlay'] = pluggedValues.overlay;
-                this.values['sequence' + k + '_blendmode'] = pluggedValues.blendmode;
-                this.values['sequence' + k + '_osci'] = pluggedValues.oscillator;
-            }
-
-            this.createResets(pluggedValues);
-        }
-
-        /**
-         *
-         * @param pluggedValues
-         */
-        createResets(pluggedValues)  {
-            let _reset = (seq) => {
-                let key = getSequenceKey(seq);
-                this.settings[key + '_reset'] = () => {
-                    let updates = {};
-                    updates[key + '_jump'] = false;
-                    updates[key + '_audio'] = false;
-                    updates[key + '_flipa'] = false;
-                    updates[key + '_flipx'] = false;
-                    updates[key + '_flipy'] = false;
-                    updates[key + '_speedup'] = false;
-                    updates[key + '_speeddown'] = false;
-                    updates[key + '_reversed'] = false;
-                    updates[key + '_passthrough'] = false;
-                    updates[key + '_speed'] = 1.0;
-
-                    updates[getSequenceStartKey(seq)] = 0;
-
-                    let endKey = getSequenceEndKey(seq);
-                    updates[endKey] = 0;
-
-                    messaging.program.updateSources(updates, true, false, false);
-                    messaging.emitSources(updates, true, true, false);
-                };
-            };
-
-            _reset(4);
-
-            let _rereset = (seq) => {
-                let key = getSequenceKey(seq);
-                this.settings[key + '_rereset'] = () => {
-                    let updates = {};
-                    updates[key + '_overlay'] = this.settings[key + '_overlay'];
-                    updates[key + '_input'] = this.settings[key + '_input'];
-                    updates[key + '_blendmode'] = this.settings[key + '_blendmode'];
-                    updates[key + '_osci'] = this.settings[key + '_osci'];
-                    updates[key + '_brightness'] = this.settings[key + '_brightness'];
-
-                    messaging.program.updateSources(updates, true, false, false);
-                    messaging.emitSources(updates, true, true, false);
-                };
-            };
-
-            _rereset(4);
+            _rereset(index);
         }
     }
 }

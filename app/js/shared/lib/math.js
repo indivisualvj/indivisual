@@ -3,7 +3,7 @@
  * @param min
  * @param max
  * @param negative
- * @returns {*}
+ * @returns {number}
  */
 function randomInt(min, max, negative) {
     let v = Math.floor(Math.random() * (max - min + 1)) + min;
@@ -160,7 +160,7 @@ function gammaFromThreePoints(vectorGamma, vectorBeta, vectorAlpha) {
     let b = vectorGamma.distanceTo(vectorAlpha);
     let c = vectorAlpha.distanceTo(vectorBeta);
 
-    if (a == 0 && b == 0 && c == 0) {
+    if (a === 0 && b === 0 && c === 0) {
         return 0;
     }
 

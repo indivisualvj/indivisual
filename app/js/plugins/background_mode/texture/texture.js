@@ -6,7 +6,7 @@
             let i = this.settings.background_input;
             let id = this.id();
 
-            if (this.current() != id) {
+            if (this.current() !== id) {
                 this.dispose();
 
                 let file = assetman.getImage(i);

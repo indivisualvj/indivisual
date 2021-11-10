@@ -5,7 +5,7 @@
         "tutorial": "[object Object]"
     },
     "layer": {
-        "layer_transvisible": false,
+        "layer_transvisible": true,
         "layer_positionx": 0,
         "layer_positionx_oscillate": "off",
         "layer_positiony": 0,
@@ -109,7 +109,7 @@
     },
     "pattern": {
         "pattern": "matrix",
-        "pattern_shapes": 10,
+        "pattern_shapes": 64,
         "pattern_padding": 1,
         "pattern_padding_oscillate": "off",
         "pattern_centerx": 0,
@@ -127,7 +127,7 @@
         "pattern_overlay_volume_oscillate": "off"
     },
     "shape": {
-        "shape_geometry": "plane",
+        "shape_geometry": "tile",
         "shape_sizedivider": 10,
         "shape_moda": 0,
         "shape_modb": 0,
@@ -144,19 +144,19 @@
         "shape_delay": "off"
     },
     "material": {
-        "mesh_material": "lambert",
+        "mesh_material": "basic",
         "material_style": "fill",
-        "material_blending": "NormalBlending",
+        "material_blending": "NoBlending",
         "material_blendequation": "AddEquation",
         "material_blendsrc": "SrcAlphaFactor",
         "material_blenddst": "OneMinusSrcAlphaFactor",
-        "material_side": 2,
+        "material_side": 0,
         "material_shininess": 2,
         "material_volume": 1,
         "material_roughness": 0.5,
         "material_metalness": 0.5,
         "material_softshading": false,
-        "material_shadowside": 2,
+        "material_shadowside": 1,
         "material_input": "texture",
         "material_mapping": "default",
         "material_wraps": "ClampToEdgeWrapping",
@@ -209,7 +209,7 @@
         "rotation_z": false,
         "rotation_z_random": false,
         "rotation_z_volume": 1,
-        "rotation_offset_mode": "chess45lr",
+        "rotation_offset_mode": "chess90",
         "rotation_offsetx": 0,
         "rotation_offsetx_oscillate": "off",
         "rotation_offsety": 0,

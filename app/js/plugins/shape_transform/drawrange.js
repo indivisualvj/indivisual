@@ -3,7 +3,7 @@
         static name = 'drawrange random';
 
         apply(shape) {
-            if (this.layer.getCurrentSpeed().prc == 0) {
+            if (this.layer.getCurrentSpeed().prc === 0) {
                 let l = shape.geometry.attributes.position.count - 1;
                 let a = randomInt(0, l);
                 let b = randomInt(a, l);

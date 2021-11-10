@@ -5,7 +5,7 @@
         "tutorial": "[object Object]"
     },
     "layer": {
-        "layer_transvisible": false,
+        "layer_transvisible": true,
         "layer_positionx": 0,
         "layer_positionx_oscillate": "off",
         "layer_positiony": 0,
@@ -127,7 +127,7 @@
         "pattern_overlay_volume_oscillate": "off"
     },
     "shape": {
-        "shape_geometry": "plane",
+        "shape_geometry": "tile",
         "shape_sizedivider": 10,
         "shape_moda": 0,
         "shape_modb": 0,
@@ -144,19 +144,19 @@
         "shape_delay": "off"
     },
     "material": {
-        "mesh_material": "lambert",
+        "mesh_material": "basic",
         "material_style": "fill",
-        "material_blending": "NormalBlending",
+        "material_blending": "NoBlending",
         "material_blendequation": "AddEquation",
         "material_blendsrc": "SrcAlphaFactor",
         "material_blenddst": "OneMinusSrcAlphaFactor",
-        "material_side": 2,
+        "material_side": 0,
         "material_shininess": 2,
         "material_volume": 1,
         "material_roughness": 0.5,
         "material_metalness": 0.5,
         "material_softshading": false,
-        "material_shadowside": 2,
+        "material_shadowside": 1,
         "material_input": "texture",
         "material_mapping": "default",
         "material_wraps": "ClampToEdgeWrapping",
@@ -236,11 +236,11 @@
     },
     "sizing": {
         "sizing_mode": "off",
-        "sizing_scale": 0.5,
+        "sizing_scale": 2,
         "sizing_scale_oscillate": "off",
         "sizing_x": 10,
         "sizing_x_oscillate": "off",
-        "sizing_y": 0.13000000000000078,
+        "sizing_y": 0.05000000000000071,
         "sizing_y_oscillate": "off",
         "sizing_z": 1,
         "sizing_z_oscillate": "off",

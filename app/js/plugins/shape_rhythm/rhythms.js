@@ -5,7 +5,7 @@
         apply(shape) {
             let layer = this.layer;
             let params = this.params(shape);
-            if (shape.index % 2 == 0) {
+            if (shape.index % 2 === 0) {
                 params.speed = this.beatKeeper.speeds.double;
 
             } else {
@@ -21,7 +21,7 @@
         apply(shape) {
             let layer = this.layer;
             let params = this.params(shape);
-            if (shape.index % 2 == 0) {
+            if (shape.index % 2 === 0) {
                 params.speed = this.beatKeeper.speeds.quad;
 
             } else {
@@ -37,7 +37,7 @@
         apply(shape) {
             let layer = this.layer;
             let params = this.params(shape);
-            if (shape.index % 2 == 0) {
+            if (shape.index % 2 === 0) {
                 params.speed = this.beatKeeper.speeds.double;
 
             } else {
@@ -53,7 +53,7 @@
         apply(shape) {
             let layer = this.layer;
             let params = this.params(shape);
-            if (shape.index % 2 == 0) {
+            if (shape.index % 2 === 0) {
                 params.speed = this.beatKeeper.speeds.full;
 
             } else {
@@ -69,7 +69,7 @@
         apply(shape) {
             let layer = this.layer;
             let params = this.params(shape);
-            if (shape.index % 2 == 0) {
+            if (shape.index % 2 === 0) {
                 params.speed = this.beatKeeper.speeds.full;
 
             } else {
@@ -85,7 +85,7 @@
         apply(shape) {
             let layer = this.layer;
             let params = this.params(shape);
-            if (shape.index % 2 == 1) {
+            if (shape.index % 2 === 1) {
                 params.speed = this.beatKeeper.speeds.full;
 
             } else {
@@ -101,7 +101,7 @@
         apply(shape) {
             let layer = this.layer;
             let params = this.params(shape);
-            if (shape.index % 2 == 0) {
+            if (shape.index % 2 === 0) {
                 params.speed = this.beatKeeper.speeds.half;
 
             } else {
@@ -117,7 +117,7 @@
         apply(shape) {
             let layer = this.layer;
             let params = this.params(shape);
-            if (shape.index % 2 == 0) {
+            if (shape.index % 2 === 0) {
                 params.speed = this.beatKeeper.speeds.quarter;
 
             } else {

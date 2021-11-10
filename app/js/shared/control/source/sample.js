@@ -63,13 +63,10 @@
             this.controller.sourceSettingsGui.findFolderByKey('sample').setVisible(false);
 
             let ctrl = this.controller.sourceSettingsGui.findControlByProperty(getSampleEnabledKey(this.index));
-            ctrl.setMnemonic(null); // keyboard initialization happens after init thumbs...
             this.controls.appendChild(ctrl.getContainer());
             ctrl = this.controller.sourceSettingsGui.findControlByProperty(getSampleRecordKey(this.index));
-            ctrl.setMnemonic(null);
             this.controls.appendChild(ctrl.getContainer());
             ctrl = this.controller.sourceSettingsGui.findControlByProperty(getSampleBeatKey(this.index));
-            ctrl.setMnemonic(null);
             this.controls.appendChild(ctrl.getContainer());
 
             this.node.appendChild(this.controls);

@@ -71,8 +71,8 @@
 
             this.initPlugins();
 
-            this.storeWorker = new Worker('worker/store-worker.js');
-            this.loadWorker = new Worker('worker/load-worker.js');
+            this.storeWorker = new Worker('worker/store-sample.worker.js');
+            this.loadWorker = new Worker('worker/load-sample.worker.js');
         }
 
         /**
@@ -166,7 +166,7 @@
         /**
          *
          * @param i
-         * @returns {*}
+         * @returns {HC.SourceManager.DisplaySourcePlugin}
          */
         getSequence(i) {
             if (i instanceof HC.SourceManager.DisplaySourcePlugin) {
@@ -317,7 +317,7 @@
                         let plugins = this.getPluginInstances('sequence');
                         for (let s in plugins) {
                             let seq = plugins[s];
-                            if (seq && seq.sample == sample) { // reset input to off if sample was disabled
+                            if (seq && seq.sample === sample) { // reset input to off if sample was disabled
                                 warn = true;
                             }
                         }
@@ -594,7 +594,7 @@
 
             let material = this.config.SourceValues.material_map[this.config.SourceSettings.material_map];
             let key = getSequenceKey(i);
-            if (material == key && messaging.program.renderer) {
+            if (material === key && messaging.program.renderer) {
                 return true;
             }
 
@@ -602,23 +602,23 @@
                 let visible = this.getDisplayVisible(dpl);
                 if (visible) {
                     let src = this.getDisplaySource(dpl);
-                    if (src == 'sequence') {
+                    if (src === 'sequence') {
                         let seq = this.getDisplaySequence(dpl);
-                        if (seq == i) {
+                        if (seq === i) {
                             return true;
                         }
                         let ovrly = this.getSequenceOverlay(seq);
-                        if (ovrly == i) {
+                        if (ovrly === i) {
                             return true;
                         }
 
                         ovrly = this.getSequenceOverlay(ovrly);
-                        if (ovrly == i) {
+                        if (ovrly === i) {
                             return true;
                         }
 
                         ovrly = this.getSequenceOverlay(ovrly);
-                        if (ovrly == i) {
+                        if (ovrly === i) {
                             return true;
                         }
                     }
@@ -661,8 +661,7 @@
          */
         getDisplaySequence(i) {
             let key = getDisplaySequenceKey(i);
-            let value = this.config.SourceSettings[key];
-            return value;
+            return this.config.SourceSettings[key];
         }
 
 
@@ -673,8 +672,7 @@
          */
         getDisplaySource(i) {
             let key = getDisplaySourceKey(i);
-            let value = this.config.SourceSettings[key];
-            return value;
+            return this.config.SourceSettings[key];
         }
 
 
@@ -685,8 +683,7 @@
          */
         getDisplayVisible(i) {
             let key = getDisplayVisibleKey(i);
-            let value = this.config.DisplaySettings[key];
-            return value;
+            return this.config.DisplaySettings[key];
         }
 
 
@@ -697,9 +694,7 @@
          */
         getSampleEnabledBySequence(i) {
             let s = this.getSampleBySequence(i);
-            let value = this.getSampleEnabledBySample(s);
-
-            return value;
+            return this.getSampleEnabledBySample(s);
         }
 
 
@@ -711,8 +706,7 @@
         getSampleEnabledBySample(i) {
             let key = getSampleEnabledKey(i);
             if (key in this.config.SourceSettings) {
-                let value = this.config.SourceSettings[key];
-                return value;
+                return this.config.SourceSettings[key];
             }
 
             return false;
@@ -727,7 +721,7 @@
         getSequenceBySample(i) {
             for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
                 let sample = this.getSampleBySequence(seq);
-                if (sample == i) {
+                if (sample === i) {
                     return seq;
                 }
             }
@@ -766,9 +760,7 @@
         getSampleBySequence(i) {
             let key = getSequenceSampleKey(i);
             if (key in this.config.SourceSettings) {
-                let value = this.config.SourceSettings[key];
-
-                return value;
+                return this.config.SourceSettings[key];
             }
 
             return false;

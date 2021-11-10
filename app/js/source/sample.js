@@ -256,7 +256,7 @@
                     // break;
                 // }
 
-                // if (this.pointer % 10 == 0) {
+                // if (this.pointer % 10 === 0) {
                 //     this.listener.fireEventId('sample.init.progress', this.id, this);
                 // }
             // }

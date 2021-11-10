@@ -45,7 +45,7 @@ HC.plugins.shape_rhythm = HC.plugins.shape_rhythm || {};
 
         starting(shape) {
             let params = this.params(shape);
-            return params.prc == 0;
+            return params.prc === 0;
         }
 
         finished(shape) {

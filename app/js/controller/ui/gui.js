@@ -47,7 +47,9 @@
                 }
             });
             this.component = this.gui;
-            this.gui.bar.input.classList.add('search');
+            if (this.gui.bar.input) {
+                this.gui.bar.input.classList.add('search');
+            }
             this.gui.container.style.zIndex = 99;
         }
 

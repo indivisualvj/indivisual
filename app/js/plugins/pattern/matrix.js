@@ -36,7 +36,7 @@
             // find out the column index
             let column = index - row * columns;
             // revert column index on every odd row
-            if (row % 2 == 1) {
+            if (row % 2 === 1) {
                 column = columns - column - 1;
             }
             vector.x = ++column;

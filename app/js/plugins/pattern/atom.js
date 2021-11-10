@@ -12,7 +12,7 @@
             let speed = layer.getShapeSpeed(shape);
             let params = this.params(shape);
 
-            if (!params.tween && speed.prc == 0) {
+            if (!params.tween && speed.prc === 0) {
 
                 if (this.isFirstShape(shape)) {
                     this.next = layer.random3dPosition(.5, layer.shapeSize(1));

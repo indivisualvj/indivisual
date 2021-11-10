@@ -2,7 +2,7 @@
  *
  * @param random
  * @param complementary
- * @returns {number|*|string}
+ * @returns {string}
  */
 HC.Layer.prototype.shapeColor = function (random, complementary) {
 

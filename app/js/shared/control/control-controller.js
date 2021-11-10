@@ -43,12 +43,9 @@ HC.ControlController = HC.ControlController || {};
             reset: () => {
 
                 if (messaging.program.config.ctrlKey) {
-                    let yes = confirm('Reset everything?'); // fixme doese it worke?
+                    let yes = confirm('Reset everything?');
                     if (yes) {
-                        let os = this.config.ControlSettings.session;
-                        this.config.ControlSettings.session = os;
-
-                        messaging.emitControls(this.config.ControlSettings, true, true, true);
+                        // todo: reset everything
                     }
                 }
 

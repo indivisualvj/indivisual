@@ -319,7 +319,7 @@
       sample:
         type: function
         section: Source
-        name: sample0_reset
+        name: sample0_X
 
     9:
       default:
@@ -337,7 +337,7 @@
       sample:
         type: function
         section: Source
-        name: sample1_reset
+        name: sample1_X
 
     10:
       default:
@@ -351,7 +351,7 @@
       sample:
         type: function
         section: Source
-        name: sample2_reset
+        name: sample2_X
       display:
         type: select
         section: Display
@@ -369,7 +369,7 @@
       sample:
         type: function
         section: Source
-        name: sample3_reset
+        name: sample3_X
       display:
         type: select
         section: Display
@@ -391,7 +391,7 @@
       sample:
         type: function
         section: Source
-        name: sample4_reset
+        name: sample4_X
 
     13:
       default:
@@ -405,7 +405,7 @@
       sample:
         type: function
         section: Source
-        name: sample5_reset
+        name: sample5_X
 
     14:
   #    default:
@@ -688,11 +688,11 @@
       sequence:
         type: function
         section: Source
-        name: _reset
+        name: _X
       overlay:
         type: function
         section: Source
-        name: _rereset
+        name: _XX
 
     31:
       default:

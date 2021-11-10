@@ -71,12 +71,12 @@
                 // e.stopPropagation();
 
                 if (valueComponent.nodeName === 'INPUT') {
-                    if (e.keyCode == 27) { // ESCAPE
+                    if (e.key === 'Escape') {
                         valueComponent.blur();
                     }
 
                 } else if (valueComponent.nodeName === 'SELECT') {
-                    if (e.keyCode == 8 || e.keyCode == 27) { // BACKSPACE | ESCAPE
+                    if (e.key === 'Backspace' || e.key === 'Escape') {
                         valueComponent.focus();
                         valueComponent.blur();
                         valueComponent.focus();
@@ -101,13 +101,13 @@
                 e.preventDefault();
                 e.stopPropagation();
 
-                if (e.keyCode == 38) { // UP
+                if (e.keyCode === 38) { // UP
                     requestAnimationFrame(() => {
                         this.incrementValue();
                     });
 
 
-                } else if (e.keyCode == 40) { // DOWN
+                } else if (e.keyCode === 40) { // DOWN
                     requestAnimationFrame(() => {
                         this.decrementValue();
                     });

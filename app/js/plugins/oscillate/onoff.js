@@ -26,7 +26,7 @@
             let pa = this.params(key);
 
             let speed = this.beatKeeper.getSpeed('half');
-            if (speed.prc == 0) {
+            if (speed.prc === 0) {
                 pa = (pa ? 0 : 1);
             }
 
@@ -45,7 +45,7 @@
             let pa = this.params(key);
 
             let speed = this.beatKeeper.getSpeed('full');
-            if (speed.prc == 0) {
+            if (speed.prc === 0) {
                 pa = (pa ? 0 : 1);
             }
 
@@ -64,7 +64,7 @@
             let pa = this.params(key);
 
             let speed = this.beatKeeper.getSpeed('double');
-            if (speed.prc == 0) {
+            if (speed.prc === 0) {
                 pa = (pa ? 0 : 1);
             }
 
@@ -83,7 +83,7 @@
             let pa = this.params(key);
 
             let speed = this.beatKeeper.getSpeed('quarter');
-            if (speed.prc == 0) {
+            if (speed.prc === 0) {
                 pa = (pa ? 0 : 1);
             }
 

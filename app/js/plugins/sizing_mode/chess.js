@@ -4,7 +4,7 @@
 
         apply(shape) {
             let layer = this.layer;
-            let s = (shape.index % 2 == 0) ? 1.50 : 0.50;
+            let s = (shape.index % 2 === 0) ? 1.50 : 0.50;
             s *= this.settings.sizing_scale;
             let x = this.settings.sizing_x * s;
             let y = this.settings.sizing_y * s;
@@ -20,7 +20,7 @@
 
         apply(shape) {
             let layer = this.layer;
-            let s = (shape.index % 2 == 0) ? 2.00 : 1.00;
+            let s = (shape.index % 2 === 0) ? 2.00 : 1.00;
             s *= this.settings.sizing_scale;
             let x = this.settings.sizing_x * s;
             let y = this.settings.sizing_y * s;
@@ -36,7 +36,7 @@
 
         apply(shape) {
             let layer = this.layer;
-            let s = (shape.index % 2 == 0) ? 0.50 : 1.50;
+            let s = (shape.index % 2 === 0) ? 0.50 : 1.50;
 
             s *= this.settings.sizing_scale;
             let x = this.settings.sizing_x * s;
@@ -52,7 +52,7 @@
         static name = '1|2';
 
         apply(shape) {
-            let s = (shape.index % 2 == 0) ? 1.00 : 2.00;
+            let s = (shape.index % 2 === 0) ? 1.00 : 2.00;
             s *= this.settings.sizing_scale;
             let x = this.settings.sizing_x * s;
             let y = this.settings.sizing_y * s;
@@ -67,7 +67,7 @@
         static name = '1|5';
 
         apply(shape) {
-            let s = (shape.index % 2 == 0) ? 1.00 : 5.00;
+            let s = (shape.index % 2 === 0) ? 1.00 : 5.00;
             s *= this.settings.sizing_scale;
             let x = this.settings.sizing_x * s;
             let y = this.settings.sizing_y * s;
@@ -82,7 +82,7 @@
         static name = '5|1';
 
         apply(shape) {
-            let s = (shape.index % 2 == 0) ? 5.00 : 1.00;
+            let s = (shape.index % 2 === 0) ? 5.00 : 1.00;
             s *= this.settings.sizing_scale;
             let x = this.settings.sizing_x * s;
             let y = this.settings.sizing_y * s;

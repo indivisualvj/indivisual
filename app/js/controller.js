@@ -225,14 +225,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 sourceSets,
                 HC.SourceControllerUi,
                 this.sequenceSettingsGui,
-                (seq) => {
-                    this.clips.push(new HC.SourceControllerSequence(this, numberExtract(seq, 'sequence')));
+                (folder) => {
+                    this.clips.push(new HC.SourceControllerSequence(this, folder));
                 }
             );
 
             // this.addConfigurationSettings();
             this.initStatusBar();
-            // this.initClips();
             this.initThumbs();
 
             this.addAnimationControllers(this.settingsManager.getGlobalProperties());
@@ -390,7 +389,7 @@ document.addEventListener('DOMContentLoaded', function () {
             data[folder] = settings;
 
             for (let i = 0; i < this.config.ControlValues.layers; i++) {
-                if (i == this.config.ControlSettings.layer) {
+                if (i === this.config.ControlSettings.layer) {
                     continue;
                 }
                 if (this.settingsManager.isDefault(i)) {

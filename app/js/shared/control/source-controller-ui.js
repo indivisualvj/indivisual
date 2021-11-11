@@ -35,7 +35,7 @@
             for (let k in folders) {
                 this._finishFolder(folders[k]);
                 if (hook) {
-                    hook(k);
+                    hook(folders[k]);
                 }
             }
         }

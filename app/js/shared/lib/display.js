@@ -5,6 +5,10 @@
  * @returns {string}
  */
 function getSequenceKey(i) {
+    if (isString(i)) {
+        return i;
+    }
+
     return 'sequence' + i;
 }
 

@@ -161,6 +161,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         constructor(name) {
             super(name);
+            this.clips = [];
         }
 
         /**
@@ -222,13 +223,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
             this.addGuifyControllers(
                 sourceSets,
-                HC.SequenceControllerUi,
-                this.sequenceSettingsGui
+                HC.SourceControllerUi,
+                this.sequenceSettingsGui,
+                (seq) => {
+                    this.clips.push(new HC.SourceControllerSequence(this, numberExtract(seq, 'sequence')));
+                }
             );
 
             // this.addConfigurationSettings();
             this.initStatusBar();
-            this.initClips();
+            // this.initClips();
             this.initThumbs();
 
             this.addAnimationControllers(this.settingsManager.getGlobalProperties());
@@ -281,8 +285,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
-         * @param layer
-         * @param data
+         * @param layer {number}
+         * @param data {Object}
+         * @param keepPasses {boolean}
          */
         migrateSettings0(layer, data, keepPasses) {
 
@@ -295,7 +300,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             for (let k in data) {
                 let value = data[k];
-                if (k == 'shaders' || k == 'passes') {
+                if (k === 'shaders' || k === 'passes') {
                     // sort shaders by index
                     delete value._template;
                     delete value.isdefault;
@@ -330,10 +335,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
-         * @param data
-         * @param display
-         * @param forward
-         * @param force
+         * @param layer {number}
+         * @param data {Object}
+         * @param display {boolean}
+         * @param forward {boolean}
+         * @param force {boolean}
          */
         updateSettings(layer, data, display, forward, force) {
 

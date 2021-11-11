@@ -39,11 +39,12 @@ HC.Controller.prototype.addGuifyDisplayControllers = function (groups, controlSe
 
 /**
  *
- * @param controlSets
- * @param uiClass
- * @param parent
+ * @param controlSets {Array}
+ * @param uiClass {string}
+ * @param parent {HC.GuifyFolder}
+ * @param hook {Function|null}
  */
-HC.Controller.prototype.addGuifyControllers = function (controlSets, uiClass, parent) {
+HC.Controller.prototype.addGuifyControllers = function (controlSets, uiClass, parent, hook) {
     for (let k in controlSets) {
         let inst = controlSets[k];
 
@@ -56,7 +57,7 @@ HC.Controller.prototype.addGuifyControllers = function (controlSets, uiClass, pa
             } else {
                 ui.addFolder();
             }
-            ui.addControllers();
+            ui.addControllers(hook);
         }
     }
 };
@@ -667,18 +668,6 @@ HC.Controller.prototype.updateClip = function (seq) {
 };
 
 /**
- * 
- */
-HC.Controller.prototype.initClips = function () {
-    this.clips = [];
-    for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
-        // fixme: this needs to be done in SequenceControllerUi
-        this.clips.push(new HC.SourceControllerSequence(this, seq));
-    }
-
-};
-
-/**
  *
  */
 HC.Controller.prototype.initThumbs = function () {
@@ -708,4 +697,3 @@ HC.Controller.prototype.initThumbs = function () {
     window.dispatchEvent(new Event('resize'));
     this.sequenceSettingsGui.setOpen(false);
 };
-0

@@ -213,7 +213,7 @@ HC.SourceController = HC.SourceController || {};
 
         types = {
             sequence_brightness: [0, 1, 0.02],
-            sequence_speed: [-2, 2, 0.1], // fixme sequence speed not working
+            sequence_speed: [-2, 2, 0.1],
             sequence_start: [0, 100, 1, 'hidden'],
             sequence_end: [0, 100, 1, 'hidden'],
             sequence_X: ['hidden'],

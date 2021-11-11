@@ -109,7 +109,6 @@
                 if (ctrl) {
                     folders[ctrl.getParent().getLabel()] = ctrl.getParent();
                 }
-
             }
 
             for (let k in folders) {
@@ -156,7 +155,7 @@
         /**
          *
          * @param folder
-         * @private
+         * @protected
          */
         _finishFolder(folder) {
             let clear = document.createElement('div');

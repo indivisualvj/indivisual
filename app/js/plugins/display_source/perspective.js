@@ -18,8 +18,6 @@
             this._bounds = false;
             this._last = 0;
 
-            // todo dispose old renderer?
-
             this.renderer = new THREE.WebGLRenderer({alpha: true, antialias: ANTIALIAS});
             this.renderer.view = this.renderer.domElement;
             this.renderer.view.id = this.id;
@@ -31,8 +29,6 @@
          * @param height
          */
         update(width, height) {
-            let checkWidth = this.width != width;
-            let checkHeight = this.height != height;
             this.width = width;
             this.height = height;
             this.renderer.setSize(this.width, this.height);
@@ -44,12 +40,8 @@
          * @returns {*}
          */
         current(fallback) {
-            // if (this._last == this.animation.now) {
-            //     return this.renderer.view;
-            // }
             this.next();
             return this.renderer.view;
-            // return fallback;
         }
 
         /**
@@ -57,7 +49,7 @@
          */
         next() {
 
-            if (this._last != this.animation.now) {
+            if (this._last !== this.animation.now) {
                 let key = this.id;
                 let layer = this.animation.renderer.currentLayer;
                 let three = layer.three;

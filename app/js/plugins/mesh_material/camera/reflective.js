@@ -33,7 +33,7 @@
                 generateMipmaps: true,
                 minFilter: THREE.LinearMipmapLinearFilter
             } );
-            let cubecam = new THREE.CubeCamera(1, 100000, cubeRenderTarget);
+            let cubecam = new THREE.CubeCamera(1, 10000, cubeRenderTarget);
             // cubecam.renderTarget = cubeRenderTarget;
             // cubecam.renderTarget.texture.generateMipmaps = true;
             // cubecam.renderTarget.texture.minFilter = THREE.LinearMipMapLinearFilter;

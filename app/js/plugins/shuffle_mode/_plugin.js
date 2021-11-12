@@ -39,30 +39,38 @@ HC.shuffle_mode = HC.shuffle_mode || {};
         }
 
         after() {
-            for(let i = 0; i < this.config.ControlValues.layers && !this.validate(); i++) {
-                this.next();
-            }
-
-            if (!this.validate()) {
+            if (!this.validate(this.getLayer())) {
+                console.log('schuffle_mode.layer', 'fail');
                 return false;
             }
 
-            return this.layer;
+            console.log('schuffle_mode.layer', this.getLayer());
+            return this.getLayer();
         }
 
         next() {
             console.error('.next() must be implemented in derived plugin')
         }
 
-        validate() {
+        getLayer() {
+            let pile = this.getPile();
+            return pile.length ? pile[this.layer] : 0;
+        }
 
-            let shuffleable = layerShuffleable(this.layer);
-            if (shuffleable) {
-                let isdefault = this.animation.settingsManager.isDefault(this.layer);
-                if (!isdefault) {
-                    // alright!
-                    return true;
+        getPile() {
+            let pile = [];
+            for (let i = 0; i < this.config.ControlValues.layers; i++) {
+                if (this.validate(i)) {
+                    pile.push(i);
                 }
+            }
+            return pile;
+        }
+
+        validate(i) {
+            if (this.config.shuffleable(i + 1) && !this.animation.settingsManager.isDefault(i)) {
+                // alright!
+                return true;
             }
 
             return false;

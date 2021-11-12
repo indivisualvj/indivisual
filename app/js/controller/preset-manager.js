@@ -100,12 +100,12 @@
 
             let di = 0;
             for (let i = 0; i < this.config.ControlValues.layers; i++) {
-                if (!layerShuffleable(i)) {
+                if (!this.config.shuffleable(i+1)) {
                     continue;
                 }
 
                 if (di < dflt.length) {
-                    this._loadPreset(dflt[di], i, di, di == dflt.length - 1);
+                    this._loadPreset(dflt[di], i, di, di === dflt.length - 1);
                     di++;
 
                 } else if (!this.settingsManager.isDefault(i)) {
@@ -122,9 +122,9 @@
         appendPresets(folder) {
             let children = Object.keys(folder.children);
             let dflt = [];
-            let layers = this.config.ControlValues.layer;
+            let layers = this.config.ControlValues.layers;
 
-            for (let i = 0; dflt.length < layers.length && i < children.length; i++) {
+            for (let i = 0; dflt.length < layers && i < children.length; i++) {
                 let child = folder.getChild(children[i]);
                 if (!child.getLabel().match(/^_.+/)) {
                     dflt.push(child);
@@ -134,16 +134,17 @@
             HC.clearLog();
 
             let di = 0;
-            for (let i = 0; i < layers.length; i++) {
+            for (let i = 0; i < layers; i++) {
                 if (!this.settingsManager.isDefault(i)) {
                     continue;
                 }
-                if (!layerShuffleable(i)) {
+
+                if (!this.config.shuffleable(i+1)) {
                     continue;
                 }
 
                 if (di < dflt.length) {
-                    this._loadPreset(dflt[di], i, di, di == dflt.length - 1);
+                    this._loadPreset(dflt[di], i, di, di === dflt.length - 1);
                     di++;
 
                 } else {

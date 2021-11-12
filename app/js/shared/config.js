@@ -283,6 +283,11 @@ HC.Statics = HC.Statics || {};
             return this._initControlSets(HC.SourceController, this.SourceValues);
         }
 
+        shuffleable (index) {
+            let shuffleable = this.ControlSettings.shuffleable.toIntArray();
+            return shuffleable.length === 0 || shuffleable.indexOf(index) !== -1;
+        }
+
         /**
          *
          */

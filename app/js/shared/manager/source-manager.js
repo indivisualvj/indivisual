@@ -166,7 +166,7 @@
         /**
          *
          * @param i
-         * @returns {*}
+         * @returns {HC.SourceManager.DisplaySourcePlugin}
          */
         getSequence(i) {
             if (i instanceof HC.SourceManager.DisplaySourcePlugin) {

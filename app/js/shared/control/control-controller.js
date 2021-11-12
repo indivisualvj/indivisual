@@ -50,7 +50,7 @@ HC.ControlController = HC.ControlController || {};
                 }
 
                 if (messaging.program.config.shiftKey || messaging.program.config.ctrlKey) {
-                    messaging.program.settingsManager.reset(splitToIntArray(this.config.ControlSettings.shuffleable));
+                    messaging.program.settingsManager.reset(); // fixme: shuffleable?
                     messaging.program.syncLayers();
                     messaging.program.updateControl('reset', true, true, true, true);
                     messaging.program.explorer.resetPresets();

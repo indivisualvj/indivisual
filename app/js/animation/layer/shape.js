@@ -39,10 +39,9 @@ HC.Layer.prototype.shapeSize = function (multiplier) {
      * da müsste 14 eigentlich 64-14 also 50 sein. max - shape_sizedivider wären also 14 und man hätte den divider.
      * alle presets ändern und det so machen
      */
-    if (this._shapeSize != this.settings.shape_sizedivider) {
+    if (this._shapeSize !== this.settings.shape_sizedivider) {
         this._shapeSize = this.settings.shape_sizedivider;
-        let preset = this.resolution().x / this._shapeSize;
-        this._shapeSizePixels = preset;
+        this._shapeSizePixels = this.resolution().x / this._shapeSize;
     }
     return this._shapeSizePixels * (multiplier || 1);
 };

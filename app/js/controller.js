@@ -161,6 +161,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         constructor(name) {
             super(name);
+            this.clips = [];
         }
 
         /**
@@ -222,13 +223,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
             this.addGuifyControllers(
                 sourceSets,
-                HC.SequenceControllerUi,
-                this.sequenceSettingsGui
+                HC.SourceControllerUi,
+                this.sequenceSettingsGui,
+                (folder) => {
+                    this.clips.push(new HC.SourceControllerSequence(this, folder));
+                }
             );
 
             // this.addConfigurationSettings();
             this.initStatusBar();
-            this.initClips();
             this.initThumbs();
 
             this.addAnimationControllers(this.settingsManager.getGlobalProperties());
@@ -281,8 +284,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
-         * @param layer
-         * @param data
+         * @param layer {number}
+         * @param data {Object}
+         * @param keepPasses {boolean}
          */
         migrateSettings0(layer, data, keepPasses) {
 
@@ -295,7 +299,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             for (let k in data) {
                 let value = data[k];
-                if (k == 'shaders' || k == 'passes') {
+                if (k === 'shaders' || k === 'passes') {
                     // sort shaders by index
                     delete value._template;
                     delete value.isdefault;
@@ -330,10 +334,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
-         * @param data
-         * @param display
-         * @param forward
-         * @param force
+         * @param layer {number}
+         * @param data {Object}
+         * @param display {boolean}
+         * @param forward {boolean}
+         * @param force {boolean}
          */
         updateSettings(layer, data, display, forward, force) {
 
@@ -384,13 +389,15 @@ document.addEventListener('DOMContentLoaded', function () {
             data[folder] = settings;
 
             for (let i = 0; i < this.config.ControlValues.layers; i++) {
-                if (i == this.config.ControlSettings.layer) {
+                if (i === this.config.ControlSettings.layer) {
                     continue;
                 }
                 if (this.settingsManager.isDefault(i)) {
                     continue;
                 }
-                if (layerShuffleable(i) != layerShuffleable(this.config.ControlSettings.layer)) {
+
+                // share only beetween layers of same type
+                if (this.config.shuffleable(this.config.ControlSettings.layer+1) !== this.config.shuffleable(i+1)) {
                     continue;
                 }
 
@@ -418,13 +425,15 @@ document.addEventListener('DOMContentLoaded', function () {
             data[set][item] = value;
 
             for (let i = 0; i < this.config.ControlValues.layers; i++) {
-                if (i == this.config.ControlSettings.layer) {
+                if (i === this.config.ControlSettings.layer) {
                     continue;
                 }
                 if (this.settingsManager.isDefault(i)) {
                     continue;
                 }
-                if (layerShuffleable(i) != layerShuffleable(this.config.ControlSettings.layer)) {
+
+                // share only beetween layers of same type
+                if (this.config.shuffleable(this.config.ControlSettings.layer+1) !== this.config.shuffleable(i+1)) {
                     continue;
                 }
 
@@ -635,7 +644,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             } else if (item === 'reset') {
                 if (value && force) {
-                    this.settingsManager.reset(splitToIntArray(this.config.ControlSettings.shuffleable));
+                    this.settingsManager.reset(); // fixme: reset only shuffleable
                     this.refreshLayerInfo();
                 }
             }
@@ -794,27 +803,29 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateMidi(data) {
             if (this.midi) {
-                if (data.command == 'glow') {
+                if (data.command === 'glow') {
                     this.midi.glow(data.data, data.conf);
 
-                } else if (data.command == 'off') {
+                } else if (data.command === 'off') {
                     this.midi.off(data.data);
 
-                } else if (data.command == 'clock') {
+                } else if (data.command === 'clock') {
                     this.midi.clock(data.data, data.conf);
                 }
             }
         }
 
         /**
+         *
          * @param item
          * @param value
+         * @param group
          */
         setAllDisplaysTo(item, value, group) {
             let increment = value === false;
 
             if (group) {
-                group = splitToIntArray(this.config.SourceSettings[group]);
+                group = this.config.SourceSettings[group].toIntArray();
             } else {
                 group = [];
             }
@@ -822,6 +833,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let updates = {};
             for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
 
+                // skip if group defined and index not part of group
                 if (group.length && group.indexOf(i) < 0) {
                     continue;
                 }
@@ -892,12 +904,13 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          * @param name
          * @param data
+         * @param layer
          */
         updatePreset(name, data, layer) {
 
             HC.log('preset', name);
 
-            if (layer == undefined) {
+            if (layer === undefined) {
                 layer = this.config.ControlSettings.layer;
             }
 
@@ -934,9 +947,7 @@ document.addEventListener('DOMContentLoaded', function () {
             HC.log('passes', name);
 
             for (let i = 0; i < this.config.ControlValues.layers; i++) {
-                if (!this.settingsManager.isDefault(i)
-                    && layerShuffleable(i) == layerShuffleable(this.config.ControlSettings.layer)
-                ) {
+                if (this.config.shuffleable(i+1) && !this.settingsManager.isDefault(i)) {
                     if (!('info' in data)) {
 
                         let shaders = {shaders: data.shaders};
@@ -974,8 +985,8 @@ document.addEventListener('DOMContentLoaded', function () {
             for (let i = 0; i < this.config.ControlValues.layers; i++) {
                 if (this.settingsManager.layers[i]) {
                     let l = this.settingsManager.getLayer(i);
-                    if (!this.settingsManager.isDefault(l) && layerShuffleable(i)) {
-                        preset.push(i + 1);
+                    if (this.config.shuffleable(i+1) && !this.settingsManager.isDefault(l)) {
+                        preset.push(i+1);
                     }
                 }
             }

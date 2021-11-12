@@ -335,11 +335,11 @@ HC.Controller.prototype.openTreeByProperty = function (property) {
         if (control = roots[k].findControlByProperty(property)) {
             this.closeAll(roots[k]);
             let scrollto = control;
-            control = control.getParent();
+            roots[k].setOpen(true);
 
-            do {
+            while(control = control.getParent()) {
                 control.setOpen(true);
-            } while(control = control.getParent())
+            }
 
             this.scrollToControl(scrollto);
         }

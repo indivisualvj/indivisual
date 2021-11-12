@@ -170,7 +170,7 @@
                      * maybe keepsettings but never discard settings from layers excluded by ControlSettings.shuffleable
                      * those layers are there to record samples while animation is offline or to test certain settings/setups
                      */
-                    if ((keepsettings || !layerShuffleable(i))) {
+                    if ((keepsettings || !this.config.shuffleable(i+1))) { // fixme: shuffleable?
                         oldControlSets = this.layers[i].controlSets;
                     }
                     ol.dispose();
@@ -199,10 +199,12 @@
 
             if (this.nextLayer) {
 
-                if (this.currentLayer !== this.nextLayer) { // fixme instead of not switching in between, try to update layer tweens to beatkeeper speeds percenteages
+                // todo: fastforward tweens?
+                if (this.currentLayer !== this.nextLayer) {
                     if (!force && this.config.ControlSettings.shuffle_mode !== 'off') {
                         let speed = this.nextLayer.getCurrentSpeed();
                         if (!speed.starting()) {
+                            console.log('HC.Renderer.switchLayer', 'fail', 'speed in progress')
                             return;
                         } else {
 

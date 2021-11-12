@@ -34,3 +34,18 @@ function clone (obj) {
 JSON.copy = function (object) {
     return JSON.parse(JSON.stringify(object));
 };
+
+Number.prototype.toIntArray = function () {
+    return [this];
+};
+
+String.prototype.toIntArray = function () {
+    if (this.length) {
+        let arr = this.split(',');
+        return arr.map(function (it) {
+            return parseInt(it);
+        });
+    }
+
+    return [];
+};

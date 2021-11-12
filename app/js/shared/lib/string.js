@@ -1,25 +1,4 @@
 /**
- * splitToIntArray
- * @param value
- * @returns {*}
- */
-function splitToIntArray(value) {
-
-    if (value && isString(value)) {
-        let arr = value.split(',');
-        return arr.map(function (it) {
-            return parseInt(it);
-        });
-
-    } else if (isInteger(value)) {
-        return [value];
-
-    } else {
-        return [];
-    }
-}
-
-/**
  * filePath
  * @returns {string}
  */
@@ -45,7 +24,7 @@ function parseFileMeta(file) {
     };
     let data = file.replace(/^[^\d]+/, '').replace(/\..{3,4}$/, '');
 
-    if (data != file) {
+    if (data !== file) {
         data = data.split(',');
 
         meta.tempo = parseInt(data[0]);

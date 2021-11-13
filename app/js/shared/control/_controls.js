@@ -74,7 +74,17 @@ HC.controls = HC.controls || {};
          */
         events = {};
 
+        /**
+         *
+         * @type {Object.<string, Function>}
+         */
         hooks = {};
+
+        /**
+         *
+         * @type {Object.<string, Object.<string, string>>}
+         */
+        attributes = {}
 
         /**
          * @type {HC.Config}

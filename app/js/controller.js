@@ -271,6 +271,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     let settings = session.settings;
                     for (let k in settings) {
                         this.updateSettings(k, settings[k], true, false, true);
+                        console.log(settings[k]);
                     }
                 }
                 if ('data' in session) {
@@ -644,7 +645,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             } else if (item === 'reset') {
                 if (value && force) {
-                    this.settingsManager.reset(); // fixme: reset only shuffleable
+                    this.settingsManager.reset(this.config.ControlSettings.shuffleable.toIntArray((it)=>{return parseInt(it)-1;}));
                     this.refreshLayerInfo();
                 }
             }

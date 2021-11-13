@@ -64,6 +64,27 @@
 
         /**
          *
+         * @param info
+         */
+        setInfo(info) {
+            if (info !== null) {
+                this.getComponent().label.setAttribute('data-label', info);
+
+            } else {
+                this.getComponent().label.removeAttribute('data-label');
+            }
+        }
+
+        /**
+         *
+         * @returns {string}
+         */
+        getInfo() {
+            return this.getComponent().label.getAttribute('data-label');
+        }
+
+        /**
+         *
          */
         mnemonicAction() {
             console.log('not implemented');

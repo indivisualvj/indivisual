@@ -39,10 +39,23 @@ Number.prototype.toIntArray = function () {
     return [this];
 };
 
-String.prototype.toIntArray = function () {
+String.prototype.toIntArray = function (mapFunction) {
     if (this.length) {
-        let arr = this.split(',');
-        return arr.map(function (it) {
+        let arr = [];
+
+        if (this.match(/\d+\.{2}\d+/)) {
+            // fill from digit 1 to digit 2
+            let ft = this.split('..');
+            let from = parseInt(ft[0]);
+            let to = parseInt(ft[1]);
+            for (let i = from; i <= to; i++) {
+                arr.push(i);
+            }
+        } else {
+            arr = this.split(',');
+        }
+
+        return arr.map(mapFunction || function (it) {
             return parseInt(it);
         });
     }

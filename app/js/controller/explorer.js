@@ -74,7 +74,7 @@
                     for (let k in children) {
                         let child = children[k];
 
-                        if (child.type == 'folder') {
+                        if (child.type === 'folder') {
                             let folder = parent.addFolder(child.name, null, false);
                             _insert(child.children, folder);
                             folder.finishLayout(child, this.presetMan);
@@ -95,29 +95,31 @@
          */
         reload() {
 
+            // todo: is it possible to preserve loaded? maybe name attribute of settings is set?
             this.gui.removeChildren();
-
-            // for (let k in this.gui.children) {
-            //     let child = this.gui.children[k];
-            //     child.remove();
-            // }
-
             this.load();
         }
 
         /**
          * 
          */
-        resetPresets() {
-            let ctrls = this.gui.getContainer().querySelectorAll('[data-label]');
-            ctrls.forEach((ctrl) => {
-                ctrl.removeAttribute('data-label');
-            });
+        resetPresets(heap) {
+            let children = this.gui.getAllControllers();
 
-            ctrls = this.gui.getContainer().querySelectorAll('[data-mnemonic]');
-            ctrls.forEach((ctrl) => {
-                ctrl.removeAttribute('data-mnemonic');
-            });
+            for (const key in children) {
+                let child = children[key];
+                let info = child.getInfo();
+                let mnemonic = child.getMnemonic();
+
+                if (heap && heap.length) {
+                    if (heap.indexOf(parseInt(info)) > -1) {
+                        continue;
+                    }
+                }
+
+                child.setInfo(null);
+                child.setMnemonic(null);
+            }
         }
 
         /**

@@ -92,7 +92,7 @@
             let style = window.getComputedStyle(this.gui.panel.panel);
             let display = style.getPropertyValue('display');
 
-            return display != 'none';
+            return display !== 'none';
         }
 
         /**

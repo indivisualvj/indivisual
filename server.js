@@ -10,7 +10,6 @@ const sio = require('socket.io');
 const https = require('https');
 const http = require('http');
 const commandLineArgs = require('command-line-args');
-const Process = require("process");
 
 let options = commandLineArgs([
     { name: "port", alias: "p", type: String, defaultOption: true },

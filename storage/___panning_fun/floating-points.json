@@ -1,7 +1,8 @@
 {
     "info": {
         "name": 0,
-        "version": 1
+        "version": 1,
+        "tutorial": {}
     },
     "layer": {
         "layer_transvisible": false,
@@ -273,7 +274,7 @@
                             2,
                             0.01
                         ],
-                        "audio": false,
+                        "audio": true,
                         "stepwise": false,
                         "oscillate": "off"
                     },
@@ -284,7 +285,7 @@
                             2,
                             0.01
                         ],
-                        "audio": false,
+                        "audio": true,
                         "stepwise": false,
                         "oscillate": "off"
                     },
@@ -295,12 +296,12 @@
                             10,
                             0.01
                         ],
-                        "audio": false,
+                        "audio": true,
                         "stepwise": false,
                         "oscillate": "blitzpeakslow"
                     },
                     "waveFactor": {
-                        "value": 0.001,
+                        "value": 0.0381,
                         "_type": [
                             0,
                             0.5,
@@ -362,6 +363,37 @@
                     },
                     "grayscale": {
                         "value": false
+                    }
+                }
+            },
+            {
+                "drawing": {
+                    "apply": true,
+                    "random": false,
+                    "onebit": {
+                        "value": false
+                    },
+                    "intensity": {
+                        "value": 16,
+                        "_type": [
+                            2,
+                            16,
+                            1
+                        ],
+                        "audio": false,
+                        "stepwise": false,
+                        "oscillate": "off"
+                    },
+                    "radius": {
+                        "value": 1,
+                        "_type": [
+                            1,
+                            16,
+                            0.25
+                        ],
+                        "audio": false,
+                        "stepwise": false,
+                        "oscillate": "off"
                     }
                 }
             }

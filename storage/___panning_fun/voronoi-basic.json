@@ -1,7 +1,8 @@
 {
     "info": {
         "name": 0,
-        "version": 1
+        "version": 1,
+        "tutorial": {}
     },
     "layer": {
         "layer_transvisible": false,
@@ -362,6 +363,140 @@
                     },
                     "grayscale": {
                         "value": false
+                    }
+                }
+            },
+            {
+                "paint": {
+                    "apply": true,
+                    "random": false,
+                    "colorOffset": {
+                        "value": 2,
+                        "_type": [
+                            0,
+                            2,
+                            0.01
+                        ],
+                        "audio": true,
+                        "stepwise": false,
+                        "oscillate": "off"
+                    },
+                    "colorFactor": {
+                        "value": 2,
+                        "_type": [
+                            0,
+                            2,
+                            0.01
+                        ],
+                        "audio": true,
+                        "stepwise": false,
+                        "oscillate": "off"
+                    },
+                    "sampleDistance": {
+                        "value": 5,
+                        "_type": [
+                            -10,
+                            10,
+                            0.01
+                        ],
+                        "audio": true,
+                        "stepwise": false,
+                        "oscillate": "blitzpeakslow"
+                    },
+                    "waveFactor": {
+                        "value": 0.0381,
+                        "_type": [
+                            0,
+                            0.5,
+                            0.0001
+                        ],
+                        "audio": false,
+                        "stepwise": false,
+                        "oscillate": "off"
+                    }
+                }
+            },
+            {
+                "film": {
+                    "apply": true,
+                    "random": false,
+                    "time": {
+                        "value": 1,
+                        "_type": [
+                            -10,
+                            10,
+                            0.01
+                        ],
+                        "audio": false,
+                        "stepwise": false,
+                        "oscillate": "timestamp"
+                    },
+                    "scanlines": {
+                        "value": 512,
+                        "_type": [
+                            1,
+                            1024,
+                            1
+                        ],
+                        "audio": false,
+                        "stepwise": false,
+                        "oscillate": "off"
+                    },
+                    "scanlines_intensity": {
+                        "value": 0.05,
+                        "_type": [
+                            0,
+                            5,
+                            0.01
+                        ],
+                        "audio": false,
+                        "stepwise": false,
+                        "oscillate": "off"
+                    },
+                    "noise": {
+                        "value": 0.5,
+                        "_type": [
+                            0,
+                            5,
+                            0.01
+                        ],
+                        "audio": false,
+                        "stepwise": false,
+                        "oscillate": "off"
+                    },
+                    "grayscale": {
+                        "value": false
+                    }
+                }
+            },
+            {
+                "drawing": {
+                    "apply": true,
+                    "random": false,
+                    "onebit": {
+                        "value": false
+                    },
+                    "intensity": {
+                        "value": 16,
+                        "_type": [
+                            2,
+                            16,
+                            1
+                        ],
+                        "audio": false,
+                        "stepwise": false,
+                        "oscillate": "off"
+                    },
+                    "radius": {
+                        "value": 1,
+                        "_type": [
+                            1,
+                            16,
+                            0.25
+                        ],
+                        "audio": false,
+                        "stepwise": false,
+                        "oscillate": "off"
                     }
                 }
             }

@@ -1,7 +1,8 @@
 {
     "info": {
         "name": 0,
-        "version": 1
+        "version": 1,
+        "tutorial": {}
     },
     "layer": {
         "layer_transvisible": false,
@@ -263,56 +264,6 @@
     "passes": {
         "shaders": [
             {
-                "paint": {
-                    "apply": true,
-                    "random": false,
-                    "colorOffset": {
-                        "value": 2,
-                        "_type": [
-                            0,
-                            2,
-                            0.01
-                        ],
-                        "audio": false,
-                        "stepwise": false,
-                        "oscillate": "off"
-                    },
-                    "colorFactor": {
-                        "value": 2,
-                        "_type": [
-                            0,
-                            2,
-                            0.01
-                        ],
-                        "audio": false,
-                        "stepwise": false,
-                        "oscillate": "off"
-                    },
-                    "sampleDistance": {
-                        "value": 5,
-                        "_type": [
-                            -10,
-                            10,
-                            0.01
-                        ],
-                        "audio": false,
-                        "stepwise": false,
-                        "oscillate": "blitzpeakslow"
-                    },
-                    "waveFactor": {
-                        "value": 0.001,
-                        "_type": [
-                            0,
-                            0.5,
-                            0.0001
-                        ],
-                        "audio": false,
-                        "stepwise": false,
-                        "oscillate": "off"
-                    }
-                }
-            },
-            {
                 "film": {
                     "apply": true,
                     "random": false,
@@ -362,6 +313,23 @@
                     },
                     "grayscale": {
                         "value": false
+                    }
+                }
+            },
+            {
+                "edge_detection_rgb": {
+                    "apply": true,
+                    "random": false,
+                    "opacity": {
+                        "value": 0.75,
+                        "_type": [
+                            0,
+                            1,
+                            0.001
+                        ],
+                        "audio": false,
+                        "stepwise": false,
+                        "oscillate": "off"
                     }
                 }
             }

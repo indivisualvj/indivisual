@@ -12,7 +12,7 @@ HC.plugins.shape_geometry = HC.plugins.shape_geometry || {};
             if (!this.geometry) { // all meshes use the same geometry
                 let geometry = this.create();
 
-                if (this.settings.material_mapping == 'f2b') {
+                if (this.controlSets.material.properties.material_mapping === 'f2b') {
                     HC.UVGenerator.front2back(geometry);
                 }
 

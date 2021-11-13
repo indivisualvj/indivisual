@@ -393,11 +393,11 @@ Shapetastic = function (inst) {
             let v1 = new THREE.Vector2(vt[0], vt[1]);
             let v2 = new THREE.Vector2(n[0], n[1]);
             let d = v1.distanceTo(v2);
-        }
 
-        if (Math.abs(d) < .02) {
-            _drawHandle(e, true);
-            vt = n;
+            if (Math.abs(d) < .02) {
+                _drawHandle(e, true);
+                vt = n;
+            }
         }
 
         for (let i = 0; i < vtcs.length; i++) {
@@ -592,7 +592,7 @@ Shapetastic = function (inst) {
 
         vertices = vertices.slice(1, vertices.length - 1);
 
-        animation.updateSetting(statics.ControlSettings.layer, 'shape_vertices', vertices, jo, jo);
+        animation.updateSetting(animation.config.ControlSettings.layer, {'shape': {'shape_vertices': vertices}}, jo, jo, false);
     };
 
     /**

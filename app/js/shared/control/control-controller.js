@@ -42,18 +42,32 @@ HC.ControlController = HC.ControlController || {};
 
             reset: () => {
 
-                if (messaging.program.config.ctrlKey) {
+                if (messaging.program.config.shiftKey && messaging.program.config.ctrlKey) {
                     let yes = confirm('Reset everything?');
                     if (yes) {
-                        // todo: reset everything
+                        messaging.program.explorer.resetPresets();
+                        messaging.program.settingsManager.reset();
+                        messaging.program.config.SourceSettingsManager.reset();
+                        messaging.program.config.ControlSettingsManager.reset();
+                        messaging.program.config.DisplaySettingsManager.reset();
+                        let sources = messaging.program.config.SourceSettingsManager.prepareFlat();
+                        let controls = messaging.program.config.ControlSettingsManager.prepareFlat();
+                        let displays = messaging.program.config.DisplaySettingsManager.prepareFlat();
+                        messaging.program.syncLayers();
+                        messaging.emitSources(sources, true, false, true);
+                        messaging.emitControls(controls, true, false, true);
+                        messaging.emitDisplays(displays, true, false, true);
+                        messaging.program.updateSources(sources, true, true, true);
+                        messaging.program.updateControls(controls, true, true, true);
+                        messaging.program.updateDisplays(displays, true, true, true);
                     }
-                }
-
-                if (messaging.program.config.shiftKey || messaging.program.config.ctrlKey) {
-                    messaging.program.settingsManager.reset(); // fixme: shuffleable?
+                } else if (messaging.program.config.shiftKey) {
+                    let shuffleable = this.config.ControlSettings.shuffleable.toIntArray((it)=>{return parseInt(it)-1;});
+                    messaging.program.settingsManager.reset(shuffleable);
                     messaging.program.syncLayers();
                     messaging.program.updateControl('reset', true, true, true, true);
-                    messaging.program.explorer.resetPresets();
+                    shuffleable = this.config.ControlSettings.shuffleable.toIntArray();
+                    messaging.program.explorer.resetPresets(shuffleable);
                     messaging.program.updateControl('layer', this.config.ControlSettings.layer, true, false, false);
 
                 } else {
@@ -114,7 +128,16 @@ HC.ControlController = HC.ControlController || {};
             shuffleable: ['half'],
 
             shuffle_mode: ['half', 'clear'],
-            shuffle_every: ['half']
+            shuffle_every: ['half'],
+        };
+
+        attributes = {
+            reset: {
+                title: 'Press SHIFT to delete all (NOT shuffleable) layers.\nPress CTRL+SHIFT to reset EVERYTHING!'
+            },
+            shuffleable: {
+                title: 'Only layer 1..20, will be included if shuffle is active.\nOn layer reset (SHIFT+DEL) only these layers be reset.\n',
+            },
         };
 
         events = {

@@ -172,11 +172,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
             this.monitor = new HC.Monitor();
             this.monitor.activate(false);
-            this.controlSettingsGui = new HC.Guify('ControlSettings', true);
-            this.displaySettingsGui = new HC.Guify('DisplaySettings');
-            this.sourceSettingsGui = new HC.Guify('SourceSettings');
-            this.sequenceSettingsGui = new HC.Guify('SequenceSettings');
-            this.animationSettingsGui = new HC.Guify('AnimationSettings');
+            this.controlSettingsGui = new HC.Guify('ControlSettings', 'control', true);
+            this.displaySettingsGui = new HC.Guify('DisplaySettings', 'display');
+            this.sourceSettingsGui = new HC.Guify('SourceSettings', 'source');
+            this.sequenceSettingsGui = new HC.Guify('SequenceSettings', 'sequence');
+            this.animationSettingsGui = new HC.Guify('AnimationSettings', 'animation');
             // this.configurationSettingsGui = new HC.Guify('ConfigurationSettings');
 
             this.guis = [
@@ -271,6 +271,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     let settings = session.settings;
                     for (let k in settings) {
                         this.updateSettings(k, settings[k], true, false, true);
+                        console.log(settings[k]);
                     }
                 }
                 if ('data' in session) {
@@ -644,7 +645,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             } else if (item === 'reset') {
                 if (value && force) {
-                    this.settingsManager.reset(); // fixme: reset only shuffleable
+                    this.settingsManager.reset(this.config.ControlSettings.shuffleable.toIntArray((it)=>{return parseInt(it)-1;}));
                     this.refreshLayerInfo();
                 }
             }

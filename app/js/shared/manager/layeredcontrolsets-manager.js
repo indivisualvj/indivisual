@@ -207,7 +207,9 @@
 
             for (let layer in this.layers) {
 
-                // fixme: continue if heap and heap NOT contains layer
+                if (heap && heap.length && heap.indexOf(parseInt(layer)) > -1) {
+                    continue;
+                }
 
                 this.resetLayer(layer);
 

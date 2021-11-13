@@ -119,7 +119,6 @@
 
         /**
          *
-         * @param layer
          * @returns {boolean}
          */
         isDefault() {

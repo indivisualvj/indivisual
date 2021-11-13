@@ -10,6 +10,7 @@ const sio = require('socket.io');
 const https = require('https');
 const http = require('http');
 const commandLineArgs = require('command-line-args');
+const Process = require("process");
 
 let options = commandLineArgs([
     { name: "port", alias: "p", type: String, defaultOption: true },
@@ -97,15 +98,7 @@ if (process.argv.length > 2) {
     }
 }
 
-server.listen(_PORT);
-console.log('server running on port: ' + _PORT);
-let proto = _HTTPS ? 'https' : 'http';
-
-let networkIPs = getNetworkIPs();
-for (const networkIP of networkIPs) {
-    console.log('open ' + proto + '://' + networkIP + ':' + _PORT + ' in your browser');
-}
-
+_startListening();
 
 app.use(express.static('..'));
 
@@ -954,9 +947,9 @@ function _existCreate(dir, feedback) {
     return returnValue;
 }
 
-function getNetworkIPs() {
+function _getNetworkIPs() {
     const nets = networkInterfaces();
-    const results = [];
+    const results = ['localhost'];
 
     for (const name of Object.keys(nets)) {
         for (const net of nets[name]) {
@@ -968,4 +961,30 @@ function getNetworkIPs() {
     }
 
     return results;
+}
+
+function _logConnectionInfo() {
+    console.log('server running on port: ' + _PORT);
+    let proto = _HTTPS ? 'https' : 'http';
+
+    let networkIPs = _getNetworkIPs();
+    console.log('with the following links you can start visualizing:')
+    for (const networkIP of networkIPs) {
+        console.log(proto + '://' + networkIP + ':' + _PORT + ' (inline)');
+        console.log(proto + '://' + networkIP + ':' + _PORT + '/controller.html (controller)');
+        console.log(proto + '://' + networkIP + ':' + _PORT + '/animation.html (animation)');
+    }
+}
+
+function _startListening() {
+    server.listen(_PORT).addListener('error', (error) => {
+        if (error.code === 'EADDRINUSE') {
+            console.error('port ' + _PORT + ' is already in use. terminating.');
+            process.exit(1);
+        } else {
+            throw error;
+        }
+    }).addListener('listening', () => {
+        _logConnectionInfo();
+    });
 }

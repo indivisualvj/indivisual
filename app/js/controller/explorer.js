@@ -61,7 +61,7 @@
             this.messaging = controller.messaging;
             this.presetMan = new HC.PresetManager(controller, this);
 
-            this.gui = new HC.GuifyExplorer('Presets', true, this);
+            this.gui = new HC.GuifyExplorer('Presets', 'presets', true, this);
             this.load();
         }
 

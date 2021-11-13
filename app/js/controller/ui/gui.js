@@ -19,19 +19,19 @@
 
         /**
          *
-         * @param name
+         * @param title
          * @param open
          */
-        init(name, open) {
+        init(id, title, open) {
             this.gui = new guify({
-                title: name,
+                title: title,
                 theme: 'dark', // dark, light, yorha, or theme object
                 align: 'right', // left, right
                 width: '100%',
                 barMode: 'offset', // none, overlay, above, offset
                 panelMode: 'inner',
                 opacity: 1,
-                root: document.getElementById(name),
+                root: document.getElementById(id),
                 open: open,
                 search: {
                     filter: (value) => {

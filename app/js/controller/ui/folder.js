@@ -311,8 +311,8 @@
                     }
 
                 } else if (!reset && regExp.test(child.getProperty())) {
-                        child.setVisible(true);
-                        found = true;
+                    child.setVisible(true);
+                    found = true;
 
                 } else {
                     child.setVisible(reset);
@@ -386,7 +386,7 @@
             for (let k in this.children) {
                 let child = this.getChild(k);
 
-                if (child.getMnemonic() == char) {
+                if (child.getMnemonic() === char) {
                     child.mnemonicAction();
                     return child;
                 }

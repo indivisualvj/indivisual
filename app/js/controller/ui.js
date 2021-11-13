@@ -434,20 +434,28 @@ HC.Controller.prototype.toggleByKey = function (ci, char, shiftKey) {
     let roots = this.guis;
     let open = this.nextOpenFolder();
 
+    // start a search on shift if possible or..
+    // expand next open
     if (!open.isExpanded()) {
         if (ci < roots.length) {
-            roots[ci].setOpen(true);
+            if (shiftKey && open.gui.bar) {
+                roots[ci].gui.bar.input.focus();
+            } else {
+                roots[ci].setOpen(true);
+            }
         }
         return;
     }
 
     let controllers = open.getControllers();
 
-    if (shiftKey && controllers.length > 0) { // reset on shift
+    // reset on shift
+    if (shiftKey && controllers.length > 0) {
         this.resetFolder(open);
         return;
     }
 
+    // toggle control by mnemonic
     let ctrl = open.toggleByMnemonic(char);
     this.scrollToControl(ctrl);
 };

@@ -109,10 +109,13 @@
                     di++;
 
                 } else if (!this.settingsManager.isDefault(i)) {
-                    this.settingsManager.setLayerProperties(i, false);
-                    this.controller.updatePreset(false, this.settingsManager.prepareLayer(i));
+                    console.log('reset', i);
+                    this.settingsManager.resetLayer(i);
+                    this.controller.updatePreset(false, {}, i);
                 }
             }
+
+            this.controller.updateControl('layer', 0, true, true);
         }
 
         /**
@@ -155,27 +158,24 @@
 
         /**
          *
-         * @param {HC.GuifyExplorerPreset} child
+         * @param child
          * @param i
          * @param di
+         * @param last
          * @private
          */
         _loadPreset(child, i, di, last) {
 
             child.setInfo(i+1);
 
+            console.log('loading', child.getLabel());
             this.filesystem.load(STORAGE_DIR, child.getParent().getLabel(), child.getLabel(), (data) => {
-
                 requestAnimationFrame(() => {
-
-                    this.controller.updateControl('layer', i, true, true); // todo why have to set?
+                    // this.controller.updateControl('layer', i, true, true); // todo why have to set?
                     let key = data.dir + '/' + data.name;
                     let contents = JSON.parse(data.contents);
-                    this.controller.updatePreset(key, contents);
-
-                    if (last) {
-                        this.controller.updateControl('layer', 0, true, true);
-                    }
+                    console.log('loaded', data.name);
+                    this.controller.updatePreset(key, contents, i);
                 });
             });
         };

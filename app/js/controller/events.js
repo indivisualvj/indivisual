@@ -141,11 +141,9 @@ HC.Controller.prototype.initKeyboard = function () {
         }
     };
 
-    setMnemonics(this.controlSettingsGui);
-    setMnemonics(this.displaySettingsGui);
-    setMnemonics(this.sourceSettingsGui);
-    setMnemonics(this.animationSettingsGui);
-    setMnemonics(this.sequenceSettingsGui);
+    for (const key in this.guis) {
+        setMnemonics(this.guis[key]);
+    }
 
     window.addEventListener('keyup', (e) => {
         this.config.ctrlKey = e.ctrlKey;
@@ -165,6 +163,23 @@ HC.Controller.prototype.initKeyboard = function () {
 
         if (/INPUT|TEXTAREA|SELECT|BUTTON/.test(e.target.nodeName)) {
             return;
+        }
+
+        if (e.key === 'Shift') {
+            if (this.config.doubleShift) {
+
+                let open = this.nextOpenFolder();
+                if (open.gui.bar) {
+                    open.gui.bar.input.focus();
+                }
+
+                clearTimeout(this.config.doubleShift);
+                this.config.doubleShift = false;
+            } else {
+                this.config.doubleShift = setTimeout(() => {
+                    this.config.doubleShift = false;
+                }, 300);
+            }
         }
 
         if (e.key === 'Backspace') { // = close folders

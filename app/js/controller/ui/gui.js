@@ -11,18 +11,19 @@
         /**
          *
          * @param id
+         * @param title
          * @param open
          */
-        constructor(id, open) {
-            super(null, null, id, open);
+        constructor(id, title, open) {
+            super(null, null, id, title);
         }
 
         /**
          *
+         * @param id
          * @param title
-         * @param open
          */
-        init(id, title, open) {
+        init(id, title) {
             this.gui = new guify({
                 title: title,
                 theme: 'dark', // dark, light, yorha, or theme object
@@ -33,13 +34,12 @@
                 opacity: 1,
                 pollRateMS: 1000/30,
                 root: document.getElementById(id),
-                open: open,
                 search: {
                     filter: (value) => {
                         this.filterTree(value);
                     },
                     delay: 175,
-                    action: (e) => {
+                    action: () => {
                         let ctrl = this.findFirstVisibleControl();
                         if (ctrl) {
                             ctrl.triggerComponent();
@@ -50,8 +50,16 @@
             this.component = this.gui;
             if (this.gui.bar.input) {
                 this.gui.bar.input.classList.add('search');
+                this.gui.bar.input.addEventListener('keyup', (e) => {
+                    if (e.key === 'Escape') {
+                        e.currentTarget.value = '';
+                        this.filterTree('');
+                        e.currentTarget.blur();
+                    }
+                });
             }
             this.gui.container.style.zIndex = 99;
+
         }
 
         /**

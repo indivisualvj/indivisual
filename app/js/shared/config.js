@@ -44,16 +44,24 @@ HC.Statics = HC.Statics || {};
          * @type {boolean}
          */
         ctrlKey = false;
+
         /**
          *
          * @type {boolean}
          */
         altKey = false;
+
         /**
          *
          * @type {boolean}
          */
         shiftKey = false;
+
+        /**
+         *
+         * @type {boolean}
+         */
+        doubleShift = false;
 
         config = [
             {

@@ -44,8 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let controller = new HC.Controller(G_INSTANCE);
     messaging = new HC.Messaging(controller);
-    let config = new HC.Config(messaging);
-    controller.config = config;
+    controller.config = new HC.Config(messaging);
 
     messaging.connect(function (reconnect, controller) {
 
@@ -60,8 +59,7 @@ document.addEventListener('DOMContentLoaded', function () {
             controller.config.loadConfig(function () {
 
                 let sets = controller.config.initControlSets();
-                let cm = new HC.LayeredControlSetsManager([], controller.config.AnimationValues);
-                controller.settingsManager = cm;
+                controller.settingsManager = new HC.LayeredControlSetsManager([], controller.config.AnimationValues);
                 controller.init(sets);
                 controller.loadSession();
                 controller.initKeyboard();
@@ -178,8 +176,9 @@ document.addEventListener('DOMContentLoaded', function () {
             this.controlSettingsGui = new HC.Guify('ControlSettings', 'control', true);
             this.displaySettingsGui = new HC.Guify('DisplaySettings', 'display');
             this.sourceSettingsGui = new HC.Guify('SourceSettings', 'source');
-            this.sequenceSettingsGui = new HC.Guify('SequenceSettings', 'sequence');
             this.animationSettingsGui = new HC.Guify('AnimationSettings', 'animation');
+            this.sequenceSettingsGui = new HC.Guify('SequenceSettings', 'sequence');
+            this.explorer = new HC.Explorer(this);
             // this.configurationSettingsGui = new HC.Guify('ConfigurationSettings');
 
             this.guis = [
@@ -188,10 +187,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.sourceSettingsGui,
                 this.animationSettingsGui,
                 this.sequenceSettingsGui,
+                this.explorer.gui,
             ];
             this.beatKeeper = new HC.BeatKeeper(null, this.config);
             this.sourceManager = new HC.SourceManager(null, { config: this.config, sample: [] });
-            this.explorer = new HC.Explorer(this);
 
             let controlSets = sets.controlSets;
             this.config.ControlSettings.session = _HASH; // ugly workaround
@@ -274,7 +273,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     let settings = session.settings;
                     for (let k in settings) {
                         this.updateSettings(k, settings[k], true, false, true);
-                        console.log(settings[k]);
                     }
                 }
                 if ('data' in session) {
@@ -1019,6 +1017,38 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.updateSetting(this.config.ControlSettings.layer, data, true, true, false);
                 }
             }
+        }
+
+        /**
+         * reset all of all settings
+         */
+        fullReset() {
+            this.explorer.resetPresets();
+            this.settingsManager.reset();
+            this.config.SourceSettingsManager.reset();
+            this.config.ControlSettingsManager.reset();
+            this.config.DisplaySettingsManager.reset();
+            let sources = this.config.SourceSettingsManager.prepareFlat();
+            let controls = this.config.ControlSettingsManager.prepareFlat();
+            let displays = this.config.DisplaySettingsManager.prepareFlat();
+            this.syncLayers();
+            this.messaging.emitSources(sources, true, false, true);
+            this.messaging.emitControls(controls, true, false, true);
+            this.messaging.emitDisplays(displays, true, false, true);
+            this.updateSources(sources, true, true, true);
+            this.updateControls(controls, true, true, true);
+            this.updateDisplays(displays, true, true, true);
+        }
+
+        /**
+         * reset non shuffleable layers
+         */
+        resetLayers() {
+            let shuffleable = this.config.ControlSettings.shuffleable.toIntArray((it)=>{return parseInt(it)-1;});
+            this.settingsManager.reset(shuffleable);
+            shuffleable = this.config.ControlSettings.shuffleable.toIntArray();
+            this.explorer.resetPresets(shuffleable);
+            this.syncLayers();
         }
     }
 }

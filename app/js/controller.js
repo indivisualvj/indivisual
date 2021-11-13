@@ -1020,5 +1020,37 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
         }
+
+        /**
+         * reset all of all settings
+         */
+        fullReset() {
+            this.explorer.resetPresets();
+            this.settingsManager.reset();
+            this.config.SourceSettingsManager.reset();
+            this.config.ControlSettingsManager.reset();
+            this.config.DisplaySettingsManager.reset();
+            let sources = this.config.SourceSettingsManager.prepareFlat();
+            let controls = this.config.ControlSettingsManager.prepareFlat();
+            let displays = this.config.DisplaySettingsManager.prepareFlat();
+            this.syncLayers();
+            this.messaging.emitSources(sources, true, false, true);
+            this.messaging.emitControls(controls, true, false, true);
+            this.messaging.emitDisplays(displays, true, false, true);
+            this.updateSources(sources, true, true, true);
+            this.updateControls(controls, true, true, true);
+            this.updateDisplays(displays, true, true, true);
+        }
+
+        /**
+         * reset non shuffleable layers
+         */
+        resetLayers() {
+            let shuffleable = this.config.ControlSettings.shuffleable.toIntArray((it)=>{return parseInt(it)-1;});
+            this.settingsManager.reset(shuffleable);
+            shuffleable = this.config.ControlSettings.shuffleable.toIntArray();
+            this.explorer.resetPresets(shuffleable);
+            this.syncLayers();
+        }
     }
 }

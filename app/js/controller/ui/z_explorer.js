@@ -11,11 +11,12 @@
         /**
          *
          * @param id
+         * @param name
          * @param open
          * @param {HC.Explorer} explorer
          */
-        constructor(id, open, explorer) {
-            super(id, open);
+        constructor(id, name, open, explorer) {
+            super(id, name, open);
             this.finishLayout(explorer);
         }
 
@@ -48,7 +49,7 @@
             actions.classList.add('actions');
             actions.innerHTML =
                 '<div class="new" title="Create folder."></div>' +
-                '<div class="reset" title="Reload presets"></div>';
+                '<div class="reset" title="Reload presets."></div>';
             actions.childNodes.item(0).addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();

@@ -14,7 +14,7 @@
          */
         constructor() {
             navigator.getUserMedia = 
-                || navigator.mediaDevices.getUserMedia 
+                navigator.mediaDevices.getUserMedia 
                 || navigator.getUserMedia 
                 || navigator.webkitGetUserMedia 
                 || navigator.mozGetUserMedia 

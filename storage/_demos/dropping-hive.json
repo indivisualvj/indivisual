@@ -1,8 +1,7 @@
 {
     "info": {
         "name": 0,
-        "version": 1,
-        "tutorial": "[object Object]"
+        "version": 1
     },
     "layer": {
         "layer_transvisible": false,

@@ -39,11 +39,12 @@ HC.Controller.prototype.addGuifyDisplayControllers = function (groups, controlSe
 
 /**
  *
- * @param controlSets
- * @param uiClass
- * @param parent
+ * @param controlSets {Array}
+ * @param uiClass {string}
+ * @param parent {HC.GuifyFolder}
+ * @param hook {Function|null}
  */
-HC.Controller.prototype.addGuifyControllers = function (controlSets, uiClass, parent) {
+HC.Controller.prototype.addGuifyControllers = function (controlSets, uiClass, parent, hook) {
     for (let k in controlSets) {
         let inst = controlSets[k];
 
@@ -56,7 +57,7 @@ HC.Controller.prototype.addGuifyControllers = function (controlSets, uiClass, pa
             } else {
                 ui.addFolder();
             }
-            ui.addControllers();
+            ui.addControllers(hook);
         }
     }
 };
@@ -334,11 +335,11 @@ HC.Controller.prototype.openTreeByProperty = function (property) {
         if (control = roots[k].findControlByProperty(property)) {
             this.closeAll(roots[k]);
             let scrollto = control;
-            control = control.getParent();
+            roots[k].setOpen(true);
 
-            do {
+            while(control = control.getParent()) {
                 control.setOpen(true);
-            } while(control = control.getParent())
+            }
 
             this.scrollToControl(scrollto);
         }
@@ -433,20 +434,28 @@ HC.Controller.prototype.toggleByKey = function (ci, char, shiftKey) {
     let roots = this.guis;
     let open = this.nextOpenFolder();
 
+    // start a search on shift if possible or..
+    // expand next open
     if (!open.isExpanded()) {
         if (ci < roots.length) {
-            roots[ci].setOpen(true);
+            if (shiftKey && open.gui.bar) {
+                roots[ci].gui.bar.input.focus();
+            } else {
+                roots[ci].setOpen(true);
+            }
         }
         return;
     }
 
     let controllers = open.getControllers();
 
-    if (shiftKey && controllers.length > 0) { // reset on shift
+    // reset on shift
+    if (shiftKey && controllers.length > 0) {
         this.resetFolder(open);
         return;
     }
 
+    // toggle control by mnemonic
     let ctrl = open.toggleByMnemonic(char);
     this.scrollToControl(ctrl);
 };
@@ -667,18 +676,6 @@ HC.Controller.prototype.updateClip = function (seq) {
 };
 
 /**
- * 
- */
-HC.Controller.prototype.initClips = function () {
-    this.clips = [];
-    for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
-        // fixme: this needs to be done in SequenceControllerUi
-        this.clips.push(new HC.SourceControllerSequence(this, seq));
-    }
-
-};
-
-/**
  *
  */
 HC.Controller.prototype.initThumbs = function () {
@@ -708,4 +705,3 @@ HC.Controller.prototype.initThumbs = function () {
     window.dispatchEvent(new Event('resize'));
     this.sequenceSettingsGui.setOpen(false);
 };
-0

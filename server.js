@@ -1,14 +1,15 @@
 #!/usr/bin/env node
 'use strict';
 
-let fs = require('fs');
-let conf = require('./config.json');
-let path = require('path');
-let express = require('express');
-let sio = require('socket.io');
-let https = require('https');
-let http = require('http');
-let commandLineArgs = require('command-line-args');
+const fs = require('fs');
+const { networkInterfaces } = require('os');
+const conf = require('./config.json');
+const path = require('path');
+const express = require('express');
+const sio = require('socket.io');
+const https = require('https');
+const http = require('http');
+const commandLineArgs = require('command-line-args');
 
 let options = commandLineArgs([
     { name: "port", alias: "p", type: String, defaultOption: true },
@@ -96,10 +97,7 @@ if (process.argv.length > 2) {
     }
 }
 
-server.listen(_PORT);
-console.log('server running on port: ' + _PORT);
-let proto = _HTTPS ? 'https' : 'http';
-console.log('open ' + proto + '://localhost:' + _PORT + ' in your browser');
+_startListening();
 
 app.use(express.static('..'));
 
@@ -946,4 +944,46 @@ function _existCreate(dir, feedback) {
     }
 
     return returnValue;
+}
+
+function _getNetworkIPs() {
+    const nets = networkInterfaces();
+    const results = ['localhost'];
+
+    for (const name of Object.keys(nets)) {
+        for (const net of nets[name]) {
+            // Skip over non-IPv4 and internal (i.e. 127.0.0.1) addresses
+            if (net.family === 'IPv4' && !net.internal) {
+                results.push(net.address);
+            }
+        }
+    }
+
+    return results;
+}
+
+function _logConnectionInfo() {
+    console.log('server running on port: ' + _PORT);
+    let proto = _HTTPS ? 'https' : 'http';
+
+    let networkIPs = _getNetworkIPs();
+    console.log('with the following links you can start visualizing:')
+    for (const networkIP of networkIPs) {
+        console.log(proto + '://' + networkIP + ':' + _PORT + ' (inline)');
+        console.log(proto + '://' + networkIP + ':' + _PORT + '/controller.html (controller)');
+        console.log(proto + '://' + networkIP + ':' + _PORT + '/animation.html (animation)');
+    }
+}
+
+function _startListening() {
+    server.listen(_PORT).addListener('error', (error) => {
+        if (error.code === 'EADDRINUSE') {
+            console.error('port ' + _PORT + ' is already in use. terminating.');
+            process.exit(1);
+        } else {
+            throw error;
+        }
+    }).addListener('listening', () => {
+        _logConnectionInfo();
+    });
 }

@@ -42,19 +42,13 @@ HC.ControlController = HC.ControlController || {};
 
             reset: () => {
 
-                if (messaging.program.config.ctrlKey) {
+                if (messaging.program.config.shiftKey && messaging.program.config.ctrlKey) {
                     let yes = confirm('Reset everything?');
                     if (yes) {
-                        // todo: reset everything
+                        messaging.program.fullReset();
                     }
-                }
-
-                if (messaging.program.config.shiftKey || messaging.program.config.ctrlKey) {
-                    messaging.program.settingsManager.reset(splitToIntArray(this.config.ControlSettings.shuffleable));
-                    messaging.program.syncLayers();
-                    messaging.program.updateControl('reset', true, true, true, true);
-                    messaging.program.explorer.resetPresets();
-                    messaging.program.updateControl('layer', this.config.ControlSettings.layer, true, false, false);
+                } else if (messaging.program.config.shiftKey) {
+                    messaging.program.resetLayers();
 
                 } else {
                     messaging.program.updateControl('reset', true, true, true, false);
@@ -114,7 +108,16 @@ HC.ControlController = HC.ControlController || {};
             shuffleable: ['half'],
 
             shuffle_mode: ['half', 'clear'],
-            shuffle_every: ['half']
+            shuffle_every: ['half'],
+        };
+
+        attributes = {
+            reset: {
+                title: 'Press SHIFT to delete all (NOT shuffleable) layers.\nPress CTRL+SHIFT to reset EVERYTHING!'
+            },
+            shuffleable: {
+                title: 'Only layer 1..20, will be included if shuffle is active.\nOn layer reset (SHIFT+DEL) only these layers be reset.\n',
+            },
         };
 
         events = {

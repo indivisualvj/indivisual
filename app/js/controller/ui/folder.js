@@ -11,7 +11,7 @@
 
         /**
          *
-         * @type {Object.<string, *>}
+         * @type {Object.<string, HC.GuifyItem>}
          */
         children = {};
 
@@ -118,9 +118,12 @@
         /**
          *
          * @param label
+         * @param property
+         * @param object
          * @param options
          * @param onChange
          * @param opts
+         * @returns {HC.GuifyController}
          */
         addSelectController(label, property, object, options, onChange, opts) {
             opts = this._buildControllerOptions('select', label, property, object, onChange, opts);
@@ -154,10 +157,31 @@
         /**
          *
          * @param key
-         * @return {*}
+         * @returns {HC.GuifyItem}
          */
         getChild(key) {
             return this.children[key];
+        }
+
+        /**
+         *
+         * @returns {HC.GuifyController[]}
+         */
+        getAllControllers() {
+            let ctrls = [];
+            let _find = function (inst, ctrls) {
+                for (const key in inst.children) {
+                    let child = inst.children[key];
+                    if (child instanceof HC.GuifyFolder) {
+                        _find(child, ctrls)
+                    } else if (child instanceof HC.GuifyController) {
+                        ctrls.push(child)
+                    }
+                }
+            }
+
+            _find(this, ctrls);
+            return ctrls;
         }
 
         /**
@@ -202,7 +226,7 @@
                 let child = parent.getChild(k);
 
                 if (child instanceof HC.GuifyFolder) {
-                    if (k == key) {
+                    if (k === key) {
                         return child;
                     }
 
@@ -253,7 +277,7 @@
                         return child;
                     }
                 } else {
-                    if (child.getProperty() == property) {
+                    if (child.getProperty() === property) {
                         return child;
                     }
                 }
@@ -269,7 +293,7 @@
          */
         filterTree(value) {
             let found = false;
-            let reset = value ? false : true;
+            let reset = !value;
             let regExp = new RegExp(value);
 
             for (let k in this.children) {
@@ -287,8 +311,8 @@
                     }
 
                 } else if (!reset && regExp.test(child.getProperty())) {
-                        child.setVisible(true);
-                        found = true;
+                    child.setVisible(true);
+                    found = true;
 
                 } else {
                     child.setVisible(reset);
@@ -362,7 +386,7 @@
             for (let k in this.children) {
                 let child = this.getChild(k);
 
-                if (child.getMnemonic() == char) {
+                if (child.getMnemonic() === char) {
                     child.mnemonicAction();
                     return child;
                 }

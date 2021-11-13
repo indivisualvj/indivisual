@@ -124,9 +124,7 @@
                 layer = parseInt(layer);
 
                 while (!(layer in this.layers)) {
-                    this.layers.push({
-                        shuffleable: true
-                    });
+                    this.layers.push({});
                 }
 
                 layer = this.layers[layer];
@@ -209,10 +207,8 @@
 
             for (let layer in this.layers) {
 
-                if (heap && heap.length > 0) {
-                    if (heap.indexOf(parseInt(layer)) < 0) {
-                        continue;
-                    }
+                if (heap && heap.length && heap.indexOf(parseInt(layer)) > -1) {
+                    continue;
                 }
 
                 this.resetLayer(layer);

@@ -109,7 +109,7 @@
         fullReset(keepSettings) {
             this.listener.removeEvent(EVENT_RENDERER_RENDER);
             this.resize();
-            this.initLayers(keepSettings, true);
+            this.initLayers(keepSettings);
             this.setLayer(0);
         }
 
@@ -147,9 +147,8 @@
         /**
          *
          * @param keepsettings
-         * @param slow
          */
-        initLayers(keepsettings, slow) {
+        initLayers(keepsettings) {
 
             if (this._layers) {
                 this.three.scene.remove(this._layers);
@@ -166,11 +165,7 @@
                 let ol = this.layers[i];
 
                 if (ol) {
-                    /**
-                     * maybe keepsettings but never discard settings from layers excluded by ControlSettings.shuffleable
-                     * those layers are there to record samples while animation is offline or to test certain settings/setups
-                     */
-                    if ((keepsettings || !layerShuffleable(i))) {
+                    if (keepsettings) {
                         oldControlSets = this.layers[i].controlSets;
                     }
                     ol.dispose();
@@ -183,7 +178,7 @@
 
                 this.layers[i] = layer;
 
-                this.resetLayer(layer, slow);
+                this.resetLayer(layer);
             }
 
             this.currentLayer = this.layers[this.config.ControlSettings.layer];
@@ -199,10 +194,12 @@
 
             if (this.nextLayer) {
 
-                if (this.currentLayer !== this.nextLayer) { // fixme instead of not switching in between, try to update layer tweens to beatkeeper speeds percenteages
+                // todo: fastforward tweens?
+                if (this.currentLayer !== this.nextLayer) {
                     if (!force && this.config.ControlSettings.shuffle_mode !== 'off') {
                         let speed = this.nextLayer.getCurrentSpeed();
                         if (!speed.starting()) {
+                            console.log('HC.Renderer.switchLayer', 'fail', 'speed in progress')
                             return;
                         } else {
 

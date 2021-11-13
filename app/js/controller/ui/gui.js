@@ -11,34 +11,35 @@
         /**
          *
          * @param id
+         * @param title
          * @param open
          */
-        constructor(id, open) {
-            super(null, null, id, open);
+        constructor(id, title, open) {
+            super(null, null, id, title);
         }
 
         /**
          *
-         * @param name
-         * @param open
+         * @param id
+         * @param title
          */
-        init(name, open) {
+        init(id, title) {
             this.gui = new guify({
-                title: name,
+                title: title,
                 theme: 'dark', // dark, light, yorha, or theme object
                 align: 'right', // left, right
                 width: '100%',
                 barMode: 'offset', // none, overlay, above, offset
                 panelMode: 'inner',
                 opacity: 1,
-                root: document.getElementById(name),
-                open: open,
+                pollRateMS: 1000/30,
+                root: document.getElementById(id),
                 search: {
                     filter: (value) => {
                         this.filterTree(value);
                     },
                     delay: 175,
-                    action: (e) => {
+                    action: () => {
                         let ctrl = this.findFirstVisibleControl();
                         if (ctrl) {
                             ctrl.triggerComponent();
@@ -49,8 +50,16 @@
             this.component = this.gui;
             if (this.gui.bar.input) {
                 this.gui.bar.input.classList.add('search');
+                this.gui.bar.input.addEventListener('keyup', (e) => {
+                    if (e.key === 'Escape') {
+                        e.currentTarget.value = '';
+                        this.filterTree('');
+                        e.currentTarget.blur();
+                    }
+                });
             }
             this.gui.container.style.zIndex = 99;
+
         }
 
         /**
@@ -92,7 +101,7 @@
             let style = window.getComputedStyle(this.gui.panel.panel);
             let display = style.getPropertyValue('display');
 
-            return display != 'none';
+            return display !== 'none';
         }
 
         /**

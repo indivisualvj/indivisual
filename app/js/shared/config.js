@@ -44,16 +44,24 @@ HC.Statics = HC.Statics || {};
          * @type {boolean}
          */
         ctrlKey = false;
+
         /**
          *
          * @type {boolean}
          */
         altKey = false;
+
         /**
          *
          * @type {boolean}
          */
         shiftKey = false;
+
+        /**
+         *
+         * @type {boolean}
+         */
+        doubleShift = false;
 
         config = [
             {
@@ -281,6 +289,11 @@ HC.Statics = HC.Statics || {};
          */
         initSourceControlSets() {
             return this._initControlSets(HC.SourceController, this.SourceValues);
+        }
+
+        shuffleable (index) {
+            let shuffleable = this.ControlSettings.shuffleable.toIntArray();
+            return shuffleable.length === 0 || shuffleable.indexOf(index) !== -1;
         }
 
         /**

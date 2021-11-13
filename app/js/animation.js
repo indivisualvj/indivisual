@@ -298,7 +298,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         pause() {
             this.running = false;
-            this.lastUpdate = this.now; // todo use todo use THREE.Clock.start/stop! getElapsedTime!
+            this.lastUpdate = this.now;
         }
 
         /**
@@ -308,7 +308,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.now = HC.now() - this.lastUpdate;
             this.diff = this.now - this.last;
             this.duration = 1000 / this.config.DisplaySettings.fps;
-            this.diffPrc = this.diff / (1000 / 60); // todo use THREE.Clock.getDelta!
+            this.diffPrc = this.diff / (1000 / 60);
             this.rms = this.duration - this.ms;
             this._rmsc++;
             this._rmss += this.rms;

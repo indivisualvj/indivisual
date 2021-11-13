@@ -66,38 +66,36 @@
         /**
          *
          * @param {HC.Controller} controller
-         * @param index
+         * @param {HC.GuifyFolder} settingsFolder
          */
-        constructor(controller, index) {
+        constructor(controller, settingsFolder) {
             this.controller = controller;
             this.sourceManager = controller.sourceManager;
             this.config = controller.config;
-            this.index = index;
+            this.key = settingsFolder.getKey();
+            this.settingsFolder = settingsFolder;
 
             this.init();
         }
 
         init() {
-            let sequenceKey = 'sequence' + this.index;
-
             this.clipNode = document.createElement('div');
-            this.clipNode.id = sequenceKey;
-            // this.clipNode.setAttribute('data-title', sequenceKey);
+            this.clipNode.id = this.key;
             this.clipNode.setAttribute('class', 'sequence control');
-            this.clipNode.setAttribute('data-sequence', this.index.toString());
+            this.clipNode.setAttribute('data-sequence', this.key);
 
             this.thumbsNode  = document.createElement('div');
-            this.thumbsNode.id = sequenceKey + '_thumbs';
+            this.thumbsNode.id = this.key + '_thumbs';
             this.thumbsNode.setAttribute('class', 'thumbs');
             this.clipNode.appendChild(this.thumbsNode);
 
             this.indicatorNode = document.createElement('div');
-            this.indicatorNode.id = sequenceKey + '_indicator';
+            this.indicatorNode.id = this.key + '_indicator';
             this.indicatorNode.setAttribute('class', 'indicator');
             this.clipNode.appendChild(this.indicatorNode);
 
             this.pointerNode = document.createElement('div');
-            this.pointerNode.id = sequenceKey + '_pointer';
+            this.pointerNode.id = this.key + '_pointer';
             this.pointerNode.setAttribute('class', 'progress');
             this.indicatorNode.appendChild(this.pointerNode);
 
@@ -119,9 +117,6 @@
         }
 
         initControls() {
-            let sequenceKey = getSequenceKey(this.index);
-
-            this.settingsFolder = this.controller.sequenceSettingsGui.getChild(sequenceKey);
             this.controlsNode = this.settingsFolder.getFolderContainer();
 
             let clear = document.createElement('div');
@@ -188,8 +183,8 @@
                 let beats = 0;
                 if (data) {
                     let length = data.length;
-                    let start = this.getSequenceStart(this.index);
-                    let end = this.getSequenceEnd(this.index);
+                    let start = this.getSequenceStart(this.key);
+                    let end = this.getSequenceEnd(this.key);
                     let sequence = {
                         start: 0,
                         end: 0,
@@ -224,7 +219,7 @@
         /**
          *
          * @param i
-         * @returns {*}
+         * @returns {number}
          */
         getSequenceStart(i) {
             let key = getSequenceStartKey(i);
@@ -234,8 +229,8 @@
 
         /**
          *
-         * @param i
-         * @returns {*}
+         * @param i {number}
+         * @returns {number}
          */
         getSequenceEnd(i) {
             let key = getSequenceEndKey(i);

@@ -11,11 +11,12 @@
         /**
          *
          * @param id
+         * @param name
          * @param open
          * @param {HC.Explorer} explorer
          */
-        constructor(id, open, explorer) {
-            super(id, open);
+        constructor(id, name, open, explorer) {
+            super(id, name, open);
             this.finishLayout(explorer);
         }
 
@@ -47,8 +48,8 @@
             let actions = document.createElement('div');
             actions.classList.add('actions');
             actions.innerHTML =
-                '<div class="new"></div>' +
-                '<div class="reset"></div>';
+                '<div class="new" title="Create folder."></div>' +
+                '<div class="reset" title="Reload presets."></div>';
             actions.childNodes.item(0).addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
@@ -83,10 +84,10 @@
                 let actions = document.createElement('div');
                 actions.classList.add('actions');
                 actions.innerHTML =
-                    '<div class="new"></div>' +
-                    '<div class="fill"></div>' +
-                    '<div class="save"></div>' +
-                    '<div class="rename"></div>';
+                    '<div class="new" title="Save current layer to new file."></div>' +
+                    '<div class="fill" title="Fill (shuffleable) layers with presets.\nPress SHIFT to fill remaining (shuffleable) layers."></div>' +
+                    '<div class="save" title="!Attention! Save all files assigned to a layer!"></div>' +
+                    '<div class="rename" title="Rename this folder."></div>';
                 actions.childNodes.item(0).addEventListener('click', (e) => {
                     e.preventDefault(); e.stopPropagation();
                     presetMan.newPreset(this);
@@ -119,7 +120,6 @@
 
         /**
          *
-         * @param opts
          * @param data
          * @param {HC.PresetManager} presetMan
          * @returns {HC.GuifyExplorerPreset}
@@ -166,27 +166,6 @@
 
         /**
          *
-         * @param info
-         */
-        setInfo(info) {
-            if (info !== null) {
-                this.getComponent().label.setAttribute('data-label', info);
-
-            } else {
-                this.getComponent().label.removeAttribute('data-label');
-            }
-        }
-
-        /**
-         *
-         * @returns {string}
-         */
-        getInfo() {
-            return this.getComponent().label.getAttribute('data-label');
-        }
-
-        /**
-         *
          * @param selected
          */
         setSelected(selected) {
@@ -226,13 +205,14 @@
         finishLayout(presetMan) {
             let container = this.getContainer();
             container.classList.add('preset');
+            container.setAttribute('title', 'Press CTRL to append shader passes from this preset to all loaded (shuffleable) presets')
 
             let actions = document.createElement('div');
             actions.classList.add('actions');
             actions.innerHTML =
-                '<div class="save"></div>' +
-                '<div class="rename"></div>' +
-                '<div class="delete"></div>';
+                '<div class="save" title="!Attention! the current layer settings will be written to this file!"></div>' +
+                '<div class="rename" title="Rename this file."></div>' +
+                '<div class="delete" title="Trash this file (Remains as .' + this.getLabel() + ')."></div>';
             actions.childNodes.item(0).addEventListener('click', (e) => {
                 e.preventDefault(); e.stopPropagation();
                 presetMan.savePreset(this);

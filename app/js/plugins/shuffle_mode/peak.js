@@ -27,9 +27,10 @@
         }
 
         next() {
+            let pile = this.getPile();
             this.layer++;
 
-            if (this.layer >= this.config.ControlValues.layers) {
+            if (this.layer > pile.length - 1) {
                 this.layer = 0;
             }
         }
@@ -41,10 +42,11 @@
         static index = 11;
 
         next() {
+            let pile = this.getPile();
             this.layer--;
 
             if (this.layer < 0) {
-                this.layer = this.config.ControlValues.layers - 1;
+                this.layer = pile.length - 1;
             }
         }
     }
@@ -55,16 +57,9 @@
         static index = 12;
 
         next() {
-            let pile = [];
-            for(let i = 0; i < this.config.ControlValues.layers; i++) {
-                if (layerShuffleable(i) && !this.animation.settingsManager.isDefault(i)) {
-                    pile.push(i);
-                }
-            }
+            let pile = this.getPile();
 
-            if (pile.length) {
-                this.layer = pile[randomInt(0, pile.length - 1, false)];
-            }
+            this.layer = pile.length ? randomInt(0, pile.length - 1, false) : 0;
         }
     }
 }

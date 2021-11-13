@@ -109,7 +109,6 @@
                 if (ctrl) {
                     folders[ctrl.getParent().getLabel()] = ctrl.getParent();
                 }
-
             }
 
             for (let k in folders) {
@@ -156,7 +155,7 @@
         /**
          *
          * @param folder
-         * @private
+         * @protected
          */
         _finishFolder(folder) {
             let clear = document.createElement('div');
@@ -175,6 +174,7 @@
             let styles = this.controlSet.styles[key] || false;
             let props = this.controlSet.properties;
             let values = this.controlSet.values[key] || false;
+            let attributes = this.controlSet.attributes[key] || false;
             let parent = this.controlSet.parents[key] || undefined;
             let value = props[key];
             let folder = this.folder;
@@ -190,7 +190,7 @@
 
             // _check if hidden
             if (types && types.length > 0) {
-                if(types[types.length - 1] == 'hidden') {
+                if(types[types.length - 1] === 'hidden') {
                     return;
                 }
             }
@@ -211,7 +211,7 @@
                 initial: props[key]
             };
 
-            if (types[types.length - 1] == 'display') {
+            if (types[types.length - 1] === 'display') {
                 config.type = 'display';
                 // config.label = '';
                 delete config.onChange;
@@ -226,15 +226,13 @@
                 delete config.object;
 
             } else if (typeof value == 'number' && types && types.length > 2) {
-                if (true) {
-                    config.type = 'range';
-                    let min = types[0];
-                    let max = types[1];
-                    let step = types[2];
-                    config.min = min;
-                    config.max = max;
-                    config.step = step;
-                }
+                config.type = 'range';
+                let min = types[0];
+                let max = types[1];
+                let step = types[2];
+                config.min = min;
+                config.max = max;
+                config.step = step;
 
             } else if (typeof value == 'boolean') {
                 config.type = 'checkbox';
@@ -268,6 +266,13 @@
                 e.register(window);
             }
 
+            if (attributes) {
+                let container = controller.getContainer()
+                for (const attributesKey in attributes) {
+                    container.setAttribute(attributesKey, attributes[attributesKey]);
+                }
+            }
+
             return controller;
 
         }
@@ -283,13 +288,7 @@
             data[set] = {};
             data[set][that.getProperty()] = value;
 
-            messaging.program.updateSetting(
-                undefined,
-                data,
-                true,
-                true,
-                false
-            );
+            messaging.program.updateSetting(undefined, data, false, true, false);
 
             HC.log(set + '/' + that.getProperty(), value);
 

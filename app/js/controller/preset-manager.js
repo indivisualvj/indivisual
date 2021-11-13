@@ -100,19 +100,22 @@
 
             let di = 0;
             for (let i = 0; i < this.config.ControlValues.layers; i++) {
-                if (!layerShuffleable(i)) {
+                if (!this.config.shuffleable(i+1)) {
                     continue;
                 }
 
                 if (di < dflt.length) {
-                    this._loadPreset(dflt[di], i, di, di == dflt.length - 1);
+                    this._loadPreset(dflt[di], i, di, di === dflt.length - 1);
                     di++;
 
                 } else if (!this.settingsManager.isDefault(i)) {
-                    this.settingsManager.setLayerProperties(i, false);
-                    this.controller.updatePreset(false, this.settingsManager.prepareLayer(i));
+                    console.log('reset', i);
+                    this.settingsManager.resetLayer(i);
+                    this.controller.updatePreset(false, {}, i);
                 }
             }
+
+            this.controller.updateControl('layer', 0, true, true);
         }
 
         /**
@@ -122,9 +125,9 @@
         appendPresets(folder) {
             let children = Object.keys(folder.children);
             let dflt = [];
-            let layers = this.config.ControlValues.layer;
+            let layers = this.config.ControlValues.layers;
 
-            for (let i = 0; dflt.length < layers.length && i < children.length; i++) {
+            for (let i = 0; dflt.length < layers && i < children.length; i++) {
                 let child = folder.getChild(children[i]);
                 if (!child.getLabel().match(/^_.+/)) {
                     dflt.push(child);
@@ -134,16 +137,17 @@
             HC.clearLog();
 
             let di = 0;
-            for (let i = 0; i < layers.length; i++) {
+            for (let i = 0; i < layers; i++) {
                 if (!this.settingsManager.isDefault(i)) {
                     continue;
                 }
-                if (!layerShuffleable(i)) {
+
+                if (!this.config.shuffleable(i+1)) {
                     continue;
                 }
 
                 if (di < dflt.length) {
-                    this._loadPreset(dflt[di], i, di, di == dflt.length - 1);
+                    this._loadPreset(dflt[di], i, di, di === dflt.length - 1);
                     di++;
 
                 } else {
@@ -154,27 +158,24 @@
 
         /**
          *
-         * @param {HC.GuifyExplorerPreset} child
+         * @param child
          * @param i
          * @param di
+         * @param last
          * @private
          */
         _loadPreset(child, i, di, last) {
 
             child.setInfo(i+1);
 
+            console.log('loading', child.getLabel());
             this.filesystem.load(STORAGE_DIR, child.getParent().getLabel(), child.getLabel(), (data) => {
-
                 requestAnimationFrame(() => {
-
-                    this.controller.updateControl('layer', i, true, true); // todo why have to set?
+                    // this.controller.updateControl('layer', i, true, true); // todo why have to set?
                     let key = data.dir + '/' + data.name;
                     let contents = JSON.parse(data.contents);
-                    this.controller.updatePreset(key, contents);
-
-                    if (last) {
-                        this.controller.updateControl('layer', 0, true, true);
-                    }
+                    console.log('loaded', data.name);
+                    this.controller.updatePreset(key, contents, i);
                 });
             });
         };

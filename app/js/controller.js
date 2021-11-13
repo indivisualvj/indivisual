@@ -101,14 +101,17 @@ document.addEventListener('DOMContentLoaded', function () {
          * @type {HC.Guify}
          */
         controlSettingsGui;
+
         /**
          * @type {HC.Guify}
          */
         displaySettingsGui;
+
         /**
          * @type {HC.Guify}
          */
         sourceSettingsGui;
+
         /**
          * @type {HC.Guify}
          */

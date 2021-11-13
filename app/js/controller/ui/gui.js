@@ -31,7 +31,7 @@
                 barMode: 'offset', // none, overlay, above, offset
                 panelMode: 'inner',
                 opacity: 1,
-                // pollRateMS: 1000/30,
+                pollRateMS: 1000/30,
                 root: document.getElementById(id),
                 open: open,
                 search: {

@@ -170,7 +170,7 @@
 
             console.log('loading', child.getLabel());
             this.filesystem.load(STORAGE_DIR, child.getParent().getLabel(), child.getLabel(), (data) => {
-                HC.TimeoutManager.getInstance().add('_loadPreset' + child.getLabel(), 0, () => {// todo: timeoutmanager
+                HC.TimeoutManager.getInstance().add('_loadPreset' + child.getLabel(), 0, () => {
                     let key = data.dir + '/' + data.name;
                     let contents = JSON.parse(data.contents);
                     console.log('loaded', data.name);

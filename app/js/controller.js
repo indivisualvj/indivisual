@@ -918,7 +918,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (this.settingsManager.get(layer, 'info').hasTutorial()) {
                 new HC.ScriptProcessor(this, name, Object.create(data.info.tutorial)).log();
 
-                data.info.tutorial = {}; // todo tutorial will be deleted on savePreset
+                data.info.tutorial = {}; // fixme tutorial will be deleted on savePreset
             }
 
             this.messaging.emitSettings(layer, data, false, false, true);

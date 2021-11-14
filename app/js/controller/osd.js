@@ -28,7 +28,7 @@ HC.Controller.prototype.showOSD = function (key, value, timeout, color) {
             if (value !== undefined) {
                 co.style.opacity = 1;
 
-                if (value == false) {
+                if (value === false) {
                     value = value.toString();
                 }
 

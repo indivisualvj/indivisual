@@ -1,3 +1,7 @@
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+
 {
     HC.plugins.shaders.repeat = class Plugin extends HC.ShaderPlugin {
         static index = 45;

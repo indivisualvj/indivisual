@@ -65,7 +65,7 @@ HC.Osci = {
     step(pa, steps, speed, onpeak, negative) {
         if ((onpeak && messaging.program.audioAnalyser.peak) || (!onpeak && speed.starting())) {
             let n = pa.next;
-            while (n == pa.next) {
+            while (n === pa.next) {
                 n = (randomInt(0, steps, negative) / steps);
             }
 

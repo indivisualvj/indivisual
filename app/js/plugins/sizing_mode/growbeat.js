@@ -21,11 +21,11 @@
 
                 let mul = this.settings.sizing_scale;
 
-                if (this.settings.sizing_mode_audio == true) {
-                    mul *= (this.settings.sizing_mode_sync == false ? this.shapeVolume(shape) : this.audioAnalyser.volume * 2);
+                if (this.settings.sizing_mode_audi === true) {
+                    mul *= (this.settings.sizing_mode_sync === false ? this.shapeVolume(shape) : this.audioAnalyser.volume * 2);
                 }
 
-                if (this.settings.sizing_mode_limit == true) {
+                if (this.settings.sizing_mode_limit === true) {
                     mul = Math.min(1, Math.max(-1, mul));
                 }
 

@@ -97,10 +97,10 @@
             let count = 0;
 
             for (let k in this.properties.shaders) {
-                if (k == index) {
+                if (k === index) {
                     break;
                 }
-                if (this.getShaderName(k) == name) {
+                if (this.getShaderName(k) === name) {
                     count++;
                 }
             }

@@ -44,7 +44,7 @@
             let co = document.getElementById('log');
             if (co) {
 
-                if (value == false) {
+                if (value === false) {
                     value = value.toString();
                 }
 

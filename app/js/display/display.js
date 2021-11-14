@@ -252,7 +252,7 @@
                 height = b.height;
             }
 
-            if (!this._bounds || this.canvas.width != width || this.canvas.height != height) {
+            if (!this._bounds || this.canvas.width !== width || this.canvas.height !== height) {
                 this.canvas.width = width;
                 this.canvas.height = height;
                 this._bounds = new HC.Rectangle(0, 0, width, height);

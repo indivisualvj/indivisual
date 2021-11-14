@@ -44,7 +44,7 @@
          *
          */
         initEvents() {
-            if (this.getComponent().opts.type == 'range') {
+            if (this.getComponent().opts.type === 'range') {
                 this._initRangeEvents();
 
             }
@@ -261,7 +261,7 @@
         isModified() {
             let value = this.getValue();
             let initial = this.getInitialValue();
-            if (typeof value == 'string' && typeof initial === 'number') {
+            if (typeof value === 'string' && typeof initial === 'number') {
                 value = parseFloat(value);
             }
             if (value !== undefined && initial !== undefined) {
@@ -275,10 +275,10 @@
          *
          */
         triggerComponent() {
-            if (this.getComponent().opts.type == 'checkbox') {
+            if (this.getComponent().opts.type === 'checkbox') {
                 this.toggleValue();
 
-            } else if (this.getComponent().opts.type == 'button') {
+            } else if (this.getComponent().opts.type === 'button') {
                 this.getComponent().button.click();
 
             } else {

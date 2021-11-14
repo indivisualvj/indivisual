@@ -203,7 +203,7 @@
                     HC.log('clock-bpm', this.clockbpm);
 
                     if (!this.config.ControlSettings.peak_bpm_detect) { // tempo by MIDI clock
-                        if (this.config.ControlSettings.tempo != this.clockbpm) {
+                        if (this.config.ControlSettings.tempo !==this.clockbpm) {
                             this.controller.updateControl('tempo', this.clockbpm, true, true, false);
                         }
                     }
@@ -243,7 +243,7 @@
                             shiftTo = shifts[i];
                             shift = this.midi_shifted[shifts[i]];
 
-                            if (id.default && id.default.shift == shiftTo) {
+                            if (id.default && id.default.shift === shiftTo) {
                                 shift = '';
                                 shiftTo = 'default';
                             }
@@ -426,7 +426,7 @@
                             let cur = settings[name];
                             let next = cur + (step * unit);
 
-                            if (id.type == 'step') {
+                            if (id.type === 'step') {
                                 step = step > 0 ? unit : -unit;
                             }
 
@@ -540,13 +540,13 @@
                     let c = sub[s];
                     if (id.shift in c) {
                         let sec = c[id.shift];
-                        if (sec.type == 'assign') {
+                        if (sec.type === 'assign') {
                             let n = sec.name;
                             let v = sec.value;
                             let setting = name + n;
                             if (setting in settings) {
                                 let sv = settings[setting];
-                                if (sv == v) {
+                                if (sv === v) {
                                     return [m, s];
                                 }
                             }

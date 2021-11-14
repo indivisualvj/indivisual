@@ -610,7 +610,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateControl(item, value, display, forward, force) {
 
-            if (typeof value != 'object') {
+            if (typeof value !== 'object') {
                 HC.log(item, value);
                 this.explainPlugin(item, value, HC);
             }
@@ -680,7 +680,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateDisplay(item, value, display, forward, force) {
 
-            if (typeof value != 'object') {
+            if (typeof value !== 'object') {
                 HC.log(item, value);
                 // this.explainPlugin(item, value);
             }
@@ -712,7 +712,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateSource(item, value, display, forward, force) {
 
-            if (typeof value != 'object') {
+            if (typeof value !== 'object') {
                 HC.log(item, value);
                 // this.explainPlugin(item, value);
             }

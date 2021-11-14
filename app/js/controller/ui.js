@@ -194,11 +194,11 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                 break;
         }
 
-        if (typeof shs == 'boolean') { // apply, etc.
+        if (typeof shs === 'boolean') { // apply, etc.
             opts.type = 'checkbox';
             folder.addController(opts);
 
-        } else if (typeof shs == 'number') {
+        } else if (typeof shs === 'number') {
             opts.type = 'range';
             opts.step = 1;
 
@@ -518,7 +518,7 @@ HC.Controller.prototype.updateUiPasses = function () {
         let passes = cs.getShaderPasses();
 
         for (let k in passFld.children) {
-            if (k == 'pass')continue;
+            if (k === 'pass')continue;
             passFld.removeChild(k);
         }
 

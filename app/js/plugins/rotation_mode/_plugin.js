@@ -6,7 +6,7 @@ HC.plugins.rotation_mode = HC.plugins.rotation_mode || {};
 {
     HC.RotationModePlugin = class Plugin extends HC.AnimationPlugin {
         isFirstShape(shape) {
-            return shape.index == -1;
+            return shape.index === -1;
         }
 
         injections = {

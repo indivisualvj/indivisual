@@ -287,7 +287,7 @@
          * @returns {boolean}
          */
         rhythmSlow(rhythm) {
-            return rhythm != 1;
+            return rhythm !== 1;
         }
 
         /**

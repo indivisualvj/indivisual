@@ -19,8 +19,8 @@
          * @param height
          */
         update(width, height) {
-            let checkWidth = this.width != width;
-            let checkHeight = this.height != height;
+            let checkWidth = this.width !== width;
+            let checkHeight = this.height !== height;
             let needsUpdate = checkWidth || checkHeight;
             this.width = width;
             this.height = height;

@@ -66,12 +66,12 @@ HC.plugins.shaders = HC.plugins.shaders || {};
                 let sProperty = properties[skey];
                 let sSetting = settings[skey];
 
-                if (typeof sProperty != 'boolean' && typeof sProperty != 'number') {
+                if (typeof sProperty !== 'boolean' && typeof sProperty !== 'number') {
 
                     if ('value' in sProperty) {
                         let v = sProperty.value;
 
-                        if (sSetting.type == 'sampler2D') {
+                        if (sSetting.type === 'sampler2D') {
                             let img = this.config.overlay_one ? this.config.overlay_one.target : false;
                             if (img) {
                                 v = this.config.overlay_one.target;
@@ -81,7 +81,7 @@ HC.plugins.shaders = HC.plugins.shaders || {};
                                 glsh.uniforms[skey + '_ready'].value = 0;
                             }
                         } else {
-                            if (sProperty.oscillate && sProperty.oscillate != 'off') {
+                            if (sProperty.oscillate && sProperty.oscillate !== 'off') {
 
                                 let plugin = this.layer.getOscillatePlugin(sProperty.oscillate);
                                 if (plugin) {

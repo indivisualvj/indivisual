@@ -8,12 +8,12 @@
             let _fn = () => {
                 this.delete(key);
                 requestAnimationFrame(() => {
-                    console.log('executing', key);
+                    // console.log('executing', key);
                     fn();
                 });
             };
             if (timeout) {
-                console.log('setting', key);
+                // console.log('setting', key);
                 this.timeouts[key] = setTimeout(_fn, timeout);
             } else {
                 fn();
@@ -34,7 +34,7 @@
 
         remove(key) {
             if (this.has(key)) {
-                console.log('clearing', key);
+                // console.log('clearing', key);
                 clearTimeout(this.get(key));
                 this.delete(key);
             }

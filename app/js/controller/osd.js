@@ -21,19 +21,19 @@ HC.Controller.prototype.showOSD = function (key, value, timeout, color) {
 
             if (timeout) {
                 this._osdTimeout = setTimeout(function () {
-                    co.style.opacity = 0;
+                    co.style.opacity = '0';
                 }, timeout);
             }
 
             if (value !== undefined) {
-                co.style.opacity = 1;
+                co.style.opacity = '1';
 
                 if (value === false) {
                     value = value.toString();
                 }
 
-                let txt = '';
-                let elem = false;
+                let txt;
+                let elem;
                 if (value) {
                     txt = key + ': ' + value;
 

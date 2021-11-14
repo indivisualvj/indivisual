@@ -104,7 +104,7 @@ HC.SourceController = HC.SourceController || {};
          */
         createGroupSettings(pluggedValues) {
             let _create = (value, group) => {
-                return function () {
+                return () => {
                     this.config.messaging.program.setAllDisplaysTo('source', value, group);
                 }
             };

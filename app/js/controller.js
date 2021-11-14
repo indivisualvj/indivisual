@@ -735,6 +735,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 this.updateUi(this.sourceSettingsGui);
+                this.updateUi(this.sequenceSettingsGui);
             }
 
             if (forward) {

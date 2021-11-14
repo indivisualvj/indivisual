@@ -1,9 +1,9 @@
-
 /**
  *
  * @param key
  * @param value
  * @param timeout
+ * @param color
  */
 HC.Controller.prototype.showOSD = function (key, value, timeout, color) {
 

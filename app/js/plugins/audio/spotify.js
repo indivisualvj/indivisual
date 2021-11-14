@@ -56,29 +56,6 @@
                 });
 
                 player.connect();
-
-
-            //     if (!this.audioTag) {
-            //         let audio = document.createElement('audio');
-            //         audio.crossOrigin = "anonymous";
-            //         audio.setAttribute('controls', '');
-            //         document.body.append(audio);
-            //
-            //         let to;
-            //         document.addEventListener('mousemove', function () {
-            //             audio.style.visibility = 'visible';
-            //             clearTimeout(to);
-            //             to = setTimeout(function () {
-            //                 audio.style.visibility = 'hidden';
-            //             }, 2000);
-            //         });
-            //
-            //         this.audioTag = audio;
-            //     }
-            //
-            //     this.onDrop(HC.AudioManager.plugins.soundcloud.dropEvent, callback);
-            //     HC.AudioManager.plugins.soundcloud.dropEvent = false;
-            //
             }
         }
 
@@ -96,8 +73,6 @@
 
                 inst.audioTag.addEventListener('canplay', onCanPlay);
                 inst.audioTag.setAttribute('src', sound.stream_url + '?client_id=' + SOUNDCLOUD_CLIENT_ID);
-                // onCanPlay();
-
             });
 
         }

@@ -27,7 +27,7 @@
          * @param {HTMLElement} element
          * @param {string} key
          * @param {boolean} dataSource
-         * @private
+         * @protected
          */
         _addShareListener(element, key, dataSource) {
             let li = element.lastChild;
@@ -37,7 +37,7 @@
             let sy = document.createElement('div');
             sy.setAttribute('class', 'sync');
 
-            sy.addEventListener('click', function (e) {
+            sy.addEventListener('click', (e) => {
 
                 if (sy.classList.contains('selected')) {
                     messaging.program.setSynchronized(key, false);
@@ -91,7 +91,7 @@
         /**
          *
          * @param {HC.ControlSet} controlSet
-         * @param gui
+         * @param {HC.Guify} gui
          */
         constructor(controlSet, gui) {
             super(controlSet);
@@ -288,7 +288,7 @@
             data[set] = {};
             data[set][that.getProperty()] = value;
 
-            messaging.program.updateSetting(undefined, data, true, true, false);
+            this.config.messaging.program.updateSetting(undefined, data, true, true, false);
 
             HC.log(set + '/' + that.getProperty(), value);
 
@@ -352,12 +352,12 @@
          */
         onChange() {
             return (v, that) => {
-                if (that.getProperty() == 'apply' && v === false) {
-                    messaging.program.cleanShaderPasses();
-                    messaging.program.updateUiPasses();
+                if (that.getProperty() === 'apply' && v === false) {
+                    this.config.messaging.program.cleanShaderPasses();
+                    this.config.messaging.program.updateUiPasses();
                 }
 
-                let passes = messaging.program.settingsManager.get(this.config.ControlSettings.layer, 'passes');
+                let passes = this.config.messaging.program.settingsManager.get(this.config.ControlSettings.layer, 'passes');
                 let data = {passes: {shaders: passes.getShaderPasses()}};
                 messaging.emitSettings(this.config.ControlSettings.layer, data, false, false, false);
 

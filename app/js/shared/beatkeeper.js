@@ -102,8 +102,7 @@
         /**
          *
          * @param value
-         * @param forward
-         * @returns {*}
+         * @returns {boolean}
          */
         trigger(value) {
 
@@ -122,9 +121,6 @@
                 }, 1333);
 
                 messaging.program.updateControl('tempo', bpm, true, false, false);
-                // this.config.ControlSettings.tempo = bpm;
-                // messaging.emitControls({tempo: bpm}, true, false);
-
 
             } else { // first trigger
                 this.firstTrigger = HC.now();

@@ -15,7 +15,7 @@
          * @param that
          */
         onChange(value, that) {
-            messaging.program.updateDisplay(that.getProperty(), value, true, true, false);
+            this.config.messaging.program.updateDisplay(that.getProperty(), value, true, true, false);
         }
     }
 }

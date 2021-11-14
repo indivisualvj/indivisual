@@ -48,6 +48,7 @@
          * @type {boolean}
          */
         preset = false;
+
         settings = false;
 
         /**

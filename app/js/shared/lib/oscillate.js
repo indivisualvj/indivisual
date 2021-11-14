@@ -61,9 +61,11 @@ HC.Osci = {
      * @param speed
      * @param onpeak
      * @param negative
+     * @param isPeak
+     * @param frameTime
      */
-    step(pa, steps, speed, onpeak, negative) {
-        if ((onpeak && messaging.program.audioAnalyser.peak) || (!onpeak && speed.starting())) {
+    step(pa, steps, speed, onpeak, negative, isPeak, frameTime) {
+        if ((onpeak && isPeak) || (!onpeak && speed.starting())) {
             let n = pa.next;
             while (n === pa.next) {
                 n = (randomInt(0, steps, negative) / steps);
@@ -76,7 +78,7 @@ HC.Osci = {
         let diff = pa.next - pa.value;
 
         if (Math.abs(diff) > 0.01) {
-            let step = diff / 0.075 * messaging.program.diff / (speed.duration * 2);
+            let step = diff / 0.075 * frameTime / (speed.duration * 2);
             pa.value += step;
         }
     },
@@ -92,23 +94,23 @@ HC.Osci = {
     wobble(beatKeeper, progress, settings, func) {
         let p = 1;
 
-        let bpm = 60000 / messaging.program.config.ControlSettings.tempo;
+        let duration = 60000 / settings.tempo;
         let div = beatKeeper.rhythmDivider(settings.rhythm) / 2;
         func = func || Math.sin;
         progress = progress || Math.PI * beatKeeper.now();
 
         if (settings.osci1_period !== 0) {
-            let pr = progress / (bpm * settings.osci1_period);
+            let pr = progress / (duration * settings.osci1_period);
             pr *= div;
             p = settings.osci1_amp * func(pr);
         }
         if (settings.osci2_period !== 0) {
-            let pr = progress / (bpm * settings.osci2_period);
+            let pr = progress / (duration * settings.osci2_period);
             pr *= div;
             p += settings.osci2_amp * func(pr);
         }
         if (settings.osci3_period !== 0) {
-            let pr = progress / (bpm * settings.osci3_period);
+            let pr = progress / (duration * settings.osci3_period);
             pr *= div;
             p += settings.osci3_amp * func(pr);
         }

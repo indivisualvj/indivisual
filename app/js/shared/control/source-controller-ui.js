@@ -15,7 +15,7 @@
          * @param that
          */
         onChange(value, that) {
-            messaging.program.updateSource(that.getProperty(), value, true, true, false);
+            this.config.messaging.program.updateSource(that.getProperty(), value, true, true, false);
         }
 
 

@@ -624,7 +624,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (item === 'layer') {
                 this.updateSettings(value, this.settingsManager.prepareLayer(value), true, false, true);
-
                 this.explorer.setSelected(value+1, true);
 
                 let config = {
@@ -1034,6 +1033,7 @@ document.addEventListener('DOMContentLoaded', function () {
             shuffleable = this.config.ControlSettings.shuffleable.toIntArray();
             this.explorer.resetPresets(shuffleable);
             this.syncLayers();
+            // fixme: does not call updateUi
         }
     }
 }

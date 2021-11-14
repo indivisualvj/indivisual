@@ -59,9 +59,13 @@ HC.Shape.prototype.initPlugins = function () {
          * @type {HC.Layer}
          */
         layer;
+
         settings;
+
         controlSets;
+
         tree;
+
         key;
         
         id(suffix) {

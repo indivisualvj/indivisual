@@ -1033,7 +1033,6 @@ document.addEventListener('DOMContentLoaded', function () {
             shuffleable = this.config.ControlSettings.shuffleable.toIntArray();
             this.explorer.resetPresets(shuffleable);
             this.syncLayers();
-            // fixme: does not call updateUi
         }
     }
 }

@@ -60,7 +60,6 @@
             this.displayMap = [];
             this.maptastic = this.initMaptastic();
             this.cliptastic = this.initCliptastic();
-            this.mappingTimeouts = [];
 
             this.initBorderModePlugins();
         }
@@ -107,15 +106,11 @@
          * @param mapping
          */
         onMapping(id, mapping) {
-            if (this.mappingTimeouts[id]) {
-                clearTimeout(this.mappingTimeouts[id]);
-            }
             if (this.animation) {
                 let f = (id, mapping) => {
-                    this.mappingTimeouts[id] = setTimeout(() => {
+                    HC.TimeoutManager.getInstance().add('onMapping.' + id, 125, () => {
                         this.animation.updateDisplay(id + '_mapping', JSON.stringify(mapping), false, true, false);
-                        this.mappingTimeouts[id] = false;
-                    }, 125);
+                    });
                 };
                 f(id, mapping);
             }

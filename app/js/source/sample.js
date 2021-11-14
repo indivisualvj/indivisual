@@ -226,83 +226,12 @@
             this.length = this.beats * this.duration;
 
             let fps = this.config.DisplaySettings.fps * 1.15;
-            let frameCount = Math.ceil(this.length / 1000 * fps);
-            this.frameCount = frameCount;
-
+            this.frameCount = Math.ceil(this.length / 1000 * fps);
             this.listener.fireEventId('sample.init.start', this.id, this);
-
-            // let loops = 0;
-            // let divider = 1;
-            // for (let i = 0; i < this.frameCount; i++) {
-            //     this.listener.register(EVENT_RENDERER_RENDER, this.id, (data) => {
-                //     if (loops % divider === 0) {
-                // if (this.frames.length < this.frameCount) {
-                //     let frame = this._createFrame(this.pointer);
-                //     this._resetFrame(frame);
-                //     this.frames.push(frame);
-                //
-                //     this.pointer++;
-                //
-                // } else if (needsUpdate && this.pointer < this.frameCount) {
-                //     let frame = this.frames[this.pointer];
-                //     this._resetFrame(frame);
-                //     this.pointer++;
-                //
-                // } else {
-                    this.initialized = true;
-                //     this.pointer = 0;
-                //     this.listener.remove(EVENT_RENDERER_RENDER, this.id);
-                    this.listener.fireEventId('sample.init.end', this.id, this);
-                    // break;
-                // }
-
-                // if (this.pointer % 10 === 0) {
-                //     this.listener.fireEventId('sample.init.progress', this.id, this);
-                // }
-            // }
-            // divider = Math.ceil(this.config.DisplaySettings.fps / this.program.fps);
-            // loops++;
-            // });
+            this.initialized = true;
+            this.listener.fireEventId('sample.init.end', this.id, this);
 
         }
-
-        /**
-         *
-         * @param index
-         * @returns {OffscreenCanvas}
-         * @private
-         */
-        // _createFrame(index) {
-        //     let frame = new OffscreenCanvas(1, 1);
-        //     frame.index = index;
-        //     frame.id = this.id + '_' + index;
-        //     frame.ctx = frame.getContext('2d');
-        //
-        //     return frame;
-        // }
-
-        /**
-         *
-         * @param frame
-         * @private
-         */
-        // _resizeFrame(frame) {
-        //     frame.width = this.canvas.width;
-        //     frame.height = this.canvas.height;
-        // }
-
-        /**
-         *
-         * @param frame
-         * @private
-         */
-        // _resetFrame(frame) {
-        //     this._resizeFrame(frame);
-        //
-        //     requestAnimationFrame(() => {
-        //         frame.ctx.clearRect(0, 0, frame.width, frame.height);
-        //     });
-        // }
 
         /**
          *

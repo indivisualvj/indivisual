@@ -138,14 +138,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
-         * @type {{}}
-         */
-        thumbTimeouts = {
-            samples: null,
-        };
-
-        /**
-         *
          * @type {boolean}
          */
         ready = false;
@@ -647,7 +639,6 @@ document.addEventListener('DOMContentLoaded', function () {
             } else if (item === 'reset') {
                 if (value && force) {
                     this.settingsManager.reset(this.config.ControlSettings.shuffleable.toIntArray((it)=>{return parseInt(it)-1;}));
-                    this.refreshLayerInfo();
                 }
             }
 
@@ -766,23 +757,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (key in this.config) {
                         let sec = data.data[key];
                         for (let tkey in sec) {
-                            let type = sec[tkey];
-                            this.config[key][tkey] = type;
+                            this.config[key][tkey] = sec[tkey];
                         }
                     }
                 }
                 this.updateUi(this.sourceSettingsGui);
             }
 
-            clearTimeout(this.thumbTimeouts.samples);
-
-            this.thumbTimeouts.samples = setTimeout(() => {
-                requestAnimationFrame(() => {
-                    this.updateSequenceUi();
-                    this.updateThumbs();
-                });
-
-            }, 125);
+            HC.TimeoutManager.getInstance().add('updateData', 1000/7.5, () => {
+                this.updateSequenceUi();
+                this.updateThumbs();
+            });
         }
 
         /**
@@ -791,7 +776,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateSequenceUi() {
             if (this.config.SourceValues && this.config.SourceValues.sequence) {
                 for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
-                    requestAnimationFrame(() => {
+                    HC.TimeoutManager.getInstance().add('updateSequenceUI' + seq, 0, () => {
                         this.updateClip(seq);
                         this.updateIndicator(seq);
                     });

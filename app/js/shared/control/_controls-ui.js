@@ -288,7 +288,7 @@
             data[set] = {};
             data[set][that.getProperty()] = value;
 
-            this.config.messaging.program.updateSetting(undefined, data, true, true, false);
+            messaging.program.updateSetting(undefined, data, true, true, false);
 
             HC.log(set + '/' + that.getProperty(), value);
 

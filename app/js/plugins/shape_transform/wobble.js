@@ -36,7 +36,8 @@
                         osci2_amp: 1,
                         osci3_period: .022342,
                         osci3_amp: 2,
-                        rhythm: 'half'
+                        rhythm: 'half',
+                        tempo: this.config.ControlSettings.tempo,
                     };
                 }
 

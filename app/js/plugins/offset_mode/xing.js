@@ -57,7 +57,7 @@
             for (let i = 0; i < directions.length; i++) {
 
                 if (directions[i] !== 0) {
-                    if (_direction == dir) {
+                    if (_direction === dir) {
 
                         if (i < 2) {
                             x = progress * directions[i];

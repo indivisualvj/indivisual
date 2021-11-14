@@ -594,7 +594,7 @@
 
             let material = this.config.SourceValues.material_map[this.config.SourceSettings.material_map];
             let key = getSequenceKey(i);
-            if (material === key && messaging.program.renderer) {
+            if (material === key && this.renderer) {
                 return true;
             }
 

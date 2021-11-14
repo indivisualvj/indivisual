@@ -194,11 +194,11 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                 break;
         }
 
-        if (typeof shs == 'boolean') { // apply, etc.
+        if (typeof shs === 'boolean') { // apply, etc.
             opts.type = 'checkbox';
             folder.addController(opts);
 
-        } else if (typeof shs == 'number') {
+        } else if (typeof shs === 'number') {
             opts.type = 'range';
             opts.step = 1;
 
@@ -476,32 +476,34 @@ HC.Controller.prototype.scrollToControl = function (control) {
 
 /**
  *
- * @param control
+ * @param {HC.Guify} control
  */
 HC.Controller.prototype.updateUi = function (control) {
+    let key = control ? control.getLabel() : 'all';
+    HC.TimeoutManager.getInstance().add('updateUi.' + key, 1000/7.5, () => {
+        this.refreshLayerInfo();
 
-    this.refreshLayerInfo();
-
-    if (!control) {
-        this.updateValuesChanged(this.controlSettingsGui);
-        this.updateValuesChanged(this.displaySettingsGui);
-        this.updateValuesChanged(this.sourceSettingsGui);
-        this.updateValuesChanged(this.animationSettingsGui);
-        this.updateValuesChanged(this.sequenceSettingsGui);
-        return;
-    }
-
-    if (control === this.animationSettingsGui) {
-        this.updateUiPasses();
-    }
-
-    for (let key in control.children) {
-        let child = control.getChild(key);
-
-        if (child instanceof HC.GuifyFolder) {
-            this.updateValuesChanged(child);
+        if (!control) {
+            this._updateValuesChanged(this.controlSettingsGui);
+            this._updateValuesChanged(this.displaySettingsGui);
+            this._updateValuesChanged(this.sourceSettingsGui);
+            this._updateValuesChanged(this.animationSettingsGui);
+            this._updateValuesChanged(this.sequenceSettingsGui);
+            return;
         }
-    }
+
+        if (control === this.animationSettingsGui) {
+            this.updateUiPasses();
+        }
+
+        for (let key in control.children) {
+            let child = control.getChild(key);
+
+            if (child instanceof HC.GuifyFolder) {
+                this._updateValuesChanged(child);
+            }
+        }
+    });
 };
 
 /**
@@ -517,7 +519,7 @@ HC.Controller.prototype.updateUiPasses = function () {
         let passes = cs.getShaderPasses();
 
         for (let k in passFld.children) {
-            if (k == 'pass')continue;
+            if (k === 'pass')continue;
             passFld.removeChild(k);
         }
 
@@ -558,17 +560,19 @@ HC.Controller.prototype.showDisplayControls = function () {
 /**
  *
  * @param folder
+ * @returns {boolean|void}
+ * @private
  */
-HC.Controller.prototype.updateValuesChanged = function (folder) {
+HC.Controller.prototype._updateValuesChanged = function (folder) {
 
     let changes = false;
 
     if (!folder) {
-        this.updateValuesChanged(this.controlSettingsGui);
-        this.updateValuesChanged(this.displaySettingsGui);
-        this.updateValuesChanged(this.sourceSettingsGui);
-        this.updateValuesChanged(this.animationSettingsGui);
-        this.updateValuesChanged(this.sequenceSettingsGui);
+        this._updateValuesChanged(this.controlSettingsGui);
+        this._updateValuesChanged(this.displaySettingsGui);
+        this._updateValuesChanged(this.sourceSettingsGui);
+        this._updateValuesChanged(this.animationSettingsGui);
+        this._updateValuesChanged(this.sequenceSettingsGui);
         return;
     }
 
@@ -576,7 +580,7 @@ HC.Controller.prototype.updateValuesChanged = function (folder) {
         let child = folder.getChild(key);
         let changed = false;
         if (child instanceof HC.GuifyFolder) {
-            changed = this.updateValuesChanged(child);
+            changed = this._updateValuesChanged(child);
 
         } else {
             changed = child.isModified();

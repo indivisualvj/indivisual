@@ -55,8 +55,8 @@ HC.Layer.prototype.doOverlay = function (shape) {
         return;
     }
 
-    if (this.settings.pattern_overlay != 'off'
-        && this.settings.pattern_overlay_volume != 0
+    if (this.settings.pattern_overlay !== 'off'
+        && this.settings.pattern_overlay_volume !== 0
     ) {
 
         let nu = false;
@@ -88,7 +88,7 @@ HC.Layer.prototype.doOverlay = function (shape) {
         let plugin = this.getPatternOverlayPlugin();
         this.doPlugin(plugin, nu);
 
-        if (this.settings.pattern_overlay_volume != 1) {
+        if (this.settings.pattern_overlay_volume !== 1) {
             let fade = ((2 * Math.abs(this.settings.pattern_overlay_volume)) - 1);
 
             let dx = (nu.x() - shape.x()) / 2;
@@ -197,7 +197,7 @@ HC.Layer.prototype.doBackground = function () {
  * @param materialColor
  */
 HC.Layer.prototype.doLighting = function (materialColor) {
-    if (materialColor || this.settings.lighting_color == '') {
+    if (materialColor || this.settings.lighting_color === '') {
         this.lightColor(materialColor || this.shapeColor(false));
     }
     this.updateLighting();

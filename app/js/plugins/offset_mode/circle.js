@@ -70,7 +70,7 @@
 
             let va = params.angle;
 
-            va = va > 360 ? va - 360 : va;
+            // va = va > 360 ? va - 360 : va;
 
             let sttngs = {
                 osci1_period: 0.005,
@@ -79,7 +79,8 @@
                 osci2_amp: 1,
                 osci3_period: 0.01,
                 osci3_amp: 1,
-                rhythm: 'half'
+                rhythm: 'half',
+                tempo: this.config.ControlSettings.tempo
             };
 
             let multiplier = 0.5;

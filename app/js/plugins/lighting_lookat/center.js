@@ -13,7 +13,7 @@
 
             }
 
-            if (light.target != this.target) {
+            if (light.target !== this.target) {
                 light.target = this.target;
             }
 
@@ -33,7 +33,7 @@
                 this.layer._lighting.add(target);
             }
 
-            if (light.target != this.targets[i]) {
+            if (light.target !== this.targets[i]) {
                 light.target = this.targets[i];
             }
         }

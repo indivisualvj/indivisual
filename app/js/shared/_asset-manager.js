@@ -296,21 +296,16 @@
             // complex
             if (path.match(/.+\.mat$/i)) {
                 assetman.loadMaterial(path, function (mat) {
-                    requestAnimationFrame(() => {
-                        _assign(target, mat);
-                        callback(target);
-                    });
-
+                    _assign(target, mat);
+                    callback(target);
                 }, error);
 
             // simple
             } else {
                 assetman.loadTexture(path, function (tex) {
                     let mat = { map: tex };
-                    requestAnimationFrame(() => {
-                        _assign(target, mat);
-                        callback(target);
-                    });
+                    _assign(target, mat);
+                    callback(target);
 
                 }, error);
             }

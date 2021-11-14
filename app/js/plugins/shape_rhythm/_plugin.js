@@ -54,7 +54,7 @@ HC.plugins.shape_rhythm = HC.plugins.shape_rhythm || {};
         }
 
         isFirstShape(shape) {
-            return shape.index == -1;
+            return shape.index === -1;
         }
     }
 }

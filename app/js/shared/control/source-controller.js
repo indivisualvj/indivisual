@@ -104,8 +104,8 @@ HC.SourceController = HC.SourceController || {};
          */
         createGroupSettings(pluggedValues) {
             let _create = (value, group) => {
-                return function () {
-                    messaging.program.setAllDisplaysTo('source', value, group);
+                return () => {
+                    this.config.messaging.program.setAllDisplaysTo('source', value, group);
                 }
             };
             let _add = (group) => {
@@ -159,22 +159,22 @@ HC.SourceController = HC.SourceController || {};
          */
         appendSeqButtons() {
             this.settings.seq_0 = function () {
-                messaging.program.setAllDisplaysTo('sequence', 0);
+                this.config.messaging.program.setAllDisplaysTo('sequence', 0);
             };
             this.settings.seq_1 = function () {
-                messaging.program.setAllDisplaysTo('sequence', 1);
+                this.config.messaging.program.setAllDisplaysTo('sequence', 1);
             };
             this.settings.seq_2 = function () {
-                messaging.program.setAllDisplaysTo('sequence', 2);
+                this.config.messaging.program.setAllDisplaysTo('sequence', 2);
             };
             this.settings.seq_3 = function () {
-                messaging.program.setAllDisplaysTo('sequence', 3);
+                this.config.messaging.program.setAllDisplaysTo('sequence', 3);
             };
             this.settings.seq_4 = function () {
-                messaging.program.setAllDisplaysTo('sequence', 4);
+                this.config.messaging.program.setAllDisplaysTo('sequence', 4);
             };
             this.settings.seq_inc = function () {
-                messaging.program.setAllDisplaysTo('sequence', false);
+                this.config.messaging.program.setAllDisplaysTo('sequence', false);
             };
 
 
@@ -297,7 +297,7 @@ HC.SourceController = HC.SourceController || {};
          * @param index
          * @param pluggedValues
          */
-        createResets(index, pluggedValues)  {
+        createResets(index, pluggedValues) {
             let _reset = (seq) => {
                 let key = getSequenceKey(seq);
                 this.settings[key +  '_X'] = () => {
@@ -318,8 +318,8 @@ HC.SourceController = HC.SourceController || {};
                     let endKey = getSequenceEndKey(seq);
                     updates[endKey] = 0;
 
-                    messaging.program.updateSources(updates, true, false, false);
-                    messaging.emitSources(updates, true, true, false);
+                    this.config.messaging.program.updateSources(updates, true, false, false);
+                    this.config.messaging.emitSources(updates, true, true, false);
                 };
             };
 
@@ -335,8 +335,8 @@ HC.SourceController = HC.SourceController || {};
                     updates[key + '_osci'] = this.settings[key + '_osci'];
                     updates[key + '_brightness'] = this.settings[key + '_brightness'];
 
-                    messaging.program.updateSources(updates, true, false, false);
-                    messaging.emitSources(updates, true, true, false);
+                    this.config.messaging.program.updateSources(updates, true, false, false);
+                    this.config.messaging.emitSources(updates, true, true, false);
                 };
             };
 

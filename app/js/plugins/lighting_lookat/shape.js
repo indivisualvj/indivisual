@@ -8,7 +8,7 @@
                 }
             }
 
-            if (light.target != this.shape.mesh) {
+            if (light.target !== this.shape.mesh) {
                 light.target = this.shape.mesh;
             }
         }
@@ -27,7 +27,7 @@
             let params = this.params(light);
             let speed = params.speed || this.layer.getCurrentSpeed();
 
-            if (params.shape && params.shape.parent != this.layer) {
+            if (params.shape && params.shape.parent !== this.layer) {
                 params.shape = false;
             }
 
@@ -36,7 +36,7 @@
                 params.speed = this.layer.getShapeSpeed(params.shape).speed;
             }
 
-            if (light.target != params.shape.mesh) {
+            if (light.target !== params.shape.mesh) {
                 light.target = params.shape.mesh;
             }
         }

@@ -25,7 +25,7 @@
                 for (let i in vertices) {
                     let v = vertices[i];
 
-                    if (v.x != 0 || v.y != 0) {
+                    if (v.x !== 0 || v.y !== 0) {
                         if (moved === false) {
                             shape.moveTo(v.x, v.y);
                             moved = i;

@@ -12,7 +12,7 @@
             let y = 0;
             let z = 0;
 
-            if (index != 0) {
+            if (index !== 0) {
                 let rad = Math.floor(index / 4) * layer.shapeSize(1) * this.settings.pattern_padding;
                 let deg = 90 * mod;
 

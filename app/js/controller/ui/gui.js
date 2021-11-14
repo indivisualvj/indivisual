@@ -82,7 +82,7 @@
          * @returns {string}
          */
         getLabel() {
-            return this.gui.bar.element.textContent;
+            return this.gui.bar.label.textContent;
         }
 
         /**
@@ -90,7 +90,7 @@
          * @param label
          */
         setLabel(label) {
-            this.gui.bar.element.textContent = label;
+            this.gui.bar.label.textContent = label;
         }
 
         /**

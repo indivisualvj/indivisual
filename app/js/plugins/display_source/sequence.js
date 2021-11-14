@@ -168,8 +168,8 @@
                 let start = this.config.SourceSettings[this.id + '_start'];
                 let end = this.config.SourceSettings[this.id + '_end'];
 
-                let needsUpdate = start != this.start || end != this.end
-                    || this.width != this.sample.width || this.height != this.sample.height;
+                let needsUpdate = start !== this.start || end !== this.end
+                    || this.width !== this.sample.width || this.height !== this.sample.height;
 
                 if (needsUpdate) {
                     let os = this.start;
@@ -177,11 +177,11 @@
                     let frameCount = this.sample.frameCount;
                     this.sourceManager.applySequenceSlice(this, frameCount, start, end);
 
-                    if (os != this.start) {
+                    if (os !== this.start) {
                         this.pointer = this.start;
                         this.counter = 0;
 
-                    } else if (oe != this.end && this.pointer > this.end) {
+                    } else if (oe !== this.end && this.pointer > this.end) {
                         this.pointer = this.start;
                         this.counter = 0;
                     }

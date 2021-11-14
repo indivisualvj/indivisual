@@ -42,31 +42,31 @@ HC.ControlController = HC.ControlController || {};
 
             reset: () => {
 
-                if (messaging.program.config.shiftKey && messaging.program.config.ctrlKey) {
+                if (this.config.messaging.program.config.shiftKey && this.config.messaging.program.config.ctrlKey) {
                     let yes = confirm('Reset everything?');
                     if (yes) {
-                        messaging.program.fullReset();
+                        this.config.messaging.program.fullReset();
                     }
-                } else if (messaging.program.config.shiftKey) {
-                    messaging.program.resetLayers();
+                } else if (this.config.messaging.program.config.shiftKey) {
+                    this.config.messaging.program.resetLayers();
 
                 } else {
-                    messaging.program.updateControl('reset', true, true, true, false);
+                    this.config.messaging.program.updateControl('reset', true, true, true, false);
                 }
             },
 
             monitor: false,
             push_layers: () => {
-                messaging.program.syncLayers();
+                this.config.messaging.program.syncLayers();
             },
             push_sources: () => {
-                messaging.program.pushSources();
+                this.config.messaging.program.pushSources();
             },
             rst_shaders: () => {
-                messaging.program.settingsManager.update(this.config.ControlSettings.layer, 'passes', 'shaders', []);
-                let data = messaging.program.settingsManager.get(this.config.ControlSettings.layer, 'passes').prepare();
-                messaging.program.updateSettings(this.config.ControlSettings.layer, data, false, false, true);
-                messaging.emitSettings(this.config.ControlSettings.layer, data, false, false, true);
+                this.config.messaging.program.settingsManager.update(this.config.ControlSettings.layer, 'passes', 'shaders', []);
+                let data = this.config.messaging.program.settingsManager.get(this.config.ControlSettings.layer, 'passes').prepare();
+                this.config.messaging.program.updateSettings(this.config.ControlSettings.layer, data, false, false, true);
+                this.config.messaging.emitSettings(this.config.ControlSettings.layer, data, false, false, true);
             },
             debug: false,
             tempo: 120.00,
@@ -122,13 +122,13 @@ HC.ControlController = HC.ControlController || {};
 
         events = {
             play: (inst) => { return new HC.KeyEvent('keyup', [32], (e) => {
-                messaging.program.updateControl('play', !this.config.ControlSettings.play, true, true, false);
+                this.config.messaging.program.updateControl('play', !this.config.ControlSettings.play, true, true, false);
             }, 'spc')},
             reset: (inst) => { return new HC.KeyEvent('keyup', [46], (e) => {
                 inst.settings.reset();
             }, 'del')},
             monitor: (inst) => { return new HC.KeyEvent('keyup', [36], (e) => {
-                messaging.program.updateControl('monitor', !this.config.ControlSettings.monitor, true, true, false);
+                this.config.messaging.program.updateControl('monitor', !this.config.ControlSettings.monitor, true, true, false);
             }, 'hm')},
             push_layers: (inst) => { return new HC.KeyEvent('keyup', [35], (e) => {
                 inst.settings.push_layers();

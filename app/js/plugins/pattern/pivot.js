@@ -68,7 +68,7 @@
             for (let i = 0; i < this.points.length; i++) {
                 let p = this.points[i];
 
-                if (p != params.currentPoint && p != params.lastPoint) {
+                if (p !== params.currentPoint && p !== params.lastPoint) {
                     let n = Math.min(closest, this.closestPointOnLine(v1, v2, p));
                     if (n < closest) {
                         closest = n;

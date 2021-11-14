@@ -59,9 +59,13 @@ HC.Shape.prototype.initPlugins = function () {
          * @type {HC.Layer}
          */
         layer;
+
         settings;
+
         controlSets;
+
         tree;
+
         key;
         
         id(suffix) {
@@ -212,14 +216,14 @@ HC.Shape.prototype.initPlugins = function () {
          */
         updateTexture(texture, prefix) {
             let wraps = THREE[this.settings[prefix + '_wraps']];
-            if (texture.wrapS != wraps) { // todo controlsets last change instead!?
+            if (texture.wrapS !== wraps) { // todo controlsets last change instead!?
                 texture.wrapS = wraps;
                 if (texture.image) {
                     texture.needsUpdate = true;
                 }
             }
             let wrapt = THREE[this.settings[prefix + '_wrapt']];
-            if (texture.wrapT != wrapt) {
+            if (texture.wrapT !== wrapt) {
                 texture.wrapT = wrapt;
                 if (texture.image) {
                     texture.needsUpdate = true;

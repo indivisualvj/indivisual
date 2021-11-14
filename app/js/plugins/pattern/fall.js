@@ -32,7 +32,7 @@
             if (params.velocity.y > 0
                 && shape.y() < layer.resolution().y - layer.shapeSize(3)
                 && shape.y() - params.threshold > layer.resolution().y / 8
-                && 15 == randomInt(0, 15)
+                && 15 === randomInt(0, 15)
             ) {
                 params.threshold = shape.y();
                 params.velocity.y *= -0.1;

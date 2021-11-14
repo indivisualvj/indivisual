@@ -164,7 +164,7 @@
 
                 let elem = document.querySelector(data.query);
                 if (elem) {
-                    if (data.value == '') {
+                    if (data.value === '') {
                         elem.removeAttribute(data.key);
 
                     } else {
@@ -172,7 +172,7 @@
                         elem.setAttribute(data.key, data.value);
                     }
 
-                    if (data.resetValue != undefined) {
+                    if (data.resetValue !== undefined) {
 
                         if (that.timeouts[key]) {
                             clearTimeout(that.timeouts[key]);
@@ -180,7 +180,7 @@
 
                         that.timeouts[key] = setTimeout(() => {
 
-                            if (data.resetValue == '') {
+                            if (data.resetValue === '') {
                                 elem.removeAttribute(data.key);
 
                             } else {

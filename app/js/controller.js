@@ -912,6 +912,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             } else {
                 this.updateSettings(layer, data, false, false, true);
+                this.settingsManager.update(layer, 'info', 'name', name);
             }
 
             data = this.settingsManager.prepareLayer(layer);
@@ -973,6 +974,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (this.settingsManager.layers[i]) {
                     let l = this.settingsManager.getLayer(i);
                     if (this.config.shuffleable(i+1) && !this.settingsManager.isDefault(l)) {
+                        let name = l.controlSets.info.get('name');
+                        if (name) {
+                            this.explorer.setInfoByPath(name, i+1);
+                        }
                         preset.push(i+1);
                     }
                 }

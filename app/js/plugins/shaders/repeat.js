@@ -82,7 +82,6 @@
                 }
             `,
 
-            // todo: put all operations from display, repeat, blendmode, into one operations shader file
             fragmentShader: `
 
                 uniform sampler2D tDiffuse;

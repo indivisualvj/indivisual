@@ -51,6 +51,18 @@ HC.Layer.prototype.animate = function (hook) {
         this._resetShapes();
         // return;
     }
+    if (this.shadersNeedUpdate) {
+        this._updateShaderPasses();
+    }
+    if (this.lightingNeedsReset) {
+        this._resetLighting();
+    }
+    if (this.fogNeedsReset) {
+        this._resetFog();
+    }
+    if (this.ambientLightNeedsReset) {
+        this._resetAmbientLight();
+    }
 
     this.listener.fireEvent(EVENT_LAYER_ANIMATE);
 

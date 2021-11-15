@@ -1,7 +1,10 @@
 /**
  *
+ * @private
  */
-HC.Layer.prototype.resetLighting = function () {
+HC.Layer.prototype._resetLighting = function () {
+
+    this.lightingNeedsReset = false;
 
     if (this._lighting) {
         this._layer.remove(this._lighting);
@@ -14,8 +17,8 @@ HC.Layer.prototype.resetLighting = function () {
     this._lighting.name = '_lighting' + this.index;
     this._layer.add(this._lighting);
 
-    this.resetAmbientLight();
-    this.resetFog();
+    this._resetAmbientLight();
+    this._resetFog();
 
     let plugin = this.getLightingTypePlugin();
 
@@ -36,8 +39,9 @@ HC.Layer.prototype.resetLighting = function () {
 /**
  *
  * @param value
+ * @private
  */
-HC.Layer.prototype.lightColor = function (value) {
+HC.Layer.prototype._lightColor = function (value) {
 
     if (this.lights && this.lights.length) {
         let c = new THREE.Color(value);
@@ -54,8 +58,9 @@ HC.Layer.prototype.lightColor = function (value) {
 
 /**
  *
+ * @private
  */
-HC.Layer.prototype.updateLighting = function () {
+HC.Layer.prototype._updateLighting = function () {
 
     if (this.three.scene.fog) {
         this.three.scene.fog.near = this.settings.lighting_fog_near;
@@ -80,8 +85,10 @@ HC.Layer.prototype.updateLighting = function () {
 
 /**
  *
+ * @private
  */
-HC.Layer.prototype.resetFog = function () {
+HC.Layer.prototype._resetFog = function () {
+    this.fogNeedsReset = false;
     if (this.three.scene.fog) {
         this._layer.fog = null;
     }
@@ -94,9 +101,11 @@ HC.Layer.prototype.resetFog = function () {
 
 /**
  *
+ * @private
  */
-HC.Layer.prototype.resetAmbientLight = function () {
+HC.Layer.prototype._resetAmbientLight = function () {
 
+    this.ambientLightNeedsReset = false;
     if (this.ambientLight) {
         this._lighting.remove(this.ambientLight);
         this.ambientLight.traverse(threeDispose);

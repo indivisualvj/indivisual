@@ -198,9 +198,9 @@ HC.Layer.prototype.doBackground = function () {
  */
 HC.Layer.prototype.doLighting = function (materialColor) {
     if (materialColor || this.settings.lighting_color === '') {
-        this.lightColor(materialColor || this.shapeColor(false));
+        this._lightColor(materialColor || this.shapeColor(false));
     }
-    this.updateLighting();
+    this._updateLighting();
 };
 
 /**

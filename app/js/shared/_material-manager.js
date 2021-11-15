@@ -8,7 +8,6 @@
      */
     HC.MaterialManager = class MaterialManager {
         materials = [];
-        maxInstances = 10;
 
         /**
          *
@@ -17,7 +16,6 @@
         }
 
         addMaterial(material) {
-            // this.materials.push(material);
 
             return material;
         }

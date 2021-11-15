@@ -539,7 +539,6 @@ document.addEventListener('DOMContentLoaded', function () {
             if (layer === undefined) {
                 layer = this.config.ControlSettings.layer;
             }
-            // if (!renderer)return;
 
             let layerIndex = layer;
             layer = this.renderer.layers[layer];
@@ -554,29 +553,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
             switch (property) {
 
-                // todo: hooks for all of these!
-                // shader reset
                 case 'shaders':
-                    layer.updateShaderPasses();
+                    this.listener.fireEventId(EVENT_LAYER_UPDATE_SHADERS, layer.index, layer, FIVE_FPS);
                     break;
 
-                case 'lighting_ambient':
-                    layer.resetAmbientLight();
-                    break;
-
-                case 'lighting_type':
-                case 'lighting_pattern_lights':
-                    layer.resetLighting();
-                    break;
-
-                case 'lighting_fog':
-                    layer.resetFog();
-                    break;
-
-                // special case for shapetastic // todo: how to solve that?
                 case 'shape_vertices':
                     if (display) {
-                        layer.resetShapes();
+                        this.listener.fireEventId(EVENT_LAYER_RESET_SHAPES, layer.index, layer, FIVE_FPS);
                     }
                     break;
             }

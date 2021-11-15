@@ -16,9 +16,8 @@
                     let path = filePath(CUBE_DIR, file);
 
                     assetman.loadCubeTexture(path, function (texture) {
+
                         inst.texture = texture;
-
-
                         inst.layer.setBackground(texture);
                     });
 

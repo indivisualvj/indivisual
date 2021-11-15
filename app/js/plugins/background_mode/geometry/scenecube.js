@@ -20,12 +20,15 @@
                 this.target1 = new THREE.WebGLRenderTarget(edge, edge, {
                     wrapT: this.settings.background_wrapt, wrapS: THREE.RepeatWrapping
                 });
+                this.addDisposable(this.target1);
                 this.target2 = new THREE.WebGLRenderTarget(edge, edge, {
                     wrapT: this.settings.background_wrapt, wrapS: THREE.RepeatWrapping
                 });
+                this.addDisposable(this.target2);
 
                 res.multiplyScalar(2.5);
                 let geo = new THREE.BoxBufferGeometry(res.x, res.y, res.x);
+                this.addDisposable(geo);
 
                 this.material = materialman.addMaterial(new THREE.MeshBasicMaterial({
                     color: color,
@@ -33,6 +36,7 @@
                     map: this.target1.texture,
                     transparent: true
                 }));
+                this.addDisposable(this.material);
 
                 let mesh = new THREE.Mesh(geo, this.material);
                 mesh.scale.multiplyScalar(this.settings.background_volume);
@@ -44,7 +48,6 @@
                 this.layer.setBackground(mesh);
 
             } else {
-// fixme: ON RepeatWrapping: THREE.WebGLState: TypeError: Failed to execute 'texImage2D' on 'WebGL2RenderingContext': Overload resolution failed.
                 if (this.counter % 2) {
                     this.texture = this.target2.texture;
                     this.material.map = this.texture;

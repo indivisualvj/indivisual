@@ -216,7 +216,7 @@ HC.Shape.prototype.initPlugins = function () {
          */
         updateTexture(texture, prefix) {
             let wraps = THREE[this.settings[prefix + '_wraps']];
-            if (texture.wrapS !== wraps) { // todo controlsets last change instead!?
+            if (texture.wrapS !== wraps) {
                 texture.wrapS = wraps;
                 if (texture.image) {
                     texture.needsUpdate = true;

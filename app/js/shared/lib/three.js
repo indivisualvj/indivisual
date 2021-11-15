@@ -18,7 +18,6 @@ function threeDispose(obj) {
             let key = keys[k];
             if (obj.material[key] instanceof THREE.Texture) {
                 requestAnimationFrame(() => {
-                    // console.log('material texture dispose', obj.material[key].uuid);
                     obj.material[key].dispose();
                 });
             }
@@ -30,7 +29,6 @@ function threeDispose(obj) {
 
     if (disposable) {
         requestAnimationFrame(() => {
-            // console.log('dispose', disposable.uuid);
             disposable.dispose();
         });
     }

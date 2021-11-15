@@ -64,7 +64,7 @@
         setGeometry(geo) {
 
             if (this.geometry) {
-                this.geometry.dispose();
+                threeDispose(this.geometry);
             }
 
             this.geometry = geo;

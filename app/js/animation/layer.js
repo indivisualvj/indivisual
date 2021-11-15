@@ -78,6 +78,35 @@
          */
         shapesNeedReset = false;
 
+        /**
+         *
+         * @type {boolean}
+         */
+        lightingNeedsReset = false;
+
+        /**
+         *
+         * @type {boolean}
+         */
+        ambientNeedsReset = false;
+
+        /**
+         *
+         * @type {boolean}
+         */
+        fogNeedsReset = false;
+
+
+        /**
+         *
+         * @type {boolean}
+         */
+        shadersNeedUpdate = false;
+
+        /**
+         *
+         * @type {boolean}
+         */
         shapeMaterialsNeedUpdate = false;
 
         /**
@@ -165,6 +194,18 @@
             this.listener.register(EVENT_LAYER_RESET_SHAPES, this.index, () => {
                 this.shapesNeedReset = true;
             });
+            this.listener.register(EVENT_LAYER_RESET_LIGHTING, this.index, () => {
+                this.lightingNeedsReset = true;
+            });
+            this.listener.register(EVENT_LAYER_RESET_AMBIENT, this.index, () => {
+                this.ambientNeedsReset = true;
+            });
+            this.listener.register(EVENT_LAYER_RESET_FOG, this.index, () => {
+                this.fogNeedsReset = true;
+            });
+            this.listener.register(EVENT_LAYER_UPDATE_SHADERS, this.index, () => {
+                this.shadersNeedUpdate = true;
+            });
         }
 
         /**
@@ -230,12 +271,12 @@
             this.needsReset = false;
             this.shapeMaterialsNeedUpdate = false;
 
-            this.reloadPlugins();
+            this._reloadPlugins();
             this._resetShapes();
-            this.resetLighting();
-            this.resetBackground();
+            this._resetLighting();
+            this._resetBackground();
             this.updateShaders();
-            this.updateShaderPasses();
+            this._updateShaderPasses();
         }
 
         /**
@@ -300,10 +341,6 @@
             this._rotation = false;
             this._shapes = false;
 
-            if (sc.background && sc.background.dispose) {
-                sc.background.dispose();
-            }
-
             if (this.shape) {
                 this.shape.sceneObject().traverse(threeDispose);
                 this.shape = false;
@@ -328,7 +365,6 @@
                 this.tween.removeAll();
             }
             this.lastUpdate = 0;
-            // this.tween = new TWEEN.Group();
         }
 
         /**
@@ -383,9 +419,12 @@
 
         /**
          *
-         * @returns {null|Array}
+         * @returns {null|[]}
+         * @private
          */
-        updateShaderPasses() {
+        _updateShaderPasses() {
+            this.shadersNeedUpdate = false;
+
             let shaders = null;
             let passes = this.animation.settingsManager.get(this.index, 'passes');
             let shds = passes.getShaderPasses();

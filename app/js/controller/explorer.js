@@ -68,7 +68,7 @@
         /**
          * 
          */
-        load() {
+        load(callback) {
             this.messaging.files(STORAGE_DIR, (data) => {
                 let _insert = (children, parent) => {
                     for (let k in children) {
@@ -87,17 +87,18 @@
                 };
                 _insert(this.default, this.gui);
                 _insert(data, this.gui);
+                if (callback) {
+                    callback();
+                }
             });
         }
 
         /**
          *
          */
-        reload() {
-
-            // todo: is it possible to preserve loaded? maybe name attribute of settings is set?
+        reload(callback) {
             this.gui.removeChildren();
-            this.load();
+            this.load(callback);
         }
 
         /**
@@ -109,7 +110,6 @@
             for (const key in children) {
                 let child = children[key];
                 let info = child.getInfo();
-                let mnemonic = child.getMnemonic();
 
                 if (heap && heap.length) {
                     if (heap.indexOf(parseInt(info)) > -1) {

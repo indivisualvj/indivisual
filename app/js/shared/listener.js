@@ -1,9 +1,5 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
- *
- *
- * TODO: what about that? https://github.com/mrdoob/eventdispatcher.js
- *
  */
 {
     /**

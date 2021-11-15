@@ -72,6 +72,12 @@
          */
         needsReset = false;
 
+        /**
+         *
+         * @type {boolean}
+         */
+        shapesNeedReset = false;
+
         shapeMaterialsNeedUpdate = false;
 
         /**
@@ -149,12 +155,15 @@
 
             this.resetSizes(renderer.resolution);
 
-            this.listener.register(EVENT_LAYER_NEEDS_RESET, this.index, () => {
-                console.log(EVENT_LAYER_NEEDS_RESET, this.index);
+            this.listener.register(EVENT_LAYER_RESET, this.index, () => {
+                console.log(EVENT_LAYER_RESET, this.index);
                 this.needsReset = true;
             });
-            this.listener.register(EVENT_SHAPE_MATERIALS_NEED_UPDATE, this.index, () => {
+            this.listener.register(EVENT_SHAPE_MATERIALS_UPDATE, this.index, () => {
                 this.shapeMaterialsNeedUpdate = true;
+            });
+            this.listener.register(EVENT_LAYER_RESET_SHAPES, this.index, () => {
+                this.shapesNeedReset = true;
             });
         }
 
@@ -267,6 +276,8 @@
 
                 this.addShape(shape);
             }
+
+            this.shapesNeedReset = false;
         }
 
         /**

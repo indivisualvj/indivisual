@@ -573,21 +573,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     layer.resetFog();
                     break;
 
-                // reload shapes //todo: create event and use onSet hook
-                case 'pattern':
-                case 'pattern_mover':
-                case 'shape_modifier':
-                case 'shape_modifier_volume':
-                case 'shape_geometry':
-                case 'shape_transform':
-                case 'mesh_material':
-                case 'material_mapping':
-                case 'shape_moda':
-                case 'shape_modb':
-                case 'shape_modc':
-                    layer.resetShapes();
-                    break;
-
                 // special case for shapetastic // todo: how to solve that?
                 case 'shape_vertices':
                     if (display) {

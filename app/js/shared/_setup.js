@@ -28,12 +28,15 @@ EVENT_SAMPLE_READY = 'sample.ready';
 EVENT_SAMPLE_STATUS_CHANGED = 'sample.disabled';
 EVENT_RENDERER_RENDER = 'renderer.render';
 EVENT_LAYER_ANIMATE = 'layer.animate';
-EVENT_LAYER_NEEDS_RESET = 'layer.needs_reset';
-EVENT_SHAPE_MATERIALS_NEED_UPDATE = 'shape.materials_need_update';
+EVENT_LAYER_RESET = 'layer.reset';
+EVENT_LAYER_RESET_SHAPES = 'layer.reset_shapes';
+EVENT_SHAPE_MATERIALS_UPDATE = 'shape.materials_update';
 EVENT_SOURCE_MANAGER_RENDER = 'source-manager.render';
 EVENT_DISPLAY_MANAGER_RENDER = 'display-manager.render';
 EVENT_ANIMATION_RENDER = 'animation.render';
 EVENT_ANIMATION_ANIMATE = 'animation.animate';
+
+FIVE_FPS = 1000/5;
 
 MNEMONICS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 OSD_TIMEOUT = 2000;

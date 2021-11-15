@@ -16,7 +16,11 @@
                     let id = isObject(context) ? context.index : context;
                     switch (key) {
                         case 'pattern_shapes':
-                            messaging.program.listener.fireEventId(EVENT_LAYER_NEEDS_RESET, id, context, 1000/7.5);
+                            messaging.program.listener.fireEventId(EVENT_LAYER_RESET, id, context, FIVE_FPS);
+                            break;
+                        case 'pattern':
+                        case 'pattern_mover':
+                            messaging.program.listener.fireEventId(EVENT_LAYER_RESET_SHAPES, id, context, FIVE_FPS);
                             break;
                     }
                 }

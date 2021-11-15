@@ -766,7 +766,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.updateUi(this.sourceSettingsGui);
             }
 
-            HC.TimeoutManager.getInstance().add('updateData', 1000/7.5, () => {
+            HC.TimeoutManager.getInstance().add('updateData', FIVE_FPS, () => {
                 this.updateSequenceUi();
                 this.updateThumbs();
             });

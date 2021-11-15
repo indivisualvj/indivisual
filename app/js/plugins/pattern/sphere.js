@@ -58,7 +58,7 @@
                 this.points = this.getDistributionOnSphere(layer.shapeCount());
             }
 
-            return this.points[shape.index];
+            return this.points[shape.index] || {x: 0, y: 0, z: 0};
         }
     }
 }

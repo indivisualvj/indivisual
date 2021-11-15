@@ -14,7 +14,16 @@
             onSet: (key, value, context, that) => {
                 if (context) {
                     let id = isObject(context) ? context.index : context;
-                    messaging.program.listener.fireEventId(EVENT_SHAPE_MATERIALS_NEED_UPDATE, id, context);
+                    switch (key) {
+                        case 'mesh_material':
+                        case 'material_mapping':
+                            messaging.program.listener.fireEventId(EVENT_LAYER_RESET_SHAPES, id, context);
+                            break;
+
+                        default:
+                            messaging.program.listener.fireEventId(EVENT_SHAPE_MATERIALS_UPDATE, id, context);
+                            break;
+                    }
                 }
             }
         };

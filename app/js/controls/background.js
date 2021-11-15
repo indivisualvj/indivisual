@@ -17,7 +17,7 @@
                     switch (key) {
                         case 'background_wraps':
                         case 'background_wrapt':
-                            messaging.program.listener.fireEventId(EVENT_LAYER_NEEDS_RESET, id, context, 1000/7.5);
+                            messaging.program.listener.fireEventId(EVENT_LAYER_RESET, id, context, FIVE_FPS);
                             break;
                     }
                 }

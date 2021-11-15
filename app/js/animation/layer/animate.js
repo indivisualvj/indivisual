@@ -47,6 +47,10 @@ HC.Layer.prototype.animate = function (hook) {
         this.fullReset();
         return;
     }
+    if (this.shapesNeedReset) {
+        this.resetShapes();
+        return;
+    }
 
     this.listener.fireEvent(EVENT_LAYER_ANIMATE);
 

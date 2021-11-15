@@ -557,7 +557,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 // complete layer reset:
                 case 'shape_sizedivider':
                 case 'pattern_shapes':
-                    this.renderer.resetLayer(layer);
+                case 'background_wrapt':
+                case 'background_wraps': // todo: add events to settings
+                    this.listener.fireEventId(EVENT_LAYER_NEEDS_RESET, layer.index);
                     break;
 
                 // shader reset

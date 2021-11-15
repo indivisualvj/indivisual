@@ -55,11 +55,22 @@
          * @type {Object.<string, HC.ControlSet>}
          */
         controlSets;
+
         lights = false;
+
         ambientLight = false;
+
         shapes = false;
+
         shape = false;
+
         materialColor;
+
+        /**
+         *
+         * @type {boolean}
+         */
+        needsReset = false;
 
         /**
          *
@@ -79,8 +90,11 @@
          * @private
          */
         _rotation;
+
         _shapes = false;
+
         _lighting = false;
+
         _background = false;
 
         /**
@@ -132,6 +146,10 @@
             };
 
             this.resetSizes(renderer.resolution);
+
+            this.listener.register(EVENT_LAYER_NEEDS_RESET, this.index, () => {
+                this.needsReset = true;
+            })
         }
 
         /**
@@ -199,7 +217,7 @@
             this.resetBackground();
             this.updateShaders();
             this.updateShaderPasses();
-
+            this.needsReset = false;
         }
 
         /**
@@ -348,29 +366,26 @@
          */
         updateShaderPasses() {
             let shaders = null;
-            // if (this.animation.settingsManager)
-            {
-                let passes = this.animation.settingsManager.get(this.index, 'passes');
-                let shds = passes.getShaderPasses();
+            let passes = this.animation.settingsManager.get(this.index, 'passes');
+            let shds = passes.getShaderPasses();
 
-                for (let index in shds) {
+            for (let index in shds) {
 
-                    let shader = passes.getShader(index);
+                let shader = passes.getShader(index);
 
-                    if (shader && shader.apply) {
-                        let name = passes.getShaderName(index);
-                        let key = passes.getShaderPassKey(index);
-                        let plugin = this.getShaderPassPlugin(name, key, shader);
-                        if (plugin) {
-                            plugin.create();
-                            plugin.updateResolution();
+                if (shader && shader.apply) {
+                    let name = passes.getShaderName(index);
+                    let key = passes.getShaderPassKey(index);
+                    let plugin = this.getShaderPassPlugin(name, key, shader);
+                    if (plugin) {
+                        plugin.create();
+                        plugin.updateResolution();
 
-                            if (!shaders) {
-                                shaders = [];
-                            }
-
-                            shaders.push(plugin);
+                        if (!shaders) {
+                            shaders = [];
                         }
+
+                        shaders.push(plugin);
                     }
                 }
             }

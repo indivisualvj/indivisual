@@ -43,6 +43,11 @@ HC.Layer.prototype.animateShape = function (shape) {
  */
 HC.Layer.prototype.animate = function (hook) {
 
+    if (this.needsReset) {
+        this.fullReset();
+        return;
+    }
+
     this.listener.fireEvent(EVENT_LAYER_ANIMATE);
 
     this.tween.update(this.animation.now - this.lastUpdate, false);

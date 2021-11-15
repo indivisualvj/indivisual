@@ -17,8 +17,12 @@
                 let res = this.layer.resolution().clone();
                 let edge = Math.min(res.x, res.y);
 
-                this.target1 = new THREE.WebGLRenderTarget(edge, edge);
-                this.target2 = this.target1.clone();
+                this.target1 = new THREE.WebGLRenderTarget(edge, edge, {
+                    wrapT: this.settings.background_wrapt, wrapS: THREE.RepeatWrapping
+                });
+                this.target2 = new THREE.WebGLRenderTarget(edge, edge, {
+                    wrapT: this.settings.background_wrapt, wrapS: THREE.RepeatWrapping
+                });
 
                 res.multiplyScalar(2.5);
                 let geo = new THREE.BoxBufferGeometry(res.x, res.y, res.x);

@@ -43,6 +43,27 @@ HC.Layer.prototype.animateShape = function (shape) {
  */
 HC.Layer.prototype.animate = function (hook) {
 
+    if (this.needsReset) {
+        this._fullReset();
+        // return;
+    }
+    if (this.shapesNeedReset) {
+        this._resetShapes();
+        // return;
+    }
+    if (this.shadersNeedUpdate) {
+        this._updateShaderPasses();
+    }
+    if (this.lightingNeedsReset) {
+        this._resetLighting();
+    }
+    if (this.fogNeedsReset) {
+        this._resetFog();
+    }
+    if (this.ambientLightNeedsReset) {
+        this._resetAmbientLight();
+    }
+
     this.listener.fireEvent(EVENT_LAYER_ANIMATE);
 
     this.tween.update(this.animation.now - this.lastUpdate, false);
@@ -59,15 +80,13 @@ HC.Layer.prototype.animate = function (hook) {
     this.animateShape(this.shape);
     this.doPatternRotation(); // preset current pattern euler from layer's shape rotation
 
-    let shapeNeedsUpdate = this.settings.material_needs_update; // todo bound to lastchange todo for CS
-
     for (let i = 0; i < this.shapes.length; i++) {
         let shape = this.shapes[i];
         this.animateShape(shape, true);
-        shape.needsUpdate = shapeNeedsUpdate;
+        shape.materialNeedsUpdate = this.shapeMaterialsNeedUpdate;
     }
 
-    this.settings.material_needs_update = false;
+    this.shapeMaterialsNeedUpdate = false;
 
     this.doLighting(this.materialColor);
     this.doBackground();

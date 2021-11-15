@@ -37,7 +37,7 @@
             let cs = this.get(layer, set);
             let v = value;
             if (cs) {
-                v = cs.set(property, value);
+                v = cs.set(property, value, layer);
 
                 if (this.globalProperties) {
                     this.globalProperties[set].set(property, value);
@@ -243,7 +243,7 @@
 
             let mappings = HC.LayeredControlSetsManager.mappings(controlSets);
 
-            let proxy = new Proxy(controlSets, {
+            return new Proxy(controlSets, {
 
                 has(target, name) {
                     let key = mappings[name];
@@ -277,8 +277,6 @@
                     return false;
                 }
             });
-
-            return proxy;
         }
 
         /**

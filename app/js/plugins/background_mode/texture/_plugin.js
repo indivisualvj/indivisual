@@ -13,9 +13,6 @@
         }
 
         dispose() {
-            if (this.texture) {
-                this.texture.dispose();
-            }
         }
     }
 }

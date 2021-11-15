@@ -206,7 +206,9 @@
                 object: props,
                 property: key,
                 // key: key,
-                onChange: this.onChange,
+                onChange: (value, ctrl) => {
+                    this.onChange(value, ctrl);
+                },
                 set: this.controlSet.className(),
                 initial: props[key]
             };

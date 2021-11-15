@@ -4,26 +4,23 @@
  */
 HC.Layer.prototype.setBackground = function (value) {
 
-    this.resetBackground(false);
+    this._resetBackground(false);
 
     if (value instanceof THREE.Object3D) {
-        this.resetBackground(true);
-
+        this._resetBackground(true);
         this._background.add(value);
     }
     if (value instanceof THREE.Color || value instanceof THREE.Texture) {
         this._layer.background = value;
-
-    } else {
-        // already reset in resetBackground
     }
 };
 
 /**
  *
  * @param recreate
+ * @private
  */
-HC.Layer.prototype.resetBackground = function (recreate) {
+HC.Layer.prototype._resetBackground = function (recreate) {
     if (this._background) {
         this._layer.remove(this._background);
         this._background.traverse(threeDispose);

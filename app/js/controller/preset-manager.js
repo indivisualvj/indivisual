@@ -109,13 +109,10 @@
                     di++;
 
                 } else if (!this.settingsManager.isDefault(i)) {
-                    console.log('reset', i);
                     this.settingsManager.resetLayer(i);
                     this.controller.updatePreset(false, {}, i);
                 }
             }
-
-            this.controller.updateControl('layer', 0, true, true);
         }
 
         /**
@@ -175,6 +172,7 @@
                     let contents = JSON.parse(data.contents);
                     console.log('loaded', data.name);
                     this.controller.updatePreset(key, contents, i);
+                    this.controller.updateControl('layer', 0, true, true);
                 });
             });
         };

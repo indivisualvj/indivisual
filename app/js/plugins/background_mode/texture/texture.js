@@ -18,7 +18,6 @@
                     assetman.loadTexture(path, function (texture) {
                         texture.center.set(.5, .5);
                         inst.texture = texture;
-
                         inst.layer.setBackground(texture);
                     });
 

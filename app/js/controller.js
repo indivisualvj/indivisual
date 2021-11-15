@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             controller.config.loadConfig(function () {
 
+                controller.listener = new HC.Listener();
                 let sets = controller.config.initControlSets();
                 controller.settingsManager = new HC.LayeredControlSetsManager([], controller.config.AnimationValues);
                 controller.init(sets);
@@ -625,6 +626,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (item === 'layer') {
                 this.updateSettings(value, this.settingsManager.prepareLayer(value), true, false, true);
                 this.explorer.setSelected(value+1, true);
+                HC.log(item, value+1);
 
                 let config = {
                     action: 'attr',
@@ -764,7 +766,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.updateUi(this.sourceSettingsGui);
             }
 
-            HC.TimeoutManager.getInstance().add('updateData', 1000/7.5, () => {
+            HC.TimeoutManager.getInstance().add('updateData', FIVE_FPS, () => {
                 this.updateSequenceUi();
                 this.updateThumbs();
             });
@@ -852,7 +854,8 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         syncLayers() {
             for (let layer in this.settingsManager.layers) {
-                let to = parseInt(layer) * 150;
+                layer = parseInt(layer);
+                let to = layer * 150;
 
                 let st = (layer, to) => {
                     setTimeout(() => {
@@ -883,6 +886,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let settings = this.settingsManager.prepareLayer(layer);
 
             if (settings) {
+                HC.log('sync_layer', layer+1);
                 this.messaging.emitSettings(layer, settings, true, false, true);
             }
         }
@@ -912,6 +916,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             } else {
                 this.updateSettings(layer, data, false, false, true);
+                this.settingsManager.update(layer, 'info', 'name', name);
             }
 
             data = this.settingsManager.prepareLayer(layer);
@@ -973,6 +978,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (this.settingsManager.layers[i]) {
                     let l = this.settingsManager.getLayer(i);
                     if (this.config.shuffleable(i+1) && !this.settingsManager.isDefault(l)) {
+                        let name = l.controlSets.info.get('name');
+                        if (name) {
+                            this.explorer.setInfoByPath(name, i+1);
+                        }
                         preset.push(i+1);
                     }
                 }

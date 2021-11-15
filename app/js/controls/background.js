@@ -10,13 +10,26 @@
 
         static index = 70;
 
+        hooks = {
+            onSet: (key, value, context, that) => {
+                if (context !== undefined) {
+                    let id = isObject(context) ? context.index : context;
+                    switch (key) {
+                        case 'background_wraps':
+                        case 'background_wrapt':
+                            messaging.program.listener.fireEventId(EVENT_LAYER_RESET, id, context, FIVE_FPS);
+                            break;
+                    }
+                }
+            }
+        };
+
         settings = {
             background_mode: 'transparent',
             background_color: '#000000',
             background_input: 'none',
             background_volume: 1,
             background_volume_oscillate: 'off',
-            // background_mapping: ,
             background_wraps: 'ClampToEdgeWrapping',
             background_wrapt: 'ClampToEdgeWrapping',
             background_repeatx: 1.0,

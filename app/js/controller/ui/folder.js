@@ -163,6 +163,10 @@
             return this.children[key];
         }
 
+        hasChild(key) {
+            return this.children.hasOwnProperty(key);
+        }
+
         /**
          *
          * @returns {HC.GuifyController[]}

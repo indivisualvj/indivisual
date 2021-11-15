@@ -5,7 +5,7 @@
 
     let inst;
     /**
-     *
+     * todo: does it cache loaded contents???
      * @type {HC.AssetManager}
      */
     HC.AssetManager = class AssetManager {

@@ -58,7 +58,10 @@
             actions.childNodes.item(1).addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                explorer.reload();
+                explorer.reload(() => {
+                    explorer.controller.refreshLayerInfo();
+                });
+
             });
             container.appendChild(actions);
         }

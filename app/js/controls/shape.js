@@ -10,6 +10,28 @@
 
         static index = 100;
 
+        hooks = {
+            onSet: (key, value, context, that) => {
+                if (context !== undefined) {
+                    let id = isObject(context) ? context.index : context;
+                    switch (key) {
+                        case 'shape_sizedivider':
+                            messaging.program.listener.fireEventId(EVENT_LAYER_RESET, id, context, FIVE_FPS);
+                            break;
+                        case 'shape_modifier':
+                        case 'shape_modifier_volume':
+                        case 'shape_geometry':
+                        case 'shape_transform':
+                        case 'shape_moda':
+                        case 'shape_modb':
+                        case 'shape_modc':
+                            messaging.program.listener.fireEventId(EVENT_LAYER_RESET_SHAPES, id, context, FIVE_FPS);
+                            break;
+                    }
+                }
+            }
+        };
+
         settings = {
             shape_geometry: 'tile',
             shape_sizedivider: 14,

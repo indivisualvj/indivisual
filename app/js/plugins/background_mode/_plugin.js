@@ -33,6 +33,8 @@ HC.plugins.background_mode = HC.plugins.background_mode || {};
         reset() {
             this.layer.setBackground(this.current(''));
         }
+
+        // fixme: find a way to dispose backgrounds
     }
 }
 

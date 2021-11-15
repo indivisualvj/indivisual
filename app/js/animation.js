@@ -539,7 +539,6 @@ document.addEventListener('DOMContentLoaded', function () {
             if (layer === undefined) {
                 layer = this.config.ControlSettings.layer;
             }
-            // if (!renderer)return;
 
             let layerIndex = layer;
             layer = this.renderer.layers[layer];
@@ -554,49 +553,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
             switch (property) {
 
-                // complete layer reset:
-                case 'shape_sizedivider':
-                case 'pattern_shapes':
-                    this.renderer.resetLayer(layer);
-                    break;
-
-                // shader reset
                 case 'shaders':
-                    layer.updateShaderPasses();
+                    this.listener.fireEventId(EVENT_LAYER_UPDATE_SHADERS, layer.index, layer, FIVE_FPS);
                     break;
 
-                case 'lighting_ambient':
-                    layer.resetAmbientLight();
-                    break;
-
-                case 'lighting_type':
-                case 'lighting_pattern_lights':
-                    layer.resetLighting();
-                    break;
-
-                case 'lighting_fog':
-                    layer.resetFog();
-                    break;
-
-                // reload shapes
-                case 'pattern':
-                case 'pattern_mover':
-                case 'shape_modifier':
-                case 'shape_modifier_volume':
-                case 'shape_geometry':
-                case 'shape_transform':
-                case 'mesh_material':
-                case 'material_mapping':
-                case 'shape_moda':
-                case 'shape_modb':
-                case 'shape_modc':
-                    layer.resetShapes();
-                    break;
-
-                // special case for shapetastic
                 case 'shape_vertices':
                     if (display) {
-                        layer.resetShapes();
+                        this.listener.fireEventId(EVENT_LAYER_RESET_SHAPES, layer.index, layer, FIVE_FPS);
                     }
                     break;
             }

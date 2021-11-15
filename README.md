@@ -36,19 +36,15 @@ except a plugin concept designed by myself.
 
 However i tried to cleanup and remove the messiest parts of it since i retired 
 from my part time job as a VJ performing video life acts in some well known clubs in Munich.
-I also retired from being a professional developer due to my inability 
-to use popular programming techniques and design patterns.  
 
 Therefore things do not work together perfectly sometimes.
 
-But still it's pretty much fun to play with!
+But still it is pretty much fun to play with!
 
 
 ### Deprecated Powerful Features on Insecure (non SSL) Origins
 When not running on localhost, it is not possible to use microphone or audio input without SSL.
-- You can either run chrome with the --unsafely-treat-insecure-origin-as-secure="http://example.com" flag (replacing "example.com" with the origin you actually want to test)
-    like described in this [article](https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-powerful-features-on-insecure-origins)
-- Or you have to enable SSL
+You have to enable SSL.
 
 Server options can be found [here](docs/server-options.md)
 
@@ -119,7 +115,6 @@ Just open a pull request or an issue.
 
 ## Used Libraries and Credits
 Many thanks to:
-
 - https://github.com/mrdoob/three.js
 - https://github.com/tweenjs/tween.js
 - https://github.com/glowbox/maptasticjs
@@ -129,5 +124,4 @@ Many thanks to:
 - https://github.com/yarnpkg/yarn
 - https://www.shadertoy.com/
 - https://uberviz.io/viz/word-problems/
-- Google for their lightning fast browser/engine
 - All the people contributing to web technology

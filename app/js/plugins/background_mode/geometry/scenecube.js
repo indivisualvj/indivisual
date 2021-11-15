@@ -40,7 +40,7 @@
                 this.layer.setBackground(mesh);
 
             } else {
-
+// fixme: ON RepeatWrapping: THREE.WebGLState: TypeError: Failed to execute 'texImage2D' on 'WebGL2RenderingContext': Overload resolution failed.
                 if (this.counter % 2) {
                     this.texture = this.target2.texture;
                     this.material.map = this.texture;

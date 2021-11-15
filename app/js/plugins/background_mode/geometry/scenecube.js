@@ -40,11 +40,11 @@
                 this.layer.setBackground(mesh);
 
             } else {
-// fixme: THREE.WebGLState: TypeError: Failed to execute 'texImage2D' on 'WebGL2RenderingContext': Overload resolution failed.
+
                 if (this.counter % 2) {
                     this.texture = this.target2.texture;
                     this.material.map = this.texture;
-                    // this.layer.three.renderer.clear();
+
                     this.layer.three.renderer.setRenderTarget(this.target1);
                     this.layer.three.renderer.render(this.layer.three.scene, this.layer.three.camera);
                     this.layer.three.renderer.setRenderTarget(null);
@@ -52,7 +52,7 @@
                 } else {
                     this.texture = this.target1.texture;
                     this.material.map = this.texture;
-                    // this.layer.three.renderer.clear();
+
                     this.layer.three.renderer.setRenderTarget(this.target2);
                     this.layer.three.renderer.render(this.layer.three.scene, this.layer.three.camera);
                     this.layer.three.renderer.setRenderTarget(null);

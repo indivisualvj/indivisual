@@ -6,7 +6,6 @@
 
 "Arturia BeatStep MIDI 1": &ArturiaBeatStep
   constants:
-    MIDI_CLOCK_NEXT: [248, 251]
     MIDI_ROW_ONE:
       "0": [176, 16]
       "1": [176, 17]

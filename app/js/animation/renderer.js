@@ -61,12 +61,6 @@
         nextLayer;
 
         /**
-         *
-         * @type {boolean}
-         */
-        layerSwitched = false;
-
-        /**
          * @type {HC.Animation}
          */
         animation;
@@ -190,7 +184,6 @@
          * @param force
          */
         switchLayer(force) {
-            this.layerSwitched = false;
 
             if (this.nextLayer) {
 
@@ -216,7 +209,6 @@
 
                     this.currentLayer = this.nextLayer;
                     this.nextLayer = false;
-                    this.layerSwitched = true;
 
                 } else {
                     this.setLayer(this.nextLayer.index);

@@ -35,10 +35,10 @@ display_visibility:
   visible: visible
   randomblitz: random blitz
   randomsmear: random smear
-#  stackf: stack
-#  stackr: stack (reversed)
-  stackoof: stack one off
-  stackoor: stack one off (reversed)
+  stackoneoff: stack one off
+  stackoneoffr: stack one off (reversed)
+  stackoneon: stack one on
+  stackoneonr: stack one on (reversed)
   randomflash: random flash
   random: random
   randomoneoff: random one off
@@ -48,13 +48,10 @@ display_visibility:
 
 display_speed:
   peak: peak
-  layer: layer
   full: fulls
   half: halfs
   quarter: quarters
   eight: eights
-  midi: midi
-#  random: random
 
 border_speed:
   peak: peak
@@ -62,4 +59,3 @@ border_speed:
   half: halfs
   quarter: quarters
   eight: eights
-#  random: random

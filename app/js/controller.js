@@ -797,9 +797,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 } else if (data.command === 'off') {
                     this.midi.off(data.data);
-
-                } else if (data.command === 'clock') {
-                    this.midi.clock(data.data, data.conf);
                 }
             }
         }

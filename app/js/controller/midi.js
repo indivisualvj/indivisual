@@ -14,14 +14,14 @@
         controller;
 
         /**
-         * @type {MIDIAccess}
+         * @type {Midi}
          */
         midi;
+
         data;
+
         assignment;
-        clockcounter = 0;
-        clockbpm;
-        clockfirst;
+
         /**
          *
          * @type {*[]}
@@ -189,28 +189,6 @@
 
             } else if (this.midi_pressed[dataId]) {
                 delete this.midi_pressed[dataId];
-            }
-
-            if (this.data[0] === 248) {
-
-                if (this.clockcounter < 96) {
-                    this.clockcounter++;
-
-                } else {
-                    let clocknow = message.timeStamp;
-                    let diff = clocknow - this.clockfirst;
-                    this.clockbpm = round(4 * 60 * 1000 / diff, 2);
-                    HC.log('clock-bpm', this.clockbpm);
-
-                    if (!this.config.ControlSettings.peak_bpm_detect) { // tempo by MIDI clock
-                        if (this.config.ControlSettings.tempo !==this.clockbpm) {
-                            this.controller.updateControl('tempo', this.clockbpm, true, true, false);
-                        }
-                    }
-
-                    this.clockcounter = 0;
-                    this.clockfirst = clocknow;
-                }
             }
 
             if (this.data.length < 2) return;
@@ -635,26 +613,6 @@
 
         /**
          *
-         * @param dat
-         * @param conf
-         * @private
-         */
-        _updateBeatClock(dat, conf) {
-            if (this.midi && dat) {
-                let to = conf.duration / 24;
-                for (let i = 0; i < 24; i++) {
-                    setTimeout(() => {
-                        let clock = [dat[0], dat[1]];
-
-                        this._send(clock);
-
-                    }, to * i);
-                }
-            }
-        }
-
-        /**
-         *
          * @param id
          * @param conf
          */
@@ -668,16 +626,6 @@
          */
         off(id) {
             this._off(id);
-        }
-
-        /**
-         *
-         * @param id
-         * @param conf
-         */
-        clock(id, conf)
-        {
-            this._updateBeatClock(id, conf);
         }
     }
 }

@@ -173,7 +173,7 @@
         /**
          *
          * @param rhythm
-         * @returns {boolean}
+         * @returns {HC.Speed}
          */
         getSpeed(rhythm) {
 
@@ -192,7 +192,7 @@
 
         /**
          *
-         * @returns {boolean}
+         * @returns {HC.Speed}
          */
         getDefaultSpeed() {
             return this.getSpeed('quarter');

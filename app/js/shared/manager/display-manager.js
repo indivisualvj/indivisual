@@ -431,13 +431,14 @@
          *
          */
         renderDisplays() {
-            let visibleIndex = 0;
             let fallback = this.renderer.current();
 
             for (let i = 0; i < this.displays.length; i++) {
                 let display = this.displays[i];
+
+                this.doVisibility(display, i);
+
                 if (display && !display.offline) {
-                    this._handleVisible(display, visibleIndex++);
 
                     if (display.visible) {
                         display.render(fallback);
@@ -454,269 +455,6 @@
             this.config.DisplaySettings.trigger_display_visibility = false;
             this.config.DisplaySettings.force_display_visibility = false;
             this.config.DisplaySettings.reset_display_visibility = false;
-        }
-
-        /**
-         *
-         * @param display
-         * @param index
-         * @private
-         */
-        _handleVisible(display, index) {
-            let redo = false;
-            if (!display.static) {
-                redo = this._visibilityMode(index, display.visible);
-
-            } else {
-                redo = 1;
-            }
-// fixme: visibility does not work at all
-            switch (redo) {
-                case 0:
-                    display.visible = false;
-                    break;
-
-                case 1:
-                    display.visible = true;
-                    break;
-
-                case 2:
-                    display.visible = randomInt(0, 3) > 0 ? true : this.config.DisplaySettings.force_display_visibility;
-                    break;
-
-                case 3: // flash
-                    display.visible = randomBool() ? true : this.config.DisplaySettings.force_display_visibility;
-                    break;
-
-                case 4: // flash timeout
-                    if (display.visible === true) {
-                        display.visible = this.flashTimeoutInFrames(this.visibilitySpeed());
-
-                    } else {
-                        display.visible--;
-                    }
-                    break;
-
-                //case -3:
-                //    break;
-
-                case -4:
-                    display.smear = (randomBool()) ? true : this.config.DisplaySettings.force_display_visibility;
-                    display.visible = true;
-                    break;
-
-                case -5:
-                    display.blitz = (randomBool()
-                        || this.config.DisplaySettings.force_display_visibility) ? 4 : 0;
-                    display.visible = true;
-                    break;
-            }
-
-            // undo _freezemode
-            switch (redo) {
-                case -3:
-                    display.smear = false;
-                    display.blitz = 0;
-                    break;
-                case -4:
-                    display.blitz = 0;
-                    break;
-                case -5:
-                    display.smear = false;
-                    break;
-                case -2:
-                case false:
-                    break;
-
-                default:
-                    display.smear = false;
-                    break;
-            }
-            display.blitz--;
-        }
-
-        /**
-         * todo PLUGINS MAN?
-         * @param index
-         * @param visible
-         * @returns {boolean}
-         */
-        _visibilityMode(index, visible) {
-            let redo = false;
-
-            let speed = this.visibilitySpeed();
-            let sv = this.settings.visibility.random !== false
-                ? this.settings.visibility.random : this.config.DisplaySettings.display_visibility;
-
-            if (this.config.DisplaySettings.reset_display_visibility) {
-                sv = 'visible';
-            }
-
-            switch (sv) {
-                case 'random':
-                    if ((speed === false && this.audioAnalyser.peak) || speed === 0) {
-                        redo = 2;
-                    }
-                    break;
-
-                case 'randomoneon':
-                    if ((speed === false && this.audioAnalyser.peak) || speed === 0) {
-                        if (index === 0) {
-                            this.settings.visibility.index = randomInt(0, this.displayMap.length - 1);
-                        }
-                    }
-                    redo = this.settings.visibility.index === index ? 1 : 0;
-                    break;
-
-                case 'randomoneoff':
-                    if ((speed === false && this.audioAnalyser.peak) || speed === 0) {
-                        if (index === 0) {
-                            this.settings.visibility.index = randomInt(0, this.displayMap.length - 1);
-                        }
-                    }
-                    redo = this.settings.visibility.index === index ? 0 : 1;
-                    break;
-
-                case 'randomflash':
-                    if (!visible && ((speed === false && this.audioAnalyser.peak) || speed === 0)) {
-                        redo = 3;
-
-                    } else if (visible) {
-                        redo = 4;
-
-                    } else {
-                        redo = 0;
-                    }
-                    break;
-
-                case 'randomblitz':
-                    if ((speed === false && this.audioAnalyser.peak) || speed === 0) {
-                        redo = -5;
-                    } else {
-                        redo = -2;
-                    }
-                    break;
-
-                case 'randomsmear':
-                    if ((speed === false && this.audioAnalyser.peak) || speed === 0) {
-                        redo = -4;
-                    } else {
-                        redo = -2;
-                    }
-                    break;
-
-                case 'stackf': //stack forward
-                    var percentile = 1 / (this.displayMap.length + 1);
-                    var prc = percentile * (index + 1);
-                    //if (speed === false) {
-                    this.visibilityStack(index, 1, speed);
-                    var i = this.settings.visibility.index + 2;
-                    speed = i * percentile;
-                    //}
-                    if (speed > prc) {
-                        redo = 1;
-                    } else {
-                        redo = 0;
-                    }
-                    break;
-
-                case 'stackr': // stack reversed
-                    var percentile = 1 / (this.displayMap.length);
-                    var prc = percentile * (index);
-                    //if (speed === false) {
-                    this.visibilityStack(index, 1, speed);
-                    var i = this.settings.visibility.index;
-                    speed = i * percentile;
-                    //}
-                    if (1 - speed > prc) {
-                        redo = 1;
-                    } else {
-                        redo = 0;
-                    }
-                    break;
-
-                case 'stackoof': // stack one off forward
-                    this.visibilityStack(index, 1, speed);
-                    var i = this.settings.visibility.index;
-                    if (index === i) {
-                        redo = 0;
-                    } else {
-                        redo = 1;
-                    }
-                    break;
-
-                case 'stackoor': // stack one off reversed
-                    this.visibilityStack(index, -1, speed);
-                    var i = this.settings.visibility.index;
-                    if (index === i) {
-                        redo = 0;
-                    } else {
-                        redo = 1;
-                    }
-                    break;
-
-                case 'hidden':
-                    redo = 0;
-                    break;
-
-                case 'visible':
-                    redo = 1;
-                    break;
-
-                default:
-                    redo = !visible;
-                    break;
-            }
-
-            return redo;
-        }
-
-        /**
-         *
-         * @returns {boolean|number}
-         */
-        visibilitySpeed() {
-            let speed = false;
-            let ds = this.config.DisplaySettings.display_speed;
-            if (ds === 'midi') {
-                if (this.config.DisplaySettings.trigger_display_visibility
-                    || this.config.DisplaySettings.force_display_visibility
-                ) {
-                    speed = {prc: 0};
-
-                } else {
-                    speed = {prc: 1};
-                }
-                speed.duration = this.beatKeeper.getDefaultSpeed();
-
-            } else if (ds === 'layer') {
-                if (this.renderer.layerSwitched) {
-                    speed = {prc: 0};
-                    this.config.DisplaySettings.force_display_visibility = true;
-
-                } else {
-                    speed = {prc: 1};
-                }
-
-            } else if (ds === 'peak') {
-                if (this.audioAnalyser.peak) {
-                    speed = {prc: 0};
-                    this.config.DisplaySettings.force_display_visibility = true;
-
-                } else {
-                    speed = {prc: 1};
-                }
-
-            } else {
-                speed = this.beatKeeper.getSpeed(ds);
-            }
-
-            if (speed) {
-                return speed.prc;
-
-            } else {
-                return false;
-            }
         }
 
         /**
@@ -747,7 +485,7 @@
          */
         visibilityStack(index, dir, speed) {
 
-            if (index === 0 && ((speed === false && this.audioAnalyser.peak) || speed === 0)) {
+            if (index === 0 && ((this.audioAnalyser.peak) || speed.prc === 0)) {
 
                 let i = this.settings.visibility.index;
 
@@ -770,7 +508,7 @@
          * @returns {number}
          */
         flashTimeoutInFrames(speed) {
-            let timeout = this.beatKeeper.getSpeed(speed).duration / 2;
+            let timeout = speed.duration / 2;
             return Math.round((timeout / this.animation.duration) / 2);
         }
 

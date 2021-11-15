@@ -28,46 +28,55 @@
          * @type {HC.Mask}
          */
         mask;
+
         /**
          * 
          * @type {boolean}
          */
         smear = false;
+
         /**
          * 
          * @type {number}
          */
         blitz = 0;
+
         /**
          * 
          * @type {boolean}
          */
         judder = false;
+
         /**
          * 
          * @type {boolean}
          */
         visible = true;
+
         /**
          * 
          * @type {boolean}
          */
         offline = false;
+
         /**
          * 
          * @type {boolean}
          */
         transparent = false;
+
         /**
          * 
          * @type {boolean}
          */
         keepbounds = true;
+
         /**
          * 
          * @type {number}
          */
         smearing = 0.0;
+
         /**
          * 
          * @type {boolean}

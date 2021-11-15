@@ -12,7 +12,7 @@
 
         hooks = {
             onSet: (key, value, context, that) => {
-                if (context) {
+                if (context !== undefined) {
                     let id = isObject(context) ? context.index : context;
                     switch (key) {
                         case 'background_wraps':

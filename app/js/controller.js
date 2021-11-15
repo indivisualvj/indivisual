@@ -854,7 +854,8 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         syncLayers() {
             for (let layer in this.settingsManager.layers) {
-                let to = parseInt(layer) * 150;
+                layer = parseInt(layer);
+                let to = layer * 150;
 
                 let st = (layer, to) => {
                     setTimeout(() => {
@@ -885,6 +886,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let settings = this.settingsManager.prepareLayer(layer);
 
             if (settings) {
+                HC.log('sync_layer', layer+1);
                 this.messaging.emitSettings(layer, settings, true, false, true);
             }
         }

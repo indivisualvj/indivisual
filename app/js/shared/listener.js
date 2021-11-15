@@ -112,7 +112,6 @@
          */
         fireEventId(event, id, target, timeout) {
             if (event in this.events && id in this.events[event]) {
-
                 if (timeout) {
                     HC.TimeoutManager.getInstance().add(event + '.' + id, timeout, () => {
                         this.bruteFireEventId(event, id, target);
@@ -123,7 +122,7 @@
                 }
 
             } else {
-                // console.warn('unknown event', event, id);
+                console.warn('unknown event', event, id);
             }
         }
 

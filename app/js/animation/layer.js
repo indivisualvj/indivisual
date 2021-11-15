@@ -224,16 +224,18 @@
 
         /**
          *
+         * @private
          */
-        fullReset() {
+        _fullReset() {
+            this.needsReset = false;
+            this.shapeMaterialsNeedUpdate = false;
+
             this.reloadPlugins();
-            this.resetShapes();
+            this._resetShapes();
             this.resetLighting();
             this.resetBackground();
             this.updateShaders();
             this.updateShaderPasses();
-            this.needsReset = false;
-            this.shapeMaterialsNeedUpdate = false;
         }
 
         /**
@@ -251,8 +253,9 @@
 
         /**
          *
+         * @private
          */
-        resetShapes() {
+        _resetShapes() {
             this.resetPlugins();
             this.initRotator();
             this.resetAnimation();

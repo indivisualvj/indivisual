@@ -44,12 +44,12 @@ HC.Layer.prototype.animateShape = function (shape) {
 HC.Layer.prototype.animate = function (hook) {
 
     if (this.needsReset) {
-        this.fullReset();
-        return;
+        this._fullReset();
+        // return;
     }
     if (this.shapesNeedReset) {
-        this.resetShapes();
-        return;
+        this._resetShapes();
+        // return;
     }
 
     this.listener.fireEvent(EVENT_LAYER_ANIMATE);

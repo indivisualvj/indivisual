@@ -273,13 +273,13 @@
                             }
                         }
                     } else {
-                        HC.log('this.midi_miss', this.data);
+                        HC.log('midi_miss', this.data);
                     }
                 } else {
-                    HC.log('this.midi_miss', this.data);
+                    HC.log('midi_miss', this.data);
                 }
             } else {
-                HC.log('this.midi_miss', this.data);
+                HC.log('midi_miss', this.data);
             }
         }
 

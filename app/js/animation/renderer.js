@@ -178,7 +178,7 @@
 
                 this.layers[i] = layer;
 
-                this.resetLayer(layer);
+                layer.needsReset = true;
             }
 
             this.currentLayer = this.layers[this.config.ControlSettings.layer];
@@ -286,8 +286,7 @@
             }
 
             this.nextLayer = false;
-
-            layer.fullReset();
+            layer.needsReset = true;
         }
 
         /**

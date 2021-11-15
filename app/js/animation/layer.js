@@ -72,6 +72,8 @@
          */
         needsReset = false;
 
+        shapeMaterialsNeedUpdate = false;
+
         /**
          *
          * @type {Object.<string, HC.Plugin>}
@@ -148,8 +150,12 @@
             this.resetSizes(renderer.resolution);
 
             this.listener.register(EVENT_LAYER_NEEDS_RESET, this.index, () => {
+                console.log(EVENT_LAYER_NEEDS_RESET, this.index);
                 this.needsReset = true;
-            })
+            });
+            this.listener.register(EVENT_SHAPE_MATERIALS_NEED_UPDATE, this.index, () => {
+                this.shapeMaterialsNeedUpdate = true;
+            });
         }
 
         /**
@@ -218,6 +224,7 @@
             this.updateShaders();
             this.updateShaderPasses();
             this.needsReset = false;
+            this.shapeMaterialsNeedUpdate = false;
         }
 
         /**

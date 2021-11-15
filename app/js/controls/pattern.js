@@ -10,6 +10,19 @@
 
         static index = 90;
 
+        hooks = {
+            onSet: (key, value, context, that) => {
+                if (context) {
+                    let id = isObject(context) ? context.index : context;
+                    switch (key) {
+                        case 'pattern_shapes':
+                            messaging.program.listener.fireEventId(EVENT_LAYER_NEEDS_RESET, id, context, 1000/7.5);
+                            break;
+                    }
+                }
+            }
+        };
+
         settings = {
             pattern: 'matrix',
             pattern_shapes: 112,

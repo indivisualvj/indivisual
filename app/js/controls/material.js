@@ -11,8 +11,11 @@
         static index = 110;
 
         hooks = {
-            onSet: () => {
-                this.properties.material_needs_update = true;
+            onSet: (key, value, context, that) => {
+                if (context) {
+                    let id = isObject(context) ? context.index : context;
+                    messaging.program.listener.fireEventId(EVENT_SHAPE_MATERIALS_NEED_UPDATE, id, context);
+                }
             }
         };
 
@@ -40,12 +43,10 @@
             material_offsety: 0.0,
             material_centerx: .5,
             material_centery: .5,
-            material_rotation: 0.0,
-            material_needs_update: false
+            material_rotation: 0.0
         };
         
         types = {
-            material_needs_update: ['hidden'],
             material_blendequation: ['hidden'],
             material_blendsrc: ['hidden'],
             material_blenddst: ['hidden'],

@@ -19,7 +19,7 @@
         mesh;
         geometry;
         normalScale;
-        needsUpdate = true;
+        materialNeedsUpdate = true;
 
         /**
          *
@@ -352,8 +352,8 @@
             this.mesh.castShadow = settings.lighting_shadows;
             this.mesh.receiveShadow = settings.lighting_shadows;
 
-            if (this.needsUpdate) {
-                this.needsUpdate = false;
+            if (this.materialNeedsUpdate) {
+                this.materialNeedsUpdate = false;
                 if ('shininess' in mat && mat.shininess !== settings.material_shininess) {
                     mat.shininess = settings.material_shininess;
 

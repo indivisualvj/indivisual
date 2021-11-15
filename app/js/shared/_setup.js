@@ -29,6 +29,7 @@ EVENT_SAMPLE_STATUS_CHANGED = 'sample.disabled';
 EVENT_RENDERER_RENDER = 'renderer.render';
 EVENT_LAYER_ANIMATE = 'layer.animate';
 EVENT_LAYER_NEEDS_RESET = 'layer.needs_reset';
+EVENT_SHAPE_MATERIALS_NEED_UPDATE = 'shape.materials_need_update';
 EVENT_SOURCE_MANAGER_RENDER = 'source-manager.render';
 EVENT_DISPLAY_MANAGER_RENDER = 'display-manager.render';
 EVENT_ANIMATION_RENDER = 'animation.render';

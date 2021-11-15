@@ -10,6 +10,19 @@
 
         static index = 100;
 
+        hooks = {
+            onSet: (key, value, context, that) => {
+                if (context) {
+                    let id = isObject(context) ? context.index : context;
+                    switch (key) {
+                        case 'shape_sizedivider':
+                            messaging.program.listener.fireEventId(EVENT_LAYER_NEEDS_RESET, id, context, 1000/7.5);
+                            break;
+                    }
+                }
+            }
+        };
+
         settings = {
             shape_geometry: 'tile',
             shape_sizedivider: 14,

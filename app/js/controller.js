@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             controller.config.loadConfig(function () {
 
+                controller.listener = new HC.Listener();
                 let sets = controller.config.initControlSets();
                 controller.settingsManager = new HC.LayeredControlSetsManager([], controller.config.AnimationValues);
                 controller.init(sets);

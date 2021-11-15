@@ -10,6 +10,20 @@
 
         static index = 70;
 
+        hooks = {
+            onSet: (key, value, context, that) => {
+                if (context) {
+                    let id = isObject(context) ? context.index : context;
+                    switch (key) {
+                        case 'background_wraps':
+                        case 'background_wrapt':
+                            messaging.program.listener.fireEventId(EVENT_LAYER_NEEDS_RESET, id, context, 1000/7.5);
+                            break;
+                    }
+                }
+            }
+        };
+
         settings = {
             background_mode: 'transparent',
             background_color: '#000000',

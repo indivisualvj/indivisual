@@ -554,14 +554,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             switch (property) {
 
-                // complete layer reset:
-                case 'shape_sizedivider':
-                case 'pattern_shapes':
-                case 'background_wrapt':
-                case 'background_wraps': // todo: add events to settings
-                    this.listener.fireEventId(EVENT_LAYER_NEEDS_RESET, layer.index);
-                    break;
-
+                // todo: hooks for all of these!
                 // shader reset
                 case 'shaders':
                     layer.updateShaderPasses();
@@ -580,7 +573,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     layer.resetFog();
                     break;
 
-                // reload shapes
+                // reload shapes //todo: create event and use onSet hook
                 case 'pattern':
                 case 'pattern_mover':
                 case 'shape_modifier':
@@ -595,7 +588,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     layer.resetShapes();
                     break;
 
-                // special case for shapetastic
+                // special case for shapetastic // todo: how to solve that?
                 case 'shape_vertices':
                     if (display) {
                         layer.resetShapes();

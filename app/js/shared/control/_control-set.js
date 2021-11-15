@@ -238,11 +238,11 @@ HC.controls = HC.controls || {};
          * @param value
          * @returns {*}
          */
-        set(key, value) {
+        set(key, value, context) {
             if (key in this.settings) {
 
                 if ('onSet' in this.hooks) {
-                    this.hooks.onSet();
+                    this.hooks.onSet(key, value, context, this);
                 }
 
                 this.properties[key] = this.validate(key, value)

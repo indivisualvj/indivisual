@@ -625,6 +625,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (item === 'layer') {
                 this.updateSettings(value, this.settingsManager.prepareLayer(value), true, false, true);
                 this.explorer.setSelected(value+1, true);
+                HC.log(item, value+1);
 
                 let config = {
                     action: 'attr',

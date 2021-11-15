@@ -470,7 +470,7 @@
             } else {
                 redo = 1;
             }
-
+// fixme: visibility does not work at all
             switch (redo) {
                 case 0:
                     display.visible = false;
@@ -490,7 +490,7 @@
 
                 case 4: // flash timeout
                     if (display.visible === true) {
-                        display.visible = this.flashTimeoutInFrames(this.config.DisplaySettings.display_speed);
+                        display.visible = this.flashTimeoutInFrames(this.visibilitySpeed());
 
                     } else {
                         display.visible--;
@@ -687,6 +687,7 @@
                 } else {
                     speed = {prc: 1};
                 }
+                speed.duration = this.beatKeeper.getDefaultSpeed();
 
             } else if (ds === 'layer') {
                 if (this.renderer.layerSwitched) {
@@ -770,8 +771,7 @@
          */
         flashTimeoutInFrames(speed) {
             let timeout = this.beatKeeper.getSpeed(speed).duration / 2;
-            let count = Math.round((timeout / this.animation.duration) / 2);
-            return count;
+            return Math.round((timeout / this.animation.duration) / 2);
         }
 
     }

@@ -1,9 +1,7 @@
 
 display_mask_shape:
-  off: 'off'
-#  circle: circle
+  off: off
   triangle: triangle
-#  trianglesquare: triangle square
   rect: rect
   quad: quad
   pentagon: pentagon
@@ -28,25 +26,11 @@ display:
   - 10
   - 11
   - 12
+  - 13
 
 video: {}
 
-display_visibility:
-  visible: visible
-  randomblitz: random blitz
-  randomsmear: random smear
-  stackoneoff: stack one off
-  stackoneoffr: stack one off (reversed)
-  stackoneon: stack one on
-  stackoneonr: stack one on (reversed)
-  randomflash: random flash
-  random: random
-  randomoneoff: random one off
-  randomoneon: random one on
-  randomall: random all
-#  hidden: hidden
-
-display_speed:
+display_speed: &speeds
   peak: peak
   full: fulls
   half: halfs
@@ -54,8 +38,4 @@ display_speed:
   eight: eights
 
 border_speed:
-  peak: peak
-  full: fulls
-  half: halfs
-  quarter: quarters
-  eight: eights
+  *speeds

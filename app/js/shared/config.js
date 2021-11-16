@@ -106,6 +106,7 @@ HC.Statics = HC.Statics || {};
                 callback: (data, finished) => {
                     this.DisplayValues = jsyaml.load(data.contents);
                     this._loadBorderModePlugins(this.DisplayValues);
+                    this._loadVisibilityModePlugins(this.DisplayValues);
                     finished();
                 }
             },
@@ -397,6 +398,15 @@ HC.Statics = HC.Statics || {};
          */
         _loadBorderModePlugins(settings) {
             this._loadPlugins(settings, 'border_mode', HC.Display.border_mode);
+        }
+
+        /**
+         *
+         * @param settings
+         * @private
+         */
+        _loadVisibilityModePlugins(settings) {
+            this._loadPlugins(settings, 'display_visibility', HC.Display.display_visibility);
         }
 
         /**

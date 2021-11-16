@@ -97,19 +97,19 @@
       default:
         type: boolean
         section: Display
-        name: trigger_display_visibility
+        name: trigger_display_visibility # todo: still need it?
         options:
           silent: true
       sequence:
         type: boolean
         section: Display
-        name: trigger_display_visibility
+        name: trigger_display_visibility # todo: still need it?
         options:
           silent: true
       overlay:
         type: boolean
         section: Display
-        name: trigger_display_visibility
+        name: trigger_display_visibility # todo: still need it?
         options:
           silent: true
       sample:

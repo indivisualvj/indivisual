@@ -62,6 +62,7 @@
             this.cliptastic = this.initCliptastic();
 
             this.initBorderModePlugins();
+            this.initVisibilityModePlugins();
         }
 
         /**
@@ -72,6 +73,19 @@
                 let plugin = HC.Display.border_mode[k];
                 plugin = new plugin(this);
                 HC.Display.border_mode[k] = plugin;
+                plugin.init();
+            }
+        }
+
+
+        /**
+         *
+         */
+        initVisibilityModePlugins() {
+            for (let k in HC.Display.display_visibility) {
+                let plugin = HC.Display.display_visibility[k];
+                plugin = new plugin(this);
+                HC.Display.display_visibility[k] = plugin;
                 plugin.init();
             }
         }
@@ -329,11 +343,12 @@
             this.displayMap = [];
             let index = 0;
             for (let i = 0; i < this.displays.length; i++) {
-                if (this.displays[i]) {
-                    if (!this.displays[i].static) {
+                let display = this.displays[i];
+                if (display) {
+                    display.index = index++;
+                    if (!display.static) {
                         this.displayMap.push(i);
                     }
-                    this.displays[i].index = index++;
                 }
             }
         }
@@ -436,9 +451,8 @@
             for (let i = 0; i < this.displays.length; i++) {
                 let display = this.displays[i];
 
-                this.doVisibility(display, i);
-
                 if (display && !display.offline) {
+                    this.doDisplayVisibility(display, i);
 
                     if (display.visible) {
                         display.render(fallback);
@@ -457,49 +471,55 @@
             this.config.DisplaySettings.reset_display_visibility = false;
         }
 
-        /**
-         *
-         * @returns {boolean}
-         */
-        borderSpeed() {
-            let bs = this.config.DisplaySettings.border_speed;
-            let speed;
-            if (bs === 'peak') {
-                if (this.audioAnalyser.peak) {
-                    speed = {prc: 0};
+        doDisplayVisibility(display, index) {
+            let plugin = HC.Display.display_visibility[this.config.DisplaySettings.display_visibility];
 
-                } else {
-                    speed = {prc: 1};
-                }
-            } else {
-                speed = this.beatKeeper.getSpeed(bs);
+            if (plugin.before(display)) {
+                plugin.apply(display);
             }
-            return speed;
+            // this._dirty = true;
         }
 
         /**
          *
-         * @param index
-         * @param dir
-         * @param speed
+         * @returns {HC.Speed}
          */
-        visibilityStack(index, dir, speed) {
+        borderSpeed() {
+            let borderSpeed = this.config.DisplaySettings.border_speed;
+            let speed = this.beatKeeper.getDefaultSpeed();
+            if (borderSpeed === 'peak') {
+                if (this.audioAnalyser.peak) {
+                    speed.prc = 0;
 
-            if (index === 0 && ((this.audioAnalyser.peak) || speed.prc === 0)) {
-
-                let i = this.settings.visibility.index;
-
-                i += dir;
-
-                if (i >= this.displayMap.length) {
-                    i = 0;
-
-                } else if (i < 0) {
-                    i = this.displayMap.length - 1;
+                } else {
+                    speed.prc = 1;
                 }
-
-                this.settings.visibility.index = i;
+            } else {
+                speed = this.beatKeeper.getSpeed(borderSpeed);
             }
+
+            return speed;
+        }
+
+
+        /**
+         *
+         * @returns {HC.Speed}
+         */
+        displaySpeed() {
+            let displaySpeed = this.config.DisplaySettings.display_speed;
+            let speed = this.beatKeeper.getDefaultSpeed();
+            if (displaySpeed === 'peak') {
+                if (this.audioAnalyser.peak) {
+                    speed.prc = 0;
+
+                } else {
+                    speed.prc = 1;
+                }
+            } else {
+                speed = this.beatKeeper.getSpeed(displaySpeed);
+            }
+            return speed;
         }
 
         /**

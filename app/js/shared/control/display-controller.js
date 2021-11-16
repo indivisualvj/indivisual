@@ -240,12 +240,12 @@ HC.DisplayController = HC.DisplayController || {};
                 this._create('parents', i, this.members.parents, this.prefix + i);
 
                 // settings
-                let _resize = function (key, factor) {
-                    return function () {
+                let _resize = (key, factor) => {
+                    return () => {
                         let _key = (key + '_' + factor);
                         let data = {};
                         data[_key] = factor;
-                        this.config.emitDisplays(data, true, true, false);
+                        this.config.messaging.emitDisplays(data, true, true, false);
                     };
                 };
 
@@ -272,19 +272,19 @@ HC.DisplayController = HC.DisplayController || {};
         static index = 20;
 
         settings = {
-            display_visibility: 'visible',
+            display_visibility: 'visible', // todo: visiblity_mode or display_visibility?
             display_speed: 'quarter',
             border_mode: 'visible',
             border_speed: 'half',
             border: 0,
             border_color: '#ffffff',
-            trigger_display_visibility: () => {
+            trigger_display_visibility: () => { // todo: still need it?
                 this.config.messaging.program.updateDisplay('trigger_display_visibility', true, true, true, false);
             },
-            force_display_visibility: () => {
+            force_display_visibility: () => { // todo: still need it?
                 this.config.messaging.program.updateDisplay('force_display_visibility', true, true, true, false);
             },
-            reset_display_visibility: () => {
+            reset_display_visibility: () => { // todo: still need it?
                 this.config.messaging.program.updateDisplay('reset_display_visibility', true, true, true, false);
             }
         };

@@ -520,7 +520,7 @@
                 return;
             }
 
-            let prc = false;
+            let prc;
             if (speed === false) {
                 prc = this.displayManager.audioAnalyser.volume * 2;
             } else {

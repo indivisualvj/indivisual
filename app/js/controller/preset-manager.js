@@ -87,6 +87,7 @@
          * @param {HC.GuifyExplorerFolder} folder
          */
         loadPresets(folder) {
+            // fixme: check if loading a lot/switching a lot/setting layers a lot, kills the controller and if: why?
             let children = Object.keys(folder.children);
             let dflt = [];
 

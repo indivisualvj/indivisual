@@ -112,10 +112,40 @@
             this.gui.panel.SetVisible(exp);
         }
 
+        toggleFullscreen() {
+            this.gui.ToggleFullscreen();
+        }
         /**
          *
          */
         remove() {
+        }
+
+        openByPath(path) {
+            let control = this.findByPath(path);
+            let result = control;
+            if (control) {
+                do {
+                    control.setOpen(true);
+                } while ((control = control.getParent()));
+            }
+
+            return result;
+        }
+
+        findByPath(path) {
+            let parts = path.split('/');
+            let control = this;
+            for (const part in parts) {
+                let name = parts[part];
+                if (!control.hasChild(name)) {
+                    control = null;
+                    break;
+                }
+                control = control.getChild(name);
+            }
+
+            return control;
         }
     }
 }

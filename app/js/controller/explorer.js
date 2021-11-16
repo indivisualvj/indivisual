@@ -148,26 +148,12 @@
         }
 
         setInfoByPath(path, layer) {
-            let control = this.findByPath(path);
+            let control = this.gui.findByPath(path);
             if (control) {
                 control.setInfo(layer);
             }
         }
 
-        findByPath(path, layer) {
-            let parts = path.split('/');
-            let control = this.gui;
-            for (const part in parts) {
-                let name = parts[part];
-                if (!control.hasChild(name)) {
-                    control = null;
-                    break;
-                }
-                control = control.getChild(name);
-            }
-
-            return control;
-        }
 
         /**
          * 

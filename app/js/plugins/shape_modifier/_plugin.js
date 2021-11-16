@@ -1,5 +1,7 @@
 HC.plugins.shape_modifier = HC.plugins.shape_modifier || {};
 {
+    // todo: either create shape to work like display borders, or try a modifier to achieve it.
+
     HC.ShapeModifierPlugin = class Plugin extends HC.AnimationPlugin {
 
         setControlSets(controlSets) {

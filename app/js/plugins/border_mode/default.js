@@ -41,7 +41,8 @@
 
         init() {
             for (let k in HC.Display.border_mode) {
-                if (k !== this.constructor.name) {
+                let plugin = HC.Display.border_mode[k]
+                if (plugin.constructor.name !== this.constructor.name) {
                     this.modeKeys[this.modeCount++] = k;
                     this.modes[k] = HC.Display.border_mode[k];
                 }

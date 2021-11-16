@@ -437,9 +437,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (detectedSpeed) {
                     this.messaging.emitMidi('glow', MIDI_PEAKBPM_FEEDBACK, {timeout: 15000 / detectedSpeed, times: 8});
                 }
-                if (this.config.DisplaySettings.display_speed === 'midi') {
-                    this.messaging.emitMidi('clock', MIDI_CLOCK_NEXT, {duration: this.beatKeeper.getDefaultSpeed().duration});
-                }
 
                 if (this.beatKeeper.getSpeed('half').starting()) {
                     for (let i = 0; i < this.config.SourceValues.sequence.length; i++) {

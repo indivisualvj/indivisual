@@ -158,22 +158,22 @@ HC.SourceController = HC.SourceController || {};
          *
          */
         appendSeqButtons() {
-            this.settings.seq_0 = function () {
+            this.settings.seq_0 = () => {
                 this.config.messaging.program.setAllDisplaysTo('sequence', 0);
             };
-            this.settings.seq_1 = function () {
+            this.settings.seq_1 = () => {
                 this.config.messaging.program.setAllDisplaysTo('sequence', 1);
             };
-            this.settings.seq_2 = function () {
+            this.settings.seq_2 = () => {
                 this.config.messaging.program.setAllDisplaysTo('sequence', 2);
             };
-            this.settings.seq_3 = function () {
+            this.settings.seq_3 = () => {
                 this.config.messaging.program.setAllDisplaysTo('sequence', 3);
             };
-            this.settings.seq_4 = function () {
+            this.settings.seq_4 = () => {
                 this.config.messaging.program.setAllDisplaysTo('sequence', 4);
             };
-            this.settings.seq_inc = function () {
+            this.settings.seq_inc = () => {
                 this.config.messaging.program.setAllDisplaysTo('sequence', false);
             };
 

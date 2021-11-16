@@ -486,7 +486,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     let settings = session.settings;
 
                     for (let k in settings) {
-                        this.updateSettings(k, settings[k], true, false, true, false);
+                        this.updateSettings(k, settings[k], true, false, true);
                     }
                 }
 
@@ -549,7 +549,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             switch (property) {
-
                 case 'shaders':
                     this.listener.fireEventId(EVENT_LAYER_UPDATE_SHADERS, layer.index, layer, FIVE_FPS);
                     break;
@@ -608,6 +607,7 @@ document.addEventListener('DOMContentLoaded', function () {
                                     this.fullReset(false);
 
                                 } else {
+                                    assetman.disposeAllTextures();
                                     this.renderer.resetLayer(this.renderer.currentLayer);
                                 }
                             }
@@ -781,16 +781,12 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param display
          * @param forward
          * @param force
-         * @param reset
          */
-        updateSettings(layer, data, display, forward, force, reset) {
+        updateSettings(layer, data, display, forward, force) {
 
             if (force) {
                 this.settingsManager.updateData(layer, data);
-
-                if (false !== reset) {
-                    this.renderer.resetLayer(layer);
-                }
+                this.renderer.resetLayer(layer);
 
             } else {
                 for (let k in data) {

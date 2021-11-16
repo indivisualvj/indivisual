@@ -6,11 +6,13 @@
 
         shader = {
             uniforms: {
-                uTime: {type: 'f', value: 1.0}
+                uTime: { type: 'f', value: 1.0 },
+                opacity: { type: 'f', value: 1.0 },
             },
             fragmentShader: `
                 uniform float uTime;
                 varying vec2 vUv;
+                uniform float opacity;
                 
                 #define PI 3.14159265359
                 
@@ -64,7 +66,13 @@
                     pix += 0.2*col3*disks * sin(t+i*j+i);
                 
                     pix -= smoothstep(0.3, 5.5, length(r));
-                    gl_FragColor = vec4(pix,1.0);
+
+                    float distR = 1.0 - pix.r;
+                    float distG = 1.0 - pix.g;
+                    float distB = 1.0 - pix.b;
+
+                    gl_FragColor = vec4(pix,opacity * (3.-(distR+distG+distB)));
+
                 }
                 `
             ,

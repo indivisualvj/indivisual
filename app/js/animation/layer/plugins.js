@@ -382,8 +382,9 @@ HC.Layer.prototype._reloadPlugins = function () {
                 }
 
                 if (plug instanceof HC.ShaderPlugin) {
-                    // no reset of ShaderPlugins
-                    continue;
+                    console.log('no more avoid dispose shader plugins? what will happen?');
+                //     // no reset of ShaderPlugins
+                //     continue;
                 }
                 if (plug.dispose) {
                     // this was created for ShaderPlugins, but no good disposing these...

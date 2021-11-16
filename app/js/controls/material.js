@@ -11,7 +11,7 @@
         static index = 110;
 
         hooks = {
-            onSet: (key, value, context, that) => {
+            onChange: (key, value, context, that) => {
                 if (context !== undefined) {
                     let id = isObject(context) ? context.index : context;
                     switch (key) {

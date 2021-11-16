@@ -3,7 +3,7 @@
  */
 {
     HC.MeshShaderMaterialPlugin = class MeshShaderMaterialPlugin extends HC.MeshMaterialPlugin {
-
+// todo add opacity to all shader base materials
         static index = 99;
         active = false;
 
@@ -25,6 +25,9 @@
                     }
                     if (material.uniforms.audio) {
                         material.uniforms.audio.value = this.audioAnalyser.getFrequencyRangeValues();
+                    }
+                    if (material.uniforms.opacity) {
+                        material.uniforms.opacity.value = material.opacity;
                     }
                 }
 

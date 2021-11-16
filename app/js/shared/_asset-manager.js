@@ -12,9 +12,7 @@
         images = {};
         cubes = {};
         videos = {};
-
-        textures = [];
-        maxTextures = 10;
+        textures = {};
 
         /**
          *
@@ -174,12 +172,21 @@
          * @param error
          */
         loadTexture(url, callback, error) {
-            new THREE.TextureLoader().load(url, (tex) => {
+
+            if (url in this.textures) {
+                let tex = this.textures[url];
                 requestAnimationFrame(() => {
-                    this.textures.push(tex);
                     callback(tex);
                 });
-            }, false, error);
+
+            } else {
+                new THREE.TextureLoader().load(url, (tex) => {
+                    requestAnimationFrame(() => {
+                        this.textures[url] = tex;
+                        callback(tex);
+                    });
+                }, false, error);
+            }
         }
 
         /**
@@ -283,6 +290,7 @@
          * @param error
          */
         loadMaterialMap(target, path, callback, error) {
+            let inst = this;
             let _assign = function (to, from) {
                 let keys = Object.keys(from);
                 for (let k in keys) {
@@ -295,14 +303,14 @@
 
             // complex
             if (path.match(/.+\.mat$/i)) {
-                assetman.loadMaterial(path, function (mat) {
+                inst.loadMaterial(path, function (mat) {
                     _assign(target, mat);
                     callback(target);
                 }, error);
 
             // simple
             } else {
-                assetman.loadTexture(path, function (tex) {
+                inst.loadTexture(path, function (tex) {
                     let mat = { map: tex };
                     _assign(target, mat);
                     callback(target);
@@ -315,7 +323,6 @@
             for (let i = 0; i < this.textures.length; i++) {
                 requestAnimationFrame(() => {
                     this.textures[i].dispose();
-                    this.textures[i] = null;
                 });
             }
 

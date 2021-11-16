@@ -88,7 +88,9 @@ HC.Layer.prototype._updateLighting = function () {
  * @private
  */
 HC.Layer.prototype._resetFog = function () {
+
     this.fogNeedsReset = false;
+
     if (this.three.scene.fog) {
         this._layer.fog = null;
     }
@@ -106,6 +108,7 @@ HC.Layer.prototype._resetFog = function () {
 HC.Layer.prototype._resetAmbientLight = function () {
 
     this.ambientLightNeedsReset = false;
+
     if (this.ambientLight) {
         this._lighting.remove(this.ambientLight);
         this.ambientLight.traverse(threeDispose);

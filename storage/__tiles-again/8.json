@@ -1,6 +1,6 @@
 {
     "info": {
-        "name": 0,
+        "name": "__tiles-again/8.json",
         "version": 1,
         "tutorial": {}
     },
@@ -146,7 +146,7 @@
     "material": {
         "mesh_material": "physical",
         "material_style": "fill",
-        "material_blending": "NoBlending",
+        "material_blending": "AdditiveBlending",
         "material_blendequation": "AddEquation",
         "material_blendsrc": "SrcAlphaFactor",
         "material_blenddst": "OneMinusSrcAlphaFactor",
@@ -167,8 +167,7 @@
         "material_offsety": 0,
         "material_centerx": 0.5,
         "material_centery": 0.5,
-        "material_rotation": 0,
-        "material_needs_update": true
+        "material_rotation": 0
     },
     "coloring": {
         "coloring_mode": "onergb",

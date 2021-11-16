@@ -1,6 +1,6 @@
 {
     "info": {
-        "name": 0,
+        "name": "__tiles-again/9.json",
         "version": 1,
         "tutorial": {}
     },
@@ -76,7 +76,7 @@
     },
     "background": {
         "background_mode": "scenesphere",
-        "background_color": "#fff",
+        "background_color": "#666",
         "background_input": "none",
         "background_volume": 5,
         "background_volume_oscillate": "off",
@@ -167,8 +167,7 @@
         "material_offsety": 0,
         "material_centerx": 0.5,
         "material_centery": 0.5,
-        "material_rotation": 0,
-        "material_needs_update": true
+        "material_rotation": 0
     },
     "coloring": {
         "coloring_mode": "onergb",

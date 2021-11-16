@@ -52,7 +52,7 @@
             pattern_paddingx: [-10, 10, 0.01],
             pattern_paddingy: [-10, 10, 0.01],
             pattern_paddingz: [-10, 10, 0.01],
-            pattern_shapes: [0, 512, 1],
+            pattern_shapes: [1, 512, 1],
             pattern_centerx: [-5, 5, 0.01],
             pattern_centery: [-5, 5, 0.01],
             pattern_centerz: [-5, 5, 0.01],

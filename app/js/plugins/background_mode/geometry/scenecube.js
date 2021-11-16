@@ -1,3 +1,5 @@
+// todo: create sequencecube0-5 backgrounds
+
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
@@ -17,12 +19,14 @@
                 let res = this.layer.resolution().clone();
                 let edge = Math.min(res.x, res.y);
 
+                let wraps = THREE[this.settings.background_wraps];
+                let wrapt = THREE[this.settings.background_wrapt];
                 this.target1 = new THREE.WebGLRenderTarget(edge, edge, {
-                    wrapT: this.settings.background_wrapt, wrapS: THREE.RepeatWrapping
+                    wrapT: wrapt, wrapS: wraps
                 });
                 this.addDisposable(this.target1);
                 this.target2 = new THREE.WebGLRenderTarget(edge, edge, {
-                    wrapT: this.settings.background_wrapt, wrapS: THREE.RepeatWrapping
+                    wrapT: wrapt, wrapS: wraps
                 });
                 this.addDisposable(this.target2);
 

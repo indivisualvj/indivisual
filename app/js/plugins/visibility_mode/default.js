@@ -166,7 +166,6 @@
 
         apply (display) {
             if (display.index in this.visible) {
-                let props = this.visible[display.index];
                 display.visible = true;
 
             } else {
@@ -181,12 +180,15 @@
      *
      * @type {HC.Display.display_visibility.randomoneoff}
      */
-    HC.Display.display_visibility.randomoneoff = class randomoneoff extends HC.Display.VisibilityModePlugin {
+    HC.Display.display_visibility.randomoneoff = class randomoneoff extends HC.Display.display_visibility.stackoneoff {
 
         static name = 'random one off';
 
-        apply (display) {
-
+        doFirstItemStuff() {
+            let speed = this.getSpeed();
+            if (speed.starting()) {
+                this.current = randomInt(0, this.displayManager.displayMap.length-1);
+            }
         }
     }
 }
@@ -196,12 +198,15 @@
      *
      * @type {HC.Display.display_visibility.randomoneon}
      */
-    HC.Display.display_visibility.randomoneon = class randomoneon extends HC.Display.VisibilityModePlugin {
+    HC.Display.display_visibility.randomoneon = class randomoneon extends HC.Display.display_visibility.stackoneon {
 
         static name = 'random one on';
 
-        apply (display) {
-
+        doFirstItemStuff() {
+            let speed = this.getSpeed();
+            if (speed.starting()) {
+                this.current = randomInt(0, this.displayManager.displayMap.length-1);
+            }
         }
     }
 }

@@ -7,7 +7,7 @@
      * @type {HC.SourceManager}
      */
     HC.SourceManager = class SourceManager {
-
+// todo: restructure everything using a sequence/etc. does fire a dirty event for that particular item to register it has to progress/repaint
         /**
          * @type {HC.Animation}
          */

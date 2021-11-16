@@ -139,9 +139,22 @@ document.addEventListener('DOMContentLoaded', function () {
         animate() {
 
             this.listener.fireEvent(EVENT_ANIMATION_ANIMATE);
+
+            this._preRender();
+
             /**
-             * do general stuff
+             * do layer stuff
              */
+            if (IS_ANIMATION) {
+                this.doShuffle();
+            }
+            this.renderer.switchLayer(IS_MONITOR);
+
+            this.renderer.animate();
+
+        }
+
+        _preRender() {
             let speed = this.beatKeeper.getDefaultSpeed();
 
             if (IS_ANIMATION && speed.starting()) {
@@ -188,22 +201,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 this.listener.fireEvent('audio.peak', this.audioAnalyser);
             }
-
-            /**
-             * END do general stuff
-             */
-
-            /**
-             * do layer stuff
-             */
-            if (IS_ANIMATION) {
-                this.doShuffle();
-            }
-            this.renderer.switchLayer(IS_MONITOR);
-
-            this.renderer.animate();
-
         }
+
+
 
         /**
          *

@@ -426,7 +426,7 @@ input:focus, select:focus {
     z-index: 999;
     left: 0;
     display: none;
-    top: -90px;
+    top: -88px;
     width: 130px;
     height: 70px;
     padding: 8px;

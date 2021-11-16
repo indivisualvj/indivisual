@@ -12,7 +12,7 @@
         static index = 10;
 
         settings = {
-            layer_transvisible: false,
+            layer_transvisible: false, // todo z-index needed for arrangements. also maybe layer-numbers as shuffleable to define who plays with whom.
             layer_positionx: 0,
             layer_positionx_oscillate: 'off',
             layer_positiony: 0,

@@ -272,7 +272,7 @@ HC.DisplayController = HC.DisplayController || {};
         static index = 20;
 
         settings = {
-            display_visibility: 'visible', // todo: visiblity_mode or display_visibility?
+            display_visibility: 'visible',
             display_speed: 'quarter',
             border_mode: 'visible',
             border_speed: 'half',

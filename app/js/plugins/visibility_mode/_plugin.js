@@ -47,7 +47,7 @@ HC.Display.display_visibility = {};
         }
 
         getSpeed() {
-            return this.displayManager.displaySpeed(); // todo: pull function in here
+            return this.displayManager.displaySpeed();
         }
 
         /**

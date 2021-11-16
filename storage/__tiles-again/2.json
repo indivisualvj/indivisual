@@ -1,8 +1,8 @@
 {
     "info": {
-        "name": 0,
+        "name": "__tiles-again/2.json",
         "version": 1,
-        "tutorial": {}
+        "tutorial": "[object Object]"
     },
     "layer": {
         "layer_transvisible": false,
@@ -167,8 +167,7 @@
         "material_offsety": 0,
         "material_centerx": 0.5,
         "material_centery": 0.5,
-        "material_rotation": 0,
-        "material_needs_update": true
+        "material_rotation": 0
     },
     "coloring": {
         "coloring_mode": "onergb",

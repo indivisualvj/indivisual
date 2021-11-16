@@ -284,13 +284,6 @@
             }
 
             let blast = false;
-            // no acceleration
-            //let step = Math.max(63, Math.min(65, vel)) - 64;
-            // acceleration up to 3
-            //let step = Math.max(60, Math.min(68, vel)) - 64;
-            // acceleration up to 4
-            //let step = Math.max(59, Math.min(69, vel)) - 64;
-            // acceleration up to 5
             let step = Math.max(58, Math.min(70, vel)) - 64;
 
             if (!id.options) {
@@ -314,6 +307,12 @@
                         values = this.config[values];
                         status = this.config[status];
 
+                        let enable = vel ? id.name : false;
+                        if (enable) {
+                            this._showOSD(id.type,id.name + 'N' + id.suffix);
+                        } else {
+                            this._hideOSD(id.type);
+                        }
                         if (name in values) {
                             values = values[name];
                             let keys = Object.keys(values);
@@ -323,9 +322,8 @@
                                     n += id.suffix;
                                 }
                                 let ass = [this.data[0], id.start + i];
-                                if (vel && n in status && status[n]) {
+                                if (enable && n in status && status[n]) {
                                     this._glow(ass);
-
                                 } else {
                                     this._off(ass);
                                 }

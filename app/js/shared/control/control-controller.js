@@ -68,6 +68,53 @@ HC.ControlController = HC.ControlController || {};
                 this.config.messaging.program.updateSettings(this.config.ControlSettings.layer, data, false, false, true);
                 this.config.messaging.emitSettings(this.config.ControlSettings.layer, data, false, false, true);
             },
+            layout_close: () => {
+                this.config.messaging.program.closeAll();
+            },
+            layout_control: () => {
+                this.config.messaging.program.closeAll();
+                this.config.messaging.program.openTreeByPath('controls');
+            },
+            layout_display: () => {
+                this.config.messaging.program.closeAll();
+                this.config.messaging.program.openTreeByPath('displays/_general');
+            },
+            layout_source: () => {
+                this.config.messaging.program.closeAll();
+                this.config.messaging.program.openTreeByFolder('source');
+            },
+            layout_source_fullscreen: () => {
+                this.config.messaging.program.closeAll();
+                this.config.messaging.program.openTreeByFolder('source');
+                let control = this.config.messaging.program.guis[2];
+                control.toggleFullscreen();
+            },
+            layout_animation: () => {
+                this.config.messaging.program.closeAll();
+                let control = this.config.messaging.program.guis[3];
+                control.setOpen(true);
+            },
+            layout_animation_fullscreen: () => {
+                this.config.messaging.program.closeAll();
+                let control = this.config.messaging.program.guis[3];
+                control.setOpen(true);
+                control.toggleFullscreen();
+            },
+            layout_sequence: () => {
+                this.config.messaging.program.closeAll();
+                let control = this.config.messaging.program.guis[4];
+                this.config.messaging.program.openAll(control);
+            },
+            layout_sequence_fullscreen: () => {
+                this.config.messaging.program.closeAll();
+                let control = this.config.messaging.program.guis[4];
+                this.config.messaging.program.openAll(control);
+                control.toggleFullscreen();
+            },
+            layout_presets: () => {
+                this.config.messaging.program.closeAll();
+                this.config.messaging.program.toggleByKey(5);
+            },
             debug: false,
             tempo: 120.00,
             beat: true,
@@ -86,7 +133,17 @@ HC.ControlController = HC.ControlController || {};
             tempo: [1, 200, 0.01],
             shuffle_every: [1, 64, 1],
             volume: ['hidden'],
-            debug: ['hidden']
+            debug: ['hidden'],
+            layout_control: ['hidden'],
+            layout_presets: ['hidden'],
+            layout_sequence: ['hidden'],
+            layout_display: ['hidden'],
+            layout_source: ['hidden'],
+            layout_animation: ['hidden'],
+            layout_animation_fullscreen: ['hidden'],
+            layout_sequence_fullscreen: ['hidden'],
+            layout_source_fullscreen: ['hidden'],
+            layout_close: ['hidden'],
         };
 
         styles = {

@@ -46,7 +46,6 @@
         doFirstItemStuff() {
             if (this.getSpeed().starting() && randomBool(4)) {
                 this.currentMode = randomInt(0, this.modeCount-1);
-                console.log(this.currentMode);
             }
             HC.Display.display_visibility[this.modeKeys[this.currentMode]].doFirstItemStuff();
         }

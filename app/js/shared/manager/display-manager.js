@@ -431,20 +431,6 @@
         /**
          *
          */
-        updateMasks() {
-            for (let i = 0; i < this.displays.length; i++) {
-                if (this.displays[i]) {
-                    let display = this.displays[i];
-                    if (display && display.mask) {
-                        display.mask.update();
-                    }
-                }
-            }
-        }
-
-        /**
-         *
-         */
         renderDisplays() {
             let fallback = this.renderer.current();
 
@@ -466,9 +452,6 @@
 
                 }
             }
-            this.config.DisplaySettings.trigger_display_visibility = false;
-            this.config.DisplaySettings.force_display_visibility = false;
-            this.config.DisplaySettings.reset_display_visibility = false;
         }
 
         doDisplayVisibility(display, index) {
@@ -520,16 +503,6 @@
                 speed = this.beatKeeper.getSpeed(displaySpeed);
             }
             return speed;
-        }
-
-        /**
-         *
-         * @param speed
-         * @returns {number}
-         */
-        flashTimeoutInFrames(speed) {
-            let timeout = speed.duration / 2;
-            return Math.round((timeout / this.animation.duration) / 2);
         }
 
     }

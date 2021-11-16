@@ -332,7 +332,7 @@ HC.Controller.prototype.openTreeByProperty = function (property) {
 
     for (let k in roots) {
         let control;
-        if (control = roots[k].findControlByProperty(property)) {
+        if ((control = roots[k].findControlByProperty(property))) {
             this.closeAll(roots[k]);
             let scrollto = control;
             roots[k].setOpen(true);
@@ -355,13 +355,14 @@ HC.Controller.prototype.openTreeByFolder = function (key) {
 
     for (let k in roots) {
         let folder;
-        if (folder = roots[k].findFolderByKey(key)) {
+        if ((folder = roots[k].findFolderByKey(key))) {
             this.closeAll(roots[k]);
+            roots[k].setOpen(true);
             let scrollto = folder;
 
             do {
                 folder.setOpen(true);
-            } while(folder = folder.getParent())
+            } while((folder = folder.getParent()))
 
             this.scrollToControl(scrollto);
         }
@@ -370,8 +371,30 @@ HC.Controller.prototype.openTreeByFolder = function (key) {
 
 /**
  *
+ * @param path
+ * @returns {boolean}
+ */
+HC.Controller.prototype.openTreeByPath = function (path) {
+    let roots = this.guis;
+
+    for (let k in roots) {
+        this.closeAll(roots[k]);
+        let folder = roots[k].openByPath(path);
+        if (folder) {
+            roots[k].setOpen(true);
+            this.scrollToControl(folder);
+            return true;
+        }
+    }
+
+    return false;
+};
+
+/**
+ *
  * @param item
  * @param value
+ * @param tree
  */
 HC.Controller.prototype.explainPlugin = function (item, value, tree) {
 
@@ -417,6 +440,42 @@ HC.Controller.prototype.closeAll = function (control) {
                 child.setOpen(false);
                 result = child;
                 this.closeAll(child);
+            }
+        }
+    }
+
+    return result;
+};
+
+
+/**
+ *
+ * @param control
+ */
+HC.Controller.prototype.openAll = function (control) {
+
+    if (!control) {
+        this.guis.forEach((gui) => {
+            this.openAll(gui);
+        })
+        return;
+    }
+
+    if (control instanceof HC.Guify) {
+        control.setOpen(true);
+
+    } else if (control instanceof HC.GuifyFolder) {
+        control.setOpen(true);
+    }
+
+    let result;
+    if (control.children) {
+        for (let k in control.children) {
+            let child = control.getChild(k);
+            if (child instanceof HC.GuifyFolder) {
+                child.setOpen(true);
+                result = child;
+                this.openAll(child);
             }
         }
     }

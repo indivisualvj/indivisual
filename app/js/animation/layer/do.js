@@ -160,7 +160,8 @@ HC.Layer.prototype.doColoring = function (shape) {
         }
     }
     let color = shape.color;
-    shape.opacity(color.o * this.settings.coloring_opacity);
+    let multiplier = this.settings.material_blending !== 'NoBlending' ? color.o : ((this.settings.coloring_opacity > .99) ? 1 : color.o);
+    shape.opacity(multiplier * this.settings.coloring_opacity);
 
     return proceed;
 };

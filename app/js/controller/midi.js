@@ -113,12 +113,15 @@
                     let name = input.value.name;
                     if (name in this.config.MidiController) {
                         _updateControlSet(input, this.config.MidiController[name]);
-                    }
+                    } else {
+                        // _check for valid ControlSet by MIDI Device manufacturer
+                        name = input.value.manufacturer;
+                        if (name in this.config.MidiController) {
+                            _updateControlSet(input, this.config.MidiController[name]);
 
-                    // _check for valid ControlSet by MIDI Device manufacturer
-                    name = input.value.manufacturer;
-                    if (name in this.config.MidiController) {
-                        _updateControlSet(input, this.config.MidiController[name]);
+                        } else {
+                            _updateControlSet(input, this.config.MidiController['Default']);
+                        }
                     }
 
                     console.log(name, input.value);

@@ -424,9 +424,9 @@ input:focus, select:focus {
 #samples .sample .controls {
     cursor: default;
     z-index: 999;
-    left: 0;
+    left: -1px;
     display: none;
-    top: -88px;
+    top: -89px;
     width: 130px;
     height: 70px;
     padding: 8px;

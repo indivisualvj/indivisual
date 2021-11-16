@@ -7,7 +7,6 @@
      * @type {HC.SourceManager}
      */
     HC.SourceManager = class SourceManager {
-
         /**
          * @type {HC.Animation}
          */
@@ -586,12 +585,11 @@
         }
 
         /**
-         *
+         * This is used for UI only
          * @param i
          * @returns {boolean}
          */
         getSequenceHasParent(i) {
-
             let material = this.config.SourceValues.material_map[this.config.SourceSettings.material_map];
             let key = getSequenceKey(i);
             if (material === key && this.renderer) {

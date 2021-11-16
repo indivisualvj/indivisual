@@ -53,11 +53,6 @@
          */
         counter = 0;
 
-        // /**
-        //  * @type {Array.<OffscreenCanvas>}
-        //  */
-        // frames = [];
-
         /**
          * @type {Array.<ImageBitmap>}
          */
@@ -146,26 +141,18 @@
             let beats = this.config.SourceSettings[getSampleBeatKey(this.index)];
 
             let checkEnabled = this.enabled !== enabled;
-            let checkBeats = this.beats !== beats;
-            // let checkFrames = this.frames.length === 0;
-            // let checkWidth = this.canvas.width !== width;
-            // let checkHeight = this.canvas.height !== height;
-
-            // let needsUpdate = checkBeats || checkFrames;// || checkWidth || checkHeight;
-
             this.enabled = enabled;
-            // this.speed = tempo;
             this.canvas.width = width;
             this.canvas.height = height;
             this.record = record;
             this.beats = beats;
 
             if (!record && checkEnabled && enabled) {
-                this._init(tempo);//, needsUpdate);
+                this._init(tempo);
 
             } else if (!enabled) {
                 this._reset();
-                // this.listener.fireEventId('sample.init.reset', this.id, this);
+
             } else if (record) {
                 if (!this.started) {
                     this.listener.register(EVENT_SOURCE_MANAGER_RENDER, this.id, (data) => {
@@ -210,6 +197,12 @@
             this.complete = false;
             this.counter = 0;
             this._clip = false;
+
+            for (const sample of this.samples) {
+                sample.close();
+            }
+
+            this.samples = [];
         }
 
         /**
@@ -288,31 +281,21 @@
 
                     }
                     if (!sample.complete) {
-                        let target = this.canvas;//sample.frames[sample.pointer];
-                        // if (target && target.ctx) {
-                            let ctx = this.context;//target.ctx;
-                            ctx.drawImage(image, 0, 0);
-                            target = target.transferToImageBitmap();
-                            target._color = color;
-                            target.progress = sample.counter + speed.prc;
-                            target.prc = speed.prc;
+                        let ctx = this.context;
+                        ctx.drawImage(image, 0, 0);
+                        let target = this.canvas.transferToImageBitmap();
+                        target._color = color;
+                        target.progress = sample.counter + speed.prc;
+                        target.prc = speed.prc;
 
-                            sample.samples[sample.pointer] = target;
+                        sample.samples[sample.pointer] = target;
 
-                            sample.pointer++;
-                        // }
+                        sample.pointer++;
                     }
                 }
             } else {
                 this.listener.fireEventId('sample.render.error', sample.id, sample);
             }
-
-        }
-
-        /**
-         *
-         */
-        reset() {
 
         }
 

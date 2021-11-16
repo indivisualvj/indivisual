@@ -4,8 +4,6 @@
 {
     HC.SourceManager.display_source.sequence = class Plugin extends HC.SourceManager.DisplaySourcePlugin {
 
-        // fixme: is not rendered if not display 0 or so?
-
         static index = 10;
 
         /**

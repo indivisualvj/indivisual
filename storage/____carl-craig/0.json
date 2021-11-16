@@ -1,6 +1,6 @@
 {
     "info": {
-        "name": "_demos/sauron.json",
+        "name": "____carl-craig/0.json",
         "version": 1,
         "tutorial": {}
     },
@@ -173,8 +173,8 @@
         "coloring_mode": "growrgb",
         "coloring_volume": 1,
         "coloring_volume_oscillate": "off",
-        "coloring_hue": 0,
-        "coloring_hue_oscillate": "off",
+        "coloring_hue": 360,
+        "coloring_hue_oscillate": "oscillator",
         "coloring_sat": 1,
         "coloring_sat_oscillate": "off",
         "coloring_lum": 0.5,

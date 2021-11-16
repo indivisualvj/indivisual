@@ -125,7 +125,6 @@ HC.Layer.prototype.doMaterialMap = function () {
 
     } else if (seq !== 'none') {
         let plugin = this.getMaterialMapPlugin('sequence');
-        // color = plugin.apply(parseInt(seq));
         color = this.doPlugin(plugin, parseInt(seq));
 
     } else {

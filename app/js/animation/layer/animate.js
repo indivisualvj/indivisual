@@ -39,30 +39,10 @@ HC.Layer.prototype.animateShape = function (shape) {
 
 /**
  *
- * @param hook
  */
-HC.Layer.prototype.animate = function (hook) {
+HC.Layer.prototype.animate = function () {
 
-    if (this.needsReset) {
-        this._fullReset();
-        // return;
-    }
-    if (this.shapesNeedReset) {
-        this._resetShapes();
-        // return;
-    }
-    if (this.shadersNeedUpdate) {
-        this._updateShaderPasses();
-    }
-    if (this.lightingNeedsReset) {
-        this._resetLighting();
-    }
-    if (this.fogNeedsReset) {
-        this._resetFog();
-    }
-    if (this.ambientLightNeedsReset) {
-        this._resetAmbientLight();
-    }
+    this._preAnimate();
 
     this.listener.fireEvent(EVENT_LAYER_ANIMATE);
 
@@ -93,3 +73,27 @@ HC.Layer.prototype.animate = function (hook) {
 
     this.doOscillate(false);
 };
+
+/**
+ *
+ */
+HC.Layer.prototype._preAnimate = function () {
+    if (this.needsReset) {
+        this._fullReset();
+    }
+    if (this.shapesNeedReset) {
+        this._resetShapes();
+    }
+    if (this.shadersNeedUpdate) {
+        this._updateShaderPasses();
+    }
+    if (this.lightingNeedsReset) {
+        this._resetLighting();
+    }
+    if (this.fogNeedsReset) {
+        this._resetFog();
+    }
+    if (this.ambientLightNeedsReset) {
+        this._resetAmbientLight();
+    }
+}

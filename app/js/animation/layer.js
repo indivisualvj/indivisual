@@ -297,6 +297,10 @@
          * @private
          */
         _resetShapes() {
+
+            this.shapesNeedReset = false;
+            this.shapeMaterialsNeedUpdate = false;
+
             this.resetPlugins();
             this.initRotator();
             this.resetAnimation();
@@ -321,7 +325,6 @@
                 this.addShape(shape);
             }
 
-            this.shapesNeedReset = false;
         }
 
         /**

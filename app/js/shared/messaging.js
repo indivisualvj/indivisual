@@ -362,7 +362,7 @@
 
         /**
          *
-         * @param keys
+         * @param key
          * @param data
          */
         emitData(key, data) {

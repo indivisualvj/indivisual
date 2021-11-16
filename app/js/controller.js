@@ -847,7 +847,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         * question push even if monitor is enabled? how do it nicely?
+         * todo: push even if monitor is enabled? how do it nicely?
          */
         syncLayers() {
             for (let layer in this.settingsManager.layers) {
@@ -1022,13 +1022,13 @@ document.addEventListener('DOMContentLoaded', function () {
             let sources = this.config.SourceSettingsManager.prepareFlat();
             let controls = this.config.ControlSettingsManager.prepareFlat();
             let displays = this.config.DisplaySettingsManager.prepareFlat();
-            this.syncLayers();
             this.messaging.emitSources(sources, true, false, true);
             this.messaging.emitControls(controls, true, false, true);
             this.messaging.emitDisplays(displays, true, false, true);
             this.updateSources(sources, true, true, true);
             this.updateControls(controls, true, true, true);
             this.updateDisplays(displays, true, true, true);
+            this.syncLayers();
         }
 
         /**

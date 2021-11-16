@@ -241,16 +241,12 @@ HC.controls = HC.controls || {};
          */
         set(key, value, context) {
             if (key in this.settings) {
-
-                if ('onSet' in this.hooks) {
-                    let alteredValue = this.hooks.onSet(key, value, context, this);
-                    if (alteredValue !== undefined) {
-                        console.log('updated value onSet', value, alteredValue);
-                        value = alteredValue;
-                    }
-                }
-
+                let oldValue = this.properties[key];
                 this.properties[key] = this.validate(key, value)
+
+                if ('onChange' in this.hooks && oldValue !== this.properties[key]) {
+                    this.hooks.onChange(key, value, context, this);
+                }
             }
 
             return this.properties[key];

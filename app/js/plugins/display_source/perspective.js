@@ -48,26 +48,26 @@
          *
          */
         next() {
-
             if (this._last !== this.animation.now) {
                 let key = this.id;
                 let layer = this.animation.renderer.currentLayer;
                 let three = layer.three;
                 let cam = this.animation.renderer.three[key];
-                let lcam = three.camera;
-                cam.position.x = lcam.position.x;
-                cam.position.y = lcam.position.y;
-                cam.position.z = lcam.position.z;
-                cam.rotation.x = lcam.rotation.x;
-                cam.rotation.y = lcam.rotation.y + this.config.DisplaySettings[key + '_angle'] * RAD;
-                cam.rotation.z = lcam.rotation.z;
-                cam.fov = lcam.fov * this.config.DisplaySettings[key + '_fov'];
-                cam.zoom = lcam.zoom * this.config.DisplaySettings[key + '_zoom'];
+                if (cam) {
+                    let lcam = three.camera;
+                    cam.position.x = lcam.position.x;
+                    cam.position.y = lcam.position.y;
+                    cam.position.z = lcam.position.z;
+                    cam.rotation.x = lcam.rotation.x;
+                    cam.rotation.y = lcam.rotation.y + this.config.DisplaySettings[key + '_angle'] * RAD;
+                    cam.rotation.z = lcam.rotation.z;
+                    cam.fov = lcam.fov * this.config.DisplaySettings[key + '_fov'];
+                    cam.zoom = lcam.zoom * this.config.DisplaySettings[key + '_zoom'];
 
-                cam.updateProjectionMatrix();
+                    cam.updateProjectionMatrix();
 
-                this.renderer.render(three.scene, cam);
-
+                    this.renderer.render(three.scene, cam);
+                }
                 this._last = this.animation.now;
             }
         }

@@ -29,10 +29,8 @@
   "directories": {
     "app": "app",
     "bin": "bin",
-    "sessions": "sessions",
-    "storage": "storage",
-    "samples": "samples",
-    "assets": "assets"
+    "home": "~/indivisual",
+    "sessions": "sessions"
   },
 
   "defaults": {

@@ -45,7 +45,7 @@
             return mesh;
         }
 
-        dispose() {
+        reset() {
             this.animation.listener.removeLike(this.id());
         }
     }

@@ -5,6 +5,7 @@
   "main": "server.js",
   "dependencies": {
     "command-line-args": "^5.0.2",
+    "expand-home-dir": "^0.0.3",
     "express": "^4.16.4",
     "js-yaml": "^4.1.0",
     "socket.io": "^2.4.0",

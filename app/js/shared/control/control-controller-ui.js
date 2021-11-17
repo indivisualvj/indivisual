@@ -15,7 +15,7 @@
          * @param that
          */
         onChange(value, that) {
-            messaging.program.updateControl(that.getProperty(), value, false, true, false);
+            messaging.program.updateControl(that.getProperty(), value, true, true, false);
         }
     }
 }

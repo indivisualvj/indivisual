@@ -2,7 +2,7 @@
  *
  * @param plugin
  * @param name
- * @returns {*}
+ * @returns {HC.AnimationPlugin}
  */
 HC.Layer.prototype.getPlugin = function (plugin, name) {
 
@@ -24,7 +24,7 @@ HC.Layer.prototype.getMaterialMapPlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*}
+ * @returns {HC.LightingLookatPlugin}
  */
 HC.Layer.prototype.getLightingLookatPlugin = function (name) {
     return this.getPlugin('lighting_lookat', name);
@@ -33,7 +33,7 @@ HC.Layer.prototype.getLightingLookatPlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*}
+ * @returns {HC.LightingPatternPlugin}
  */
 HC.Layer.prototype.getLightingPatternPlugin = function (name) {
     return this.getPlugin('lighting_pattern', name);
@@ -42,7 +42,7 @@ HC.Layer.prototype.getLightingPatternPlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*}
+ * @returns {HC.LightingTypePlugin}
  */
 HC.Layer.prototype.getLightingTypePlugin = function (name) {
     return this.getPlugin('lighting_type', name);
@@ -51,7 +51,7 @@ HC.Layer.prototype.getLightingTypePlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*}
+ * @returns {HC.ShaderPlugin}
  */
 HC.Layer.prototype.getShaderPlugin = function (name) {
     return this.getPlugin('shaders', name);
@@ -61,7 +61,8 @@ HC.Layer.prototype.getShaderPlugin = function (name) {
  *
  * @param name
  * @param key
- * @returns {*}
+ * @param properties
+ * @returns {HC.ShaderPlugin}
  */
 HC.Layer.prototype.getShaderPassPlugin = function (name, key, properties) {
 
@@ -87,7 +88,7 @@ HC.Layer.prototype.getShaderPassPlugin = function (name, key, properties) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.PatternRotationPlugin}
  */
 HC.Layer.prototype.getPatternRotationPlugin = function (name) {
     return this.getPlugin('pattern_rotation', name);
@@ -96,7 +97,7 @@ HC.Layer.prototype.getPatternRotationPlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.ShapeLookatPlugin}
  */
 HC.Layer.prototype.getShapeLookatPlugin = function (name) {
     return this.getPlugin('shape_lookat', name);
@@ -105,7 +106,7 @@ HC.Layer.prototype.getShapeLookatPlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.BackgroundModePlugin}
  */
 HC.Layer.prototype.getBackgroundModePlugin = function (name) {
     return this.getPlugin('background_mode', name);
@@ -114,7 +115,7 @@ HC.Layer.prototype.getBackgroundModePlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.OffsetModePlugin}
  */
 HC.Layer.prototype.getOffsetModePlugin = function (name) {
     return this.getPlugin('offset_mode', name);
@@ -123,7 +124,7 @@ HC.Layer.prototype.getOffsetModePlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|string|boolean}
+ * @returns {HC.PatternPlugin}
  */
 HC.Layer.prototype.getPatternPlugin = function (name) {
     return this.getPlugin('pattern', name);
@@ -132,7 +133,7 @@ HC.Layer.prototype.getPatternPlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.PatternPlugin}
  */
 HC.Layer.prototype.getPatternOverlayPlugin = function (name) {
     return this.getPlugin('pattern_overlay', name);
@@ -141,7 +142,7 @@ HC.Layer.prototype.getPatternOverlayPlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.RotationOffsetModePlugin}
  */
 HC.Layer.prototype.getRotationOffsetModePlugin = function (name) {
     return this.getPlugin('rotation_offset_mode', name);
@@ -150,7 +151,7 @@ HC.Layer.prototype.getRotationOffsetModePlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.RotationModePlugin}
  */
 HC.Layer.prototype.getRotationModePlugin = function (name) {
     return this.getPlugin('rotation_mode', name);
@@ -159,7 +160,7 @@ HC.Layer.prototype.getRotationModePlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.RotationDirectionPlugin}
  */
 HC.Layer.prototype.getRotationDirectionPlugin = function (name) {
     return this.getPlugin('rotation_direction', name);
@@ -168,7 +169,7 @@ HC.Layer.prototype.getRotationDirectionPlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.PatternMoverPlugin}
  */
 HC.Layer.prototype.getPatternMoverPlugin = function (name) {
     return this.getPlugin('pattern_mover', name);
@@ -177,7 +178,7 @@ HC.Layer.prototype.getPatternMoverPlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.SizingModePlugin}
  */
 HC.Layer.prototype.getSizingModePlugin = function (name) {
     return this.getPlugin('sizing_mode', name);
@@ -186,7 +187,7 @@ HC.Layer.prototype.getSizingModePlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.SizingFlipPlugin}
  */
 HC.Layer.prototype.getSizingFlipPlugin = function (name) {
     return this.getPlugin('sizing_flip', name);
@@ -195,7 +196,7 @@ HC.Layer.prototype.getSizingFlipPlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.ShapeGeometryPlugin}
  */
 HC.Layer.prototype.getShapeGeometryPlugin = function (name) {
     return this.getPlugin('shape_geometry', name);
@@ -204,7 +205,7 @@ HC.Layer.prototype.getShapeGeometryPlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.ShapeTransformPlugin}
  */
 HC.Layer.prototype.getShapeTransformPlugin = function (name) {
     return this.getPlugin('shape_transform', name);
@@ -213,7 +214,7 @@ HC.Layer.prototype.getShapeTransformPlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.ShapeModifierPlugin}
  */
 HC.Layer.prototype.getShapeModifierPlugin = function (name) {
     return this.getPlugin('shape_modifier', name);
@@ -222,7 +223,7 @@ HC.Layer.prototype.getShapeModifierPlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.ShapeRhythmPlugin}
  */
 HC.Layer.prototype.getShapeRhythmPlugin = function (name) {
     return this.getPlugin('shape_rhythm', name);
@@ -231,7 +232,7 @@ HC.Layer.prototype.getShapeRhythmPlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.ShapeDelayPlugin}
  */
 HC.Layer.prototype.getShapeDelayPlugin = function (name) {
     return this.getPlugin('shape_delay', name);
@@ -240,7 +241,7 @@ HC.Layer.prototype.getShapeDelayPlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.ShapePairingPlugin}
  */
 HC.Layer.prototype.getShapePairingPlugin = function (name) {
     return this.getPlugin('shape_pairing', name);
@@ -249,7 +250,7 @@ HC.Layer.prototype.getShapePairingPlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.OscillatePlugin}
  */
 HC.Layer.prototype.getOscillatePlugin = function (name) {
     return this.getPlugin('oscillate', name);
@@ -258,7 +259,7 @@ HC.Layer.prototype.getOscillatePlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.ColoringModePlugin}
  */
 HC.Layer.prototype.getColoringModePlugin = function (name) {
     return this.getPlugin('coloring_mode', name);
@@ -267,7 +268,7 @@ HC.Layer.prototype.getColoringModePlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.FilterModePlugin}
  */
 HC.Layer.prototype.getFilterModePlugin = function (name) {
     return this.getPlugin('filter_mode', name);
@@ -276,7 +277,7 @@ HC.Layer.prototype.getFilterModePlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.MeshMaterialPlugin}
  */
 HC.Layer.prototype.getMeshMaterialPlugin = function (name) {
     return this.getPlugin('mesh_material', name);
@@ -285,7 +286,7 @@ HC.Layer.prototype.getMeshMaterialPlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.MaterialStylePlugin}
  */
 HC.Layer.prototype.getMaterialStylePlugin = function (name) {
     return this.getPlugin('material_style', name);
@@ -294,7 +295,7 @@ HC.Layer.prototype.getMaterialStylePlugin = function (name) {
 /**
  *
  * @param name
- * @returns {*|boolean}
+ * @returns {HC.CameraModePlugin}
  */
 HC.Layer.prototype.getCameraModePlugin = function (name) {
     return this.getPlugin('camera_mode', name);
@@ -379,16 +380,6 @@ HC.Layer.prototype._reloadPlugins = function () {
 
                 if (plug.reset) {
                     plug.reset();
-                }
-
-                if (plug instanceof HC.ShaderPlugin) {
-                    console.log('no more avoid dispose shader plugins? what will happen?');
-                //     // no reset of ShaderPlugins
-                //     continue;
-                }
-                if (plug.dispose) {
-                    // this was created for ShaderPlugins, but no good disposing these...
-                    plug.dispose();
                 }
             }
             let instance = this.loadPlugin(plugin, key);

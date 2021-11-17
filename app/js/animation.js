@@ -603,10 +603,14 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (value) {
                             if (this.renderer) {
                                 if (force) {
+                                    console.log('full reset');
+                                    assetman.disposeAll();
                                     this.beatKeeper.reset();
                                     this.fullReset(false);
 
                                 } else {
+                                    console.log('layer reset');
+                                    assetman.disposeAll();
                                     this.renderer.resetLayer(this.renderer.currentLayer);
                                 }
                             }

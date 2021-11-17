@@ -2,10 +2,15 @@ node_modules
 bin
 sessions
 samples
+storage/*
+!storage/__setup
+!storage/_demos
+!storage/_tutorials
+!storage/space-oddity
+!storage/ambient
 storage/*/\.*
 
 .idea
 .settings
 .project
-
 /yarn-error.log

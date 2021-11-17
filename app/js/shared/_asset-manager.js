@@ -337,7 +337,9 @@
             this.progress = [];
             this.textures = [];
 
-            THREE.Cache.clear();
+            if (IS_ANIMATION) {
+                THREE.Cache.clear();
+            }
         }
 
         /**

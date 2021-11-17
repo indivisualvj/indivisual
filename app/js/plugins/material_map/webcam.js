@@ -22,21 +22,25 @@
 
         initTexture() {
             let that = this;
-            navigator.getUserMedia({video: true}).then(function (stream) {
-                    let video = document.createElement("video");
-                    Object.assign(video, {
-                        srcObject: stream,
-                        autoplay: true
-                    });
+            try {
+                navigator.mediaDevices.getUserMedia({video: true}).then(function (stream) {
+                        let video = document.createElement("video");
+                        Object.assign(video, {
+                            srcObject: stream,
+                            autoplay: true
+                        });
 
-                    let videoTexture = new THREE.VideoTexture(video);
-                    videoTexture.minFilter = THREE.LinearFilter;
-                    that.properties.map = videoTexture;
-                    that.properties.emissiveMap = videoTexture;
-                }
-            ).catch(function (error) {
-                console.error(error);
-            });
+                        let videoTexture = new THREE.VideoTexture(video);
+                        videoTexture.minFilter = THREE.LinearFilter;
+                        that.properties.map = videoTexture;
+                        that.properties.emissiveMap = videoTexture;
+                    }
+                ).catch(function (error) {
+                    console.error(error);
+                });
+            } catch (ex) {
+                console.log(ex);
+            }
         }
     }
 }

@@ -34,7 +34,7 @@
                     this.points[i] = p;
 
                     this.geometry = new THREE.CircleGeometry(this.layer.shapeSize(.125/2), 12);
-                    this.material = materialman.addMaterial(new THREE.MeshPhongMaterial({emissive: 0xffffff}));
+                    this.material = new THREE.MeshPhongMaterial({emissive: 0xffffff});
                     let m = new THREE.Mesh(this.geometry, this.material);
                     this.layer._shapes.add(m);
                     m.position.copy(p);

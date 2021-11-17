@@ -40,7 +40,7 @@
 
             this.cameras.add(cubecam);
 
-            this.material = materialman.addMaterial(new THREE.MeshPhysicalMaterial({envMap: cubeRenderTarget.texture}));
+            this.material = new THREE.MeshPhysicalMaterial({envMap: cubeRenderTarget.texture});
             let mesh = new THREE.Mesh(geometry, this.material);
             mesh.name = this.id(index);
 

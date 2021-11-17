@@ -15,10 +15,10 @@
                 let geo = new THREE.BoxBufferGeometry(res.x, res.y, res.x);
                 this.geometry = geo;
 
-                let mat = materialman.addMaterial(new THREE.MeshPhysicalMaterial({
+                let mat = new THREE.MeshPhysicalMaterial({
                     color: color,
                     side: THREE.DoubleSide
-                }));
+                });
                 this.material = mat;
 
                 let mesh = new THREE.Mesh(geo, mat);

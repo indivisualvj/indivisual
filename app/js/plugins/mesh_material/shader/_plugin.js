@@ -9,7 +9,7 @@
 
         apply(geometry, index) {
             this.active = true;
-            let material = materialman.addMaterial(new THREE.ShaderMaterial(this.shader));
+            let material = new THREE.ShaderMaterial(this.shader);
             material.color = new THREE.Color();
             this.material = material;
 

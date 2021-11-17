@@ -4,7 +4,7 @@
         // static name = 'line (no transform)';
 
         apply(geometry) {
-            let material = materialman.addMaterial(new THREE.LineBasicMaterial());
+            let material = new THREE.LineBasicMaterial();
             this.material = material;
             let edges = new THREE.EdgesGeometry(geometry);
             this.geometry = edges;

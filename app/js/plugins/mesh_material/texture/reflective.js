@@ -14,7 +14,7 @@
 
             let inst = this;
             let file = this.settings.background_input;
-            this.material = materialman.addMaterial(new THREE.MeshPhysicalMaterial({envMap: null}));
+            this.material = new THREE.MeshPhysicalMaterial({envMap: null});
             let mesh = new THREE.Mesh(geometry, this.material);
             mesh.name = this.id(index);
 

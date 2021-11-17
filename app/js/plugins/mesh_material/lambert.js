@@ -3,7 +3,7 @@
         static index = 2;
 
         apply(geometry) {
-            this.material = materialman.addMaterial(new THREE.MeshLambertMaterial());
+            this.material = new THREE.MeshLambertMaterial();
             return new THREE.Mesh(geometry, this.material);
         }
     }

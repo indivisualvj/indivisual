@@ -16,10 +16,10 @@
                 geo.rotateY(Math.PI / 2);
                 this.geometry = geo;
 
-                this.material = materialman.addMaterial(new THREE.MeshPhysicalMaterial({
+                this.material = new THREE.MeshPhysicalMaterial({
                     color: color,
                     side: THREE.DoubleSide
-                }));
+                });
 
                 let mesh = new THREE.Mesh(geo, this.material);
                 mesh.receiveShadow = true;

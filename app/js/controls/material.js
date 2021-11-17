@@ -11,8 +11,20 @@
         static index = 110;
 
         hooks = {
-            onSet: () => {
-                this.properties.material_needs_update = true;
+            onChange: (key, value, context, that) => {
+                if (context !== undefined) {
+                    let id = isObject(context) ? context.index : context;
+                    switch (key) {
+                        case 'mesh_material':
+                        case 'material_mapping':
+                            messaging.program.listener.fireEventId(EVENT_LAYER_RESET_SHAPES, id, context);
+                            break;
+
+                        default:
+                            messaging.program.listener.fireEventId(EVENT_SHAPE_MATERIALS_UPDATE, id, context);
+                            break;
+                    }
+                }
             }
         };
 
@@ -40,12 +52,10 @@
             material_offsety: 0.0,
             material_centerx: .5,
             material_centery: .5,
-            material_rotation: 0.0,
-            material_needs_update: false
+            material_rotation: 0.0
         };
         
         types = {
-            material_needs_update: ['hidden'],
             material_blendequation: ['hidden'],
             material_blendsrc: ['hidden'],
             material_blenddst: ['hidden'],

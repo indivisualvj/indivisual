@@ -48,17 +48,66 @@
          * @type {boolean}
          */
         preset = false;
+
         settings = false;
 
         /**
          * @type {Object.<string, HC.ControlSet>}
          */
         controlSets;
+
         lights = false;
+
         ambientLight = false;
+
         shapes = false;
+
         shape = false;
+
         materialColor;
+
+        /**
+         *
+         * @type {boolean}
+         */
+        needsReset = false;
+
+        /**
+         *
+         * @type {boolean}
+         */
+        shapesNeedReset = false;
+
+        /**
+         *
+         * @type {boolean}
+         */
+        lightingNeedsReset = false;
+
+        /**
+         *
+         * @type {boolean}
+         */
+        ambientNeedsReset = false;
+
+        /**
+         *
+         * @type {boolean}
+         */
+        fogNeedsReset = false;
+
+
+        /**
+         *
+         * @type {boolean}
+         */
+        shadersNeedUpdate = false;
+
+        /**
+         *
+         * @type {boolean}
+         */
+        shapeMaterialsNeedUpdate = false;
 
         /**
          *
@@ -78,8 +127,11 @@
          * @private
          */
         _rotation;
+
         _shapes = false;
+
         _lighting = false;
+
         _background = false;
 
         /**
@@ -130,13 +182,37 @@
                 composer: composer,
             };
 
-            this.resetSizes(renderer.resolution);
+            this._resetSizes(renderer.resolution);
+
+            this.listener.register(EVENT_LAYER_RESET, this.index, () => {
+                console.log(EVENT_LAYER_RESET, this.index);
+                this.needsReset = true;
+            });
+            this.listener.register(EVENT_SHAPE_MATERIALS_UPDATE, this.index, () => {
+                this.shapeMaterialsNeedUpdate = true;
+            });
+            this.listener.register(EVENT_LAYER_RESET_SHAPES, this.index, () => {
+                this.shapesNeedReset = true;
+            });
+            this.listener.register(EVENT_LAYER_RESET_LIGHTING, this.index, () => {
+                this.lightingNeedsReset = true;
+            });
+            this.listener.register(EVENT_LAYER_RESET_AMBIENT, this.index, () => {
+                this.ambientNeedsReset = true;
+            });
+            this.listener.register(EVENT_LAYER_RESET_FOG, this.index, () => {
+                this.fogNeedsReset = true;
+            });
+            this.listener.register(EVENT_LAYER_UPDATE_SHADERS, this.index, () => {
+                this.shadersNeedUpdate = true;
+            });
         }
 
         /**
          *
+         * @private
          */
-        initRotator() {
+        _initRotator() {
             if (this._rotation) {
                 this._layer.remove(this._rotation);
                 this._rotation.traverse(threeDispose);
@@ -157,8 +233,9 @@
         /**
          *
          * @param resolution
+         * @private
          */
-        initBoundaries(resolution) {
+        _initBoundaries(resolution) {
 
             let width = resolution.x;
             let height = resolution.y;
@@ -190,24 +267,28 @@
 
         /**
          *
+         * @private
          */
-        fullReset() {
-            this.reloadPlugins();
-            this.resetShapes();
-            this.resetLighting();
-            this.resetBackground();
-            this.updateShaders();
-            this.updateShaderPasses();
+        _fullReset() {
+            this.needsReset = false;
+            this.shapeMaterialsNeedUpdate = false;
 
+            this._reloadPlugins();
+            this._resetShapes();
+            this._resetLighting();
+            this._resetBackground();
+            this._updateShaders();
+            this._updateShaderPasses();
         }
 
         /**
          *
          * @param resolution
+         * @private
          */
-        resetSizes(resolution) {
+        _resetSizes(resolution) {
 
-            this.initBoundaries(resolution);
+            this._initBoundaries(resolution);
 
             if (this.three.composer) {
                 this.three.composer.setSize(this.resolution().x, this.resolution().y);
@@ -216,11 +297,16 @@
 
         /**
          *
+         * @private
          */
-        resetShapes() {
+        _resetShapes() {
+
+            this.shapesNeedReset = false;
+            this.shapeMaterialsNeedUpdate = false;
+
             this.resetPlugins();
-            this.initRotator();
-            this.resetAnimation();
+            this._initRotator();
+            this._resetAnimation();
 
             let sgp = this.getShapeGeometryPlugin();
             if (sgp)sgp.reset();
@@ -241,12 +327,14 @@
 
                 this.addShape(shape);
             }
+
         }
 
         /**
          *
+         * @private
          */
-        dispose() {
+        _dispose() {
             let sc = this.three.scene;
             this.settings = false;
             this.controlSets = false;
@@ -260,16 +348,12 @@
             this._rotation = false;
             this._shapes = false;
 
-            if (sc.background && sc.background.dispose) {
-                sc.background.dispose();
-            }
-
             if (this.shape) {
                 this.shape.sceneObject().traverse(threeDispose);
                 this.shape = false;
             }
 
-            this.resetAnimation();
+            this._resetAnimation();
         }
 
         /**
@@ -282,20 +366,21 @@
 
         /**
          *
+         * @private
          */
-        resetAnimation() {
+        _resetAnimation() {
             if (this.tween) {
                 this.tween.removeAll();
             }
             this.lastUpdate = 0;
-            // this.tween = new TWEEN.Group();
         }
 
         /**
          *
-         * @returns {null|Array}
+         * @returns {null|[]}
+         * @private
          */
-        updateShaders() {
+        _updateShaders() {
             let shaders = null;
             let li = 0;
 
@@ -343,33 +428,33 @@
 
         /**
          *
-         * @returns {null|Array}
+         * @returns {null|[]}
+         * @private
          */
-        updateShaderPasses() {
+        _updateShaderPasses() {
+            this.shadersNeedUpdate = false;
+
             let shaders = null;
-            // if (this.animation.settingsManager)
-            {
-                let passes = this.animation.settingsManager.get(this.index, 'passes');
-                let shds = passes.getShaderPasses();
+            let passes = this.animation.settingsManager.get(this.index, 'passes');
+            let shds = passes.getShaderPasses();
 
-                for (let index in shds) {
+            for (let index in shds) {
 
-                    let shader = passes.getShader(index);
+                let shader = passes.getShader(index);
 
-                    if (shader && shader.apply) {
-                        let name = passes.getShaderName(index);
-                        let key = passes.getShaderPassKey(index);
-                        let plugin = this.getShaderPassPlugin(name, key, shader);
-                        if (plugin) {
-                            plugin.create();
-                            plugin.updateResolution();
+                if (shader && shader.apply) {
+                    let name = passes.getShaderName(index);
+                    let key = passes.getShaderPassKey(index);
+                    let plugin = this.getShaderPassPlugin(name, key, shader);
+                    if (plugin) {
+                        plugin.create();
+                        plugin.updateResolution();
 
-                            if (!shaders) {
-                                shaders = [];
-                            }
-
-                            shaders.push(plugin);
+                        if (!shaders) {
+                            shaders = [];
                         }
+
+                        shaders.push(plugin);
                     }
                 }
             }

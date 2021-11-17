@@ -42,31 +42,78 @@ HC.ControlController = HC.ControlController || {};
 
             reset: () => {
 
-                if (messaging.program.config.shiftKey && messaging.program.config.ctrlKey) {
+                if (this.config.messaging.program.config.shiftKey && this.config.messaging.program.config.ctrlKey) {
                     let yes = confirm('Reset everything?');
                     if (yes) {
-                        messaging.program.fullReset();
+                        this.config.messaging.program.fullReset();
                     }
-                } else if (messaging.program.config.shiftKey) {
-                    messaging.program.resetLayers();
+                } else if (this.config.messaging.program.config.shiftKey) {
+                    this.config.messaging.program.resetLayers();
 
                 } else {
-                    messaging.program.updateControl('reset', true, true, true, false);
+                    this.config.messaging.program.updateControl('reset', true, true, true, false);
                 }
             },
 
             monitor: false,
             push_layers: () => {
-                messaging.program.syncLayers();
+                this.config.messaging.program.syncLayers();
             },
             push_sources: () => {
-                messaging.program.pushSources();
+                this.config.messaging.program.pushSources();
             },
             rst_shaders: () => {
-                messaging.program.settingsManager.update(this.config.ControlSettings.layer, 'passes', 'shaders', []);
-                let data = messaging.program.settingsManager.get(this.config.ControlSettings.layer, 'passes').prepare();
-                messaging.program.updateSettings(this.config.ControlSettings.layer, data, false, false, true);
-                messaging.emitSettings(this.config.ControlSettings.layer, data, false, false, true);
+                this.config.messaging.program.settingsManager.update(this.config.ControlSettings.layer, 'passes', 'shaders', []);
+                let data = this.config.messaging.program.settingsManager.get(this.config.ControlSettings.layer, 'passes').prepare();
+                this.config.messaging.program.updateSettings(this.config.ControlSettings.layer, data, false, false, true);
+                this.config.messaging.emitSettings(this.config.ControlSettings.layer, data, false, false, true);
+            },
+            layout_close: () => {
+                this.config.messaging.program.closeAll();
+            },
+            layout_control: () => {
+                this.config.messaging.program.closeAll();
+                this.config.messaging.program.openTreeByPath('controls');
+            },
+            layout_display: () => {
+                this.config.messaging.program.closeAll();
+                this.config.messaging.program.openTreeByPath('displays/_general');
+            },
+            layout_source: () => {
+                this.config.messaging.program.closeAll();
+                this.config.messaging.program.openTreeByFolder('source');
+            },
+            layout_source_fullscreen: () => {
+                this.config.messaging.program.closeAll();
+                this.config.messaging.program.openTreeByFolder('source');
+                let control = this.config.messaging.program.guis[2];
+                control.toggleFullscreen();
+            },
+            layout_animation: () => {
+                this.config.messaging.program.closeAll();
+                let control = this.config.messaging.program.guis[3];
+                control.setOpen(true);
+            },
+            layout_animation_fullscreen: () => {
+                this.config.messaging.program.closeAll();
+                let control = this.config.messaging.program.guis[3];
+                control.setOpen(true);
+                control.toggleFullscreen();
+            },
+            layout_sequence: () => {
+                this.config.messaging.program.closeAll();
+                let control = this.config.messaging.program.guis[4];
+                this.config.messaging.program.openAll(control);
+            },
+            layout_sequence_fullscreen: () => {
+                this.config.messaging.program.closeAll();
+                let control = this.config.messaging.program.guis[4];
+                this.config.messaging.program.openAll(control);
+                control.toggleFullscreen();
+            },
+            layout_presets: () => {
+                this.config.messaging.program.closeAll();
+                this.config.messaging.program.toggleByKey(5);
             },
             debug: false,
             tempo: 120.00,
@@ -86,7 +133,17 @@ HC.ControlController = HC.ControlController || {};
             tempo: [1, 200, 0.01],
             shuffle_every: [1, 64, 1],
             volume: ['hidden'],
-            debug: ['hidden']
+            debug: ['hidden'],
+            layout_control: ['hidden'],
+            layout_presets: ['hidden'],
+            layout_sequence: ['hidden'],
+            layout_display: ['hidden'],
+            layout_source: ['hidden'],
+            layout_animation: ['hidden'],
+            layout_animation_fullscreen: ['hidden'],
+            layout_sequence_fullscreen: ['hidden'],
+            layout_source_fullscreen: ['hidden'],
+            layout_close: ['hidden'],
         };
 
         styles = {
@@ -122,13 +179,13 @@ HC.ControlController = HC.ControlController || {};
 
         events = {
             play: (inst) => { return new HC.KeyEvent('keyup', [32], (e) => {
-                messaging.program.updateControl('play', !this.config.ControlSettings.play, true, true, false);
+                this.config.messaging.program.updateControl('play', !this.config.ControlSettings.play, true, true, false);
             }, 'spc')},
             reset: (inst) => { return new HC.KeyEvent('keyup', [46], (e) => {
                 inst.settings.reset();
             }, 'del')},
             monitor: (inst) => { return new HC.KeyEvent('keyup', [36], (e) => {
-                messaging.program.updateControl('monitor', !this.config.ControlSettings.monitor, true, true, false);
+                this.config.messaging.program.updateControl('monitor', !this.config.ControlSettings.monitor, true, true, false);
             }, 'hm')},
             push_layers: (inst) => { return new HC.KeyEvent('keyup', [35], (e) => {
                 inst.settings.push_layers();

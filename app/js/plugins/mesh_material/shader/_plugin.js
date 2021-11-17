@@ -3,7 +3,7 @@
  */
 {
     HC.MeshShaderMaterialPlugin = class MeshShaderMaterialPlugin extends HC.MeshMaterialPlugin {
-
+// todo add opacity to all shader based materials
         static index = 99;
         active = false;
 
@@ -11,8 +11,11 @@
             this.active = true;
             let material = new THREE.ShaderMaterial(this.shader);
             material.color = new THREE.Color();
+            this.material = material;
 
-            let mesh = new THREE.Mesh(geometry, material);
+            let mesh = new THREE.Mesh(geometry, this.material);
+            this.mesh = mesh;
+
             mesh.onBeforeRender = () => {
                 if (this.layer.isVisible() && material.uniforms) {
                     if (material.uniforms.uTime) {
@@ -26,6 +29,9 @@
                     if (material.uniforms.audio) {
                         material.uniforms.audio.value = this.audioAnalyser.getFrequencyRangeValues();
                     }
+                    if (material.uniforms.opacity) {
+                        material.uniforms.opacity.value = material.opacity;
+                    }
                 }
 
             };
@@ -34,6 +40,7 @@
         }
 
         reset() {
+            threeTraverse(this);
         }
     }
 }

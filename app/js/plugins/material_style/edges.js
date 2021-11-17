@@ -23,10 +23,10 @@
 
                 let inst = this;
                 this.animation.listener.register('animation.updateSetting', this.id(shape.index), function (data) {
-                    if (inst.layer == data.layer) {
+                    if (inst.layer === data.layer) {
                         switch (data.item) {
                             case inst.tree:
-                                if (data.value != inst.key && params.original) {
+                                if (data.value !== inst.key && params.original) {
                                     inst.active[shape.index] = false;
                                     params.mesh = false;
                                     shape.setMesh(params.original);
@@ -75,10 +75,10 @@
 
                 let inst = this;
                 this.animation.listener.register('animation.updateSetting', this.id(shape.index), function (data) {
-                    if (inst.layer == data.layer) {
+                    if (inst.layer === data.layer) {
                         switch (data.item) {
                             case inst.tree:
-                                if (data.value != inst.key && params.states) {
+                                if (data.value !== inst.key && params.states) {
                                     inst.active[shape.index] = false;
                                     shape.setMesh(params.states[0]);
                                     params.states = false;

@@ -6,7 +6,6 @@
  */
 function getSequenceKey(i) {
     if (isString(i)) {
-        console.log('getSequenceKey', i);
         return i;
     }
 
@@ -19,7 +18,6 @@ function getSequenceKey(i) {
  * @returns {string}
  */
 function getSampleKey(i) {
-    //return i;
     return 'sample' + i;
 }
 

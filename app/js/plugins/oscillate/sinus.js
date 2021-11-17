@@ -96,7 +96,6 @@
         static index = 40;
 
         apply(key) {
-            let layer = this.layer;
             let speed = this.beatKeeper.getSpeed('64');
             return this.activate(key, HC.Osci.sinus(speed.prc));
         }
@@ -106,9 +105,24 @@
     HC.plugins.oscillate.oscillator = class Plugin extends HC.OscillatePlugin {
         static name = 'oscillator';
         static index = 40;
+        osci = {
+            osci1_period: 1,
+            osci1_amp: 1,
+            osci2_period: 0,
+            osci2_amp: 0,
+            osci3_period: 0,
+            osci3_amp: 0,
+            rhythm: 'half',
+        };
 
         apply(key) {
-            return this.activate(key, HC.Osci.wobble(this.beatKeeper, 0, this.settings));
+            for (const osciKey in this.osci) {
+                if (osciKey !== 'tempo') {
+                    this.osci[osciKey] = this.settings[osciKey];
+                }
+            }
+            this.osci.tempo = this.config.ControlSettings.tempo;
+            return this.activate(key, HC.Osci.wobble(this.beatKeeper, 0, this.osci));
         }
     }
 }
@@ -123,10 +137,12 @@
             osci2_amp: 0,
             osci3_period: 0,
             osci3_amp: 0,
-            rhythm: 'half'
+            rhythm: 'half',
+            tempo: 120,
         };
 
         apply(key) {
+            this.osci.tempo = this.config.ControlSettings.tempo;
             this.osci.osci1_period = this.settings.osci1_period;
             this.osci.rhythm = this.settings.rhythm;
             return this.activate(key, HC.Osci.wobble(this.beatKeeper, 0, this.osci));
@@ -145,10 +161,12 @@
             osci2_amp: 1,
             osci3_period: 0,
             osci3_amp: 0,
-            rhythm: 'half'
+            rhythm: 'half',
+            tempo: 120,
         };
 
         apply(key) {
+            this.osci.tempo = this.config.ControlSettings.tempo;
             this.osci.osci2_period = this.settings.osci2_period;
             this.osci.rhythm = this.settings.rhythm;
             return this.activate(key, HC.Osci.wobble(this.beatKeeper, 0, this.osci));
@@ -167,10 +185,12 @@
                 osci2_amp: 0,
                 osci3_period: 1,
                 osci3_amp: 1,
-                rhythm: 'half'
+                rhythm: 'half',
+                tempo: 120,
             };
 
             apply(key) {
+                this.osci.tempo = this.config.ControlSettings.tempo;
                 this.osci.osci3_period = this.settings.osci3_period;
                 this.osci.rhythm = this.settings.rhythm;
                 return this.activate(key, HC.Osci.wobble(this.beatKeeper, 0, this.osci));

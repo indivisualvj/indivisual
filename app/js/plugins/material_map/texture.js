@@ -5,7 +5,7 @@
     HC.plugins.material_map.texture = class Plugin extends HC.MaterialMapPlugin {
 
         file;
-        loading;
+        loading = undefined;
 
         properties = {
             map: null,
@@ -48,9 +48,6 @@
                     }, this.reset);
 
                 }
-                // else {
-                //     this.reset();
-                // }
             }
 
             return '';

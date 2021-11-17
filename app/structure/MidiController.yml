@@ -6,7 +6,6 @@
 
 "Arturia BeatStep MIDI 1": &ArturiaBeatStep
   constants:
-    MIDI_CLOCK_NEXT: [248, 251]
     MIDI_ROW_ONE:
       "0": [176, 16]
       "1": [176, 17]
@@ -29,122 +28,6 @@
     MIDI_PEAKBPM_FEEDBACK: [176, 23]
     MIDI_BEAT_FEEDBACK: [176, 30]
     MIDI_PEAK_FEEDBACK: [176, 31]
-
-  # # # # # # # # # # # # # # # # # # # #
-  #
-  # sequencer
-  #
-  # # # # # # # # # # # # # # # # # # # #
-
-  128:
-    80:
-      default:
-        type: 'off'
-      sequence:
-        type: 'off'
-      overlay:
-        type: 'off'
-      sample:
-        type: 'off'
-
-    83:
-      default:
-        type: 'off'
-      sequence:
-        type: 'off'
-      overlay:
-        type: 'off'
-      sample:
-        type: 'off'
-
-    84:
-      default:
-        type: 'off'
-      sequence:
-        type: 'off'
-      overlay:
-        type: 'off'
-      sample:
-        type: 'off'
-
-  144:
-    80:
-      default:
-        type: boolean
-        section: Display
-        name: reset_display_visibility
-        options:
-          silent: true
-      sequence:
-        type: boolean
-        section: Display
-        name: reset_display_visibility
-        options:
-          silent: true
-      overlay:
-        type: boolean
-        section: Display
-        name: reset_display_visibility
-        options:
-          silent: true
-      sample:
-        type: boolean
-        section: Display
-        name: reset_display_visibility
-        options:
-          silent: true
-
-    83:
-      default:
-        type: boolean
-        section: Display
-        name: trigger_display_visibility
-        options:
-          silent: true
-      sequence:
-        type: boolean
-        section: Display
-        name: trigger_display_visibility
-        options:
-          silent: true
-      overlay:
-        type: boolean
-        section: Display
-        name: trigger_display_visibility
-        options:
-          silent: true
-      sample:
-        type: boolean
-        section: Display
-        name: trigger_display_visibility
-        options:
-          silent: true
-
-    84:
-      default:
-        type: boolean
-        section: Display
-        name: force_display_visibility
-        options:
-          silent: true
-      sequence:
-        type: boolean
-        section: Display
-        name: force_display_visibility
-        options:
-          silent: true
-      overlay:
-        type: boolean
-        section: Display
-        name: force_display_visibility
-        options:
-          silent: true
-      sample:
-        type: boolean
-        section: Display
-        name: force_display_visibility
-        options:
-          silent: true
 
   # # # # # # # # # # # # # # # # # # # #
   #
@@ -450,6 +333,11 @@
         type: function
         section: Source
         name: g0animation
+      layout:
+        type: function
+        section: Control
+        name: layout_control
+
     17:
       default:
         type: shift
@@ -469,6 +357,10 @@
         type: function
         section: Source
         name: g0sequence
+      layout:
+        type: function
+        section: Control
+        name: layout_display
     18:
       default:
         type: shift
@@ -488,6 +380,10 @@
         type: function
         section: Source
         name: g0perspective
+      layout:
+        type: function
+        section: Control
+        name: layout_source
 
     19:
       default:
@@ -508,6 +404,11 @@
         type: function
         section: Source
         name: g0black
+      layout:
+        type: function
+        section: Control
+        name: layout_animation
+
 
     20:
       default:
@@ -528,6 +429,10 @@
         type: function
         section: Source
         name: g0offline
+      layout:
+        type: function
+        section: Control
+        name: layout_sequence
 
     21:
   #    default:
@@ -543,6 +448,11 @@
         type: toggle
         section: Source
         name: sample5_enabled
+      layout:
+        type: function
+        section: Control
+        name: layout_presets
+
     22:
       default:
         type: status
@@ -618,6 +528,10 @@
         type: function
         section: Source
         name: g1perspective
+      layout:
+        type: function
+        section: Control
+        name: layout_source_fullscreen
 
     27:
       default:
@@ -638,6 +552,10 @@
         type: function
         section: Source
         name: g1black
+      layout:
+        type: function
+        section: Control
+        name: layout_animation_fullscreen
 
     28:
       default:
@@ -658,6 +576,10 @@
         type: function
         section: Source
         name: g1offline
+      layout:
+        type: function
+        section: Control
+        name: layout_sequence_fullscreen
 
     29:
       default:
@@ -679,12 +601,13 @@
         type: toggle
         section: Source
         name: sample5_record
+      layout:
+        type: function
+        section: Control
+        name: layout_close
 
     30:
-      default:
-        type: function
-        section: Display
-        name: force_display_visibility
+#      default: ~
       sequence:
         type: function
         section: Source
@@ -696,9 +619,10 @@
 
     31:
       default:
-        type: function
-        section: Display
-        name: reset_display_visibility
+        type: shift
+        shift: layout
+        section: Control
+        name: layout
 
   #  102:
   #    default:
@@ -706,6 +630,6 @@
   #      section: Control
   #      name: beat
 
-
 Default: *ArturiaBeatStep
 Arturia: *ArturiaBeatStep
+"Arturia BeatStep": *ArturiaBeatStep

@@ -13,11 +13,14 @@
                 let res = this.layer.resolution().clone();
                 res.multiplyScalar(2.5);
                 let geo = new THREE.BoxBufferGeometry(res.x, res.y, res.x);
+                this.geometry = geo;
 
-                let mat = materialman.addMaterial(new THREE.MeshPhysicalMaterial({
+                let mat = new THREE.MeshPhysicalMaterial({
                     color: color,
                     side: THREE.DoubleSide
-                }));
+                });
+                this.material = mat;
+
                 let mesh = new THREE.Mesh(geo, mat);
                 mesh.scale.multiplyScalar(this.settings.background_volume);
                 mesh.scale.x *= -1;
@@ -29,9 +32,6 @@
                 let file = assetman.getImage(this.settings.background_input);
                 if (file) {
                     assetman.loadMaterialMap(mat, filePath(IMAGE_DIR, file), function (mat) {
-                        // tex.wrapS = THREE.RepeatWrapping;
-                        // tex.repeat.x = -1;
-
                         if (!mat.emissiveMap) {
                             mat.emissiveMap = mat.map;
                         }

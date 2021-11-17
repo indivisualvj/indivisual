@@ -32,7 +32,8 @@
                 osci2_amp: 1,
                 osci3_period: 0.01,
                 osci3_amp: 1,
-                rhythm: 'half'
+                rhythm: 'half',
+                tempo: this.config.ControlSettings.tempo
             };
 
             let reduce = params.multiplier > 0;

@@ -42,7 +42,7 @@
 
         start() {
             if (this.source) {
-                this.source.connect(this.context.destination);
+                this.source.connect(this.manager.initContext().destination);
                 this.source.buffer = this.buffer;
                 this.source.loop = true;
                 this.source.start(0.0);
@@ -63,15 +63,15 @@
         onLoaded(data, callback) {
             let inst = this;
 
-            if (this.context.decodeAudioData) {
-                this.context.decodeAudioData(
+            if (this.getContext()().decodeAudioData) {
+                this.getContext()().decodeAudioData(
                     data,
-                    function (buffer) {
-                        inst.source = inst.context.createBufferSource();
-                        inst.buffer = buffer;
+                    (buffer) => {
+                        this.source = this.getContext()().createBufferSource();
+                        this.buffer = buffer;
 
                         if (callback) {
-                            callback(inst.source);
+                            callback(this.source);
                         }
                     },
                     function (e) {
@@ -79,8 +79,8 @@
                     }
                 );
             } else {
-                this.source = inst.context.createBufferSource();
-                this.buffer = inst.context.createBuffer(data, false);
+                this.source = this.getContext().createBufferSource();
+                this.buffer = this.getContext().createBuffer(data, false);
                 if (callback) {
                     callback(this.source);
                 }

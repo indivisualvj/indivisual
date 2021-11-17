@@ -20,13 +20,9 @@ HC.Shape.prototype.initPlugins = function () {
             let key = plugins[p];
             let plugin = HC.Shape.prototype.injected.plugins[key];
             HC.Shape.prototype._plugins[key] = clone(plugin);
-            // HC.Shape.prototype._plugins[key] = Object.assign({}, plugin);
-            // HC.Shape.prototype._plugins[key] = JSON.copy(plugin);
         }
     }
     this.plugins = clone(HC.Shape.prototype._plugins);
-    // this.plugins = Object.assign({}, HC.Shape.prototype._plugins);
-    // this.plugins = JSON.copy(HC.Shape.prototype._plugins);
 };
 {
     /**
@@ -59,9 +55,13 @@ HC.Shape.prototype.initPlugins = function () {
          * @type {HC.Layer}
          */
         layer;
+
         settings;
+
         controlSets;
+
         tree;
+
         key;
         
         id(suffix) {
@@ -212,14 +212,14 @@ HC.Shape.prototype.initPlugins = function () {
          */
         updateTexture(texture, prefix) {
             let wraps = THREE[this.settings[prefix + '_wraps']];
-            if (texture.wrapS != wraps) { // todo controlsets last change instead!?
+            if (texture.wrapS !== wraps) {
                 texture.wrapS = wraps;
                 if (texture.image) {
                     texture.needsUpdate = true;
                 }
             }
             let wrapt = THREE[this.settings[prefix + '_wrapt']];
-            if (texture.wrapT != wrapt) {
+            if (texture.wrapT !== wrapt) {
                 texture.wrapT = wrapt;
                 if (texture.image) {
                     texture.needsUpdate = true;

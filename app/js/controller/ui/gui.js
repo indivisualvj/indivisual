@@ -82,7 +82,7 @@
          * @returns {string}
          */
         getLabel() {
-            return this.gui.bar.element.textContent;
+            return this.gui.bar.label.textContent;
         }
 
         /**
@@ -90,7 +90,7 @@
          * @param label
          */
         setLabel(label) {
-            this.gui.bar.element.textContent = label;
+            this.gui.bar.label.textContent = label;
         }
 
         /**
@@ -112,10 +112,40 @@
             this.gui.panel.SetVisible(exp);
         }
 
+        toggleFullscreen() {
+            this.gui.ToggleFullscreen();
+        }
         /**
          *
          */
         remove() {
+        }
+
+        openByPath(path) {
+            let control = this.findByPath(path);
+            let result = control;
+            if (control) {
+                do {
+                    control.setOpen(true);
+                } while ((control = control.getParent()));
+            }
+
+            return result;
+        }
+
+        findByPath(path) {
+            let parts = path.split('/');
+            let control = this;
+            for (const part in parts) {
+                let name = parts[part];
+                if (!control.hasChild(name)) {
+                    control = null;
+                    break;
+                }
+                control = control.getChild(name);
+            }
+
+            return control;
         }
     }
 }

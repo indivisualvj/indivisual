@@ -11,6 +11,27 @@
 
         static index = 40;
 
+        hooks = {
+            onChange: (key, value, context, that) => {
+                if (context !== undefined) {
+                    let id = isObject(context) ? context.index : context;
+                    switch (key) {
+                        case 'lighting_type':
+                        case 'lighting_pattern_lights':
+                            messaging.program.listener.fireEventId(EVENT_LAYER_RESET_LIGHTING, id, context, FIVE_FPS);
+                            break;
+                        case 'lighting_ambient':
+                            messaging.program.listener.fireEventId(EVENT_LAYER_RESET_AMBIENT, id, context, FIVE_FPS);
+                            break;
+                        case 'lighting_fog':
+                            messaging.program.listener.fireEventId(EVENT_LAYER_RESET_FOG, id, context, FIVE_FPS);
+                            break;
+
+                    }
+                }
+            }
+        };
+
         settings = {
             lighting_type: 'off',
             lighting_color: '#ffffff',

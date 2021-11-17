@@ -30,8 +30,17 @@ HC.plugins.background_mode = HC.plugins.background_mode || {};
             return super.id(suffix) + this.settings.background_volume + this.settings.background_color + this.settings.background_input;
         }
 
+        /**
+         * use this in derived plugins to cleanup
+         * @protected
+         */
+        _dispose() {
+
+        }
+
         reset() {
             this.layer.setBackground(this.current(''));
+            this._dispose();
         }
     }
 }

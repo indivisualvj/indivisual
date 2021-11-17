@@ -139,9 +139,22 @@ document.addEventListener('DOMContentLoaded', function () {
         animate() {
 
             this.listener.fireEvent(EVENT_ANIMATION_ANIMATE);
+
+            this._preRender();
+
             /**
-             * do general stuff
+             * do layer stuff
              */
+            if (IS_ANIMATION) {
+                this.doShuffle();
+            }
+            this.renderer.switchLayer(IS_MONITOR);
+
+            this.renderer.animate();
+
+        }
+
+        _preRender() {
             let speed = this.beatKeeper.getDefaultSpeed();
 
             if (IS_ANIMATION && speed.starting()) {
@@ -188,22 +201,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 this.listener.fireEvent('audio.peak', this.audioAnalyser);
             }
-
-            /**
-             * END do general stuff
-             */
-
-            /**
-             * do layer stuff
-             */
-            if (IS_ANIMATION) {
-                this.doShuffle();
-            }
-            this.renderer.switchLayer(IS_MONITOR);
-
-            this.renderer.animate();
-
         }
+
+
 
         /**
          *
@@ -437,9 +437,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (detectedSpeed) {
                     this.messaging.emitMidi('glow', MIDI_PEAKBPM_FEEDBACK, {timeout: 15000 / detectedSpeed, times: 8});
                 }
-                if (this.config.DisplaySettings.display_speed === 'midi') {
-                    this.messaging.emitMidi('clock', MIDI_CLOCK_NEXT, {duration: this.beatKeeper.getDefaultSpeed().duration});
-                }
 
                 if (this.beatKeeper.getSpeed('half').starting()) {
                     for (let i = 0; i < this.config.SourceValues.sequence.length; i++) {
@@ -489,7 +486,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     let settings = session.settings;
 
                     for (let k in settings) {
-                        this.updateSettings(k, settings[k], true, false, true, false);
+                        this.updateSettings(k, settings[k], true, false, true);
                     }
                 }
 
@@ -539,7 +536,6 @@ document.addEventListener('DOMContentLoaded', function () {
             if (layer === undefined) {
                 layer = this.config.ControlSettings.layer;
             }
-            // if (!renderer)return;
 
             let layerIndex = layer;
             layer = this.renderer.layers[layer];
@@ -553,50 +549,13 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             switch (property) {
-
-                // complete layer reset:
-                case 'shape_sizedivider':
-                case 'pattern_shapes':
-                    this.renderer.resetLayer(layer);
-                    break;
-
-                // shader reset
                 case 'shaders':
-                    layer.updateShaderPasses();
+                    this.listener.fireEventId(EVENT_LAYER_UPDATE_SHADERS, layer.index, layer, FIVE_FPS);
                     break;
 
-                case 'lighting_ambient':
-                    layer.resetAmbientLight();
-                    break;
-
-                case 'lighting_type':
-                case 'lighting_pattern_lights':
-                    layer.resetLighting();
-                    break;
-
-                case 'lighting_fog':
-                    layer.resetFog();
-                    break;
-
-                // reload shapes
-                case 'pattern':
-                case 'pattern_mover':
-                case 'shape_modifier':
-                case 'shape_modifier_volume':
-                case 'shape_geometry':
-                case 'shape_transform':
-                case 'mesh_material':
-                case 'material_mapping':
-                case 'shape_moda':
-                case 'shape_modb':
-                case 'shape_modc':
-                    layer.resetShapes();
-                    break;
-
-                // special case for shapetastic
                 case 'shape_vertices':
                     if (display) {
-                        layer.resetShapes();
+                        this.listener.fireEventId(EVENT_LAYER_RESET_SHAPES, layer.index, layer, FIVE_FPS);
                     }
                     break;
             }
@@ -644,10 +603,14 @@ document.addEventListener('DOMContentLoaded', function () {
                         if (value) {
                             if (this.renderer) {
                                 if (force) {
+                                    console.log('full reset');
+                                    assetman.disposeAll();
                                     this.beatKeeper.reset();
                                     this.fullReset(false);
 
                                 } else {
+                                    console.log('layer reset');
+                                    assetman.disposeAll();
                                     this.renderer.resetLayer(this.renderer.currentLayer);
                                 }
                             }
@@ -821,16 +784,12 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param display
          * @param forward
          * @param force
-         * @param reset
          */
-        updateSettings(layer, data, display, forward, force, reset) {
+        updateSettings(layer, data, display, forward, force) {
 
             if (force) {
                 this.settingsManager.updateData(layer, data);
-
-                if (false !== reset) {
-                    this.renderer.resetLayer(layer);
-                }
+                this.renderer.resetLayer(layer);
 
             } else {
                 for (let k in data) {

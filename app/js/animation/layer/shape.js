@@ -28,6 +28,15 @@ HC.Layer.prototype.shapeColor = function (random, complementary) {
     return hex;
 };
 
+// todo use everywere???
+HC.Layer.prototype.getShape = function (index) {
+    if (index in this.shapes) {
+        return this.shapes[index];
+    }
+
+    return null;
+};
+
 /**
  *
  * @param multiplier

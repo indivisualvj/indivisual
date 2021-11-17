@@ -28,46 +28,55 @@
          * @type {HC.Mask}
          */
         mask;
+
         /**
          * 
          * @type {boolean}
          */
         smear = false;
+
         /**
          * 
          * @type {number}
          */
         blitz = 0;
+
         /**
          * 
          * @type {boolean}
          */
         judder = false;
+
         /**
          * 
          * @type {boolean}
          */
         visible = true;
+
         /**
          * 
          * @type {boolean}
          */
         offline = false;
+
         /**
          * 
          * @type {boolean}
          */
         transparent = false;
+
         /**
          * 
          * @type {boolean}
          */
         keepbounds = true;
+
         /**
          * 
          * @type {number}
          */
         smearing = 0.0;
+
         /**
          * 
          * @type {boolean}
@@ -252,7 +261,7 @@
                 height = b.height;
             }
 
-            if (!this._bounds || this.canvas.width != width || this.canvas.height != height) {
+            if (!this._bounds || this.canvas.width !== width || this.canvas.height !== height) {
                 this.canvas.width = width;
                 this.canvas.height = height;
                 this._bounds = new HC.Rectangle(0, 0, width, height);
@@ -511,7 +520,7 @@
                 return;
             }
 
-            let prc = false;
+            let prc;
             if (speed === false) {
                 prc = this.displayManager.audioAnalyser.volume * 2;
             } else {

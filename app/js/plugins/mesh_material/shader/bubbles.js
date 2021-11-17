@@ -4,9 +4,10 @@
     HC.plugins.mesh_material.bubbles = class Plugin extends HC.MeshShaderMaterialPlugin {
 
         shader = {
-            uniforms: {
+            uniforms: { // todo these are generalized, put them into _plugin
                 uTime: {type: 'f', value: 1.0}
             },
+            // todo: generalized varying and uniforms to _plugin
             fragmentShader: `
             varying vec2 vUv;
             uniform float uTime;

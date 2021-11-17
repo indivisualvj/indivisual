@@ -6,20 +6,17 @@
             let i = this.settings.background_input;
             let id = this.id();
 
-            if (this.current() != id) {
-                this.dispose();
+            if (this.current() !== id) {
+                this._dispose();
 
                 let file = assetman.getCube(i);
                 if (file) {
                     this.current(id);
-                    let inst = this;
                     let path = filePath(CUBE_DIR, file);
 
-                    assetman.loadCubeTexture(path, function (texture) {
-                        inst.texture = texture;
-
-
-                        inst.layer.setBackground(texture);
+                    assetman.loadCubeTexture(path, (texture) => {
+                        this.texture = texture;
+                        this.layer.setBackground(texture);
                     });
 
                 } else {

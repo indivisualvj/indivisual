@@ -34,8 +34,8 @@ HC.DisplayController = HC.DisplayController || {};
                         updates[key] = this.config.DisplaySettings[okey];
                     }
                 }
-                messaging.program.updateDisplays(updates, true, true, true);
-                messaging.emitDisplays(updates, true, false, true);
+                this.config.messaging.program.updateDisplays(updates, true, true, true);
+                this.config.emitDisplays(updates, true, false, true);
             },
             mask_reset: () => {
                 let updates = {};
@@ -47,8 +47,8 @@ HC.DisplayController = HC.DisplayController || {};
                         updates[key] = this.config.DisplaySettingsManager.get('video.displayN').getDefault(key);
                     }
                 }
-                messaging.program.updateDisplays(updates, true, true, true);
-                messaging.emitDisplays(updates, true, false, true);
+                this.config.messaging.program.updateDisplays(updates, true, true, true);
+                this.config.emitDisplays(updates, true, false, true);
             },
             auto: () => {
                 for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
@@ -56,7 +56,7 @@ HC.DisplayController = HC.DisplayController || {};
                     key += '_mapping';
                     let data = {};
                     data[key] = '';
-                    messaging.emitDisplays(data, true, true, false);
+                    this.config.emitDisplays(data, true, true, false);
                 }
             },
             full: () => {
@@ -67,7 +67,7 @@ HC.DisplayController = HC.DisplayController || {};
                         key += '_' + 1;
                         let data = {};
                         data[key] = 1;
-                        messaging.emitDisplays(data, true, true, false);
+                        this.config.emitDisplays(data, true, true, false);
                     }
                 }
             },
@@ -79,7 +79,7 @@ HC.DisplayController = HC.DisplayController || {};
                         key += '_' + 2;
                         let data = {};
                         data[key] = 2;
-                        messaging.emitDisplays(data, true, true, false);
+                        this.config.emitDisplays(data, true, true, false);
                     }
                 }
             },
@@ -91,7 +91,7 @@ HC.DisplayController = HC.DisplayController || {};
                         key += '_' + 3;
                         let data = {};
                         data[key] = 3;
-                        messaging.emitDisplays(data, true, true, false);
+                        this.config.emitDisplays(data, true, true, false);
                     }
                 }
             }
@@ -240,12 +240,12 @@ HC.DisplayController = HC.DisplayController || {};
                 this._create('parents', i, this.members.parents, this.prefix + i);
 
                 // settings
-                let _resize = function (key, factor) {
-                    return function () {
+                let _resize = (key, factor) => {
+                    return () => {
                         let _key = (key + '_' + factor);
                         let data = {};
                         data[_key] = factor;
-                        messaging.emitDisplays(data, true, true, false);
+                        this.config.messaging.emitDisplays(data, true, true, false);
                     };
                 };
 
@@ -278,15 +278,6 @@ HC.DisplayController = HC.DisplayController || {};
             border_speed: 'half',
             border: 0,
             border_color: '#ffffff',
-            trigger_display_visibility: () => {
-                messaging.program.updateDisplay('trigger_display_visibility', true, true, true, false);
-            },
-            force_display_visibility: () => {
-                messaging.program.updateDisplay('force_display_visibility', true, true, true, false);
-            },
-            reset_display_visibility: () => {
-                messaging.program.updateDisplay('reset_display_visibility', true, true, true, false);
-            }
         };
 
         types = {
@@ -301,9 +292,6 @@ HC.DisplayController = HC.DisplayController || {};
             border_speed: ['half'],
             border: ['half', 'clear'],
             border_color: ['half'],
-            trigger_display_visibility: ['third', 'clear'],
-            force_display_visibility: ['third'],
-            reset_display_visibility: ['third']
         };
 
         values = {
@@ -340,7 +328,7 @@ HC.DisplayController = HC.DisplayController || {};
             display_static: ['quarter', 'clear'],
             display_transparent: ['quarter'],
             display_noborder: ['quarter'],
-            // display_smearing: ['half']
+            // display_smearing: ['full']
         };
 
         values = {

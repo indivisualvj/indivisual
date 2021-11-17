@@ -33,9 +33,9 @@
                     p.z = 0;
                     this.points[i] = p;
 
-                    let g = new THREE.CircleGeometry(this.layer.shapeSize(.125/2), 12);
-                    let mat = materialman.addMaterial(new THREE.MeshPhongMaterial({emissive: 0xffffff}));
-                    let m = new THREE.Mesh(g, mat);
+                    this.geometry = new THREE.CircleGeometry(this.layer.shapeSize(.125/2), 12);
+                    this.material = new THREE.MeshPhongMaterial({emissive: 0xffffff});
+                    let m = new THREE.Mesh(this.geometry, this.material);
                     this.layer._shapes.add(m);
                     m.position.copy(p);
                     p._mesh = m;
@@ -68,7 +68,7 @@
             for (let i = 0; i < this.points.length; i++) {
                 let p = this.points[i];
 
-                if (p != params.currentPoint && p != params.lastPoint) {
+                if (p !== params.currentPoint && p !== params.lastPoint) {
                     let n = Math.min(closest, this.closestPointOnLine(v1, v2, p));
                     if (n < closest) {
                         closest = n;

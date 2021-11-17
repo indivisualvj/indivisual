@@ -43,7 +43,7 @@ HC.plugins.shape_delay = HC.plugins.shape_delay || {};
         }
 
         isFirstShape(shape) {
-            return shape.index == -1;
+            return shape.index === -1;
         }
     }
 }

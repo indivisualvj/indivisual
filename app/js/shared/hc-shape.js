@@ -19,7 +19,7 @@
         mesh;
         geometry;
         normalScale;
-        needsUpdate = true;
+        materialNeedsUpdate = true;
 
         /**
          *
@@ -64,7 +64,7 @@
         setGeometry(geo) {
 
             if (this.geometry) {
-                this.geometry.dispose();
+                threeDispose(this.geometry);
             }
 
             this.geometry = geo;
@@ -317,7 +317,7 @@
             }
 
             if (plugin.properties && plugin.properties.map) {
-                if (mat.map != plugin.properties.map) {
+                if (mat.map !== plugin.properties.map) {
                     let keys = Object.keys(plugin.properties);
                     for (let k in keys) {
                         let key = keys[k];
@@ -352,12 +352,12 @@
             this.mesh.castShadow = settings.lighting_shadows;
             this.mesh.receiveShadow = settings.lighting_shadows;
 
-            if (this.needsUpdate) {
-                this.needsUpdate = false;
-                if ('shininess' in mat && mat.shininess != settings.material_shininess) {
+            if (this.materialNeedsUpdate) {
+                this.materialNeedsUpdate = false;
+                if ('shininess' in mat && mat.shininess !== settings.material_shininess) {
                     mat.shininess = settings.material_shininess;
 
-                } else if (mat.refractionRatio != settings.material_shininess) {
+                } else if (mat.refractionRatio !== settings.material_shininess) {
                     mat.refractionRatio = settings.material_shininess / 100;
                 }
 
@@ -366,17 +366,17 @@
 
                 this._updateMaterialBlending();
 
-                if (mat.flatShading == settings.material_softshading) { // reversed logic!
+                if (mat.flatShading === settings.material_softshading) { // reversed logic!
                     mat.flatShading = !settings.material_softshading; // reversed logic!
                     mat.needsUpdate = true;
                 }
 
-                if (mat.side != settings.material_side) {
+                if (mat.side !== settings.material_side) {
                     mat.side = settings.material_side;
                     mat.needsUpdate = true;
                 }
 
-                if (mat.shadowSide != settings.material_shadowside) {
+                if (mat.shadowSide !== settings.material_shadowside) {
                     mat.shadowSide = settings.material_shadowside;
                     mat.needsUpdate = true;
                 }
@@ -396,7 +396,7 @@
             if (b !== undefined) {
                 b = THREE[b];
 
-                if (mat.blending != b) {
+                if (mat.blending !== b) {
                     mat.blending = b;
                     mat.needsUpdate = true;
                 }
@@ -406,7 +406,7 @@
             if (b !== undefined) {
                 b = THREE[b];
 
-                if (mat.blendEquation != b) {
+                if (mat.blendEquation !== b) {
                     mat.blendEquation = b;
                     mat.needsUpdate = true;
                 }
@@ -416,7 +416,7 @@
             if (b !== undefined) {
                 b = THREE[b];
 
-                if (mat.blendSrc != b) {
+                if (mat.blendSrc !== b) {
                     mat.blendSrc = b;
                     mat.needsUpdate = true;
                 }
@@ -426,55 +426,12 @@
             if (b !== undefined) {
                 b = THREE[b];
 
-                if (mat.blendDst != b) {
+                if (mat.blendDst !== b) {
                     mat.blendDst = b;
                     mat.needsUpdate = true;
                 }
             }
         }
-
-        /**
-         *
-         * @private
-         */
-        // _updateMaterialMap() {
-        //     let settings = this.parent.settings;
-        //     let mat = this.mesh.material;
-        //     if (mat.map) {
-        //         let repeat = mat.map.repeat;
-        //         let offset = mat.map.offset;
-        //         let center = mat.map.center;
-        //
-        //         repeat.x = 1 / settings.material_repeatx;
-        //         repeat.y = 1 / settings.material_repeaty;
-        //
-        //         if (settings.material_repeatx <= 1) {
-        //             center.x = .5;
-        //             let uvofx;
-        //             if (offset.x != -(uvofx = settings.material_centerx - .5)) {
-        //                 offset.x = -uvofx;
-        //             }
-        //
-        //         } else {
-        //             offset.x = 0;
-        //             if (center.x != settings.material_centerx) {
-        //                 center.x = 1 - settings.material_centerx;
-        //             }
-        //         }
-        //         if (settings.material_repeaty <= 1) {
-        //             center.y = .5;
-        //             let uvofy;
-        //             if (offset.y != (uvofy = settings.material_centery - .5)) {
-        //                 offset.y = uvofy;
-        //             }
-        //         } else {
-        //             offset.y = 0;
-        //             if (center.y != settings.material_centery) {
-        //                 center.y = settings.material_centery;
-        //             }
-        //         }
-        //     }
-        // }
 
         getRootGeometry() {
             let _get = function (g) {

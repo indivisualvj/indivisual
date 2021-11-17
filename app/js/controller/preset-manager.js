@@ -47,10 +47,10 @@
          * @param {HC.GuifyExplorerPreset} ctrl
          */
         loadPreset(ctrl) {
-            if (ctrl.getLabel() == '_default') {
+            if (ctrl.getLabel() === '_default') {
                 // load default
                 this.settingsManager.setLayerProperties(this.config.ControlSettings.layer, false);
-                requestAnimationFrame(() => {
+                HC.TimeoutManager.getInstance().add('loadPreset', 0, () => {
                     this.explorer.resetPreset(this.config.ControlSettings.layer + 1);
                     this.controller.updatePreset(false, this.settingsManager.prepareLayer(this.config.ControlSettings.layer));
                 });
@@ -58,7 +58,7 @@
             } else {
                 // load preset
                 this.filesystem.load(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (data) => {
-                    requestAnimationFrame(() => {
+                    HC.TimeoutManager.getInstance().add('loadPreset', 0, () => {
 
                         if (this.config.ctrlKey) { //load shaders into present presets
                             this.controller.transferShaderPasses(data.dir + '/' + data.name, JSON.parse(data.contents));
@@ -109,13 +109,10 @@
                     di++;
 
                 } else if (!this.settingsManager.isDefault(i)) {
-                    console.log('reset', i);
                     this.settingsManager.resetLayer(i);
                     this.controller.updatePreset(false, {}, i);
                 }
             }
-
-            this.controller.updateControl('layer', 0, true, true);
         }
 
         /**
@@ -170,12 +167,12 @@
 
             console.log('loading', child.getLabel());
             this.filesystem.load(STORAGE_DIR, child.getParent().getLabel(), child.getLabel(), (data) => {
-                requestAnimationFrame(() => {
-                    // this.controller.updateControl('layer', i, true, true); // todo why have to set?
+                HC.TimeoutManager.getInstance().add('_loadPreset' + child.getLabel(), 0, () => {
                     let key = data.dir + '/' + data.name;
                     let contents = JSON.parse(data.contents);
                     console.log('loaded', data.name);
                     this.controller.updatePreset(key, contents, i);
+                    this.controller.updateControl('layer', 0, true, true);
                 });
             });
         };

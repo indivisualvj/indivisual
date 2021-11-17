@@ -42,17 +42,17 @@
             let axis = this.slice.axis;
             switch (axis) {
                 case 'x':
-                    if (grid.x == slice) {
+                    if (grid.x === slice) {
                         eu.x = this.euler.x;
                     }
                     break;
                 case 'y':
-                    if (grid.y == slice) {
+                    if (grid.y === slice) {
                         eu.y = this.euler.y;
                     }
                     break;
                 case 'z':
-                    if (grid.z == slice) {
+                    if (grid.z === slice) {
                         eu.z = this.euler.z;
                     }
                     break;

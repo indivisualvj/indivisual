@@ -30,18 +30,34 @@ HC.plugins.pattern = HC.plugins.pattern || {};
         boundsCheck(shape, extend, depthMultiplier, velocity) {
 
             let direction = new THREE.Vector3(0, 0, 0);
-            // todo bounds check using box/geometry (layer.playground (settings?[layer_playground_volume/size])
-            //  place it shortly behind camera
-            //  will it be less greedy?
-            //  example: https://threejs.org/examples/?q=webx#webxr_vr_multiview
+
+            // source: https://discourse.threejs.org/t/functions-to-calculate-the-visible-width-height-at-a-given-z-depth-from-a-perspective-camera/269
+            const visibleHeightAtZDepth = ( depth, camera ) => {
+                // compensate for cameras not positioned at z=0
+                const cameraOffset = camera.position.z;
+                if ( depth < cameraOffset ) depth -= cameraOffset;
+                else depth += cameraOffset;
+
+                // vertical fov in radians
+                const vFOV = camera.fov * Math.PI / 180;
+
+                // Math.abs to ensure the result is always positive
+                return 2 * Math.tan( vFOV / 2 ) * Math.abs( depth );
+            };
+
+            const visibleWidthAtZDepth = ( depth, camera ) => {
+                const height = visibleHeightAtZDepth( depth, camera );
+                return height * camera.aspect;
+            };
 
             // bounds _check
-            let mx = this.layer.resolution('half').x + (extend || 0);
-            let my = this.layer.resolution('half').y + (extend || 0);
-            let mz = this.layer.cameraDefaultDistance(depthMultiplier || 0);
 
             let world = new THREE.Vector3();
             shape.getWorldPosition(world);
+
+            let mx = visibleWidthAtZDepth(world.z, this.layer.getCamera()) / 2;
+            let my = visibleHeightAtZDepth(world.z, this.layer.getCamera()) / 2;
+            let mz = this.layer.cameraDefaultDistance(depthMultiplier || 0);
 
             if (world.x > mx) {
                 direction.x = -1;
@@ -71,6 +87,10 @@ HC.plugins.pattern = HC.plugins.pattern || {};
             }
 
             return direction;
+        }
+
+        reset() {
+            threeTraverse(this);
         }
     }
 }

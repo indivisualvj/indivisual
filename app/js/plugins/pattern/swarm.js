@@ -108,7 +108,7 @@
                 let bro = this.randshapes.get() || layer.getRandomShape();
                 let dist = bro ? bro.position().distanceTo(cam.position) : 0;
 
-                if (bro != shape && dist > layer.shapeSize(1)) {
+                if (bro !== shape && dist > layer.shapeSize(1)) {
                     // turn to another shape
                     bro.getWorldPosition(params.targetLook);
                     params.shape = bro;

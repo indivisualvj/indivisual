@@ -13,5 +13,4 @@ storage/*/\.*
 .idea
 .settings
 .project
-
 /yarn-error.log

@@ -12,10 +12,8 @@
             }
         }
 
-        dispose() {
-            if (this.texture) {
-                this.texture.dispose();
-            }
+        _dispose() {
+            threeTraverse(this);
         }
     }
 }

@@ -1,9 +1,5 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
- *
- *
- * TODO: what about that? https://github.com/mrdoob/eventdispatcher.js
- *
  */
 {
     /**
@@ -112,10 +108,18 @@
          * @param event
          * @param id
          * @param target
+         * @param timeout
          */
-        fireEventId(event, id, target) {
+        fireEventId(event, id, target, timeout) {
             if (event in this.events && id in this.events[event]) {
-                this.bruteFireEventId(event, id, target);
+                if (timeout) {
+                    HC.TimeoutManager.getInstance().add(event + '.' + id, timeout, () => {
+                        this.bruteFireEventId(event, id, target);
+                    });
+
+                } else {
+                    this.bruteFireEventId(event, id, target);
+                }
 
             } else {
                 // console.warn('unknown event', event, id);

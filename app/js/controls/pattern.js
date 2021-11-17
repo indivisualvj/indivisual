@@ -10,6 +10,23 @@
 
         static index = 90;
 
+        hooks = {
+            onChange: (key, value, context, that) => {
+                if (context !== undefined) {
+                    let id = isObject(context) ? context.index : context;
+                    switch (key) {
+                        case 'pattern_shapes':
+                            messaging.program.listener.fireEventId(EVENT_LAYER_RESET, id, context, FIVE_FPS);
+                            break;
+                        case 'pattern':
+                        case 'pattern_mover':
+                            messaging.program.listener.fireEventId(EVENT_LAYER_RESET_SHAPES, id, context, FIVE_FPS);
+                            break;
+                    }
+                }
+            }
+        };
+
         settings = {
             pattern: 'matrix',
             pattern_shapes: 112,
@@ -35,7 +52,7 @@
             pattern_paddingx: [-10, 10, 0.01],
             pattern_paddingy: [-10, 10, 0.01],
             pattern_paddingz: [-10, 10, 0.01],
-            pattern_shapes: [0, 512, 1],
+            pattern_shapes: [1, 512, 1],
             pattern_centerx: [-5, 5, 0.01],
             pattern_centery: [-5, 5, 0.01],
             pattern_centerz: [-5, 5, 0.01],

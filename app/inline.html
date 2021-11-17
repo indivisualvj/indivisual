@@ -10,7 +10,7 @@
 
 
     </head>
-    <style type="text/css">
+    <style>
         html {
             height: 100%;
         }
@@ -50,11 +50,32 @@
             position: absolute;
             right: 35%;
             top: 0;
-            width: 15px;
+            width: 5px;
             height: 99.8%;
-            background: dimgray;
-            border: 1px groove;
+            background: #1a1a1a;
+            border: 1px #373a3b;
+        }
 
+        div#splitter:after {
+            font-family: Hack, monospace !important;
+            font-size: 11px !important;
+            font-weight: bold;
+            color: #ebebebff;
+            line-height: 18px;
+            position: absolute;
+            left: -15px;
+            top: 50%;
+            margin-top: -33px;
+            height: 65px;
+            padding-top: 1px;
+            width: 15px;
+            content: 'close';
+            writing-mode: vertical-rl;
+            text-orientation: upright;
+            background: #1a1a1a;
+            border: 1px #373a3b;
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
         }
     </style>
     <script type="application/javascript">
@@ -91,7 +112,8 @@
     </script>
     <body>
     <iframe id="animation" src="animation.html#inline"></iframe>
-    <div id="splitter"></div>
+    <div id="splitter" title="Click to close.
+Open by moving cursor to the right edge."></div>
     <iframe id="controller" src="controller.html#inline"></iframe>
     </body>
 </html>

@@ -7,6 +7,8 @@ HC.plugins.shaders = HC.plugins.shaders || {};
 {
     HC.ShaderPlugin = class Plugin extends HC.AnimationPlugin {
 
+        pass;
+
         create() {
             console.error('HC.ShaderPlugin: .create() must be implemented in derived plugin.');
         }
@@ -18,28 +20,10 @@ HC.plugins.shaders = HC.plugins.shaders || {};
             }
         }
 
-        dispose() {
+        reset() {
             if (this.pass) {
-                if (this.pass.dispose) {
-                    this.pass.dispose();
-                    // HC.log(this.id(), 'pass.dispose', false, DEBUG);
-                }
-                if (this.pass.material) {
-                    // HC.log(this.id(), 'pass.material.dispose', false, DEBUG);
-                    this.pass.material.dispose();
-                }
-                if (this.pass.material.map) {
-                    // HC.log(this.id(), 'pass.material.map.dispose', false, DEBUG);
-                    this.pass.material.map.dispose();
-                }
-                if (this.pass.quad) {
-                    // HC.log(this.id(), 'pass.quad.geometry.dispose', false, DEBUG);
-                    this.pass.quad.geometry.dispose();
-                }
-                if (this.pass.overrideMaterial) {
-                    // HC.log(this.id(), 'pass.overrideMaterial.dispose', false, DEBUG);
-                    this.pass.overrideMaterial.dispose();
-                }
+                threeTraverse(this);
+                threeTraverse(this.pass);
             }
         }
 
@@ -66,12 +50,12 @@ HC.plugins.shaders = HC.plugins.shaders || {};
                 let sProperty = properties[skey];
                 let sSetting = settings[skey];
 
-                if (typeof sProperty != 'boolean' && typeof sProperty != 'number') {
+                if (typeof sProperty !== 'boolean' && typeof sProperty !== 'number') {
 
                     if ('value' in sProperty) {
                         let v = sProperty.value;
 
-                        if (sSetting.type == 'sampler2D') {
+                        if (sSetting.type === 'sampler2D') {
                             let img = this.config.overlay_one ? this.config.overlay_one.target : false;
                             if (img) {
                                 v = this.config.overlay_one.target;
@@ -81,7 +65,7 @@ HC.plugins.shaders = HC.plugins.shaders || {};
                                 glsh.uniforms[skey + '_ready'].value = 0;
                             }
                         } else {
-                            if (sProperty.oscillate && sProperty.oscillate != 'off') {
+                            if (sProperty.oscillate && sProperty.oscillate !== 'off') {
 
                                 let plugin = this.layer.getOscillatePlugin(sProperty.oscillate);
                                 if (plugin) {

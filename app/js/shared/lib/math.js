@@ -21,7 +21,7 @@ function randomInt(min, max, negative) {
  */
 function randomBool(distraction) {
     if (distraction) {
-        return randomInt(0, distraction) == distraction;
+        return randomInt(0, distraction) === distraction;
     }
 
     return Math.random() < 0.5;

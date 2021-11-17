@@ -1,8 +1,71 @@
+
+/**
+ *
+ */
+HC.Layer.prototype.animate = function () {
+
+    this._preAnimate();
+
+    this.listener.fireEvent(EVENT_LAYER_ANIMATE);
+
+    this.tween.update(this.animation.now - this.lastUpdate, false);
+
+    this.doOscillate(true);
+
+    this.rotation(this.settings.layer_rotationx, this.settings.layer_rotationy, this.settings.layer_rotationz);
+    this.position(this.settings.layer_positionx, this.settings.layer_positiony, this.settings.layer_positionz);
+
+    this.doCameraMode();
+
+    this.materialColor = this.doMaterialMap();
+
+    this._animateShape(this.shape);
+    this.doPatternRotation(); // preset current pattern euler from layer's shape rotation
+
+    for (let i = 0; i < this.shapes.length; i++) {
+        let shape = this.shapes[i];
+        this._animateShape(shape, true);
+        shape.materialNeedsUpdate = this.shapeMaterialsNeedUpdate;
+    }
+
+    this.shapeMaterialsNeedUpdate = false;
+
+    this.doLighting(this.materialColor);
+    this.doBackground();
+
+    this.doOscillate(false);
+};
+
+/**
+ *
+ */
+HC.Layer.prototype._preAnimate = function () {
+    if (this.needsReset) {
+        this._fullReset();
+    }
+    if (this.shapesNeedReset) {
+        this._resetShapes();
+    }
+    if (this.shadersNeedUpdate) {
+        this._updateShaderPasses();
+    }
+    if (this.lightingNeedsReset) {
+        this._resetLighting();
+    }
+    if (this.fogNeedsReset) {
+        this._resetFog();
+    }
+    if (this.ambientLightNeedsReset) {
+        this._resetAmbientLight();
+    }
+}
+
 /**
  *
  * @param shape
+ * @private
  */
-HC.Layer.prototype.animateShape = function (shape) {
+HC.Layer.prototype._animateShape = function (shape) {
 
     let duration = this.getShapeRhythmPlugin();
     let delay = this.getShapeDelayPlugin();
@@ -35,42 +98,4 @@ HC.Layer.prototype.animateShape = function (shape) {
         this.doColoring(shape);
         this.doMaterial(shape);
     }
-};
-
-/**
- *
- * @param hook
- */
-HC.Layer.prototype.animate = function (hook) {
-
-    this.listener.fireEvent(EVENT_LAYER_ANIMATE);
-
-    this.tween.update(this.animation.now - this.lastUpdate, false);
-
-    this.doOscillate(true);
-
-    this.rotation(this.settings.layer_rotationx, this.settings.layer_rotationy, this.settings.layer_rotationz);
-    this.position(this.settings.layer_positionx, this.settings.layer_positiony, this.settings.layer_positionz);
-
-    this.doCameraMode();
-
-    this.materialColor = this.doMaterialMap();
-
-    this.animateShape(this.shape);
-    this.doPatternRotation(); // preset current pattern euler from layer's shape rotation
-
-    let shapeNeedsUpdate = this.settings.material_needs_update; // todo bound to lastchange todo for CS
-
-    for (let i = 0; i < this.shapes.length; i++) {
-        let shape = this.shapes[i];
-        this.animateShape(shape, true);
-        shape.needsUpdate = shapeNeedsUpdate;
-    }
-
-    this.settings.material_needs_update = false;
-
-    this.doLighting(this.materialColor);
-    this.doBackground();
-
-    this.doOscillate(false);
 };

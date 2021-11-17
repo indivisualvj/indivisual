@@ -10,7 +10,7 @@
             let params = this.params(shape);
             let mod = this.switcher ? 0 : 1;
 
-            if (shape.index % 2 == mod) {
+            if (shape.index % 2 === mod) {
                 params.dir = 1;
 
             } else {
@@ -32,7 +32,7 @@
             let params = this.params(shape);
             let mod = this.switcher ? 0 : 1;
 
-            if (grid.x % 2 == mod) {
+            if (grid.x % 2 === mod) {
                 params.dir = 1;
 
             } else {
@@ -54,7 +54,7 @@
             let params = this.params(shape);
             let mod = this.switcher ? 0 : 1;
 
-            if (grid.y % 2 == mod) {
+            if (grid.y % 2 === mod) {
                 params.dir = 1;
 
             } else {

@@ -39,7 +39,7 @@
                         return Math.min(1, speed.prc + prc);
                     }
 
-                } else if (this.settings.sizing_mode_sync == false) {
+                } else if (this.settings.sizing_mode_sync === false) {
                     return shape.size();
 
                 } else {

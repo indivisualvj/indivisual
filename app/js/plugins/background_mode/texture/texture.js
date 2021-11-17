@@ -7,7 +7,7 @@
             let id = this.id();
 
             if (this.current() !== id) {
-                this.dispose();
+                this._dispose();
 
                 let file = assetman.getImage(i);
                 if (file) {
@@ -18,7 +18,6 @@
                     assetman.loadTexture(path, function (texture) {
                         texture.center.set(.5, .5);
                         inst.texture = texture;
-
                         inst.layer.setBackground(texture);
                     });
 

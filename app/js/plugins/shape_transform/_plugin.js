@@ -1,7 +1,11 @@
 HC.plugins.shape_transform = HC.plugins.shape_transform || {};
 
 {
-    HC.ShapeTransformPlugin = class Plugin extends HC.AnimationPlugin {
+    /**
+     *
+     * @type {HC.ShapeTransformPlugin}
+     */
+    HC.ShapeTransformPlugin = class Plugin extends HC.AnimationPlugin { // todo: checkout if everything works when you rename all class Plugin to their final HC. name
 
         setControlSets(controlSets) {
             super.setControlSets(controlSets);

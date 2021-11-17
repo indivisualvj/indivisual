@@ -79,7 +79,7 @@
 
             let mo = new MutationObserver((mutations) => {
                 mutations.forEach((mutation) => {
-                    if (mutation.attributeName == 'data-progress') {
+                    if (mutation.attributeName === 'data-progress') {
                         this.setProgress(mutation.target.getAttribute(mutation.attributeName));
                     }
                 });

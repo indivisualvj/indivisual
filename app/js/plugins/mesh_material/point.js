@@ -4,23 +4,22 @@
         static name = 'points';
 
         apply(geometry, index) {
-            let material = materialman.addMaterial(new THREE.PointsMaterial());
-            let mesh = new THREE.Points(geometry, material);
-
-            return mesh;
+            this.material = new THREE.PointsMaterial();
+            return new THREE.Points(geometry, this.material);
         }
     }
 }
+
 {
     HC.plugins.mesh_material.pointedges = class Plugin extends HC.MeshMaterialPlugin {
         static index = 10;
         static name = 'points (edges only)';
 
         apply(geometry, index) {
-            let material = materialman.addMaterial(new THREE.PointsMaterial());
-            let g = new THREE.EdgesGeometry(geometry);
-            let mesh = new THREE.Points(g, material);
-            g.userData.geometry = geometry;
+            this.material = new THREE.PointsMaterial();
+            let edges = new THREE.EdgesGeometry(geometry);
+            let mesh = new THREE.Points(edges, this.material);
+            edges.userData.geometry = geometry;
 
             return mesh;
         }

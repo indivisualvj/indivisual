@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             controller.config.loadConfig(function () {
 
+                controller.listener = new HC.Listener();
                 let sets = controller.config.initControlSets();
                 controller.settingsManager = new HC.LayeredControlSetsManager([], controller.config.AnimationValues);
                 controller.init(sets);
@@ -135,14 +136,6 @@ document.addEventListener('DOMContentLoaded', function () {
          * @type {{}}
          */
         synced = {};
-
-        /**
-         *
-         * @type {{}}
-         */
-        thumbTimeouts = {
-            samples: null,
-        };
 
         /**
          *
@@ -618,7 +611,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateControl(item, value, display, forward, force) {
 
-            if (typeof value != 'object') {
+            if (typeof value !== 'object') {
                 HC.log(item, value);
                 this.explainPlugin(item, value, HC);
             }
@@ -632,8 +625,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (item === 'layer') {
                 this.updateSettings(value, this.settingsManager.prepareLayer(value), true, false, true);
-
                 this.explorer.setSelected(value+1, true);
+                HC.log(item, value+1);
 
                 let config = {
                     action: 'attr',
@@ -647,7 +640,6 @@ document.addEventListener('DOMContentLoaded', function () {
             } else if (item === 'reset') {
                 if (value && force) {
                     this.settingsManager.reset(this.config.ControlSettings.shuffleable.toIntArray((it)=>{return parseInt(it)-1;}));
-                    this.refreshLayerInfo();
                 }
             }
 
@@ -689,7 +681,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateDisplay(item, value, display, forward, force) {
 
-            if (typeof value != 'object') {
+            if (typeof value !== 'object') {
                 HC.log(item, value);
                 // this.explainPlugin(item, value);
             }
@@ -721,7 +713,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateSource(item, value, display, forward, force) {
 
-            if (typeof value != 'object') {
+            if (typeof value !== 'object') {
                 HC.log(item, value);
                 // this.explainPlugin(item, value);
             }
@@ -745,6 +737,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 this.updateUi(this.sourceSettingsGui);
+                this.updateUi(this.sequenceSettingsGui);
             }
 
             if (forward) {
@@ -766,23 +759,17 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (key in this.config) {
                         let sec = data.data[key];
                         for (let tkey in sec) {
-                            let type = sec[tkey];
-                            this.config[key][tkey] = type;
+                            this.config[key][tkey] = sec[tkey];
                         }
                     }
                 }
                 this.updateUi(this.sourceSettingsGui);
             }
 
-            clearTimeout(this.thumbTimeouts.samples);
-
-            this.thumbTimeouts.samples = setTimeout(() => {
-                requestAnimationFrame(() => {
-                    this.updateSequenceUi();
-                    this.updateThumbs();
-                });
-
-            }, 125);
+            HC.TimeoutManager.getInstance().add('updateData', FIVE_FPS, () => {
+                this.updateSequenceUi();
+                this.updateThumbs();
+            });
         }
 
         /**
@@ -791,7 +778,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateSequenceUi() {
             if (this.config.SourceValues && this.config.SourceValues.sequence) {
                 for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
-                    requestAnimationFrame(() => {
+                    HC.TimeoutManager.getInstance().add('updateSequenceUI' + seq, 0, () => {
                         this.updateClip(seq);
                         this.updateIndicator(seq);
                     });
@@ -810,9 +797,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 } else if (data.command === 'off') {
                     this.midi.off(data.data);
-
-                } else if (data.command === 'clock') {
-                    this.midi.clock(data.data, data.conf);
                 }
             }
         }
@@ -863,11 +847,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         * question push even if monitor is enabled? how do it nicely?
+         * todo: push even if monitor is enabled? how do it nicely?
          */
         syncLayers() {
             for (let layer in this.settingsManager.layers) {
-                let to = parseInt(layer) * 150;
+                layer = parseInt(layer);
+                let to = layer * 150;
 
                 let st = (layer, to) => {
                     setTimeout(() => {
@@ -898,6 +883,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let settings = this.settingsManager.prepareLayer(layer);
 
             if (settings) {
+                HC.log('sync_layer', layer+1);
                 this.messaging.emitSettings(layer, settings, true, false, true);
             }
         }
@@ -927,13 +913,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
             } else {
                 this.updateSettings(layer, data, false, false, true);
+                this.settingsManager.update(layer, 'info', 'name', name);
             }
 
             data = this.settingsManager.prepareLayer(layer);
             if (this.settingsManager.get(layer, 'info').hasTutorial()) {
                 new HC.ScriptProcessor(this, name, Object.create(data.info.tutorial)).log();
 
-                data.info.tutorial = {}; // todo tutorial will be deleted on savePreset
+                data.info.tutorial = {}; // fixme tutorial will be deleted on savePreset
             }
 
             this.messaging.emitSettings(layer, data, false, false, true);
@@ -988,6 +975,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (this.settingsManager.layers[i]) {
                     let l = this.settingsManager.getLayer(i);
                     if (this.config.shuffleable(i+1) && !this.settingsManager.isDefault(l)) {
+                        let name = l.controlSets.info.get('name');
+                        if (name) {
+                            this.explorer.setInfoByPath(name, i+1);
+                        }
                         preset.push(i+1);
                     }
                 }
@@ -1023,6 +1014,8 @@ document.addEventListener('DOMContentLoaded', function () {
          * reset all of all settings
          */
         fullReset() {
+            assetman.disposeAll();
+            this.explorer.reload();
             this.explorer.resetPresets();
             this.settingsManager.reset();
             this.config.SourceSettingsManager.reset();
@@ -1031,13 +1024,13 @@ document.addEventListener('DOMContentLoaded', function () {
             let sources = this.config.SourceSettingsManager.prepareFlat();
             let controls = this.config.ControlSettingsManager.prepareFlat();
             let displays = this.config.DisplaySettingsManager.prepareFlat();
-            this.syncLayers();
             this.messaging.emitSources(sources, true, false, true);
             this.messaging.emitControls(controls, true, false, true);
             this.messaging.emitDisplays(displays, true, false, true);
             this.updateSources(sources, true, true, true);
             this.updateControls(controls, true, true, true);
             this.updateDisplays(displays, true, true, true);
+            this.syncLayers();
         }
 
         /**

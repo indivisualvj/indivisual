@@ -61,12 +61,6 @@
         nextLayer;
 
         /**
-         *
-         * @type {boolean}
-         */
-        layerSwitched = false;
-
-        /**
          * @type {HC.Animation}
          */
         animation;
@@ -168,7 +162,7 @@
                     if (keepsettings) {
                         oldControlSets = this.layers[i].controlSets;
                     }
-                    ol.dispose();
+                    ol._dispose();
                 }
 
                 let layer = new HC.Layer(this.animation, this, i);
@@ -178,7 +172,7 @@
 
                 this.layers[i] = layer;
 
-                this.resetLayer(layer);
+                layer.needsReset = true;
             }
 
             this.currentLayer = this.layers[this.config.ControlSettings.layer];
@@ -190,7 +184,6 @@
          * @param force
          */
         switchLayer(force) {
-            this.layerSwitched = false;
 
             if (this.nextLayer) {
 
@@ -216,7 +209,6 @@
 
                     this.currentLayer = this.nextLayer;
                     this.nextLayer = false;
-                    this.layerSwitched = true;
 
                 } else {
                     this.setLayer(this.nextLayer.index);
@@ -286,8 +278,7 @@
             }
 
             this.nextLayer = false;
-
-            layer.fullReset();
+            layer.needsReset = true;
         }
 
         /**

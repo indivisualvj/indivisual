@@ -54,11 +54,11 @@
 
         spherePosition(shape) {
             let layer = this.layer;
-            if (!this.points || this.points.length != layer.shapeCount()) {
+            if (!this.points || this.points.length !== layer.shapeCount()) {
                 this.points = this.getDistributionOnSphere(layer.shapeCount());
             }
 
-            return this.points[shape.index];
+            return this.points[shape.index] || {x: 0, y: 0, z: 0};
         }
     }
 }
@@ -87,8 +87,8 @@
                 params.velocity = randomFloat(0.1, 1, 2, false);
             }
 
-            let v = this.settings.pattern_audio == true
-                ? ((this.settings.pattern_sync == false
+            let v = this.settings.pattern_audio === true
+                ? ((this.settings.pattern_sync === false
                     ? this.shapeVolume(shape) : this.audioAnalyser.volume) * this.settings.pattern_padding) : 1;
 
             if (this.audioAnalyser.peak) {
@@ -146,7 +146,7 @@
 
             } else if (this.animation.audioManager.isActive()) {
                 if (this.audioAnalyser.peak) {
-                    params.volume = this.settings.pattern_sync == false
+                    params.volume = this.settings.pattern_sync === false
                         ? this.shapeVolume(shape) : this.audioAnalyser.volume;
                     params.velocity *= -1;
 

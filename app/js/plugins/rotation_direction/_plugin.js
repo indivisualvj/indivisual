@@ -18,7 +18,7 @@ HC.plugins.rotation_direction = HC.plugins.rotation_direction || {};
         }
 
         isFirstShape(shape) {
-            return shape.index == -1;
+            return shape.index === -1;
         }
     }
 }

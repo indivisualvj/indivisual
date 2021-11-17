@@ -14,14 +14,14 @@
         controller;
 
         /**
-         * @type {MIDIAccess}
+         * @type {Midi}
          */
         midi;
+
         data;
+
         assignment;
-        clockcounter = 0;
-        clockbpm;
-        clockfirst;
+
         /**
          *
          * @type {*[]}
@@ -72,7 +72,7 @@
                     software: true
                 }).then((e) => {this._onSuccess(e);}, (e) => {this._onFailure(e);});
             } else {
-                console.error("No MIDI support in your browser.");
+                console.warn("No MIDI support in your browser. If you're not on localhost, try enabling SSL.");
             }
         }
 
@@ -89,15 +89,17 @@
             let _updateControlSet = (input, settings) => {
                 let constants = settings.constants;
                 for (let c in constants) {
-                    let co = constants[c];
-                    window[c] = co; // todo do not put into window.
+                    window[c] = constants[c];
                 }
 
                 input.value._controlSet = settings;
             };
 
             let _onStateChange = () => {
-                if (this.midi.onstatechange == null) return;
+                if (this.midi.onstatechange == null){
+                    return;
+                }
+
                 this.midi.onstatechange = null;
                 let inputs = this.midi.inputs.values();
                 let success = false;
@@ -113,12 +115,15 @@
                     let name = input.value.name;
                     if (name in this.config.MidiController) {
                         _updateControlSet(input, this.config.MidiController[name]);
-                    }
+                    } else {
+                        // _check for valid ControlSet by MIDI Device manufacturer
+                        name = input.value.manufacturer;
+                        if (name in this.config.MidiController) {
+                            _updateControlSet(input, this.config.MidiController[name]);
 
-                    // _check for valid ControlSet by MIDI Device manufacturer
-                    name = input.value.manufacturer;
-                    if (name in this.config.MidiController) {
-                        _updateControlSet(input, this.config.MidiController[name]);
+                        } else {
+                            _updateControlSet(input, this.config.MidiController['Default']);
+                        }
                     }
 
                     console.log(name, input.value);
@@ -191,28 +196,6 @@
                 delete this.midi_pressed[dataId];
             }
 
-            if (this.data[0] === 248) {
-
-                if (this.clockcounter < 96) {
-                    this.clockcounter++;
-
-                } else {
-                    let clocknow = message.timeStamp;
-                    let diff = clocknow - this.clockfirst;
-                    this.clockbpm = round(4 * 60 * 1000 / diff, 2);
-                    HC.log('clock-bpm', this.clockbpm);
-
-                    if (!this.config.ControlSettings.peak_bpm_detect) { // tempo by MIDI clock
-                        if (this.config.ControlSettings.tempo != this.clockbpm) {
-                            this.controller.updateControl('tempo', this.clockbpm, true, true, false);
-                        }
-                    }
-
-                    this.clockcounter = 0;
-                    this.clockfirst = clocknow;
-                }
-            }
-
             if (this.data.length < 2) return;
             // console.log('', this.data); // MIDI data [144, 63, 73]
 
@@ -243,7 +226,7 @@
                             shiftTo = shifts[i];
                             shift = this.midi_shifted[shifts[i]];
 
-                            if (id.default && id.default.shift == shiftTo) {
+                            if (id.default && id.default.shift === shiftTo) {
                                 shift = '';
                                 shiftTo = 'default';
                             }
@@ -273,13 +256,13 @@
                             }
                         }
                     } else {
-                        HC.log('this.midi_miss', this.data);
+                        HC.log('midi_miss', this.data);
                     }
                 } else {
-                    HC.log('this.midi_miss', this.data);
+                    HC.log('midi_miss', this.data);
                 }
             } else {
-                HC.log('this.midi_miss', this.data);
+                HC.log('midi_miss', this.data);
             }
         }
 
@@ -306,13 +289,6 @@
             }
 
             let blast = false;
-            // no acceleration
-            //let step = Math.max(63, Math.min(65, vel)) - 64;
-            // acceleration up to 3
-            //let step = Math.max(60, Math.min(68, vel)) - 64;
-            // acceleration up to 4
-            //let step = Math.max(59, Math.min(69, vel)) - 64;
-            // acceleration up to 5
             let step = Math.max(58, Math.min(70, vel)) - 64;
 
             if (!id.options) {
@@ -326,8 +302,7 @@
                 id.options.color = '';
             }
 
-            let cch = [step, timestamp, blast];
-            this.cache[values + name] = cch;
+            this.cache[values + name] = [step, timestamp, blast];
 
             switch (id.type) {
                 case 'status':
@@ -336,6 +311,12 @@
                         values = this.config[values];
                         status = this.config[status];
 
+                        let enable = vel ? id.name : false;
+                        if (enable) {
+                            this._showOSD(id.type,id.name + 'N' + id.suffix);
+                        } else {
+                            this._hideOSD(id.type);
+                        }
                         if (name in values) {
                             values = values[name];
                             let keys = Object.keys(values);
@@ -345,9 +326,8 @@
                                     n += id.suffix;
                                 }
                                 let ass = [this.data[0], id.start + i];
-                                if (vel && n in status && status[n]) {
+                                if (enable && n in status && status[n]) {
                                     this._glow(ass);
-
                                 } else {
                                     this._off(ass);
                                 }
@@ -426,7 +406,7 @@
                             let cur = settings[name];
                             let next = cur + (step * unit);
 
-                            if (id.type == 'step') {
+                            if (id.type === 'step') {
                                 step = step > 0 ? unit : -unit;
                             }
 
@@ -540,13 +520,13 @@
                     let c = sub[s];
                     if (id.shift in c) {
                         let sec = c[id.shift];
-                        if (sec.type == 'assign') {
+                        if (sec.type === 'assign') {
                             let n = sec.name;
                             let v = sec.value;
                             let setting = name + n;
                             if (setting in settings) {
                                 let sv = settings[setting];
-                                if (sv == v) {
+                                if (sv === v) {
                                     return [m, s];
                                 }
                             }
@@ -635,26 +615,6 @@
 
         /**
          *
-         * @param dat
-         * @param conf
-         * @private
-         */
-        _updateBeatClock(dat, conf) {
-            if (this.midi && dat) {
-                let to = conf.duration / 24;
-                for (let i = 0; i < 24; i++) {
-                    setTimeout(() => {
-                        let clock = [dat[0], dat[1]];
-
-                        this._send(clock);
-
-                    }, to * i);
-                }
-            }
-        }
-
-        /**
-         *
          * @param id
          * @param conf
          */
@@ -668,16 +628,6 @@
          */
         off(id) {
             this._off(id);
-        }
-
-        /**
-         *
-         * @param id
-         * @param conf
-         */
-        clock(id, conf)
-        {
-            this._updateBeatClock(id, conf);
         }
     }
 }

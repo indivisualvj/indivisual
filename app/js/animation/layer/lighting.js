@@ -107,7 +107,7 @@ HC.Layer.prototype._resetFog = function () {
  */
 HC.Layer.prototype._resetAmbientLight = function () {
 
-    this.ambientLightNeedsReset = false;
+    this.ambientNeedsReset = false;
 
     if (this.ambientLight) {
         this._lighting.remove(this.ambientLight);

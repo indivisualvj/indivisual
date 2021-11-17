@@ -359,7 +359,7 @@
          * @private
          */
         _load(file, callback) {
-            messaging._emit({action: 'get', file: file, name: file}, function (data) {
+            messaging._emit({action: 'load', file: file, name: file}, function (data) {
                 callback(data);
             });
         }

@@ -55,7 +55,7 @@ HC.Layer.prototype._preAnimate = function () {
     if (this.fogNeedsReset) {
         this._resetFog();
     }
-    if (this.ambientLightNeedsReset) {
+    if (this.ambientNeedsReset) {
         this._resetAmbientLight();
     }
 }

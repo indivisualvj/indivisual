@@ -4,17 +4,15 @@
 
         shader = {
             uniforms: {
-                uTime: {type: 'f', value: 1.0},
-                uColor: {type: 'v3', value: {r: 1.0, g: 1.0, b: 1.0}}
+                uTime: { type: 'f', value: 1.0 },
+                opacity: { type: 'f', value: 1.0 },
+                uColor: { type: 'v3', value: { r: 1.0, g: 1.0, b: 1.0 } }
             },
-            fragmentShader: `
-                varying vec2 vUv;
-                uniform float uTime;
+            fragmentShader: HC.MeshShaderMaterialPlugin.fragmentPrefix + `
                 uniform vec3 uColor;
                 
                 void main () {
                     float time = uTime/500.0;
-                    vec2 iResolution = vec2(1.0);
                     float w = iResolution.x / 5.;
                     float h = iResolution.y / 6.;
                 
@@ -40,13 +38,13 @@
                     float ij = mod(vUv.y, h);
                     if (ij < 1.)
                         if (i >= 1.)
-                            gl_FragColor = vec4(uColor, 1.);
+                            gl_FragColor = vec4(uColor, opacity);
                         else
                             gl_FragColor = vec4(0);
                 }
             `
             ,
-            vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
+            vertexShader: HC.MeshShaderMaterialPlugin.vertexShader
         }
     }
 }

@@ -4,13 +4,9 @@
     HC.plugins.mesh_material.monjori = class Plugin extends HC.MeshShaderMaterialPlugin {
 
         shader = {
-
-            uniforms: {
-                uTime: {type: 'f', value: 1.0}
-            },
-            fragmentShader: `
-            uniform float uTime;
-            varying vec2 vUv;
+            uniforms: {...HC.MeshShaderMaterialPlugin.standardUniforms},
+            fragmentShader: HC.MeshShaderMaterialPlugin.fragmentPrefix + `
+           
             void main(void)
             {
                 vec2 p = -1.0 + 2.0 * vUv;
@@ -35,10 +31,10 @@
                 d=r/350.0;
                 d+=sin(d*d*8.0)*0.52;
                 f=(sin(a*g)+1.0)/2.0;
-                gl_FragColor=vec4(vec3(f*i/1.6,i/2.0+d/13.0,i)*d*p.x+vec3(i/1.3+d/8.0,i/2.0+d/18.0,i)*d*(1.0-p.x),1.0);
+                gl_FragColor=vec4(vec3(f*i/1.6,i/2.0+d/13.0,i)*d*p.x+vec3(i/1.3+d/8.0,i/2.0+d/18.0,i)*d*(1.0-p.x), opacity);
             }`
             ,
-            vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
+            vertexShader: HC.MeshShaderMaterialPlugin.vertexShader
         }
     }
 }

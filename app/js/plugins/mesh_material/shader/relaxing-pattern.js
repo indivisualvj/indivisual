@@ -7,13 +7,10 @@
         shader = {
             uniforms: {
                 uTime: {type: 'f', value: 1.0},
-                tDiffuse: { type: "t", value: null },
+                opacity: { type: 'f', value: 1.0 },
                 audio: { type: "fv", value: []}
             },
-            fragmentShader: `
-            varying vec2 vUv;
-            uniform float uTime;
-            uniform sampler2D tDiffuse;
+            fragmentShader: HC.MeshShaderMaterialPlugin.fragmentPrefix + `
             uniform float audio[5];
             
             #define iTime uTime
@@ -96,13 +93,9 @@
                 col *= 0.5 + 0.5*pow( 16.0*uv.x*uv.y*(1.0-uv.x)*(1.0-uv.y), bass*0.005 );
                 fragColor = vec4(col, 1.0);
             }
+            ` + HC.MeshShaderMaterialPlugin.fragmentSuffix,
+            vertexShader: HC.MeshShaderMaterialPlugin.vertexShader
             
-            void main() {
-                mainImage(gl_FragColor, vUv);
-            }
-            `
-            ,
-            vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
         }
     }
 }

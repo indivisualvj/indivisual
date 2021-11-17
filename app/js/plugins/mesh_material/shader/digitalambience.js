@@ -3,12 +3,8 @@
     HC.plugins.mesh_material.digitalambience = class Plugin extends HC.MeshShaderMaterialPlugin {
         static name = 'digital-ambience';
         shader = {
-            uniforms: {
-                uTime: {type: 'f', value: 1.0}
-            },
-            fragmentShader: `
-            uniform float uTime;
-            varying vec2 vUv;
+            uniforms: {...HC.MeshShaderMaterialPlugin.standardUniforms},
+            fragmentShader: HC.MeshShaderMaterialPlugin.fragmentPrefix + `
             
             vec2 rotate(vec2 p, float a)
             {
@@ -96,10 +92,9 @@
                 col *= fbm(uTime * 6.0) * 2.0;
                 col = pow(col, vec3(1.0 / 2.2));
                 //col = clamp(col, vec3(0.0), vec3(1.0));
-                gl_FragColor = vec4(col, 1.0);
-            }`
-            ,
-            vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
+                gl_FragColor = vec4(col, opacity);
+            }`,
+            vertexShader: HC.MeshShaderMaterialPlugin.vertexShader
         }
     }
 }

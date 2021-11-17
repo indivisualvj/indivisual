@@ -17,12 +17,9 @@
     HC.plugins.mesh_material.trigonometric = class Plugin extends HC.MeshShaderMaterialPlugin {
 
         shader = {
-            uniforms: {
-                uTime: {type: 'f', value: 1.0}
-            },
-            fragmentShader: `
-            varying vec2 vUv;
-            uniform float uTime;
+            uniforms: {...HC.MeshShaderMaterialPlugin.standardUniforms},
+            fragmentShader: HC.MeshShaderMaterialPlugin.fragmentPrefix + `
+            
             vec2 iterate (in vec2 p, in vec4 t) {
                 return p - 0.05*cos(t.xz + p.x*p.y + cos(t.yw+1.5*3.1415927*p.yx)+p.yx*p.yx );
             }
@@ -59,10 +56,10 @@
 
                 col *= 0.3 + 0.7*pow( 16.0*q.x*q.y*(1.0-q.x)*(1.0-q.y), 0.2 );
 
-                gl_FragColor = vec4( col, 1.0 );
-            }`
-            ,
-            vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
+                gl_FragColor = vec4( col, opacity );
+            }
+            `,
+            vertexShader: HC.MeshShaderMaterialPlugin.vertexShader
         }
     }
 }

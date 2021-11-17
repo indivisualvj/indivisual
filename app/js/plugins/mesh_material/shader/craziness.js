@@ -5,14 +5,8 @@
     HC.plugins.mesh_material.craziness = class Plugin extends HC.MeshShaderMaterialPlugin {
 
         shader = {
-            uniforms: {
-                uTime: {type: 'f', value: 1.0},
-                // resolution: {type: "v2", value: new THREE.Vector2(800, 600)}
-            },
-            fragmentShader: `
-            varying vec2 vUv;
-            vec2 resolution = vec2(1.0);
-            uniform float uTime;
+            uniforms: {...HC.MeshShaderMaterialPlugin.standardUniforms},
+            fragmentShader: HC.MeshShaderMaterialPlugin.fragmentPrefix + `
             
             #define t uTime/4.0
             mat2 m(float a){float c=cos(a), s=sin(a);return mat2(c,-s,s,c);}
@@ -36,13 +30,9 @@
                 }
                 fragColor = vec4(cl, 1.);
             }
+            ` + HC.MeshShaderMaterialPlugin.fragmentSuffix,
+            vertexShader: HC.MeshShaderMaterialPlugin.vertexShader
             
-            void main() {
-                mainImage(gl_FragColor, vUv);
-            }
-            `
-            ,
-            vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
         }
     }
 }

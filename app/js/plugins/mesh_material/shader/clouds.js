@@ -3,12 +3,8 @@
     HC.plugins.mesh_material.clouds = class Plugin extends HC.MeshShaderMaterialPlugin {
 
         shader = {
-            uniforms: {
-                uTime: {type: 'f', value: 1.0}
-            },
-            fragmentShader: `
-                uniform float uTime;
-                varying vec2 vUv;
+            uniforms: {...HC.MeshShaderMaterialPlugin.standardUniforms},
+            fragmentShader: HC.MeshShaderMaterialPlugin.fragmentPrefix + `
     
                 const float cloudscale = 1.1;
                 const float speed = 0.03;
@@ -51,7 +47,6 @@
                 }
                 
                 // -----------------------------------------------
-                vec2 iResolution = vec2(1.0);
                 
                 void main () {
                     vec2 p = vUv.xy / iResolution.xy;
@@ -119,10 +114,11 @@
                     
                     vec3 result = mix(skycolour, clamp(skytint * skycolour + cloudcolour, 0.0, 1.0), clamp(f + c, 0.0, 1.0));
                     
-                    gl_FragColor = vec4( result, 1.0 );
-                }`
-            ,
-            vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
+                    gl_FragColor = vec4( result, opacity );
+                }
+            `,
+            vertexShader: HC.MeshShaderMaterialPlugin.vertexShader
+            
         }
     }
 }

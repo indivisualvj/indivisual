@@ -5,13 +5,8 @@
     HC.plugins.mesh_material.sparkle_plexus = class Plugin extends HC.MeshShaderMaterialPlugin {
         static name = 'sparkle-plexus';
         shader = {
-            uniforms: {
-                uTime: {type: 'f', value: 1.0}
-            },
-            fragmentShader: `
-                uniform float uTime;
-                uniform vec2 resolution;
-                varying vec2 vUv;
+            uniforms: {...HC.MeshShaderMaterialPlugin.standardUniforms},
+            fragmentShader: HC.MeshShaderMaterialPlugin.fragmentPrefix + `
                 
                 #define S(a,b,t) smoothstep(a,b,t)
                 
@@ -82,7 +77,6 @@
                 
                 void mainImage( out vec4 fragColor, in vec2 fragCoord )
                 {
-                    vec2 iResolution = vec2(1.0);
                     vec2 uv = (fragCoord-.5*iResolution.xy)/iResolution.y;
                     vec2 mouse = (iResolution.xy)-.5;
                     float m = 0.;
@@ -102,24 +96,13 @@
                         m += Layer(uv*size+i*20.-mouse)*fade;
                     }
                     
-                    
-                    
-                
                     vec3 col = vec3(m);
                     
-                    //col.rg = id+1.;
-                    
-                    //if (gv.x>.48||gv.y>.48) col = vec3(1.,0,0);
-                
                     fragColor = vec4(col,1.0);
                 }
-                
-                void main() {
-                    mainImage(gl_FragColor, vUv);
-                }
-                `
-            ,
-            vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
+            ` + HC.MeshShaderMaterialPlugin.fragmentSuffix,
+            vertexShader: HC.MeshShaderMaterialPlugin.vertexShader
+            
         }
     }
 }

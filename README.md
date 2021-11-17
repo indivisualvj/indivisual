@@ -27,8 +27,9 @@ To get an idea of what can be done with it, visit my [YouTube channel](https://w
     ```
 - To use as single page application open http://localhost:8081
     - Learn how to use in seperated windows or even multiple machines [here](docs/setup-options.md)
-- Scroll down to the Tutorials section and have a look
-    
+- Take a look at the [indivisual-assets]() repo to get some assets and presets and install them into [nodejs-runtime-user-home]/indivisual
+- Load the application and check out the content under "presets"
+
 
 ## For Developers
 There is no clean code in there. There also is no explicit design pattern 

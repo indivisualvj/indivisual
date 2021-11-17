@@ -212,7 +212,7 @@ HC.Statics = HC.Statics || {};
                     return;
                 }
                 let rsc = resources[index];
-                let action = 'get';
+                let action = 'config';
                 if (rsc.action) {
                     action = rsc.action;
                 }

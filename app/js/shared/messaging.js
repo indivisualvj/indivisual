@@ -420,7 +420,26 @@
         load(base, dir, file, callback) {
             let path = filePath(base, dir);
             let data = {
-                action: 'get',
+                action: 'load',
+                dir: dir,
+                name: file,
+                file: path + '/' + file
+            };
+            this._emit(data, callback);
+        }
+
+
+        /**
+         *
+         * @param base
+         * @param dir
+         * @param file
+         * @param callback
+         */
+        config(base, dir, file, callback) {
+            let path = filePath(base, dir);
+            let data = {
+                action: 'config',
                 dir: dir,
                 name: file,
                 file: path + '/' + file

@@ -4,10 +4,13 @@
         // static name = 'line (no transform)';
 
         apply(geometry) {
-            this.material = materialman.addMaterial(new THREE.LineBasicMaterial());
-            let g = new THREE.EdgesGeometry(geometry);
-            let mesh = new THREE.LineSegments(g, material);
-            g.userData.geometry = geometry;
+            let material = materialman.addMaterial(new THREE.LineBasicMaterial());
+            this.material = material;
+            let edges = new THREE.EdgesGeometry(geometry);
+            this.geometry = edges;
+            let mesh = new THREE.LineSegments(edges, material);
+            this.mesh = mesh;
+            edges.userData.geometry = geometry;
             mesh.computeLineDistances();
 
             return mesh;

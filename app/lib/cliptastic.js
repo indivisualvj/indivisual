@@ -164,9 +164,6 @@ var Cliptastic = function(config) {
 
     var init = function(){
         // UI events
-        //window.addEventListener('mousemove', mouseMove);
-        //window.addEventListener('mouseup', mouseUp);
-        //window.addEventListener('mousedown', mouseDown);
         window.addEventListener('keydown', keyDown);
     };
 

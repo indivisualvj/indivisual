@@ -349,7 +349,7 @@ HC.Layer.prototype.resetPlugins = function () {
             if (plugin in this.plugins && key in this.plugins[plugin]) {
                 let plug = this.getPlugin(plugin, key);
                 if (plug.reset) {
-                    plug.reset(); // todo: all plugins should be reset here. are we missing something?
+                    plug.reset();
                 }
             }
         }

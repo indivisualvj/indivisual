@@ -294,9 +294,6 @@ var Maptastic = function(config) {
         window.addEventListener('resize', resize );
 
         // UI events
-        //window.addEventListener('mousemove', mouseMove);
-        //window.addEventListener('mouseup', mouseUp);
-        //window.addEventListener('mousedown', mouseDown);
         window.addEventListener('keydown', keyDown);
 
         resize();

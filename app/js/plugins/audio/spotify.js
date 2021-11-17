@@ -60,26 +60,25 @@
         }
 
         onDrop(e, callback) {
-            let inst = this;
             let url = e.dataTransfer.getData('URL');
-            SC.resolve(url).then(function (sound) {
+            SC.resolve(url).then((sound) => {
 
-                let onCanPlay = function () {
-                    inst.audioTag.removeEventListener('canplay', onCanPlay);
-                    inst.audioTag.play();
-                    inst.source = inst.context.createMediaElementSource(inst.audioTag);
-                    callback(inst.source);
+                let onCanPlay = () => {
+                    this.audioTag.removeEventListener('canplay', onCanPlay);
+                    this.audioTag.play();
+                    this.source = this.getContext().createMediaElementSource(this.audioTag);
+                    callback(this.source);
                 };
 
-                inst.audioTag.addEventListener('canplay', onCanPlay);
-                inst.audioTag.setAttribute('src', sound.stream_url + '?client_id=' + SOUNDCLOUD_CLIENT_ID);
+                this.audioTag.addEventListener('canplay', onCanPlay);
+                this.audioTag.setAttribute('src', sound.stream_url + '?client_id=' + SOUNDCLOUD_CLIENT_ID);
             });
 
         }
 
         start() {
             if (this.source) {
-                this.source.connect(this.context.destination);
+                this.source.connect(this.getContext().destination);
             }
         }
 

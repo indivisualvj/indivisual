@@ -72,7 +72,7 @@
                     software: true
                 }).then((e) => {this._onSuccess(e);}, (e) => {this._onFailure(e);});
             } else {
-                console.error("No MIDI support in your browser.");
+                console.warn("No MIDI support in your browser. If you're not on localhost, try enabling SSL.");
             }
         }
 
@@ -89,15 +89,17 @@
             let _updateControlSet = (input, settings) => {
                 let constants = settings.constants;
                 for (let c in constants) {
-                    let co = constants[c];
-                    window[c] = co;
+                    window[c] = constants[c];
                 }
 
                 input.value._controlSet = settings;
             };
 
             let _onStateChange = () => {
-                if (this.midi.onstatechange == null) return;
+                if (this.midi.onstatechange == null){
+                    return;
+                }
+
                 this.midi.onstatechange = null;
                 let inputs = this.midi.inputs.values();
                 let success = false;

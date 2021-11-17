@@ -13,13 +13,7 @@
          *
          */
         constructor() {
-            navigator.getUserMedia = 
-                navigator.mediaDevices.getUserMedia 
-                || navigator.getUserMedia 
-                || navigator.webkitGetUserMedia 
-                || navigator.mozGetUserMedia 
-                || navigator.msGetUserMedia;
-            window.AudioContext = window.AudioContext || window.webkitAudioContext;
+
         }
 
         /**
@@ -28,8 +22,7 @@
          * @param callback
          */
         initPlugin(name, callback) {
-            this.initContext();
-            this.plugin = new HC.AudioManager.plugins[name]().construct(this.context);
+            this.plugin = new HC.AudioManager.plugins[name](this);
             this.plugin.init(callback);
         }
 
@@ -78,6 +71,8 @@
             if (!this.context) {
                 this.context = new (window.AudioContext)();
             }
+
+            return this.context;
         }
     }
 }

@@ -17,7 +17,9 @@
          *
          */
         constructor() {
-            THREE.Cache.enabled = true;
+            if (IS_ANIMATION) {
+                THREE.Cache.enabled = true;
+            }
         }
 
         /**

@@ -22,7 +22,7 @@
 
         initTexture() {
             let that = this;
-            navigator.mediaDevices.getUserMedia({video: true}).then(function (stream) {
+            navigator.getUserMedia({video: true}).then(function (stream) {
                     let video = document.createElement("video");
                     Object.assign(video, {
                         srcObject: stream,

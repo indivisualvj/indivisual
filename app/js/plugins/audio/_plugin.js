@@ -2,11 +2,21 @@ HC.AudioManager.plugins = HC.AudioManager.plugins || {};
 {
     HC.AudioPlugin = class Plugin {
 
-        construct(context) {
-            this.context = context;
-            this.source;
-            this.stream;
-            return this;
+        /**
+         * @type {HC.AudioManager}
+         */
+        manager;
+
+        source;
+
+        stream;
+
+        /**
+         *
+         * @param {HC.AudioManager} manager
+         */
+        constructor(manager) {
+            this.manager = manager;
         }
 
         start() {
@@ -27,6 +37,10 @@ HC.AudioManager.plugins = HC.AudioManager.plugins || {};
             }
 
             this.source = false;
+        }
+
+        getContext() {
+            return this.manager.initContext();
         }
     }
 }

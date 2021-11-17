@@ -14,15 +14,14 @@
                 res.multiplyScalar(this.settings.background_volume);
                 let geo = new THREE.SphereBufferGeometry(res.length() * 2, 16, 16);
                 geo.rotateY(Math.PI / 2);
-                this.addDisposable(geo);
+                this.geometry = geo;
 
-                let mat = materialman.addMaterial(new THREE.MeshPhysicalMaterial({
+                this.material = materialman.addMaterial(new THREE.MeshPhysicalMaterial({
                     color: color,
                     side: THREE.DoubleSide
                 }));
-                this.addDisposable(mat);
 
-                let mesh = new THREE.Mesh(geo, mat);
+                let mesh = new THREE.Mesh(geo, this.material);
                 mesh.receiveShadow = true;
                 this.mesh = mesh;
 
@@ -30,7 +29,7 @@
 
                 let file = assetman.getImage(this.settings.background_input);
                 if (file) {
-                    assetman.loadMaterialMap(mat, filePath(IMAGE_DIR, file), function (mat) {
+                    assetman.loadMaterialMap(this.material, filePath(IMAGE_DIR, file), function (mat) {
                         if (!mat.emissiveMap) {
                             mat.emissiveMap = mat.map;
                         }

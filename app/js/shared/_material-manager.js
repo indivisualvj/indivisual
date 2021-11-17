@@ -16,10 +16,12 @@
         }
 
         addMaterial(material) {
+            this.materials.push(material);
 
             return material;
         }
 
+        // todo: when to call it?
         disposeAll() {
             for (let i = 0; i < this.materials.length; i++) {
                 requestAnimationFrame(() => {

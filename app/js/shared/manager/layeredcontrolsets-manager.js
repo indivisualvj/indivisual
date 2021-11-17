@@ -257,7 +257,11 @@
                 },
 
                 get(target, name, receiver) {
-                    return target[mappings[name]].properties[name];
+                    if (name in mappings) {
+                        return target[mappings[name]].properties[name];
+                    }
+
+                    return undefined;
                 },
 
                 set(target, name, value, receiver) {

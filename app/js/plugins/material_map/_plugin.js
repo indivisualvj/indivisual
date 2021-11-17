@@ -8,20 +8,15 @@ HC.plugins.material_map = HC.plugins.material_map || {};
         };
 
         reset() {
-            this.dispose();
-            let keys = Object.keys(this.properties);
-            for (let k in keys) {
-                this.properties[keys[k]] = undefined;
-            }
+            this._dispose();
         }
 
-        dispose() {
+        _dispose() {
             let keys = Object.keys(this.properties);
             for (let k in keys) {
                 let v = this.properties[keys[k]];
-                if (v && v.dispose) {
-                    v.dispose();
-                }
+                this.properties[keys[k]] = undefined;
+                threeTraverse(v);
             }
         }
     }

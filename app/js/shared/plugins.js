@@ -20,13 +20,9 @@ HC.Shape.prototype.initPlugins = function () {
             let key = plugins[p];
             let plugin = HC.Shape.prototype.injected.plugins[key];
             HC.Shape.prototype._plugins[key] = clone(plugin);
-            // HC.Shape.prototype._plugins[key] = Object.assign({}, plugin);
-            // HC.Shape.prototype._plugins[key] = JSON.copy(plugin);
         }
     }
     this.plugins = clone(HC.Shape.prototype._plugins);
-    // this.plugins = Object.assign({}, HC.Shape.prototype._plugins);
-    // this.plugins = JSON.copy(HC.Shape.prototype._plugins);
 };
 {
     /**

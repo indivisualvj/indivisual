@@ -5,7 +5,7 @@
 
     let inst;
     /**
-     * todo: does it cache loaded contents???
+     *
      * @type {HC.AssetManager}
      */
     HC.AssetManager = class AssetManager {
@@ -319,7 +319,8 @@
             }
         }
 
-        disposeAllTextures() {
+        // todo when to call it?
+        disposeAll() {
             for (let i = 0; i < this.textures.length; i++) {
                 requestAnimationFrame(() => {
                     this.textures[i].dispose();

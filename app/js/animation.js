@@ -607,7 +607,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                     this.fullReset(false);
 
                                 } else {
-                                    assetman.disposeAllTextures();
                                     this.renderer.resetLayer(this.renderer.currentLayer);
                                 }
                             }

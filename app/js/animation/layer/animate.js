@@ -1,41 +1,3 @@
-/**
- *
- * @param shape
- */
-HC.Layer.prototype.animateShape = function (shape) {
-
-    let duration = this.getShapeRhythmPlugin();
-    let delay = this.getShapeDelayPlugin();
-
-    // wait until delay is over
-    if (!delay.finished(shape)) {
-        delay.update(shape, this.animation.diff);
-
-        // wait until duration is over
-    } else if (!duration.finished(shape)) {
-        duration.update(shape, this.animation.diff);
-
-        // reconfigure when finished
-    } else {
-        this.nextShapeRhythm(shape);
-        this.nextShapeDelay(shape);
-        this.nextShapeDirection(shape);
-        this.nextShapeRotation(shape);
-
-    }
-
-    if (shape.isVisible()) {
-        this.doPattern(shape);
-        this.doOffsetMode(shape);
-        this.doShapeTransform(shape);
-        this.doSizing(shape);
-        this.doRotationOffset(shape);
-        this.doShapeLookat(shape);
-        this.doLockingShapeRotation(shape);
-        this.doColoring(shape);
-        this.doMaterial(shape);
-    }
-};
 
 /**
  *
@@ -57,12 +19,12 @@ HC.Layer.prototype.animate = function () {
 
     this.materialColor = this.doMaterialMap();
 
-    this.animateShape(this.shape);
+    this._animateShape(this.shape);
     this.doPatternRotation(); // preset current pattern euler from layer's shape rotation
 
     for (let i = 0; i < this.shapes.length; i++) {
         let shape = this.shapes[i];
-        this.animateShape(shape, true);
+        this._animateShape(shape, true);
         shape.materialNeedsUpdate = this.shapeMaterialsNeedUpdate;
     }
 
@@ -97,3 +59,43 @@ HC.Layer.prototype._preAnimate = function () {
         this._resetAmbientLight();
     }
 }
+
+/**
+ *
+ * @param shape
+ * @private
+ */
+HC.Layer.prototype._animateShape = function (shape) {
+
+    let duration = this.getShapeRhythmPlugin();
+    let delay = this.getShapeDelayPlugin();
+
+    // wait until delay is over
+    if (!delay.finished(shape)) {
+        delay.update(shape, this.animation.diff);
+
+        // wait until duration is over
+    } else if (!duration.finished(shape)) {
+        duration.update(shape, this.animation.diff);
+
+        // reconfigure when finished
+    } else {
+        this.nextShapeRhythm(shape);
+        this.nextShapeDelay(shape);
+        this.nextShapeDirection(shape);
+        this.nextShapeRotation(shape);
+
+    }
+
+    if (shape.isVisible()) {
+        this.doPattern(shape);
+        this.doOffsetMode(shape);
+        this.doShapeTransform(shape);
+        this.doSizing(shape);
+        this.doRotationOffset(shape);
+        this.doShapeLookat(shape);
+        this.doLockingShapeRotation(shape);
+        this.doColoring(shape);
+        this.doMaterial(shape);
+    }
+};

@@ -88,5 +88,9 @@ HC.plugins.pattern = HC.plugins.pattern || {};
 
             return direction;
         }
+
+        reset() {
+            threeTraverse(this);
+        }
     }
 }

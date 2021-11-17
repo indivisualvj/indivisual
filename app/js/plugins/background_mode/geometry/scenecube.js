@@ -24,15 +24,15 @@
                 this.target1 = new THREE.WebGLRenderTarget(edge, edge, {
                     wrapT: wrapt, wrapS: wraps
                 });
-                this.addDisposable(this.target1);
+
                 this.target2 = new THREE.WebGLRenderTarget(edge, edge, {
                     wrapT: wrapt, wrapS: wraps
                 });
-                this.addDisposable(this.target2);
+
 
                 res.multiplyScalar(2.5);
                 let geo = new THREE.BoxBufferGeometry(res.x, res.y, res.x);
-                this.addDisposable(geo);
+                this.geometry = geo;
 
                 this.material = materialman.addMaterial(new THREE.MeshBasicMaterial({
                     color: color,
@@ -40,7 +40,6 @@
                     map: this.target1.texture,
                     transparent: true
                 }));
-                this.addDisposable(this.material);
 
                 let mesh = new THREE.Mesh(geo, this.material);
                 mesh.scale.multiplyScalar(this.settings.background_volume);

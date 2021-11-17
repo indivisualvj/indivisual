@@ -182,7 +182,7 @@
                 composer: composer,
             };
 
-            this.resetSizes(renderer.resolution);
+            this._resetSizes(renderer.resolution);
 
             this.listener.register(EVENT_LAYER_RESET, this.index, () => {
                 console.log(EVENT_LAYER_RESET, this.index);
@@ -210,8 +210,9 @@
 
         /**
          *
+         * @private
          */
-        initRotator() {
+        _initRotator() {
             if (this._rotation) {
                 this._layer.remove(this._rotation);
                 this._rotation.traverse(threeDispose);
@@ -232,8 +233,9 @@
         /**
          *
          * @param resolution
+         * @private
          */
-        initBoundaries(resolution) {
+        _initBoundaries(resolution) {
 
             let width = resolution.x;
             let height = resolution.y;
@@ -275,17 +277,18 @@
             this._resetShapes();
             this._resetLighting();
             this._resetBackground();
-            this.updateShaders();
+            this._updateShaders();
             this._updateShaderPasses();
         }
 
         /**
          *
          * @param resolution
+         * @private
          */
-        resetSizes(resolution) {
+        _resetSizes(resolution) {
 
-            this.initBoundaries(resolution);
+            this._initBoundaries(resolution);
 
             if (this.three.composer) {
                 this.three.composer.setSize(this.resolution().x, this.resolution().y);
@@ -302,8 +305,8 @@
             this.shapeMaterialsNeedUpdate = false;
 
             this.resetPlugins();
-            this.initRotator();
-            this.resetAnimation();
+            this._initRotator();
+            this._resetAnimation();
 
             let sgp = this.getShapeGeometryPlugin();
             if (sgp)sgp.reset();
@@ -329,8 +332,9 @@
 
         /**
          *
+         * @private
          */
-        dispose() {
+        _dispose() {
             let sc = this.three.scene;
             this.settings = false;
             this.controlSets = false;
@@ -349,7 +353,7 @@
                 this.shape = false;
             }
 
-            this.resetAnimation();
+            this._resetAnimation();
         }
 
         /**
@@ -362,8 +366,9 @@
 
         /**
          *
+         * @private
          */
-        resetAnimation() {
+        _resetAnimation() {
             if (this.tween) {
                 this.tween.removeAll();
             }
@@ -372,9 +377,10 @@
 
         /**
          *
-         * @returns {null|Array}
+         * @returns {null|[]}
+         * @private
          */
-        updateShaders() {
+        _updateShaders() {
             let shaders = null;
             let li = 0;
 

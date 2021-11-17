@@ -1014,6 +1014,9 @@ document.addEventListener('DOMContentLoaded', function () {
          * reset all of all settings
          */
         fullReset() {
+            assetman.disposeAll();
+            materialman.disposeAll();
+            this.explorer.reload();
             this.explorer.resetPresets();
             this.settingsManager.reset();
             this.config.SourceSettingsManager.reset();

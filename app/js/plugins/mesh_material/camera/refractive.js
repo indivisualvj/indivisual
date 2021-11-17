@@ -35,13 +35,10 @@
                 mapping: THREE.CubeRefractionMapping,
             } );
             let cubecam = new THREE.CubeCamera(1, 10000, cubeRenderTarget);
-            // cubecam.renderTarget.texture.generateMipmaps = true;
-            // cubecam.renderTarget.texture.minFilter = THREE.LinearMipMapLinearFilter;
-            // cubecam.renderTarget.texture.mapping = THREE.CubeRefractionMapping;
             this.cameras.add(cubecam);
 
-            let material = materialman.addMaterial(new THREE.MeshPhysicalMaterial({envMap: cubeRenderTarget.texture}));
-            let mesh = new THREE.Mesh(geometry, material);
+            this.material = materialman.addMaterial(new THREE.MeshPhysicalMaterial({envMap: cubeRenderTarget.texture}));
+            let mesh = new THREE.Mesh(geometry, this.material);
             mesh.name = this.id(index);
 
             let inst = this;

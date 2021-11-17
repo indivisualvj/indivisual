@@ -3,8 +3,8 @@
         static index = 1;
 
         apply(geometry) {
-            let material = materialman.addMaterial(new THREE.MeshBasicMaterial());
-            return new THREE.Mesh(geometry, material);
+            this.material = materialman.addMaterial(new THREE.MeshBasicMaterial());
+            return new THREE.Mesh(geometry, this.material);
         }
     }
 }

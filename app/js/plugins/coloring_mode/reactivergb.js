@@ -18,8 +18,8 @@
 
                 if (!sync && gridPosition.y > 1) {
                     let i = gridPosition.x - 1;
-                    if (layer.shapes[i]) {
-                        let c2 = layer.shapes[i];
+                    if (layer.getShape(i)) {
+                        let c2 = layer.getShape(i);
                         fbdv = this.shapeVolume(c2) * 0.6;
                     }
                 }

@@ -20,7 +20,7 @@
                 if (shape.index % 2 === 1) {
                     let pi = shape.index - 1;
                     if (pi >= 0 && pi < layer.shapes.length) {
-                        let src = layer.shapes[pi].color;
+                        let src = layer.getShape(pi).color;
                         this.chess(src, color);
                     }
                 }
@@ -29,7 +29,7 @@
                 if (shape.index % 2 === 0) {
                     let ni = shape.index + 1;
                     if (ni >= 0 && ni < layer.shapes.length) {
-                        let src = layer.shapes[ni].color;
+                        let src = layer.getShape(ni).color;
                         this.chess(src, color);
                     }
                 }

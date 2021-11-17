@@ -18,7 +18,7 @@ HC.Layer.prototype.shapeColor = function (random, complementary) {
             index = randomInt(0, this.shapes.length - 1);
         }
 
-        let shape = this.shapes[index];
+        let shape = this.getShape(index);
         let hsl = shape.color;
         if (complementary) {
             hsl = hslComplementary(hsl);
@@ -28,7 +28,6 @@ HC.Layer.prototype.shapeColor = function (random, complementary) {
     return hex;
 };
 
-// todo use everywere???
 HC.Layer.prototype.getShape = function (index) {
     if (index in this.shapes) {
         return this.shapes[index];
@@ -43,11 +42,6 @@ HC.Layer.prototype.getShape = function (index) {
  * @returns {number}
  */
 HC.Layer.prototype.shapeSize = function (multiplier) {
-
-    /**
-     * da müsste 14 eigentlich 64-14 also 50 sein. max - shape_sizedivider wären also 14 und man hätte den divider.
-     * alle presets ändern und det so machen
-     */
     if (this._shapeSize !== this.settings.shape_sizedivider) {
         this._shapeSize = this.settings.shape_sizedivider;
         this._shapeSizePixels = this.resolution().x / this._shapeSize;
@@ -77,5 +71,5 @@ HC.Layer.prototype.addShape = function (child) {
  * @returns {*}
  */
 HC.Layer.prototype.getRandomShape = function () {
-    return this.shapes[randomInt(0, this.shapes.length - 1)];
+    return this.getShape(randomInt(0, this.shapes.length - 1));
 };

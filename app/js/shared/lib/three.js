@@ -4,34 +4,35 @@
  */
 function threeDispose(obj) {
     let disposable;
-    if (!(obj instanceof THREE.Scene) && obj.dispose) { // fixme: not avoid disposing scenes. get control over it! ;)
-        disposable = obj;
-    }
-    if (obj.renderTarget) {
-        disposable = obj.renderTarget;
-    }
-    if (obj.material) {
-        disposable = obj.material;
 
-        let keys = Object.keys(obj.material);
-        for (let k in keys) {
-            let key = keys[k];
-            if (obj.material[key] instanceof THREE.Texture) {
-                requestAnimationFrame(() => {
-                    obj.material[key].dispose();
-                });
-            }
-        }
-    }
-    if (obj.geometry) {
-        disposable = obj.geometry;
+    if (!(obj instanceof THREE.Scene)) {
+        console.log('ddamn you just disposed a scene!');
     }
 
-    if (disposable) {
-        requestAnimationFrame(() => {
-            disposable.dispose();
-        });
-    }
+    // if (obj.dispose) {
+    //     disposable = obj;
+    // }
+    // if (obj.renderTarget) {
+    //     disposable = obj.renderTarget;
+    // }
+    // if (obj.material) {
+    //     disposable = obj.material;
+    //
+    //     let keys = Object.keys(obj.material);
+    //     for (let k in keys) {
+    //         let key = keys[k];
+    //         if (obj.material[key] instanceof THREE.Texture) {
+    //             obj.material[key].dispose();
+    //         }
+    //     }
+    // }
+    // if (obj.geometry) {
+    //     disposable = obj.geometry;
+    // }
+    //
+    // if (disposable) {
+    //     disposable.dispose();
+    // }
 }
 
 function threeTraverse(obj) {

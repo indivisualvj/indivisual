@@ -1015,7 +1015,6 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         fullReset() {
             assetman.disposeAll();
-            materialman.disposeAll();
             this.explorer.reload();
             this.explorer.resetPresets();
             this.settingsManager.reset();

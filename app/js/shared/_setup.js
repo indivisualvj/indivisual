@@ -58,8 +58,4 @@ if (TWEEN) {
  * @type {HC.AssetManager}
  */
 assetman = new HC.AssetManager();
-/**
- * @type {HC.MaterialManager}
- */
-materialman = new HC.MaterialManager();
 

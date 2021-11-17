@@ -19,6 +19,7 @@
          */
         constructor() {
             inst = this;
+            THREE.Cache.enabled = true;
         }
 
         /**
@@ -159,9 +160,7 @@
          */
         loadFont(url, callback) {
             new THREE.FontLoader().load(url, function (font) {
-                requestAnimationFrame(() => {
-                    callback(font);
-                });
+                callback(font);
             });
         }
 
@@ -175,16 +174,12 @@
 
             if (url in this.textures) {
                 let tex = this.textures[url];
-                requestAnimationFrame(() => {
-                    callback(tex);
-                });
+                callback(tex);
 
             } else {
                 new THREE.TextureLoader().load(url, (tex) => {
-                    requestAnimationFrame(() => {
-                        this.textures[url] = tex;
-                        callback(tex);
-                    });
+                    this.textures[url] = tex;
+                    callback(tex);
                 }, false, error);
             }
         }
@@ -196,6 +191,13 @@
          * @param error
          */
         loadCubeTexture(url, callback, error) {
+
+            if (url in this.textures) {
+                let tex = this.textures[url];
+                callback(tex);
+                return;
+            }
+
             this._files(url, function (data) {
 
                 let images = [];
@@ -219,9 +221,7 @@
                 });
 
                 new THREE.CubeTextureLoader().setPath(filePath(url, '')).load(images, function (tex) {
-                    requestAnimationFrame(() => {
-                        callback(tex);
-                    });
+                    callback(tex);
                 }, false, error);
             });
         }
@@ -252,9 +252,7 @@
                         let _load = function (key) {
 
                             if (!key) {
-                                requestAnimationFrame(() => {
-                                    callback(material);
-                                });
+                                callback(material);
 
                             } else {
                                 let val = json[key];
@@ -319,12 +317,9 @@
             }
         }
 
-        // todo when to call it?
         disposeAll() {
             for (let i = 0; i < this.textures.length; i++) {
-                requestAnimationFrame(() => {
-                    this.textures[i].dispose();
-                });
+                this.textures[i].dispose();
             }
 
             this.textures = [];

@@ -211,6 +211,27 @@
 
         /**
          *
+         * @returns {HC.GuifyController[]}
+         */
+        getAllControllers() {
+            let ctrls = [];
+            let _find = function (inst, ctrls) {
+                for (const key in inst.children) {
+                    let child = inst.children[key];
+                    if (child instanceof HC.GuifyFolder) {
+                        _find(child, ctrls)
+                    } else if (child instanceof HC.GuifyController) {
+                        ctrls.push(child)
+                    }
+                }
+            }
+
+            _find(this, ctrls);
+            return ctrls;
+        }
+
+        /**
+         *
          */
         remove() {
             super.remove();

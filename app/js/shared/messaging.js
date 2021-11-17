@@ -156,6 +156,7 @@
         /**
          *
          * @param data
+         * @param that
          */
         onAttr(data, that) {
             let key = data.query.replace(/[^a-z0-9]+/gi, '') + data.key;
@@ -205,6 +206,7 @@
         /**
          *
          * @param data
+         * @param that
          */
         onData(data, that) {
             requestAnimationFrame(function () {
@@ -241,6 +243,7 @@
          * @param key
          * @param value
          * @param resetValue
+         * @param timeout
          */
         emitAttr(query, key, value, resetValue, timeout) {
             let config = {
@@ -409,6 +412,7 @@
 
         /**
          *
+         * @param base
          * @param dir
          * @param file
          * @param callback

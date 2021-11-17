@@ -4,7 +4,12 @@
  */
 function threeDispose(obj) {
     let disposable;
-    if (!(obj instanceof THREE.Scene) && obj.dispose) {
+
+    if (obj instanceof THREE.Scene) {
+        return;
+    }
+
+    if (obj.dispose) {
         disposable = obj;
     }
     if (obj.renderTarget) {
@@ -14,12 +19,10 @@ function threeDispose(obj) {
         disposable = obj.material;
 
         let keys = Object.keys(obj.material);
-        for(let k in keys) {
+        for (let k in keys) {
             let key = keys[k];
             if (obj.material[key] instanceof THREE.Texture) {
-                requestAnimationFrame(() => {
-                    obj.material[key].dispose();
-                });
+                obj.material[key].dispose();
             }
         }
     }
@@ -28,8 +31,35 @@ function threeDispose(obj) {
     }
 
     if (disposable) {
-        requestAnimationFrame(() => {
-            disposable.dispose();
-        });
+        disposable.dispose();
+    }
+}
+
+function threeTraverse(obj) {
+    if (!isObject(obj)) return;
+
+    if (obj.dispose && typeof obj.dispose === 'function') {
+        console.log(obj.constructor.name, 'dispose');
+        obj.dispose();
+    }
+    if (obj.traverse && typeof obj.traverse === 'function') {
+        console.log(obj.constructor.name, 'traverse');
+        obj.traverse(threeTraverse);
+    }
+
+    let keys = Object.keys(obj);
+
+    for (let k in keys) {
+        let key = keys[k];
+        let prop = obj[key];
+        if (prop) {
+            if (prop.traverse && typeof prop.traverse === 'function') {
+                prop.traverse(threeDispose);
+
+            } else if (prop.dispose && typeof prop.dispose === 'function') {
+                console.log(prop.constructor.name, 'dispose', key);
+                prop.dispose();
+            }
+        }
     }
 }

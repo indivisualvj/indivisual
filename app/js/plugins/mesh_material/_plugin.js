@@ -41,5 +41,9 @@ HC.plugins.mesh_material = HC.plugins.mesh_material || {};
 
             return geometry;
         }
+
+        reset() {
+            threeTraverse(this);
+        }
     }
 }

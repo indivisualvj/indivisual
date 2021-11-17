@@ -22,24 +22,21 @@
                 this.target1 = new THREE.WebGLRenderTarget(edge, edge, {
                     wrapT: wrapt, wrapS: wraps
                 });
-                this.addDisposable(this.target1);
 
                 this.target2 = new THREE.WebGLRenderTarget(edge, edge, {
                     wrapT: wrapt, wrapS: wraps
                 });
-                this.addDisposable(this.target2);
 
                 let geo = new THREE.SphereBufferGeometry(res.length() * 2, 16, 16);
                 geo.rotateY(Math.PI / 2);
-                this.addDisposable(geo);
+                this.geometry = geo;
 
-                this.material = materialman.addMaterial(new THREE.MeshBasicMaterial({
+                this.material = new THREE.MeshBasicMaterial({
                     color: color,
                     side: THREE.DoubleSide,
                     map: this.target1.texture,
                     transparent: true
-                }));
-                this.addDisposable(this.material);
+                });
 
                 let mesh = new THREE.Mesh(geo, this.material);
                 mesh.scale.multiplyScalar(this.settings.background_volume);

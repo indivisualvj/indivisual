@@ -162,7 +162,7 @@
                     if (keepsettings) {
                         oldControlSets = this.layers[i].controlSets;
                     }
-                    ol.dispose();
+                    ol._dispose();
                 }
 
                 let layer = new HC.Layer(this.animation, this, i);

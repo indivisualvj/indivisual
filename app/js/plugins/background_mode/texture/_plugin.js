@@ -12,7 +12,8 @@
             }
         }
 
-        dispose() {
+        _dispose() {
+            threeTraverse(this);
         }
     }
 }

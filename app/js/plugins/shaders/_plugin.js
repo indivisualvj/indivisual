@@ -7,6 +7,8 @@ HC.plugins.shaders = HC.plugins.shaders || {};
 {
     HC.ShaderPlugin = class Plugin extends HC.AnimationPlugin {
 
+        pass;
+
         create() {
             console.error('HC.ShaderPlugin: .create() must be implemented in derived plugin.');
         }
@@ -18,23 +20,10 @@ HC.plugins.shaders = HC.plugins.shaders || {};
             }
         }
 
-        dispose() {
+        reset() {
             if (this.pass) {
-                if (this.pass.dispose) {
-                    this.pass.dispose();
-                }
-                if (this.pass.material) {
-                    this.pass.material.dispose();
-                }
-                if (this.pass.material.map) {
-                    this.pass.material.map.dispose();
-                }
-                if (this.pass.quad) {
-                    this.pass.quad.geometry.dispose();
-                }
-                if (this.pass.overrideMaterial) {
-                    this.pass.overrideMaterial.dispose();
-                }
+                threeTraverse(this);
+                threeTraverse(this.pass);
             }
         }
 

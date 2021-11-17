@@ -2,10 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-
-    let inst;
     /**
-     * todo: does it cache loaded contents???
+     *
      * @type {HC.AssetManager}
      */
     HC.AssetManager = class AssetManager {
@@ -13,12 +11,15 @@
         cubes = {};
         videos = {};
         textures = {};
+        progress = {};
 
         /**
          *
          */
         constructor() {
-            inst = this;
+            if (IS_ANIMATION) {
+                THREE.Cache.enabled = true;
+            }
         }
 
         /**
@@ -159,9 +160,7 @@
          */
         loadFont(url, callback) {
             new THREE.FontLoader().load(url, function (font) {
-                requestAnimationFrame(() => {
-                    callback(font);
-                });
+                callback(font);
             });
         }
 
@@ -173,20 +172,22 @@
          */
         loadTexture(url, callback, error) {
 
-            if (url in this.textures) {
-                let tex = this.textures[url];
-                requestAnimationFrame(() => {
-                    callback(tex);
-                });
-
-            } else {
-                new THREE.TextureLoader().load(url, (tex) => {
-                    requestAnimationFrame(() => {
-                        this.textures[url] = tex;
-                        callback(tex);
-                    });
-                }, false, error);
+            if (this._cacheGet(url, callback)) {
+                return;
             }
+            let progress = this._progressGet(url);
+            this._progressSet(url, callback);
+
+            if (progress) {
+                // callback was exchanged and will be called instead
+                return;
+            }
+
+            new THREE.TextureLoader().load(url, (tex) => {
+                this._cacheSet(url, tex);
+                callback = this._progressGet(url, true);
+                callback(tex);
+            }, false, error);
         }
 
         /**
@@ -196,7 +197,19 @@
          * @param error
          */
         loadCubeTexture(url, callback, error) {
-            this._files(url, function (data) {
+
+            if (this._cacheGet(url, callback)) {
+                return;
+            }
+            let progress = this._progressGet(url);
+            this._progressSet(url, callback);
+
+            if (progress) {
+                // callback was exchanged and will be called instead
+                return;
+            }
+
+            this._files(url, (data) => {
 
                 let images = [];
                 for (let k in data) {
@@ -218,10 +231,10 @@
                     return a.localeCompare(b);
                 });
 
-                new THREE.CubeTextureLoader().setPath(filePath(url, '')).load(images, function (tex) {
-                    requestAnimationFrame(() => {
-                        callback(tex);
-                    });
+                new THREE.CubeTextureLoader().setPath(filePath(url, '')).load(images, (tex) => {
+                    this._cacheSet(url, tex);
+                    callback = this._progressGet(url, true);
+                    callback(tex);
                 }, false, error);
             });
         }
@@ -233,7 +246,7 @@
          * @param error
          */
         loadMaterial(url, callback, error) {
-            this._files(url, function (data) {
+            this._files(url, (data) => {
 
                 let files = [];
                 for (let k in data) {
@@ -243,23 +256,21 @@
                 let config = files['config.json'];
                 if (config) {
                     config = filePath(url, config);
-                    inst._load(config, function (data) {
+                    this._load(config, (data) => {
                         let json = JSON.parse(data.contents);
                         let keys = Object.keys(json);
                         let material = {};
                         let i = 0;
 
-                        let _load = function (key) {
+                        let _load = (key) => {
 
                             if (!key) {
-                                requestAnimationFrame(() => {
-                                    callback(material);
-                                });
+                                callback(material);
 
                             } else {
                                 let val = json[key];
                                 if (isString(val)) {
-                                    inst.loadTexture(filePath(url, val), function (tex) {
+                                    this.loadTexture(filePath(url, val), (tex) => {
                                         material[key] = tex;
                                         tex.name = val;
                                         _load(keys[i++]);
@@ -303,14 +314,14 @@
 
             // complex
             if (path.match(/.+\.mat$/i)) {
-                inst.loadMaterial(path, function (mat) {
+                this.loadMaterial(path, function (mat) {
                     _assign(target, mat);
                     callback(target);
                 }, error);
 
             // simple
             } else {
-                inst.loadTexture(path, function (tex) {
+                this.loadTexture(path, function (tex) {
                     let mat = { map: tex };
                     _assign(target, mat);
                     callback(target);
@@ -319,14 +330,16 @@
             }
         }
 
-        disposeAllTextures() {
+        disposeAll() {
             for (let i = 0; i < this.textures.length; i++) {
-                requestAnimationFrame(() => {
-                    this.textures[i].dispose();
-                });
+                this.textures[i].dispose();
             }
-
+            this.progress = [];
             this.textures = [];
+
+            if (IS_ANIMATION) {
+                THREE.Cache.clear();
+            }
         }
 
         /**
@@ -349,6 +362,79 @@
             messaging._emit({action: 'get', file: file, name: file}, function (data) {
                 callback(data);
             });
+        }
+
+        /**
+         *
+         * @param url
+         * @param callback
+         * @returns {boolean|THREE.Texture}
+         * @private
+         */
+        _cacheGet(url, callback) {
+            if (url in this.textures) {
+                let tex = this.textures[url];
+                if (callback) {
+                    callback(tex);
+                    return true;
+                }
+                return tex;
+            }
+
+            return false;
+        }
+
+        /**
+         *
+         * @param url
+         * @param tex
+         * @private
+         */
+        _cacheSet(url, tex) {
+            if (url in this.textures) {
+                console.error('avoid adding duplicate urls', url);
+                debugger; // maybe it was loaded twice but how?
+            }
+            this.textures[url] = tex;
+        }
+
+        /**
+         *
+         * @param url
+         * @param remove
+         * @returns {null|*}
+         * @private
+         */
+        _progressGet(url, remove) {
+            if (url in this.progress) {
+                let progress = this.progress[url];
+                if (remove) {
+                    this._progressRemove(url);
+                }
+
+                return progress;
+            }
+
+            return null;
+        }
+
+        /**
+         *
+         * @param url
+         * @param callback
+         * @private
+         */
+        _progressSet(url, callback) {
+            this.progress[url] = callback;
+        }
+
+        /**
+         *
+         * @param url
+         * @private
+         */
+        _progressRemove(url) {
+            delete this.progress[url];
         }
     }
 }

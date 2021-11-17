@@ -14,17 +14,17 @@
 
             let inst = this;
             let file = this.settings.background_input;
-            let material = materialman.addMaterial(new THREE.MeshPhysicalMaterial({envMap: null}));
-            let mesh = new THREE.Mesh(geometry, material);
+            this.material = new THREE.MeshPhysicalMaterial({envMap: null});
+            let mesh = new THREE.Mesh(geometry, this.material);
             mesh.name = this.id(index);
 
-            let _onLoad = function (texture) {
+            let _onLoad = (texture) => {
                 texture.name = file;
                 texture.generateMipmaps = true;
                 texture.minFilter = THREE.LinearMipMapLinearFilter;
                 texture.mapping = THREE.CubeReflectionMapping;
-                material.envMap = texture;
-                material.needsUpdate = true;
+                this.material.envMap = texture;
+                this.material.needsUpdate = true;
             };
             this.cubeTextureFromBackgroundInput(_onLoad);
 

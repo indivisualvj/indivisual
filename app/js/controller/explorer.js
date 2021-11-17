@@ -94,7 +94,7 @@
         }
 
         /**
-         *
+         * todo sometimes there are children left. why?
          */
         reload(callback) {
             this.gui.removeChildren();

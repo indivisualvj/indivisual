@@ -4,7 +4,8 @@
 {
     HC.GeometryBackgroundModePlugin = class GeometryBackgroundModePlugin extends HC.BackgroundModePlugin {
         mesh;
-        disposables = [];
+        material;
+        geometry;
 
         after() {
             if (this.mesh && this.mesh.material) {
@@ -20,22 +21,8 @@
             }
         }
 
-        reset() {
-            this.dispose();
-        }
-
-        addDisposable(obj) {
-            this.disposables.push(obj);
-        }
-
-        dispose() {
-            for (const disposable of this.disposables) {
-                if (disposable.traverse) {
-                    disposable.traverse(threeDispose);
-                } else {
-                    disposable.dispose();
-                }
-            }
+        _dispose() {
+            threeTraverse(this);
         }
     }
 }

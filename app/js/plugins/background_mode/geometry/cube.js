@@ -13,13 +13,13 @@
                 let res = this.layer.resolution().clone();
                 res.multiplyScalar(2.5);
                 let geo = new THREE.BoxBufferGeometry(res.x, res.y, res.x);
-                this.addDisposable(geo);
+                this.geometry = geo;
 
-                let mat = materialman.addMaterial(new THREE.MeshPhysicalMaterial({
+                let mat = new THREE.MeshPhysicalMaterial({
                     color: color,
                     side: THREE.DoubleSide
-                }));
-                this.addDisposable(mat);
+                });
+                this.material = mat;
 
                 let mesh = new THREE.Mesh(geo, mat);
                 mesh.scale.multiplyScalar(this.settings.background_volume);

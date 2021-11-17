@@ -90,7 +90,7 @@
                 let constants = settings.constants;
                 for (let c in constants) {
                     let co = constants[c];
-                    window[c] = co; // todo do not put into window.
+                    window[c] = co;
                 }
 
                 input.value._controlSet = settings;
@@ -300,8 +300,7 @@
                 id.options.color = '';
             }
 
-            let cch = [step, timestamp, blast];
-            this.cache[values + name] = cch;
+            this.cache[values + name] = [step, timestamp, blast];
 
             switch (id.type) {
                 case 'status':

@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
+    // todo: is lighting dead?
     HC.SourceManager.display_source.lighting = class Plugin extends HC.SourceManager.DisplaySourcePlugin {
         static index = 99;
         type = 'lighting';

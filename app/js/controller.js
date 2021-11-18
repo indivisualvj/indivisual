@@ -852,7 +852,7 @@ document.addEventListener('DOMContentLoaded', function () {
         syncLayers() {
             for (let layer in this.settingsManager.layers) {
                 layer = parseInt(layer);
-                let to = layer * 150;
+                let to = layer * 150; // todo: can it be done faster?
 
                 let st = (layer, to) => {
                     setTimeout(() => {
@@ -863,7 +863,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
             let to = this.config.ControlValues.layers * 151;
 
-            setTimeout(() => {
+            setTimeout(() => { // todo: switch to first shuffleable?
                 this.updateControl('layer', this.config.ControlSettings.layer, true, true, true);
             }, to);
         }

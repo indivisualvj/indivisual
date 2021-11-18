@@ -129,6 +129,7 @@ HC.ControlController = HC.ControlController || {};
             layout_animation_fullscreen: ['hidden'],
             layout_sequence_fullscreen: ['hidden'],
             layout_source_fullscreen: ['hidden'],
+            layout_override: ['hidden'],
             layout_close: ['hidden'],
         };
 

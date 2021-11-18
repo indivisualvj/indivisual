@@ -691,3 +691,11 @@ input[type=checkbox].guify-checkbox_hxzak + label {
 .delete {
     background-image: url("/img/delete.png");
 }
+
+.check {
+    background-image: url("/img/check.png");
+}
+
+.next {
+    background-image: url("/img/next.png");
+}

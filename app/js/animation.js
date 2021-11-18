@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function () {
             config.loadConfig(() => {
                 animation.config.initControlSets();
 
-                animation.listener = new HC.Listener();
                 animation.audioManager = new HC.AudioManager();
                 animation.audioAnalyser = new HC.AudioAnalyser(animation);
                 animation.beatKeeper = new HC.BeatKeeper(animation, animation.config);
@@ -37,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 animation.renderer = renderer;
 
                 if (IS_ANIMATION) {
-                    animation.listener.register('webglcontextlost', animation.name, function () {
+                    HC.EventManager.getInstance().register('webglcontextlost', animation.name, function () {
                         // now reset...
                         HC.log('HC.Renderer', 'another context loss...', true, true);
 
@@ -139,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         animate() {
 
-            this.listener.fireEvent(EVENT_ANIMATION_ANIMATE);
+            HC.EventManager.getInstance().fireEvent(EVENT_ANIMATION_ANIMATE);
 
             this._preRender();
 
@@ -200,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (this.audioAnalyser.peak) {
                 this.messaging.emitMidi('glow', MIDI_PEAK_FEEDBACK, {timeout: 125});
 
-                this.listener.fireEvent('audio.peak', this.audioAnalyser);
+                HC.EventManager.getInstance().fireEvent('audio.peak', this.audioAnalyser);
             }
         }
 
@@ -210,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         render() {
-            this.listener.fireEvent(EVENT_ANIMATION_RENDER);
+            HC.EventManager.getInstance().fireEvent(EVENT_ANIMATION_RENDER);
             if (IS_ANIMATION) {
                 this.sourceManager.render();
             }
@@ -315,7 +314,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this._rmss += this.rms;
             this.last = this.now;
 
-            this.listener.fireEvent('animation.updateRuntime', this);
+            HC.EventManager.getInstance().fireEvent('animation.updateRuntime', this);
         }
 
         /**
@@ -551,12 +550,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
             switch (property) {
                 case 'shaders':
-                    this.listener.fireEventId(EVENT_LAYER_UPDATE_SHADERS, layer.index, layer, FIVE_FPS);
+                    HC.EventManager.getInstance().fireEventId(EVENT_LAYER_UPDATE_SHADERS, layer.index, layer, FIVE_FPS);
                     break;
 
                 case 'shape_vertices':
                     if (display) {
-                        this.listener.fireEventId(EVENT_LAYER_RESET_SHAPES, layer.index, layer, FIVE_FPS);
+                        HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_SHAPES, layer.index, layer, FIVE_FPS);
                     }
                     break;
             }
@@ -565,7 +564,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.messaging.emitSettings(layerIndex, data, true, false, force);
             }
 
-            this.listener.fireEvent('animation.updateSetting', {layer: layer, item: property, value: value});
+            HC.EventManager.getInstance().fireEvent('animation.updateSetting', {layer: layer, item: property, value: value});
         }
 
         /**
@@ -675,7 +674,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.sourceManager.updateSample(numberExtract(item, 'sample'));
 
                     if (item.match(/sample\d+_(enabled|record)/)) { // never let samples be selected on enabled/record status change
-                        this.listener.fireEvent(EVENT_SAMPLE_STATUS_CHANGED, this.sourceManager.getSample(numberExtract(item, 'sample')));
+                        HC.EventManager.getInstance().fireEvent(EVENT_SAMPLE_STATUS_CHANGED, this.sourceManager.getSample(numberExtract(item, 'sample')));
                     }
 
                 } else if (item.match(/display\d+_source/)) {
@@ -691,7 +690,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            this.listener.fireEvent(EVENT_SOURCE_SETTING_CHANGED, arguments);
+            HC.EventManager.getInstance().fireEvent(EVENT_SOURCE_SETTING_CHANGED, arguments);
         }
 
         /**
@@ -707,8 +706,8 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param data
          */
         updateMidi(data) {
-            if (this.listener && data.command === 'message') {
-                this.listener.fireEvent('midi.message', data.data);
+            if (IS_ANIMATION && data.command === 'message') {
+                HC.EventManager.getInstance().fireEvent('midi.message', data.data);
             }
         }
 

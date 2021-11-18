@@ -4,11 +4,10 @@
 {
     /**
      *
-     * @type {HC.Listener}
+     * @type {HC.EventManager}
      */
-    HC.Listener = class Listener {
+    HC.EventManager = class EventManager {
         events = {};
-// todo: make it a singleton. call it EventManager. put it into ./manager
         /**
          *
          * @param event
@@ -150,6 +149,12 @@
                     this.bruteFireEventId(event, id, target);
                 }
             }
+        }
+
+
+        static _em = new this();
+        static getInstance() {
+            return this._em;
         }
     }
 }

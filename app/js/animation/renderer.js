@@ -66,11 +66,6 @@
         animation;
 
         /**
-         * @type {HC.Listener}
-         */
-        listener;
-
-        /**
          * @type {HC.Config}
          */
         config;
@@ -89,7 +84,6 @@
         constructor(animation, config) {
             this.animation = animation;
             this.config = animation.config;
-            this.listener = animation.listener;
             this.beatKeeper = animation.beatKeeper;
             this.layers = config.layers;
 
@@ -101,7 +95,7 @@
          * @param keepSettings
          */
         fullReset(keepSettings) {
-            this.listener.removeEvent(EVENT_RENDERER_RENDER);
+            HC.EventManager.getInstance().removeEvent(EVENT_RENDERER_RENDER);
             this.resize();
             this.initLayers(keepSettings);
             this.setLayer(0);
@@ -122,7 +116,7 @@
                 canvas.id = 'threeWebGL';
                 canvas.style = {width: 1, height: 1};
                 canvas.addEventListener('webglcontextlost', () => {
-                    this.animation.listener.fireEvent('webglcontextlost');
+                    HC.EventManager.getInstance().fireEvent('webglcontextlost');
                 });
 
                 this.three.renderer.view = canvas;
@@ -369,7 +363,7 @@
         render() {
 
             if (this._last !== this.animation.now) {
-                this.animation.listener.fireEvent(EVENT_RENDERER_RENDER, this);
+                HC.EventManager.getInstance().fireEvent(EVENT_RENDERER_RENDER, this);
 
                 this.three.scene.background = this.currentLayer._layer.background;
                 this.three.scene.fog = this.currentLayer._layer.fog;

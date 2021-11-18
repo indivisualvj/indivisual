@@ -28,11 +28,6 @@
         renderer;
 
         /**
-         * @type {HC.Listener}
-         */
-        listener;
-
-        /**
          * @type {HC.Config}
          */
         config;
@@ -63,7 +58,6 @@
                 this.displayManager = animation.displayManager;
                 this.beatKeeper = animation.beatKeeper;
                 this.renderer = animation.renderer;
-                this.listener = animation.listener;
             }
             this.config = options.config;
             this.samples = options.sample;
@@ -213,7 +207,7 @@
                 return;
             }
 
-            this.listener.register('sample.init.start', sample.id, function (target) {
+            HC.EventManager.getInstance().register('sample.init.start', sample.id, function (target) {
                 messaging.emitAttr('[id="' + target.id + '"]', 'style', '');
                 messaging.emitAttr('[id="' + target.id + '"]', 'data-label', 'initializing');
                 messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {delay: 50});
@@ -223,16 +217,16 @@
                 messaging.emitData(target.id, conf);
             });
 
-            this.listener.register('sample.init.progress', sample.id, function (target) {
+            HC.EventManager.getInstance().register('sample.init.progress', sample.id, function (target) {
                 let progress = target.pointer / target.frameCount * 100;
                 let msg = 'preparing';
                 messaging.emitAttr('[id="' + target.id + '"]', 'data-label', msg);
                 messaging.emitAttr('[id="' + target.id + '"]', 'data-progress', progress);
             });
 
-            this.listener.register('sample.init.reset', sample.id, function (target) {
+            HC.EventManager.getInstance().register('sample.init.reset', sample.id, function (target) {
                 messaging.emitAttr('[id="' + target.id + '"]', 'style', '');
-                messaging.emitAttr('[id="' + target.id + '"]', 'data-label', '');
+                messaging.emitAttr('[id="' + target.id + '"]', '', 'sample');
                 messaging.emitMidi('off', MIDI_ROW_ONE[target.index]);
                 messaging.emitMidi('off', MIDI_SAMPLE_FEEDBACK);
 
@@ -241,9 +235,9 @@
                 messaging.emitData(target.id, conf);
             });
 
-            this.listener.register('sample.init.end', sample.id, (target) => {
+            HC.EventManager.getInstance().register('sample.init.end', sample.id, (target) => {
                 messaging.emitAttr('[id="' + target.id + '"]', 'style', '');
-                messaging.emitAttr('[id="' + target.id + '"]', 'data-label', 'ready to record');
+                messaging.emitAttr('[id="' + target.id + '"]', 'data-label', 'enabled');
                 messaging.emitMidi('off', MIDI_ROW_ONE[target.index]);
                 messaging.emitMidi('off', MIDI_SAMPLE_FEEDBACK);
                 let conf = {DataSettings: {}};
@@ -251,12 +245,12 @@
                 messaging.emitData(target.id, conf);
             });
 
-            this.listener.register('sample.render.start', sample.id, (target) => {
+            HC.EventManager.getInstance().register('sample.render.start', sample.id, (target) => {
                 messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {timeout: this.beatKeeper.getSpeed('eight').duration});
                 messaging.emitMidi('glow', MIDI_SAMPLE_FEEDBACK);
             });
 
-            this.listener.register('sample.render.progress', sample.id, (target) => {
+            HC.EventManager.getInstance().register('sample.render.progress', sample.id, (target) => {
 
                 let progress = target.counter / target.beats * 100;
 
@@ -270,14 +264,14 @@
                 messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], conf);
             });
 
-            this.listener.register('sample.render.error', sample.id, (target) => {
+            HC.EventManager.getInstance().register('sample.render.error', sample.id, (target) => {
                 messaging.emitAttr('[id="' + target.id + '"]', 'data-progress', '');
-                messaging.emitAttr('[id="' + target.id + '"]', 'data-label', '[ERROR!]');
+                messaging.emitAttr('[id="' + target.id + '"]', 'data-label', '[!ERROR]');
                 messaging.emitMidi('glow', MIDI_ROW_ONE[sample.index], {timeout: 500, times: 3});
                 messaging.emitMidi('glow', MIDI_SAMPLE_FEEDBACK, {timeout: 500, times: 3});
             });
 
-            this.listener.register('sample.render.end', sample.id, (target) => {
+            HC.EventManager.getInstance().register('sample.render.end', sample.id, (target) => {
                 let recordKey = getSampleRecordKey(target.index);
 
                 if (this.config.SourceSettings[recordKey]) { // reset smpX_record
@@ -293,7 +287,7 @@
                 messaging.emitMidi('off', MIDI_SAMPLE_FEEDBACK);
             });
 
-            this.listener.register(EVENT_SAMPLE_STATUS_CHANGED, sample.id, (target) => {
+            HC.EventManager.getInstance().register(EVENT_SAMPLE_STATUS_CHANGED, sample.id, (target) => {
                 if (!target.enabled) {
                     messaging.emitAttr('[id="' + target.id + '"]', 'data-progress', '');
                     messaging.emitAttr('[id="' + target.id + '"]', 'data-label', '');
@@ -348,11 +342,11 @@
                     messaging._emit({action: 'unlinkall', dir: dir}, (files) => {
                         console.log('unlinkall', dir, files.length + ' files deleted');
 
-                        this.listener.register('sample.store.progress', sample.id, (target) => {
+                        HC.EventManager.getInstance().register('sample.store.progress', sample.id, (target) => {
                             let key = getSampleStoreKey(target.index);
                             messaging.emitAttr('[data-id="' + key + '"]', 'data-label', target.pointer + '/' + target.frameCount);
                         });
-                        this.listener.register('sample.store.end', sample.id, (target) => {
+                        HC.EventManager.getInstance().register('sample.store.end', sample.id, (target) => {
                             let key = getSampleStoreKey(target.index);
                             messaging.emitAttr('[data-id="' + key + '"]', 'data-label', '');
 
@@ -385,7 +379,7 @@
                     // sample.complete = true;
                     this.storeWorker.onmessage = null;
                     sample.samples = ev.data.samples;
-                    this.listener.fireEventId('sample.store.end', sample.id, sample);
+                    HC.EventManager.getInstance().fireEventId('sample.store.end', sample.id, sample);
                 }
             };
             this.storeWorker.postMessage({
@@ -461,7 +455,7 @@
                                 if (loaded >= frameCount) {
                                     sample.pointer = sample.frameCount;
                                     sample.finish();
-                                    this.listener.fireEventId(EVENT_SAMPLE_READY, sample);
+                                    HC.EventManager.getInstance().fireEventId(EVENT_SAMPLE_READY, sample);
                                 }
                             };
 
@@ -581,7 +575,7 @@
          *
          */
         render() {
-            this.listener.fireEvent(EVENT_SOURCE_MANAGER_RENDER);
+            HC.EventManager.getInstance().fireEvent(EVENT_SOURCE_MANAGER_RENDER);
         }
 
         /**

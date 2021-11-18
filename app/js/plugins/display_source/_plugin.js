@@ -47,11 +47,6 @@ HC.SourceManager.display_source = {};
         animation;
 
         /**
-         * @type {HC.Listener}
-         */
-        listener;
-
-        /**
          * @type {HC.DisplayManager}
          */
         displayManager;
@@ -102,7 +97,6 @@ HC.SourceManager.display_source = {};
             this.displayManager = owner.displayManager;
             this.beatKeeper = owner.beatKeeper;
             this.audioAnalyser = owner.audioAnalyser;
-            this.listener = owner.listener;
             this.sourceManager = owner.sourceManager;
             if (this.sourceManager) {
                 this.renderer = this.sourceManager.renderer;

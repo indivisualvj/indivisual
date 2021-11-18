@@ -58,7 +58,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             controller.config.loadConfig(function () {
 
-                controller.listener = new HC.Listener();
                 let sets = controller.config.initControlSets();
                 controller.settingsManager = new HC.LayeredControlSetsManager([], controller.config.AnimationValues);
                 controller.init(sets);
@@ -660,6 +659,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (display !== false) {
 
                 if (item.match(/_(sequence|sample|source)/)) {
+                    alert('now! line number->console');
+                    console.log('now!');
                     this.updateData();
 
                 } else if (item === 'monitor') {
@@ -734,6 +735,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (!value) { // set record to false if enabled == false
                         let smp = numberExtract(item, 'sample');
                         this.updateSource(getSampleRecordKey(smp), false, true, true, false);
+                        this.updateThumbs();
                     }
 
                 } else if (item.match(/_(load)/)) {
@@ -783,7 +785,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateSequenceUi() {
             if (this.config.SourceValues && this.config.SourceValues.sequence) {
                 for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
-                    HC.TimeoutManager.getInstance().add('updateSequenceUI' + seq, 0, () => {
+                    HC.TimeoutManager.getInstance().add('updateSequenceUi' + seq, 0, () => {
                         this.updateClip(seq);
                         this.updateIndicator(seq);
                     });

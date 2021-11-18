@@ -29,11 +29,6 @@
         renderer;
 
         /**
-         * @type {HC.Listener}
-         */
-        listener;
-
-        /**
          * @type {HC.BeatKeeper}
          */
         beatKeeper;
@@ -177,7 +172,6 @@
             this.animation = animation;
             this.config = animation.config;
             this.beatKeeper = animation.beatKeeper;
-            this.listener = animation.listener;
             this.renderer = renderer;
             this.index = index;
 
@@ -202,26 +196,26 @@
 
             this._resetSizes(renderer.resolution);
 
-            this.listener.register(EVENT_LAYER_RESET, this.index, () => {
+            HC.EventManager.getInstance().register(EVENT_LAYER_RESET, this.index, () => {
                 console.log(EVENT_LAYER_RESET, this.index);
                 this.needsReset = true;
             });
-            this.listener.register(EVENT_SHAPE_MATERIALS_UPDATE, this.index, () => {
+            HC.EventManager.getInstance().register(EVENT_SHAPE_MATERIALS_UPDATE, this.index, () => {
                 this.shapeMaterialsNeedUpdate = true;
             });
-            this.listener.register(EVENT_LAYER_RESET_SHAPES, this.index, () => {
+            HC.EventManager.getInstance().register(EVENT_LAYER_RESET_SHAPES, this.index, () => {
                 this.shapesNeedReset = true;
             });
-            this.listener.register(EVENT_LAYER_RESET_LIGHTING, this.index, () => {
+            HC.EventManager.getInstance().register(EVENT_LAYER_RESET_LIGHTING, this.index, () => {
                 this.lightingNeedsReset = true;
             });
-            this.listener.register(EVENT_LAYER_RESET_AMBIENT, this.index, () => {
+            HC.EventManager.getInstance().register(EVENT_LAYER_RESET_AMBIENT, this.index, () => {
                 this.ambientNeedsReset = true;
             });
-            this.listener.register(EVENT_LAYER_RESET_FOG, this.index, () => {
+            HC.EventManager.getInstance().register(EVENT_LAYER_RESET_FOG, this.index, () => {
                 this.fogNeedsReset = true;
             });
-            this.listener.register(EVENT_LAYER_UPDATE_SHADERS, this.index, () => {
+            HC.EventManager.getInstance().register(EVENT_LAYER_UPDATE_SHADERS, this.index, () => {
                 this.shadersNeedUpdate = true;
             });
         }

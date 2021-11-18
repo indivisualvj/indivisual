@@ -17,11 +17,11 @@
                     switch (key) {
                         case 'mesh_material':
                         case 'override_material_inputping':
-                            messaging.program.listener.fireEventId(EVENT_LAYER_RESET_SHAPES, id, context);
+                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_SHAPES, id, context);
                             break;
 
                         default:
-                            messaging.program.listener.fireEventId(EVENT_SHAPE_MATERIALS_UPDATE, id, context);
+                            HC.EventManager.getInstance().fireEventId(EVENT_SHAPE_MATERIALS_UPDATE, id, context);
                             break;
                     }
                 }

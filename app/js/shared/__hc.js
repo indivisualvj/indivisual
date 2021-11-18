@@ -54,11 +54,6 @@ var HC = HC || {};
         beatKeeper;
 
         /**
-         * @type {HC.Listener}
-         */
-        listener;
-
-        /**
          * @type {HC.LayeredControlSetsManager}
          */
         settingsManager;

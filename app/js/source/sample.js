@@ -81,11 +81,6 @@
         config;
 
         /**
-         * @type {HC.Listener}
-         */
-        listener;
-
-        /**
          * @type {HC.BeatKeeper}
          */
         beatKeeper;
@@ -120,7 +115,6 @@
             this.beatKeeper = program.beatKeeper;
             this.sourceManager = program.sourceManager;
             this.renderer = program.sourceManager.renderer;
-            this.listener = program.listener;
             this.config = program.config;
             this.index = index;
             this.id = 'sample' + index;
@@ -155,7 +149,7 @@
 
             } else if (record) {
                 if (!this.started) {
-                    this.listener.register(EVENT_SOURCE_MANAGER_RENDER, this.id, (data) => {
+                    HC.EventManager.getInstance().register(EVENT_SOURCE_MANAGER_RENDER, this.id, (data) => {
                         let speed = this.beatKeeper.getDefaultSpeed();
                         this.render(this.renderer.current(), speed, this.renderer.currentColor());
                     });
@@ -190,7 +184,7 @@
          * @private
          */
         _reset() {
-            this.listener.removeEventId(EVENT_RENDERER_RENDER, this.id, this);
+            HC.EventManager.getInstance().removeEventId(EVENT_RENDERER_RENDER, this.id, this);
             this.initialized = false;
             this.pointer = 0;
             this.started = false;
@@ -220,9 +214,9 @@
 
             let fps = this.config.DisplaySettings.fps * 1.15;
             this.frameCount = Math.ceil(this.length / 1000 * fps);
-            this.listener.fireEventId('sample.init.start', this.id, this);
+            HC.EventManager.getInstance().fireEventId('sample.init.start', this.id, this);
             this.initialized = true;
-            this.listener.fireEventId('sample.init.end', this.id, this);
+            HC.EventManager.getInstance().fireEventId('sample.init.end', this.id, this);
 
         }
 
@@ -231,14 +225,14 @@
          */
         finish() {
 
-            this.listener.removeEventId(EVENT_SOURCE_MANAGER_RENDER, this.id);
+            HC.EventManager.getInstance().removeEventId(EVENT_SOURCE_MANAGER_RENDER, this.id);
 
             if (this.pointer < this.frameCount / 2) {
                 this.started = false;
                 this.pointer = 0;
                 this.counter = 0;
 
-                this.listener.fireEventId('sample.render.error', this.id, this);
+                HC.EventManager.getInstance().fireEventId('sample.render.error', this.id, this);
 
             } else {
                 this.samples.splice(this.pointer);
@@ -248,8 +242,8 @@
                 this.length = this.frameCount / 60 * 1000;
                 this.pointer = 0;
                 this.counter = 0;
-                this.listener.fireEventId('sample.render.end', this.id, this);
-                this.listener.fireEvent(EVENT_SAMPLE_READY, this);
+                HC.EventManager.getInstance().fireEventId('sample.render.end', this.id, this);
+                HC.EventManager.getInstance().fireEvent(EVENT_SAMPLE_READY, this);
             }
         }
 
@@ -265,7 +259,7 @@
             if (image && sample.samples) {
                 if (!sample.started) {
                     if (speed.starting()) {
-                        this.listener.fireEventId('sample.render.start', sample.id, sample);
+                        HC.EventManager.getInstance().fireEventId('sample.render.start', sample.id, sample);
                         sample.started = true;
                     }
                 }
@@ -276,7 +270,7 @@
 
                         } else {
                             sample.counter++;
-                            this.listener.fireEventId('sample.render.progress', sample.id, sample);
+                            HC.EventManager.getInstance().fireEventId('sample.render.progress', sample.id, sample);
                         }
 
                     }
@@ -294,7 +288,7 @@
                     }
                 }
             } else {
-                this.listener.fireEventId('sample.render.error', sample.id, sample);
+                HC.EventManager.getInstance().fireEventId('sample.render.error', sample.id, sample);
             }
 
         }

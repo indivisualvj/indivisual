@@ -212,7 +212,6 @@ document.addEventListener('DOMContentLoaded', function () {
             );
 
             sourceSets.sequenceN.visible = true;
-            sourceSets.lighting.visible = false;
             sourceSets.sample.visible = false;
             sourceSets.source.visible = false;
 
@@ -851,9 +850,6 @@ document.addEventListener('DOMContentLoaded', function () {
             this.messaging.emitSources(updates, true, true, false);
         }
 
-        /**
-         * todo: push even if monitor is enabled? how do it nicely?
-         */
         syncLayers() {
             let index = 0;
             for (let layer in this.settingsManager.layers) {
@@ -878,7 +874,20 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         pushSources() {
-            this.messaging.emitSources(this.config.SourceSettingsManager.prepareFlat(), true, true, false);
+            this._bypassMonitor(() => {
+                this.messaging.emitSources(this.config.SourceSettingsManager.prepareFlat(), true, true, false);
+            });
+        }
+
+        pushLayers() {
+            this._bypassMonitor(this.syncLayers);
+        }
+
+        _bypassMonitor(fn) {
+            let monitorStatus = this.config.ControlSettings.monitor;
+            this.updateControl('monitor', false, false, true, false);
+            fn();
+            this.updateControl('monitor', monitorStatus, false, true, false);
         }
 
         /**

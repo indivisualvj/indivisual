@@ -8,40 +8,6 @@ HC.SourceController = HC.SourceController || {};
 {
     /**
      *
-     * @type {HC.SourceController.lighting}
-     */
-    HC.SourceController.lighting = class lighting extends HC.ControlSet {
-        static index = 10;
-
-        settings = {
-            lighting_type: 'off',
-            lighting_color: 'current',
-            lighting_brightness: 1.0,
-            lighting_speed: 'eight',
-            lighting_pattern_lights: 1,
-            lighting_scale: 1
-        };
-
-        types = {
-            lighting_brightness: [0, 1, 0.02],
-            lighting_pattern_lights: [1, 60, 1],
-            lighting_scale: [1, 10, 1]
-        };
-
-        styles = {
-            lighting_type: ['half', 'clear'],
-            lighting_color: ['half'],
-            lighting_speed: ['half', 'clear'],
-            lighting_brightness: ['half'],
-            lighting_pattern_lights: ['half', 'clear'],
-            lighting_scale: ['half']
-        }
-    }
-}
-
-{
-    /**
-     *
      * @type {HC.SourceController.source}
      */
     HC.SourceController.source = class source extends HC.ControlSet {

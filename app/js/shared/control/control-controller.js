@@ -57,7 +57,7 @@ HC.ControlController = HC.ControlController || {};
 
             monitor: false,
             push_layers: () => {
-                this.config.messaging.program.syncLayers();
+                this.config.messaging.program.pushLayers();
             },
             push_sources: () => {
                 this.config.messaging.program.pushSources();

@@ -36,7 +36,7 @@ sequence:
   - 3
   - 4
 
-material_map:
+material_map: &maps
   none: none
   0: sequence0
   1: sequence1
@@ -44,6 +44,9 @@ material_map:
   3: sequence3
   4: sequence4
   webcam: webcam
+
+background_map:
+  *maps
 
 oscillator:
   off: off
@@ -90,51 +93,3 @@ blendmode:
 #  saturation: saturation
 #  color: color
 #  luminosity: luminosity
-
-lighting_speed:
-  peak: peak
-  full: fulls
-  half: halfs
-  quarter: quarters
-  eight: eights
-  sixteen: sixteens
-#  random: random
-
-lighting_color:
-  current: current
-  complementary: complementary
-  hsl: hsl
-  red: red
-  green: green
-  blue: blue
-  cyan: cyan
-  magenta: magenta
-  yellow: yellow
-
-lighting_type:
-  off: 'off'
-  randomblitzrgb: randomblitz RGB
-  randomblitzamber: randomblitz AMBER
-  randomblitzwhite: randomblitz WHITE
-  randomblitzuv: randomblitz UV
-  randomoneonrgb: random one on RGB
-  randomoneonamber: random one on AMBER
-  randomoneonwhite: random one on WHITE
-  randomoneonuv: random one on UV
-  shufflergb: shuffle RGB
-  shuffleamber: shuffle AMBER
-#  shufflewhite: shuffle WHITE
-  shuffleuv: shuffle UV
-  wavergb: wave RGB
-  waveamber: wave AMBER
-#  wavewhite: wave WHITE
-  waveuv: wave UV
-  allrgb: all RGB
-#  allamber: all AMBER
-#  allwhite: all WHITE
-#  alluv: all UV
-  strobemodulorgb: strobe modulo RGB
-  strobemoduloamber: strobe modulo AMBER
-  strobemodulowhite: strobe modulo WHITE
-  strobemodulouv: strobe modulo UV
-  randomall: random all

@@ -597,7 +597,7 @@ function _find(base) {
         });
     };
 
-    walkSync(filePath(_HOME, base), files);
+    walkSync(base, files);
 
     console.log('sending ' + files.length + ' files');
 
@@ -908,6 +908,20 @@ function _initConnection() {
          *
          */
         socket.on('files', function (data, callback) {
+
+            _log('files', data);
+            console.log('searching files in ' + data.file);
+
+            let files = _find(filePath(_HOME, data.file));
+            data.data = files;
+
+            callback(files);
+        });
+
+        /**
+         *
+         */
+        socket.on('samples', function (data, callback) {
 
             _log('files', data);
             console.log('searching files in ' + data.file);

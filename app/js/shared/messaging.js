@@ -499,6 +499,21 @@
             this._emit(conf, callback);
         }
 
+
+        /**
+         *
+         * @param dir
+         * @param callback
+         */
+        samples(dir, callback) {
+            let conf = {
+                action: 'samples',
+                file: dir
+            };
+
+            this._emit(conf, callback);
+        }
+
         /**
          *
          * @param dir

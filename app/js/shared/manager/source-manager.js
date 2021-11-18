@@ -364,7 +364,7 @@
                     });
                 };
 
-                messaging.files(dir, callback);
+                messaging.samples(dir, callback);
 
             }
         }
@@ -419,7 +419,7 @@
 
             let file = filePath(SAMPLE_DIR, name);
 
-            messaging._emit({action: 'files', file: file}, (files) => {
+            messaging._emit({action: 'samples', file: file}, (files) => {
 
                 let frameCount = files.length;
                 sample.enabled = true;
@@ -492,7 +492,7 @@
 
                 let file = filePath(SAMPLE_DIR, sample.id);
 
-                messaging.files(file, (files) => {
+                messaging.samples(file, (files) => {
 
                     let loaded = 0;
                     let frameCount = files.length;

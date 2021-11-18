@@ -8,7 +8,7 @@
      */
     HC.Listener = class Listener {
         events = {};
-
+// todo: make it a singleton. call it EventManager. put it into ./manager
         /**
          *
          * @param event

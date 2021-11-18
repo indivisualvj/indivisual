@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             this.monitor = new HC.Monitor();
             this.monitor.activate(false);
-            this.controlSettingsGui = new HC.Guify('ControlSettings', 'control', true);
+            this.controlSettingsGui = new HC.Guify('ControlSettings', 'control');
             this.displaySettingsGui = new HC.Guify('DisplaySettings', 'display');
             this.sourceSettingsGui = new HC.Guify('SourceSettings', 'source');
             this.animationSettingsGui = new HC.Guify('AnimationSettings', 'animation');
@@ -231,6 +231,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             this.addAnimationControllers(this.settingsManager.getGlobalProperties());
             this.addPassesFolder(HC.ShaderPassUi.onPasses);
+
+            this.openTreeByPath('controls');
         }
 
         /**
@@ -274,6 +276,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 this.updateControl('layer', this.config.ControlSettings.layer, true, false, false);
+
+                this._checkDisplayVisibility();
             });
         }
 
@@ -623,6 +627,10 @@ document.addEventListener('DOMContentLoaded', function () {
             let tValue = value;
             value = this.config.ControlSettingsManager.updateItem(item, value);
 
+            if (typeof value === 'function') { // value never can be a function
+                value = tValue;
+            }
+
             if (item === 'layer') {
                 this.updateSettings(value, this.settingsManager.prepareLayer(value), true, false, true);
                 this.explorer.setSelected(value+1, true);
@@ -644,9 +652,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (forward) {
-                if (typeof value === 'function') { // reset to
-                    value = tValue;
-                }
                 let data = {};
                 data[item] = value;
                 this.messaging.emitControls(data, true, false, force);
@@ -850,22 +855,23 @@ document.addEventListener('DOMContentLoaded', function () {
          * todo: push even if monitor is enabled? how do it nicely?
          */
         syncLayers() {
+            let index = 0;
             for (let layer in this.settingsManager.layers) {
                 layer = parseInt(layer);
-                let to = layer * 150; // todo: can it be done faster?
 
-                let st = (layer, to) => {
-                    setTimeout(() => {
+                if (this.config.shuffleable(layer+1)) {
+                    let to = 50 * index++;
+                    HC.TimeoutManager.getInstance().add('syncLayer.' + layer, to, () => {
                         this.syncLayer(layer);
-                    }, to);
-                };
-                st(layer, to);
+                    });
+                }
             }
-            let to = this.config.ControlValues.layers * 151;
+            let to = ++index * 50;
 
-            setTimeout(() => { // todo: switch to first shuffleable?
-                this.updateControl('layer', this.config.ControlSettings.layer, true, true, true);
-            }, to);
+            HC.TimeoutManager.getInstance().add('setLayer', to, () => {
+                let layer = this.config.ControlSettings.layer;
+                this.updateControl('layer', layer, true, true, true);
+            });
         }
 
         /**
@@ -1031,6 +1037,18 @@ document.addEventListener('DOMContentLoaded', function () {
             this.updateControls(controls, true, true, true);
             this.updateDisplays(displays, true, true, true);
             this.syncLayers();
+            this._checkDisplayVisibility();
+        }
+
+        /**
+         *
+         * @private
+         */
+        _checkDisplayVisibility() {
+            if (!this.config.DisplaySettings.display0_visible) {
+                this.openTreeByPath('video/display0');
+                this.showOSD('display0_visible', 'enabled at least one?', 10000, 'red');
+            }
         }
 
         /**

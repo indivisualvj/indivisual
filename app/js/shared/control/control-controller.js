@@ -81,35 +81,17 @@ HC.ControlController = HC.ControlController || {};
             },
             layout_source: () => {
                 this.config.messaging.program.closeAll();
-                this.config.messaging.program.openTreeByFolder('source');
-            },
-            layout_source_fullscreen: () => {
-                this.config.messaging.program.closeAll();
-                this.config.messaging.program.openTreeByFolder('source');
-                let control = this.config.messaging.program.guis[2];
-                control.toggleFullscreen();
+                this.config.messaging.program.openTreeByPath('source');
             },
             layout_animation: () => {
                 this.config.messaging.program.closeAll();
                 let control = this.config.messaging.program.guis[3];
                 control.setOpen(true);
             },
-            layout_animation_fullscreen: () => {
-                this.config.messaging.program.closeAll();
-                let control = this.config.messaging.program.guis[3];
-                control.setOpen(true);
-                control.toggleFullscreen();
-            },
             layout_sequence: () => {
                 this.config.messaging.program.closeAll();
                 let control = this.config.messaging.program.guis[4];
                 this.config.messaging.program.openAll(control);
-            },
-            layout_sequence_fullscreen: () => {
-                this.config.messaging.program.closeAll();
-                let control = this.config.messaging.program.guis[4];
-                this.config.messaging.program.openAll(control);
-                control.toggleFullscreen();
             },
             layout_presets: () => {
                 this.config.messaging.program.closeAll();

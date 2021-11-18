@@ -528,10 +528,6 @@
         type: function
         section: Source
         name: g1perspective
-      layout:
-        type: function
-        section: Control
-        name: layout_source_fullscreen
 
     27:
       default:
@@ -552,10 +548,6 @@
         type: function
         section: Source
         name: g1black
-      layout:
-        type: function
-        section: Control
-        name: layout_animation_fullscreen
 
     28:
       default:
@@ -576,10 +568,6 @@
         type: function
         section: Source
         name: g1offline
-      layout:
-        type: function
-        section: Control
-        name: layout_sequence_fullscreen
 
     29:
       default:

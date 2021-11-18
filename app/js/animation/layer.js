@@ -56,7 +56,10 @@
          */
         controlSets;
 
-        lights = false;
+        /**
+         * @type {Array.<THREE.Light>}
+         */
+        lights = [];
 
         ambientLight = false;
 
@@ -128,11 +131,26 @@
          */
         _rotation;
 
-        _shapes = false;
+        /**
+         *
+         * @type {Array.<HC.Shape>}
+         * @private
+         */
+        _shapes;
 
-        _lighting = false;
+        /**
+         *
+         * @type {THREE.Group}
+         * @private
+         */
+        _lighting;
 
-        _background = false;
+        /**
+         *
+         * @type {THREE.Group}
+         * @private
+         */
+        _background;
 
         /**
          * @type {Object.<string, *>}

@@ -42,7 +42,7 @@
         };
         
         types = {
-            background_volume: [10, 10, 0.01],
+            background_volume: [-10, 10, 0.01],
             background_repeatx: [-32, 32, 0.001],
             background_repeaty: [-32, 32, 0.001],
             background_offsetx: [-10, 10, 0.001],

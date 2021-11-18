@@ -24,7 +24,7 @@
 
         /**
          *
-         * @param {THREE.Texture} map
+         * @param map {THREE.Texture}
          * @param image
          */
         updateTexture(map, image) {

@@ -880,7 +880,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         pushLayers() {
-            this._bypassMonitor(this.syncLayers);
+            this._bypassMonitor(() => {
+                this.syncLayers();
+            });
         }
 
         _bypassMonitor(fn) {

@@ -150,6 +150,7 @@ HC.Layer.prototype.doOverrideBackgroundMode = function () {
 
     } else if (seq !== 'none') {
         let plugin = this.getOverrideBackgroundModePlugin('sequence');
+        plugin.setCropping(false);
         this.doPlugin(plugin, parseInt(seq));
 
     } else {

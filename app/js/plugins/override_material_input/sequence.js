@@ -47,27 +47,27 @@
          * @param image
          */
         initTexture(image) {
-            let edge = Math.min(image.width, image.height);
-            // let nearest = THREE.Math.floorPowerOfTwo(edge);
-            // while (nearest > edge) {
-            //     nearest /= 2;
-            //     nearest = THREE.Math.floorPowerOfTwo(nearest);
-            // }
-            // edge = nearest;
+            let width = image.width;
+            let height = image.height
 
-            let canvas = new OffscreenCanvas(edge, edge);
-            canvas.width = edge;
-            canvas.height = edge;
+            if (this.enableCropping) {
+                width = height = Math.min(image.width, image.height);
+            }
+
+            let canvas = new OffscreenCanvas(width, height);
+            canvas.width = width;
+            canvas.height = height;
+            this.canvas = canvas;
             this.context = canvas.getContext('2d');
 
-            let offsetX = .5 * (image.width - edge);
-            let offsetY = .5 * (image.height - edge);
+            let offsetX = .5 * (image.width - width);
+            let offsetY = .5 * (image.height - height);
 
             this.clip = {
                 x: offsetX,
                 y: offsetY,
-                width: edge,
-                height: edge
+                width: width,
+                height: height
             };
 
             let tex = new THREE.CanvasTexture(canvas);

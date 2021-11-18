@@ -9,10 +9,25 @@ HC.plugins.override_material_input = HC.plugins.override_material_input || {};
          */
         context;
 
+        /**
+         * @type {OffscreenCanvas}
+         */
+        canvas;
+
+        /**
+         *
+         * @type {boolean}
+         */
+        enableCropping = true;
+
         properties = {
             map: null,
             emissiveMap: null
         };
+
+        setCropping(cropping) {
+            this.enableCropping = cropping;
+        }
 
         reset() {
             this.context = null;

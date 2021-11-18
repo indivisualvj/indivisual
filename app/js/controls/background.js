@@ -42,11 +42,11 @@
         };
         
         types = {
-            background_volume: [-5, 5, 0.01],
+            background_volume: [10, 10, 0.01],
             background_repeatx: [-32, 32, 0.001],
             background_repeaty: [-32, 32, 0.001],
-            background_offsetx: [-5, 5, 0.001],
-            background_offsety: [-5, 5, 0.001],
+            background_offsetx: [-10, 10, 0.001],
+            background_offsety: [-10, 10, 0.001],
             background_centerx: [0, 1, 0.001],
             background_centery: [0, 1, 0.001],
             background_rotation: [-180, 180, 0.01]

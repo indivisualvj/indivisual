@@ -528,6 +528,10 @@
         type: function
         section: Source
         name: g1perspective
+      layout:
+        type: function
+        section: Control
+        name: layout_override
 
     27:
       default:

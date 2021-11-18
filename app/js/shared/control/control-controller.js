@@ -83,6 +83,10 @@ HC.ControlController = HC.ControlController || {};
                 this.config.messaging.program.closeAll();
                 this.config.messaging.program.openTreeByPath('source');
             },
+            layout_override: () => {
+                this.config.messaging.program.closeAll();
+                this.config.messaging.program.openTreeByPath('override');
+            },
             layout_animation: () => {
                 this.config.messaging.program.closeAll();
                 let control = this.config.messaging.program.guis[3];

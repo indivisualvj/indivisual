@@ -32,9 +32,9 @@
             if (img) {
                 let width = map.image.width;
                 let height = map.image.height;
-                if (img._ctx) {
-                    img._ctx.clearRect(0, 0, width, height);
-                    img._ctx.drawImage(image, img._clipX, img._clipY, width, height, 0, 0, width, height);
+                if (this.context) {
+                    this.context.clearRect(0, 0, width, height);
+                    this.context.drawImage(image, this.clip.x, this.clip.y, this.clip.width, this.clip.height, 0, 0, width, height);
                 }
                 img._color = image._color;
             }
@@ -48,19 +48,27 @@
          */
         initTexture(image) {
             let edge = Math.min(image.width, image.height);
-            let nearest = THREE.Math.floorPowerOfTwo(edge);
-            while (nearest > edge) {
-                nearest /= 2;
-                nearest = THREE.Math.floorPowerOfTwo(nearest);
-            }
-            edge = nearest;
+            // let nearest = THREE.Math.floorPowerOfTwo(edge);
+            // while (nearest > edge) {
+            //     nearest /= 2;
+            //     nearest = THREE.Math.floorPowerOfTwo(nearest);
+            // }
+            // edge = nearest;
 
             let canvas = new OffscreenCanvas(edge, edge);
             canvas.width = edge;
             canvas.height = edge;
-            canvas._ctx = canvas.getContext('2d');
-            canvas._clipX = (image.width - edge) / 2;
-            canvas._clipY = (image.height - edge) / 2;
+            this.context = canvas.getContext('2d');
+
+            let offsetX = .5 * (image.width - edge);
+            let offsetY = .5 * (image.height - edge);
+
+            this.clip = {
+                x: offsetX,
+                y: offsetY,
+                width: edge,
+                height: edge
+            };
 
             let tex = new THREE.CanvasTexture(canvas);
             this.properties.map = tex;

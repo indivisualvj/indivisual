@@ -142,7 +142,7 @@
       default:
         type: select
         section: Source
-        name: material_map
+        name: override_material_input
       sequence:
         type: volume
         section: Source

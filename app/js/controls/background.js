@@ -58,7 +58,7 @@
             // background_input: ['half'],
             background_volume: ['half', 'clear'],
             background_volume_oscillate: ['half'],
-            // background_mapping: ['half'],
+            // override_background_modeping: ['half'],
             background_wraps: ['half', 'clear'],
             background_wrapt: ['half'],
             background_repeatx: ['half', 'clear'],

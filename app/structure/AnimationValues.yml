@@ -22,7 +22,7 @@ material_wraps:
 material_wrapt:
   *wraps
 
-material_input: #material_map inputs
+material_input: #override_material_input inputs
   none: none
 
 material_side:
@@ -35,7 +35,7 @@ material_shadowside:
   1: back
   2: double
 
-material_mapping:
+override_material_inputping:
   default: default
   f2b: front2back
 

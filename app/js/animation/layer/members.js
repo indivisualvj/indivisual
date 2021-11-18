@@ -1,31 +1,31 @@
 /**
  *
- * @returns {HC.MaterialMapPlugin}
+ * @returns {HC.OverrideMaterialInputPlugin}
  */
-HC.Layer.prototype.getMaterialMap = function () {
-    let seq = this.config.SourceSettings.material_map;
+HC.Layer.prototype.getOverrideMaterialInput = function () {
+    let seq = this.config.SourceSettings.override_material_input;
     if (seq === 'webcam') {
-        return this.getMaterialMapPlugin('webcam');
+        return this.getOverrideMaterialInputPlugin('webcam');
 
     } else if (seq !== 'none') {
-        return this.getMaterialMapPlugin('sequence');
+        return this.getOverrideMaterialInputPlugin('sequence');
 
     }
 
-    return this.getMaterialMapPlugin('texture');
+    return this.getOverrideMaterialInputPlugin('texture');
 };
 
 /**
  *
- * @returns {HC.MaterialMapPlugin}
+ * @returns {HC.OverrideMaterialInputPlugin}
  */
-HC.Layer.prototype.getBackgroundMap = function () {
-    let seq = this.config.SourceSettings.background_map;
+HC.Layer.prototype.getOverrideBackgroundMode = function () {
+    let seq = this.config.SourceSettings.override_background_mode;
     if (seq === 'webcam') {
-        return this.getBackgroundMapPlugin('webcam');
+        return this.getOverrideBackgroundModePlugin('webcam');
 
     } else if (seq !== 'none') {
-        return this.getBackgroundMapPlugin('sequence');
+        return this.getOverrideBackgroundModePlugin('sequence');
 
     }
 

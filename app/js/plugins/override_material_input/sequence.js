@@ -1,5 +1,5 @@
 {
-    HC.plugins.material_map.sequence = class Plugin extends HC.MaterialMapPlugin {
+    HC.plugins.override_material_input.sequence = class Plugin extends HC.OverrideMaterialInputPlugin {
 
         apply(i) {
             let seq = this.animation.sourceManager.getSequence(i);

@@ -2,7 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    HC.plugins.material_map.texture = class Plugin extends HC.MaterialMapPlugin {
+    HC.plugins.override_material_input.texture = class Plugin extends HC.OverrideMaterialInputPlugin {
 
         file;
         loading = undefined;
@@ -37,7 +37,7 @@
                     let path = filePath(IMAGE_DIR, file);
                     this.loading = true;
 
-                    assetman.loadMaterialMap(this.properties, path, function (mat) {
+                    assetman.loadOverrideMaterialInput(this.properties, path, function (mat) {
                         inst.file = file;
                         inst.loading = false;
 

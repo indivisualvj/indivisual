@@ -14,7 +14,7 @@
 
         needsUpdate(suffix) {
 
-            let map = this.layer.getBackgroundMap();
+            let map = this.layer.getOverrideBackgroundMode();
             if (map) {
                 return super.needsUpdate(map.key);
             }

@@ -2,7 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    HC.plugins.material_map.webcam = class Plugin extends HC.MaterialMapPlugin {
+    HC.plugins.override_material_input.webcam = class Plugin extends HC.OverrideMaterialInputPlugin {
 
         file;
         loading;

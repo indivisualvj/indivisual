@@ -1,6 +1,6 @@
-HC.plugins.material_map = HC.plugins.material_map || {};
+HC.plugins.override_material_input = HC.plugins.override_material_input || {};
 {
-    HC.MaterialMapPlugin = class Plugin extends HC.AnimationTexturePlugin {
+    HC.OverrideMaterialInputPlugin = class Plugin extends HC.AnimationTexturePlugin {
 
         properties = {
             map: null,

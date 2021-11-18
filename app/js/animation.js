@@ -44,7 +44,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         for (let i = 0; i < animation.config.SourceValues.sample.length; i++) {
                             animation.updateSource(getSampleKey(i), false, true, true, false);
                         }
-                        animation.updateSource('material_map', 'none', true, true, false);
+                        animation.updateSource('override_material_input', 'none', true, true, false);
+                        animation.updateSource('override_background_mode', 'none', true, true, false);
                     });
 
                     animation.messaging.emitAttr('#play', 'data-color', '');
@@ -681,9 +682,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     let display = this.displayManager.getDisplay(numberExtract(item, 'display'));
                     this.sourceManager.updateSource(display);
 
-                    if (display && display.isFixedSize()) { // todo what is it? needed by light display source make lighting manage it!
-                        this.displayManager.updateDisplay(display.index, false);
-                    }
+                    // if (display && display.isFixedSize()) { // todo what is it? needed by light display source make lighting manage it!
+                    //     this.displayManager.updateDisplay(display.index, false);
+                    // }
 
                 } else if (item.match(/display\d+_sequence/)) {
                     this.sourceManager.updateSource(this.displayManager.getDisplay(numberExtract(item, 'display')));

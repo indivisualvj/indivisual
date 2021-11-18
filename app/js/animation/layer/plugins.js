@@ -14,19 +14,19 @@ HC.Layer.prototype.getPlugin = function (plugin, name) {
 /**
  *
  * @param name
- * @returns {HC.MaterialMapPlugin}
+ * @returns {HC.OverrideMaterialInputPlugin}
  */
-HC.Layer.prototype.getMaterialMapPlugin = function (name) {
-    return this.getPlugin('material_map', name);
+HC.Layer.prototype.getOverrideMaterialInputPlugin = function (name) {
+    return this.getPlugin('override_material_input', name);
 };
 
 /**
  *
  * @param name
- * @returns {HC.MaterialMapPlugin}
+ * @returns {HC.OverrideMaterialInputPlugin}
  */
-HC.Layer.prototype.getBackgroundMapPlugin = function (name) {
-    return this.getPlugin('background_map', name);
+HC.Layer.prototype.getOverrideBackgroundModePlugin = function (name) {
+    return this.getPlugin('override_background_mode', name);
 };
 
 

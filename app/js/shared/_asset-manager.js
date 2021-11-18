@@ -300,7 +300,7 @@
          * @param callback
          * @param error
          */
-        loadMaterialMap(target, path, callback, error) {
+        loadOverrideMaterialInput(target, path, callback, error) {
             let inst = this;
             let _assign = function (to, from) {
                 let keys = Object.keys(from);

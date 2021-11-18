@@ -15,8 +15,8 @@ HC.SourceController = HC.SourceController || {};
         static index = 10;
 
         settings = {
-            material_map: 'none',
-            background_map: 'none',
+            override_material_input: 'none',
+            override_background_mode: 'none',
         };
 
         types = {

@@ -36,7 +36,7 @@ sequence:
   - 3
   - 4
 
-material_map: &maps
+override_material_input: &maps
   none: none
   0: sequence0
   1: sequence1
@@ -45,7 +45,7 @@ material_map: &maps
   4: sequence4
   webcam: webcam
 
-background_map:
+override_background_mode:
   *maps
 
 oscillator:

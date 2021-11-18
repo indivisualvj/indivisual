@@ -31,7 +31,7 @@ HC.plugins.background_mode = HC.plugins.background_mode || {};
         }
 
         after() {
-            let map = this.layer.getBackgroundMap();
+            let map = this.layer.getOverrideBackgroundMode();
             if (map) {
                 if (map.properties.map && this.needsUpdate(map.key)) {
                     this.current(this.id(map.key));

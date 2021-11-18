@@ -17,7 +17,7 @@ HC.Layer.prototype.animate = function () {
 
     this.doCameraMode();
 
-    this.materialColor = this.doMaterialMap();
+    this.materialColor = this.doOverrideMaterialInput();
 
     this._animateShape(this.shape);
     this.doPatternRotation(); // preset current pattern euler from layer's shape rotation
@@ -31,7 +31,7 @@ HC.Layer.prototype.animate = function () {
     this.shapeMaterialsNeedUpdate = false;
 
     this.doLighting(this.materialColor);
-    this.doBackgroundMap();
+    this.doOverrideBackgroundMode();
     this.doBackground();
 
     this.doOscillate(false);

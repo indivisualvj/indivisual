@@ -415,7 +415,7 @@ HC.Statics = HC.Statics || {};
          * @private
          */
         _loadDisplaySourcePlugins(settings) {
-            Object.assign(HC.plugins.background_map, HC.plugins.material_map);
+            Object.assign(HC.plugins.override_background_mode, HC.plugins.override_material_input);
             this._loadPlugins(settings, 'display_source', HC.SourceManager.display_source);
         }
 

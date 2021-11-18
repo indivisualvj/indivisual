@@ -8,7 +8,7 @@ HC.Layer.prototype.shapeColor = function (random, complementary) {
 
     let hex = '';
     let index = Math.floor(this.shapes.length / 2);
-    let plugin = this.getMaterialMap();
+    let plugin = this.getOverrideMaterialInput();
     if (plugin.map && plugin.map.image && plugin.map.image._color) {
         hex = plugin.map.image._color;
 

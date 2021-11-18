@@ -5,6 +5,34 @@
 
 HC.SourceController = HC.SourceController || {};
 
+
+{
+    /**
+     *
+     * @type {HC.SourceController.override}
+     */
+    HC.SourceController.override = class source extends HC.ControlSet {
+        static index = 10;
+
+        settings = {
+            material_map: 'none',
+            background_map: 'none',
+        };
+
+        types = {
+
+        };
+
+        styles = {
+
+        };
+
+        values = {
+
+        };
+    }
+}
+
 {
     /**
      *
@@ -58,10 +86,9 @@ HC.SourceController = HC.SourceController || {};
             // create source settings
             this.createSourceSettings(pluggedValues);
 
-            // append seq buttons and material_map
+            // append seq buttons
             this.appendSeqButtons();
 
-            this.settings.material_map = 'none';
         }
 
         /**

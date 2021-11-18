@@ -20,6 +20,15 @@ HC.Layer.prototype.getMaterialMapPlugin = function (name) {
     return this.getPlugin('material_map', name);
 };
 
+/**
+ *
+ * @param name
+ * @returns {HC.MaterialMapPlugin}
+ */
+HC.Layer.prototype.getBackgroundMapPlugin = function (name) {
+    return this.getPlugin('background_map', name);
+};
+
 
 /**
  *

@@ -6,7 +6,7 @@
             let i = this.settings.background_input;
             let id = this.id();
 
-            if (this.current() !== id) {
+            if (this.needsUpdate()) {
                 this._dispose();
 
                 let file = assetman.getCube(i);

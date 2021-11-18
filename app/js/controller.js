@@ -213,6 +213,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             sourceSets.sequenceN.visible = true;
             sourceSets.sample.visible = false;
+            sourceSets.override.visible = false;
             sourceSets.source.visible = false;
 
             this.addGuifyControllers(

@@ -10,7 +10,7 @@
         target2;
 
         apply() {
-            if (this.current() !== this.id()) {
+            if (this.needsUpdate()) {
                 this.current(this.id());
 
                 let color = new THREE.Color(this.settings.background_color);

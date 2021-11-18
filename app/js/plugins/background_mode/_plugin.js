@@ -26,6 +26,24 @@ HC.plugins.background_mode = HC.plugins.background_mode || {};
             return HC.BackgroundModePlugin.background[this.layer.index];
         }
 
+        needsUpdate(suffix) {
+            return this.id(suffix) !== this.current();
+        }
+
+        after() {
+            let map = this.layer.getBackgroundMap();
+            if (map) {
+                if (map.properties.map && this.needsUpdate(map.key)) {
+                    this.current(this.id(map.key));
+                    this.texture = map.properties.map;
+                    this.layer.setBackground(this.texture);
+                }
+                return true;
+            }
+
+            return false;
+        }
+
         id(suffix) {
             return super.id(suffix) + this.settings.background_volume + this.settings.background_color + this.settings.background_input;
         }

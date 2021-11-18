@@ -31,6 +31,7 @@ HC.Layer.prototype.animate = function () {
     this.shapeMaterialsNeedUpdate = false;
 
     this.doLighting(this.materialColor);
+    this.doBackgroundMap();
     this.doBackground();
 
     this.doOscillate(false);

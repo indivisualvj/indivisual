@@ -135,6 +135,27 @@ HC.Layer.prototype.doMaterialMap = function () {
     return color;
 };
 
+
+/**
+ *
+ * @returns {*}
+ */
+HC.Layer.prototype.doBackgroundMap = function () {
+
+    let seq = this.config.SourceSettings.background_map;
+
+    if (seq === 'webcam') {
+        let plugin = this.getBackgroundMapPlugin('webcam');
+        this.doPlugin(plugin);
+
+    } else if (seq !== 'none') {
+        let plugin = this.getBackgroundMapPlugin('sequence');
+        this.doPlugin(plugin, parseInt(seq));
+
+    } else {
+    }
+};
+
 /**
  *
  * @param shape

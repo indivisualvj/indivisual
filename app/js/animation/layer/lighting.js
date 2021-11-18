@@ -43,7 +43,7 @@ HC.Layer.prototype._resetLighting = function () {
  */
 HC.Layer.prototype._lightColor = function (value) {
 
-    if (this.lights && this.lights.length) {
+    if (this.lights.length) {
         let c = new THREE.Color(value);
 
         if (c.r === 0 && c.g === 0 && c.b === 0) { // is black. change to white.
@@ -120,4 +120,12 @@ HC.Layer.prototype._resetAmbientLight = function () {
         this._lighting.add(light);
         this.ambientLight = light;
     }
+};
+
+/**
+ *
+ * @private
+ */
+HC.Layer.prototype.hasLighting = function () {
+    return this.lights.length || this.ambientLight;
 };

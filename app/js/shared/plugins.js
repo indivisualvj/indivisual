@@ -207,7 +207,7 @@ HC.Shape.prototype.initPlugins = function () {
     HC.AnimationTexturePlugin = class AnimationTexturePlugin extends HC.AnimationPlugin {
         /**
          *
-         * @param {THREE.Texture} texture
+         * @param texture {THREE.Texture}
          * @param prefix
          */
         updateTexture(texture, prefix) {

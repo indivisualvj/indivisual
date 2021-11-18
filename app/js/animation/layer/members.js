@@ -17,6 +17,23 @@ HC.Layer.prototype.getMaterialMap = function () {
 
 /**
  *
+ * @returns {HC.MaterialMapPlugin}
+ */
+HC.Layer.prototype.getBackgroundMap = function () {
+    let seq = this.config.SourceSettings.background_map;
+    if (seq === 'webcam') {
+        return this.getBackgroundMapPlugin('webcam');
+
+    } else if (seq !== 'none') {
+        return this.getBackgroundMapPlugin('sequence');
+
+    }
+
+    return null;
+};
+
+/**
+ *
  * @param shape
  * @param x
  * @param y

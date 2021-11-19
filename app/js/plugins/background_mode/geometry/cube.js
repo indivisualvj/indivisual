@@ -31,7 +31,7 @@
 
                 let file = assetman.getImage(this.settings.background_input);
                 if (file) {
-                    assetman.loadOverrideMaterialInput(mat, filePath(IMAGE_DIR, file), function (mat) {
+                    assetman.loadMaterialMap(mat, filePath(IMAGE_DIR, file), function (mat) {
                         if (!mat.emissiveMap) {
                             mat.emissiveMap = mat.map;
                         }

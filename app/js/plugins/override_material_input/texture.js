@@ -37,7 +37,7 @@
                     let path = filePath(IMAGE_DIR, file);
                     this.loading = true;
 
-                    assetman.loadOverrideMaterialInput(this.properties, path, function (mat) {
+                    assetman.loadMaterialMap(this.properties, path, function (mat) {
                         inst.file = file;
                         inst.loading = false;
 

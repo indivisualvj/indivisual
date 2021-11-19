@@ -2,10 +2,6 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.ScriptProcessor}
-     */
     HC.ScriptProcessor = class ScriptProcessor {
 
         /**
@@ -42,7 +38,7 @@
 
                         let instance = ex.shift();
                         let func = ex.shift();
-                        let args = parseArray(ex);
+                        let args = HC.parseArray(ex);
 
                         instance = this._getInstance(instance);
 

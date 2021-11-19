@@ -2,10 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.Shape}
-     */
+
     HC.Shape = class Shape {
 
         parent;
@@ -64,7 +61,7 @@
         setGeometry(geo) {
 
             if (this.geometry) {
-                threeDispose(this.geometry);
+                HC.dispose(this.geometry);
             }
 
             this.geometry = geo;

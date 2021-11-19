@@ -2,10 +2,6 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.Explorer}
-     */
     HC.Explorer = class Explorer {
 
         /**
@@ -13,6 +9,9 @@
          */
         controller;
 
+        /**
+         * @type {HC.Config}
+         */
         config;
 
         /**
@@ -60,7 +59,7 @@
             this.controller = controller;
             this.messaging = controller.messaging;
             this.presetMan = new HC.PresetManager(controller, this);
-
+            this.config = controller.config;
             this.gui = new HC.GuifyExplorer('Presets', 'presets', true, this);
             this.load();
         }
@@ -93,9 +92,6 @@
             });
         }
 
-        /**
-         * todo sometimes there are children left. why?
-         */
         reload(callback) {
             this.gui.removeChildren();
             this.load(callback);
@@ -105,20 +101,14 @@
          * 
          */
         resetPresets(heap) {
-            let children = this.gui.getAllControllers();
-
-            for (const key in children) {
-                let child = children[key];
-                let info = child.getInfo();
-
+            for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
                 if (heap && heap.length) {
-                    if (heap.indexOf(parseInt(info)) > -1) {
+                    if (heap.indexOf(parseInt(layer+1)) > -1) {
                         continue;
                     }
                 }
 
-                child.setInfo(null);
-                child.setMnemonic(null);
+                this.resetPreset(layer);
             }
         }
 

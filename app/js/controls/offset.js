@@ -2,10 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.controls.offset}
-     */
+
     HC.controls.offset = class ControlSet extends HC.ControlSet {
 
         static index = 170;

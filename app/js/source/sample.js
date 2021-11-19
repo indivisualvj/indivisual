@@ -2,10 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.Sample}
-     */
+
     HC.Sample = class Sample {
 
         index;

@@ -1,18 +1,18 @@
 /**
- * filePath
+ *
  * @returns {string}
  */
-function filePath() {
+HC.filePath = function() {
     let args = Array.prototype.slice.call(arguments);
     return args.join('/');
 }
 
 /**
- * parseFileMeta
+ *
  * @param file
- * @returns {{fps: number, resolution: {x: number, y: number}, speed: number}}
+ * @returns {{fps: number, tempo: number, resolution: {x: number, y: number}}}
  */
-function parseFileMeta(file) {
+HC.parseFileMeta = function (file) {
 
     let meta = {
         tempo: 120,
@@ -51,7 +51,7 @@ function parseFileMeta(file) {
  * @param prefix
  * @returns {*}
  */
-function numberExtract(item, prefix) {
+HC.numberExtract = function(item, prefix) {
     let regex = new RegExp(prefix + '(\\d+)_?\\w*');
     let i = item.replace(regex, '$1');
     i = parseInt(i);
@@ -66,9 +66,10 @@ function numberExtract(item, prefix) {
 /**
  *
  * @param value
- * @returns {*}
+ * @param fallback
+ * @returns {any|boolean|number}
  */
-function parse(value, fallback) {
+HC.parse = function (value, fallback) {
     if (value === 'true') {
         return true;
 
@@ -93,10 +94,10 @@ function parse(value, fallback) {
  * @param args
  * @returns {*}
  */
-function parseArray(args) {
+HC.parseArray = function(args) {
     for (let i in args) {
         let a = args[i];
-        args[i] = parse(a);
+        args[i] = HC.parse(a);
     }
 
     return args;

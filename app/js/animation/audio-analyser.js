@@ -2,10 +2,6 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     * 
-     * @type {HC.AudioAnalyser}
-     */
     HC.AudioAnalyser = class AudioAnalyser {
 
         /**

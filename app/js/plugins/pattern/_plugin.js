@@ -90,7 +90,7 @@ HC.plugins.pattern = HC.plugins.pattern || {};
         }
 
         reset() {
-            threeTraverse(this);
+            HC.traverse(this);
         }
     }
 }

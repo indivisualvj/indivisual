@@ -2,10 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.Monitor}
-     */
+
     HC.Monitor = class Monitor {
 
         /**

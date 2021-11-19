@@ -2,10 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.SourceManager}
-     */
+
     HC.SourceManager = class SourceManager {
         /**
          * @type {HC.Animation}
@@ -337,7 +334,7 @@
 
             let sample = this.getSample(i);
             if (sample) {
-                let dir = filePath(SAMPLE_DIR, name);
+                let dir = HC.filePath(SAMPLE_DIR, name);
                 let callback = () => {
                     messaging._emit({action: 'unlinkall', dir: dir}, (files) => {
                         console.log('unlinkall', dir, files.length + ' files deleted');
@@ -385,7 +382,7 @@
             this.storeWorker.postMessage({
                 length: sample.frameCount,
                 samples: sample.samples,
-                path: filePath(SAMPLE_DIR, name),
+                path: HC.filePath(SAMPLE_DIR, name),
                 scale: scale,
                 id: sample.id
             }, sample.samples);
@@ -411,7 +408,7 @@
             sample.width = this.displayManager.width;
             sample.height = this.displayManager.height;
 
-            let file = filePath(SAMPLE_DIR, name);
+            let file = HC.filePath(SAMPLE_DIR, name);
 
             messaging._emit({action: 'samples', file: file}, (files) => {
 
@@ -469,7 +466,7 @@
                     length: sample.frameCount,
                     files: files,
                     blobs: blobs,
-                    path: filePath(SAMPLE_DIR, name),
+                    path: HC.filePath(SAMPLE_DIR, name),
                     id: sample.id
                 }, blobs);
             });
@@ -484,7 +481,7 @@
             if (!sample._clip) {
                 sample._clip = {id: sample.id, ready: false, thumbs: [], length: 0, beats: 0, duration: 0};
 
-                let file = filePath(SAMPLE_DIR, sample.id);
+                let file = HC.filePath(SAMPLE_DIR, sample.id);
 
                 messaging.samples(file, (files) => {
 
@@ -501,7 +498,7 @@
                     for (let i = 0; i < frameCount; i += step) {
                         let ri = Math.floor(i);
                         let file = files[ri];
-                        file = filePath(SAMPLE_DIR, sample.id, ri + '.png');
+                        file = HC.filePath(SAMPLE_DIR, sample.id, ri + '.png');
                         let image = new Image();
                         image.src = file;
                         image._index = index++;
@@ -704,23 +701,6 @@
             let key = getSampleEnabledKey(i);
             if (key in this.config.SourceSettings) {
                 return this.config.SourceSettings[key];
-            }
-
-            return false;
-        }
-
-
-        /**
-         * //fixme: nobody need that?
-         * @param i
-         * @returns {*}
-         */
-        getSequenceBySample(i) {
-            for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
-                let sample = this.getSampleBySequence(seq);
-                if (sample === i) {
-                    return seq;
-                }
             }
 
             return false;

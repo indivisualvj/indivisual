@@ -11,7 +11,7 @@
         }
 
         loadCubeTexture(name, callback) {
-            let path = filePath(CUBE_DIR, name);
+            let path = HC.filePath(CUBE_DIR, name);
             assetman.loadCubeTexture(path, function (texture) {
                 callback(texture);
             });

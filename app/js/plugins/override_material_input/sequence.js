@@ -70,6 +70,8 @@
                 height: height
             };
 
+            this.clip = new HC.Rectangle(0, 0, image.width, image.height).cropTo(width, height);
+
             let tex = new THREE.CanvasTexture(canvas);
             this.properties.map = tex;
             this.properties.emissiveMap = tex;

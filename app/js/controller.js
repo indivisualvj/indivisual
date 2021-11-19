@@ -74,10 +74,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 {
-    /**
-     *
-     * @type {HC.Controller}
-     */
     HC.Controller = class Controller extends HC.Program {
 
         /**
@@ -733,13 +729,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 } else if (item.match(/_(enabled)/)) {
                     if (!value) { // set record to false if enabled == false
-                        let smp = numberExtract(item, 'sample');
+                        let smp = HC.numberExtract(item, 'sample');
                         this.updateSource(getSampleRecordKey(smp), false, true, true, false);
                         this.updateThumbs();
                     }
 
                 } else if (item.match(/_(load)/)) {
-                    let smp = numberExtract(item, 'sample');
+                    let smp = HC.numberExtract(item, 'sample');
                     this.loadClip(smp);
                 }
 

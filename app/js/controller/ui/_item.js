@@ -110,7 +110,13 @@
          *
          */
         remove() {
-            this.getComponent().Remove();
+            if (this.getParent()) {
+                this.getParent().removeChild(this);
+
+            } else {
+                this.getComponent().Remove();
+            }
+
         }
 
         /**

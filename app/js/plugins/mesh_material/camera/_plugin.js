@@ -22,7 +22,7 @@
         reset() {
             if (this.cameras) {
                 this.layer.three.scene.remove(this.cameras);
-                this.cameras.traverse(threeDispose);
+                this.cameras.traverse(HC.dispose);
                 this.cameras = undefined;
 
                 HC.EventManager.getInstance().removeLike(this.id());

@@ -3,10 +3,6 @@
  */
 
 {
-    /**
-     *
-     * @type {HC.Animation.EventListener}
-     */
     HC.Animation.EventListener = class EventListener {
         init () {
 
@@ -29,10 +25,6 @@
 }
 
 {
-    /**
-     *
-     * @type {HC.Animation.KeyboardListener}
-     */
     HC.Animation.KeyboardListener = class KeyboardListener {
 
         /**
@@ -56,10 +48,6 @@
 }
 
 {
-    /**
-     *
-     * @type {HC.Animation.ResizeListener}
-     */
     HC.Animation.ResizeListener = class ResizeListener {
 
         /**

@@ -2,10 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.Guify}
-     */
+
     HC.Guify = class Guify extends HC.GuifyFolder {
 
         /**

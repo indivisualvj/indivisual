@@ -124,7 +124,7 @@ HC.Controller.prototype.addPassesFolder = function (submit) {
 
     let passes = this.animationSettingsGui.getChild('passes');
     if (passes) {
-        this.animationSettingsGui.removeChild(passes.getLabel());
+        this.animationSettingsGui.removeChild(passes);
     }
     let ui = new HC.ControlSetGuifyUi(this.settingsManager.getGlobalProperties()['passes'], this.animationSettingsGui);
     let dir = ui.addFolder();
@@ -135,6 +135,7 @@ HC.Controller.prototype.addPassesFolder = function (submit) {
 
 /**
  *
+ * @param key
  * @param control
  * @param parent
  */

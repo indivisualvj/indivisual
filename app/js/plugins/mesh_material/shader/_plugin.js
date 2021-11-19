@@ -39,7 +39,7 @@
         }
 
         reset() {
-            threeTraverse(this);
+            HC.traverse(this);
         }
 
         static standardUniforms = {

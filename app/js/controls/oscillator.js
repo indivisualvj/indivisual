@@ -2,10 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.controls.oscillator}
-     */
+
     HC.controls.oscillator = class ControlSet extends HC.ControlSet {
 
         static index = 30;

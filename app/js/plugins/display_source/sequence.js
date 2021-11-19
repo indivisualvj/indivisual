@@ -100,7 +100,7 @@
                     let display = data[2];
 
                     if (display && item.startsWith('sequence')) {
-                        let seq = numberExtract(item, 'sequence');
+                        let seq = HC.numberExtract(item, 'sequence');
 
                         if (item.match(/^sequence\d+_input$/)) {
                             sourceManager.updatePluginNrSource('sequence', seq);
@@ -174,6 +174,7 @@
                     let os = this.start;
                     let oe = this.end;
                     let frameCount = this.sample.frameCount;
+                    HC.SourceControllerSequence
                     this.sourceManager.applySequenceSlice(this, frameCount, start, end);
 
                     if (os !== this.start) {

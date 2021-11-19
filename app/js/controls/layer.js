@@ -3,10 +3,6 @@
  */
 
 {
-    /**
-     *
-     * @type {HC.controls.layer}
-     */
     HC.controls.layer = class ControlSet extends HC.ControlSet {
 
         static index = 10;

@@ -1,9 +1,5 @@
 
 {
-    /**
-     *
-     * @type {HC.Display.border_mode.visible}
-     */
     HC.Display.border_mode.visible = class Plugin extends HC.Display.BorderModePlugin  {
 
         static index = 10;
@@ -24,10 +20,7 @@
 }
 
 {
-    /**
-     *
-     * @type {HC.Display.border_mode.randomall}
-     */
+
     HC.Display.border_mode.randomall = class Plugin extends HC.Display.BorderModePlugin  {
 
         static index = 999;
@@ -59,10 +52,7 @@
 }
 
 {
-    /**
-     *
-     * @type {HC.Display.border_mode.randomline}
-     */
+
     HC.Display.border_mode.randomline = class Plugin extends HC.Display.BorderModePlugin  {
 
         static name = 'random line';

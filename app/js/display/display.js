@@ -2,10 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.Display}
-     */
+
     HC.Display = class Display {
 
         /**
@@ -188,7 +185,7 @@
                 let color = '#00ffbb';
                 if (image && image._color) {
                     color = image._color;
-                    color = hslToHex(hslComplementary(hexToHsl(color)));
+                    color = HC.hslToHex(HC.hslComplementary(HC.hexToHsl(color)));
                 }
 
                 ctx.fillStyle = color;

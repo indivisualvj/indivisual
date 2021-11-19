@@ -2,10 +2,6 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.Renderer}
-     */
     HC.Renderer = class Renderer {
 
         /**
@@ -140,7 +136,7 @@
 
             if (this._layers) {
                 this.three.scene.remove(this._layers);
-                this._layers.traverse(threeDispose);
+                this._layers.traverse(HC.dispose);
             }
             this._layers = new THREE.Group();
             this.three.scene.add(this._layers);

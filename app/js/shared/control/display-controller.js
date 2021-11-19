@@ -7,10 +7,7 @@ HC.DisplayController = HC.DisplayController || {};
 {
     HC.DisplayController.video = {};
 
-    /**
-     *
-     * @type {HC.DisplayController.video._general}
-     */
+
     HC.DisplayController.video._general = class _general extends HC.ControlSet {
 
         static index = 10;
@@ -166,10 +163,7 @@ HC.DisplayController = HC.DisplayController || {};
         };
     };
 
-    /**
-     *
-     * @type {HC.DisplayController.video.displayN}
-     */
+
     HC.DisplayController.video.displayN = class displayN extends HC.IterableControlSet {
 
         static index = 10;

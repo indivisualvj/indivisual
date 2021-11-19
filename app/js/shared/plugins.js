@@ -25,10 +25,7 @@ HC.Shape.prototype.initPlugins = function () {
     this.plugins = clone(HC.Shape.prototype._plugins);
 };
 {
-    /**
-     *
-     * @type {HC.AnimationPlugin}
-     */
+
     HC.AnimationPlugin = class AnimationPlugin {
 
         /**

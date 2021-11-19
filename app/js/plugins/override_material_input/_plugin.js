@@ -40,7 +40,7 @@ HC.plugins.override_material_input = HC.plugins.override_material_input || {};
             for (let k in keys) {
                 let v = this.properties[keys[k]];
                 this.properties[keys[k]] = undefined;
-                threeTraverse(v);
+                HC.traverse(v);
             }
         }
     }

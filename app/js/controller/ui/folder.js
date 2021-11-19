@@ -1,12 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-
 {
-    /**
-     *
-     * @type {HC.GuifyFolder}
-     */
     HC.GuifyFolder = class GuifyFolder extends HC.GuifyItem {
 
         /**
@@ -160,7 +155,19 @@
          * @returns {HC.GuifyItem}
          */
         getChild(key) {
-            return this.children[key];
+            if (key in this.children) {
+                return this.children[key];
+            }
+
+            return null;
+        }
+
+        getChildKey(child) {
+            for (const childKey in this.children) {
+                if (this.children[childKey] === child) {
+                    return childKey;
+                }
+            }
         }
 
         hasChild(key) {
@@ -203,7 +210,12 @@
          * @param key
          */
         removeChild(key) {
-            this.getChild(key).remove();
+            let child = this.getChild(key);
+            if (!child) {
+                child = key;
+                key = this.getChildKey(child);
+            }
+            child.getComponent().Remove();
             delete this.children[key];
         }
 

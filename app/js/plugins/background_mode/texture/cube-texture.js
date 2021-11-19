@@ -12,7 +12,7 @@
                 let file = assetman.getCube(i);
                 if (file) {
                     this.current(id);
-                    let path = filePath(CUBE_DIR, file);
+                    let path = HC.filePath(CUBE_DIR, file);
 
                     assetman.loadCubeTexture(path, (texture) => {
                         this.texture = texture;

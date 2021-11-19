@@ -2,10 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.controls.locking}
-     */
+
     HC.controls.locking = class ControlSet extends HC.ControlSet {
 
         static index = 150;

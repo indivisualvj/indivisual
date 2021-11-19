@@ -278,7 +278,7 @@ HC.controls = HC.controls || {};
                 if (otype !== type) {
                     // cast to whatever
                     if (type === 'string' && otype !== 'string') {
-                        value = parse(value);
+                        value = HC.parse(value);
 
                         // cast to string
                     } else if (type !== 'string' && otype === 'string') {

@@ -2,10 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.controls.pattern}
-     */
+
     HC.controls.pattern = class ControlSet extends HC.ControlSet {
 
         static index = 90;

@@ -23,7 +23,7 @@ HC.Layer.prototype.setBackground = function (value) {
 HC.Layer.prototype._resetBackground = function (recreate) {
     if (this._background) {
         this._layer.remove(this._background);
-        this._background.traverse(threeDispose);
+        this._background.traverse(HC.dispose);
     }
 
     this._layer.background = null;

@@ -2,10 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.controls.material}
-     */
+
     HC.controls.material = class ControlSet extends HC.ControlSet {
 
         static index = 110;

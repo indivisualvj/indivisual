@@ -77,10 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 {
-    /**
-     *
-     * @type {HC.Animation}
-     */
+
     HC.Animation = class Animation extends HC.Program {
         /**
          * @type {HC.Renderer}
@@ -666,19 +663,19 @@ document.addEventListener('DOMContentLoaded', function () {
             if (display) {
                 if (item.match(/^sample\d+_load/) && value) {
                     if (this.monitor) {
-                        this.sourceManager.loadSample(numberExtract(item, 'sample'), value);
+                        this.sourceManager.loadSample(HC.numberExtract(item, 'sample'), value);
                     }
                     this.updateSource(item, false, false, true, false);
 
                 } else if (item.match(/^sample\d+_/)) {
-                    this.sourceManager.updateSample(numberExtract(item, 'sample'));
+                    this.sourceManager.updateSample(HC.numberExtract(item, 'sample'));
 
                     if (item.match(/sample\d+_(enabled|record)/)) { // never let samples be selected on enabled/record status change
-                        HC.EventManager.getInstance().fireEvent(EVENT_SAMPLE_STATUS_CHANGED, this.sourceManager.getSample(numberExtract(item, 'sample')));
+                        HC.EventManager.getInstance().fireEvent(EVENT_SAMPLE_STATUS_CHANGED, this.sourceManager.getSample(HC.numberExtract(item, 'sample')));
                     }
 
                 } else if (item.match(/display\d+_source/)) {
-                    let display = this.displayManager.getDisplay(numberExtract(item, 'display'));
+                    let display = this.displayManager.getDisplay(HC.numberExtract(item, 'display'));
                     this.sourceManager.updateSource(display);
 
                     // if (display && display.isFixedSize()) { // todo what is it? needed by light display source make lighting manage it!
@@ -686,7 +683,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     // }
 
                 } else if (item.match(/display\d+_sequence/)) {
-                    this.sourceManager.updateSource(this.displayManager.getDisplay(numberExtract(item, 'display')));
+                    this.sourceManager.updateSource(this.displayManager.getDisplay(HC.numberExtract(item, 'display')));
                 }
             }
 
@@ -723,7 +720,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (item.match(/^display\d+_\d/)) { // resize
                 if (value) {
-                    this.displayManager.centerDisplay(numberExtract(item, 'display'), value);
+                    this.displayManager.centerDisplay(HC.numberExtract(item, 'display'), value);
                     this.updateDisplay(item, false, display, true);
                 }
                 this.config.DisplaySettingsManager.updateItem(item, value);
@@ -762,7 +759,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (item.match(/^display\d+_/)) {
 
-                    let i = numberExtract(item, 'display');
+                    let i = HC.numberExtract(item, 'display');
 
                     if (item.match(/_mask$/)) { // mask
                         this.displayManager.updateDisplay(i, 'mask');

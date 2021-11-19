@@ -166,7 +166,7 @@
 
                 this.layers[i] = layer;
 
-                layer.needsReset = true;
+                HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET, layer.index, layer, 0);
             }
 
             this.currentLayer = this.layers[this.config.ControlSettings.layer];

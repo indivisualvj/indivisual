@@ -584,9 +584,14 @@
          * @returns {boolean}
          */
         getSequenceHasParent(i) {
-            let material = this.config.SourceValues.override_material_input[this.config.SourceSettings.override_material_input];
+            let override = this.config.SourceValues.override_material_input[this.config.SourceSettings.override_material_input];
             let key = getSequenceKey(i);
-            if (material === key && this.renderer) {
+            if (override === key && this.renderer) {
+                return true;
+            }
+            override = this.config.SourceValues.override_background_mode[this.config.SourceSettings.override_background_mode];
+            key = getSequenceKey(i);
+            if (override === key && this.renderer) {
                 return true;
             }
 
@@ -706,7 +711,7 @@
 
 
         /**
-         *
+         * //fixme: nobody need that?
          * @param i
          * @returns {*}
          */

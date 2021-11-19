@@ -95,9 +95,9 @@
          */
         _initRangeEvents() {
             let active = false;
-            let valueCompondent = this.component.valueComponent;
+            let valueComponent = this.component.valueComponent;
 
-            valueCompondent.addEventListener('keyup', (e) => {
+            valueComponent.addEventListener('keyup', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
 
@@ -114,28 +114,26 @@
                 }
             });
 
-            valueCompondent.addEventListener('mousedown', function (e) {
+            valueComponent.addEventListener('mousedown', (e) => {
                 active = true;
-            });
+                window.addEventListener('mousemove', (e) => {
+                    if (active) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        let dy = e.movementY;
+                        let resY = window.screen.availHeight;
+                        let vy = Math.abs(dy / (resY/512));
+                        if (dy < 0) {
+                            this.incrementValue(vy);
 
-            window.addEventListener('mousemove', (e) => {
-                if (active) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    let dy = e.movementY;
-                    let resY = window.screen.availHeight;
-                    let vy = Math.abs(dy / (resY/512));
-                    if (dy < 0) {
-                        this.incrementValue(vy);
-
-                    } else if (dy > 0) {
-                        this.decrementValue(vy);
+                        } else if (dy > 0) {
+                            this.decrementValue(vy);
+                        }
                     }
-                }
-            });
-
-            window.addEventListener('mouseup', function (e) {
-                active = false;
+                });
+                window.addEventListener('mouseup', (e) => {
+                    active = false;
+                });
             });
         }
 

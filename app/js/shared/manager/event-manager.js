@@ -2,20 +2,15 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.EventManager}
-     */
     HC.EventManager = class EventManager {
         events = {};
         /**
-         *
+         * (re)registers a event. no event can exist twice.
          * @param event
          * @param id
          * @param callback
          */
         register(event, id, callback) {
-
             let _func = function (target) {
                 if (callback) {
                     callback(target);
@@ -113,11 +108,11 @@
             if (event in this.events && id in this.events[event]) {
                 if (timeout) {
                     HC.TimeoutManager.getInstance().add(event + '.' + id, timeout, () => {
-                        this.bruteFireEventId(event, id, target);
+                        this._doFireEvent(event, id, target);
                     });
 
                 } else {
-                    this.bruteFireEventId(event, id, target);
+                    this._doFireEvent(event, id, target);
                 }
 
             } else {
@@ -130,8 +125,9 @@
          * @param event
          * @param id
          * @param target
+         * @private
          */
-        bruteFireEventId(event, id, target) {
+        _doFireEvent(event, id, target) {
             let _call = this.events[event][id];
             if (_call) {
                 _call(target);
@@ -146,7 +142,7 @@
         fireEvent(event, target) {
             if (event in this.events) {
                 for (let id in this.events[event]) {
-                    this.bruteFireEventId(event, id, target);
+                    this._doFireEvent(event, id, target);
                 }
             }
         }

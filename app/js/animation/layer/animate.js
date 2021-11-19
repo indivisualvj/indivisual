@@ -4,7 +4,7 @@
  */
 HC.Layer.prototype.animate = function () {
 
-    this._preAnimate();
+    this._handleResets();
 
     HC.EventManager.getInstance().fireEvent(EVENT_LAYER_ANIMATE);
 
@@ -40,23 +40,29 @@ HC.Layer.prototype.animate = function () {
 /**
  *
  */
-HC.Layer.prototype._preAnimate = function () {
+HC.Layer.prototype._handleResets = function () {
     if (this.needsReset) {
+        console.log('layer.' + this.index, '_fullReset');
         this._fullReset();
     }
     if (this.shapesNeedReset) {
+        console.log('layer.' + this.index, '_resetShapes');
         this._resetShapes();
     }
     if (this.shadersNeedUpdate) {
+        console.log('layer.' + this.index, '_updateShaderPasses');
         this._updateShaderPasses();
     }
     if (this.lightingNeedsReset) {
+        console.log('layer.' + this.index, '_resetLighting');
         this._resetLighting();
     }
     if (this.fogNeedsReset) {
+        console.log('layer.' + this.index, '_resetFog');
         this._resetFog();
     }
     if (this.ambientNeedsReset) {
+        console.log('layer.' + this.index, '_resetAmbientLight');
         this._resetAmbientLight();
     }
 }

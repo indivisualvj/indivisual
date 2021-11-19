@@ -8,7 +8,7 @@
         geometry;
 
         after() {
-            if (this.mesh && this.mesh.material) {
+            if (!super.after() && this.mesh && this.mesh.material) {
                 let mat = this.mesh.material;
                 let keys = Object.keys(mat);
                 for (let k in keys) {

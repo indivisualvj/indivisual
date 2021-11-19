@@ -5,15 +5,9 @@
     HC.plugins.mesh_material.flow_body = class Plugin extends HC.MeshShaderMaterialPlugin {
         static name = 'flow-body';
         shader = {
-            uniforms: {
-                uTime: {type: 'f', value: 1.0}
-            },
-            fragmentShader: `
-                uniform float uTime;
-                uniform vec2 resolution;
-                uniform sampler2D iChannel0;
-                varying vec2 vUv;
-                
+            uniforms: {...HC.MeshShaderMaterialPlugin.standardUniforms},
+            fragmentShader: HC.MeshShaderMaterialPlugin.fragmentPrefix + `
+                                
                 #define DOTS
                 const float LN2 = 0.693147181;	// natural log of 2 used to convert Log2 to LogE
                 const float SourceMag = 2.55;
@@ -22,7 +16,6 @@
                     
                 void mainImage( out vec4 fragColor, in vec2 fragCoord )
                 {
-                    vec2 iResolution = vec2(1.);
                     vec2 div = vec2( divs, divs*iResolution.y/iResolution.x );
                     vec2 uv = fragCoord.xy / iResolution.xy;
                     uv -= 0.5;									// center on screen
@@ -72,13 +65,9 @@
                     fragColor = vec4(c, c, c, 1.0);
                 //	fragColor = vec4(c, sxy.x, sxy.y, 1.0);
                 }
-                
-                void main() {
-                    mainImage(gl_FragColor, vUv);
-                }
-                `
-            ,
-            vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
+            ` + HC.MeshShaderMaterialPlugin.fragmentSuffix,
+            vertexShader: HC.MeshShaderMaterialPlugin.vertexShader
+            
         }
     }
 }

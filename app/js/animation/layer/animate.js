@@ -4,9 +4,9 @@
  */
 HC.Layer.prototype.animate = function () {
 
-    this._preAnimate();
+    this._handleResets();
 
-    this.listener.fireEvent(EVENT_LAYER_ANIMATE);
+    HC.EventManager.getInstance().fireEvent(EVENT_LAYER_ANIMATE);
 
     this.tween.update(this.animation.now - this.lastUpdate, false);
 
@@ -17,13 +17,13 @@ HC.Layer.prototype.animate = function () {
 
     this.doCameraMode();
 
-    this.materialColor = this.doMaterialMap();
+    this.materialColor = this.doOverrideMaterialInput();
 
     this._animateShape(this.shape);
     this.doPatternRotation(); // preset current pattern euler from layer's shape rotation
 
     for (let i = 0; i < this.shapes.length; i++) {
-        let shape = this.shapes[i];
+        let shape = this.getShape(i);
         this._animateShape(shape, true);
         shape.materialNeedsUpdate = this.shapeMaterialsNeedUpdate;
     }
@@ -31,6 +31,7 @@ HC.Layer.prototype.animate = function () {
     this.shapeMaterialsNeedUpdate = false;
 
     this.doLighting(this.materialColor);
+    this.doOverrideBackgroundMode();
     this.doBackground();
 
     this.doOscillate(false);
@@ -39,23 +40,29 @@ HC.Layer.prototype.animate = function () {
 /**
  *
  */
-HC.Layer.prototype._preAnimate = function () {
+HC.Layer.prototype._handleResets = function () {
     if (this.needsReset) {
+        console.log('layer.' + this.index, '_fullReset');
         this._fullReset();
     }
     if (this.shapesNeedReset) {
+        console.log('layer.' + this.index, '_resetShapes');
         this._resetShapes();
     }
     if (this.shadersNeedUpdate) {
+        console.log('layer.' + this.index, '_updateShaderPasses');
         this._updateShaderPasses();
     }
     if (this.lightingNeedsReset) {
+        console.log('layer.' + this.index, '_resetLighting');
         this._resetLighting();
     }
     if (this.fogNeedsReset) {
+        console.log('layer.' + this.index, '_resetFog');
         this._resetFog();
     }
-    if (this.ambientLightNeedsReset) {
+    if (this.ambientNeedsReset) {
+        console.log('layer.' + this.index, '_resetAmbientLight');
         this._resetAmbientLight();
     }
 }

@@ -17,7 +17,7 @@
                     switch (key) {
                         case 'background_wraps':
                         case 'background_wrapt':
-                            messaging.program.listener.fireEventId(EVENT_LAYER_RESET, id, context, FIVE_FPS);
+                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET, id, context, SKIP_TEN_FRAMES);
                             break;
                     }
                 }
@@ -42,11 +42,11 @@
         };
         
         types = {
-            background_volume: [-5, 5, 0.01],
+            background_volume: [-10, 10, 0.01],
             background_repeatx: [-32, 32, 0.001],
             background_repeaty: [-32, 32, 0.001],
-            background_offsetx: [-5, 5, 0.001],
-            background_offsety: [-5, 5, 0.001],
+            background_offsetx: [-10, 10, 0.001],
+            background_offsety: [-10, 10, 0.001],
             background_centerx: [0, 1, 0.001],
             background_centery: [0, 1, 0.001],
             background_rotation: [-180, 180, 0.01]
@@ -58,7 +58,7 @@
             // background_input: ['half'],
             background_volume: ['half', 'clear'],
             background_volume_oscillate: ['half'],
-            // background_mapping: ['half'],
+            // override_background_modeping: ['half'],
             background_wraps: ['half', 'clear'],
             background_wrapt: ['half'],
             background_repeatx: ['half', 'clear'],

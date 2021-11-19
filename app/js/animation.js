@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', function () {
             config.loadConfig(() => {
                 animation.config.initControlSets();
 
-                animation.listener = new HC.Listener();
                 animation.audioManager = new HC.AudioManager();
                 animation.audioAnalyser = new HC.AudioAnalyser(animation);
                 animation.beatKeeper = new HC.BeatKeeper(animation, animation.config);
@@ -37,14 +36,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 animation.renderer = renderer;
 
                 if (IS_ANIMATION) {
-                    animation.listener.register('webglcontextlost', animation.name, function () {
+                    HC.EventManager.getInstance().register('webglcontextlost', animation.name, function () {
                         // now reset...
                         HC.log('HC.Renderer', 'another context loss...', true, true);
 
                         for (let i = 0; i < animation.config.SourceValues.sample.length; i++) {
                             animation.updateSource(getSampleKey(i), false, true, true, false);
                         }
-                        animation.updateSource('material_map', 'none', true, true, false);
+                        animation.updateSource('override_material_input', 'none', true, true, false);
+                        animation.updateSource('override_background_mode', 'none', true, true, false);
                     });
 
                     animation.messaging.emitAttr('#play', 'data-color', '');
@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         animate() {
 
-            this.listener.fireEvent(EVENT_ANIMATION_ANIMATE);
+            HC.EventManager.getInstance().fireEvent(EVENT_ANIMATION_ANIMATE);
 
             this._preRender();
 
@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (this.audioAnalyser.peak) {
                 this.messaging.emitMidi('glow', MIDI_PEAK_FEEDBACK, {timeout: 125});
 
-                this.listener.fireEvent('audio.peak', this.audioAnalyser);
+                HC.EventManager.getInstance().fireEvent('audio.peak', this.audioAnalyser);
             }
         }
 
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         render() {
-            this.listener.fireEvent(EVENT_ANIMATION_RENDER);
+            HC.EventManager.getInstance().fireEvent(EVENT_ANIMATION_RENDER);
             if (IS_ANIMATION) {
                 this.sourceManager.render();
             }
@@ -314,7 +314,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this._rmss += this.rms;
             this.last = this.now;
 
-            this.listener.fireEvent('animation.updateRuntime', this);
+            HC.EventManager.getInstance().fireEvent('animation.updateRuntime', this);
         }
 
         /**
@@ -550,12 +550,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
             switch (property) {
                 case 'shaders':
-                    this.listener.fireEventId(EVENT_LAYER_UPDATE_SHADERS, layer.index, layer, FIVE_FPS);
+                    HC.EventManager.getInstance().fireEventId(EVENT_LAYER_UPDATE_SHADERS, layer.index, layer, SKIP_TEN_FRAMES);
                     break;
 
                 case 'shape_vertices':
                     if (display) {
-                        this.listener.fireEventId(EVENT_LAYER_RESET_SHAPES, layer.index, layer, FIVE_FPS);
+                        HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_SHAPES, layer.index, layer, SKIP_TEN_FRAMES);
                     }
                     break;
             }
@@ -564,7 +564,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.messaging.emitSettings(layerIndex, data, true, false, force);
             }
 
-            this.listener.fireEvent('animation.updateSetting', {layer: layer, item: property, value: value});
+            HC.EventManager.getInstance().fireEvent('animation.updateSetting', {layer: layer, item: property, value: value});
         }
 
         /**
@@ -674,23 +674,23 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.sourceManager.updateSample(numberExtract(item, 'sample'));
 
                     if (item.match(/sample\d+_(enabled|record)/)) { // never let samples be selected on enabled/record status change
-                        this.listener.fireEvent(EVENT_SAMPLE_STATUS_CHANGED, this.sourceManager.getSample(numberExtract(item, 'sample')));
+                        HC.EventManager.getInstance().fireEvent(EVENT_SAMPLE_STATUS_CHANGED, this.sourceManager.getSample(numberExtract(item, 'sample')));
                     }
 
                 } else if (item.match(/display\d+_source/)) {
                     let display = this.displayManager.getDisplay(numberExtract(item, 'display'));
                     this.sourceManager.updateSource(display);
 
-                    if (display && display.isFixedSize()) { // todo what is it? needed by light display source make lighting manage it!
-                        this.displayManager.updateDisplay(display.index, false);
-                    }
+                    // if (display && display.isFixedSize()) { // todo what is it? needed by light display source make lighting manage it!
+                    //     this.displayManager.updateDisplay(display.index, false);
+                    // }
 
                 } else if (item.match(/display\d+_sequence/)) {
                     this.sourceManager.updateSource(this.displayManager.getDisplay(numberExtract(item, 'display')));
                 }
             }
 
-            this.listener.fireEvent(EVENT_SOURCE_SETTING_CHANGED, arguments);
+            HC.EventManager.getInstance().fireEvent(EVENT_SOURCE_SETTING_CHANGED, arguments);
         }
 
         /**
@@ -706,8 +706,8 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param data
          */
         updateMidi(data) {
-            if (this.listener && data.command === 'message') {
-                this.listener.fireEvent('midi.message', data.data);
+            if (IS_ANIMATION && data.command === 'message') {
+                HC.EventManager.getInstance().fireEvent('midi.message', data.data);
             }
         }
 

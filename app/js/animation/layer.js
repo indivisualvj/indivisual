@@ -2,10 +2,6 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     * 
-     * @type {HC.Layer}
-     */
     HC.Layer = class Layer {
 
         /**
@@ -27,11 +23,6 @@
          * @type {HC.Renderer}
          */
         renderer;
-
-        /**
-         * @type {HC.Listener}
-         */
-        listener;
 
         /**
          * @type {HC.BeatKeeper}
@@ -56,7 +47,10 @@
          */
         controlSets;
 
-        lights = false;
+        /**
+         * @type {Array.<THREE.Light>}
+         */
+        lights = [];
 
         ambientLight = false;
 
@@ -128,11 +122,26 @@
          */
         _rotation;
 
-        _shapes = false;
+        /**
+         *
+         * @type {Array.<HC.Shape>}
+         * @private
+         */
+        _shapes;
 
-        _lighting = false;
+        /**
+         *
+         * @type {THREE.Group}
+         * @private
+         */
+        _lighting;
 
-        _background = false;
+        /**
+         *
+         * @type {THREE.Group}
+         * @private
+         */
+        _background;
 
         /**
          * @type {Object.<string, *>}
@@ -159,7 +168,6 @@
             this.animation = animation;
             this.config = animation.config;
             this.beatKeeper = animation.beatKeeper;
-            this.listener = animation.listener;
             this.renderer = renderer;
             this.index = index;
 
@@ -183,29 +191,7 @@
             };
 
             this._resetSizes(renderer.resolution);
-
-            this.listener.register(EVENT_LAYER_RESET, this.index, () => {
-                console.log(EVENT_LAYER_RESET, this.index);
-                this.needsReset = true;
-            });
-            this.listener.register(EVENT_SHAPE_MATERIALS_UPDATE, this.index, () => {
-                this.shapeMaterialsNeedUpdate = true;
-            });
-            this.listener.register(EVENT_LAYER_RESET_SHAPES, this.index, () => {
-                this.shapesNeedReset = true;
-            });
-            this.listener.register(EVENT_LAYER_RESET_LIGHTING, this.index, () => {
-                this.lightingNeedsReset = true;
-            });
-            this.listener.register(EVENT_LAYER_RESET_AMBIENT, this.index, () => {
-                this.ambientNeedsReset = true;
-            });
-            this.listener.register(EVENT_LAYER_RESET_FOG, this.index, () => {
-                this.fogNeedsReset = true;
-            });
-            this.listener.register(EVENT_LAYER_UPDATE_SHADERS, this.index, () => {
-                this.shadersNeedUpdate = true;
-            });
+            this.needsReset = true;
         }
 
         /**
@@ -279,6 +265,7 @@
             this._resetBackground();
             this._updateShaders();
             this._updateShaderPasses();
+            this._initListeners();
         }
 
         /**
@@ -475,6 +462,72 @@
          */
         resume() {
             this.lastUpdate = this.animation.now - this.lastUpdate;
+        }
+
+        /**
+         *
+         * @private
+         */
+        _initListeners() {
+            let eventManager = HC.EventManager.getInstance();
+
+            eventManager.register(EVENT_LAYER_RESET, this.index, () => {
+                console.log(EVENT_LAYER_RESET, this.index);
+                this.needsReset = true;
+
+                // if layer is not animated right now, do it after some frames
+                HC.TimeoutManager.getInstance().add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
+                    this._handleResets();
+                });
+            });
+
+            eventManager.register(EVENT_SHAPE_MATERIALS_UPDATE, this.index, () => {
+                this.shapeMaterialsNeedUpdate = true;
+                // if layer is not animated right now, do it after some frames
+                HC.TimeoutManager.getInstance().add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
+                    this._handleResets();
+                });
+            });
+
+            eventManager.register(EVENT_LAYER_RESET_SHAPES, this.index, () => {
+                this.shapesNeedReset = true;
+                // if layer is not animated right now, do it after some frames
+                HC.TimeoutManager.getInstance().add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
+                    this._handleResets();
+                });
+            });
+
+            eventManager.register(EVENT_LAYER_RESET_LIGHTING, this.index, () => {
+                this.lightingNeedsReset = true;
+                // if layer is not animated right now, do it after some frames
+                HC.TimeoutManager.getInstance().add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
+                    this._handleResets();
+                });
+            });
+
+            eventManager.register(EVENT_LAYER_RESET_AMBIENT, this.index, () => {
+                this.ambientNeedsReset = true;
+                // if layer is not animated right now, do it after some frames
+                HC.TimeoutManager.getInstance().add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
+                    this._handleResets();
+                });
+            });
+
+            eventManager.register(EVENT_LAYER_RESET_FOG, this.index, () => {
+                this.fogNeedsReset = true;
+                // if layer is not animated right now, do it after some frames
+                HC.TimeoutManager.getInstance().add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
+                    this._handleResets();
+                });
+            });
+
+            eventManager.register(EVENT_LAYER_UPDATE_SHADERS, this.index, () => {
+                this.shadersNeedUpdate = true;
+                // if layer is not animated right now, do it after some frames
+                HC.TimeoutManager.getInstance().add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
+                    this._handleResets();
+                });
+            });
         }
     }
 }

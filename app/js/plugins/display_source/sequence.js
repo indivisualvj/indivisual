@@ -94,10 +94,9 @@
          * @param {HC.SourceManager} sourceManager
          */
         static initListeners(sourceManager) {
-            if (sourceManager.listener) {
-                sourceManager.listener.register(EVENT_SOURCE_SETTING_CHANGED, 'sequence', (data) => {
+            if (IS_ANIMATION) {
+                HC.EventManager.getInstance().register(EVENT_SOURCE_SETTING_CHANGED, 'sequence', (data) => {
                     let item = data[0];
-                    let value = data[1];
                     let display = data[2];
 
                     if (display && item.startsWith('sequence')) {
@@ -217,16 +216,16 @@
                     conf.SourceTypes[getSequenceEndKey(this.index)] = type;
                     messaging.emitData(this.sample.id, conf);
                 } else {
-                    this.listener.register(EVENT_SAMPLE_READY, this.id, (target) => {
+                    HC.EventManager.getInstance().register(EVENT_SAMPLE_READY, this.id, (target) => {
                         if (this.sample && this.sample.id === target.id) {
-                            this.listener.removeEventId(EVENT_SAMPLE_READY, this.id);
+                            HC.EventManager.getInstance().removeEventId(EVENT_SAMPLE_READY, this.id);
                             this.updateSource();
                         }
                     });
                 }
             }
 
-            this.listener.register(EVENT_SAMPLE_STATUS_CHANGED, this.id, (target) => {
+            HC.EventManager.getInstance().register(EVENT_SAMPLE_STATUS_CHANGED, this.id, (target) => {
                 if (this.sample && this.sample.id === target.id) {
                     this.animation.updateSource(getSequenceSampleKey(this.index), 'off', true, true);
                 }

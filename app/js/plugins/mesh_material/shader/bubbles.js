@@ -4,13 +4,9 @@
     HC.plugins.mesh_material.bubbles = class Plugin extends HC.MeshShaderMaterialPlugin {
 
         shader = {
-            uniforms: { // todo these are generalized, put them into _plugin
-                uTime: {type: 'f', value: 1.0}
-            },
-            // todo: generalized varying and uniforms to _plugin
-            fragmentShader: `
-            varying vec2 vUv;
-            uniform float uTime;
+            uniforms: {...HC.MeshShaderMaterialPlugin.standardUniforms},
+            fragmentShader: HC.MeshShaderMaterialPlugin.fragmentPrefix + `
+
             void main () {
                 vec2 uv = -1.0 + 2.0*vUv.xy;
 
@@ -41,10 +37,10 @@
                 float distR = 1.0 - color.r;
                 float distG = 1.0 - color.g;
                 float distB = 1.0 - color.b;
-                gl_FragColor = vec4(color, -.75+(distR+distG+distB));
+                gl_FragColor = vec4(color, opacity * (-.75+(distR+distG+distB)));
             }`
             ,
-            vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
+            vertexShader: HC.MeshShaderMaterialPlugin.vertexShader
         }
     }
 }

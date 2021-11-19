@@ -106,7 +106,7 @@ HC.Statics = HC.Statics || {};
                 callback: (data, finished) => {
                     this.DisplayValues = jsyaml.load(data.contents);
                     this._loadBorderModePlugins(this.DisplayValues);
-                    this._loadVisibilityModePlugins(this.DisplayValues);
+                    this._loadDisplayVisibilityPlugins(this.DisplayValues);
                     finished();
                 }
             },
@@ -212,7 +212,7 @@ HC.Statics = HC.Statics || {};
                     return;
                 }
                 let rsc = resources[index];
-                let action = 'get';
+                let action = 'config';
                 if (rsc.action) {
                     action = rsc.action;
                 }
@@ -405,7 +405,7 @@ HC.Statics = HC.Statics || {};
          * @param settings
          * @private
          */
-        _loadVisibilityModePlugins(settings) {
+        _loadDisplayVisibilityPlugins(settings) {
             this._loadPlugins(settings, 'display_visibility', HC.Display.display_visibility);
         }
 
@@ -415,6 +415,7 @@ HC.Statics = HC.Statics || {};
          * @private
          */
         _loadDisplaySourcePlugins(settings) {
+            Object.assign(HC.plugins.override_background_mode, HC.plugins.override_material_input);
             this._loadPlugins(settings, 'display_source', HC.SourceManager.display_source);
         }
 

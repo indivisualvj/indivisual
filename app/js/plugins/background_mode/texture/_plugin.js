@@ -7,9 +7,19 @@
         texture;
 
         after() {
-            if (this.texture) {
+            if (!super.after() && this.texture) {
                 this.updateTexture(this.texture, 'background');
             }
+        }
+
+        needsUpdate(suffix) {
+
+            let map = this.layer.getOverrideBackgroundMode();
+            if (map) {
+                return super.needsUpdate(map.key);
+            }
+
+            return super.needsUpdate(suffix);
         }
 
         _dispose() {

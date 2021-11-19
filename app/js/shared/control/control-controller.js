@@ -57,7 +57,7 @@ HC.ControlController = HC.ControlController || {};
 
             monitor: false,
             push_layers: () => {
-                this.config.messaging.program.syncLayers();
+                this.config.messaging.program.pushLayers();
             },
             push_sources: () => {
                 this.config.messaging.program.pushSources();
@@ -81,35 +81,21 @@ HC.ControlController = HC.ControlController || {};
             },
             layout_source: () => {
                 this.config.messaging.program.closeAll();
-                this.config.messaging.program.openTreeByFolder('source');
+                this.config.messaging.program.openTreeByPath('source');
             },
-            layout_source_fullscreen: () => {
+            layout_override: () => {
                 this.config.messaging.program.closeAll();
-                this.config.messaging.program.openTreeByFolder('source');
-                let control = this.config.messaging.program.guis[2];
-                control.toggleFullscreen();
+                this.config.messaging.program.openTreeByPath('override');
             },
             layout_animation: () => {
                 this.config.messaging.program.closeAll();
                 let control = this.config.messaging.program.guis[3];
                 control.setOpen(true);
             },
-            layout_animation_fullscreen: () => {
-                this.config.messaging.program.closeAll();
-                let control = this.config.messaging.program.guis[3];
-                control.setOpen(true);
-                control.toggleFullscreen();
-            },
             layout_sequence: () => {
                 this.config.messaging.program.closeAll();
                 let control = this.config.messaging.program.guis[4];
                 this.config.messaging.program.openAll(control);
-            },
-            layout_sequence_fullscreen: () => {
-                this.config.messaging.program.closeAll();
-                let control = this.config.messaging.program.guis[4];
-                this.config.messaging.program.openAll(control);
-                control.toggleFullscreen();
             },
             layout_presets: () => {
                 this.config.messaging.program.closeAll();
@@ -143,6 +129,7 @@ HC.ControlController = HC.ControlController || {};
             layout_animation_fullscreen: ['hidden'],
             layout_sequence_fullscreen: ['hidden'],
             layout_source_fullscreen: ['hidden'],
+            layout_override: ['hidden'],
             layout_close: ['hidden'],
         };
 

@@ -1,12 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-
 {
-    /**
-     *
-     * @type {HC.LayeredControlSetsManager}
-     */
     HC.LayeredControlSetsManager = class LayeredControlSetsManager {
 
         static _mappings = false;
@@ -143,7 +138,6 @@
             for (let k in controlSets) {
                 controlSets[k].reset();
             }
-
         }
 
         /**

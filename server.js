@@ -1,40 +1,39 @@
 #!/usr/bin/env node
 'use strict';
 
-const fs = require('fs');
-const { networkInterfaces } = require('os');
 const conf = require('./config.json');
+const fs = require('fs');
+const {networkInterfaces} = require('os');
 const path = require('path');
 const express = require('express');
 const sio = require('socket.io');
 const https = require('https');
 const http = require('http');
-const commandLineArgs = require('command-line-args');
+const _commandLineArgs = require('command-line-args');
+const _resolveHome = require('expand-home-dir');
 
-let options = commandLineArgs([
-    { name: "port", alias: "p", type: String, defaultOption: true },
-    { name: "https", type: Boolean },
-    { name: "ssl-key", type: String },
-    { name: "ssl-cert", type: String },
+
+let options = _commandLineArgs([
+    {name: "port", alias: "p", type: String, defaultOption: true},
+    {name: "https", type: Boolean},
+    {name: "ssl-key", type: String},
+    {name: "ssl-cert", type: String},
 ]);
 
-_setup();
+
 const _ROOT = path.resolve('.');
 const _APP = path.resolve(conf.directories.app);
 const _BIN = path.resolve(conf.directories.bin);
-const _SESSIONS = path.resolve(conf.directories.sessions);
-const _SAMPLES = path.resolve(conf.directories.samples);
-const _ASSETS = path.resolve(conf.directories.assets);
-const _STORAGE = path.resolve(conf.directories.storage);
+const _HOME = path.resolve(_resolveHome(conf.directories.home));
+const _SESSIONS = conf.directories.sessions; // do not resolve!
 const _PORT = options.port ? options.port : conf.port;
 const _HTTPS = typeof options.https != "undefined";
 const _SSL_KEY = options['ssl-key'] ? options['ssl-key'] : 'ssl/server.key';
 const _SSL_CERT = options['ssl-cert'] ? options['ssl-cert'] : 'ssl/server.crt';
 
-
 let app = express();
 let server = null;
-if(_HTTPS) {
+if (_HTTPS) {
     let credentials = {
         key: fs.readFileSync(_SSL_KEY),
         cert: fs.readFileSync(_SSL_CERT),
@@ -64,9 +63,9 @@ let targetsGroups = {
 let sourcesGroups = {
     animation: ['controls', 'displays', 'sources', 'attr', 'midi', 'log', 'data'],
     controller: ['controls', 'displays', 'sources', 'settings', 'log', 'attr', 'midi'],
-    client: targetsGroups.log,
-    setup: targetsGroups.setup,
-    monitor: targetsGroups.log
+    client: ['log'],
+    setup: ['displays', 'data', 'settings'],
+    monitor: ['log']
 };
 
 let log = {};
@@ -101,170 +100,14 @@ _startListening();
 
 app.use(express.static('..'));
 
-initGet();
-cron();
+_initGet();
+_cron();
+_initConnection();
 
 /**
  *
  */
-io.sockets.on('connection', function (socket) {
-
-    socket.on('join', function (data) {
-        _log('join', data);
-        socket.join(data.name);
-    });
-
-    socket.on('log', function (data) {
-        _log('log', data);
-        _emit(data);
-    });
-
-    socket.on('attr', function (data) {
-        _log('attr', data);
-        _emit(data);
-    });
-
-    socket.on('midi', function (data) {
-        _log('midi', data);
-        _emit(data);
-    });
-
-    socket.on('data', function (data) {
-        _log('data', data);
-        if(_emit(data)) {
-            //_store(data);
-        }
-    });
-
-    socket.on('controls', function (data) {
-        _log('controls', data);
-        if (_emit(data)) {
-            _store(data, conf.unstorable.controls);
-        }
-    });
-
-    socket.on('displays', function (data) {
-        _log('displays', data);
-        if (_emit(data)) {
-            _store(data, conf.unstorable.displays);
-        }
-    });
-
-    socket.on('sources', function (data) {
-        _log('sources', data);
-        if (_emit(data)) {
-            _store(data, conf.unstorable.sources);
-        }
-    });
-
-    socket.on('settings', function (data) {
-        _log('settings', data);
-        if (_emit(data)) {
-            _store(data, conf.unstorable.settings);
-        }
-    });
-
-    socket.on('sync', function (data, callback) {
-        _log('sync', data);
-        let _finish = function (data) {
-            let target = data.from.substr(0, data.from.length - data.sid.length - 1);
-            let session = sessions[data.sid];
-            let keys = Object.keys(session);
-            let result = {};
-            for (let i = 0; i < keys.length; i++) {
-                let key = keys[i];
-                if (_validTarget(target, key, false)) { // false instead of session to avoid checkups (regarding monitor)
-                    result[key] = session[key];
-                }
-            }
-
-            callback(result);
-        };
-
-        // restore from session (RAM)
-        if (data.sid && data.sid in sessions) {
-            _finish(data);
-
-        // restore from session (FILE)
-        } else if (data.sid) {
-            _restore(data, _finish);
-        }
-    });
-
-    /**
-     *
-     */
-    socket.on('files', function (data, callback) {
-
-        _log('files', data);
-        console.log('searching files in ' + data.file);
-
-        let files = _find(data.file);
-        data.data = files;
-
-        callback(files);
-    });
-
-    /**
-     *
-     */
-    socket.on('save', _save);
-
-    /**
-     *
-     */
-    socket.on('mkdir', _save);
-
-    /**
-     *
-     */
-    socket.on('write', _writeBinary);
-
-    /**
-     *
-     */
-    socket.on('rename', function (data, callback) {
-        let old = filePath(data.dir, data.file);
-        let nu  = filePath(data.dir, data.nu);
-        fs.rename(old, nu, function() {
-            let msg = data.file + ' renamed to ' + data.nu;
-            // console.log(msg);
-            callback(msg);
-        });
-    });
-
-    /**
-     *
-     */
-    socket.on('delete', function (data, callback) {
-        let old = filePath(data.dir, data.file);
-        let nu  = filePath(data.dir, '.' + data.file);
-        fs.rename(old, nu, function() {
-            let msg = data.file + ' deleted';
-            console.log(msg);
-            callback(msg);
-        });
-    });
-
-    /**
-     *
-     */
-    socket.on('unlinkall', function (data, callback) {
-        let dir = filePath(_ROOT, data.dir);
-        _unlinkAll(dir, callback);
-    });
-
-    /**
-     *
-     */
-    socket.on('get', _load);
-
-});
-
-/**
- *
- */
-function cron() {
+function _cron() {
     setTimeout(function () {
 
         for (let key in sessions) {
@@ -309,9 +152,9 @@ function cron() {
             }
         }
 
-        cron();
+        _cron();
 
-    }, 2*1000);
+    }, 2 * 1000);
 }
 
 /**
@@ -352,7 +195,7 @@ function _emit(data) {
  * @returns {boolean}
  * @private
  */
-function _validSource (source, action) {
+function _validSource(source, action) {
     let pass = false;
 
     if (source in sourcesGroups) {
@@ -405,7 +248,7 @@ function _validTarget(target, action, session) {
 function _restore(data, callback) {
 
     sessions[data.sid] = {active: false, blocked: true};
-    let root = filePath(_SESSIONS, data.sid);
+    let root = filePath(_HOME, _SESSIONS, data.sid);
     let config = {
         sid: data.sid,
         section: 'controls',
@@ -441,14 +284,14 @@ function _restore(data, callback) {
             config.file = filePath(root, 'sources.json');
             _load(config, function (result) {
                 _validate(config, result);
-            
+
                 config.section = 'settings';
                 config.file = filePath(root, 'settings.json');
                 _load(config, function (result) {
                     _validate(config, result);
 
                     callback(data);
-    
+
                 }, true);
             }, true);
         }, true);
@@ -463,9 +306,10 @@ function _restore(data, callback) {
  */
 function _save(data, callback) {
 
-    callback = callback || function () {};
+    callback = callback || function () {
+    };
 
-    let dir = data.dir;
+    let dir = filePath(_HOME, data.dir);
     let file = filePath(dir, data.file);
 
     _existCreate(dir);
@@ -487,7 +331,6 @@ function _save(data, callback) {
         callback(dir + ' written');
     }
 }
-
 
 
 /**
@@ -585,9 +428,9 @@ function _store(data, unstorable = []) {
  */
 function _load(data, callback, forceCallback) {
     let file = data.file;
-    fs.readFile(file, 'utf8', function(err, contents) {
+    fs.readFile(file, 'utf8', function (err, contents) {
 
-        if(err) {
+        if (err) {
             data.action = 'log';
             data.value = err;
             if (forceCallback) {
@@ -613,8 +456,9 @@ function _sources(req, sources) {
     let compress = false;
     let name = req.originalUrl.replace('bin/', '');
 
-    let file = _BIN + name; // do not use file_path! req originalUrl already contains leading slash ...
+    _existCreate(_BIN);
 
+    let file = filePath(_BIN, name.substr(1)); // do not use file_path! req originalUrl already contains leading slash ...
     let files = [];
     let __find = function (list, base) {
         for (let i = 0; i < list.length; i++) {
@@ -632,7 +476,7 @@ function _sources(req, sources) {
                 if (fs.statSync(f).isDirectory()) {
                     let subs = exists ? fs.readdirSync(f) : [];
 
-                    subs.sort(function(a, b) {
+                    subs.sort(function (a, b) {
                         let fa = filePath(f, a);
                         let fb = filePath(f, b);
                         let ad = fs.statSync(fa).isDirectory() ? 1 : 0;
@@ -670,7 +514,7 @@ function _concat(files, file) {
 
     try {
         let result = {code: ''};
-        files.forEach(function(f) {
+        files.forEach(function (f) {
             let code = fs.readFileSync(f, "utf8");
             result.code += "\n\n" + code;
         });
@@ -718,7 +562,7 @@ function _unlinkAll(dir, callback) {
 function _find(base) {
     let files = [];
 
-    let walkSync = function(dir, filelist) {
+    let walkSync = function (dir, filelist) {
 
         let exists = false;
         try {
@@ -728,7 +572,7 @@ function _find(base) {
         }
         let files = exists ? fs.readdirSync(dir) : [];
         filelist = filelist || [];
-        files.forEach(function(file) {
+        files.forEach(function (file) {
 
             if (!file.match(/^\..+/)) { // skip hidden files
                 let f = {
@@ -775,7 +619,7 @@ function _log(sec, data) {
 /**
  *
  */
-function initGet() {
+function _initGet() {
 
     /**
      *
@@ -855,35 +699,35 @@ function initGet() {
      *
      */
     app.get('/lib/*.js', function (req, res) {
-        res.sendFile(_APP + req.originalUrl);
+        res.sendFile(filePath(_APP, req.originalUrl.substr(1)));
     });
 
     /**
      *
      */
     app.get('/css/*.css', function (req, res) {
-        res.sendFile(_APP + req.originalUrl);
+        res.sendFile(filePath(_APP, req.originalUrl.substr(1)));
     });
 
     /**
      *
      */
     app.get('/img/*.png', function (req, res) {
-        res.sendFile(_APP + req.originalUrl);
+        res.sendFile(filePath(_APP, req.originalUrl.substr(1)));
     });
 
     /**
      *
      */
     app.get('/samples/*/*.png', function (req, res) {
-        res.sendFile(_ROOT + req.originalUrl);
+        res.sendFile(filePath(_ROOT, req.originalUrl.substr(1)));
     });
 
     /**
      *
      */
     app.get('/assets/*', function (req, res) {
-        let url = _ROOT + req.originalUrl;
+        let url = filePath(_HOME, req.originalUrl.substr(1));
         res.sendFile(url, {}, function (err) {
             if (err) {
                 console.log(url, err);
@@ -907,22 +751,6 @@ function filePath() {
 
 /**
  *
- * @private
- */
-function _setup() {
-
-    console.log('setting up environment...');
-
-    let keys = Object.keys(conf.directories);
-    for(let i = 0; i < keys.length; i++) {
-        let dir = conf.directories[keys[i]];
-
-        _existCreate(dir, true);
-    }
-}
-
-/**
- *
  * @param dir
  * @param feedback
  * @returns {string}
@@ -933,7 +761,7 @@ function _existCreate(dir, feedback) {
     try {
         if (!fs.existsSync(dir)) {
             returnValue = ('creating ' + dir);
-            fs.mkdirSync(dir);
+            fs.mkdirSync(dir, {recursive: true});
 
         } else {
             returnValue = (dir + ' ok');
@@ -986,4 +814,185 @@ function _startListening() {
     }).addListener('listening', () => {
         _logConnectionInfo();
     });
+}
+
+function _initConnection() {
+
+    /**
+     *
+     */
+    io.sockets.on('connection', function (socket) {
+
+        socket.on('join', function (data) {
+            _log('join', data);
+            socket.join(data.name);
+        });
+
+        socket.on('log', function (data) {
+            _log('log', data);
+            _emit(data);
+        });
+
+        socket.on('attr', function (data) {
+            _log('attr', data);
+            _emit(data);
+        });
+
+        socket.on('midi', function (data) {
+            _log('midi', data);
+            _emit(data);
+        });
+
+        socket.on('data', function (data) {
+            _log('data', data);
+            if (_emit(data)) {
+            }
+        });
+
+        socket.on('controls', function (data) {
+            _log('controls', data);
+            if (_emit(data)) {
+                _store(data, conf.unstorable.controls);
+            }
+        });
+
+        socket.on('displays', function (data) {
+            _log('displays', data);
+            if (_emit(data)) {
+                _store(data, conf.unstorable.displays);
+            }
+        });
+
+        socket.on('sources', function (data) {
+            _log('sources', data);
+            if (_emit(data)) {
+                _store(data, conf.unstorable.sources);
+            }
+        });
+
+        socket.on('settings', function (data) {
+            _log('settings', data);
+            if (_emit(data)) {
+                _store(data, conf.unstorable.settings);
+            }
+        });
+
+        socket.on('sync', function (data, callback) {
+            _log('sync', data);
+            let _finish = function (data) {
+                let target = data.from.substr(0, data.from.length - data.sid.length - 1);
+                let session = sessions[data.sid];
+                let keys = Object.keys(session);
+                let result = {};
+                for (let i = 0; i < keys.length; i++) {
+                    let key = keys[i];
+                    if (_validTarget(target, key, false)) { // false instead of session to avoid checkups (regarding monitor)
+                        result[key] = session[key];
+                    }
+                }
+
+                callback(result);
+            };
+
+            // restore from session (RAM)
+            if (data.sid && data.sid in sessions) {
+                _finish(data);
+
+                // restore from session (FILE)
+            } else if (data.sid) {
+                _restore(data, _finish);
+            }
+        });
+
+        /**
+         *
+         */
+        socket.on('files', function (data, callback) {
+
+            _log('files', data);
+            console.log('searching files in ' + data.file);
+
+            let files = _find(filePath(_HOME, data.file));
+            data.data = files;
+
+            callback(files);
+        });
+
+        /**
+         *
+         */
+        socket.on('samples', function (data, callback) {
+
+            _log('files', data);
+            console.log('searching files in ' + data.file);
+
+            let files = _find(data.file);
+            data.data = files;
+
+            callback(files);
+        });
+
+        /**
+         *
+         */
+        socket.on('save', _save);
+
+        /**
+         *
+         */
+        socket.on('mkdir', _save);
+
+        /**
+         *
+         */
+        socket.on('write', _writeBinary);
+
+        /**
+         *
+         */
+        socket.on('rename', function (data, callback) {
+            let old = filePath(_HOME, data.dir, data.file);
+            let nu = filePath(_HOME, data.dir, data.nu);
+            fs.rename(old, nu, function () {
+                let msg = data.file + ' renamed to ' + data.nu;
+                // console.log(msg);
+                callback(msg);
+            });
+        });
+
+        /**
+         *
+         */
+        socket.on('delete', function (data, callback) {
+            let old = filePath(_HOME, data.dir, data.file);
+            let nu = filePath(_HOME, data.dir, '.' + data.file);
+            fs.rename(old, nu, function () {
+                let msg = data.file + ' deleted';
+                console.log(msg);
+                callback(msg);
+            });
+        });
+
+        /**
+         *
+         */
+        socket.on('unlinkall', function (data, callback) {
+            let dir = filePath(_ROOT, data.dir);
+            _unlinkAll(dir, callback);
+        });
+
+        /**
+         *
+         */
+        socket.on('config', _load);
+
+        /**
+         *
+         */
+        socket.on('load', (data, callback) => {
+            data.file = filePath(_HOME, data.file);
+            _load(data, callback);
+        });
+    });
+
 }

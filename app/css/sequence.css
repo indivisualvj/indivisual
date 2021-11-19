@@ -1,0 +1,88 @@
+
+#SequenceSettings {
+    user-select: initial;
+}
+
+#SequenceSettings .sequence {
+    position: relative;
+    width: 99%;
+    height: 18%;
+    min-height: 48px;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+#SequenceSettings .sequence[data-title]:before {
+    content: attr(data-title);
+    color: #ffffff;
+    background: #232323;
+    line-height: 18px;
+    border-radius: 2px;
+    border: 1px solid #565656;
+    padding: 0 4px;
+    bottom: 4px;
+    left: 4px;
+    position: absolute;
+    z-index: 1;
+}
+
+#SequenceSettings [data-label]:after {
+    background: rgba(35, 35, 35, 0.5);
+}
+
+#SequenceSettings .sequence .controls {
+    padding: 1% 0% 0% 1%;
+}
+
+.thumbs {
+    position: relative;
+    display: flex;
+    height: 100%;
+    min-height: 48px;
+    white-space: nowrap;
+    background: #2e2e2e;
+}
+
+.thumb {
+    position: relative;
+    display: block;
+    width: 6.25%;
+    min-height: 48px;
+    height: 100%;
+    overflow: hidden;
+    border-left: 1px solid #efefef;
+}
+
+.thumb img {
+    width: 200%;
+    margin-left: -50%;
+    height: 100%;
+    min-height: 48px;
+    position: absolute;
+}
+
+.indicator {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 100%;
+    min-height: 48px;
+    border-left: 4px solid greenyellow;
+    border-right: 4px solid orangered;
+    outline: 1000px solid rgba(0,0,0, 0.6);
+    box-sizing: border-box !important;
+}
+
+.progress {
+    display: block;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0;
+    height: 100%;
+    border-right: 4px solid #2fa1d6;
+    box-sizing: border-box;
+    background: rgba(0, 0, 0, .3)
+}

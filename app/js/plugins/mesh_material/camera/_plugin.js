@@ -25,7 +25,7 @@
                 this.cameras.traverse(threeDispose);
                 this.cameras = undefined;
 
-                this.animation.listener.removeLike(this.id());
+                HC.EventManager.getInstance().removeLike(this.id());
             }
         }
     }

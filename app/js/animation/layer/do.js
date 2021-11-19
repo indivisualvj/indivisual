@@ -113,26 +113,48 @@ HC.Layer.prototype.doOverlay = function (shape) {
  *
  * @returns {*}
  */
-HC.Layer.prototype.doMaterialMap = function () {
+HC.Layer.prototype.doOverrideMaterialInput = function () {
 
-    let seq = this.config.SourceSettings.material_map;
+    let seq = this.config.SourceSettings.override_material_input;
     let map = this.settings.material_input;
     let color = false;
 
     if (seq === 'webcam') {
-        let plugin = this.getMaterialMapPlugin('webcam');
+        let plugin = this.getOverrideMaterialInputPlugin('webcam');
         color = this.doPlugin(plugin, map);
 
     } else if (seq !== 'none') {
-        let plugin = this.getMaterialMapPlugin('sequence');
+        let plugin = this.getOverrideMaterialInputPlugin('sequence');
         color = this.doPlugin(plugin, parseInt(seq));
 
     } else {
-        let plugin = this.getMaterialMapPlugin('texture');
+        let plugin = this.getOverrideMaterialInputPlugin('texture');
         color = this.doPlugin(plugin, map);
     }
 
     return color;
+};
+
+
+/**
+ *
+ * @returns {*}
+ */
+HC.Layer.prototype.doOverrideBackgroundMode = function () {
+
+    let seq = this.config.SourceSettings.override_background_mode;
+
+    if (seq === 'webcam') {
+        let plugin = this.getOverrideBackgroundModePlugin('webcam');
+        this.doPlugin(plugin);
+
+    } else if (seq !== 'none') {
+        let plugin = this.getOverrideBackgroundModePlugin('sequence');
+        plugin.setCropping(false);
+        this.doPlugin(plugin, parseInt(seq));
+
+    } else {
+    }
 };
 
 /**
@@ -177,7 +199,7 @@ HC.Layer.prototype.doMaterial = function (shape) {
     shape.strokeWidth(this.settings.material_volume);
 
     try {
-        let map = this.getMaterialMap();
+        let map = this.getOverrideMaterialInput();
         shape.updateMaterial(map, this.settings.coloring_emissive);
     } catch (e) {
         console.error(e);
@@ -381,7 +403,7 @@ HC.Layer.prototype.doCameraMode = function () {
     let plugin = this.getCameraModePlugin();
     this.doPlugin(plugin);
 
-    this.renderer.listener.fireEvent('layer.doCameraMode', this.getCamera());
+    HC.EventManager.getInstance().fireEvent('layer.doCameraMode', this.getCamera());
 };
 
 /**

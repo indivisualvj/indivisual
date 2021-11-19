@@ -148,8 +148,7 @@
                 this.node.style.backgroundImage = 'url(' + src + ')';
                 this.node.style.backgroundPositionX = 'center';
                 this.node.style.backgroundPositionY = 'center';
-                this.node.style.backgroundSize = '50%';
-                this.node.setAttribute('data-label', 'ready to play');
+                this.node.setAttribute('data-label', 'ready');
 
             } else {
                 this.node.style.backgroundImage = '';

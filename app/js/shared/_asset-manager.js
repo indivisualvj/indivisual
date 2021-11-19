@@ -300,7 +300,7 @@
          * @param callback
          * @param error
          */
-        loadMaterialMap(target, path, callback, error) {
+        loadOverrideMaterialInput(target, path, callback, error) {
             let inst = this;
             let _assign = function (to, from) {
                 let keys = Object.keys(from);
@@ -359,7 +359,7 @@
          * @private
          */
         _load(file, callback) {
-            messaging._emit({action: 'get', file: file, name: file}, function (data) {
+            messaging._emit({action: 'load', file: file, name: file}, function (data) {
                 callback(data);
             });
         }

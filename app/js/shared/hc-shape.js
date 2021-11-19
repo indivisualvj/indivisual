@@ -335,9 +335,6 @@
                     }
                 }
 
-                // this._updateMaterialMap();
-
-
             } else if (mat.map) {
                 let keys = Object.keys(plugin.properties);
                 for (let k in keys) {

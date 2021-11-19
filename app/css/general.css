@@ -1,0 +1,130 @@
+*::-webkit-scrollbar-corner {
+    height: 0;
+    display: none;
+}
+*::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+    background: #1a1a1a;
+    right: -12px;
+}
+*::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background: grey;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    background: #000000;
+    height: 100vh;
+    box-sizing: border-box;
+
+    user-select: none;
+
+    overflow: hidden;
+
+    font-family: Hack, monospace !important;
+    font-size: 11px !important;
+}
+
+.control {
+    border-top: 1px solid #444748;
+    border-right: 1px solid #373a3b;
+    border-bottom: 1px solid #2a2d2e;
+    border-left: 1px solid #373a3b;
+    border-radius: 1px;
+    margin-bottom: 1px;
+    padding: 0;
+}
+
+.metalback {
+    background-image: linear-gradient(top, #383b3c 25%, #313334 75%);
+    background-image: -moz-linear-gradient(top, #383b3c 25%, #313334 75%);
+    background-image: -webkit-linear-gradient(top, #383b3c 25%, #313334 75%);
+    background-image: -ms-linear-gradient(top, #383b3c 25%, #313334 75%);
+    background-image: -o-linear-gradient(top, #383b3c 25%, #313334 75%);
+}
+
+.item {
+    position: relative;
+    overflow-y: auto;
+}
+
+.fixed {
+    position: fixed;
+}
+
+.fh {
+    overflow: visible;
+    max-height: 98vh;
+}
+
+.left {
+    position: relative;
+    float: left;
+    margin: .5% 0 0 .5%;
+    min-width: 310px;
+    max-width: 640px;
+}
+
+.clear {
+    clear: both !important;
+}
+
+.noclear {
+    clear: none !important;
+}
+
+.w45p {
+    width: 44.25%;
+    max-width: 640px;
+}
+
+.w55p {
+    width: 54.25%;
+    max-width: 768px;
+}
+
+pre {
+    font-family: Hack, monospace;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+
+pre div {
+    overflow: hidden;
+    max-width: 100%;
+    white-space: pre-wrap;
+}
+
+pre a {
+    cursor: pointer;
+    color: rgba(10, 190, 255, 1);
+    font-weight: bold;
+}
+
+pre .yellow {
+    color: rgba(255, 210, 10, 1);
+    font-weight: bold;
+}
+
+pre .red {
+    color: rgba(255, 10, 10, 1);
+    font-weight: bold;
+}
+
+pre .orange {
+    color: rgba(255, 175, 10, 1);
+    font-weight: bold;
+}
+
+input:focus, select:focus {
+    outline: none;
+    box-shadow: 0 0 2px 1px #e61d5f;
+}
+
+button {
+    font-size: 11px;
+}
+

@@ -1,12 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-
 {
-    /**
-     *
-     * @type {HC.AudioManager}
-     */
     HC.AudioManager = class AudioManager {
 
         /**

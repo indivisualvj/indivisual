@@ -95,9 +95,9 @@
          */
         _initRangeEvents() {
             let active = false;
-            let valueCompondent = this.component.valueComponent;
+            let valueComponent = this.component.valueComponent;
 
-            valueCompondent.addEventListener('keyup', (e) => {
+            valueComponent.addEventListener('keyup', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
 
@@ -114,32 +114,26 @@
                 }
             });
 
-            valueCompondent.addEventListener('mousedown', function (e) {
+            valueComponent.addEventListener('mousedown', (e) => {
                 active = true;
-            });
-
-            window.addEventListener('mousemove', (e) => {
-                if (active) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    let dy = e.movementY;
-                    let resY = window.screen.availHeight;
-                    let vy = Math.abs(dy / (resY/512));
-                    if (dy < 0) {
-                        requestAnimationFrame(() => {
+                window.addEventListener('mousemove', (e) => {
+                    if (active) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        let dy = e.movementY;
+                        let resY = window.screen.availHeight;
+                        let vy = Math.abs(dy / (resY/512));
+                        if (dy < 0) {
                             this.incrementValue(vy);
-                        });
 
-                    } else if (dy > 0) {
-                        requestAnimationFrame(() => {
+                        } else if (dy > 0) {
                             this.decrementValue(vy);
-                        });
+                        }
                     }
-                }
-            });
-
-            window.addEventListener('mouseup', function (e) {
-                active = false;
+                });
+                window.addEventListener('mouseup', (e) => {
+                    active = false;
+                });
             });
         }
 
@@ -174,6 +168,13 @@
             }
         }
 
+        setRangeValue(v) {
+            let scaledValue = this.getComponent().ScaleValue(parseFloat(v));
+            this.getComponent().valueComponent.value = this.getComponent().FormatNumber(scaledValue);
+            this.getComponent().lastValue = scaledValue;
+            this.getComponent().emit('input', scaledValue);
+        }
+
         /**
          *
          * @return {number}
@@ -205,7 +206,8 @@
 
             v += s;
             v = Math.min(v, this.getMax());
-            this.getComponent().emit('input', v);
+            // this.getComponent().emit('input', v);
+            this.setRangeValue(v);
         }
 
         /**
@@ -222,7 +224,8 @@
 
             v -= s;
             v = Math.max(v, this.getMin());
-            this.getComponent().emit('input', v);
+            // this.getComponent().emit('input', v);
+            this.setRangeValue(v);
         }
 
         /**
@@ -247,8 +250,7 @@
          */
         getInitialValue() {
             if ('initial' in this.getComponent().opts) {
-                let initial = this.getComponent().opts.initial;
-                return initial;
+                return this.getComponent().opts.initial;
             }
 
             return undefined;

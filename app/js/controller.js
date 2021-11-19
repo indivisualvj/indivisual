@@ -58,7 +58,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             controller.config.loadConfig(function () {
 
-                controller.listener = new HC.Listener();
                 let sets = controller.config.initControlSets();
                 controller.settingsManager = new HC.LayeredControlSetsManager([], controller.config.AnimationValues);
                 controller.init(sets);
@@ -166,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             this.monitor = new HC.Monitor();
             this.monitor.activate(false);
-            this.controlSettingsGui = new HC.Guify('ControlSettings', 'control', true);
+            this.controlSettingsGui = new HC.Guify('ControlSettings', 'control');
             this.displaySettingsGui = new HC.Guify('DisplaySettings', 'display');
             this.sourceSettingsGui = new HC.Guify('SourceSettings', 'source');
             this.animationSettingsGui = new HC.Guify('AnimationSettings', 'animation');
@@ -212,8 +211,8 @@ document.addEventListener('DOMContentLoaded', function () {
             );
 
             sourceSets.sequenceN.visible = true;
-            sourceSets.lighting.visible = false;
             sourceSets.sample.visible = false;
+            sourceSets.override.visible = false;
             sourceSets.source.visible = false;
 
             this.addGuifyControllers(
@@ -231,6 +230,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             this.addAnimationControllers(this.settingsManager.getGlobalProperties());
             this.addPassesFolder(HC.ShaderPassUi.onPasses);
+
+            this.openTreeByPath('controls');
         }
 
         /**
@@ -274,6 +275,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 this.updateControl('layer', this.config.ControlSettings.layer, true, false, false);
+
+                this._checkDisplayVisibility();
             });
         }
 
@@ -623,6 +626,10 @@ document.addEventListener('DOMContentLoaded', function () {
             let tValue = value;
             value = this.config.ControlSettingsManager.updateItem(item, value);
 
+            if (typeof value === 'function') { // value never can be a function
+                value = tValue;
+            }
+
             if (item === 'layer') {
                 this.updateSettings(value, this.settingsManager.prepareLayer(value), true, false, true);
                 this.explorer.setSelected(value+1, true);
@@ -644,9 +651,6 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (forward) {
-                if (typeof value === 'function') { // reset to
-                    value = tValue;
-                }
                 let data = {};
                 data[item] = value;
                 this.messaging.emitControls(data, true, false, force);
@@ -655,6 +659,8 @@ document.addEventListener('DOMContentLoaded', function () {
             if (display !== false) {
 
                 if (item.match(/_(sequence|sample|source)/)) {
+                    alert('now! line number->console');
+                    console.log('now!');
                     this.updateData();
 
                 } else if (item === 'monitor') {
@@ -729,6 +735,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (!value) { // set record to false if enabled == false
                         let smp = numberExtract(item, 'sample');
                         this.updateSource(getSampleRecordKey(smp), false, true, true, false);
+                        this.updateThumbs();
                     }
 
                 } else if (item.match(/_(load)/)) {
@@ -766,7 +773,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.updateUi(this.sourceSettingsGui);
             }
 
-            HC.TimeoutManager.getInstance().add('updateData', FIVE_FPS, () => {
+            HC.TimeoutManager.getInstance().add('updateData', SKIP_TEN_FRAMES, () => {
                 this.updateSequenceUi();
                 this.updateThumbs();
             });
@@ -778,7 +785,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateSequenceUi() {
             if (this.config.SourceValues && this.config.SourceValues.sequence) {
                 for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
-                    HC.TimeoutManager.getInstance().add('updateSequenceUI' + seq, 0, () => {
+                    HC.TimeoutManager.getInstance().add('updateSequenceUi' + seq, 0, () => {
                         this.updateClip(seq);
                         this.updateIndicator(seq);
                     });
@@ -846,33 +853,46 @@ document.addEventListener('DOMContentLoaded', function () {
             this.messaging.emitSources(updates, true, true, false);
         }
 
-        /**
-         * todo: push even if monitor is enabled? how do it nicely?
-         */
         syncLayers() {
+            let index = 0;
             for (let layer in this.settingsManager.layers) {
                 layer = parseInt(layer);
-                let to = layer * 150;
 
-                let st = (layer, to) => {
-                    setTimeout(() => {
+                if (this.config.shuffleable(layer+1)) {
+                    let to = 50 * index++;
+                    HC.TimeoutManager.getInstance().add('syncLayer.' + layer, to, () => {
                         this.syncLayer(layer);
-                    }, to);
-                };
-                st(layer, to);
+                    });
+                }
             }
-            let to = this.config.ControlValues.layers * 151;
+            let to = ++index * 50;
 
-            setTimeout(() => {
-                this.updateControl('layer', this.config.ControlSettings.layer, true, true, true);
-            }, to);
+            HC.TimeoutManager.getInstance().add('setLayer', to, () => {
+                let layer = this.config.ControlSettings.layer;
+                this.updateControl('layer', layer, true, true, true);
+            });
         }
 
         /**
          *
          */
         pushSources() {
-            this.messaging.emitSources(this.config.SourceSettingsManager.prepareFlat(), true, true, false);
+            this._bypassMonitor(() => {
+                this.messaging.emitSources(this.config.SourceSettingsManager.prepareFlat(), true, true, false);
+            });
+        }
+
+        pushLayers() {
+            this._bypassMonitor(() => {
+                this.syncLayers();
+            });
+        }
+
+        _bypassMonitor(fn) {
+            let monitorStatus = this.config.ControlSettings.monitor;
+            this.updateControl('monitor', false, false, true, false);
+            fn();
+            this.updateControl('monitor', monitorStatus, false, true, false);
         }
 
         /**
@@ -1031,6 +1051,18 @@ document.addEventListener('DOMContentLoaded', function () {
             this.updateControls(controls, true, true, true);
             this.updateDisplays(displays, true, true, true);
             this.syncLayers();
+            this._checkDisplayVisibility();
+        }
+
+        /**
+         *
+         * @private
+         */
+        _checkDisplayVisibility() {
+            if (!this.config.DisplaySettings.display0_visible) {
+                this.openTreeByPath('video/display0');
+                this.showOSD('display0_visible', 'enabled at least one?', 10000, 'red');
+            }
         }
 
         /**

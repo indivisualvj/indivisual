@@ -84,10 +84,10 @@
             let prc = speed.prc;
 
             if (!shuffle && prc === 0) {
-                let bro = layer.shapes[0];
+                let bro = layer.getShape(0);
 
                 if (params.ni < layer.shapeCount()) {
-                    bro = layer.shapes[params.ni++];
+                    bro = layer.getShape(params.ni++);
 
                 } else {
                     params.ni = 1;
@@ -107,7 +107,7 @@
                     }
 
                     let ni = this.index[index];
-                    let bro = layer.shapes[ni];
+                    let bro = layer.getShape(ni);
 
                     if (bro) {
                         let brorams = this.params(bro);
@@ -127,7 +127,7 @@
                     prc = (prc - 0.5) * 2;
 
                     let ni = this.index[index];
-                    let bro = layer.shapes[ni];
+                    let bro = layer.getShape(ni);
                     if (bro) {
                         let brorams = this.params(bro);
                         if (!params.xf) {
@@ -242,7 +242,7 @@
                 }
 
                 let ni = this.index[index];
-                let bro = layer.shapes[ni];
+                let bro = layer.getShape(ni);
 
                 if (bro) {
                     let brorams = this.params(bro);
@@ -262,7 +262,7 @@
                 prc = (prc - 0.5) * 2;
 
                 let ni = this.index[index];
-                let bro = layer.shapes[ni];
+                let bro = layer.getShape(ni);
                 if (bro) {
                     let brorams = this.params(bro);
                     if (!params.xf) {
@@ -377,7 +377,7 @@
                 }
 
                 let ni = this.index[index];
-                let bro = layer.shapes[ni];
+                let bro = layer.getShape(ni);
 
                 if (bro) {
                     let brorams = this.params(bro);
@@ -397,7 +397,7 @@
                 prc = (prc - 0.5) * 2;
 
                 let ni = this.index[index];
-                let bro = layer.shapes[ni];
+                let bro = layer.getShape(ni);
                 if (bro) {
                     let brorams = this.params(bro);
                     if (!params.xf) {

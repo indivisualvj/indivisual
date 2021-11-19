@@ -5,16 +5,8 @@
     HC.plugins.mesh_material.blue_dots = class Plugin extends HC.MeshShaderMaterialPlugin {
         static name = 'blue-dots';
         shader = {
-            uniforms: {
-                uTime: {type: 'f', value: 1.0}
-            },
-            fragmentShader: `
-                uniform float uTime;
-                uniform vec2 resolution;
-                uniform sampler2D iChannel0;
-                varying vec2 vUv;
-                
-                
+            uniforms: {...HC.MeshShaderMaterialPlugin.standardUniforms},
+            fragmentShader: HC.MeshShaderMaterialPlugin.fragmentPrefix + `
                 const float Pi = 3.14159265359;
                 
                 #define Time uTime
@@ -290,13 +282,9 @@
                     vec3 outCol = EvalTile(coord, vec2(0.0), time);
                     fragColor = vec4(GammaEncode(clamp01(outCol.xyz)), 1.0); return;
                 }
-                
-                void main() {
-                    mainImage(gl_FragColor, vUv);
-                }
-                `
+                ` + HC.MeshShaderMaterialPlugin.fragmentSuffix
             ,
-            vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
+            vertexShader: HC.MeshShaderMaterialPlugin.vertexShader
         }
     }
 }

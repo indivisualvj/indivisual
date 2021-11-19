@@ -8,7 +8,7 @@
         };
 
         apply() {
-            if (this.current() !== this.id()) {
+            if (this.needsUpdate()) {
                 this.current(this.id());
                 this.layer.setBackground(new THREE.Color(this.settings.background_color));
             }

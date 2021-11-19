@@ -6,7 +6,7 @@
         static index = 50;
 
         apply() {
-            if (this.current() !== this.id()) {
+            if (this.needsUpdate()) {
                 this.current(this.id());
 
                 let color = new THREE.Color(this.settings.background_color);
@@ -31,7 +31,7 @@
 
                 let file = assetman.getImage(this.settings.background_input);
                 if (file) {
-                    assetman.loadMaterialMap(mat, filePath(IMAGE_DIR, file), function (mat) {
+                    assetman.loadOverrideMaterialInput(mat, filePath(IMAGE_DIR, file), function (mat) {
                         if (!mat.emissiveMap) {
                             mat.emissiveMap = mat.map;
                         }

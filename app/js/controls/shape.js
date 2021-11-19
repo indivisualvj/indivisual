@@ -16,7 +16,7 @@
                     let id = isObject(context) ? context.index : context;
                     switch (key) {
                         case 'shape_sizedivider':
-                            messaging.program.listener.fireEventId(EVENT_LAYER_RESET, id, context, FIVE_FPS);
+                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET, id, context, SKIP_TEN_FRAMES);
                             break;
                         case 'shape_modifier':
                         case 'shape_modifier_volume':
@@ -25,7 +25,7 @@
                         case 'shape_moda':
                         case 'shape_modb':
                         case 'shape_modc':
-                            messaging.program.listener.fireEventId(EVENT_LAYER_RESET_SHAPES, id, context, FIVE_FPS);
+                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_SHAPES, id, context, SKIP_TEN_FRAMES);
                             break;
                     }
                 }

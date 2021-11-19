@@ -5,21 +5,14 @@
     HC.plugins.mesh_material.cellular = class Plugin extends HC.MeshShaderMaterialPlugin {
 
         shader = {
-            uniforms: {
-                uTime: { type: 'f', value: 1.0 },
-                opacity: { type: 'f', value: 1.0 },
-            },
-            fragmentShader: `
-                uniform float uTime;
-                varying vec2 vUv;
-                uniform float opacity;
+            uniforms: {...HC.MeshShaderMaterialPlugin.standardUniforms},
+            fragmentShader: HC.MeshShaderMaterialPlugin.fragmentPrefix + `
                 
                 #define PI 3.14159265359
                 
                 vec3 col1 = vec3(0.216, 0.471, 0.698); // blue
                 vec3 col2 = vec3(1.00, 0.329, 0.298); // yellow
                 vec3 col3 = vec3(0.867, 0.910, 0.247); // red
-                vec2 iResolution = vec2(1.0);
                 
                 float disk(vec2 r, vec2 center, float radius) {
                     return 1.0 - smoothstep( radius-0.008, radius+0.008, length(r-center));
@@ -72,11 +65,10 @@
                     float distB = 1.0 - pix.b;
 
                     gl_FragColor = vec4(pix,opacity * (3.-(distR+distG+distB)));
-
                 }
-                `
-            ,
-            vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
+            `,
+            vertexShader: HC.MeshShaderMaterialPlugin.vertexShader
+            
         }
     }
 }

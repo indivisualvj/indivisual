@@ -5,13 +5,8 @@
     HC.plugins.mesh_material.floating_points = class Plugin extends HC.MeshShaderMaterialPlugin {
         static name = 'floating-points';
         shader = {
-            uniforms: {
-                uTime: {type: 'f', value: 1.0}
-            },
-            fragmentShader: `
-                uniform float uTime;
-                uniform vec2 resolution;
-                varying vec2 vUv;
+            uniforms: {...HC.MeshShaderMaterialPlugin.standardUniforms},
+            fragmentShader: HC.MeshShaderMaterialPlugin.fragmentPrefix + `
                 
                 float DistanceToLine(vec3 LineStart, vec3 LineEnd, vec3 Point)
                 {
@@ -21,7 +16,6 @@
                 
                 void mainImage( out vec4 fragColor, in vec2 fragCoord )
                 {
-                    vec2 iResolution = vec2(1.);
                     // UV goes from -0.5 to 0.5 vertically
                     vec2 uv = (fragCoord - iResolution.xy * 0.5)/iResolution.y;
                     
@@ -63,13 +57,9 @@
                     
                     fragColor = vec4(color, 1);
                 }
-                
-                void main() {
-                    mainImage(gl_FragColor, vUv);
-                }
-                `
-            ,
-            vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
+            ` + HC.MeshShaderMaterialPlugin.fragmentSuffix,
+            vertexShader: HC.MeshShaderMaterialPlugin.vertexShader
+            
         }
     }
 }

@@ -4,13 +4,8 @@
         static name = 'strained-lights'
 
         shader = {
-            uniforms: {
-                uTime: {type: 'f', value: 1.0},
-            },
-            fragmentShader: `
-            varying vec2 vUv;
-            vec2 resolution = vec2(1.0);
-            uniform float uTime;
+            uniforms: {...HC.MeshShaderMaterialPlugin.standardUniforms},
+            fragmentShader: HC.MeshShaderMaterialPlugin.fragmentPrefix + `
             
             // credits: Dave_Hoskins Hash functions: https://www.shadertoy.com/view/4djSRW
 
@@ -59,14 +54,8 @@
                 o *= 1.0-dot(N,N*1.7);// vingette
                 o.a = 1.;
             }
-
-            void main() 
-            {
-                mainImage(gl_FragColor, vUv);
-            }
-            `
-            ,
-            vertexShader: "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}"
+            ` + HC.MeshShaderMaterialPlugin.fragmentSuffix,
+            vertexShader: HC.MeshShaderMaterialPlugin.vertexShader
         }
     }
 }

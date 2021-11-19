@@ -1,3 +1,6 @@
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
 {
     HC.TimeoutManager = class TimeoutManager {
 

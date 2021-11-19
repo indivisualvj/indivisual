@@ -1,5 +1,5 @@
 // todo: create sequencecube0-5 backgrounds
-
+//     also mesh materials
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
@@ -12,7 +12,7 @@
         target2;
 
         apply() {
-            if (this.current() !== this.id()) {
+            if (this.needsUpdate()) {
                 this.current(this.id());
 
                 let color = new THREE.Color(this.settings.background_color);

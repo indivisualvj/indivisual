@@ -3,7 +3,7 @@
         static index = 1;
 
         apply() {
-            if (this.current() !== this.id()) {
+            if (this.needsUpdate()) {
                 this.layer.setBackground(this.current(this.id()));
             }
         }

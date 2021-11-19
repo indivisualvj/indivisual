@@ -88,7 +88,7 @@
                 actions.classList.add('actions');
                 actions.innerHTML =
                     '<div class="new" title="Save current layer to new file."></div>' +
-                    '<div class="fill" title="Fill (shuffleable) layers with presets.\nPress SHIFT to fill remaining (shuffleable) layers."></div>' +
+                    '<div class="fill" title="Slowly fill (shuffleable) layers with the underlying presets.\nPress SHIFT to fill remaining (shuffleable) layers."></div>' +
                     '<div class="save" title="!Attention! Save all files assigned to a layer!"></div>' +
                     '<div class="rename" title="Rename this folder."></div>';
                 actions.childNodes.item(0).addEventListener('click', (e) => {

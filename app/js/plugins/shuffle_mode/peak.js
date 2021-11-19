@@ -9,7 +9,7 @@
 
             let inst = this;
 
-            this.animation.listener.register('audio.peak', this.objectName, function (target) {
+            HC.EventManager.getInstance().register('audio.peak', this.objectName, function (target) {
                 inst.peaks++;
             });
         }

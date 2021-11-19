@@ -7,7 +7,7 @@
 
             if (layer.shapes.length === 0) return;
             let camera = layer.getCamera();
-            let shape = layer.shapes[0];
+            let shape = layer.getShape(0);
             let lookAt = new THREE.Vector3();
             shape.getWorldPosition(lookAt);
             let relativeCameraOffset = new THREE.Vector3(

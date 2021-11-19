@@ -315,15 +315,6 @@ HC.Controller.prototype.nextOpenFolder = function (control) {
 
 /**
  *
- * @param name
- */
-HC.Controller.prototype.toggleByName = function (name) {
-    // for tutorials and to open shader passes
-    console.error('not implemented');
-};
-
-/**
- *
  * @param property
  */
 HC.Controller.prototype.openTreeByProperty = function (property) {
@@ -340,29 +331,6 @@ HC.Controller.prototype.openTreeByProperty = function (property) {
             while(control = control.getParent()) {
                 control.setOpen(true);
             }
-
-            this.scrollToControl(scrollto);
-        }
-    }
-};
-
-/**
- *
- * @param key
- */
-HC.Controller.prototype.openTreeByFolder = function (key) {
-    let roots = this.guis;
-
-    for (let k in roots) {
-        let folder;
-        if ((folder = roots[k].findFolderByKey(key))) {
-            this.closeAll(roots[k]);
-            roots[k].setOpen(true);
-            let scrollto = folder;
-
-            do {
-                folder.setOpen(true);
-            } while((folder = folder.getParent()))
 
             this.scrollToControl(scrollto);
         }
@@ -539,7 +507,8 @@ HC.Controller.prototype.scrollToControl = function (control) {
  */
 HC.Controller.prototype.updateUi = function (control) {
     let key = control ? control.getLabel() : 'all';
-    HC.TimeoutManager.getInstance().add('updateUi.' + key, FIVE_FPS, () => {
+
+    HC.TimeoutManager.getInstance().add('updateUi.' + key, SKIP_TEN_FRAMES, () => {
         this.refreshLayerInfo();
 
         if (!control) {

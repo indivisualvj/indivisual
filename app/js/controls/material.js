@@ -16,12 +16,12 @@
                     let id = isObject(context) ? context.index : context;
                     switch (key) {
                         case 'mesh_material':
-                        case 'material_mapping':
-                            messaging.program.listener.fireEventId(EVENT_LAYER_RESET_SHAPES, id, context);
+                        case 'override_material_inputping':
+                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_SHAPES, id, context);
                             break;
 
                         default:
-                            messaging.program.listener.fireEventId(EVENT_SHAPE_MATERIALS_UPDATE, id, context);
+                            HC.EventManager.getInstance().fireEventId(EVENT_SHAPE_MATERIALS_UPDATE, id, context);
                             break;
                     }
                 }
@@ -43,7 +43,7 @@
             material_softshading: false,
             material_shadowside: 1,
             material_input: 'texture',
-            material_mapping: 'default',
+            override_material_inputping: 'default',
             material_wraps: 'ClampToEdgeWrapping',
             material_wrapt: 'ClampToEdgeWrapping',
             material_repeatx: 1.0,
@@ -87,7 +87,7 @@
             material_softshading: ['half', 'clear'],
             material_shadowside: ['half'],
             material_input: ['half', 'clear'],
-            material_mapping: ['half'],
+            override_material_inputping: ['half'],
             material_wraps: ['half', 'clear'],
             material_wrapt: ['half'],
             material_repeatx: ['half', 'clear'],

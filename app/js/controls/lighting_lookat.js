@@ -3,10 +3,6 @@
  */
 
 {
-    /**
-     *
-     * @type {HC.controls.lighting_lookat}
-     */
     HC.controls.lighting_lookat = class ControlSet extends HC.ControlSet {
 
         static index = 50;

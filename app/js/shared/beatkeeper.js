@@ -327,10 +327,7 @@
 }
 
 {
-    /**
-     *
-     * @type {HC.Speed}
-     */
+
     HC.Speed = class Speed {
         duration = 0;
         progress = 0;

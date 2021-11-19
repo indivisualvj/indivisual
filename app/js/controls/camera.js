@@ -2,10 +2,6 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.controls.camera}
-     */
     HC.controls.camera = class ControlSet extends HC.ControlSet {
 
         static index = 80;

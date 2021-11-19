@@ -22,8 +22,8 @@ HC.plugins.shaders = HC.plugins.shaders || {};
 
         reset() {
             if (this.pass) {
-                threeTraverse(this);
-                threeTraverse(this.pass);
+                HC.traverse(this);
+                HC.traverse(this.pass);
             }
         }
 

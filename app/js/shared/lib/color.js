@@ -1,8 +1,8 @@
 /**
  *
- * @returns {{s: *, h: *, l: *, o: number}}
+ * @returns {{s: number, h: number, l: number, o: number}}
  */
-function randomColor() {
+HC.randomColor = function() {
 
     let vh = randomInt(0, 360);
     let vs = randomInt(50, 100);
@@ -18,7 +18,7 @@ function randomColor() {
  * @param hex
  * @returns {{s, h, l}}
  */
-function hexToHsl(hex) {
+HC.hexToHsl = function(hex) {
     let hex3 = /^([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/;
     let hex6 = /^([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/;
     let color = {r: 255, g: 255, b: 255};
@@ -39,22 +39,22 @@ function hexToHsl(hex) {
         };
     }
 
-    return rgbToHsl(color);
+    return HC.rgbToHsl(color);
 }
 
 /**
  *
  * @param color
- * @returns {*}
+ * @returns {{h: number, s: number, l: number}}
  */
-function rgbToHsl(color) {
+HC.rgbToHsl = function(color) {
     if ('r' in color) {
         let r = color.r;
         let g = color.g;
         let b = color.b;
-        r = bound01(r, 255);
-        g = bound01(g, 255);
-        b = bound01(b, 255);
+        r = HC.bound01(r, 255);
+        g = HC.bound01(g, 255);
+        b = HC.bound01(b, 255);
 
         let max = Math.max(r, g, b), min = Math.min(r, g, b);
         let h, s, l = (max + min) / 2;
@@ -90,33 +90,24 @@ function rgbToHsl(color) {
  * @param color
  * @returns {{r: number, b: number, g: number}}
  */
-function hslToRgb(color) {
+HC.hslToRgb = function(color) {
     let h = color.h,
         s = color.s,
         l = color.l;
     let r, g, b;
 
-    h = bound01(h, 360);
-    s = bound01(s, 100);
-    l = bound01(l, 100);
-
-    function hue2rgb(p, q, t) {
-        if (t < 0) t += 1;
-        if (t > 1) t -= 1;
-        if (t < 1 / 6) return p + (q - p) * 6 * t;
-        if (t < 1 / 2) return q;
-        if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-        return p;
-    }
+    h = HC.bound01(h, 360);
+    s = HC.bound01(s, 100);
+    l = HC.bound01(l, 100);
 
     if (s === 0) {
         r = g = b = l; // achromatic
     } else {
         let q = l < 0.5 ? l * (1 + s) : l + s - l * s;
         let p = 2 * l - q;
-        r = hue2rgb(p, q, h + 1 / 3);
-        g = hue2rgb(p, q, h);
-        b = hue2rgb(p, q, h - 1 / 3);
+        r = HC.hue2rgb(p, q, h + 1 / 3);
+        g = HC.hue2rgb(p, q, h);
+        b = HC.hue2rgb(p, q, h - 1 / 3);
     }
 
     return {r: r * 255, g: g * 255, b: b * 255};
@@ -127,10 +118,10 @@ function hslToRgb(color) {
  * @param color
  * @returns {string}
  */
-function hslToHex(color) {
-    let c = hslToRgb(color);
+HC.hslToHex = function(color) {
+    let c = HC.hslToRgb(color);
 
-    return '#' + rgbToHex(c.r, c.g, c.b);
+    return '#' + HC.rgbToHex(c.r, c.g, c.b);
 }
 
 /**
@@ -140,12 +131,12 @@ function hslToHex(color) {
  * @param b
  * @returns {string}
  */
-function rgbToHex(r, g, b) {
+HC.rgbToHex = function (r, g, b) {
 
     let hex = [
-        pad2(Math.round(r).toString(16)),
-        pad2(Math.round(g).toString(16)),
-        pad2(Math.round(b).toString(16))
+        HC.pad2(Math.round(r).toString(16)),
+        HC.pad2(Math.round(g).toString(16)),
+        HC.pad2(Math.round(b).toString(16))
     ];
 
     return hex.join("");
@@ -156,7 +147,7 @@ function rgbToHex(r, g, b) {
  * @param c
  * @returns {string}
  */
-function pad2(c) {
+HC.pad2 = function (c) {
     return c.length === 1 ? '0' + c : '' + c;
 }
 
@@ -165,7 +156,7 @@ function pad2(c) {
  * @param hsl
  * @returns {*}
  */
-function hslComplementary(hsl) {
+HC.hslComplementary = function(hsl) {
     hsl = Object.assign({}, hsl);
     hsl.s = 100;
     hsl.l = 50;
@@ -179,7 +170,7 @@ function hslComplementary(hsl) {
  * @param from
  * @param to
  */
-function copyHsl(from, to) {
+HC.copyHsl = function(from, to) {
     to.h = from.h;
     to.s = from.s;
     to.l = from.l;
@@ -192,7 +183,7 @@ function copyHsl(from, to) {
  * @param t
  * @returns {*}
  */
-function hue2rgb(p, q, t) {
+HC.hue2rgb = function(p, q, t) {
     if (t < 0) t += 1;
     if (t > 1) t -= 1;
     if (t < 1 / 6) return p + (q - p) * 6 * t;
@@ -207,7 +198,7 @@ function hue2rgb(p, q, t) {
  * @param max
  * @returns {number}
  */
-function bound01(n, max) {
+HC.bound01 = function(n, max) {
     n = Math.min(max, Math.max(0, n));
 
     // Handle floating point rounding errors

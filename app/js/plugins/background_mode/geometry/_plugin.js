@@ -22,7 +22,7 @@
         }
 
         _dispose() {
-            threeTraverse(this);
+            HC.traverse(this);
         }
     }
 }

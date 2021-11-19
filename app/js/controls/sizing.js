@@ -3,10 +3,7 @@
  */
 
 {
-    /**
-     *
-     * @type {HC.controls.sizing}
-     */
+
     HC.controls.sizing = class ControlSet extends HC.ControlSet {
 
         static index = 160;

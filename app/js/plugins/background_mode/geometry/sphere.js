@@ -29,7 +29,7 @@
 
                 let file = assetman.getImage(this.settings.background_input);
                 if (file) {
-                    assetman.loadMaterialMap(this.material, filePath(IMAGE_DIR, file), function (mat) {
+                    assetman.loadMaterialMap(this.material, HC.filePath(IMAGE_DIR, file), function (mat) {
                         if (!mat.emissiveMap) {
                             mat.emissiveMap = mat.map;
                         }

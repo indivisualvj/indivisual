@@ -3,10 +3,7 @@
  */
 HC.Display.border_mode = {};
 {
-    /**
-     *
-     * @type {HC.Display.BorderModePlugin}
-     */
+
     HC.Display.BorderModePlugin = class BorderModePlugin {
 
         static index = 99;

@@ -21,9 +21,9 @@ HC.Layer.prototype.shapeColor = function (random, complementary) {
         let shape = this.getShape(index);
         let hsl = shape.color;
         if (complementary) {
-            hsl = hslComplementary(hsl);
+            hsl = HC.hslComplementary(hsl);
         }
-        hex = hslToHex(hsl);
+        hex = HC.hslToHex(hsl);
     }
     return hex;
 };

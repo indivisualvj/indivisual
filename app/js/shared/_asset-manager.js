@@ -2,10 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.AssetManager}
-     */
+
     HC.AssetManager = class AssetManager {
         images = {};
         cubes = {};
@@ -231,7 +228,7 @@
                     return a.localeCompare(b);
                 });
 
-                new THREE.CubeTextureLoader().setPath(filePath(url, '')).load(images, (tex) => {
+                new THREE.CubeTextureLoader().setPath(HC.filePath(url, '')).load(images, (tex) => {
                     this._cacheSet(url, tex);
                     callback = this._progressGet(url, true);
                     callback(tex);
@@ -255,7 +252,7 @@
 
                 let config = files['config.json'];
                 if (config) {
-                    config = filePath(url, config);
+                    config = HC.filePath(url, config);
                     this._load(config, (data) => {
                         let json = JSON.parse(data.contents);
                         let keys = Object.keys(json);
@@ -270,7 +267,7 @@
                             } else {
                                 let val = json[key];
                                 if (isString(val)) {
-                                    this.loadTexture(filePath(url, val), (tex) => {
+                                    this.loadTexture(HC.filePath(url, val), (tex) => {
                                         material[key] = tex;
                                         tex.name = val;
                                         _load(keys[i++]);

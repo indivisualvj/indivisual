@@ -1,8 +1,10 @@
+HC = HC || {};
+
 /**
  *
  * @param obj
  */
-function threeDispose(obj) {
+HC.dispose = function (obj) {
     let disposable;
 
     if (obj instanceof THREE.Scene) {
@@ -35,7 +37,7 @@ function threeDispose(obj) {
     }
 }
 
-function threeTraverse(obj) {
+HC.traverse = function (obj) {
     if (!isObject(obj)) return;
 
     if (obj.dispose && typeof obj.dispose === 'function') {
@@ -44,7 +46,7 @@ function threeTraverse(obj) {
     }
     if (obj.traverse && typeof obj.traverse === 'function') {
         console.log(obj.constructor.name, 'traverse');
-        obj.traverse(threeTraverse);
+        obj.traverse(HC.traverse);
     }
 
     let keys = Object.keys(obj);
@@ -54,7 +56,7 @@ function threeTraverse(obj) {
         let prop = obj[key];
         if (prop) {
             if (prop.traverse && typeof prop.traverse === 'function') {
-                prop.traverse(threeDispose);
+                prop.traverse(HC.dispose);
 
             } else if (prop.dispose && typeof prop.dispose === 'function') {
                 console.log(prop.constructor.name, 'dispose', key);

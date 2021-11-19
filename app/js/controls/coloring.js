@@ -2,10 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.controls.coloring}
-     */
+
     HC.controls.coloring = class ControlSet extends HC.ControlSet {
 
         static index = 120;

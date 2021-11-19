@@ -2,10 +2,6 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.controls.background}
-     */
     HC.controls.background = class ControlSet extends HC.ControlSet {
 
         static index = 70;

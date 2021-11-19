@@ -2,10 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.controls.audio}
-     */
+
     HC.controls.audio = class ControlSet extends HC.ControlSet {
 
         static index = 20;

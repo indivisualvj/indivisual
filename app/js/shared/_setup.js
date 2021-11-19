@@ -57,8 +57,5 @@ if (TWEEN) {
     TWEEN.now = HC.now;
 }
 
-/**
- * @type {HC.AssetManager}
- */
 assetman = new HC.AssetManager();
 

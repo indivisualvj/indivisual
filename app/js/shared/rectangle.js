@@ -2,10 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.Rectangle}
-     */
+
     HC.Rectangle = class Rectangle {
 
         /**
@@ -21,5 +18,20 @@
             this.width = width;
             this.height = height;
         }
+
+
+        /**
+         *
+         * @param width
+         * @param height
+         * @returns {HC.Rectangle}
+         */
+        cropTo(width, height) {
+            let offsetX = .5 * (this.width - width);
+            let offsetY = .5 * (this.height - height);
+
+            return new HC.Rectangle(offsetX, offsetY, width, height);
+        }
+
     }
 }

@@ -48,7 +48,7 @@ HC.plugins.mesh_material = HC.plugins.mesh_material || {};
         }
 
         reset() {
-            threeTraverse(this);
+            HC.traverse(this);
         }
     }
 }

@@ -13,7 +13,7 @@
                 if (file) {
                     this.current(id);
                     let inst = this;
-                    let path = filePath(IMAGE_DIR, file);
+                    let path = HC.filePath(IMAGE_DIR, file);
 
                     assetman.loadTexture(path, function (texture) {
                         texture.center.set(.5, .5);

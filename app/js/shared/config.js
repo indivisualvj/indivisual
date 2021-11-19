@@ -3,10 +3,7 @@
  */
 HC.Statics = HC.Statics || {};
 {
-    /**
-     *
-     * @type {HC.Config}
-     */
+
     HC.Config = class Config {
 
         /**
@@ -216,7 +213,7 @@ HC.Statics = HC.Statics || {};
                 if (rsc.action) {
                     action = rsc.action;
                 }
-                let file = filePath(rsc.base || APP_DIR, rsc.file);
+                let file = HC.filePath(rsc.base || APP_DIR, rsc.file);
                 this.messaging._emit({action: action, file: file, name: rsc.name}, (data) => {
                     rsc.callback(data, () => {
                         _load(index + 1, _callback);

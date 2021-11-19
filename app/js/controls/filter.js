@@ -2,10 +2,6 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.controls.filter}
-     */
     HC.controls.filter = class ControlSet extends HC.ControlSet {
 
         static index = 130;

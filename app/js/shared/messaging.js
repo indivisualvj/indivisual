@@ -2,10 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.Messaging}
-     */
+
     HC.Messaging = class Messaging {
 
         /**
@@ -418,7 +415,7 @@
          * @param callback
          */
         load(base, dir, file, callback) {
-            let path = filePath(base, dir);
+            let path = HC.filePath(base, dir);
             let data = {
                 action: 'load',
                 dir: dir,
@@ -437,7 +434,7 @@
          * @param callback
          */
         config(base, dir, file, callback) {
-            let path = filePath(base, dir);
+            let path = HC.filePath(base, dir);
             let data = {
                 action: 'config',
                 dir: dir,
@@ -456,7 +453,7 @@
          * @param callback
          */
         save(base, dir, file, data, callback) {
-            let path = filePath(base, dir);
+            let path = HC.filePath(base, dir);
             let conf = {
                 action: 'save',
                 dir: path,
@@ -475,7 +472,7 @@
          * @param callback
          */
         mkdir(base, dir, data, callback) {
-            let path = filePath(base, dir);
+            let path = HC.filePath(base, dir);
             let conf = {
                 action: 'mkdir',
                 dir: path,
@@ -521,7 +518,7 @@
          * @param data
          */
         sample(dir, file, data) {
-            let path = filePath(SAMPLE_DIR, dir);
+            let path = HC.filePath(SAMPLE_DIR, dir);
             let conf = {
                 action: 'write',
                 dir: path,
@@ -540,7 +537,7 @@
          * @param callback
          */
         delete(base, dir, file, callback) {
-            let path = filePath(base, dir);
+            let path = HC.filePath(base, dir);
             let data = {
                 action: 'delete',
                 dir: path,
@@ -559,7 +556,7 @@
          * @param callback
          */
         rename(base, dir, file, nu, callback) {
-            let path = filePath(base, dir);
+            let path = HC.filePath(base, dir);
             let data = {
                 action: 'rename',
                 dir: path,

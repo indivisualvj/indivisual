@@ -7,10 +7,7 @@
  */
 HC.SourceManager.display_source = {};
 {
-    /**
-     *
-     * @type {HC.SourceManager.DisplaySourcePlugin}
-     */
+
     HC.SourceManager.DisplaySourcePlugin = class DisplaySourcePlugin {
 
         static _index = 99;

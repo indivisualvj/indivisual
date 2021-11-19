@@ -124,7 +124,7 @@
 
             this.node.addEventListener('dragend', (e) => {
                 if (e.dataTransfer.dropEffect === 'link' && currentSequence) {
-                    let seq = numberExtract(currentSequence.getAttribute('data-sequence'), 'sequence');
+                    let seq = HC.numberExtract(currentSequence.getAttribute('data-sequence'), 'sequence');
                     let smp = this.index;
                     this.controller.updateSource(getSequenceSampleKey(seq), smp, true, true, false);
                     currentSequence = null;

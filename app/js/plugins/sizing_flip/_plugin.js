@@ -3,10 +3,7 @@
  */
 HC.plugins.sizing_flip = HC.plugins.sizing_flip || {};
 {
-    /**
-     *
-     * @type {HC.SizingFlipPlugin}
-     */
+
     HC.SizingFlipPlugin = class Plugin extends HC.AnimationPlugin {
 
         setControlSets(controlSets) {

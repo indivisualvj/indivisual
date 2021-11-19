@@ -201,7 +201,7 @@
         _initRotator() {
             if (this._rotation) {
                 this._layer.remove(this._rotation);
-                this._rotation.traverse(threeDispose);
+                this._rotation.traverse(HC.dispose);
             }
 
             this._rotation = new THREE.Group();
@@ -330,13 +330,13 @@
             this._shapes = false;
 
             sc.remove(this._layer);
-            this._layer.traverse(threeDispose);
+            this._layer.traverse(HC.dispose);
             this._lighting = false;
             this._rotation = false;
             this._shapes = false;
 
             if (this.shape) {
-                this.shape.sceneObject().traverse(threeDispose);
+                this.shape.sceneObject().traverse(HC.dispose);
                 this.shape = false;
             }
 

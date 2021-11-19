@@ -2,10 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.controls.rotation}
-     */
+
     HC.controls.rotation = class ControlSet extends HC.ControlSet {
 
         static index = 140;

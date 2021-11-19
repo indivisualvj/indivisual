@@ -2,10 +2,6 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.GuifyExplorer}
-     */
     HC.GuifyExplorer = class GuifyExplorer extends HC.Guify {
 
         /**
@@ -69,10 +65,6 @@
 }
 
 {
-    /**
-     *
-     * @type {HC.GuifyExplorerFolder}
-     */
     HC.GuifyExplorerFolder = class GuifyExplorerFolder extends HC.GuifyFolder {
 
         /**
@@ -144,10 +136,6 @@
 }
 
 {
-    /**
-     *
-     * @type {HC.GuifyExplorerPreset}
-     */
     HC.GuifyExplorerPreset = class GuifyExplorerPreset extends HC.GuifyController {
 
         /**

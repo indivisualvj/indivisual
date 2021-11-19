@@ -1,9 +1,6 @@
 HC.plugins.shape_delay = HC.plugins.shape_delay || {};
 {
-    /**
-     *
-     * @type {HC.ShapeDelayPlugin}
-     */
+
     HC.ShapeDelayPlugin = class Plugin extends HC.AnimationPlugin {
 
         injections = {

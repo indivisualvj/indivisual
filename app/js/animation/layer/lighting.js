@@ -8,7 +8,7 @@ HC.Layer.prototype._resetLighting = function () {
 
     if (this._lighting) {
         this._layer.remove(this._lighting);
-        this._lighting.traverse(threeDispose);
+        this._lighting.traverse(HC.dispose);
     }
 
     this._lighting = new THREE.Group();
@@ -111,7 +111,7 @@ HC.Layer.prototype._resetAmbientLight = function () {
 
     if (this.ambientLight) {
         this._lighting.remove(this.ambientLight);
-        this.ambientLight.traverse(threeDispose);
+        this.ambientLight.traverse(HC.dispose);
         this.ambientLight = false;
     }
 

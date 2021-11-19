@@ -1,8 +1,5 @@
 {
-    /**
-     *
-     * @type {HC.RoundedRect}
-     */
+
     HC.RoundedRect = class RoundedRect {
 
         /**
@@ -39,23 +36,19 @@
             shape.absarc(hw - radius, hh + radius, radius, -ninety, 0);
             // shape.lineTo(hw, -hh+radius);
             // upperright
-            shape.absarc(hw - radius, -hh - radius, radius, 0 * RAD, 90 * RAD);
+            shape.absarc(hw - radius, -hh - radius, radius, RAD, 90 * RAD);
             // shape.lineTo(-hw+radius, -hh);
             // upperleft
             shape.absarc(-hw + radius, -hh - radius, radius, 90 * RAD, 180 * RAD);
             // shape.lineTo(-hw, hh-radius);
 
-            let geo = new THREE.ShapeGeometry(shape, this.curveSegments);
-            return geo;
+            return new THREE.ShapeGeometry(shape, this.curveSegments);
         }
     }
 }
 
 {
-    /**
-     *
-     * @type {HC.DirectionalCircle}
-     */
+
     HC.DirectionalCircle = class DirectionalCircle {
 
         /**
@@ -88,10 +81,7 @@
 
 
 {
-    /**
-     *
-     * @type {HC.DirectionalRing}
-     */
+
     HC.DirectionalRing = class DirectionalRing {
 
         /**
@@ -125,10 +115,7 @@
 
 
 {
-    /**
-     *
-     * @type {HC.DirectionalShape}
-     */
+
     HC.DirectionalShape = class DirectionalShape {
 
         /**
@@ -170,10 +157,7 @@
 }
 
 {
-    /**
-     *
-     * @type {HC.Rect}
-     */
+
     HC.Rect = class Rect {
 
         /**
@@ -206,10 +190,7 @@
 }
 
 {
-    /**
-     *
-     * @type {HC.RightTriangle}
-     */
+
     HC.RightTriangle = class RightTriangle {
 
         /**
@@ -241,10 +222,7 @@
 }
 
 {
-    /**
-     *
-     * @type {HC.CustomGeometry}
-     */
+
     HC.CustomGeometry = class CustomGeometry {
 
         /**

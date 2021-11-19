@@ -34,7 +34,7 @@
             if (!this.loading && !this.properties.map) {
                 if (file) {
                     let inst = this;
-                    let path = filePath(IMAGE_DIR, file);
+                    let path = HC.filePath(IMAGE_DIR, file);
                     this.loading = true;
 
                     assetman.loadMaterialMap(this.properties, path, function (mat) {

@@ -102,15 +102,10 @@
                 e.stopPropagation();
 
                 if (e.keyCode === 38) { // UP
-                    requestAnimationFrame(() => {
-                        this.incrementValue();
-                    });
-
+                    this.incrementValue();
 
                 } else if (e.keyCode === 40) { // DOWN
-                    requestAnimationFrame(() => {
-                        this.decrementValue();
-                    });
+                    this.decrementValue();
                 }
             });
 
@@ -160,19 +155,16 @@
         /**
          *
          * @param v
-         * @return {*}
          */
         setValue(v) {
-            if (this.getComponent().opts.object && this.getProperty() in this.getComponent().opts.object) {
-                this.getComponent().opts.object[this.getProperty()] = v;
-            }
+            this.getComponent().SetValue(v);
+            this.getComponent().lastValue = v;
         }
 
         setRangeValue(v) {
-            let scaledValue = this.getComponent().ScaleValue(parseFloat(v));
-            this.getComponent().valueComponent.value = this.getComponent().FormatNumber(scaledValue);
-            this.getComponent().lastValue = scaledValue;
-            this.getComponent().emit('input', scaledValue);
+            this.getComponent().valueComponent.value = v;
+            this.getComponent().lastValue = v;
+            this.getComponent().emit('input', v);
         }
 
         /**
@@ -199,14 +191,16 @@
         incrementValue(factor) {
             let v = this.getValue();
             let s = this.getStep();
+            let d = getDigits(s);
 
             if (isFloat(s)) {
-                s *= factor||1;
+                s *= Math.ceil(factor);
             }
 
             v += s;
             v = Math.min(v, this.getMax());
-            // this.getComponent().emit('input', v);
+            v = round(v, d);
+
             this.setRangeValue(v);
         }
 
@@ -217,14 +211,15 @@
         decrementValue(factor) {
             let v = this.getValue();
             let s = this.getStep();
+            let d = getDigits(s);
 
             if (isFloat(s)) {
-                s *= factor||1;
+                s *= Math.ceil(factor);
             }
 
             v -= s;
             v = Math.max(v, this.getMin());
-            // this.getComponent().emit('input', v);
+            v = round(v, d);
             this.setRangeValue(v);
         }
 

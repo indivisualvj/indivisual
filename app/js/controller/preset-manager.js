@@ -88,29 +88,28 @@
          */
         loadPresets(folder) {
             let children = Object.keys(folder.children);
-            let dflt = [];
+            let candidates = [];
 
-            for (let i = 0; dflt.length < this.config.ControlValues.layers && i < children.length; i++) {
-                let child = folder.getChild(children[i]);
-                dflt.push(child);
+            for (let layer = 0; candidates.length < this.config.ControlValues.layers && layer < children.length; layer++) {
+                let child = folder.getChild(children[layer]);
+                candidates.push(child);
             }
             this.explorer.resetPresets();
 
             HC.clearLog();
 
-            let di = 0;
-            for (let i = 0; i < this.config.ControlValues.layers; i++) {
-                if (!this.config.shuffleable(i+1)) {
-                    continue;
-                }
+            let candidate = 0;
+            for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
+                if (this.config.shuffleable(layer+1)) {
+                    if (candidate < candidates.length) {
+                        this._loadPreset(candidates[candidate], layer, candidate, candidate * SKIP_TEN_FRAMES);
+                        candidate++;
 
-                if (di < dflt.length) {
-                    this._loadPreset(dflt[di], i, di, di === dflt.length - 1);
-                    di++;
-
-                } else if (!this.settingsManager.isDefault(i)) {
-                    this.settingsManager.resetLayer(i);
-                    this.controller.updatePreset(false, {}, i);
+                    } else { // always reset but do it slowly
+                        HC.TimeoutManager.getInstance().add('updatePreset.' + layer, layer * SKIP_TEN_FRAMES, () => {
+                            this.controller.updatePreset(false, {'info': {}}, layer);
+                        });
+                    }
                 }
             }
         }
@@ -158,21 +157,20 @@
          * @param child
          * @param i
          * @param di
-         * @param last
+         * @param timeout
          * @private
          */
-        _loadPreset(child, i, di, last) {
+        _loadPreset(child, i, di, timeout) {
 
             child.setInfo(i+1);
 
             console.log('loading', child.getLabel());
             this.filesystem.load(STORAGE_DIR, child.getParent().getLabel(), child.getLabel(), (data) => {
-                HC.TimeoutManager.getInstance().add('_loadPreset' + child.getLabel(), 0, () => {
+                HC.TimeoutManager.getInstance().add('_loadPreset' + child.getLabel(), timeout || 0, () => {
                     let key = data.dir + '/' + data.name;
                     let contents = JSON.parse(data.contents);
                     console.log('loaded', data.name);
                     this.controller.updatePreset(key, contents, i);
-                    this.controller.updateControl('layer', 0, true, true);
                 });
             });
         };

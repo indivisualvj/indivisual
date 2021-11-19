@@ -143,7 +143,6 @@
             for (let k in controlSets) {
                 controlSets[k].reset();
             }
-
         }
 
         /**

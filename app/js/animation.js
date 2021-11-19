@@ -550,12 +550,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
             switch (property) {
                 case 'shaders':
-                    HC.EventManager.getInstance().fireEventId(EVENT_LAYER_UPDATE_SHADERS, layer.index, layer, FIVE_FPS);
+                    HC.EventManager.getInstance().fireEventId(EVENT_LAYER_UPDATE_SHADERS, layer.index, layer, SKIP_TEN_FRAMES);
                     break;
 
                 case 'shape_vertices':
                     if (display) {
-                        HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_SHAPES, layer.index, layer, FIVE_FPS);
+                        HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_SHAPES, layer.index, layer, SKIP_TEN_FRAMES);
                     }
                     break;
             }

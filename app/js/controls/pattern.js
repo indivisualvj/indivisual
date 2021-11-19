@@ -16,11 +16,11 @@
                     let id = isObject(context) ? context.index : context;
                     switch (key) {
                         case 'pattern_shapes':
-                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET, id, context, FIVE_FPS);
+                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET, id, context, SKIP_TEN_FRAMES);
                             break;
                         case 'pattern':
                         case 'pattern_mover':
-                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_SHAPES, id, context, FIVE_FPS);
+                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_SHAPES, id, context, SKIP_TEN_FRAMES);
                             break;
                     }
                 }

@@ -32,7 +32,7 @@
                 barMode: 'offset', // none, overlay, above, offset
                 panelMode: 'inner',
                 opacity: 1,
-                pollRateMS: FIVE_FPS,
+                pollRateMS: SKIP_TEN_FRAMES,
                 root: document.getElementById(id),
                 search: {
                     filter: (value) => {

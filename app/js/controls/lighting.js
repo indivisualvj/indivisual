@@ -18,13 +18,13 @@
                     switch (key) {
                         case 'lighting_type':
                         case 'lighting_pattern_lights':
-                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_LIGHTING, id, context, FIVE_FPS);
+                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_LIGHTING, id, context, SKIP_TEN_FRAMES);
                             break;
                         case 'lighting_ambient':
-                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_AMBIENT, id, context, FIVE_FPS);
+                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_AMBIENT, id, context, SKIP_TEN_FRAMES);
                             break;
                         case 'lighting_fog':
-                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_FOG, id, context, FIVE_FPS);
+                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_FOG, id, context, SKIP_TEN_FRAMES);
                             break;
 
                     }

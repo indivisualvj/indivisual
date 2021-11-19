@@ -709,23 +709,6 @@
             return false;
         }
 
-
-        /**
-         * //fixme: nobody need that?
-         * @param i
-         * @returns {*}
-         */
-        getSequenceBySample(i) {
-            for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
-                let sample = this.getSampleBySequence(seq);
-                if (sample === i) {
-                    return seq;
-                }
-            }
-
-            return false;
-        }
-
         /**
          *
          * @param sequence

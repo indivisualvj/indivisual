@@ -573,7 +573,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (layer === undefined) {
                 layer = this.config.ControlSettings.layer;
             }
-            // fixme: if passes are loaded via CTRL+preset, passes added cannot be removed completely.
+
             let passes = this.settingsManager.get(layer, 'passes');
             let pass = {};
             pass[ctrl.name] = ctrl.getShader();

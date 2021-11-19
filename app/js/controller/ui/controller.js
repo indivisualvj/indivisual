@@ -126,14 +126,10 @@
                     let resY = window.screen.availHeight;
                     let vy = Math.abs(dy / (resY/512));
                     if (dy < 0) {
-                        requestAnimationFrame(() => {
-                            this.incrementValue(vy);
-                        });
+                        this.incrementValue(vy);
 
                     } else if (dy > 0) {
-                        requestAnimationFrame(() => {
-                            this.decrementValue(vy);
-                        });
+                        this.decrementValue(vy);
                     }
                 }
             });
@@ -174,6 +170,13 @@
             }
         }
 
+        setRangeValue(v) {
+            let scaledValue = this.getComponent().ScaleValue(parseFloat(v));
+            this.getComponent().valueComponent.value = this.getComponent().FormatNumber(scaledValue);
+            this.getComponent().lastValue = scaledValue;
+            this.getComponent().emit('input', scaledValue);
+        }
+
         /**
          *
          * @return {number}
@@ -205,7 +208,8 @@
 
             v += s;
             v = Math.min(v, this.getMax());
-            this.getComponent().emit('input', v);
+            // this.getComponent().emit('input', v);
+            this.setRangeValue(v);
         }
 
         /**
@@ -222,7 +226,8 @@
 
             v -= s;
             v = Math.max(v, this.getMin());
-            this.getComponent().emit('input', v);
+            // this.getComponent().emit('input', v);
+            this.setRangeValue(v);
         }
 
         /**
@@ -247,8 +252,7 @@
          */
         getInitialValue() {
             if ('initial' in this.getComponent().opts) {
-                let initial = this.getComponent().opts.initial;
-                return initial;
+                return this.getComponent().opts.initial;
             }
 
             return undefined;

@@ -1,0 +1,90 @@
+
+[data-color="red"] {
+    border-left: 6px solid rgba(255, 10, 10, 0.7) !important;
+}
+
+[data-color="yellow"] {
+    border-left: 6px solid rgba(255, 220, 10, 0.7) !important;
+}
+
+[data-color="green"] {
+    border-left: 6px solid rgba(10, 255, 10, 0.7) !important;
+}
+
+[data-background="blue"] {
+    background-color: #2fa1d6;
+}
+
+[color="red"]:after {
+    color: rgba(255, 10, 10, 0.7) !important;
+}
+
+[color="yellow"]:after {
+    color: rgba(255, 220, 10, 0.7) !important;
+}
+
+[color="green"]:after {
+    color: rgba(10, 255, 10, 0.7) !important;
+}
+
+[data-selected="true"] {
+    color: rgba(10, 255, 10, 0.7) !important;
+}
+
+[data-border="red"] {
+    border-left: 1px solid #e61d5f !important;
+}
+
+[data-border="yellow"] {
+    border-left: 1px solid rgba(255, 220, 10, 0.7) !important;
+}
+
+[data-border="green"] {
+    border-left: 1px solid rgba(10, 255, 10, 0.7) !important;
+}
+
+[data-border="blue"] {
+    border-left: 1px solid #2fa1d6 !important;
+}
+
+[data-changed] {
+    color: #e61d5f !important;
+}
+
+[data-changed] label,
+[data-changed] input {
+    color: #e61d5f !important;
+}
+
+[data-changed] select {
+    color: #e61d5f !important;
+}
+
+[data-changed] select:hover {
+    color: white !important;
+}
+
+[data-label]:after {
+    position: absolute;
+    content: attr(data-label);
+    color: #ffffff;
+    background: #232323;
+    line-height: 18px;
+    border-radius: 2px;
+    border: 1px solid #565656;
+    padding: 0 4px;
+    top: 4px;
+    right: 4px;
+    white-space: pre-wrap;
+}
+
+[data-mnemonic]:before {
+    position: absolute;
+    content: attr(data-mnemonic);
+    color: #2fd62f;
+    top: -5px;
+    left: 3px;
+    font-size: 10px;
+    font-weight: bold;
+    z-index: 1;
+}

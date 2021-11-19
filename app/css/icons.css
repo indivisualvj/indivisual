@@ -1,0 +1,56 @@
+
+.sync {
+    background-image: url("/img/sync.png");
+}
+
+.share {
+    background-image: url("/img/share.png");
+}
+
+.open {
+    background-image: url("/img/open.png");
+}
+
+.load {
+    background-image: url("/img/load.png");
+}
+
+.all {
+    background-image: url("/img/all.png");
+}
+
+.fill {
+    background-image: url("/img/fill.png");
+}
+
+.reset {
+    background-image: url("/img/reset.png");
+}
+
+.new {
+    background-image: url("/img/new.png");
+}
+
+.new_folder {
+    background-image: url("/img/new_folder.png");
+}
+
+.save {
+    background-image: url("/img/save.png");
+}
+
+.rename {
+    background-image: url("/img/rename.png");
+}
+
+.delete {
+    background-image: url("/img/delete.png");
+}
+
+.check {
+    background-image: url("/img/check.png");
+}
+
+.next {
+    background-image: url("/img/next.png");
+}

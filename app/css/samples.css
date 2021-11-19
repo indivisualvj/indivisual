@@ -1,0 +1,54 @@
+
+#samples {
+    width: 100%;
+    box-sizing: content-box;
+    margin-bottom: 8px;
+    white-space: nowrap;
+}
+
+#samples .sample {
+    cursor: move;
+    position: relative;
+    display: inline-block;
+    box-sizing: border-box;
+    width: 15.84%;
+    height: 100%;
+    margin-right: 1%;
+}
+
+#samples .sample .controls {
+    cursor: default;
+    z-index: 999;
+    left: -1px;
+    display: none;
+    top: -89px;
+    width: 130px;
+    height: 70px;
+    padding: 8px;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.0) !important;
+    border: 1px solid transparent !important;
+    transition: all 125ms;
+}
+
+#samples .sample:hover .controls {
+    display: block;
+    border: 1px solid #2fa1d6 !important;
+    background-color: rgba(0, 0, 0, 0.8) !important;
+    width: 130px;
+    height: 70px;
+}
+
+#samples .sample .controls .guify-component-container {
+    position: relative;
+    opacity: 0;
+}
+
+#samples .sample:hover .controls .guify-component-container {
+    opacity: 1;
+}
+
+#samples [data-label]:after {
+    max-width: 90%;
+    background: rgba(35, 35, 35, 0.5);
+}

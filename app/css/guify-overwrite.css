@@ -1,0 +1,77 @@
+
+.guify-container_be6yU[data-mnemonic]:before {
+    top: 3px;
+    left: 49px;
+}
+
+.guify-component-container[data-mnemonic]:before {
+    top: -4px;
+    left: -6px;
+}
+
+.guify-component-container[role="button"][data-mnemonic]:before {
+    top: 7px;
+    left: -8px;
+}
+
+.guify-bar-title_hrfSP {
+    box-sizing: border-box;
+    top: 1px !important;
+    padding-left: 60px;
+    text-align: left !important;
+}
+
+.guify-button_1S84xL {
+    width: calc(100%) !important;
+}
+
+.guify-panel-container_39NJay
+{
+    position: relative !important;
+}
+
+input[type=checkbox].guify-checkbox_hxzak + label {
+    position: absolute;
+    right: 2px;
+}
+
+.guify-component-container {
+    clear: both !important;
+    width: 99%;
+}
+
+.guify-component-container[data-class] {
+    float: left;
+    margin-right: 1%;
+    box-sizing: border-box;
+}
+
+.guify-main {
+    transition: all 500ms;
+    opacity: 1;
+    box-sizing: border-box;
+    min-height: 25px;
+}
+
+.guify-main:empty {
+    opacity: 0;
+}
+
+.guify-component-container[data-changed] > div > div {
+    color: #e61d5f !important;
+}
+
+.guify-container_be6yU[data-mnemonic]:before {
+    top: 3px;
+    left: 49px;
+}
+
+.guify-component-container[data-mnemonic]:before {
+    top: -4px;
+    left: -6px;
+}
+
+.guify-component-container[role="button"][data-mnemonic]:before {
+    top: 7px;
+    left: -8px;
+}

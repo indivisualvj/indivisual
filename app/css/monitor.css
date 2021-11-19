@@ -1,0 +1,68 @@
+
+#monitor {
+    transition: all 125ms;
+    padding-top: 52%;
+    position: relative;
+}
+
+.monitor {
+    position: absolute;
+    top: 0;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    margin: 0 0 4px 0;
+    padding: 1px;
+    max-height: 328px;
+}
+
+.blockfocus {
+    position: absolute;
+    z-index: 999;
+    box-sizing: border-box;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0 0 4px 0;
+    padding: 3px;
+    max-height: 328px;
+
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+
+.expandable {
+    z-index: 999;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.0) !important;
+    border: 1px solid transparent !important;
+    cursor: zoom-in !important;
+    transition: all 125ms;
+}
+
+.expandable[fixed] {
+    width: 175% !important;
+    height: 175% !important;
+    cursor: zoom-out !important;
+}
+
+.expandable:hover, .expandable[fixed] {
+    border: 1px solid #2fa1d6 !important;
+    background-color: rgba(0, 0, 0, 0.8) !important;
+}
+
+.expandable:hover::after, .expandable[fixed]::after {
+    content: ' click to expand/reduce';
+    font-size: 10px;
+    font-weight: bold;
+    color: #2fa1d6;
+
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    z-index: 1;
+}

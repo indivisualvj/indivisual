@@ -19,7 +19,7 @@
         create() {
             let layer = this.layer;
 
-            return new THREE.SphereGeometry(layer.shapeSize(.5), this.getModA(1, 1, 64), this.getModB(1, 1, 64));
+            return new THREE.SphereGeometry(layer.shapeSize(.5), this.getModA(1, 1, 128), this.getModB(1, 1, 128));
         }
     }
 }

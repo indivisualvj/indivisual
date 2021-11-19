@@ -48,7 +48,14 @@
     opacity: 1;
 }
 
-#samples [data-label]:after {
-    max-width: 90%;
+#samples .sample[data-label]:after {
+    box-sizing: border-box;
+    max-width: 94%;
+    right: 3%;
+    top: 4%;
+    max-height: 92%;
+    overflow: hidden;
     background: rgba(35, 35, 35, 0.5);
+    font-size: 9px;
+    line-height: 12px;
 }

@@ -573,6 +573,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (layer === undefined) {
                 layer = this.config.ControlSettings.layer;
             }
+
             let passes = this.settingsManager.get(layer, 'passes');
             let pass = {};
             pass[ctrl.name] = ctrl.getShader();

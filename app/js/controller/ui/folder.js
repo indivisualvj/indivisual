@@ -216,6 +216,9 @@
                 key = this.getChildKey(child);
             }
             child.getComponent().Remove();
+            if (child instanceof GuifyFolder) {
+                child.removeChildren();
+            }
             delete this.children[key];
         }
 

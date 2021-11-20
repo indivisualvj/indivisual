@@ -6,6 +6,11 @@
     HC.Guify = class Guify extends HC.GuifyFolder {
 
         /**
+         * @type {{string: *}}
+         */
+        opts;
+
+        /**
          *
          * @param id
          * @param title
@@ -21,7 +26,8 @@
          * @param title
          */
         init(id, title) {
-            this.gui = new guify({
+
+            this.opts = {
                 title: title,
                 theme: 'dark', // dark, light, yorha, or theme object
                 align: 'right', // left, right
@@ -43,7 +49,9 @@
                         }
                     }
                 }
-            });
+            };
+
+            this.gui = new guify(this.opts);
             this.component = this.gui;
             if (this.gui.bar.input) {
                 this.gui.bar.input.classList.add('search');
@@ -57,6 +65,10 @@
             }
             this.gui.container.style.zIndex = 99;
 
+        }
+
+        setPollRate(value) {
+            this.opts.pollRateMS = value;
         }
 
         /**

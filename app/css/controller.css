@@ -107,6 +107,16 @@ pre#osd {
     }
 }
 
+@media screen and (max-width: 560px) {
+    #status div {
+        height: 44px;
+    }
+
+    #status #layers {
+        height: 26px;
+    }
+}
+
 @media screen and (max-width: 425px) {
 
     .guify-main [data-class],

@@ -263,7 +263,7 @@
             let shuffleable = !this.animation.settingsManager.isDefault(layer.index) && this.config.shuffleable(layer.index+1);
             let fastShuffling = this.config.ControlSettings.shuffle_mode !== 'off' && this.config.ControlSettings.shuffle_every < 4;
             let shuffling = (shuffleable && fastShuffling);
-
+// fixme: fastshuffle kill sequence progress visualisation
             if (layer.settings.layer_transvisible || shuffling) {
                 return true;
             }

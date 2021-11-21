@@ -4,8 +4,10 @@
 {
     HC.plugins.override_material_input.webcam = class Plugin extends HC.OverrideMaterialInputPlugin {
 
-        file;
-        loading;
+        /**
+         * @type {MediaStream}
+         */
+        stream;
 
         properties = {
             map: null,
@@ -23,24 +25,40 @@
         initTexture() {
             let that = this;
             try {
-                navigator.mediaDevices.getUserMedia({video: true}).then(function (stream) {
-                        let video = document.createElement("video");
-                        Object.assign(video, {
-                            srcObject: stream,
-                            autoplay: true
-                        });
-
-                        let videoTexture = new THREE.VideoTexture(video);
-                        videoTexture.minFilter = THREE.LinearFilter;
-                        that.properties.map = videoTexture;
-                        that.properties.emissiveMap = videoTexture;
+                let resolution = this.layer.renderer.getResolution();
+                let config = {
+                    video: {
+                        width: {min: 640, ideal: resolution.x, max: 1920},
+                        height: {min: 360, ideal: resolution.y, max: 1080},
                     }
-                ).catch(function (error) {
+                }
+                navigator.mediaDevices.getUserMedia(config).then( (stream) => {
+                    let video = document.createElement("video");
+                    Object.assign(video, {
+                        srcObject: stream,
+                        autoplay: true
+                    });
+                    this.stream = stream;
+
+                    let videoTexture = new THREE.VideoTexture(video);
+                    videoTexture.minFilter = THREE.LinearFilter;
+                    that.properties.map = videoTexture;
+                    that.properties.emissiveMap = videoTexture;
+                }).catch(function (error) {
                     console.error(error);
                 });
             } catch (ex) {
                 console.log(ex);
             }
+        }
+
+        reset() {
+            if (this.video) {
+                this.stream.getTracks().forEach((track) => {
+                    track.stop();
+                });
+            }
+            super.reset();
         }
     }
 }

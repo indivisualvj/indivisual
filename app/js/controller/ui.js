@@ -178,7 +178,8 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                 folder: folder,
                 property: property,
                 object: object,
-                cssClasses: 'clear'
+                cssClasses: 'clear',
+                uniqueKey: folder.getLabel() + '.' + key + '.' + label,
             };
         };
 

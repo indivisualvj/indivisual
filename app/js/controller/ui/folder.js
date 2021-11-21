@@ -105,7 +105,11 @@
                 controller = new HC.GuifyController(this, opts);
             }
 
-            this.children[controller.getLabel()] = controller;
+            let key = controller.getUniqueKey();
+            if (key in this.children) {
+                throw new Error('Duplicate entry "' + key + '"');
+            }
+            this.children[key] = controller;
 
             return controller;
         }
@@ -200,9 +204,7 @@
          */
         remove() {
             super.remove();
-            if (this.isExpanded()) {
-                this.removeChildren();
-            }
+            this.removeChildren();
         }
 
         /**
@@ -215,10 +217,7 @@
                 child = key;
                 key = this.getChildKey(child);
             }
-            child.getComponent().Remove();
-            if (child instanceof GuifyFolder) {
-                child.removeChildren();
-            }
+            child.remove();
             delete this.children[key];
         }
 

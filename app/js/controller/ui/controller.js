@@ -3,6 +3,9 @@
  */
 {
     HC.GuifyController = class GuifyController extends HC.GuifyItem {
+
+        _uniqueKey;
+
         /**
          *
          * @param parent
@@ -14,6 +17,11 @@
             this.parent = parent;
             if (!(parent instanceof HC.Guify)) {
                 opts.folder = parent.getComponent();
+            }
+
+            if (opts.uniqueKey) {
+                this._uniqueKey = opts.uniqueKey;
+                delete opts.uniqueKey;
             }
 
             if (opts.onChange) {
@@ -138,6 +146,14 @@
          */
         getProperty() {
             return this.getComponent().opts.property || this.getLabel();
+        }
+
+        /**
+         *
+         * @returns {string}
+         */
+        getUniqueKey() {
+            return this._uniqueKey || this.getProperty();
         }
 
         /**

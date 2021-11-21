@@ -191,7 +191,7 @@
                         length: 0
                     };
 
-                    this.applySequenceSlice(sequence, length, start, end);
+                    this.controller.sourceManager.applySequenceSlice(sequence, length, start, end);
 
                     let frameDuration = data.duration / length;
                     let beatDuration = data.duration / data.beats;

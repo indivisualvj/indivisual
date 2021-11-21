@@ -2,7 +2,7 @@
 #samples {
     width: 100%;
     box-sizing: content-box;
-    margin-bottom: 8px;
+    margin-bottom: 2px;
     white-space: nowrap;
 }
 
@@ -11,9 +11,9 @@
     position: relative;
     display: inline-block;
     box-sizing: border-box;
-    width: 15.84%;
+    width: 16.33%;
     height: 100%;
-    margin-right: 1%;
+    margin-right: 0.4%;
 }
 
 #samples .sample .controls {
@@ -48,14 +48,80 @@
     opacity: 1;
 }
 
+#samples .sample[data-mnemonic]:before {
+    top: auto;
+    bottom: -1px;
+    left: 0px;
+    background: rgba(35, 35, 35, 0.5);
+    font-size: 9px;
+    line-height: 12px;
+    border: none;
+    padding: 1px 4px;
+    border-top-right-radius: 3px;
+    margin-bottom: 1px;
+    font-weight: normal;
+    color: #ebebeb;
+}
+
 #samples .sample[data-label]:after {
     box-sizing: border-box;
     max-width: 94%;
-    right: 3%;
+    right: 0;
     top: 4%;
     max-height: 92%;
     overflow: hidden;
     background: rgba(35, 35, 35, 0.5);
     font-size: 9px;
     line-height: 12px;
+    border: none;
+    border-radius: 3px 0 0 3px;
+}
+
+#samples .sample[data-label="enabled"] {
+    animation-name: enabled;
+    animation-iteration-count: 3;
+    animation-duration: 142.8ms;
+    animation-direction: reverse;
+}
+
+@keyframes enabled {
+    from {
+        background: black;
+    }
+    to {
+        background: #2fa1d6;
+    }
+}
+
+
+#samples .sample[data-label="ready"] {
+    animation-name: ready;
+    animation-iteration-count: 3;
+    animation-duration: 142.8ms;
+    animation-direction: reverse;
+}
+
+@keyframes ready {
+    from {
+        background: black;
+    }
+    to {
+        background: #2fd62f;
+    }
+}
+
+#samples .sample[data-label="\[!ERROR\]"] {
+    animation-name: error;
+    animation-iteration-count: 3;
+    animation-duration: 142.8ms;
+    animation-direction: reverse;
+}
+
+@keyframes error {
+    from {
+        background: black;
+    }
+    to {
+        background: #e61d5f;
+    }
 }

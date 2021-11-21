@@ -53,6 +53,7 @@
 
             this.node = document.createElement('div');
             this.node.id = 'sample' + this.index;
+            this.node.setAttribute('data-mnemonic', this.node.id);
             this.node.setAttribute('data-sample', this.index.toString());
             this.node.setAttribute('class', 'sample control');
             this.node.setAttribute('draggable', 'true');

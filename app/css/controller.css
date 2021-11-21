@@ -62,6 +62,11 @@ pre#osd {
         padding-top: 43%;
     }
 
+    #status {
+        position: fixed;
+        width: 100%;
+    }
+
     .blockfocus {
         max-width: 100%;
     }

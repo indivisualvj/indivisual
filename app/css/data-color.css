@@ -67,7 +67,7 @@
 [data-label]:after {
     position: absolute;
     content: attr(data-label);
-    color: #ffffff;
+    color: #ebebeb;
     background: #232323;
     line-height: 18px;
     border-radius: 2px;

@@ -189,7 +189,7 @@
                         let settings = this.settingsManager.prepareLayer(layer);
                         this.filesystem.save(STORAGE_DIR, ctrl.getLabel(), child.getLabel(), settings, (result) => {
                             HC.log(result);
-                            child.setInfo(null);
+                            child.setChanged(null);
                         }, '');
                     };
 

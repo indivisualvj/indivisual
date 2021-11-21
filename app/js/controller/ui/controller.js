@@ -194,7 +194,7 @@
             let d = getDigits(s);
 
             if (isFloat(s)) {
-                s *= Math.ceil(factor);
+                s *= Math.ceil(factor||1);
             }
 
             v += s;
@@ -214,7 +214,7 @@
             let d = getDigits(s);
 
             if (isFloat(s)) {
-                s *= Math.ceil(factor);
+                s *= Math.ceil(factor||1);
             }
 
             v -= s;

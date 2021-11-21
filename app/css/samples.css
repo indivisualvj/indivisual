@@ -68,6 +68,7 @@
     max-width: 94%;
     right: 0;
     top: 4%;
+    bottom: auto;
     max-height: 92%;
     overflow: hidden;
     background: rgba(35, 35, 35, 0.5);

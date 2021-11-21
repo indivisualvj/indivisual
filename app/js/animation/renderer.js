@@ -176,23 +176,23 @@
         switchLayer(force) {
 
             if (this.nextLayer) {
-
-                // todo: fastforward tweens?
                 if (this.currentLayer !== this.nextLayer) {
                     if (!force && this.config.ControlSettings.shuffle_mode !== 'off') {
                         let speed = this.nextLayer.getCurrentSpeed();
                         if (!speed.starting()) {
-                            console.log('HC.Renderer.switchLayer', 'fail', 'speed in progress')
-                            return;
+                            if (!this._isForceAnimate(this.nextLayer)) {
+                                console.log('HC.Renderer.switchLayer', 'fail', 'speed in progress')
+                                return;
+                            }
                         } else {
 
                         }
                     }
 
-                    if (!this.currentLayer.settings.layer_transvisible) {
+                    if (!this._isForceAnimate(this.currentLayer)) {
                         this.currentLayer.pause();
                     }
-                    if (!this.nextLayer.settings.layer_transvisible) {
+                    if (!this._isForceAnimate(this.nextLayer)) {
                         this.nextLayer.resume();
                     }
                     this.setLayer(this.nextLayer.index);
@@ -253,10 +253,22 @@
         animate() {
             for (let l in this.layers) {
                 let layer = this.layers[l];
-                if (layer === this.currentLayer || layer.settings.layer_transvisible) {
+                if (layer === this.currentLayer || this._isForceAnimate(layer)) {
                     layer.animate();
                 }
             }
+        }
+
+        _isForceAnimate(layer) {
+            let shuffleable = !this.animation.settingsManager.isDefault(layer.index) && this.config.shuffleable(layer.index+1);
+            let fastShuffling = this.config.ControlSettings.shuffle_mode !== 'off' && this.config.ControlSettings.shuffle_every < 4;
+            let shuffling = (shuffleable && fastShuffling);
+
+            if (layer.settings.layer_transvisible || shuffling) {
+                return true;
+            }
+
+            return false
         }
 
         /**

@@ -8,7 +8,7 @@ HC.Layer.prototype.animate = function () {
 
     HC.EventManager.getInstance().fireEvent(EVENT_LAYER_ANIMATE);
 
-    this.tween.update(this.animation.now - this.lastUpdate, false);
+    this.updateTween();
 
     this.doOscillate(true);
 
@@ -35,6 +35,10 @@ HC.Layer.prototype.animate = function () {
     this.doBackground();
 
     this.doOscillate(false);
+};
+
+HC.Layer.prototype.updateTween = function () {
+    this.tween.update(this.animation.now - this.lastUpdate, false);
 };
 
 /**

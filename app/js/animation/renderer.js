@@ -218,6 +218,8 @@
                 let layer = this.layers[i];
                 let transvisible = layer.settings.layer_transvisible;
 
+                layer.setBackgroundVisible(i === index);
+
                 if (i === index || transvisible) {
                     this._layers.add(layer._layer);
 

@@ -144,6 +144,12 @@
         _background;
 
         /**
+         * @type {THREE.Texture}
+         * @private
+         */
+        _hiddenBackgroundTexture;
+
+        /**
          * @type {Object.<string, *>}
          */
         three;

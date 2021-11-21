@@ -11,6 +11,7 @@
 #status {
     background: #000000;
     z-index: 99999;
+    box-sizing: border-box;
 }
 
 #status div {
@@ -86,7 +87,7 @@ pre#osd {
 
     #status {
         position: fixed;
-        width: 99.2%;
+        width: 99.4%;
         top: 0;
     }
 
@@ -115,9 +116,28 @@ pre#osd {
     #status #layers {
         height: 26px;
     }
+
+    #status {
+        width: 99.3%;
+    }
+
+    #monitor {
+        margin-top: 71px;
+    }
 }
 
 @media screen and (max-width: 425px) {
+
+    #monitor {
+        margin-top: 131px;
+    }
+
+    #status {
+        width: 99%;
+    }
+    #status div {
+        height: 26px;
+    }
 
     .guify-main [data-class],
     [data-class] {

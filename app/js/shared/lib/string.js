@@ -66,11 +66,16 @@ HC.numberExtract = function(item, prefix) {
 /**
  *
  * @param value
- * @param fallback
- * @returns {any|boolean|number}
+ * @param otype
+ * @returns {string|{}|*[]|null|undefined|any|boolean|number}
  */
-HC.parse = function (value, fallback) {
-    if (value === 'true') {
+HC.parse = function (value, otype) {
+
+    if (isString(value) && value.length === 0) {
+        debugger
+        return HC.createEmptyOfType(otype);
+    }
+    else if (value === 'true') {
         return true;
 
     } else if (value === 'false') {
@@ -86,7 +91,7 @@ HC.parse = function (value, fallback) {
         return JSON.parse(value);
     }
 
-    return fallback !== undefined ? fallback : value;
+    return value;
 }
 
 /**
@@ -101,4 +106,24 @@ HC.parseArray = function(args) {
     }
 
     return args;
+}
+
+/**
+ *
+ * @param typeName
+ * @returns {string|{}|null|*[]|undefined}
+ */
+HC.createEmptyOfType = function (typeName) {
+    switch (typeName) {
+        case 'object':
+            return {};
+        case 'string':
+            return '';
+        case 'array':
+            return [];
+        case 'undefined':
+            return undefined
+        default:
+            return null;
+    }
 }

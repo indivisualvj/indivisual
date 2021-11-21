@@ -1072,5 +1072,14 @@ document.addEventListener('DOMContentLoaded', function () {
             this.explorer.resetPresets(shuffleable);
             this.syncLayers();
         }
+
+        /**
+         *
+         * @param layer
+         */
+        resetLayer(layer) {
+            this.settingsManager.resetLayer(layer);
+            this.syncLayer(layer);
+        }
     }
 }

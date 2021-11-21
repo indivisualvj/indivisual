@@ -5,7 +5,14 @@
 
     HC.Sample = class Sample {
 
+        /**
+         * @type {number}
+         */
         index;
+
+        /**
+         * @type {number}
+         */
         id;
 
         /**
@@ -103,6 +110,11 @@
         context;
 
         /**
+         * @type {HC.Sample.Clip}
+         */
+        clip;
+
+        /**
          *
          * @param {HC.Program} program
          * @param index
@@ -187,7 +199,7 @@
             this.started = false;
             this.complete = false;
             this.counter = 0;
-            this._clip = false;
+            this.clip = null;
 
             for (const sample of this.samples) {
                 sample.close();
@@ -297,5 +309,69 @@
         last() {
             return Math.max(0, this.frameCount - 1);
         }
+
+
+        /**
+         *
+         * @returns {HC.Sample.Clip}
+         */
+        getClip() {
+            return this.clip;
+        }
+
+        /**
+         *
+         * @param value
+         */
+        setClip(value) {
+            this.clip = value;
+        }
+    }
+
+    HC.Sample.Clip = class SampleClip {
+
+        /**
+         * @type {number}
+         */
+        id;
+
+        /**
+         *
+         * @type {boolean}
+         */
+        ready = false
+
+        /**
+         *
+         * @type {[]}
+         */
+        thumbs = [];
+
+        /**
+         *
+         * @type {number}
+         */
+        length = 0;
+
+        /**
+         *
+         * @type {number}
+         */
+        beats = 0;
+
+        /**
+         *
+         * @type {number}
+         */
+        duration = 0;
+
+        /**
+         *
+         * @param id {number}
+         */
+        constructor(id) {
+            this.id = id;
+        }
+
     }
 }

@@ -865,7 +865,7 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         doShuffle() {
-            let plugin = this.getShuffleModePlugin(this.config.ControlSettings.shuffle_mode);
+            let plugin = this.getShuffleModePlugin();
             let result = plugin.apply();
             if (result !== false) {
                 result = plugin.after();
@@ -883,6 +883,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!this.plugins) {
                 this.plugins = {};
             }
+            name = name || this.config.ControlSettings.shuffle_mode;
 
             if (!this.plugins[name]) {
                 this.plugins[name] = new HC.shuffle_mode[name](this, this.config.ControlSettings);

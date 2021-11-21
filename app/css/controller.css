@@ -8,10 +8,19 @@
 @import "guify-overwrite.css";
 @import "general.css";
 
+#status {
+    background: #000000;
+    z-index: 99999;
+    box-sizing: border-box;
+}
+
 #status div {
     position: relative;
-    height: 30px;
-    line-height: 30px;
+    height: 26px;
+}
+
+#status [data-mnemonic]:before {
+    top: 1px;
 }
 
 pre#log {
@@ -50,6 +59,15 @@ pre#osd {
     overflow-y: auto;
 }
 
+@media screen and (max-width: 960px) {
+    #status div {
+        height: 44px;
+    }
+
+    #status #layers {
+        height: 26px;
+    }
+}
 
 @media screen and (max-width: 768px) {
 
@@ -59,7 +77,18 @@ pre#osd {
     }
 
     #monitor {
+        margin-top: 53px;
         padding-top: 43%;
+    }
+
+    #status div {
+        height: 26px;
+    }
+
+    #status {
+        position: fixed;
+        width: 99.4%;
+        top: 0;
     }
 
     .blockfocus {
@@ -79,7 +108,36 @@ pre#osd {
     }
 }
 
+@media screen and (max-width: 560px) {
+    #status div {
+        height: 44px;
+    }
+
+    #status #layers {
+        height: 26px;
+    }
+
+    #status {
+        width: 99.3%;
+    }
+
+    #monitor {
+        margin-top: 71px;
+    }
+}
+
 @media screen and (max-width: 425px) {
+
+    #monitor {
+        margin-top: 131px;
+    }
+
+    #status {
+        width: 99%;
+    }
+    #status div {
+        height: 26px;
+    }
 
     .guify-main [data-class],
     [data-class] {

@@ -3,6 +3,7 @@
     transition: all 125ms;
     padding-top: 52%;
     position: relative;
+    margin-bottom: 1px;
 }
 
 .monitor {

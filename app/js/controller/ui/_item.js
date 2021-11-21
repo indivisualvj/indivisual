@@ -110,13 +110,7 @@
          *
          */
         remove() {
-            if (this.getParent()) {
-                this.getParent().removeChild(this);
-
-            } else {
-                this.getComponent().Remove();
-            }
-
+            this.gui.Remove(this.getComponent());
         }
 
         /**

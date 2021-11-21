@@ -15,6 +15,20 @@ HC.Layer.prototype.setBackground = function (value) {
     }
 };
 
+HC.Layer.prototype.setBackgroundVisible = function (value) {
+    if (!value && this._layer.background) {
+        this._hiddenBackgroundTexture = this._layer.background;
+        this._layer.background = null;
+
+    } else if (value && this._hiddenBackgroundTexture) {
+        this._layer.background = this._hiddenBackgroundTexture;
+        this._hiddenBackgroundTexture = null;
+
+    } else if (this._background) {
+        this._background.visible = value;
+    }
+};
+
 /**
  *
  * @param recreate
@@ -26,6 +40,7 @@ HC.Layer.prototype._resetBackground = function (recreate) {
         this._background.traverse(HC.dispose);
     }
 
+    this._hiddenBackgroundTexture = null;
     this._layer.background = null;
 
     if (recreate !== false) {

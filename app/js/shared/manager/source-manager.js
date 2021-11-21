@@ -478,8 +478,9 @@
          * @param callback
          */
         loadClip(sample, callback) {
-            if (!sample._clip) {
-                sample._clip = {id: sample.id, ready: false, thumbs: [], length: 0, beats: 0, duration: 0};
+            if (!sample.getClip()) {
+                let clip = new HC.Sample.Clip(sample.id);
+                sample.setClip(clip);
 
                 let file = HC.filePath(SAMPLE_DIR, sample.id);
 
@@ -489,9 +490,9 @@
                     let frameCount = files.length;
                     let step = frameCount / 16;
                     let seconds = frameCount / 60;
-                    sample._clip.length = frameCount;
-                    sample._clip.duration = Math.ceil(60000 / sample.config.ControlSettings.tempo);
-                    sample._clip.beats = Math.ceil(seconds * 1000 / sample._clip.duration);
+                    clip.length = frameCount;
+                    clip.duration = Math.ceil(60000 / sample.config.ControlSettings.tempo);
+                    clip.beats = Math.ceil(seconds * 1000 / clip.duration);
 
                     let index = 0;
 
@@ -503,14 +504,13 @@
                         image.src = file;
                         image._index = index++;
 
-                        sample._clip.thumbs[image._index] = image;
+                        clip.thumbs[image._index] = image;
 
                         image.onload = () => {
-
                             loaded += step; // see if next will bee too much
                             if (loaded >= frameCount) {
-                                sample._clip.ready = true;
-                                callback(sample._clip);
+                                clip.ready = true;
+                                callback(clip);
                             }
                         };
                     }

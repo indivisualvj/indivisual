@@ -3,6 +3,9 @@
  */
 {
     HC.GuifyController = class GuifyController extends HC.GuifyItem {
+
+        _uniqueKey;
+
         /**
          *
          * @param parent
@@ -14,6 +17,11 @@
             this.parent = parent;
             if (!(parent instanceof HC.Guify)) {
                 opts.folder = parent.getComponent();
+            }
+
+            if (opts.uniqueKey) {
+                this._uniqueKey = opts.uniqueKey;
+                delete opts.uniqueKey;
             }
 
             if (opts.onChange) {
@@ -142,6 +150,14 @@
 
         /**
          *
+         * @returns {string}
+         */
+        getUniqueKey() {
+            return this._uniqueKey || this.getProperty();
+        }
+
+        /**
+         *
          * @return {*}
          */
         getValue() {
@@ -194,7 +210,7 @@
             let d = getDigits(s);
 
             if (isFloat(s)) {
-                s *= Math.ceil(factor);
+                s *= Math.ceil(factor||1);
             }
 
             v += s;
@@ -214,7 +230,7 @@
             let d = getDigits(s);
 
             if (isFloat(s)) {
-                s *= Math.ceil(factor);
+                s *= Math.ceil(factor||1);
             }
 
             v -= s;

@@ -107,7 +107,7 @@
 
                     } else { // always reset but do it slowly
                         HC.TimeoutManager.getInstance().add('updatePreset.' + layer, layer * SKIP_TEN_FRAMES, () => {
-                            this.controller.updatePreset(false, {'info': {}}, layer);
+                            this.controller.resetLayer(layer);
                         });
                     }
                 }

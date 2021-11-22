@@ -137,6 +137,11 @@
             });
         }
 
+        /**
+         *
+         * @param path
+         * @param layer
+         */
         setInfoByPath(path, layer) {
             let control = this.gui.findByPath(path);
             if (control) {

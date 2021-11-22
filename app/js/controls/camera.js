@@ -28,10 +28,10 @@
             camera_rotationx: [-180, 180, 0.01],
             camera_rotationy: [-180, 180, 0.01],
             camera_rotationz: [-180, 180, 0.01],
-            camera_mode_volume: [-10, 10, 0.001],
-            camera_x: [-5, 5, 0.001],
-            camera_y: [-5, 5, 0.001],
-            camera_z: [-5, 5, 0.001],
+            camera_mode_volume: [-10, 10, 0.01],
+            camera_x: [-5, 5, 0.01],
+            camera_y: [-5, 5, 0.01],
+            camera_z: [-5, 5, 0.01],
         };
 
         styles = {

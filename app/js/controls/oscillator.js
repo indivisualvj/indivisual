@@ -17,12 +17,12 @@
         };
 
         types = {
-            osci1_period: [0, 8, 0.001],
-            osci1_amp: [0, 2, 0.001],
-            osci2_period: [0, 8, 0.001],
-            osci2_amp: [0, 2, 0.001],
-            osci3_period: [0, 8, 0.001],
-            osci3_amp: [0, 2, 0.001]
+            osci1_period: [0, 8, 0.01],
+            osci1_amp: [0, 2, 0.01],
+            osci2_period: [0, 8, 0.01],
+            osci2_amp: [0, 2, 0.01],
+            osci3_period: [0, 8, 0.01],
+            osci3_amp: [0, 2, 0.01]
         };
     }
 }

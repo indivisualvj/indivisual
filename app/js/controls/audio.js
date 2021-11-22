@@ -15,7 +15,7 @@
         };
         
         types = {
-            audio_thickness: [0, 0.99, 0.001],
+            audio_thickness: [0, 0.99, 0.01],
         };
 
         styles = {

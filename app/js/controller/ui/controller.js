@@ -177,7 +177,10 @@
          * @param v
          */
         setValue(v) {
-            this.getComponent().lastValue = this.getValue();
+            if (this.getComponent().opts.object && this.getProperty() in this.getComponent().opts.object) {
+                this.getComponent().opts.object[this.getProperty()] = v;
+            }
+            this.getComponent().lastValue = v;
             this.getComponent().SetValue(v);
         }
 

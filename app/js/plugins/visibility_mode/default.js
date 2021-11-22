@@ -11,7 +11,7 @@
         apply (display) {
             display.visible = true;
             display.blitz = false;
-            display.smear = false;
+            // display.smear = false;
             display.judder = false;
         }
     }

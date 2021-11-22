@@ -177,8 +177,8 @@
          * @param v
          */
         setValue(v) {
+            this.getComponent().lastValue = this.getValue();
             this.getComponent().SetValue(v);
-            this.getComponent().lastValue = v;
         }
 
         setRangeValue(v) {

@@ -167,7 +167,7 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
 
     for (let skey in sh) {
         let shs = sh[skey];
-        let shis = shi[skey];
+        let shis = shi[skey] || {};
 
         let label = skey;
 

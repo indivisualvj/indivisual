@@ -118,9 +118,9 @@ HC.Controller.prototype.initStatusBar = function () {
 
 /**
  *
- * @param submit
+ * @param onChange
  */
-HC.Controller.prototype.addPassesFolder = function (submit) {
+HC.Controller.prototype.addPassesFolder = function (onChange) {
 
     let passes = this.animationSettingsGui.getChild('passes');
     if (passes) {
@@ -129,7 +129,7 @@ HC.Controller.prototype.addPassesFolder = function (submit) {
     let ui = new HC.ControlSetGuifyUi(this.settingsManager.getGlobalProperties()['passes'], this.animationSettingsGui);
     let dir = ui.addFolder();
 
-    dir.addSelectController('pass', 'pass', {pass: ''}, this.config.AnimationValues.shaders, submit);
+    dir.addSelectController('pass', 'pass', {pass: ''}, this.config.AnimationValues.shaders, onChange);
 };
 
 
@@ -166,11 +166,6 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
     let submit = control.onChange();
 
     for (let skey in sh) {
-
-        if (!(skey in shi)) {
-            continue;
-        }
-
         let shs = sh[skey];
         let shis = shi[skey];
 

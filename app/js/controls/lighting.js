@@ -49,10 +49,10 @@
         types = {
             lighting_fog_near: [0, 5000, 1],
             lighting_fog_far: [500, 10000, 1],
-            lighting_intensity: [0, 10.0, 0.01],
-            lighting_ambient_intensity: [0, 1.0, 0.01],
-            lighting_penumbra: [0, 1, 0.01],
-            lighting_angle: [0, 1.05, 0.01],
+            lighting_intensity: [0, 10.0, 0.001],
+            lighting_ambient_intensity: [0, 1.0, 0.001],
+            lighting_penumbra: [0, 1, 0.001],
+            lighting_angle: [0, 1.05, 0.001],
         };
 
         styles = {

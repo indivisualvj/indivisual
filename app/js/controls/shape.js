@@ -55,9 +55,9 @@
             shape_modb: [0, 128, 1, 'half'],
             shape_modc: [0, 128, 1, 'half'],
             shape_transform: ['half'],
-            shape_transform_volume: [-5, 5, 0.01, 'half'],
+            shape_transform_volume: [-5, 5, 0.001, 'half'],
             shape_modifier: ['half'],
-            shape_modifier_volume: [-5, 5, 0.01, 'half'],
+            shape_modifier_volume: [-5, 5, 0.001, 'half'],
             shape_rhythm: ['half'],
             shape_delay: ['half'],
         };

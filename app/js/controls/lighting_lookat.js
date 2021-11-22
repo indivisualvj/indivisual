@@ -18,9 +18,9 @@
         };
         
         types = {
-            lighting_lookat_centerx: [-5, 5, 0.01],
-            lighting_lookat_centery: [-5, 5, 0.01],
-            lighting_lookat_centerz: [-5, 5, 0.01],
+            lighting_lookat_centerx: [-5, 5, 0.001],
+            lighting_lookat_centery: [-5, 5, 0.001],
+            lighting_lookat_centerz: [-5, 5, 0.001],
         };
 
         styles = {

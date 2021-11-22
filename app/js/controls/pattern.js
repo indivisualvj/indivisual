@@ -45,14 +45,14 @@
         };
         
         types = {
-            pattern_padding: [-10, 10, 0.01],
-            pattern_paddingx: [-10, 10, 0.01],
-            pattern_paddingy: [-10, 10, 0.01],
-            pattern_paddingz: [-10, 10, 0.01],
+            pattern_padding: [-10, 10, 0.001],
+            pattern_paddingx: [-10, 10, 0.001],
+            pattern_paddingy: [-10, 10, 0.001],
+            pattern_paddingz: [-10, 10, 0.001],
             pattern_shapes: [1, 512, 1],
-            pattern_centerx: [-5, 5, 0.01],
-            pattern_centery: [-5, 5, 0.01],
-            pattern_centerz: [-5, 5, 0.01],
+            pattern_centerx: [-5, 5, 0.001],
+            pattern_centery: [-5, 5, 0.001],
+            pattern_centerz: [-5, 5, 0.001],
             pattern_overlay_volume: [0, 1.0, 0.001]
         };
 

@@ -25,10 +25,10 @@
         };
         
         types = {
-            sizing_scale: [-10, 10, 0.01],
-            sizing_x: [-10, 10, 0.01],
-            sizing_y: [-10, 10, 0.01],
-            sizing_z: [-10, 10, 0.01],
+            sizing_scale: [-10, 10, 0.001],
+            sizing_x: [-10, 10, 0.001],
+            sizing_y: [-10, 10, 0.001],
+            sizing_z: [-10, 10, 0.001],
         };
 
         styles = {

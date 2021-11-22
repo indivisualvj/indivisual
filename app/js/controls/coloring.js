@@ -26,11 +26,11 @@
         };
         
         types = {
-            coloring_volume: [-10.0, 10.0, 0.01],
-            coloring_hue: [0, 360, 0.1],
-            coloring_lum: [0, 2, 0.01],
-            coloring_sat: [0, 2, 0.01],
-            coloring_opacity: [0, 1, 0.01],
+            coloring_volume: [-10.0, 10.0, 0.001],
+            coloring_hue: [0, 360, 0.01],
+            coloring_lum: [0, 2, 0.001],
+            coloring_sat: [0, 2, 0.001],
+            coloring_opacity: [0, 1, 0.001],
         };
 
         styles = {

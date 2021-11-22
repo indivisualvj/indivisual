@@ -57,16 +57,16 @@
             material_blendsrc: ['hidden'],
             material_blenddst: ['hidden'],
             material_shininess: [0, 100, 0.1],
-            material_roughness: [0, 1, 0.01],
-            material_metalness: [0, 1, 0.01],
+            material_roughness: [0, 1, 0.001],
+            material_metalness: [0, 1, 0.001],
             material_repeatx: [-32, 32, 0.001],
             material_repeaty: [-32, 32, 0.001],
             material_offsetx: [-5, 5, 0.001],
             material_offsety: [-5, 5, 0.001],
             material_centerx: [0, 1, 0.001],
             material_centery: [0, 1, 0.001],
-            material_rotation: [-180, 180, 0.01],
-            material_volume: [0, 10, 0.01]
+            material_rotation: [-180, 180, 0.001],
+            material_volume: [0, 10, 0.001]
         };
 
         styles = {

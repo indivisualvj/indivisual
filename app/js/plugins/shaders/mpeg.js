@@ -48,7 +48,7 @@
                 "tDiffuse": {type: "t", value: null},
                 "time": {type: "f", value: 1.0},
                 "strength": {type: "f", value: 1.0},
-                nSampler: {type: 't', value: 0, texture: null}
+                "nSampler": {type: 't', value: 0, texture: null}
             },
             vertexShader: `
                 varying vec2 vUv;

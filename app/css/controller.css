@@ -59,7 +59,7 @@ pre#osd {
     overflow-y: auto;
 }
 
-@media screen and (max-width: 960px) {
+@media screen and (max-width: 958px) {
     #status div {
         height: 44px;
     }

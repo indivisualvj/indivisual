@@ -22,7 +22,7 @@
             },
             size: {
                 value: 3,
-                _type: [0.5, 250, 1],
+                _type: [0.5, 250, 0.5],
                 audio: false,
                 stepwise: false,
                 oscillate: "off"

@@ -241,7 +241,7 @@
         deletePreset(ctrl) {
             this.filesystem.delete(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (result) => {
                 HC.log(result);
-                ctrl.remove();
+                ctrl.removeFromParent();
             });
         }
 

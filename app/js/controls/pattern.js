@@ -53,7 +53,7 @@
             pattern_centerx: [-5, 5, 0.01],
             pattern_centery: [-5, 5, 0.01],
             pattern_centerz: [-5, 5, 0.01],
-            pattern_overlay_volume: [0, 1.0, 0.01]
+            pattern_overlay_volume: [0, 1.0, 0.001]
         };
 
         styles = {

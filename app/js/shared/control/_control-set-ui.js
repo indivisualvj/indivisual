@@ -382,14 +382,9 @@
          */
         static onPasses(v, that) {
 
-            if (v !== null && v in messaging.program.config.AnimationValues.shaders) {
+            if (v !== null && v.length !== 0 && v in messaging.program.config.AnimationValues.shaders) {
                 let name = messaging.program.config.AnimationValues.shaders[v];
                 if (name !== null) {
-
-                    setTimeout(() => {
-                        that.setValue(0);
-                    }, 125);
-
                     let ctrl = new HC.ShaderPassUi(v);
                     let sh = JSON.copy(messaging.program.config.ShaderSettings[v]);
                     ctrl.init(sh);

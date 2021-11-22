@@ -8,6 +8,19 @@
 
         static index = 60;
 
+        hooks = {
+            onChange: (key, value, context, that) => {
+                if (context !== undefined) {
+                    let id = isObject(context) ? context.index : context;
+                    switch (key) {
+                        case 'lighting_pattern_lights':
+                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_LIGHTING, id, context, SKIP_TEN_FRAMES);
+                            break;
+                    }
+                }
+            }
+        };
+
         settings = {
             lighting_pattern: 'ring',
             lighting_pattern_lights: 1,

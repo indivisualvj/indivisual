@@ -115,6 +115,18 @@
 
         /**
          *
+         */
+        removeFromParent() {
+            if (this.getParent()) {
+                this.getParent().removeChild(this);
+
+            } else {
+                this.remove();
+            }
+        }
+
+        /**
+         *
          * @returns {string}
          */
         getLabel() {

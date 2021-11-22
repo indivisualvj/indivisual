@@ -29,10 +29,10 @@
             shape_lookat_centerx: [-2, 2, 0.01],
             shape_lookat_centery: [-2, 2, 0.01],
             shape_lookat_centerz: [-2, 2, 0.01],
-            pattern_rotation_multiplier: [-4, 4, 0.001],
-            locking_shapex_multiplier: [-4, 4, 0.001],
-            locking_shapey_multiplier: [-4, 4, 0.001],
-            locking_shapez_multiplier: [-4, 4, 0.001]
+            pattern_rotation_multiplier: [-4, 4, 0.01],
+            locking_shapex_multiplier: [-4, 4, 0.01],
+            locking_shapey_multiplier: [-4, 4, 0.01],
+            locking_shapez_multiplier: [-4, 4, 0.01]
         };
 
         styles = {

@@ -23,45 +23,40 @@
 
 	},
 
-	vertexShader: [
+	vertexShader: `
+		varying vec2 vUv;
+	
+		void main() {
+	
+		vUv = uv;
+		gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+	
+		}
+	`,
 
-	"varying vec2 vUv;",
-
-	"void main() {",
-
-	"vUv = uv;",
-	"gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );",
-
-	"}"
-
-	].join("\n"),
-
-	fragmentShader: [
-
-	"uniform sampler2D tDiffuse;",
-	"uniform float spacing;",
-	"uniform float size;",
-	"uniform float blur;",
-	"uniform vec2 resolution;",
-    "uniform bool punchedplate;",
-	"varying vec2 vUv;",
-
-	"void main() {",
-
-        "vec2 p = vUv;",
-        "if (!punchedplate) {",
-		"vec2 count = vec2(resolution/spacing);",
-		"p = floor(vUv*count)/count;",
-        "}",
-
-		"vec4 color = texture2D(tDiffuse, p);",
-
-		"vec2 pos = mod(gl_FragCoord.xy, vec2(spacing)) - vec2(spacing/2.0);",
-		"float dist_squared = dot(pos, pos);",
-        "float sz = spacing * size;",
-        "gl_FragColor = mix(color, vec4(0.0), smoothstep(sz, sz + size * blur, dist_squared));",
-		"}"
-
-		].join("\n")
-
-	};
+	fragmentShader: `
+		uniform sampler2D tDiffuse;
+		uniform float spacing;
+		uniform float size;
+		uniform float blur;
+		uniform vec2 resolution;
+		uniform bool punchedplate;
+		varying vec2 vUv;
+	
+		void main() {
+	
+			vec2 p = vUv;
+			if (!punchedplate) {
+				vec2 count = vec2(resolution/spacing);
+				p = floor(vUv*count)/count;
+			}
+	
+			vec4 color = texture2D(tDiffuse, p);
+	
+			vec2 pos = mod(gl_FragCoord.xy, vec2(spacing)) - vec2(spacing/2.0);
+			float dist_squared = dot(pos, pos);
+			float sz = spacing * size;
+			gl_FragColor = mix(color, vec4(0.0), smoothstep(sz, sz + size * blur, dist_squared));
+		}
+	`
+};

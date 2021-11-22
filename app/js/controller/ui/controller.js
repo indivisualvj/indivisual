@@ -118,24 +118,28 @@
             });
 
             valueComponent.addEventListener('mousedown', (e) => {
-                active = true;
-                window.addEventListener('mousemove', (e) => {
-                    if (active) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        let dy = e.movementY;
-                        let resY = window.screen.availHeight;
-                        let vy = Math.abs(dy / (resY/512));
-                        if (dy < 0) {
-                            this.incrementValue(vy);
+                let entry = e.screenY;
+                let resY = window.screen.availHeight;
 
-                        } else if (dy > 0) {
-                            this.decrementValue(vy);
-                        }
+                let _handle = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    let deltaY = entry - e.screenY;//e.movementY;
+                    let value = (deltaY / (resY/256));
+
+                    if (value > 1) {
+                        this.incrementValue();
+                        entry = e.screenY;
+
+                    } else if (value < -1) {
+                        this.decrementValue();
+                        entry = e.screenY;
                     }
-                });
+                };
+
+                window.addEventListener('mousemove', _handle);
                 window.addEventListener('mouseup', (e) => {
-                    active = false;
+                    window.removeEventListener('mousemove', _handle);
                 });
             });
         }
@@ -173,8 +177,11 @@
          * @param v
          */
         setValue(v) {
-            this.getComponent().SetValue(v);
+            if (this.getComponent().opts.object && this.getProperty() in this.getComponent().opts.object) {
+                this.getComponent().opts.object[this.getProperty()] = v;
+            }
             this.getComponent().lastValue = v;
+            this.getComponent().SetValue(v);
         }
 
         setRangeValue(v) {

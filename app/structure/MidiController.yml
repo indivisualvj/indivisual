@@ -139,10 +139,6 @@
         name: sample4_beats
 
     5:
-      default:
-        type: select
-        section: Source
-        name: override_material_input
       sequence:
         type: volume
         section: Source
@@ -224,9 +220,9 @@
 
     10:
       default:
-        type: step
-        section: Display
-        name: border
+        type: select
+        section: Control
+        name: shuffle_mode
       sequence:
         type: boolean
         section: Source
@@ -241,10 +237,10 @@
         name: lighting_type
 
     11:
-  #    default:
-  #      type: select
-  #      section: Display
-  #      name: border_speed
+      default:
+        type: step
+        section: Control
+        name: shuffle_every
       sequence:
         type: boolean
         section: Source
@@ -253,20 +249,12 @@
         type: function
         section: Source
         name: sample3_X
-      display:
-        type: select
-        section: Display
-        name: lighting_speed
 
     12:
-  #    default:
-  #      type: boolean
-  #      section: Control
-  #      name: shuffle
       default:
         type: select
-        section: Control
-        name: shuffle_mode
+        section: Source
+        name: override_material_input
       sequence:
         type: boolean
         section: Source
@@ -278,9 +266,9 @@
 
     13:
       default:
-        type: step
-        section: Control
-        name: shuffle_every
+        type: select
+        section: Source
+        name: override_background_mode
       sequence:
         type: boolean
         section: Source
@@ -291,10 +279,6 @@
         name: sample5_X
 
     14:
-  #    default:
-  #      type: select
-  #      section: Control
-  #      name: shuffle_mode
       sequence:
         type: boolean
         section: Source

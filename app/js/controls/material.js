@@ -13,7 +13,7 @@
                     let id = isObject(context) ? context.index : context;
                     switch (key) {
                         case 'mesh_material':
-                        case 'override_material_inputping':
+                        case 'material_mapping':
                             HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_SHAPES, id, context);
                             break;
 
@@ -40,7 +40,7 @@
             material_softshading: false,
             material_shadowside: 1,
             material_input: 'texture',
-            override_material_inputping: 'default',
+            material_mapping: 'default',
             material_wraps: 'ClampToEdgeWrapping',
             material_wrapt: 'ClampToEdgeWrapping',
             material_repeatx: 1.0,
@@ -57,12 +57,12 @@
             material_blendsrc: ['hidden'],
             material_blenddst: ['hidden'],
             material_shininess: [0, 100, 0.1],
-            material_roughness: [0, 1, 0.01],
-            material_metalness: [0, 1, 0.01],
-            material_repeatx: [-32, 32, 0.001],
-            material_repeaty: [-32, 32, 0.001],
-            material_offsetx: [-5, 5, 0.001],
-            material_offsety: [-5, 5, 0.001],
+            material_roughness: [0, 1, 0.001],
+            material_metalness: [0, 1, 0.001],
+            material_repeatx: [-32, 32, 0.01],
+            material_repeaty: [-32, 32, 0.01],
+            material_offsetx: [-5, 5, 0.01],
+            material_offsety: [-5, 5, 0.01],
             material_centerx: [0, 1, 0.001],
             material_centery: [0, 1, 0.001],
             material_rotation: [-180, 180, 0.01],
@@ -84,7 +84,7 @@
             material_softshading: ['half', 'clear'],
             material_shadowside: ['half'],
             material_input: ['half', 'clear'],
-            override_material_inputping: ['half'],
+            material_mapping: ['half'],
             material_wraps: ['half', 'clear'],
             material_wrapt: ['half'],
             material_repeatx: ['half', 'clear'],

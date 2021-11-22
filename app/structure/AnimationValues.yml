@@ -35,7 +35,7 @@ material_shadowside:
   1: back
   2: double
 
-override_material_inputping:
+material_mapping:
   default: default
   f2b: front2back
 

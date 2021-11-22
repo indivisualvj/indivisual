@@ -397,9 +397,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 this.updateSettings(i, data, true, false, true);
 
-                if (this.settingsManager.layers[i]._preset) {
-                    this.explorer.setChanged(i+1, true);
-                }
+                this.explorer.setChanged(i+1, true);
 
                 this.messaging.emitSettings(i, data, false, false, true);
 
@@ -973,9 +971,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     }
 
-                    if (this.settingsManager.layers[i]._preset) {
-                        this.explorer.setChanged(i+1, true);
-                    }
+                    this.explorer.setChanged(i+1, true);
+                    this.updateUiPasses();
 
                     this.messaging.emitSettings(i, this.settingsManager.prepareLayer(i), false, false, true);
                 }

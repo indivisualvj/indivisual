@@ -31,12 +31,12 @@
         };
         
         types = {
-            rotation_x_volume: [-4, 4, 0.001],
-            rotation_y_volume: [-4, 4, 0.001],
-            rotation_z_volume: [-4, 4, 0.001],
-            rotation_offsetx: [-4, 4, 0.001],
-            rotation_offsety: [-4, 4, 0.001],
-            rotation_offsetz: [-4, 4, 0.001]
+            rotation_x_volume: [-4, 4, 0.01],
+            rotation_y_volume: [-4, 4, 0.01],
+            rotation_z_volume: [-4, 4, 0.01],
+            rotation_offsetx: [-4, 4, 0.01],
+            rotation_offsety: [-4, 4, 0.01],
+            rotation_offsetz: [-4, 4, 0.01]
         };
 
         styles = {

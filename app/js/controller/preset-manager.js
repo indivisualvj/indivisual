@@ -204,7 +204,11 @@
          */
         savePreset(ctrl) {
             let settings = this.settingsManager.prepareLayer(this.config.ControlSettings.layer);
-            this.filesystem.save(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), settings, (result) => {
+            let dir = ctrl.getParent().getLabel();
+            let label = ctrl.getLabel();
+            settings.info.name = HC.filePath(dir, label);
+
+            this.filesystem.save(STORAGE_DIR, dir, label, settings, (result) => {
                 HC.log(result);
                 ctrl.setChanged(null);
             });
@@ -249,11 +253,28 @@
          *
          * @param {HC.GuifyExplorerPreset} ctrl
          */
+        deleteFolder(ctrl) {
+            let confirmed = confirm('Do you want to delete "' + ctrl.getLabel() + '"?');
+            if (confirmed) {
+                this.filesystem.delete(STORAGE_DIR, null, ctrl.getLabel(), (result) => {
+                    HC.log(result);
+                    ctrl.removeFromParent();
+                });
+            }
+        }
+
+        /**
+         *
+         * @param {HC.GuifyExplorerPreset} ctrl
+         */
         deletePreset(ctrl) {
-            this.filesystem.delete(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (result) => {
-                HC.log(result);
-                ctrl.removeFromParent();
-            });
+            let confirmed = confirm('Do you want to delete "' + ctrl.getLabel() + '"?');
+            if (confirmed) {
+                this.filesystem.delete(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (result) => {
+                    HC.log(result);
+                    ctrl.removeFromParent();
+                });
+            }
         }
 
         /**
@@ -278,7 +299,24 @@
          *
          * @param {HC.GuifyItem} ctrl
          */
-        renameItem(ctrl) {
+        renameFolder(ctrl) {
+            let label = ctrl.getLabel();
+            label = prompt('Please specify a name (no duplicates)', label);
+
+            if (label) {
+                this.filesystem.rename(STORAGE_DIR, null, ctrl.getLabel(), label, (result) => {
+                    HC.log(result);
+                    ctrl.setLabel(label);
+                });
+
+            }
+        }
+
+        /**
+         *
+         * @param {HC.GuifyItem} ctrl
+         */
+        renamePreset(ctrl) {
             let label = ctrl.getLabel();
             let split = label.split('.');
             let suffix = '';
@@ -294,7 +332,7 @@
             if (label) {
                 label += suffix;
 
-                this.filesystem.rename(STORAGE_DIR, ctrl.getParent() ? ctrl.getParent().getLabel() : null, ctrl.getLabel(), label, (result) => {
+                this.filesystem.rename(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), label, (result) => {
                     HC.log(result);
                     ctrl.setLabel(label);
                 });

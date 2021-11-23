@@ -72,7 +72,6 @@ HC.numberExtract = function(item, prefix) {
 HC.parse = function (value, otype) {
 
     if (isString(value) && value.length === 0) {
-        debugger
         return HC.createEmptyOfType(otype);
     }
     else if (value === 'true') {

@@ -38,7 +38,7 @@
             this.component = this.gui.Register({
                 type: 'folder',
                 label: name,
-                folder: (this.getParent() ? this.getParent().getComponent() : null),
+                folder: (this.getParent() ? this.getParent().getLabel() : null),
                 open: open
             });
         }

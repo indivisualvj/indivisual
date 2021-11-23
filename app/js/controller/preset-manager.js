@@ -282,14 +282,16 @@
          * @param {HC.GuifyExplorer} ctrl
          */
         newFolder(ctrl) {
-            let name = '__NEW__';
+            let label = '__NEW__';
 
-            let input = prompt('Please specify a name', name);
-            if (input) {
-                name = input;
-                this.filesystem.mkdir(STORAGE_DIR, name, false, (result) => {
+            do {
+                label = prompt('Please specify a name (no duplicates)', label);
+            } while (label && ctrl.getChild(label));
+
+            if (label) {
+                this.filesystem.mkdir(STORAGE_DIR, label, false, (result) => {
                     HC.log(result);
-                    let folder = ctrl.addFolder(name);
+                    let folder = ctrl.addFolder(label);
                     folder.finishLayout({}, this);
                 });
             }
@@ -301,12 +303,15 @@
          */
         renameFolder(ctrl) {
             let label = ctrl.getLabel();
-            label = prompt('Please specify a name (no duplicates)', label);
+
+            do {
+                label = prompt('Please specify a name (no duplicates)', label);
+            } while (label && ctrl.getParent().getChild(label));
 
             if (label) {
                 this.filesystem.rename(STORAGE_DIR, null, ctrl.getLabel(), label, (result) => {
                     HC.log(result);
-                    ctrl.setLabel(label);
+                    ctrl.rename(label);
                 });
 
             }

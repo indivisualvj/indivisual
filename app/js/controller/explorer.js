@@ -69,18 +69,19 @@
          */
         load(callback) {
             this.messaging.files(STORAGE_DIR, (data) => {
+                let index = 0;
                 let _insert = (children, parent) => {
                     for (let k in children) {
                         let child = children[k];
 
                         if (child.type === 'folder') {
-                            let folder = parent.addFolder(child.name, null, false);
-                            _insert(child.children, folder);
-                            folder.finishLayout(child, this.presetMan);
-
+                            HC.TimeoutManager.getInstance().add('HC.Explorer.load.' + k, SKIP_TWO_FRAMES * index++, () => {
+                                let folder = parent.addFolder(child.name, null, false);
+                                _insert(child.children, folder);
+                                folder.finishLayout(child, this.presetMan);
+                            });
                         } else {
                             parent.addPreset(child, this.presetMan);
-
                         }
                     }
                 };

@@ -165,22 +165,22 @@ HC.ControlController = HC.ControlController || {};
         };
 
         events = {
-            play: (inst) => { return new HC.KeyEvent('keyup', [32], (e) => {
+            play: (inst) => { return new HC.KeyEvent('keydown', [32], (e) => {
                 this.config.messaging.program.updateControl('play', !this.config.ControlSettings.play, true, true, false);
             }, 'spc')},
-            reset: (inst) => { return new HC.KeyEvent('keyup', [46], (e) => {
+            reset: (inst) => { return new HC.KeyEvent('keydown', [46], (e) => {
                 inst.settings.reset();
             }, 'del')},
-            monitor: (inst) => { return new HC.KeyEvent('keyup', [36], (e) => {
+            monitor: (inst) => { return new HC.KeyEvent('keydown', [36], (e) => {
                 this.config.messaging.program.updateControl('monitor', !this.config.ControlSettings.monitor, true, true, false);
             }, 'hm')},
-            push_layers: (inst) => { return new HC.KeyEvent('keyup', [35], (e) => {
+            push_layers: (inst) => { return new HC.KeyEvent('keydown', [35], (e) => {
                 inst.settings.push_layers();
             }, 'end')},
-            push_sources: (inst) => { return new HC.KeyEvent('keyup', [34], (e) => {
+            push_sources: (inst) => { return new HC.KeyEvent('keydown', [34], (e) => {
                 inst.settings.push_sources();
             }, 'pgd')},
-            rst_shaders: (inst) => { return new HC.KeyEvent('keyup', [33], (e) => {
+            rst_shaders: (inst) => { return new HC.KeyEvent('keydown', [33], (e) => {
                 inst.settings.rst_shaders();
             }, 'pgu')},
         };

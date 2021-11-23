@@ -749,6 +749,12 @@ function filePath() {
     return args.join('/');
 }
 
+function _callIfDefined(callback) {
+    if (callback) {
+        callback();
+    }
+}
+
 /**
  *
  * @param dir
@@ -828,52 +834,63 @@ function _initConnection() {
             socket.join(data.name);
         });
 
-        socket.on('log', function (data) {
+        socket.on('log', function (data, callback) {
             _log('log', data);
-            _emit(data);
-        });
-
-        socket.on('attr', function (data) {
-            _log('attr', data);
-            _emit(data);
-        });
-
-        socket.on('midi', function (data) {
-            _log('midi', data);
-            _emit(data);
-        });
-
-        socket.on('data', function (data) {
-            _log('data', data);
             if (_emit(data)) {
+                _callIfDefined(callback);
             }
         });
 
-        socket.on('controls', function (data) {
+        socket.on('attr', function (data, callback) {
+            _log('attr', data);
+            if (_emit(data)) {
+                _callIfDefined(callback);
+            }
+        });
+
+        socket.on('midi', function (data, callback) {
+            _log('midi', data);
+            if (_emit(data)) {
+                _callIfDefined(callback);
+            }
+        });
+
+        socket.on('data', function (data, callback) {
+            _log('data', data);
+            if (_emit(data)) {
+                _callIfDefined(callback);
+            }
+        });
+
+        socket.on('controls', function (data, callback) {
             _log('controls', data);
             if (_emit(data)) {
                 _store(data, conf.unstorable.controls);
+                _callIfDefined(callback);
             }
         });
 
-        socket.on('displays', function (data) {
+        socket.on('displays', function (data, callback) {
             _log('displays', data);
             if (_emit(data)) {
                 _store(data, conf.unstorable.displays);
+                _callIfDefined(callback);
             }
         });
 
-        socket.on('sources', function (data) {
+        socket.on('sources', function (data, callback) {
             _log('sources', data);
             if (_emit(data)) {
                 _store(data, conf.unstorable.sources);
+                _callIfDefined(callback);
             }
         });
 
-        socket.on('settings', function (data) {
+        socket.on('settings', function (data, callback) {
             _log('settings', data);
             if (_emit(data)) {
                 _store(data, conf.unstorable.settings);
+                _callIfDefined(callback);
             }
         });
 
@@ -955,7 +972,6 @@ function _initConnection() {
             let nu = filePath(_HOME, data.dir, data.nu);
             fs.rename(old, nu, function () {
                 let msg = data.file + ' renamed to ' + data.nu;
-                // console.log(msg);
                 callback(msg);
             });
         });

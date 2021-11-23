@@ -66,7 +66,7 @@
             }
 
             if ((this.audioAnalyser.peak && randomBool())) {
-                let state = randomInt(0, 1);
+                let state = randomBool(3) ? 0 : 1;
                 shape.setMesh(params.states[state]);
             }
 

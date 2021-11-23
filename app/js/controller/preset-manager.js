@@ -180,20 +180,23 @@
          * @param {HC.GuifyExplorerFolder} ctrl
          */
         savePresets(ctrl) {
-            for (let k in ctrl.children) {
-                let child = ctrl.children[k];
-                let layer = parseInt(child.getInfo()) - 1;
+            let confirmed = confirm('Save all?');
+            if (confirmed) {
+                for (let k in ctrl.children) {
+                    let child = ctrl.children[k];
+                    let layer = parseInt(child.getInfo()) - 1;
 
-                if (layer >= 0 && child.getChanged()) {
-                    let save = (layer, child) => {
-                        let settings = this.settingsManager.prepareLayer(layer);
-                        this.filesystem.save(STORAGE_DIR, ctrl.getLabel(), child.getLabel(), settings, (result) => {
-                            HC.log(result);
-                            child.setChanged(null);
-                        }, '');
-                    };
+                    if (layer >= 0 && child.getChanged()) {
+                        let save = (layer, child) => {
+                            let settings = this.settingsManager.prepareLayer(layer);
+                            this.filesystem.save(STORAGE_DIR, ctrl.getLabel(), child.getLabel(), settings, (result) => {
+                                HC.log(result);
+                                child.setChanged(null);
+                            }, '');
+                        };
 
-                    save(layer, child);
+                        save(layer, child);
+                    }
                 }
             }
         }

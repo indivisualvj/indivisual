@@ -73,8 +73,7 @@
             let div = Math.PI * 0.5;
             let hseg = -div + (div / edges) * dir;
 
-            let geo = new THREE.CircleGeometry(radius, edges, hseg);
-            return geo;
+            return new THREE.CircleGeometry(radius, edges, hseg);
         }
     }
 }

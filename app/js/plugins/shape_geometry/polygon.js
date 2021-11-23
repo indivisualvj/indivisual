@@ -33,6 +33,10 @@
             }
         };
 
+        /**
+         *
+         * @returns {THREE.CircleGeometry}
+         */
         create() {
             let layer = this.layer;
 
@@ -40,13 +44,11 @@
             let dir = this.getModB(0, 0);
             let size = layer.shapeSize(.5);
 
-            let geometry = new HC.DirectionalCircle({
+            return new HC.DirectionalCircle({
                 edges: edges,
                 direction: dir,
                 radius: size
             }).create();
-
-            return geometry;
         }
     }
 }

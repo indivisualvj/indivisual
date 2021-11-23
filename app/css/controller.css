@@ -48,6 +48,8 @@ pre#osd {
     pointer-events: none;
     transition: opacity 0.15s;
     width: 75%;
+    min-height: 25%;
+    max-height: 25%;
     box-sizing: border-box;
     padding: 0;
 }

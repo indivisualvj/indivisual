@@ -65,7 +65,7 @@
             material_offsety: [-5, 5, 0.01],
             material_centerx: [0, 1, 0.001],
             material_centery: [0, 1, 0.001],
-            material_rotation: [-180, 180, 0.01],
+            material_rotation: [-180, 180, 0.1],
             material_volume: [0, 10, 0.01]
         };
 

@@ -27,9 +27,9 @@
             layer_positionx: [-5, 5, 0.01],
             layer_positiony: [-5, 5, 0.01],
             layer_positionz: [-5, 5, 0.01],
-            layer_rotationx: [-180, 180, 0.01],
-            layer_rotationy: [-180, 180, 0.01],
-            layer_rotationz: [-180, 180, 0.01]
+            layer_rotationx: [-180, 180, 0.1],
+            layer_rotationy: [-180, 180, 0.1],
+            layer_rotationz: [-180, 180, 0.1]
         };
 
         styles = {

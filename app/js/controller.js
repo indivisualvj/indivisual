@@ -850,9 +850,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         syncLayers(shuffleable) {
             let index = 0;
-            for (let layer in this.settingsManager.layers) {
-                layer = parseInt(layer);
-
+            for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
                 if (!shuffleable || -1 === shuffleable.indexOf(layer+1)) {
                     let to = 50 * index++;
                     HC.TimeoutManager.getInstance().add('syncLayer.' + layer, to, () => {

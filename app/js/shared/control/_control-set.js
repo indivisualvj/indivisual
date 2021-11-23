@@ -242,6 +242,11 @@ HC.controls = HC.controls || {};
         set(key, value, context) {
             if (key in this.settings) {
                 let oldValue = this.properties[key];
+
+                if ('onBeforeSet' in this.hooks) {
+                    value = this.hooks.onBeforeSet(key, value, context, this);
+                }
+
                 this.properties[key] = this.validate(key, value)
 
                 if ('onChange' in this.hooks && oldValue !== this.properties[key]) {

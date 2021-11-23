@@ -34,25 +34,26 @@ pre#log {
 
 pre#osd {
     position: fixed;
-    top: 50%;
-    left: 50%;
+    top: 33%;
+    left: 12.5%;
     display: block;
     opacity: 0;
-    width: 30vw;
-    max-width: 640px;
-    min-width: 310px;
-    height: 20vw;
-    padding: 0.1vw;
-    border: 6px solid rgba(68, 171, 218, 0.5);
+    border: 6px solid rgba(47, 161, 214, 0.5);
     border-radius: 1px;
-    margin: -10vw 0 0 -15vw;
-
+    margin: 0 0 0 0;
     background: rgba(0, 0, 0, 0.8);
-    color: #44abda;
+    color: #2fa1d6;
     font-size: 16px;
     z-index: 100;
     pointer-events: none;
     transition: opacity 0.15s;
+    width: 75%;
+    box-sizing: border-box;
+    padding: 0;
+}
+
+pre#osd div {
+    padding: 3px;
 }
 
 .fullscreenable:fullscreen {

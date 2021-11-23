@@ -1025,6 +1025,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * reset all of all settings
          */
         fullReset() {
+            let session = this.config.ControlSettings.session;
             assetman.disposeAll();
             this.explorer.reload();
             this.explorer.resetPresets();
@@ -1035,6 +1036,8 @@ document.addEventListener('DOMContentLoaded', function () {
             let sources = this.config.SourceSettingsManager.prepareFlat();
             let controls = this.config.ControlSettingsManager.prepareFlat();
             let displays = this.config.DisplaySettingsManager.prepareFlat();
+            controls.session = session;
+
             this.messaging.emitSources(sources, true, false, true);
             this.messaging.emitControls(controls, true, false, true);
             this.messaging.emitDisplays(displays, true, false, true);

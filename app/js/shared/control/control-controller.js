@@ -71,9 +71,6 @@ HC.ControlController = HC.ControlController || {};
             enable_mic: () => {
                 this.config.messaging.program.updateControl('audio', 'microphone', true, true, false);
             },
-            listen_keys: () => {
-
-            },
             layout_close: () => {
                 this.config.messaging.program.closeAll();
             },
@@ -155,9 +152,6 @@ HC.ControlController = HC.ControlController || {};
             layout_display: ['hidden'],
             layout_source: ['hidden'],
             layout_animation: ['hidden'],
-            layout_animation_fullscreen: ['hidden'],
-            layout_sequence_fullscreen: ['hidden'],
-            layout_source_fullscreen: ['hidden'],
             layout_override: ['hidden'],
             layout_close: ['hidden'],
         };

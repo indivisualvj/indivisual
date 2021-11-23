@@ -181,7 +181,6 @@ HC.Controller.prototype.initKeyboard = function () {
 
         if (e.key === 'Shift') {
             if (this.config.doubleShift) {
-
                 let open = this.nextOpenFolder();
                 if (open.gui.bar) {
                     open.gui.bar.input.focus();
@@ -189,6 +188,7 @@ HC.Controller.prototype.initKeyboard = function () {
 
                 clearTimeout(this.config.doubleShift);
                 this.config.doubleShift = false;
+
             } else {
                 this.config.doubleShift = setTimeout(() => {
                     this.config.doubleShift = false;
@@ -208,8 +208,8 @@ HC.Controller.prototype.initKeyboard = function () {
             }
             e.preventDefault();
             e.stopPropagation();
-            return;
 
+            return;
         }
 
         let char = String.fromCharCode(e.keyCode);
@@ -239,7 +239,6 @@ HC.Controller.prototype._initLayerKeys = function () {
             e.stopImmediatePropagation();
             let layer = id-1;
 
-            console.log('switch layer', layer);
             this.updateControl('layer', layer, true, true);
         });
     }
@@ -256,7 +255,6 @@ HC.Controller.prototype._initLayerKeys = function () {
             e.stopImmediatePropagation();
             let layer = id+9;
 
-            console.log('switch layer', layer);
             this.updateControl('layer', layer, true, true);
         });
     }

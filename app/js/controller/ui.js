@@ -465,7 +465,7 @@ HC.Controller.prototype.toggleByKey = function (ci, char, shiftKey) {
 
     // start a search on shift if possible or..
     // expand next open
-    if (!open.isExpanded()) {
+    if (!shiftKey && !open.isExpanded()) {
         if (ci < roots.length) {
             if (shiftKey && open.gui.bar) {
                 roots[ci].gui.bar.input.focus();
@@ -479,7 +479,7 @@ HC.Controller.prototype.toggleByKey = function (ci, char, shiftKey) {
     let controllers = open.getControllers();
 
     // reset on shift
-    if (shiftKey && controllers.length > 0) {
+    if (shiftKey && open.isExpanded() && controllers.length > 0) {
         this.resetFolder(open);
         return;
     }

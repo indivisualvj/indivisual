@@ -226,7 +226,7 @@
          */
         removeChildren() {
             for (let f in this.children) {
-                this.removeChild(this.children[f]);
+                this.removeChild(f);
             }
         }
 

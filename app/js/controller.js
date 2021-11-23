@@ -848,12 +848,12 @@ document.addEventListener('DOMContentLoaded', function () {
             this.messaging.emitSources(updates, true, true, false);
         }
 
-        syncLayers() {
+        syncLayers(shuffleable) {
             let index = 0;
             for (let layer in this.settingsManager.layers) {
                 layer = parseInt(layer);
 
-                if (this.config.shuffleable(layer+1)) {
+                if (!shuffleable || -1 === shuffleable.indexOf(layer+1)) {
                     let to = 50 * index++;
                     HC.TimeoutManager.getInstance().add('syncLayer.' + layer, to, () => {
                         this.syncLayer(layer);
@@ -1067,7 +1067,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.settingsManager.reset(shuffleable);
             shuffleable = this.config.ControlSettings.shuffleable.toIntArray();
             this.explorer.resetPresets(shuffleable);
-            this.syncLayers();
+            this.syncLayers(shuffleable);
         }
 
         /**

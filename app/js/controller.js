@@ -852,13 +852,13 @@ document.addEventListener('DOMContentLoaded', function () {
             let index = 0;
             for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
                 if (!shuffleable || -1 === shuffleable.indexOf(layer+1)) {
-                    let to = 50 * index++;
+                    let to = SKIP_FOUR_FRAMES * index++;
                     HC.TimeoutManager.getInstance().add('syncLayer.' + layer, to, () => {
                         this.syncLayer(layer);
                     });
                 }
             }
-            let to = ++index * 50;
+            let to = ++index * SKIP_FOUR_FRAMES;
 
             HC.TimeoutManager.getInstance().add('setLayer', to, () => {
                 let layer = this.config.ControlSettings.layer;

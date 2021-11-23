@@ -223,6 +223,22 @@
 
         /**
          *
+         * @param key
+         * @param label
+         */
+        renameChild(key, label) {
+            let child = this.getChild(key);
+            if (!child) {
+                child = key;
+                key = this.getChildKey(child);
+            }
+            child.setLabel(label);
+            delete this.children[key];
+            this.children[label] = child;
+        }
+
+        /**
+         *
          */
         removeChildren() {
             for (let f in this.children) {

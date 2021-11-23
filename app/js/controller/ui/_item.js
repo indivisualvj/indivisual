@@ -141,6 +141,15 @@
             this.getComponent().label.textContent = label;
         }
 
+        rename(label) {
+            if (this.getParent()) {
+                this.getParent().renameChild(this, label);
+
+            } else {
+                this.setLabel(label);
+            }
+        }
+
         /**
          *
          * @returns {*}

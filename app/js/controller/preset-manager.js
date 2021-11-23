@@ -334,7 +334,7 @@
 
                 this.filesystem.rename(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), label, (result) => {
                     HC.log(result);
-                    ctrl.setLabel(label);
+                    ctrl.rename(label);
                 });
 
             }

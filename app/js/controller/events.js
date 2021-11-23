@@ -2,10 +2,6 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    /**
-     *
-     * @type {HC.Event}
-     */
     HC.Event = class Event {
 
         /**
@@ -37,10 +33,6 @@
         }
     };
 
-    /**
-     *
-     * @type {HC.KeyEvent}
-     */
     HC.KeyEvent = class KeyEvent extends HC.Event {
 
         codes;
@@ -75,13 +67,33 @@
         }
     };
 
-    /**
-     *
-     * @type {HC.MouseEvent}
-     */
     HC.MouseEvent = class MouseEvent extends HC.Event {
 
     };
+
+    HC.Hotkey = class Hotkey extends HC.Event {
+
+        label;
+
+        /**
+         *
+         * @param type
+         * @param callback
+         * @param label
+         */
+        constructor(type, callback, label) {
+            super(type, callback);
+            this.label = label;
+        }
+
+        register(element) {
+            hotkeys(this.type, (e) => {
+                e.preventDefault();
+                this.callback(e);
+            });
+        }
+    };
+
 }
 
 
@@ -145,6 +157,8 @@ HC.Controller.prototype.initKeyboard = function () {
         setMnemonics(this.guis[key]);
     }
 
+    this._initLayerKeys();
+
     window.addEventListener('keyup', (e) => {
         this.config.ctrlKey = e.ctrlKey;
         this.config.altKey = e.altKey;
@@ -198,19 +212,6 @@ HC.Controller.prototype.initKeyboard = function () {
 
         }
 
-        if (e.keyCode in this.config.ControlValues.layer_keycodes) {
-            let val = this.config.ControlValues.layer_keycodes[e.keyCode];
-
-            if (e.ctrlKey) {
-                e.preventDefault();
-                e.stopPropagation();
-                val += 10;
-            }
-
-            this.updateControl('layer', val, true, true);
-            return;
-        }
-
         let char = String.fromCharCode(e.keyCode);
         let ci;
 
@@ -221,4 +222,42 @@ HC.Controller.prototype.initKeyboard = function () {
             this.toggleByKey(ci, char, e.shiftKey);
         }
     });
+};
+
+HC.Controller.prototype._initLayerKeys = function () {
+    let layers = Object.keys(this.config.ControlValues.layer).slice(0, 10);
+    for (const key in layers) {
+        let id = layers[key];
+        id = key>0?parseInt(id):10;
+        hotkeys(key, (e) => {
+            // never when in:
+            if (/INPUT|TEXTAREA|SELECT|BUTTON/.test(e.target.nodeName)) {
+                return;
+            }
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            let layer = id-1;
+
+            console.log('switch layer', layer);
+            this.updateControl('layer', layer, true, true);
+        });
+    }
+    for (const key in layers) {
+        let id = layers[key];
+        id = key>0?parseInt(id):10;
+        hotkeys('shift+' + key, (e) => {
+            // never when in:
+            if (/INPUT|TEXTAREA|SELECT|BUTTON/.test(e.target.nodeName)) {
+                return;
+            }
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            let layer = id+9;
+
+            console.log('switch layer', layer);
+            this.updateControl('layer', layer, true, true);
+        });
+    }
 };

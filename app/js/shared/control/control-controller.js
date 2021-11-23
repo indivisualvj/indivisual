@@ -68,6 +68,12 @@ HC.ControlController = HC.ControlController || {};
                 this.config.messaging.program.updateSettings(this.config.ControlSettings.layer, data, false, false, true);
                 this.config.messaging.emitSettings(this.config.ControlSettings.layer, data, false, false, true);
             },
+            enable_mic: () => {
+                this.config.messaging.program.updateControl('audio', 'microphone', true, true, false);
+            },
+            listen_keys: () => {
+
+            },
             layout_close: () => {
                 this.config.messaging.program.closeAll();
             },
@@ -120,17 +126,6 @@ HC.ControlController = HC.ControlController || {};
             shuffle_every: [1, 64, 1],
             volume: ['hidden'],
             debug: ['hidden'],
-            layout_control: ['hidden'],
-            layout_presets: ['hidden'],
-            layout_sequence: ['hidden'],
-            layout_display: ['hidden'],
-            layout_source: ['hidden'],
-            layout_animation: ['hidden'],
-            layout_animation_fullscreen: ['hidden'],
-            layout_sequence_fullscreen: ['hidden'],
-            layout_source_fullscreen: ['hidden'],
-            layout_override: ['hidden'],
-            layout_close: ['hidden'],
         };
 
         styles = {
@@ -153,6 +148,18 @@ HC.ControlController = HC.ControlController || {};
 
             shuffle_mode: ['half', 'clear'],
             shuffle_every: ['half'],
+            enable_mic: ['hidden'],
+            layout_control: ['hidden'],
+            layout_presets: ['hidden'],
+            layout_sequence: ['hidden'],
+            layout_display: ['hidden'],
+            layout_source: ['hidden'],
+            layout_animation: ['hidden'],
+            layout_animation_fullscreen: ['hidden'],
+            layout_sequence_fullscreen: ['hidden'],
+            layout_source_fullscreen: ['hidden'],
+            layout_override: ['hidden'],
+            layout_close: ['hidden'],
         };
 
         attributes = {
@@ -165,6 +172,46 @@ HC.ControlController = HC.ControlController || {};
         };
 
         events = {
+            enable_mic: (inst) => {
+                return new HC.Hotkey('ctrl+f9', (e) => {
+                    this.settings.enable_mic();
+                });
+            },
+            layout_control: (inst) => {
+                return new HC.Hotkey('ctrl+1', (e) => {
+                    this.settings.layout_control();
+                });
+            },
+            layout_presets: (inst) => {
+                return new HC.Hotkey('ctrl+2', (e) => {
+                    this.settings.layout_presets();
+                });
+            },
+            layout_sequence: (inst) => {
+                return new HC.Hotkey('ctrl+3', (e) => {
+                    this.settings.layout_sequence();
+                });
+            },
+            layout_display: (inst) => {
+                return new HC.Hotkey('ctrl+4', (e) => {
+                    this.settings.layout_display();
+                });
+            },
+            layout_source: (inst) => {
+                return new HC.Hotkey('ctrl+5', (e) => {
+                    this.settings.layout_source();
+                });
+            },
+            layout_animation: (inst) => {
+                return new HC.Hotkey('ctrl+6', (e) => {
+                    this.settings.layout_animation();
+                });
+            },
+            layout_close: (inst) => {
+                return new HC.Hotkey('ctrl+0', (e) => {
+                    this.settings.layout_close();
+                });
+            },
             play: (inst) => { return new HC.KeyEvent('keydown', [32], (e) => {
                 this.config.messaging.program.updateControl('play', !this.config.ControlSettings.play, true, true, false);
             }, 'spc')},

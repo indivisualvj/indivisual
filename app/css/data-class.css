@@ -127,3 +127,7 @@
     margin-right: 0%;
     clear: none !important;
 }
+
+[data-class="hidden"] {
+    display: none;
+}

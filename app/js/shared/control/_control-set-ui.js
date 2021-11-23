@@ -185,7 +185,7 @@
                 }
             }
 
-            // _check if hidden
+            // check if hidden
             if (types && types.length > 0) {
                 if(types[types.length - 1] === 'hidden') {
                     return;
@@ -194,7 +194,6 @@
 
             // shorten name by regexp
             let reg = new RegExp('^' + folder.getLabel() + '(.+)');
-            // let reg = new RegExp('\\w+_([^_]+)$');
             let name = key.replace(reg, '$1');
 
             let config = {
@@ -202,7 +201,6 @@
                 label: name,
                 object: props,
                 property: key,
-                // key: key,
                 onChange: (value, ctrl) => {
                     this.onChange(value, ctrl);
                 },
@@ -212,9 +210,7 @@
 
             if (types[types.length - 1] === 'display') {
                 config.type = 'display';
-                // config.label = '';
                 delete config.onChange;
-                // delete config.property;
                 delete config.object;
 
             } else if (typeof value == 'function') {
@@ -238,7 +234,6 @@
 
             } else if (typeof value == 'string' && value.startsWith('#')) {
                 config.type = 'text';
-                // config.format = 'hex';
 
             } else if (values) {
                 config.type = 'select';

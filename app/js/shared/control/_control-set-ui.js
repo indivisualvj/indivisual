@@ -147,9 +147,6 @@
 
             container.setAttribute('data-border', border);
             container.setAttribute('data-id', key);
-            if (this.folder.getParent()) { // fixme: need thath?
-                container.setAttribute('data-parent', this.folder.getParent().getLabel());
-            }
         }
 
         /**

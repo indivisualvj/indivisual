@@ -934,8 +934,7 @@ document.addEventListener('DOMContentLoaded', function () {
             data = this.settingsManager.prepareLayer(layer);
             if (this.settingsManager.get(layer, 'info').hasTutorial()) {
                 new HC.ScriptProcessor(this, name, Object.create(data.info.tutorial)).log();
-
-                data.info.tutorial = {}; // fixme tutorial will be deleted on savePreset
+                data.info.tutorial = {};
             }
 
             this.messaging.emitSettings(layer, data, false, false, true);

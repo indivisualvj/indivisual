@@ -215,17 +215,28 @@
          * @param {HC.GuifyExplorerFolder} ctrl
          */
         newPreset(ctrl) {
-            let name = Object.keys(ctrl.children).length.toString();
+            let index = (Object.keys(ctrl.children).length + 1);
+            while (ctrl.getChild(index + '.json')) { // lookup for existing
+                index++;
+            }
+            let label = index.toString();
 
-            let input = prompt('Please specify a name', name);
-            if (input) {
-                name = input;
+            do {
+                label = prompt('Please specify a name (no duplicates)', label);
+            } while (label && ctrl.getChild(label + '.json'));
+
+            if (label) {
+                label += '.json';
+
+                let preset = this.settingsManager.prepareLayer(this.config.ControlSettings.layer);
                 let nu = {
                     type: 'file',
                     dir: ctrl.getLabel(),
-                    name: name + '.json',
-                    settings: this.settingsManager.prepareLayer(this.config.ControlSettings.layer)
+                    name: label,
+                    settings: preset
                 };
+
+                preset.info.name = HC.filePath(nu.dir, nu.name);
 
                 this.filesystem.save(STORAGE_DIR, nu.dir, nu.name, nu.settings, (result) => {
                     HC.log(result);
@@ -268,22 +279,24 @@
          * @param {HC.GuifyItem} ctrl
          */
         renameItem(ctrl) {
-            let name = ctrl.getLabel();
-            let split = name.split('.');
+            let label = ctrl.getLabel();
+            let split = label.split('.');
             let suffix = '';
             if (split.length > 1) {
-                name = split[0];
+                label = split[0];
                 suffix = '.' + split[1];
             }
-            let input = prompt('Please specify a name', name);
-            if (input) {
-                name = input;
-                if (suffix) {
-                    name += suffix;
-                }
-                this.filesystem.rename(STORAGE_DIR, ctrl.getParent() ? ctrl.getParent().getLabel() : null, ctrl.getLabel(), name, (result) => {
+
+            do {
+                label = prompt('Please specify a name (no duplicates)', label);
+            } while (label && ctrl.getParent().getChild(label + suffix));
+
+            if (label) {
+                label += suffix;
+
+                this.filesystem.rename(STORAGE_DIR, ctrl.getParent() ? ctrl.getParent().getLabel() : null, ctrl.getLabel(), label, (result) => {
                     HC.log(result);
-                    ctrl.setLabel(name);
+                    ctrl.setLabel(label);
                 });
 
             }

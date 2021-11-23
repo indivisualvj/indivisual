@@ -346,8 +346,9 @@
          * @param display
          * @param forward
          * @param force
+         * @param callback
          */
-        emitSettings(layer, data, display, forward, force) {
+        emitSettings(layer, data, display, forward, force, callback) {
             let config = {
                 action: 'settings',
                 data: data,
@@ -357,7 +358,7 @@
                 layer: layer
             };
 
-            this._emit(config);
+            this._emit(config, callback);
         }
 
         /**

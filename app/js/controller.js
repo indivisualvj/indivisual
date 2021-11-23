@@ -848,21 +848,41 @@ document.addEventListener('DOMContentLoaded', function () {
             this.messaging.emitSources(updates, true, true, false);
         }
 
+        /**
+         *
+         * @param shuffleable
+         * @returns {Promise}
+         */
         syncLayers(shuffleable) {
-            let index = 0;
-            for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
-                if (!shuffleable || -1 === shuffleable.indexOf(layer+1)) {
-                    let to = SKIP_FOUR_FRAMES * index++;
-                    HC.TimeoutManager.getInstance().add('syncLayer.' + layer, to, () => {
-                        this.syncLayer(layer);
-                    });
+            return new Promise((resolve, reject) => {
+                let calls = [];
+                for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
+                    if (!shuffleable || -1 === shuffleable.indexOf(layer+1)) {
+                        calls.push(/* _call = */(_synced) => {
+                            HC.TimeoutManager.getInstance().add('syncLayer.' + layer, SKIP_FOUR_FRAMES, () => {
+                                this.syncLayer(layer, _synced);
+                            });
+                        })
+                    }
                 }
-            }
-            let to = ++index * SKIP_FOUR_FRAMES;
 
-            HC.TimeoutManager.getInstance().add('setLayer', to, () => {
-                let layer = this.config.ControlSettings.layer;
-                this.updateControl('layer', layer, true, true, true);
+                calls.push((_synced) => {
+                    this.updateControl('layer', 0, true, true, false);
+                    _synced();
+                });
+
+                let _load = function (index) {
+                    if (index >= calls.length) {
+                        resolve();
+                        return;
+                    }
+                    let _call = calls[index];
+                    _call(/*_synced = */function () {
+                        _load(index + 1);
+                    });
+                };
+
+                _load(0);
             });
         }
 
@@ -870,34 +890,42 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         pushSources() {
-            this._bypassMonitor(() => {
+            this._bypassMonitor(new Promise((resolve, reject) => {
                 this.messaging.emitSources(this.config.SourceSettingsManager.prepareFlat(), true, true, false);
-            });
+            }));
         }
 
         pushLayers() {
-            this._bypassMonitor(() => {
-                this.syncLayers();
-            });
+            this._bypassMonitor(this.syncLayers());
         }
 
-        _bypassMonitor(fn) {
+        /**
+         *
+         * @param promise {Promise}
+         * @private
+         */
+        _bypassMonitor(promise) {
             let monitorStatus = this.config.ControlSettings.monitor;
             this.updateControl('monitor', false, false, true, false);
-            fn();
-            this.updateControl('monitor', monitorStatus, false, true, false);
+            promise.finally(() => {
+                this.updateControl('monitor', monitorStatus, false, true, false);
+            });
         }
 
         /**
          *
          * @param layer
+         * @param callback
          */
-        syncLayer(layer) {
+        syncLayer(layer, callback) {
             let settings = this.settingsManager.prepareLayer(layer);
 
             if (settings) {
                 HC.log('sync_layer', layer+1);
-                this.messaging.emitSettings(layer, settings, true, false, true);
+                this.messaging.emitSettings(layer, settings, true, false, true, callback);
+
+            } else if (callback) {
+                callback();
             }
         }
 
@@ -1044,7 +1072,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.updateSources(sources, true, true, true);
             this.updateControls(controls, true, true, true);
             this.updateDisplays(displays, true, true, true);
-            this.syncLayers();
+            this.syncLayers().finally();
             this._checkDisplayVisibility();
         }
 
@@ -1067,7 +1095,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.settingsManager.reset(shuffleable);
             shuffleable = this.config.ControlSettings.shuffleable.toIntArray();
             this.explorer.resetPresets(shuffleable);
-            this.syncLayers(shuffleable);
+            this.syncLayers(shuffleable).finally();
         }
 
         /**

@@ -21,7 +21,8 @@
             let div = this.getModC(1, 1);
             let step = layer.shapeSize(.5) / div;
             let hstep = step / 2;
-            let geometry = new THREE.Geometry();
+
+            let geometries = [];
             for (let i = step; i <= layer.shapeSize(.5); i += step) {
                 let circ = new HC.DirectionalRing({
                     innerRadius: i - hstep,
@@ -30,9 +31,10 @@
                     direction: dir
                 }).create();
 
-                let mesh = new THREE.Mesh(circ);
-                geometry.merge(mesh.geometry, mesh.matrix);
+                geometries.push(circ);
             }
+            let geometry = THREE.BufferGeometryUtils.mergeBufferGeometries(geometries);
+            geometry.center();
 
             return geometry;
         }

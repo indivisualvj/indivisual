@@ -10,7 +10,7 @@
         create() {
             let layer = this.layer;
 
-            let geo = new THREE.Geometry();
+            let geo = new THREE.BufferGeometry();
             let plane = new THREE.PlaneGeometry(layer.shapeSize(1) * 1.15, layer.shapeSize(1) / 14);
 
             let pmesh = new THREE.Mesh(plane);

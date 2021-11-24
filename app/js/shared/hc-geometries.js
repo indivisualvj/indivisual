@@ -234,34 +234,27 @@
          *
          * @param vtcs
          * @param multiplier
-         * @returns {THREE.Geometry}
+         * @returns {THREE.BufferGeometry}
          */
         fromString(vtcs, multiplier) {
 
             vtcs = vtcs
                 ? '[' + vtcs + ']'
-                : '[[' + (-1) + ',' + (1) + ',0],[' + (1) + ',' + (1) + ',0],[' + (1) + ',' + (-1) + ',0]]';
+                : '[[' + (-1) + ',' + (-1) + ',1],[' + (1) + ',' + (-1) + ',1],[' + (-1) + ',' + (1) + ',1]]';
             vtcs = JSON.parse(vtcs);
 
-            let geometry = new THREE.Geometry();
-
+            let points = [];
+            let normals = [];
             for (let i = 0; i < vtcs.length; i++) {
                 let vtc = vtcs[i];
                 let vec = new THREE.Vector3(round(multiplier * vtc[0], 0), round(multiplier * vtc[1], 0), 0);
-                geometry.vertices.push(vec);
-                if (i % 3 === 0) geometry.faces.push(new THREE.Face3(i + 0, i + 1, i + 2));
+                points.push(vec);
+                if (i % 3 === 0) normals.push([i, i + 1, i + 2]);
             }
-
-            geometry.computeFaceNormals();
-            let n = geometry.faces;
-            for (let i = 0; i < n.length; i++) {
-                let face = n[i];
-                if (face.normal.z < 0) { // _check for twisted faces and twist
-                    let tmp = face.a;
-                    face.a = face.c;
-                    face.c = tmp;
-                }
-            }
+            let geometry = new THREE.BufferGeometry().setFromPoints(points);
+            geometry.setAttribute('normal', new THREE.BufferAttribute(new Float32Array(normals), 3));
+            // geometry.computeVertexNormals();
+            geometry.attributes.normal.needsUpdate = true;
 
             return geometry;
         }

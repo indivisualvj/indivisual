@@ -13,7 +13,7 @@ HC.plugins.shape_geometry = HC.plugins.shape_geometry || {};
                 let geometry = this.create();
 
                 if (this.controlSets.material.properties.material_mapping === 'f2b') {
-                    HC.UVGenerator.front2back(geometry);
+                    HC.BufferGeometryUtils.front2back(geometry);
                 }
 
                 if (!this.ready()) { // return (fallback) geometry

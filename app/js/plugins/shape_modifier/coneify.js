@@ -36,7 +36,7 @@
 
                 geometry.verticesNeedUpdate = true;
 
-            } else if (!vertices) {
+            } else {
                 console.warn('No transform for ' + geometry.type);
             }
 

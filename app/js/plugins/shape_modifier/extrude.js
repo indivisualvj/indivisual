@@ -58,7 +58,7 @@
                 geometry.center();
                 geometry.verticesNeedUpdate = true;
 
-                HC.UVGenerator.front2back(geometry);
+                HC.BufferGeometryUtils.front2back(geometry);
             }
 
             return geometry;

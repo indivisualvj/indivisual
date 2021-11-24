@@ -114,7 +114,9 @@
             let gapys = gapy / 2;
 
             if (gridPosition.y % 2 === 0) {
-                gapxs -= gapx/2;
+                gapxs -= gapx/4;
+            } else {
+                gapxs += gapx/4;
             }
 
             let x = ox + gridPosition.x * gapx - gapxs;

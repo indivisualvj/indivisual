@@ -1,14 +1,15 @@
 {
     HC.plugins.pattern.hive = class Plugin extends HC.PatternPlugin {
-        static name = 'hive';
+        static name = 'hive (hexagon)';
 
         apply(shape) {
             let layer = this.layer;
-            let gapx = layer.shapeSize(1) * 0.745 * this.settings.pattern_paddingx;
-            let nh = layer.shapeSize(1) * 0.86 * this.settings.pattern_paddingy;
-            let gapy = nh;
             let matrix = layer.getPatternPlugin('matrix');
             let gridPosition = matrix.gridPosition(shape);
+            let gpadx = this.settings.pattern_paddingx * .87;
+            let gpady = this.settings.pattern_paddingy * .75;
+            let gapx = layer.shapeSize(1) * gpadx;
+            let gapy = layer.shapeSize(1) * gpady;
 
             gapx *= this.settings.pattern_padding;
             gapy *= this.settings.pattern_padding;
@@ -16,19 +17,15 @@
             let ox = (-gapx * matrix.columnCount(layer)) / 2;
             let oy = (-gapy * matrix.rowCount(layer)) / 2;
 
-            if (gridPosition.y % 2 === 0) {
-                if (shape.index % 2 === 0) {
-                    oy -= nh / 2 * this.settings.pattern_padding * this.settings.pattern_paddingx;
-                }
+            let gapxs = gapx / 2;
+            let gapys = gapy / 2;
 
-            } else {
-                if (shape.index % 2 === 1) {
-                    oy -= nh / 2 * this.settings.pattern_padding * this.settings.pattern_paddingy;
-                }
+            if (gridPosition.y % 2 === 0) {
+                gapxs -= gapx/2;
             }
 
-            let x = ox + gridPosition.x * gapx - gapx / 2;
-            let y = oy + gridPosition.y * gapy - gapy / 4;
+            let x = ox + gridPosition.x * gapx - gapxs;
+            let y = oy + gridPosition.y * gapy - gapys;
             let z = 0;
 
             layer.positionIn3dSpace(shape, x, -y, z);
@@ -39,29 +36,55 @@
 }
 {
     HC.plugins.pattern.trihive = class Plugin extends HC.PatternPlugin {
-        static name = 'trihive';
+        static name = 'hive (triangle)';
+
+        injections = {
+            center: null,
+        }
 
         apply(shape) {
+            let params = this.params(shape);
+            if (!params.center) {
+                shape.geometry.computeBoundingSphere();
+                params.center = shape.geometry.boundingSphere.center;
+            }
             let layer = this.layer;
-
             let matrix = layer.getPatternPlugin('matrix');
             let gridPosition = matrix.gridPosition(shape);
-            let size = layer.shapeSize(1);
-            let gapx = size * 0.43 * this.settings.pattern_paddingx;
-            let gapy = size * 0.748 * this.settings.pattern_paddingy;
+            let gpadx = this.settings.pattern_paddingx * .435;
+            let gpady = this.settings.pattern_paddingy * .751;
+            let gpad = this.settings.pattern_padding;
 
-            gapx *= this.settings.pattern_padding;
-            gapy *= this.settings.pattern_padding;
+            let gapx = layer.shapeSize(1) * gpadx;
+            let gapy = layer.shapeSize(1) * gpady;
+
+            gapx *= gpad;
+            gapy *= gpad;
 
             let ox = (-gapx * matrix.columnCount(layer)) / 2;
             let oy = (-gapy * matrix.rowCount(layer)) / 2;
 
-            if (shape.index % 2 === 1) {
-                oy -= layer.shapeSize(.5) * 0.5 * this.settings.pattern_padding * this.settings.pattern_paddingx;
+            let gapxs = gapx / 2;
+            let gapys = gapy / 2;
+
+            let diff = -params.center.y * shape.size();
+
+            if (gridPosition.y % 2 === 1) {
+                if (gridPosition.x % 2 === 0) {
+                    gapys += diff;
+                } else {
+                    gapys -= diff;
+                }
+            } else {
+                if (gridPosition.x % 2 === 0) {
+                    gapys -= diff;
+                } else {
+                    gapys += diff;
+                }
             }
 
-            let x = ox + gridPosition.x * gapx - gapx / 2;
-            let y = oy + gridPosition.y * gapy - gapy / 4;
+            let x = ox + gridPosition.x * gapx - gapxs;
+            let y = oy + gridPosition.y * gapy - gapys;
             let z = 0;
 
             layer.positionIn3dSpace(shape, x, -y, z);
@@ -72,27 +95,30 @@
 }
 {
     HC.plugins.pattern.ruehive = class Plugin extends HC.PatternPlugin {
-        static name = 'ruehive';
+        static name = 'hive (rue)';
 
         apply(shape) {
             let layer = this.layer;
             let matrix = layer.getPatternPlugin('matrix');
             let gridPosition = matrix.gridPosition(shape);
             let gapx = layer.shapeSize(1) * this.settings.pattern_paddingx;
-            let gapy = 0.5 * layer.shapeSize(1) * this.settings.pattern_paddingy;
+            let gapy = layer.shapeSize(1) * this.settings.pattern_paddingy / 2;
 
             gapx *= this.settings.pattern_padding;
             gapy *= this.settings.pattern_padding;
 
-            let ox = -gapx * matrix.columnCount(layer) / 2;
-            let oy = -gapy * matrix.rowCount(layer) / 2;
+            let ox = (-gapx * matrix.columnCount(layer)) / 2;
+            let oy = (-gapy * matrix.rowCount(layer)) / 2;
 
-            if (gridPosition.y % 2 === 1) {
-                ox -= layer.shapeSize(.5);
+            let gapxs = gapx / 2;
+            let gapys = gapy / 2;
+
+            if (gridPosition.y % 2 === 0) {
+                gapxs -= gapx/2;
             }
 
-            let x = ox + gridPosition.x * gapx - gapx / 2;
-            let y = oy + gridPosition.y * gapy - gapy / 2;
+            let x = ox + gridPosition.x * gapx - gapxs;
+            let y = oy + gridPosition.y * gapy - gapys;
             let z = 0;
 
             layer.positionIn3dSpace(shape, x, -y, z);

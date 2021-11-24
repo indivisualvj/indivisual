@@ -35,7 +35,6 @@ pre#log {
 pre#osd {
     position: fixed;
     top: 33%;
-    left: 12.5%;
     display: block;
     opacity: 0;
     border: 6px solid rgba(47, 161, 214, 0.5);
@@ -47,7 +46,8 @@ pre#osd {
     z-index: 100;
     pointer-events: none;
     transition: opacity 0.15s;
-    width: 75%;
+    left: 33.33%;
+    width: 33.33%;
     min-height: 25%;
     max-height: 25%;
     box-sizing: border-box;
@@ -92,6 +92,11 @@ pre#osd div {
         position: fixed;
         width: 99.4%;
         top: 0;
+    }
+
+    pre#osd {
+        left: 12.5%;
+        width: 75%;
     }
 
     .blockfocus {

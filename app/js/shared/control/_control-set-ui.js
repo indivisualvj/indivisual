@@ -256,8 +256,10 @@
 
             if (events) {
                 let e = events(this.controlSet);
-                controller.setMnemonic(e.label);
-                e.register(window);
+                if (e instanceof HC.Event) {
+                    controller.setMnemonic(e.label);
+                    e.register(window);
+                }
 
                 /**
                  * often events are assigned to button components to represent global keystrokes.

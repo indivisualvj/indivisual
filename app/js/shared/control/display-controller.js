@@ -12,6 +12,20 @@ HC.DisplayController = HC.DisplayController || {};
 
         static index = 10;
 
+        hooks = {
+            onBeforeSet: (key, value) => {
+                switch (key) {
+                    case 'resolution':
+                        if (!value || !value.length) {
+                            return window.screen.availWidth + 'x' + window.screen.availHeight;
+                        }
+                        break;
+                }
+
+                return value;
+            }
+        }
+
         settings = {
             fps: 60,
             resolution: '1280x720',

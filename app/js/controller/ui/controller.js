@@ -76,8 +76,6 @@
                     return;
                 }
 
-                // e.stopPropagation();
-
                 if (valueComponent.nodeName === 'INPUT') {
                     if (e.key === 'Escape') {
                         valueComponent.blur();
@@ -90,7 +88,6 @@
                         valueComponent.focus();
                         valueComponent.blur();
                         e.preventDefault();
-                        e.stopPropagation();
 
                     }
                 }
@@ -106,13 +103,12 @@
             let valueComponent = this.component.valueComponent;
 
             valueComponent.addEventListener('keyup', (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-
-                if (e.keyCode === 38) { // UP
+                if (e.key === 'ArrowUp') { // UP
+                    e.preventDefault();
                     this.incrementValue();
 
-                } else if (e.keyCode === 40) { // DOWN
+                } else if (e.key === 'ArrowDown') { // DOWN
+                    e.preventDefault();
                     this.decrementValue();
                 }
             });

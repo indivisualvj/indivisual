@@ -29,6 +29,8 @@
 
 [data-selected="true"] {
     color: rgba(10, 255, 10, 0.7) !important;
+    border-left: 3px solid rgba(10, 255, 10, 0.7) !important;
+    padding-left: 9px;
 }
 
 [data-border="red"] {

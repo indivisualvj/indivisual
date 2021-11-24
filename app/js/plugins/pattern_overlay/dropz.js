@@ -25,11 +25,12 @@
             let duration = this.layer.getShapeDuration(shape);
 
             if (!params.velocity) {
-                params.delay = duration / randomInt(1, 8);
+                params.delay = duration / randomInt(.5, 1.5);
                 params.velocity = 1;
 
-                this.layer.doPlugin(this.layer.getPatternPlugin(), shape);
-                // this.layer.getPatternPlugin().apply(shape);
+                let pos = this.layer.getShape(shape.index).position();
+                shape.position(pos.x, -pos.y, pos.z);
+                // this.layer.doPlugin(this.layer.getPatternPlugin(), shape);
             }
 
             //accelerate
@@ -43,8 +44,8 @@
                 let so = shape.sceneObject();
                 so.translateZ(params.velocity);
 
-                let cam = this.layer.getCamera();
-                if (so.position.z > cam.position.z * 1.1) {
+                let dist = this.layer.cameraDefaultDistance(20)
+                if (so.position.z > dist) {
                     params.velocity = 0;
                 }
 

@@ -59,7 +59,7 @@ HC.Layer.prototype.doOverlay = function (shape) {
         && this.settings.pattern_overlay_volume !== 0
     ) {
 
-        let nu = false;
+        let nu;
         let index = shape.index;
 
         if (this.shapeCache
@@ -78,9 +78,7 @@ HC.Layer.prototype.doOverlay = function (shape) {
             delay.params(nu, delay.params(shape));
             direction.params(nu, direction.params(shape));
 
-            if (this.shapeCache
-                && this.shapeCache.length
-            ) {
+            if (this.shapeCache && this.shapeCache.length) {
                 this.shapeCache[index][this.settings.pattern_overlay] = nu;
             }
         }

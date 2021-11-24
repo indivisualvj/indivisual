@@ -12,30 +12,70 @@
             let d = edge * this.settings.pattern_paddingz;
             let radius = 1;
 
-            let shapesPerDimension = this.shapesPerDimension(layer);
-            let position = this.cubePosition(shape);
 
-            if (this.settings.pattern_audio) {
-                let or = radius;
-                if (this.settings.pattern_sync) {
-                    radius *= this.audioAnalyser.volume;
-                } else {
-                    radius *= this.shapeVolume(shape);
+            if (this.layer.shapeCount() < 7) {
+                let x, y, z;
+                switch (shape.index) {
+                    case 0:
+                        x = 0;
+                        y = 0;
+                        z = d/2;
+                        break;
+                    case 1:
+                        x = w/2;
+                        y = 0;
+                        z = 0;
+                        break;
+                    case 2:
+                        x = 0;
+                        y = 0;
+                        z = -d/2;
+                        break;
+                    case 3:
+                        x = -w/2;
+                        y = 0;
+                        z = 0;
+                        break;
+                    case 4:
+                        x = 0;
+                        y = -h/2;
+                        z = 0;
+                        break;
+                    case 5:
+                        x = 0;
+                        y = h/2;
+                        z = 0;
+                        break;
                 }
-                if (this.settings.pattern_limit) {
-                    radius = or + radius;
+                layer.positionIn3dSpace(shape, x, y, z);
+
+            } else {
+
+                let shapesPerDimension = this.shapesPerDimension(layer);
+                let position = this.cubePosition(shape);
+
+                if (this.settings.pattern_audio) {
+                    let or = radius;
+                    if (this.settings.pattern_sync) {
+                        radius *= this.audioAnalyser.volume;
+                    } else {
+                        radius *= this.shapeVolume(shape);
+                    }
+                    if (this.settings.pattern_limit) {
+                        radius = or + radius;
+                    }
                 }
+
+                let stepx = w / shapesPerDimension * radius;
+                let stepy = h / shapesPerDimension * radius;
+                let stepz = d / shapesPerDimension * radius;
+
+                let x = (shapesPerDimension - 1) / -2 * stepx + position.x * stepx;
+                let y = (shapesPerDimension - 1) / -2 * stepy + position.y * stepy;
+                let z = (shapesPerDimension - 1) / -2 * stepz + position.z * stepz;
+
+                layer.positionIn3dSpace(shape, x, y, z);
             }
-
-            let stepx = w / shapesPerDimension * radius;
-            let stepy = h / shapesPerDimension * radius;
-            let stepz = d / shapesPerDimension * radius;
-
-            let x = (shapesPerDimension - 1) / -2 * stepx + position.x * stepx;
-            let y = (shapesPerDimension - 1) / -2 * stepy + position.y * stepy;
-            let z = (shapesPerDimension - 1) / -2 * stepz + position.z * stepz;
-
-            layer.positionIn3dSpace(shape, x, y, z);
         }
 
         getDistributionOnCube(shapeCount, shapeIndex, vector) {

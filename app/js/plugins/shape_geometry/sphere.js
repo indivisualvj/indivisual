@@ -1,6 +1,6 @@
 {
     HC.plugins.shape_geometry.sphere = class Plugin extends HC.ShapeGeometryPlugin {
-        static index = 40;
+        static index = 41;
         static tutorial = {
             shape_moda: {
                 text: 'set width segments'

@@ -55,6 +55,21 @@
             }
         }
 
+        chainExecuteCalls(calls, callback) {
+            let _load = function (index) {
+                if (index >= calls.length) {
+                    callback();
+                    return;
+                }
+                let _call = calls[index];
+                _call(/*_synced = */function () {
+                    _load(index + 1);
+                });
+            };
+
+            _load(0);
+        }
+
         static _tm = new this();
         static getInstance() {
             return this._tm;

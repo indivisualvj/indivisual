@@ -464,8 +464,8 @@ HC.Controller.prototype.toggleByKey = function (ci, char, shiftKey) {
     let open = this.nextOpenFolder();
 
     // start a search on shift if possible or..
-    // expand next open
-    if (!open.isExpanded()) {
+    // expand next open (only root guis are affected)
+    if (!shiftKey && !open.isExpanded()) {
         if (ci < roots.length) {
             if (shiftKey && open.gui.bar) {
                 roots[ci].gui.bar.input.focus();
@@ -479,14 +479,16 @@ HC.Controller.prototype.toggleByKey = function (ci, char, shiftKey) {
     let controllers = open.getControllers();
 
     // reset on shift
-    if (shiftKey && controllers.length > 0) {
+    if (shiftKey && open.isExpanded() && controllers.length > 0) {
         this.resetFolder(open);
         return;
     }
 
-    // toggle control by mnemonic
-    let ctrl = open.toggleByMnemonic(char);
-    this.scrollToControl(ctrl);
+    if (!shiftKey) {
+        // toggle control by mnemonicAction (open ore toggle)
+        let ctrl = open.toggleByMnemonic(char);
+        this.scrollToControl(ctrl);
+    }
 };
 
 /**

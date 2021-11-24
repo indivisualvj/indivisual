@@ -26,6 +26,7 @@
         addFolder(key, name, open) {
             let folder = new HC.GuifyExplorerFolder(this.gui, null, name || key, open);
             folder.setKey(key);
+            folder.setParent(this);
             this.children[key] = folder;
 
             return folder;
@@ -82,7 +83,8 @@
                     '<div class="new" title="Save current layer to new file."></div>' +
                     '<div class="fill" title="Slowly fill (shuffleable) layers with the underlying presets.\nPress SHIFT to fill remaining (shuffleable) layers."></div>' +
                     '<div class="save" title="!Attention! Save all files assigned to a layer!"></div>' +
-                    '<div class="rename" title="Rename this folder."></div>';
+                    '<div class="rename" title="Rename this folder."></div>' +
+                    '<div class="delete" title="Trash this file (Remains as .' + this.getLabel() + ')."></div>';
                 actions.childNodes.item(0).addEventListener('click', (e) => {
                     e.preventDefault(); e.stopPropagation();
                     presetMan.newPreset(this);
@@ -90,10 +92,10 @@
                 actions.childNodes.item(1).addEventListener('click', (e) => {
                     e.preventDefault(); e.stopPropagation();
                     if (e.shiftKey) {
-                        presetMan.appendPresets(this);
+                        presetMan.loadPresets(this, true).finally();
 
                     } else {
-                        presetMan.loadPresets(this);
+                        presetMan.loadPresets(this).finally();
                     }
                 });
                 actions.childNodes.item(2).addEventListener('click', (e) => {
@@ -102,7 +104,11 @@
                 });
                 actions.childNodes.item(3).addEventListener('click', (e) => {
                     e.preventDefault(); e.stopPropagation();
-                    presetMan.renameItem(this);
+                    presetMan.renameFolder(this);
+                });
+                actions.childNodes.item(4).addEventListener('click', (e) => {
+                    e.preventDefault(); e.stopPropagation();
+                    presetMan.deleteFolder(this);
                 });
                 container.appendChild(actions);
             }
@@ -131,6 +137,14 @@
             this.children[controller.getLabel()] = controller;
 
             return controller;
+        }
+
+        /**
+         *
+         * @param parent {HC.GuifyItem}
+         */
+        setParent(parent) {
+            this.parent = parent;
         }
     }
 }
@@ -210,7 +224,7 @@
             });
             actions.childNodes.item(1).addEventListener('click', (e) => {
                 e.preventDefault(); e.stopPropagation();
-                presetMan.renameItem(this);
+                presetMan.renamePreset(this);
             });
             actions.childNodes.item(2).addEventListener('click', (e) => {
                 e.preventDefault(); e.stopPropagation();

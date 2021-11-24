@@ -1,6 +1,7 @@
 {
     HC.plugins.filter_mode.flash = class Plugin extends HC.FilterModePlugin {
-        color = false;
+
+        color;
 
         apply(shape, overwrite) {
             let layer = this.layer;
@@ -12,9 +13,6 @@
 
             if (this.isFirstShape(shape) || overwrite === true) {
                 let speed = layer.getShapeSpeed(shape);
-
-                // color.s = shape.color.s;
-                // color.l = shape.color.l;
 
                 if (speed.progress > speed.duration - 50) {
                     let diff = Math.abs(speed.duration - speed.progress);
@@ -59,7 +57,8 @@
 }
 {
     HC.plugins.filter_mode.strobe = class Plugin extends HC.FilterModePlugin {
-        color = false;
+
+        color;
 
         apply(shape, overwrite) {
             let layer = this.layer;

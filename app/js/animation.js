@@ -616,13 +616,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         break;
 
                     case 'layer':
-                        // audio.peakCount = 0; // disable shuffle for [shuffle every] count of peaks
                         this.renderer.nextLayer = this.renderer.layers[value];
                         break;
-
-                    // case 'tempo':
-                    //
-                    //     break;
 
                     case 'monitor':
                         if (!this.monitor) {

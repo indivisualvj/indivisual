@@ -36,30 +36,6 @@ HC.Statics = HC.Statics || {};
         ShaderSettings;
         DataSettings;
 
-        /**
-         *
-         * @type {boolean}
-         */
-        ctrlKey = false;
-
-        /**
-         *
-         * @type {boolean}
-         */
-        altKey = false;
-
-        /**
-         *
-         * @type {boolean}
-         */
-        shiftKey = false;
-
-        /**
-         *
-         * @type {boolean}
-         */
-        doubleShift = false;
-
         config = [
             {
                 file: 'structure/AnimationValues.yml',
@@ -86,7 +62,7 @@ HC.Statics = HC.Statics || {};
                     settings.layers = 20;
                     settings.layer = {};
                     for (let i = 0; i < settings.layers; i++) {
-                        settings.layer[i] = (i+1);
+                        settings.layer[i] = i+1;
                     }
 
                     this._loadAudioPlugins(settings);

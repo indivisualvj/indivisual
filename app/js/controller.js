@@ -848,23 +848,32 @@ document.addEventListener('DOMContentLoaded', function () {
             this.messaging.emitSources(updates, true, true, false);
         }
 
-        syncLayers() {
-            let index = 0;
-            for (let layer in this.settingsManager.layers) {
-                layer = parseInt(layer);
-
-                if (this.config.shuffleable(layer+1)) {
-                    let to = 50 * index++;
-                    HC.TimeoutManager.getInstance().add('syncLayer.' + layer, to, () => {
-                        this.syncLayer(layer);
-                    });
+        /**
+         *
+         * @param shuffleable
+         * @returns {Promise}
+         */
+        syncLayers(shuffleable) {
+            return new Promise((resolve, reject) => {
+                let calls = [];
+                for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
+                    if (!shuffleable || -1 === shuffleable.indexOf(layer+1)) {
+                        calls.push(/* _call = */(_synced) => {
+                            HC.TimeoutManager.getInstance().add('syncLayer.' + layer, SKIP_FOUR_FRAMES, () => {
+                                this.syncLayer(layer, _synced);
+                            });
+                        })
+                    }
                 }
-            }
-            let to = ++index * 50;
 
-            HC.TimeoutManager.getInstance().add('setLayer', to, () => {
-                let layer = this.config.ControlSettings.layer;
-                this.updateControl('layer', layer, true, true, true);
+                calls.push((_synced) => {
+                    HC.log('layer', 1);
+                    this.showOSD('layer', 1, SKIP_TEN_FRAMES, 'red');
+                    this.updateControl('layer', 0, true, true, false);
+                    _synced();
+                });
+
+                HC.TimeoutManager.getInstance().chainExecuteCalls(calls, resolve);
             });
         }
 
@@ -872,34 +881,69 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         pushSources() {
-            this._bypassMonitor(() => {
+            this._bypassMonitor(new Promise((resolve, reject) => {
                 this.messaging.emitSources(this.config.SourceSettingsManager.prepareFlat(), true, true, false);
-            });
+            }));
         }
 
         pushLayers() {
-            this._bypassMonitor(() => {
-                this.syncLayers();
+            this._bypassMonitor(this.syncLayers());
+        }
+
+        resetShaders(all) {
+            return new Promise((resolve, reject) => {
+                let calls = [];
+                let layers = all ? Object.values(this.config.ControlValues.layer).map(x => x - 1) : [this.config.ControlSettings.layer];
+                for (let key in layers) {
+                    let layer = layers[key];
+                    calls.push(/* _call = */(_synced) => {
+                        HC.TimeoutManager.getInstance().add('syncLayer.' + layer, SKIP_FOUR_FRAMES, () => {
+                            this.resetShader(layer, _synced)
+                        })
+                    })
+                }
+
+                HC.TimeoutManager.getInstance().chainExecuteCalls(calls, resolve);
             });
         }
 
-        _bypassMonitor(fn) {
+        resetShader(layer, callback) {
+            this.settingsManager.update(layer, 'passes', 'shaders', []);
+            let data = this.settingsManager.get(layer, 'passes').prepare();
+            this.updateSettings(layer, data, false, false, true);
+            HC.log('reset_shader', layer+1);
+            this.showOSD('reset_shader', layer+1, SKIP_TEN_FRAMES, 'red');
+            this.messaging.emitSettings(layer, data, false, false, true, callback);
+        }
+
+        /**
+         *
+         * @param promise {Promise}
+         * @private
+         */
+        _bypassMonitor(promise) {
             let monitorStatus = this.config.ControlSettings.monitor;
             this.updateControl('monitor', false, false, true, false);
-            fn();
-            this.updateControl('monitor', monitorStatus, false, true, false);
+            promise.finally(() => {
+                this.updateControl('monitor', monitorStatus, false, true, false);
+            });
         }
 
         /**
          *
          * @param layer
+         * @param callback
          */
-        syncLayer(layer) {
+        syncLayer(layer, callback) {
             let settings = this.settingsManager.prepareLayer(layer);
 
             if (settings) {
                 HC.log('sync_layer', layer+1);
-                this.messaging.emitSettings(layer, settings, true, false, true);
+                this.showOSD('sync_layer', layer+1, SKIP_TEN_FRAMES, 'red');
+                this.messaging.emitSettings(layer, settings, true, false, true, callback);
+
+            } else if (callback) {
+                callback();
             }
         }
 
@@ -910,6 +954,8 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param layer
          */
         updatePreset(name, data, layer) {
+
+            // fixme: this is chaos!!!
 
             HC.log('preset', name);
 
@@ -934,8 +980,7 @@ document.addEventListener('DOMContentLoaded', function () {
             data = this.settingsManager.prepareLayer(layer);
             if (this.settingsManager.get(layer, 'info').hasTutorial()) {
                 new HC.ScriptProcessor(this, name, Object.create(data.info.tutorial)).log();
-
-                data.info.tutorial = {}; // fixme tutorial will be deleted on savePreset
+                data.info.tutorial = {};
             }
 
             this.messaging.emitSettings(layer, data, false, false, true);
@@ -1028,6 +1073,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * reset all of all settings
          */
         fullReset() {
+            let session = this.config.ControlSettings.session;
             assetman.disposeAll();
             this.explorer.reload();
             this.explorer.resetPresets();
@@ -1038,13 +1084,15 @@ document.addEventListener('DOMContentLoaded', function () {
             let sources = this.config.SourceSettingsManager.prepareFlat();
             let controls = this.config.ControlSettingsManager.prepareFlat();
             let displays = this.config.DisplaySettingsManager.prepareFlat();
+            controls.session = session;
+
             this.messaging.emitSources(sources, true, false, true);
             this.messaging.emitControls(controls, true, false, true);
             this.messaging.emitDisplays(displays, true, false, true);
             this.updateSources(sources, true, true, true);
             this.updateControls(controls, true, true, true);
             this.updateDisplays(displays, true, true, true);
-            this.syncLayers();
+            this.syncLayers().finally();
             this._checkDisplayVisibility();
         }
 
@@ -1067,16 +1115,17 @@ document.addEventListener('DOMContentLoaded', function () {
             this.settingsManager.reset(shuffleable);
             shuffleable = this.config.ControlSettings.shuffleable.toIntArray();
             this.explorer.resetPresets(shuffleable);
-            this.syncLayers();
+            this.syncLayers(shuffleable).finally();
         }
 
         /**
          *
          * @param layer
+         * @param callback
          */
-        resetLayer(layer) {
+        resetLayer(layer, callback) {
             this.settingsManager.resetLayer(layer);
-            this.syncLayer(layer);
+            this.syncLayer(layer, callback);
         }
     }
 }

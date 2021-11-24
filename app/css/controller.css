@@ -3,6 +3,7 @@
 @import "icons.css";
 @import "samples.css";
 @import "monitor.css";
+@import "log.css";
 @import "sequence.css";
 @import "explorer.css";
 @import "guify-overwrite.css";
@@ -21,38 +22,6 @@
 
 #status [data-mnemonic]:before {
     top: 1px;
-}
-
-pre#log {
-    display: block;
-    width: 100%;
-    height: 100%;
-    padding: 0.15vw;
-    margin: 0;
-    color: #2fd62f;
-}
-
-pre#osd {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    display: block;
-    opacity: 0;
-    width: 30vw;
-    max-width: 640px;
-    min-width: 310px;
-    height: 20vw;
-    padding: 0.1vw;
-    border: 6px solid rgba(68, 171, 218, 0.5);
-    border-radius: 1px;
-    margin: -10vw 0 0 -15vw;
-
-    background: rgba(0, 0, 0, 0.8);
-    color: #44abda;
-    font-size: 16px;
-    z-index: 100;
-    pointer-events: none;
-    transition: opacity 0.15s;
 }
 
 .fullscreenable:fullscreen {
@@ -89,6 +58,11 @@ pre#osd {
         position: fixed;
         width: 99.4%;
         top: 0;
+    }
+
+    pre#osd {
+        left: 12.5%;
+        width: 75%;
     }
 
     .blockfocus {
@@ -135,6 +109,7 @@ pre#osd {
     #status {
         width: 99%;
     }
+
     #status div {
         height: 26px;
     }

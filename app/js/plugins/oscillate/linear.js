@@ -1,16 +1,4 @@
 {
-    HC.plugins.oscillate.lininout = class Plugin extends HC.OscillatePlugin {
-        static name = 'linear 0/1 (current)';
-        static index = 60;
-
-        apply(key, speed, add) {
-            speed = speed || this.layer.getCurrentSpeed();
-            let prc = HC.Osci.linInOut(speed.prc, add);
-            return this.activate(key, prc);
-        }
-    }
-}
-{
     HC.plugins.oscillate.lininoutdotfive = class Plugin extends HC.OscillatePlugin {
         static name = 'linear 0.5/1.5 (current)';
         static index = 60;

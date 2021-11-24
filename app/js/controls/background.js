@@ -45,7 +45,7 @@
             background_offsety: [-10, 10, 0.01],
             background_centerx: [0, 1, 0.001],
             background_centery: [0, 1, 0.001],
-            background_rotation: [-180, 180, 0.01]
+            background_rotation: [-180, 180, 0.1]
         };
         
         styles = {

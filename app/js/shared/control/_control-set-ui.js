@@ -147,9 +147,6 @@
 
             container.setAttribute('data-border', border);
             container.setAttribute('data-id', key);
-            if (this.folder.getParent()) {
-                container.setAttribute('data-parent', this.folder.getParent().getLabel());
-            }
         }
 
         /**
@@ -188,7 +185,7 @@
                 }
             }
 
-            // _check if hidden
+            // check if hidden
             if (types && types.length > 0) {
                 if(types[types.length - 1] === 'hidden') {
                     return;
@@ -197,7 +194,6 @@
 
             // shorten name by regexp
             let reg = new RegExp('^' + folder.getLabel() + '(.+)');
-            // let reg = new RegExp('\\w+_([^_]+)$');
             let name = key.replace(reg, '$1');
 
             let config = {
@@ -205,7 +201,6 @@
                 label: name,
                 object: props,
                 property: key,
-                // key: key,
                 onChange: (value, ctrl) => {
                     this.onChange(value, ctrl);
                 },
@@ -215,9 +210,7 @@
 
             if (types[types.length - 1] === 'display') {
                 config.type = 'display';
-                // config.label = '';
                 delete config.onChange;
-                // delete config.property;
                 delete config.object;
 
             } else if (typeof value == 'function') {
@@ -241,7 +234,6 @@
 
             } else if (typeof value == 'string' && value.startsWith('#')) {
                 config.type = 'text';
-                // config.format = 'hex';
 
             } else if (values) {
                 config.type = 'select';
@@ -249,23 +241,33 @@
             }
 
             let controller = folder.addController(config);
-            let ctrl = controller.getComponent();
+            let container = controller.getComponent().container;
 
             if (styles) {
-                ctrl.container.setAttribute('data-class', styles[0]);
+                container.setAttribute('data-class', styles[0]);
 
                 if (styles.length > 1) {
-                    ctrl.container.classList.add(styles[styles.length - 1]);
+                    container.classList.add(styles[styles.length - 1]);
 
                 } else {
-                    ctrl.container.classList.add('noclear');
+                    container.classList.add('noclear');
                 }
             }
 
             if (events) {
                 let e = events(this.controlSet);
-                controller.setMnemonic(e.label);
-                e.register(window);
+                if (e instanceof HC.Event) {
+                    controller.setMnemonic(e.label);
+                    e.register(window);
+                }
+
+                /**
+                 * often events are assigned to button components to represent global keystrokes.
+                 * if style is not set, hide from user.
+                 */
+                if (!styles) {
+                    container.setAttribute('data-class', 'hidden');
+                }
             }
 
             if (attributes) {

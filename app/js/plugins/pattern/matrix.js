@@ -10,7 +10,6 @@
             let layer = this.layer;
 
             let gridPosition = this.gridPosition(shape);
-
             let gapx = layer.shapeSize(1) * this.settings.pattern_paddingx;
             let gapy = layer.shapeSize(1) * this.settings.pattern_paddingy;
 

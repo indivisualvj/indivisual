@@ -56,122 +56,91 @@
                 });
 
             } else {
-                // load preset
-                this.filesystem.load(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (data) => {
-                    HC.TimeoutManager.getInstance().add('loadPreset', 0, () => {
-
-                        if (this.config.ctrlKey) { //load shaders into present presets
-                            this.controller.transferShaderPasses(data.dir + '/' + data.name, JSON.parse(data.contents));
-
-                        } else {
-                            // load the preset
-
-                            HC.clearLog();
-
-                            let key = data.dir + '/' + data.name;
-                            let contents = JSON.parse(data.contents);
-
-                            this.controller.updatePreset(key, contents);
-                            let layer = this.config.ControlSettings.layer + 1;
-                            this.explorer.resetPreset(layer);
-                            ctrl.setInfo(layer);
-                            ctrl.setSelected(true);
-                        }
+                //load shaders into present presets
+                if (HC.Hotkey.isPressed('ctrl')) {
+                    this.filesystem.load(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (data) => {
+                        this.controller.transferShaderPasses(data.dir + '/' + data.name, JSON.parse(data.contents));
                     });
-                });
-            }
-        }
-
-        /**
-         *
-         * @param {HC.GuifyExplorerFolder} folder
-         */
-        loadPresets(folder) {
-            let children = Object.keys(folder.children);
-            let candidates = [];
-
-            for (let layer = 0; candidates.length < this.config.ControlValues.layers && layer < children.length; layer++) {
-                let child = folder.getChild(children[layer]);
-                candidates.push(child);
-            }
-            this.explorer.resetPresets();
-
-            HC.clearLog();
-
-            let candidate = 0;
-            for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
-                if (this.config.shuffleable(layer+1)) {
-                    if (candidate < candidates.length) {
-                        this._loadPreset(candidates[candidate], layer, candidate, candidate * SKIP_TEN_FRAMES);
-                        candidate++;
-
-                    } else { // always reset but do it slowly
-                        HC.TimeoutManager.getInstance().add('updatePreset.' + layer, layer * SKIP_TEN_FRAMES, () => {
-                            this.controller.resetLayer(layer);
-                        });
-                    }
-                }
-            }
-        }
-
-        /**
-         *
-         * @param {HC.GuifyExplorerFolder} folder
-         */
-        appendPresets(folder) {
-            let children = Object.keys(folder.children);
-            let dflt = [];
-            let layers = this.config.ControlValues.layers;
-
-            for (let i = 0; dflt.length < layers && i < children.length; i++) {
-                let child = folder.getChild(children[i]);
-                if (!child.getLabel().match(/^_.+/)) {
-                    dflt.push(child);
-                }
-            }
-
-            HC.clearLog();
-
-            let di = 0;
-            for (let i = 0; i < layers; i++) {
-                if (!this.settingsManager.isDefault(i)) {
-                    continue;
-                }
-
-                if (!this.config.shuffleable(i+1)) {
-                    continue;
-                }
-
-                if (di < dflt.length) {
-                    this._loadPreset(dflt[di], i, di, di === dflt.length - 1);
-                    di++;
 
                 } else {
-                    this.controller.updatePreset(false, this.settingsManager.prepareLayer(this.config.ControlSettings.layer));
+                    // load the preset
+                    let layer = this.config.ControlSettings.layer;
+                    this._loadPreset(ctrl, layer, () => {
+                        ctrl.setChanged(null);
+                        ctrl.setSelected(true);
+                    });
                 }
             }
+        }
+
+        /**
+         *
+         * @param folder
+         * @param append
+         */
+        loadPresets(folder, append) {
+
+            return new Promise((resolve, reject) => {
+
+                let children = Object.keys(folder.children);
+                let candidates = [];
+
+                for (let layer = 0; candidates.length < this.config.ControlValues.layers && layer < children.length; layer++) {
+                    let child = folder.getChild(children[layer]);
+                    candidates.push(child);
+                }
+                this.explorer.resetPresets();
+
+                let candidate = 0;
+                let calls = [];
+                for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
+                    let defaultOnly = true === append ? this.settingsManager.isDefault(layer) : true;
+
+                    if (defaultOnly && this.config.shuffleable(layer + 1)) {
+                        if (candidate < candidates.length) {
+                            let child = candidates[candidate];
+                            calls.push((_loaded) => {
+                                HC.TimeoutManager.getInstance().add('loadPresets.' + layer, SKIP_TEN_FRAMES, () => {
+                                    this._loadPreset(child, layer, _loaded);
+                                });
+                            });
+                            candidate++;
+
+                        } else { // always reset but do it slowly
+                            calls.push((_synced) => {
+                                HC.TimeoutManager.getInstance().add('loadPresets.' + layer, SKIP_TEN_FRAMES, () => {
+                                    this.controller.resetLayer(layer, _synced);
+                                });
+                            });
+                        }
+                    }
+                }
+
+                HC.TimeoutManager.getInstance().chainExecuteCalls(calls, resolve);
+            });
         }
 
         /**
          *
          * @param child
          * @param i
-         * @param di
-         * @param timeout
+         * @param callback
          * @private
          */
-        _loadPreset(child, i, di, timeout) {
+        _loadPreset(child, i, callback) {
 
             child.setInfo(i+1);
 
             console.log('loading', child.getLabel());
             this.filesystem.load(STORAGE_DIR, child.getParent().getLabel(), child.getLabel(), (data) => {
-                HC.TimeoutManager.getInstance().add('_loadPreset' + child.getLabel(), timeout || 0, () => {
-                    let key = data.dir + '/' + data.name;
-                    let contents = JSON.parse(data.contents);
-                    console.log('loaded', data.name);
-                    this.controller.updatePreset(key, contents, i);
-                });
+                let key = data.dir + '/' + data.name;
+                let contents = JSON.parse(data.contents);
+                console.log('loaded', data.name);
+                this.controller.updatePreset(key, contents, i);
+
+                if (callback) {
+                    callback();
+                }
             });
         };
 
@@ -180,20 +149,23 @@
          * @param {HC.GuifyExplorerFolder} ctrl
          */
         savePresets(ctrl) {
-            for (let k in ctrl.children) {
-                let child = ctrl.children[k];
-                let layer = parseInt(child.getInfo()) - 1;
+            let confirmed = confirm('Save all?');
+            if (confirmed) {
+                for (let k in ctrl.children) {
+                    let child = ctrl.children[k];
+                    let layer = parseInt(child.getInfo()) - 1;
 
-                if (layer >= 0 && child.getChanged()) {
-                    let save = (layer, child) => {
-                        let settings = this.settingsManager.prepareLayer(layer);
-                        this.filesystem.save(STORAGE_DIR, ctrl.getLabel(), child.getLabel(), settings, (result) => {
-                            HC.log(result);
-                            child.setChanged(null);
-                        }, '');
-                    };
+                    if (layer >= 0 && child.getChanged()) {
+                        let save = (layer, child) => {
+                            let settings = this.settingsManager.prepareLayer(layer);
+                            this.filesystem.save(STORAGE_DIR, ctrl.getLabel(), child.getLabel(), settings, (result) => {
+                                HC.log(result);
+                                child.setChanged(null);
+                            }, '');
+                        };
 
-                    save(layer, child);
+                        save(layer, child);
+                    }
                 }
             }
         }
@@ -204,7 +176,11 @@
          */
         savePreset(ctrl) {
             let settings = this.settingsManager.prepareLayer(this.config.ControlSettings.layer);
-            this.filesystem.save(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), settings, (result) => {
+            let dir = ctrl.getParent().getLabel();
+            let label = ctrl.getLabel();
+            settings.info.name = HC.filePath(dir, label);
+
+            this.filesystem.save(STORAGE_DIR, dir, label, settings, (result) => {
                 HC.log(result);
                 ctrl.setChanged(null);
             });
@@ -215,17 +191,28 @@
          * @param {HC.GuifyExplorerFolder} ctrl
          */
         newPreset(ctrl) {
-            let name = Object.keys(ctrl.children).length.toString();
+            let index = (Object.keys(ctrl.children).length + 1);
+            while (ctrl.getChild(index + '.json')) { // lookup for existing
+                index++;
+            }
+            let label = index.toString();
 
-            let input = prompt('Please specify a name', name);
-            if (input) {
-                name = input;
+            do {
+                label = prompt('Please specify a name (no duplicates)', label);
+            } while (label && ctrl.getChild(label + '.json'));
+
+            if (label) {
+                label += '.json';
+
+                let preset = this.settingsManager.prepareLayer(this.config.ControlSettings.layer);
                 let nu = {
                     type: 'file',
                     dir: ctrl.getLabel(),
-                    name: name + '.json',
-                    settings: this.settingsManager.prepareLayer(this.config.ControlSettings.layer)
+                    name: label,
+                    settings: preset
                 };
+
+                preset.info.name = HC.filePath(nu.dir, nu.name);
 
                 this.filesystem.save(STORAGE_DIR, nu.dir, nu.name, nu.settings, (result) => {
                     HC.log(result);
@@ -238,11 +225,28 @@
          *
          * @param {HC.GuifyExplorerPreset} ctrl
          */
+        deleteFolder(ctrl) {
+            let confirmed = confirm('Do you want to delete "' + ctrl.getLabel() + '"?');
+            if (confirmed) {
+                this.filesystem.delete(STORAGE_DIR, null, ctrl.getLabel(), (result) => {
+                    HC.log(result);
+                    ctrl.removeFromParent();
+                });
+            }
+        }
+
+        /**
+         *
+         * @param {HC.GuifyExplorerPreset} ctrl
+         */
         deletePreset(ctrl) {
-            this.filesystem.delete(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (result) => {
-                HC.log(result);
-                ctrl.removeFromParent();
-            });
+            let confirmed = confirm('Do you want to delete "' + ctrl.getLabel() + '"?');
+            if (confirmed) {
+                this.filesystem.delete(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (result) => {
+                    HC.log(result);
+                    ctrl.removeFromParent();
+                });
+            }
         }
 
         /**
@@ -250,14 +254,16 @@
          * @param {HC.GuifyExplorer} ctrl
          */
         newFolder(ctrl) {
-            let name = '__NEW__';
+            let label = '__NEW__';
 
-            let input = prompt('Please specify a name', name);
-            if (input) {
-                name = input;
-                this.filesystem.mkdir(STORAGE_DIR, name, false, (result) => {
+            do {
+                label = prompt('Please specify a name (no duplicates)', label);
+            } while (label && ctrl.getChild(label));
+
+            if (label) {
+                this.filesystem.mkdir(STORAGE_DIR, label, false, (result) => {
                     HC.log(result);
-                    let folder = ctrl.addFolder(name);
+                    let folder = ctrl.addFolder(label);
                     folder.finishLayout({}, this);
                 });
             }
@@ -267,23 +273,45 @@
          *
          * @param {HC.GuifyItem} ctrl
          */
-        renameItem(ctrl) {
-            let name = ctrl.getLabel();
-            let split = name.split('.');
+        renameFolder(ctrl) {
+            let label = ctrl.getLabel();
+
+            do {
+                label = prompt('Please specify a name (no duplicates)', label);
+            } while (label && ctrl.getParent().getChild(label));
+
+            if (label) {
+                this.filesystem.rename(STORAGE_DIR, null, ctrl.getLabel(), label, (result) => {
+                    HC.log(result);
+                    ctrl.rename(label);
+                });
+
+            }
+        }
+
+        /**
+         *
+         * @param {HC.GuifyItem} ctrl
+         */
+        renamePreset(ctrl) {
+            let label = ctrl.getLabel();
+            let split = label.split('.');
             let suffix = '';
             if (split.length > 1) {
-                name = split[0];
+                label = split[0];
                 suffix = '.' + split[1];
             }
-            let input = prompt('Please specify a name', name);
-            if (input) {
-                name = input;
-                if (suffix) {
-                    name += suffix;
-                }
-                this.filesystem.rename(STORAGE_DIR, ctrl.getParent() ? ctrl.getParent().getLabel() : null, ctrl.getLabel(), name, (result) => {
+
+            do {
+                label = prompt('Please specify a name (no duplicates)', label);
+            } while (label && ctrl.getParent().getChild(label + suffix));
+
+            if (label) {
+                label += suffix;
+
+                this.filesystem.rename(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), label, (result) => {
                     HC.log(result);
-                    ctrl.setLabel(name);
+                    ctrl.rename(label);
                 });
 
             }

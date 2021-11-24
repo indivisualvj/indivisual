@@ -38,7 +38,7 @@
             this.component = this.gui.Register({
                 type: 'folder',
                 label: name,
-                folder: (this.getParent() ? this.getParent().getComponent() : null),
+                folder: (this.getParent() ? this.getParent().getLabel() : null),
                 open: open
             });
         }
@@ -223,10 +223,26 @@
 
         /**
          *
+         * @param key
+         * @param label
+         */
+        renameChild(key, label) {
+            let child = this.getChild(key);
+            if (!child) {
+                child = key;
+                key = this.getChildKey(child);
+            }
+            child.setLabel(label);
+            delete this.children[key];
+            this.children[label] = child;
+        }
+
+        /**
+         *
          */
         removeChildren() {
             for (let f in this.children) {
-                this.removeChild(this.children[f]);
+                this.removeChild(f);
             }
         }
 

@@ -86,39 +86,6 @@ body {
     max-width: 768px;
 }
 
-pre {
-    font-family: Hack, monospace;
-    box-sizing: border-box;
-    overflow-y: auto;
-}
-
-pre div {
-    overflow: hidden;
-    max-width: 100%;
-    white-space: pre-wrap;
-}
-
-pre a {
-    cursor: pointer;
-    color: rgba(10, 190, 255, 1);
-    font-weight: bold;
-}
-
-pre .yellow {
-    color: rgba(255, 210, 10, 1);
-    font-weight: bold;
-}
-
-pre .red {
-    color: rgba(255, 10, 10, 1);
-    font-weight: bold;
-}
-
-pre .orange {
-    color: rgba(255, 175, 10, 1);
-    font-weight: bold;
-}
-
 input:focus, select:focus {
     outline: none;
     box-shadow: 0 0 2px 1px #e61d5f;

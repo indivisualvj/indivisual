@@ -83,7 +83,7 @@
          */
         constructor(type, callback, label) {
             super(type, callback);
-            this.label = label;
+            this.label = label || type;
         }
 
         register(element) {

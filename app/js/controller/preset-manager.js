@@ -130,7 +130,7 @@
          */
         _loadPreset(child, i, callback) {
 
-            child.setInfo(i+1);
+            child.setInfo(i+1); // todo: this makes sense here?
 
             console.log('loading', child.getLabel());
             this.filesystem.load(STORAGE_DIR, child.getParent().getLabel(), child.getLabel(), (data) => {

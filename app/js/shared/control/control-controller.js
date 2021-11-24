@@ -40,12 +40,12 @@ HC.ControlController = HC.ControlController || {};
             play: true,
 
             reset: () => {
-                if (hotkeys.isPressed('shift') && hotkeys.isPressed('ctrl')) {
+                if (HC.Hotkey.isPressed('shift') && HC.Hotkey.isPressed('ctrl')) {
                     let yes = confirm('Reset everything?');
                     if (yes) {
                         this.config.messaging.program.fullReset();
                     }
-                } else if (hotkeys.isPressed('shift')) {
+                } else if (HC.Hotkey.isPressed('shift')) {
                     this.config.messaging.program.resetLayers();
 
                 } else {

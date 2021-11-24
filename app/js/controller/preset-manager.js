@@ -60,7 +60,7 @@
                 this.filesystem.load(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (data) => {
                     HC.TimeoutManager.getInstance().add('loadPreset', 0, () => {
 
-                        if (this.config.ctrlKey) { //load shaders into present presets
+                        if (HC.Hotkey.isPressed('ctrl')) { //load shaders into present presets
                             this.controller.transferShaderPasses(data.dir + '/' + data.name, JSON.parse(data.contents));
 
                         } else {

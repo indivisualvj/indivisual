@@ -33,44 +33,6 @@
         }
     };
 
-    HC.KeyEvent = class KeyEvent extends HC.Event {
-
-        codes;
-
-        label;
-
-        /**
-         *
-         * @param type
-         * @param codes
-         * @param callback
-         * @param label
-         */
-        constructor(type, codes, callback, label) {
-            super(type, callback);
-            this.codes = codes;
-            this.label = label;
-        }
-
-        /**
-         *
-         */
-        register(element) {
-            element.addEventListener(this.type, (e) => {
-                if (this.codes.includes(e.keyCode) && !(/INPUT|TEXTAREA|SELECT|BUTTON/.test(e.target.nodeName))) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    e.stopImmediatePropagation();
-                    this.callback(e);
-                }
-            });
-        }
-    };
-
-    HC.MouseEvent = class MouseEvent extends HC.Event {
-
-    };
-
     HC.Hotkey = class Hotkey extends HC.Event {
 
         label;
@@ -87,10 +49,22 @@
         }
 
         register(element) {
-            hotkeys(this.type, (e) => {
+            HC.Hotkey.add(this.type, (e) => {
                 e.preventDefault();
                 this.callback(e);
             });
+        }
+
+        static add() {
+            if (hotkeys) {
+                hotkeys(...arguments);
+            }
+        }
+
+        static isPressed() {
+            if (hotkeys) {
+                return hotkeys.isPressed(...arguments);
+            }
         }
     };
 
@@ -121,13 +95,49 @@ HC.Controller.prototype.initLogEvents = function () {
  */
 HC.Controller.prototype.initKeyboard = function () {
 
-    let keys = MNEMONICS;
+    this._initMnemonics();
+    this._initLayerKeys();
+
+    HC.Hotkey.add('*', (e) => {
+        if (e.key === 'Shift') {
+            this._onShift(e);
+        } else if (e.key === 'Backspace') {
+            this._onBackspace(e);
+        }
+    });
+};
+
+HC.Controller.prototype._onShift = function (e) {
+    if (e.ctrlKey || e.altKey) {
+        return;
+    }
+    let key = 'HC.Controller._initDoubleShift';
+    let timeoutManager = HC.TimeoutManager.getInstance();
+
+    if (timeoutManager.has(key)) {
+        let open = this.nextOpenFolder();
+        if (open.gui.bar) {
+            open.gui.bar.input.focus();
+        }
+        timeoutManager.delete(key);
+
+    } else {
+        timeoutManager.add(key, 300, () => {
+        });
+    }
+};
+
+/**
+ *
+ * @private
+ */
+HC.Controller.prototype._initMnemonics = function () {
     let ci = 0;
     let setMnemonics = function (control, key) {
         key = key || control.getLabel();
 
         if (control instanceof HC.Guify) {
-            let key = keys.charAt(ci++);
+            let key = MNEMONICS.charAt(ci++);
             control.setMnemonic(key);
         }
 
@@ -137,15 +147,15 @@ HC.Controller.prototype.initKeyboard = function () {
                 let child = control.getChild(k);
 
                 if (child instanceof HC.GuifyFolder) {
-                    if (!child.getMnemonic() && gi < keys.length) {
-                        child.setMnemonic(keys.charAt(gi++));
+                    if (!child.getMnemonic() && gi < MNEMONICS.length) {
+                        child.setMnemonic(MNEMONICS.charAt(gi++));
                     }
                     setMnemonics(child, key);
 
                 } else {
 
-                    if (!child.isDisplay() && !child.getMnemonic() && gi < keys.length) {
-                        let key = keys.charAt(gi++);
+                    if (!child.isDisplay() && !child.getMnemonic() && gi < MNEMONICS.length) {
+                        let key = MNEMONICS.charAt(gi++);
                         child.setMnemonic(key);
                     }
                 }
@@ -153,90 +163,53 @@ HC.Controller.prototype.initKeyboard = function () {
         }
     };
 
-    for (const key in this.guis) {
+    for (let key in this.guis) {
         setMnemonics(this.guis[key]);
     }
 
-    this._initLayerKeys();
-
-    window.addEventListener('keyup', (e) => {
-        this.config.ctrlKey = e.ctrlKey;
-        this.config.altKey = e.altKey;
-        this.config.shiftKey = e.shiftKey;
-    });
-
-    window.addEventListener('keydown', (e) => {
-
-        this.config.ctrlKey = e.ctrlKey;
-        this.config.altKey = e.altKey;
-        this.config.shiftKey = e.shiftKey;
-
-        if (e.ctrlKey && (e.shiftKey || e.altKey)) {
-            return;
-        }
-
-        if (/INPUT|TEXTAREA|SELECT|BUTTON/.test(e.target.nodeName)) {
-            return;
-        }
-
-        if (e.key === 'Shift') {
-            if (this.config.doubleShift) {
-                let open = this.nextOpenFolder();
-                if (open.gui.bar) {
-                    open.gui.bar.input.focus();
-                }
-
-                clearTimeout(this.config.doubleShift);
-                this.config.doubleShift = false;
-
-            } else {
-                this.config.doubleShift = setTimeout(() => {
-                    this.config.doubleShift = false;
-                }, 300);
-            }
-        }
-
-        if (e.key === 'Backspace') { // = close folders
-            let open = this.nextOpenFolder();
-            if (!(open instanceof HC.Guify)) {
-                this.closeAll(open);
-                this.scrollToControl(open);
-
-            } else {
-                let open = this.closeAll();
-                this.scrollToControl(open);
+    for (let ci = 0; ci < MNEMONICS.length; ci++) {
+        let char = MNEMONICS[ci];
+        HC.Hotkey.add(char + ',shift+' + char, (e, h) => {
+            console.log(char);
+            if (e.ctrlKey || e.altKey) {
+                return;
             }
             e.preventDefault();
-            e.stopPropagation();
-
-            return;
-        }
-
-        let char = String.fromCharCode(e.keyCode);
-        let ci;
-
-        if ((ci = keys.indexOf(char)) > -1) {
-            e.preventDefault();
-            e.stopPropagation();
 
             this.toggleByKey(ci, char, e.shiftKey);
-        }
-    });
+        });
+    }
 };
 
+HC.Controller.prototype._onBackspace = function (e) {
+    if (e.shiftKey || e.altKey || e.ctrlKey) {
+        return;
+    }
+
+    let open = this.nextOpenFolder();
+    if (!(open instanceof HC.Guify)) {
+        this.closeAll(open);
+        this.scrollToControl(open);
+
+    } else {
+        let open = this.closeAll();
+        this.scrollToControl(open);
+    }
+    e.preventDefault();
+};
+
+/**
+ *
+ * @private
+ */
 HC.Controller.prototype._initLayerKeys = function () {
     let layers = Object.keys(this.config.ControlValues.layer).slice(0, 10);
     for (const key in layers) {
         let id = layers[key];
         id = key>0?parseInt(id):10;
-        hotkeys(key, (e) => {
-            // never when in:
-            if (/INPUT|TEXTAREA|SELECT|BUTTON/.test(e.target.nodeName)) {
-                return;
-            }
+
+        HC.Hotkey.add(key, (e) => {
             e.preventDefault();
-            e.stopPropagation();
-            e.stopImmediatePropagation();
             let layer = id-1;
 
             this.updateControl('layer', layer, true, true);
@@ -245,14 +218,13 @@ HC.Controller.prototype._initLayerKeys = function () {
     for (const key in layers) {
         let id = layers[key];
         id = key>0?parseInt(id):10;
-        hotkeys('shift+' + key, (e) => {
+
+        HC.Hotkey.add('shift+' + key, (e) => {
             // never when in:
-            if (/INPUT|TEXTAREA|SELECT|BUTTON/.test(e.target.nodeName)) {
+            if (this._isTargetInput(e)) {
                 return;
             }
             e.preventDefault();
-            e.stopPropagation();
-            e.stopImmediatePropagation();
             let layer = id+9;
 
             this.updateControl('layer', layer, true, true);

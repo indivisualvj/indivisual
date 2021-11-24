@@ -36,8 +36,11 @@ HC.plugins.mesh_material = HC.plugins.mesh_material || {};
                 geo = new THREE.BufferGeometry().fromGeometry(geometry);
 
             } else {
-                geo = new THREE.BufferGeometry().setFromObject(geometry);
+                geo = geometry;
             }
+            // else {
+            //     geo = new THREE.BufferGeometry().setFromObject(geometry);
+            // }
 
             if (geo) {
                 geo.userData.geometry = geometry;

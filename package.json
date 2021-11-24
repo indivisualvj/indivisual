@@ -10,7 +10,7 @@
     "hotkeys-js": "^3.8.7",
     "js-yaml": "^4.1.0",
     "socket.io": "^2.4.0",
-    "three": "0.124"
+    "three": "0.125"
   },
   "devDependencies": {},
   "scripts": {

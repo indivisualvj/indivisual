@@ -103,11 +103,11 @@
             let valueComponent = this.component.valueComponent;
 
             valueComponent.addEventListener('keyup', (e) => {
-                if (e.keyCode === 38) { // UP
+                if (e.key === 'ArrowUp') { // UP
                     e.preventDefault();
                     this.incrementValue();
 
-                } else if (e.keyCode === 40) { // DOWN
+                } else if (e.key === 'ArrowDown') { // DOWN
                     e.preventDefault();
                     this.decrementValue();
                 }

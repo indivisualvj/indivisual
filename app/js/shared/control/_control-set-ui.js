@@ -259,6 +259,10 @@
                 controller.setMnemonic(e.label);
                 e.register(window);
 
+                /**
+                 * often events are assigned to button components to represent global keystrokes.
+                 * if style is not set, hide from user.
+                 */
                 if (!styles) {
                     container.setAttribute('data-class', 'hidden');
                 }

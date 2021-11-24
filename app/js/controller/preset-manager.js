@@ -49,10 +49,11 @@
         loadPreset(ctrl) {
             if (ctrl.getLabel() === '_default') {
                 // load default
-                this.settingsManager.setLayerProperties(this.config.ControlSettings.layer, false);
+                let layer = this.config.ControlSettings.layer;
+                this.settingsManager.setLayerProperties(layer, false);
                 HC.TimeoutManager.getInstance().add('loadPreset', 0, () => {
-                    this.explorer.resetPreset(this.config.ControlSettings.layer + 1);
-                    this.controller.updatePreset(false, this.settingsManager.prepareLayer(this.config.ControlSettings.layer));
+                    this.explorer.resetPreset(layer + 1);
+                    this.controller.updatePreset(false, this.settingsManager.prepareLayer(layer));
                 });
 
             } else {
@@ -66,8 +67,8 @@
                     // load the preset
                     let layer = this.config.ControlSettings.layer;
                     this._loadPreset(ctrl, layer, () => {
-                        ctrl.setChanged(null);
-                        this.explorer.setSelected(layer, true);
+                        this.explorer.resetPreset(layer+1)
+                        this.explorer.setSelected(layer+1, true);
                     });
                 }
             }

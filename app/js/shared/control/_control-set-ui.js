@@ -241,16 +241,16 @@
             }
 
             let controller = folder.addController(config);
-            let ctrl = controller.getComponent();
+            let container = controller.getComponent().container;
 
             if (styles) {
-                ctrl.container.setAttribute('data-class', styles[0]);
+                container.setAttribute('data-class', styles[0]);
 
                 if (styles.length > 1) {
-                    ctrl.container.classList.add(styles[styles.length - 1]);
+                    container.classList.add(styles[styles.length - 1]);
 
                 } else {
-                    ctrl.container.classList.add('noclear');
+                    container.classList.add('noclear');
                 }
             }
 
@@ -258,6 +258,10 @@
                 let e = events(this.controlSet);
                 controller.setMnemonic(e.label);
                 e.register(window);
+
+                if (!styles) {
+                    container.setAttribute('data-class', 'hidden');
+                }
             }
 
             if (attributes) {

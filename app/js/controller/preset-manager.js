@@ -66,6 +66,7 @@
                     // load the preset
                     let layer = this.config.ControlSettings.layer;
                     this._loadPreset(ctrl, layer, () => {
+                        ctrl.setChanged(null);
                         ctrl.setSelected(true);
                     });
                 }

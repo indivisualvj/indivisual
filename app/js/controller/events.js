@@ -220,10 +220,6 @@ HC.Controller.prototype._initLayerKeys = function () {
         id = key>0?parseInt(id):10;
 
         HC.Hotkey.add('shift+' + key, (e) => {
-            // never when in:
-            if (this._isTargetInput(e)) {
-                return;
-            }
             e.preventDefault();
             let layer = id+9;
 

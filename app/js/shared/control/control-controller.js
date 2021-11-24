@@ -61,10 +61,7 @@ HC.ControlController = HC.ControlController || {};
                 this.config.messaging.program.pushSources();
             },
             rst_shaders: () => {
-                this.config.messaging.program.settingsManager.update(this.config.ControlSettings.layer, 'passes', 'shaders', []);
-                let data = this.config.messaging.program.settingsManager.get(this.config.ControlSettings.layer, 'passes').prepare();
-                this.config.messaging.program.updateSettings(this.config.ControlSettings.layer, data, false, false, true);
-                this.config.messaging.emitSettings(this.config.ControlSettings.layer, data, false, false, true);
+                this.config.messaging.program.resetShaders(HC.Hotkey.isPressed('shift')).finally(()=>{});
             },
             enable_mic: () => {
                 this.config.messaging.program.updateControl('audio', 'microphone', true, true, false);
@@ -220,7 +217,7 @@ HC.ControlController = HC.ControlController || {};
             push_sources: (inst) => { return new HC.Hotkey('pagedown', (e) => {
                 inst.settings.push_sources();
             }, 'pgd')},
-            rst_shaders: (inst) => { return new HC.Hotkey('pageup', (e) => {
+            rst_shaders: (inst) => { return new HC.Hotkey('pageup,shift+pageup', (e) => {
                 inst.settings.rst_shaders();
             }, 'pgu')},
         };

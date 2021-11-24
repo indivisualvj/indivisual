@@ -867,22 +867,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 calls.push((_synced) => {
+                    HC.log('layer', 1);
+                    this.showOSD('layer', 1, SKIP_TEN_FRAMES, 'red');
                     this.updateControl('layer', 0, true, true, false);
                     _synced();
                 });
 
-                let _load = function (index) {
-                    if (index >= calls.length) {
-                        resolve();
-                        return;
-                    }
-                    let _call = calls[index];
-                    _call(/*_synced = */function () {
-                        _load(index + 1);
-                    });
-                };
-
-                _load(0);
+                HC.TimeoutManager.getInstance().chainExecuteCalls(calls, resolve);
             });
         }
 
@@ -897,6 +888,32 @@ document.addEventListener('DOMContentLoaded', function () {
 
         pushLayers() {
             this._bypassMonitor(this.syncLayers());
+        }
+
+        resetShaders(all) {
+            return new Promise((resolve, reject) => {
+                let calls = [];
+                let layers = all ? Object.values(this.config.ControlValues.layer).map(x => x - 1) : [this.config.ControlSettings.layer];
+                for (let key in layers) {
+                    let layer = layers[key];
+                    calls.push(/* _call = */(_synced) => {
+                        HC.TimeoutManager.getInstance().add('syncLayer.' + layer, SKIP_FOUR_FRAMES, () => {
+                            this.resetShader(layer, _synced)
+                        })
+                    })
+                }
+
+                HC.TimeoutManager.getInstance().chainExecuteCalls(calls, resolve);
+            });
+        }
+
+        resetShader(layer, callback) {
+            this.settingsManager.update(layer, 'passes', 'shaders', []);
+            let data = this.settingsManager.get(layer, 'passes').prepare();
+            this.updateSettings(layer, data, false, false, true);
+            HC.log('reset_shader', layer+1);
+            this.showOSD('reset_shader', layer+1, SKIP_TEN_FRAMES, 'red');
+            this.messaging.emitSettings(layer, data, false, false, true, callback);
         }
 
         /**
@@ -922,6 +939,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (settings) {
                 HC.log('sync_layer', layer+1);
+                this.showOSD('sync_layer', layer+1, SKIP_TEN_FRAMES, 'red');
                 this.messaging.emitSettings(layer, settings, true, false, true, callback);
 
             } else if (callback) {
@@ -936,6 +954,8 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param layer
          */
         updatePreset(name, data, layer) {
+
+            // fixme: this is chaos!!!
 
             HC.log('preset', name);
 
@@ -1101,10 +1121,11 @@ document.addEventListener('DOMContentLoaded', function () {
         /**
          *
          * @param layer
+         * @param callback
          */
-        resetLayer(layer) {
+        resetLayer(layer, callback) {
             this.settingsManager.resetLayer(layer);
-            this.syncLayer(layer);
+            this.syncLayer(layer, callback);
         }
     }
 }

@@ -56,122 +56,90 @@
                 });
 
             } else {
-                // load preset
-                this.filesystem.load(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (data) => {
-                    HC.TimeoutManager.getInstance().add('loadPreset', 0, () => {
-
-                        if (HC.Hotkey.isPressed('ctrl')) { //load shaders into present presets
-                            this.controller.transferShaderPasses(data.dir + '/' + data.name, JSON.parse(data.contents));
-
-                        } else {
-                            // load the preset
-
-                            HC.clearLog();
-
-                            let key = data.dir + '/' + data.name;
-                            let contents = JSON.parse(data.contents);
-
-                            this.controller.updatePreset(key, contents);
-                            let layer = this.config.ControlSettings.layer + 1;
-                            this.explorer.resetPreset(layer);
-                            ctrl.setInfo(layer);
-                            ctrl.setSelected(true);
-                        }
+                //load shaders into present presets
+                if (HC.Hotkey.isPressed('ctrl')) {
+                    this.filesystem.load(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (data) => {
+                        this.controller.transferShaderPasses(data.dir + '/' + data.name, JSON.parse(data.contents));
                     });
-                });
-            }
-        }
-
-        /**
-         *
-         * @param {HC.GuifyExplorerFolder} folder
-         */
-        loadPresets(folder) {
-            let children = Object.keys(folder.children);
-            let candidates = [];
-
-            for (let layer = 0; candidates.length < this.config.ControlValues.layers && layer < children.length; layer++) {
-                let child = folder.getChild(children[layer]);
-                candidates.push(child);
-            }
-            this.explorer.resetPresets();
-
-            HC.clearLog();
-
-            let candidate = 0;
-            for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
-                if (this.config.shuffleable(layer+1)) {
-                    if (candidate < candidates.length) {
-                        this._loadPreset(candidates[candidate], layer, candidate, candidate * SKIP_TEN_FRAMES);
-                        candidate++;
-
-                    } else { // always reset but do it slowly
-                        HC.TimeoutManager.getInstance().add('updatePreset.' + layer, layer * SKIP_TEN_FRAMES, () => {
-                            this.controller.resetLayer(layer);
-                        });
-                    }
-                }
-            }
-        }
-
-        /**
-         *
-         * @param {HC.GuifyExplorerFolder} folder
-         */
-        appendPresets(folder) {
-            let children = Object.keys(folder.children);
-            let dflt = [];
-            let layers = this.config.ControlValues.layers;
-
-            for (let i = 0; dflt.length < layers && i < children.length; i++) {
-                let child = folder.getChild(children[i]);
-                if (!child.getLabel().match(/^_.+/)) {
-                    dflt.push(child);
-                }
-            }
-
-            HC.clearLog();
-
-            let di = 0;
-            for (let i = 0; i < layers; i++) {
-                if (!this.settingsManager.isDefault(i)) {
-                    continue;
-                }
-
-                if (!this.config.shuffleable(i+1)) {
-                    continue;
-                }
-
-                if (di < dflt.length) {
-                    this._loadPreset(dflt[di], i, di, di === dflt.length - 1);
-                    di++;
 
                 } else {
-                    this.controller.updatePreset(false, this.settingsManager.prepareLayer(this.config.ControlSettings.layer));
+                    // load the preset
+                    let layer = this.config.ControlSettings.layer;
+                    this._loadPreset(ctrl, layer, () => {
+                        ctrl.setSelected(true);
+                    });
                 }
             }
+        }
+
+        /**
+         *
+         * @param folder
+         * @param append
+         */
+        loadPresets(folder, append) {
+
+            return new Promise((resolve, reject) => {
+
+                let children = Object.keys(folder.children);
+                let candidates = [];
+
+                for (let layer = 0; candidates.length < this.config.ControlValues.layers && layer < children.length; layer++) {
+                    let child = folder.getChild(children[layer]);
+                    candidates.push(child);
+                }
+                this.explorer.resetPresets();
+
+                let candidate = 0;
+                let calls = [];
+                for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
+                    let defaultOnly = true === append ? this.settingsManager.isDefault(layer) : true;
+
+                    if (defaultOnly && this.config.shuffleable(layer + 1)) {
+                        if (candidate < candidates.length) {
+                            let child = candidates[candidate];
+                            calls.push((_loaded) => {
+                                HC.TimeoutManager.getInstance().add('loadPresets.' + layer, SKIP_TEN_FRAMES, () => {
+                                    this._loadPreset(child, layer, _loaded);
+                                });
+                            });
+                            candidate++;
+
+                        } else { // always reset but do it slowly
+                            calls.push((_synced) => {
+                                HC.TimeoutManager.getInstance().add('loadPresets.' + layer, SKIP_TEN_FRAMES, () => {
+                                    this.controller.resetLayer(layer, _synced);
+                                });
+                            });
+                        }
+                    }
+                }
+
+                HC.TimeoutManager.getInstance().chainExecuteCalls(calls, resolve);
+            });
         }
 
         /**
          *
          * @param child
          * @param i
-         * @param di
-         * @param timeout
+         * @param callback
          * @private
          */
-        _loadPreset(child, i, di, timeout) {
+        _loadPreset(child, i, callback) {
 
             child.setInfo(i+1);
 
             console.log('loading', child.getLabel());
             this.filesystem.load(STORAGE_DIR, child.getParent().getLabel(), child.getLabel(), (data) => {
-                HC.TimeoutManager.getInstance().add('_loadPreset' + child.getLabel(), timeout || 0, () => {
-                    let key = data.dir + '/' + data.name;
-                    let contents = JSON.parse(data.contents);
-                    console.log('loaded', data.name);
-                    this.controller.updatePreset(key, contents, i);
-                });
+                let key = data.dir + '/' + data.name;
+                let contents = JSON.parse(data.contents);
+                console.log('loaded', data.name);
+                this.controller.updatePreset(key, contents, i);
+
+                if (callback) {
+                    callback();
+                }
             });
         };
 

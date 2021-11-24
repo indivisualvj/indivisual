@@ -15,7 +15,7 @@
                 let a = HC.logGetAnchor(key);
                 a.onclick = function (e) {
                     let co;
-                    if (co = e.target.closest('.expandable')) {
+                    if ((co = e.target.closest('.expandable'))) {
                         e.preventDefault();
                         e.stopPropagation();
                         co.onclick(e, true);
@@ -120,7 +120,7 @@
     /**
      *
      * @param value
-     * @returns {string}
+     * @returns {HTMLAnchorElement}
      */
     HC.logGetAnchor = function (value) {
         let a = document.createElement('a');

@@ -34,20 +34,18 @@ HC.ControlController = HC.ControlController || {};
     HC.ControlController.controls = class controls extends HC.ControlSet {
 
         static index = 20;
-        // static _name = 'controls';
         open = true;
 
         settings = {
             play: true,
 
             reset: () => {
-
-                if (this.config.messaging.program.config.shiftKey && this.config.messaging.program.config.ctrlKey) {
+                if (hotkeys.isPressed('shift') && hotkeys.isPressed('ctrl')) {
                     let yes = confirm('Reset everything?');
                     if (yes) {
                         this.config.messaging.program.fullReset();
                     }
-                } else if (this.config.messaging.program.config.shiftKey) {
+                } else if (hotkeys.isPressed('shift')) {
                     this.config.messaging.program.resetLayers();
 
                 } else {
@@ -207,22 +205,22 @@ HC.ControlController = HC.ControlController || {};
                     this.settings.layout_close();
                 });
             },
-            play: (inst) => { return new HC.KeyEvent('keydown', [32], (e) => {
+            play: (inst) => { return new HC.Hotkey('space', (e) => {
                 this.config.messaging.program.updateControl('play', !this.config.ControlSettings.play, true, true, false);
             }, 'spc')},
-            reset: (inst) => { return new HC.KeyEvent('keydown', [46], (e) => {
+            reset: (inst) => { return new HC.Hotkey('delete,shift+delete,ctrl+shift+delete', (e) => {
                 inst.settings.reset();
             }, 'del')},
-            monitor: (inst) => { return new HC.KeyEvent('keydown', [36], (e) => {
+            monitor: (inst) => { return new HC.Hotkey('home', (e) => {
                 this.config.messaging.program.updateControl('monitor', !this.config.ControlSettings.monitor, true, true, false);
             }, 'hm')},
-            push_layers: (inst) => { return new HC.KeyEvent('keydown', [35], (e) => {
+            push_layers: (inst) => { return new HC.Hotkey('end', (e) => {
                 inst.settings.push_layers();
             }, 'end')},
-            push_sources: (inst) => { return new HC.KeyEvent('keydown', [34], (e) => {
+            push_sources: (inst) => { return new HC.Hotkey('pagedown', (e) => {
                 inst.settings.push_sources();
             }, 'pgd')},
-            rst_shaders: (inst) => { return new HC.KeyEvent('keydown', [33], (e) => {
+            rst_shaders: (inst) => { return new HC.Hotkey('pageup', (e) => {
                 inst.settings.rst_shaders();
             }, 'pgu')},
         };

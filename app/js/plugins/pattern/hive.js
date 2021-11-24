@@ -6,7 +6,7 @@
             let layer = this.layer;
             let matrix = layer.getPatternPlugin('matrix');
             let gridPosition = matrix.gridPosition(shape);
-            let gpadx = this.settings.pattern_paddingx * .87;
+            let gpadx = this.settings.pattern_paddingx * .867;
             let gpady = this.settings.pattern_paddingy * .75;
             let gapx = layer.shapeSize(1) * gpadx;
             let gapy = layer.shapeSize(1) * gpady;
@@ -51,7 +51,7 @@
             let layer = this.layer;
             let matrix = layer.getPatternPlugin('matrix');
             let gridPosition = matrix.gridPosition(shape);
-            let gpadx = this.settings.pattern_paddingx * .435;
+            let gpadx = this.settings.pattern_paddingx * .4343;
             let gpady = this.settings.pattern_paddingy * .751;
             let gpad = this.settings.pattern_padding;
 

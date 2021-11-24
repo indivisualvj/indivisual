@@ -71,6 +71,10 @@ HC.ControlController = HC.ControlController || {};
             enable_mic: () => {
                 this.config.messaging.program.updateControl('audio', 'microphone', true, true, false);
             },
+            reset_overrides: () => {
+                this.config.messaging.program.updateSource('override_material_input', 'none', true, true, false);
+                this.config.messaging.program.updateSource('override_background_mode', 'none', true, true, false);
+            },
             layout_close: () => {
                 this.config.messaging.program.closeAll();
             },
@@ -133,27 +137,14 @@ HC.ControlController = HC.ControlController || {};
             push_sources: ['hex'],
             rst_shaders: ['quarter'],
             debug: ['eight'],
-
             tempo: ['half', 'clear'],
             beat: ['half'],
-
             audio: ['half', 'clear'],
             peak_bpm_detect: ['half'],
-
             layer: ['half', 'clear'],
             shuffleable: ['half'],
-
             shuffle_mode: ['half', 'clear'],
             shuffle_every: ['half'],
-            enable_mic: ['hidden'],
-            layout_control: ['hidden'],
-            layout_presets: ['hidden'],
-            layout_sequence: ['hidden'],
-            layout_display: ['hidden'],
-            layout_source: ['hidden'],
-            layout_animation: ['hidden'],
-            layout_override: ['hidden'],
-            layout_close: ['hidden'],
         };
 
         attributes = {
@@ -167,8 +158,13 @@ HC.ControlController = HC.ControlController || {};
 
         events = {
             enable_mic: (inst) => {
-                return new HC.Hotkey('ctrl+f9', (e) => {
+                return new HC.Hotkey('ctrl+shift+f9', (e) => {
                     this.settings.enable_mic();
+                });
+            },
+            reset_overrides: (inst) => {
+                return new HC.Hotkey('ctrl+shift+f10', (e) => {
+                    this.settings.reset_overrides();
                 });
             },
             layout_control: (inst) => {
@@ -176,29 +172,34 @@ HC.ControlController = HC.ControlController || {};
                     this.settings.layout_control();
                 });
             },
-            layout_presets: (inst) => {
-                return new HC.Hotkey('ctrl+2', (e) => {
-                    this.settings.layout_presets();
-                });
-            },
-            layout_sequence: (inst) => {
-                return new HC.Hotkey('ctrl+3', (e) => {
-                    this.settings.layout_sequence();
-                });
-            },
             layout_display: (inst) => {
-                return new HC.Hotkey('ctrl+4', (e) => {
+                return new HC.Hotkey('ctrl+2', (e) => {
                     this.settings.layout_display();
                 });
             },
             layout_source: (inst) => {
-                return new HC.Hotkey('ctrl+5', (e) => {
+                return new HC.Hotkey('ctrl+3', (e) => {
                     this.settings.layout_source();
                 });
             },
+            layout_override: (inst) => {
+                return new HC.Hotkey('ctrl+4', (e) => {
+                    this.settings.layout_override();
+                });
+            },
             layout_animation: (inst) => {
-                return new HC.Hotkey('ctrl+6', (e) => {
+                return new HC.Hotkey('ctrl+5', (e) => {
                     this.settings.layout_animation();
+                });
+            },
+            layout_sequence: (inst) => {
+                return new HC.Hotkey('ctrl+6', (e) => {
+                    this.settings.layout_sequence();
+                });
+            },
+            layout_presets: (inst) => {
+                return new HC.Hotkey('ctrl+7', (e) => {
+                    this.settings.layout_presets();
                 });
             },
             layout_close: (inst) => {

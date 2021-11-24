@@ -92,10 +92,10 @@
                 actions.childNodes.item(1).addEventListener('click', (e) => {
                     e.preventDefault(); e.stopPropagation();
                     if (e.shiftKey) {
-                        presetMan.loadPresets(this, true).finally(()=>{});
+                        presetMan.loadPresets(this, true).finally();
 
                     } else {
-                        presetMan.loadPresets(this).finally(()=>{});
+                        presetMan.loadPresets(this).finally();
                     }
                 });
                 actions.childNodes.item(2).addEventListener('click', (e) => {

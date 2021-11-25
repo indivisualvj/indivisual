@@ -401,7 +401,7 @@ HC.Layer.prototype.doCameraMode = function () {
     let plugin = this.getCameraModePlugin();
     this.doPlugin(plugin);
 
-    HC.EventManager.getInstance().fireEvent('layer.doCameraMode', this.getCamera());
+    HC.EventManager.getInstance().fireEvent('layer.doCameraMode', this.getCamera()); // todo use const
 };
 
 /**

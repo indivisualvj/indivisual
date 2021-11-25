@@ -223,9 +223,9 @@
 
             let fps = this.config.DisplaySettings.fps * 1.15;
             this.frameCount = Math.ceil(this.length / 1000 * fps);
-            HC.EventManager.getInstance().fireEventId('sample.init.start', this.id, this);
+            HC.EventManager.getInstance().fireEventId('sample.init.start', this.id, this); // todo use const
             this.initialized = true;
-            HC.EventManager.getInstance().fireEventId('sample.init.end', this.id, this);
+            HC.EventManager.getInstance().fireEventId('sample.init.end', this.id, this); // todo use const
 
         }
 
@@ -241,7 +241,7 @@
                 this.pointer = 0;
                 this.counter = 0;
 
-                HC.EventManager.getInstance().fireEventId('sample.render.error', this.id, this);
+                HC.EventManager.getInstance().fireEventId('sample.render.error', this.id, this); // todo use const
 
             } else {
                 this.samples.splice(this.pointer);
@@ -251,7 +251,7 @@
                 this.length = this.frameCount / 60 * 1000;
                 this.pointer = 0;
                 this.counter = 0;
-                HC.EventManager.getInstance().fireEventId('sample.render.end', this.id, this);
+                HC.EventManager.getInstance().fireEventId('sample.render.end', this.id, this); // todo use const
                 HC.EventManager.getInstance().fireEvent(EVENT_SAMPLE_READY, this);
             }
         }
@@ -268,7 +268,7 @@
             if (image && sample.samples) {
                 if (!sample.started) {
                     if (speed.starting()) {
-                        HC.EventManager.getInstance().fireEventId('sample.render.start', sample.id, sample);
+                        HC.EventManager.getInstance().fireEventId('sample.render.start', sample.id, sample); // todo use const
                         sample.started = true;
                     }
                 }
@@ -279,7 +279,7 @@
 
                         } else {
                             sample.counter++;
-                            HC.EventManager.getInstance().fireEventId('sample.render.progress', sample.id, sample);
+                            HC.EventManager.getInstance().fireEventId('sample.render.progress', sample.id, sample); // todo use const
                         }
 
                     }
@@ -297,7 +297,7 @@
                     }
                 }
             } else {
-                HC.EventManager.getInstance().fireEventId('sample.render.error', sample.id, sample);
+                HC.EventManager.getInstance().fireEventId('sample.render.error', sample.id, sample); // todo use const
             }
 
         }

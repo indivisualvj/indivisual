@@ -346,6 +346,8 @@
 
                 mat.roughness = settings.material_roughness;
                 mat.metalness = settings.material_metalness;
+                mat.displacementScale = settings.material_disp_scale;
+                mat.displacementBias = settings.material_disp_bias;
 
                 this._updateMaterialBlending();
 

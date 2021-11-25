@@ -9,29 +9,17 @@
 
         create() {
             let layer = this.layer;
-
-            let geo = new THREE.BufferGeometry();
-            let plane = new THREE.PlaneGeometry(layer.shapeSize(1) * 1.15, layer.shapeSize(1) / 14);
-
-            let pmesh = new THREE.Mesh(plane);
-            pmesh.rotation.z = Math.PI / -4;
-            pmesh.updateMatrix();
-            geo.merge(pmesh.geometry, pmesh.matrix);
-
-            let circ = new THREE.CircleGeometry(layer.shapeSize(.5) / 5, 24, Math.PI, Math.PI * 2);
-            let cmesh = new THREE.Mesh(circ);
-            cmesh.position.set(layer.shapeSize(.5), -layer.shapeSize(.5), 0);
-            cmesh.updateMatrix();
-            geo.merge(cmesh.geometry, cmesh.matrix);
-
-            circ = new THREE.CircleGeometry(layer.shapeSize(.5) / 5, 24, Math.PI, Math.PI * 2);
-            cmesh = new THREE.Mesh(circ);
-            cmesh.position.set(-layer.shapeSize(.5), layer.shapeSize(.5), 0);
-            cmesh.updateMatrix();
-            geo.merge(cmesh.geometry, cmesh.matrix);
-
-            geo.rotateZ(45 * RAD * this.getModA(0, 0));
-
+            let v = new THREE.Vector2(layer.shapeSize(1), layer.shapeSize(1));
+            let ss = v.length();
+            let hss = ss/2;
+            let crad = hss / 5;
+            let plane = new THREE.PlaneGeometry(ss - 1.86*crad, ss / 14);
+            let circ1 = new THREE.CircleGeometry(crad, 24, Math.PI, Math.PI * 2);
+            circ1.translate(-hss, 0, 0);
+            let circ2 = new THREE.CircleGeometry(crad, 24, Math.PI, Math.PI * 2);
+            circ2.translate(hss, 0, 0);
+            let geo = THREE.BufferGeometryUtils.mergeBufferGeometries([plane, circ1, circ2]);
+            geo.rotateZ(45 * RAD + 45 * RAD * this.getModA(0, 0));
             return geo;
         }
     }

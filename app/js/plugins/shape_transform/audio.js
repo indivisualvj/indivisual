@@ -55,9 +55,9 @@
                     }
 
                     let vtcb = vbackup[i];
-                    vertices.setX(i, vtcb.x * x);
-                    vertices.setY(i, vtcb.y * y);
-                    vertices.setZ(i, vtcb.z * z);
+                    vertices.setX(i, vtcb.x?vtcb.x * x : x*x*x);
+                    vertices.setY(i, vtcb.y?vtcb.y * y : y*y*y);
+                    vertices.setZ(i, vtcb.z?vtcb.z * z : z*z*z);
 
                 }
                 vertices.needsUpdate = true;

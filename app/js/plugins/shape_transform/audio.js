@@ -7,6 +7,7 @@
             let vertices = shape.geometry.getAttribute('position');
             let params = this.params(shape);
             if (!params.vertices) {
+
                 params.vertices = [];
                 let v = new THREE.Vector3();
                 for (let i = 0; i < vertices.count; i++) {

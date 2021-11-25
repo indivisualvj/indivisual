@@ -11,6 +11,7 @@ HC.plugins.shape_geometry = HC.plugins.shape_geometry || {};
         apply() {
             if (!this.geometry) { // all meshes use the same geometry
                 let geometry = this.create();
+                geometry = THREE.BufferGeometryUtils.mergeVertices(geometry, 10); // fixme: check if 10 is good :D
 
                 if (this.controlSets.material.properties.material_mapping === 'f2b') {
                     HC.BufferGeometryUtils.front2back(geometry);

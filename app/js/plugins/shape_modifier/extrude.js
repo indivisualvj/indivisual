@@ -48,10 +48,10 @@
                 let conf = {
                     steps: 1,
                     depth: layer.shapeSize(this.settings.shape_modifier_volume),
-                    bevelEnabled: this.settings.shape_modc,
-                    bevelThickness: this.settings.shape_modc,
-                    bevelSize: this.settings.shape_modc,
-                    bevelSegments: Math.ceil(this.settings.shape_modc / 2),
+                    bevelEnabled: this.getModA(0, 0),
+                    bevelThickness: this.getModB(0, 0),
+                    bevelSize: this.getModC(0, 0),
+                    bevelSegments: Math.ceil(this.getModC(0, 0) / 2),
                 };
 
                 geometry = new THREE.ExtrudeGeometry(shape, conf);

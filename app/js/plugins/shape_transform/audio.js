@@ -4,12 +4,8 @@
 
         apply(shape, axis) {
 
-            if (!shape.getVertices()) {
-                shape.setGeometry(shape.getRootGeometry());
-            }
-
-            let vbackup = shape.verticesCopy;
-            let vertices = shape.getVertices();
+            let vbackup = null; // fixme
+            let vertices = null;
 
             if (vertices && vbackup && this.isFirstShape(shape)) {
 

@@ -41,7 +41,7 @@
             this.index = index;
             this.color = color;
             this.mesh = mesh;
-            this.setGeometry(mesh.geometry);
+            this.geometry = mesh.geometry;
             this.normalScale = new THREE.Vector3(1, 1, 1).length();
 
             this.initPlugins();
@@ -56,17 +56,6 @@
 
         isVisible() {
             return this.visible;
-        }
-
-        setGeometry(geo) {
-
-            if (this.geometry) {
-                HC.dispose(this.geometry);
-            }
-
-            this.geometry = geo;
-            this.mesh.geometry = geo;
-            this.verticesCopy = this.copyVertices();
         }
 
         getGeometry() {
@@ -425,34 +414,6 @@
                     mat.needsUpdate = true;
                 }
             }
-        }
-
-        getRootGeometry() {
-            let _get = function (g) {
-                return g.userData ? g.userData.geometry : false;
-            };
-            let geometry = this.geometry;
-            while(_get(geometry)) {
-                geometry = _get(geometry);
-            }
-
-            return geometry
-        }
-
-        getVertices() {
-            return this.geometry.vertices;
-        }
-
-        copyVertices() {
-            let geometry = this.geometry;
-            let vertices = [];
-            if (geometry.vertices) {
-                for (let i = 0; i < geometry.vertices.length; i++) {
-                    vertices.push(geometry.vertices[i].clone());
-                }
-            }
-
-            return vertices;
         }
     }
 }

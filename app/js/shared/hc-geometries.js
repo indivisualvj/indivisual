@@ -276,7 +276,7 @@
                 if (f.z < 0) {
                     console.log('v', v);
                     console.log('f', f);
-                    n.setXYZ(i, f.x, 0, 1);
+                    n.setXYZ(i, f.z, f.y, f.x);
                 }
 
             }

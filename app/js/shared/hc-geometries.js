@@ -106,8 +106,7 @@
             let div = Math.PI * 0.5;
             let hseg = -div + (div / edges) * dir;
 
-            let geo = new THREE.RingGeometry(this.innerRadius, this.outerRadius, edges, 1, hseg);
-            return geo;
+            return new THREE.RingGeometry(this.innerRadius, this.outerRadius, edges, 1, hseg);
         }
     }
 }

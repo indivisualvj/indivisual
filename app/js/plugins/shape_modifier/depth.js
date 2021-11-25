@@ -6,19 +6,19 @@
             let layer = this.layer;
             let z = 0;
 
-            let vertices = geometry.vertices;
+            let vertices = geometry.getAttribute('position');
 
             if (vertices) {
-                geometry.center();
 
-                for (let i = 0; i < vertices.length; i++) {
-                    let vtc = vertices[i];
+                let vtc = new THREE.Vector3();
+                for (let i = 0; i < vertices.count; i++) {
+                    vtc.fromBufferAttribute(vertices, i);
 
                     switch (mode) {
 
                         default:
                         case 'center':
-                            z = new THREE.Vector2(vtc.x, vtc.y).length() * -.5;
+                            z = vtc.length() * -.5;
                             break;
 
                         case 'flat':
@@ -39,11 +39,9 @@
 
                     }
 
-                    vtc.z = z * this.settings.shape_modifier_volume;
+                    vertices.setZ(i, z * this.settings.shape_modifier_volume);
                 }
-
-                geometry.center();
-                geometry.verticesNeedUpdate = true;
+                vertices.needsUpdate = true;
 
             } else {
                 console.warn('No transform for ' + geometry.type);

@@ -122,6 +122,13 @@
                 this.three.perspective1 = new THREE.PerspectiveCamera(50, 1, 0.1, 500000);
                 this.three.perspective2 = new THREE.PerspectiveCamera(50, 1, 0.1, 500000);
 
+
+                // Observe a scene or a renderer
+                if (typeof __THREE_DEVTOOLS__ !== 'undefined') {
+                    __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: this.three.scene }));
+                    __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: this.three.scene }));
+                }
+
                 // listener.register('layer.doCameraMode', 'perspectives', function (cam) {
 
                 // })

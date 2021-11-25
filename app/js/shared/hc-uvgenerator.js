@@ -20,7 +20,7 @@
                         (vec3.y - box.min.y) / size.y
                     );
                 } else {
-                    uvs.push([(vec3.x - box.min.x) / size.x, (vec3.y - box.min.y) / size.y]);
+                    uvs.push((vec3.x - box.min.x) / size.x, (vec3.y - box.min.y) / size.y);
                 }
             }
 
@@ -62,9 +62,9 @@
                         (vec3.z - box.min.z) / range.y
                     );
                 } else {
-                    uvs.push([(vec3.x - box.min.x) / size.x,
+                    uvs.push((vec3.x - box.min.x) / size.x,
                         (vec3.y - box.min.y) / size.y,
-                        (vec3.z - box.min.z) / range.y]);
+                        (vec3.z - box.min.z) / range.y);
                 }
             }
 

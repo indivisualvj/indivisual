@@ -513,7 +513,7 @@ HC.Controller.prototype.updateUi = function (control) {
     let key = control ? control.getLabel() : 'all';
 
     HC.TimeoutManager.getInstance().add('updateUi.' + key, SKIP_TEN_FRAMES, () => {
-        this.refreshLayerInfo();
+        this.refreshLayersUi();
 
         if (!control) {
             this._updateValuesChanged(this.controlSettingsGui);

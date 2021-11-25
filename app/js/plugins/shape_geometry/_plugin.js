@@ -11,7 +11,7 @@ HC.plugins.shape_geometry = HC.plugins.shape_geometry || {};
         apply() {
             if (!this.geometry) { // all meshes use the same geometry
                 let geometry = this.create();
-                geometry = THREE.BufferGeometryUtils.mergeVertices(geometry, this.settings.shape_merge_tolerance); // fixme: make tolerance adjustable
+                geometry = THREE.BufferGeometryUtils.mergeVertices(geometry, this.settings.shape_merge_tolerance);
 
                 if (this.controlSets.material.properties.material_mapping === 'f2b') {
                     HC.BufferGeometryUtils.front2back(geometry);

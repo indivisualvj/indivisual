@@ -56,7 +56,7 @@
                 e.preventDefault();
                 e.stopPropagation();
                 explorer.reload(() => {
-                    explorer.controller.refreshLayerInfo();
+                    explorer.controller.restoreLoadedPresets();
                 });
 
             });
@@ -91,12 +91,7 @@
                 });
                 actions.childNodes.item(1).addEventListener('click', (e) => {
                     e.preventDefault(); e.stopPropagation();
-                    if (e.shiftKey) {
-                        presetMan.loadPresets(this, true).finally();
-
-                    } else {
-                        presetMan.loadPresets(this).finally();
-                    }
+                        presetMan.loadPresets(this, e.shiftKey).finally();
                 });
                 actions.childNodes.item(2).addEventListener('click', (e) => {
                     e.preventDefault(); e.stopPropagation();
@@ -160,7 +155,9 @@
          */
         constructor(parent, opts, presetMan) {
 
-            opts.action = () => {presetMan.loadPreset(this)};
+            opts.action = () => {
+                presetMan.loadPreset(this, HC.Hotkey.isPressed('ctrl'));
+            };
 
             super(parent, opts);
 

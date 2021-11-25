@@ -2,19 +2,41 @@ HC.plugins.shape_transform = HC.plugins.shape_transform || {};
 {
     HC.ShapeTransformPlugin = class Plugin extends HC.AnimationPlugin {
 
-        injections = {
-            vertices: null
-        };
+        vertices;
 
-        after() {
+        before(shape) {
+            if (!this.vertices) {
+                let vertices = shape.geometry.getAttribute('position');
+                this.vertices = [];
+                let v = new THREE.Vector3();
+                for (let i = 0; i < vertices.count; i++) {
+                    v.fromBufferAttribute(vertices, i);
+                    this.vertices.push(v.clone());
+                }
+            }
+
+            return this.isFirstShape(shape);
+        }
+
+        after(shape) {
             // todo geo.attributes.lineDistance.needsUpdate?
+            if (this.key !== 'off') {
+                if (shape.geometry.attributes.lineDistance) {
+                    shape.geometry.attributes.lineDistance.needsUpdate = true;
+                }
+                shape.geometry.attributes.position.needsUpdate = true;
+            }
+            // fixme: these plugins can not be done per shape (eg. drawrange using shapespeed) because there is only one geometry at a time
         }
 
         setControlSets(controlSets) {
             super.setControlSets(controlSets);
-            // make all such plugins make use of corresponding controlset only
+            // make all those plugins make use of corresponding controlset only
             this.settings = controlSets.shape.properties;
         }
 
+        reset() {
+            this.vertices = null;
+        }
     }
 }

@@ -68,7 +68,6 @@
                     // load the preset
                     let layer = this.config.ControlSettings.layer;
                     this._loadPreset(ctrl, layer, () => {
-                        this.explorer.resetLayerStatus(layer+1);
                         this.explorer.setSelected(layer+1, true);
                     });
                 }
@@ -103,7 +102,6 @@
                             this.settingsManager.resetLayer(layer);
                             calls.push((_loaded) => {
                                 HC.TimeoutManager.getInstance().add('loadPresets.' + layer, SKIP_TEN_FRAMES, () => {
-                                    this.explorer.resetLayerStatus(layer+1);
                                     this._loadPreset(child, layer, _loaded);
                                 });
                             });
@@ -112,7 +110,6 @@
                         } else { // always reset but do it slowly
                             calls.push((_synced) => {
                                 HC.TimeoutManager.getInstance().add('loadPresets.' + layer, SKIP_TEN_FRAMES, () => {
-                                    // fixme: no osd, this is hidden state
                                     this.controller.resetLayer(layer, _synced);
                                     this.explorer.resetLayerStatus(layer+1);
                                 });
@@ -139,6 +136,7 @@
                 let key = data.dir + '/' + data.name;
                 let contents = JSON.parse(data.contents);
                 console.log('loaded', data.name);
+                this.explorer.resetLayerStatus(layer+1);
                 child.setInfo(layer+1);
                 this.controller.updatePreset(key, contents, layer);
 

@@ -100,6 +100,7 @@
                     if (defaultOnly && this.config.shuffleable(layer + 1)) {
                         if (candidate < candidates.length) {
                             let child = candidates[candidate];
+                            this.settingsManager.resetLayer(layer);
                             calls.push((_loaded) => {
                                 HC.TimeoutManager.getInstance().add('loadPresets.' + layer, SKIP_TEN_FRAMES, () => {
                                     this._loadPreset(child, layer, _loaded);

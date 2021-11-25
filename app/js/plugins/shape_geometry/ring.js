@@ -30,13 +30,10 @@
                     edges: edges,
                     direction: dir
                 }).create();
-
                 geometries.push(circ);
             }
-            let geometry = THREE.BufferGeometryUtils.mergeBufferGeometries(geometries);
-            geometry.center();
 
-            return geometry;
+            return THREE.BufferGeometryUtils.mergeBufferGeometries(geometries);
         }
     }
 }

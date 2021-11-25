@@ -45,20 +45,21 @@
         /**
          *
          * @param {HC.GuifyExplorerPreset} ctrl
+         * @param {boolean} loadShaders
          */
-        loadPreset(ctrl) {
+        loadPreset(ctrl, loadShaders) {
             if (ctrl.getLabel() === '_default') {
                 // load default
                 let layer = this.config.ControlSettings.layer;
                 this.settingsManager.setLayerProperties(layer, false);
                 HC.TimeoutManager.getInstance().add('loadPreset', 0, () => {
-                    this.explorer.resetPreset(layer + 1);
+                    this.explorer.resetLayerStatus(layer+1);
                     this.controller.updatePreset(false, this.settingsManager.prepareLayer(layer));
                 });
 
             } else {
                 //load shaders into present presets
-                if (HC.Hotkey.isPressed('ctrl')) {
+                if (loadShaders) {
                     this.filesystem.load(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (data) => {
                         this.controller.transferShaderPasses(data.dir + '/' + data.name, JSON.parse(data.contents));
                     });
@@ -67,7 +68,6 @@
                     // load the preset
                     let layer = this.config.ControlSettings.layer;
                     this._loadPreset(ctrl, layer, () => {
-                        this.explorer.resetPreset(layer+1)
                         this.explorer.setSelected(layer+1, true);
                     });
                 }
@@ -90,7 +90,6 @@
                     let child = folder.getChild(children[layer]);
                     candidates.push(child);
                 }
-                this.explorer.resetPresets();
 
                 let candidate = 0;
                 let calls = [];
@@ -100,6 +99,7 @@
                     if (defaultOnly && this.config.shuffleable(layer + 1)) {
                         if (candidate < candidates.length) {
                             let child = candidates[candidate];
+                            this.settingsManager.resetLayer(layer);
                             calls.push((_loaded) => {
                                 HC.TimeoutManager.getInstance().add('loadPresets.' + layer, SKIP_TEN_FRAMES, () => {
                                     this._loadPreset(child, layer, _loaded);
@@ -111,33 +111,34 @@
                             calls.push((_synced) => {
                                 HC.TimeoutManager.getInstance().add('loadPresets.' + layer, SKIP_TEN_FRAMES, () => {
                                     this.controller.resetLayer(layer, _synced);
+                                    this.explorer.resetLayerStatus(layer+1);
                                 });
                             });
                         }
                     }
                 }
 
-                HC.TimeoutManager.getInstance().chainExecuteCalls(calls, resolve);
+                HC.TimeoutManager.chainExecuteCalls(calls, resolve);
             });
         }
 
         /**
          *
          * @param child
-         * @param i
+         * @param layer
          * @param callback
          * @private
          */
-        _loadPreset(child, i, callback) {
-
-            child.setInfo(i+1); // todo: this makes sense here?
+        _loadPreset(child, layer, callback) {
 
             console.log('loading', child.getLabel());
             this.filesystem.load(STORAGE_DIR, child.getParent().getLabel(), child.getLabel(), (data) => {
                 let key = data.dir + '/' + data.name;
                 let contents = JSON.parse(data.contents);
                 console.log('loaded', data.name);
-                this.controller.updatePreset(key, contents, i);
+                this.explorer.resetLayerStatus(layer+1);
+                child.setInfo(layer+1);
+                this.controller.updatePreset(key, contents, layer);
 
                 if (callback) {
                     callback();

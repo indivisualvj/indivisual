@@ -193,7 +193,7 @@
          * @private
          */
         _reset() {
-            HC.EventManager.getInstance().removeEventId(EVENT_RENDERER_RENDER, this.id, this);
+            HC.EventManager.getInstance().removeEventId(EVENT_RENDERER_BEFORE_RENDER, this.id, this);
             this.initialized = false;
             this.pointer = 0;
             this.started = false;

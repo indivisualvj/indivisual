@@ -69,8 +69,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     sample: new Array(animation.config.SourceValues.sample.length)
                 });
 
-                new HC.Animation.KeyboardListener().init(animation);
-                new HC.Animation.EventListener().init();
+                if (IS_ANIMATION) {
+                    new HC.Animation.KeyboardListener().init(animation);
+                    new HC.Animation.EventListener().init();
+                }
 
                 animation.loadSession();
             });

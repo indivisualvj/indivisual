@@ -261,8 +261,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 if ('settings' in session) {
                     HC.log('settings', 'synced');
                     let settings = session.settings;
-                    for (let k in settings) {
-                        this.updateSettings(k, settings[k], true, false, true);
+                    for (let layer in settings) {
+                        this.updateSettings(layer, settings[layer], true, false, true);
                     }
                 }
                 if ('data' in session) {
@@ -868,12 +868,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 calls.push((_synced) => {
                     HC.log('layer', 1);
-                    this.showOSD('layer', 1, SKIP_TEN_FRAMES, 'red');
                     this.updateControl('layer', 0, true, true, false);
                     _synced();
                 });
 
-                HC.TimeoutManager.getInstance().chainExecuteCalls(calls, resolve);
+                HC.TimeoutManager.chainExecuteCalls(calls, resolve);
             });
         }
 
@@ -903,7 +902,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     })
                 }
 
-                HC.TimeoutManager.getInstance().chainExecuteCalls(calls, resolve);
+                HC.TimeoutManager.chainExecuteCalls(calls, resolve);
             });
         }
 
@@ -912,7 +911,6 @@ document.addEventListener('DOMContentLoaded', function () {
             let data = this.settingsManager.get(layer, 'passes').prepare();
             this.updateSettings(layer, data, false, false, true);
             HC.log('reset_shader', layer+1);
-            this.showOSD('reset_shader', layer+1, SKIP_TEN_FRAMES, 'red');
             this.messaging.emitSettings(layer, data, false, false, true, callback);
         }
 
@@ -939,7 +937,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (settings) {
                 HC.log('sync_layer', layer+1);
-                this.showOSD('sync_layer', layer+1, SKIP_TEN_FRAMES, 'red');
                 this.messaging.emitSettings(layer, settings, true, false, true, callback);
 
             } else if (callback) {
@@ -1027,18 +1024,14 @@ document.addEventListener('DOMContentLoaded', function () {
         /**
          *
          */
-        refreshLayerInfo() {
+        refreshLayersUi() {
             let preset = [];
 
-            for (let i = 0; i < this.config.ControlValues.layers; i++) {
-                if (this.settingsManager.layers[i]) {
-                    let l = this.settingsManager.getLayer(i);
-                    if (this.config.shuffleable(i+1) && !this.settingsManager.isDefault(l)) {
-                        let name = l.controlSets.info.get('name');
-                        if (name) {
-                            this.explorer.setInfoByPath(name, i+1);
-                        }
-                        preset.push(i+1);
+            for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
+                if (this.settingsManager.layers[layer]) {
+                    let l = this.settingsManager.getLayer(layer);
+                    if (this.config.shuffleable(layer+1) && !this.settingsManager.isDefault(l)) {
+                        preset.push(layer+1);
                     }
                 }
             }
@@ -1051,6 +1044,15 @@ document.addEventListener('DOMContentLoaded', function () {
             };
 
             this.messaging.onAttr(config);
+        }
+
+        restoreLoadedPresets() {
+            for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
+                let name = this.settingsManager.get(layer, 'info').get('name');
+                if (name) {
+                    this.explorer.setInfoByPath(name, layer+1);
+                }
+            }
         }
 
         /**
@@ -1076,7 +1078,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let session = this.config.ControlSettings.session;
             assetman.disposeAll();
             this.explorer.reload();
-            this.explorer.resetPresets();
+            this.explorer.resetStatus();
             this.settingsManager.reset();
             this.config.SourceSettingsManager.reset();
             this.config.ControlSettingsManager.reset();
@@ -1092,8 +1094,9 @@ document.addEventListener('DOMContentLoaded', function () {
             this.updateSources(sources, true, true, true);
             this.updateControls(controls, true, true, true);
             this.updateDisplays(displays, true, true, true);
-            this.syncLayers().finally();
-            this._checkDisplayVisibility();
+            this.syncLayers().finally(() => {
+                this._checkDisplayVisibility();
+            });
         }
 
         /**
@@ -1102,20 +1105,20 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         _checkDisplayVisibility() {
             if (!this.config.DisplaySettings.display0_visible) {
-                this.openTreeByPath('video/display0');
-                this.showOSD('display0_visible', 'enabled at least one?', 10000, 'red');
+                this.updateDisplay('display0_visible', true, true, true, false);
             }
         }
 
         /**
          * reset non shuffleable layers
+         * @returns {Promise}
          */
         resetLayers() {
             let shuffleable = this.config.ControlSettings.shuffleable.toIntArray((it)=>{return parseInt(it)-1;});
             this.settingsManager.reset(shuffleable);
             shuffleable = this.config.ControlSettings.shuffleable.toIntArray();
-            this.explorer.resetPresets(shuffleable);
-            this.syncLayers(shuffleable).finally();
+            this.explorer.resetStatus(shuffleable);
+            return this.syncLayers(shuffleable);
         }
 
         /**

@@ -77,7 +77,7 @@ HC.Layer.prototype.nextMesh = function (index) {
 
 /**
  *
- * @returns {THREE.Geometry}
+ * @returns {THREE.BufferGeometry}
  */
 HC.Layer.prototype.nextGeometry = function () {
     let plugin = this.getShapeGeometryPlugin();

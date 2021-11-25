@@ -19,6 +19,45 @@
                         document.body.style.cursor = 'none';
                     }, 2000);
                 });
+
+                let inFullscreen = false;
+                document.addEventListener('dblclick', () => {
+
+                    if (inFullscreen) {
+                        document.exitFullscreen();
+                        return;
+                    }
+
+                    document.body.requestFullscreen().then(() => {
+                        console.log('now in fullscreen');
+
+                    }, (e) => {
+                        inFullscreen = false;
+                        console.error('no fullscreen', e);
+
+                    });
+                });
+                let wakeLock;
+
+                document.addEventListener('fullscreenchange', (e) => {
+                    if (!inFullscreen) {
+                        inFullscreen = true;
+                        navigator.wakeLock.request().then((e) => {
+                            wakeLock = e;
+                            console.log('wakelock active', e);
+                        }, (e) => {
+                            console.error('wakelock failed', e);
+                        });
+                    } else if (inFullscreen) {
+                        console.log('exit fullscreen');
+                        inFullscreen = false;
+                        if (wakeLock) {
+                            wakeLock.release().then(() => {
+                                console.log('wakelock released');
+                            });
+                        }
+                    }
+                });
             }
         }
     }

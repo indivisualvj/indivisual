@@ -20,10 +20,10 @@
                 shape = new THREE.Shape();
                 geometry.center();
 
-                let vertices = geometry.vertices;
-
-                for (let i in vertices) {
-                    let v = vertices[i];
+                let vertices = geometry.getAttribute('position');
+                let v = new THREE.Vector3();
+                for (let i = 0; i < vertices.count; i++) {
+                    v.fromBufferAttribute(vertices, i);
 
                     if (v.x !== 0 || v.y !== 0) {
                         if (moved === false) {
@@ -56,7 +56,6 @@
 
                 geometry = new THREE.ExtrudeGeometry(shape, conf);
                 geometry.center();
-                geometry.verticesNeedUpdate = true;
 
                 HC.BufferGeometryUtils.front2back(geometry);
             }

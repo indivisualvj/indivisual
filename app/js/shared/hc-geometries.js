@@ -249,8 +249,6 @@
                 points.push(vec);
             }
             let geometry = new THREE.BufferGeometry().setFromPoints(points);
-            geometry.computeVertexNormals();
-            HC.BufferGeometryUtils.default(geometry);
             this._alignVertexNormals(geometry);
 
             return geometry;
@@ -276,13 +274,12 @@
                     p.setXYZ(i  , v3.x, v3.y, v3.z);
                     p.setXYZ(i+1, v2.x, v2.y, v2.z);
                     p.setXYZ(i+2, v1.x, v1.y, v1.z);
-
                     i+=2;
                 }
             }
 
             geometry.attributes.position.needsUpdate = true;
-            geometry.attributes.normal.needsUpdate = true;
+            geometry.computeVertexNormals();
 
         }
     }

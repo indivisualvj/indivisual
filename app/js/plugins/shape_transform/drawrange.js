@@ -5,9 +5,10 @@
         apply(shape) {
             let speed = this.layer.getCurrentSpeed();
             if (!this.settings.shape_sync) {
-                speed = this.layer.getShapeSpeed(shape);
+                speed = this.layer.getShapeSpeed(shape).speed;
             }
-            let l = shape.geometry.attributes.position.count;
+            let p = shape.geometry.attributes.position;
+            let l = p.count * p.itemSize;
             let v = this.settings.shape_transform_volume;
             let m = v < 0 ? 1 - speed.prc : speed.prc;
             m *= Math.abs(v);

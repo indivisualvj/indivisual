@@ -42,7 +42,7 @@
             mesh.name = this.id(index);
 
             let inst = this;
-            HC.EventManager.getInstance().register(EVENT_RENDERER_RENDER, this.id(index), function (renderer) {
+            HC.EventManager.getInstance().register(EVENT_RENDERER_BEFORE_RENDER, this.id(index), function (renderer) {
                 if (inst.layer.isVisible()) {
                     mesh.visible = false;
 

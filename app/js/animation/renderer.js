@@ -91,7 +91,7 @@
          * @param keepSettings
          */
         fullReset(keepSettings) {
-            HC.EventManager.getInstance().removeEvent(EVENT_RENDERER_RENDER);
+            HC.EventManager.getInstance().removeEvent(EVENT_RENDERER_BEFORE_RENDER);
             this.resize();
             this.initLayers(keepSettings);
             this.setLayer(0);
@@ -378,12 +378,12 @@
          *
          */
         render() {
-
             if (this._last !== this.animation.now) {
-                HC.EventManager.getInstance().fireEvent(EVENT_RENDERER_RENDER, this);
 
                 this.three.scene.background = this.currentLayer._layer.background;
                 this.three.scene.fog = this.currentLayer._layer.fog;
+
+                HC.EventManager.getInstance().fireEvent(EVENT_RENDERER_BEFORE_RENDER, this);
 
                 if (this.currentLayer.shaders()) {
                     this.currentLayer.doShaders();

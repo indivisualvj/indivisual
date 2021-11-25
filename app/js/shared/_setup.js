@@ -26,7 +26,7 @@ IS_MONITOR = G_INSTANCE === _MONITOR;
 EVENT_SOURCE_SETTING_CHANGED = 'source.setting.changed';
 EVENT_SAMPLE_READY = 'sample.ready';
 EVENT_SAMPLE_STATUS_CHANGED = 'sample.disabled';
-EVENT_RENDERER_RENDER = 'renderer.render';
+EVENT_RENDERER_BEFORE_RENDER = 'renderer.before_render';
 EVENT_LAYER_ANIMATE = 'layer.animate';
 EVENT_LAYER_RESET = 'layer.reset';
 EVENT_LAYER_RESET_SHAPES = 'layer.reset_shapes';

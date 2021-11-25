@@ -252,7 +252,6 @@
             geometry.computeVertexNormals();
             HC.BufferGeometryUtils.default(geometry);
             this._alignVertexNormals(geometry);
-            // this._alignVertexNormals(geometry);
 
             return geometry;
         }
@@ -262,27 +261,28 @@
 
             let p = geometry.attributes.position;
             let n = geometry.attributes.normal;
-            let v = new THREE.Vector3();
+            let v1 = new THREE.Vector3();
             let f = new THREE.Vector3();
 
-            console.log('n', n.count);
-            console.log('p', p.count);
-
             for (let i = 0; i < n.count; i++) {
-
-                v.fromBufferAttribute(p, i);
+                v1.fromBufferAttribute(p, i);
                 f.fromBufferAttribute(n, i);
                 if (f.z < 0) {
-                    console.log('v', v);
-                    console.log('f', f);
-                    n.setXYZ(i, f.z, f.y, f.x);
-                }
+                    let v2 = new THREE.Vector3();
+                    v2.fromBufferAttribute(p, i+1);
+                    let v3 = new THREE.Vector3();
+                    v3.fromBufferAttribute(p, i+2);
 
+                    p.setXYZ(i  , v3.x, v3.y, v3.z);
+                    p.setXYZ(i+1, v2.x, v2.y, v2.z);
+                    p.setXYZ(i+2, v1.x, v1.y, v1.z);
+
+                    i+=2;
+                }
             }
+
             geometry.attributes.position.needsUpdate = true;
             geometry.attributes.normal.needsUpdate = true;
-            // geometry.setAttribute('normal', undefined);
-            // geometry.computeVertexNormals();
 
         }
     }

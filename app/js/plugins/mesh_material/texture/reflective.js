@@ -5,9 +5,6 @@
             reflection: {
                 text: 'use background_input to change reflection'
             }
-
-
-
         };
 
         apply(geometry, index) {
@@ -27,7 +24,7 @@
                 this.material.needsUpdate = true;
             };
             this.cubeTextureFromBackgroundInput(_onLoad);
-
+            // fixme: does not update after reload
             let id = this.id(index);
             HC.EventManager.getInstance().register('animation.updateSetting', id, function (data) {
                 if (data.layer === inst.layer) {

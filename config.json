@@ -24,7 +24,8 @@
   "addons": [
     "lib/three/shaders",
     "lib/three/postprocessing",
-    "lib/three/utils"
+    "lib/three/utils",
+    "lib/three/loaders"
   ],
 
   "directories": {

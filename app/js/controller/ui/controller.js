@@ -121,7 +121,7 @@
                     e.preventDefault();
                     e.stopPropagation();
                     let deltaY = entry - e.screenY;//e.movementY;
-                    let value = (deltaY / (resY/256));
+                    let value = (deltaY / (resY/512));
 
                     if (value > 1) {
                         this.incrementValue();

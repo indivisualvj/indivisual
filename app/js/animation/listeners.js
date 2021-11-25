@@ -22,7 +22,6 @@
 
                 let inFullscreen = false;
                 document.addEventListener('dblclick', () => {
-
                     if (inFullscreen) {
                         document.exitFullscreen();
                         return;
@@ -32,8 +31,7 @@
                         console.log('now in fullscreen');
 
                     }, (e) => {
-                        inFullscreen = false;
-                        console.error('no fullscreen', e);
+                        console.error('fullscreen failed', e);
 
                     });
                 });
@@ -71,17 +69,9 @@
          * @param {HC.Animation} animation
          */
         init (animation) {
-
-            window.addEventListener('keydown', function (e) {
-
-                if (e.ctrlKey || e.altKey || e.shiftKey) {
-                    return;
-                }
-                if (e.code === 'Space') { // SPACE = play/pause
-                    animation.updateControl('play', !animation.config.ControlSettings.play, true, true, false);
-                }
+            HC.Hotkey.add('space', (e) => {
+                animation.updateControl('play', !animation.config.ControlSettings.play, true, true, false);
             });
-
         }
     }
 }

@@ -20,10 +20,10 @@
                 shape = new THREE.Shape();
                 geometry.center();
 
-                let vertices = geometry.vertices;
-
-                for (let i in vertices) {
-                    let v = vertices[i];
+                let vertices = geometry.getAttribute('position');
+                let v = new THREE.Vector3();
+                for (let i = 0; i < vertices.count; i++) {
+                    v.fromBufferAttribute(vertices, i);
 
                     if (v.x !== 0 || v.y !== 0) {
                         if (moved === false) {
@@ -48,17 +48,16 @@
                 let conf = {
                     steps: 1,
                     depth: layer.shapeSize(this.settings.shape_modifier_volume),
-                    bevelEnabled: this.settings.shape_modc,
-                    bevelThickness: this.settings.shape_modc,
-                    bevelSize: this.settings.shape_modc,
-                    bevelSegments: Math.ceil(this.settings.shape_modc / 2),
+                    bevelEnabled: this.getModA(0, 0),
+                    bevelThickness: this.getModB(0, 0),
+                    bevelSize: this.getModC(0, 0),
+                    bevelSegments: Math.ceil(this.getModC(0, 0) / 2),
                 };
 
                 geometry = new THREE.ExtrudeGeometry(shape, conf);
                 geometry.center();
-                geometry.verticesNeedUpdate = true;
 
-                HC.UVGenerator.front2back(geometry);
+                HC.BufferGeometryUtils.front2back(geometry);
             }
 
             return geometry;

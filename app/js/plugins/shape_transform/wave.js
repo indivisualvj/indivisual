@@ -5,10 +5,6 @@
 
         apply(shape, source, axes) {
 
-            if (!shape.getVertices()) {
-                shape.setGeometry(shape.getRootGeometry());
-            }
-
             if (this.isFirstShape(shape)) {
                 source = source || 'y';
                 axes = axes || new THREE.Vector3(1, 1, 1);
@@ -22,8 +18,7 @@
                 let dir = this.settings.shape_transform_volume > 0 ? 1 : -1;
                 this.angle += dir * this.animation.getFrameDurationPercent(this.layer.getCurrentSpeed().duration, .005);
 
-                let vertices = shape.getVertices();
-                let vbackup = shape.verticesCopy;
+                let vertices = null
 
                 if (vertices) {
 

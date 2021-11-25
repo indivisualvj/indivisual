@@ -38,21 +38,21 @@
 
             let edges = this.getModA(3, 3);
             let dir = this.getModB(0, 0);
-            let steps = this.getModC(2, 2);
+            let steps = this.getModC(2, 2, 32);
             let size = layer.shapeSize(.5);
             let step = size / steps;
-            let zoffset = (steps-1) * steps/2;
-            let geometry = new THREE.Geometry();
+            let geometries = [];
             for (let i = 1; i <= steps; i++) {
                 let circ = new HC.DirectionalCircle({
                     edges: edges,
                     direction: dir,
                     radius: i * step
                 }).create();
-                circ.translate(0, 0, (steps - i) - zoffset);
-                let mesh = new THREE.Mesh(circ);
-                geometry.merge(mesh.geometry, mesh.matrix);
+                circ.translate(0, 0, (steps + i));
+                geometries.push(circ);
             }
+            let geometry = THREE.BufferGeometryUtils.mergeBufferGeometries(geometries);
+            geometry.center();
 
             return geometry;
         }

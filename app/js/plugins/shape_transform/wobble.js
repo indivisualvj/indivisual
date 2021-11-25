@@ -17,10 +17,6 @@
 
         apply(shape, axes) {
 
-            if (!shape.getVertices()) {
-                shape.setGeometry(shape.getRootGeometry());
-            }
-
             if (this.isFirstShape(shape)) {
                 let params = this.params(shape);
 
@@ -44,8 +40,8 @@
                 params.osci.rhythm = this.controlSets.audio.get('rhythm');
 
                 let multiplier = this.settings.shape_transform_volume * 15;
-                let vertices = shape.getVertices();
-                let vbackup = shape.verticesCopy;
+                let vertices = null; // fixme:
+                let vbackup = null;
 
                 if (vertices) {
 

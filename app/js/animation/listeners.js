@@ -38,8 +38,8 @@
                 if (e.ctrlKey || e.altKey || e.shiftKey) {
                     return;
                 }
-                if (e.key === 'Space') { // SPACE = play/pause
-                    animation.updateControl('play', !animation.config.ControlSettings.play, true, false, false);
+                if (e.code === 'Space') { // SPACE = play/pause
+                    animation.updateControl('play', !animation.config.ControlSettings.play, true, true, false);
                 }
             });
 

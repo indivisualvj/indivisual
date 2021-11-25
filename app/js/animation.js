@@ -45,6 +45,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                         animation.updateSource('override_material_input', 'none', true, true, false);
                         animation.updateSource('override_background_mode', 'none', true, true, false);
+
+                        alert('WebGL just died...');
                     });
 
                     animation.messaging.emitAttr('#play', 'data-color', '');
@@ -199,8 +201,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 HC.EventManager.getInstance().fireEvent('audio.peak', this.audioAnalyser); // todo use const
             }
         }
-
-
 
         /**
          *

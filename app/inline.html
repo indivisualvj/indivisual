@@ -78,12 +78,12 @@
     </style>
     <script type="application/javascript">
         document.addEventListener('DOMContentLoaded', function () {
-            var controller = document.getElementById('controller');
-            var animation = document.getElementById('animation');
-            var splitter = document.getElementById('splitter');
-            var visible = true;
+            let controller = document.getElementById('controller');
+            let animation = document.getElementById('animation');
+            let splitter = document.getElementById('splitter');
+            let visible = true;
 
-            var restore = function () {
+            let restore = function () {
                 splitter.removeEventListener('mouseover', restore);
                 visible = true;
 

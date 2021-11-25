@@ -26,7 +26,7 @@
                             break;
 
                         case 'zigzag':
-                            z = Math.sin(Math.abs(vtc.x)) * -.5 + Math.cos(Math.abs(vtc.y)) * -layer.shapeSize(.125);
+                            z = Math.sin(Math.abs(vtc.x)) * -.5 + Math.cos(Math.abs(vtc.y)) * -layer.shapeSize(.0625);
                             break;
 
                         case 'random':

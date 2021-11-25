@@ -148,8 +148,7 @@
                 let y = Math.cos(step * i + hseg) * radius;
                 shape.lineTo(x, -y);
             }
-            let geometry = new THREE.ShapeGeometry(shape);
-            return geometry;
+            return new THREE.ShapeGeometry(shape);
         }
     }
 }
@@ -249,38 +248,10 @@
                 points.push(vec);
             }
             let geometry = new THREE.BufferGeometry().setFromPoints(points);
-            this._alignVertexNormals(geometry);
+            HC.BufferGeometryUtils.sortVertices(geometry);
 
             return geometry;
         }
 
-        _alignVertexNormals(geometry) {
-            geometry.computeVertexNormals();
-
-            let p = geometry.attributes.position;
-            let n = geometry.attributes.normal;
-            let v1 = new THREE.Vector3();
-            let f = new THREE.Vector3();
-
-            for (let i = 0; i < n.count; i++) {
-                v1.fromBufferAttribute(p, i);
-                f.fromBufferAttribute(n, i);
-                if (f.z < 0) {
-                    let v2 = new THREE.Vector3();
-                    v2.fromBufferAttribute(p, i+1);
-                    let v3 = new THREE.Vector3();
-                    v3.fromBufferAttribute(p, i+2);
-
-                    p.setXYZ(i  , v3.x, v3.y, v3.z);
-                    p.setXYZ(i+1, v2.x, v2.y, v2.z);
-                    p.setXYZ(i+2, v1.x, v1.y, v1.z);
-                    i+=2;
-                }
-            }
-
-            geometry.attributes.position.needsUpdate = true;
-            geometry.computeVertexNormals();
-
-        }
     }
 }

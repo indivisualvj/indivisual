@@ -4,13 +4,22 @@
 
         apply(shape, axis) {
 
-            let vbackup = null; // fixme
-            let vertices = null;
+            let vertices = shape.geometry.getAttribute('position');
+            let params = this.params(shape);
+            if (!params.vertices) {
+                params.vertices = [];
+                let v = new THREE.Vector3();
+                for (let i = 0; i < vertices.count; i++) {
+                    v.fromBufferAttribute(vertices, i);
+                    params.vertices.push(v.clone());
+                }
+            }
+            let vbackup = params.vertices;
+
 
             if (vertices && vbackup && this.isFirstShape(shape)) {
-
                 let ai = 0;
-                for (let i = 0; i < vertices.length; i++) {
+                for (let i = 0; i < vertices.count; i++) {
 
                     let x = 1, y = 1, z = 1;
 
@@ -44,15 +53,13 @@
                         z *= v;
                     }
 
-                    let vtc = vertices[i];
                     let vtcb = vbackup[i];
-                    vtc.x = vtcb.x * x;
-                    vtc.y = vtcb.y * y;
-                    vtc.z = vtcb.z * z;
+                    vertices.setX(i, vtcb.x * x);
+                    vertices.setY(i, vtcb.y * y);
+                    vertices.setZ(i, vtcb.z * z);
 
                 }
-                shape.geometry.verticesNeedUpdate = true;
-                shape.geometry.lineDistancesNeedUpdate = true;
+                vertices.needsUpdate = true;
 
             } else if (!vertices) {
                 console.warn('No transform for ' + shape.geometry.type);

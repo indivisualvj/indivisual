@@ -244,19 +244,47 @@
             vtcs = JSON.parse(vtcs);
 
             let points = [];
-            let normals = [];
             for (let i = 0; i < vtcs.length; i++) {
                 let vtc = vtcs[i];
                 let vec = new THREE.Vector3(round(multiplier * vtc[0], 0), round(multiplier * vtc[1], 0), 0);
                 points.push(vec);
-                if (i % 3 === 0) normals.push([i, i + 1, i + 2]);
             }
             let geometry = new THREE.BufferGeometry().setFromPoints(points);
-            geometry.setAttribute('normal', new THREE.BufferAttribute(new Float32Array(normals), 3));
-            // geometry.computeVertexNormals();
-            geometry.attributes.normal.needsUpdate = true;
+            geometry.computeVertexNormals();
+            HC.BufferGeometryUtils.default(geometry);
+            this._alignVertexNormals(geometry);
+            // this._alignVertexNormals(geometry);
 
             return geometry;
+        }
+
+        _alignVertexNormals(geometry) {
+            geometry.computeVertexNormals();
+
+            let p = geometry.attributes.position;
+            let n = geometry.attributes.normal;
+            let v = new THREE.Vector3();
+            let f = new THREE.Vector3();
+
+            console.log('n', n.count);
+            console.log('p', p.count);
+
+            for (let i = 0; i < n.count; i++) {
+
+                v.fromBufferAttribute(p, i);
+                f.fromBufferAttribute(n, i);
+                if (f.z < 0) {
+                    console.log('v', v);
+                    console.log('f', f);
+                    n.setXYZ(i, f.x, 0, 1);
+                }
+
+            }
+            geometry.attributes.position.needsUpdate = true;
+            geometry.attributes.normal.needsUpdate = true;
+            // geometry.setAttribute('normal', undefined);
+            // geometry.computeVertexNormals();
+
         }
     }
 }

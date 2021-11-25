@@ -9,27 +9,27 @@ HC.plugins.mesh_material = HC.plugins.mesh_material || {};
 
         before(geometry) {
 
-            if (geometry.mergeVertices) {
-                geometry.mergeVertices();
-            }
-            if (geometry.computeFaceNormals) {
-                geometry.computeFaceNormals();
-            }
-            if (geometry.computeFlatVertexNormals) {
-                geometry.computeFlatVertexNormals();
-            }
-            if (geometry.computeVertexNormals) {
-                geometry.computeVertexNormals();
-            }
-            if (geometry.computeMorphNormals) {
-                geometry.computeMorphNormals();
-            }
+            // if (geometry.mergeVertices) {
+            //     geometry.mergeVertices();
+            // }
+            // if (geometry.computeFaceNormals) {
+            //     geometry.computeFaceNormals();
+            // }
+            // if (geometry.computeFlatVertexNormals) {
+            //     geometry.computeFlatVertexNormals();
+            // }
+            // if (geometry.computeVertexNormals) {
+            //     geometry.computeVertexNormals();
+            // }
+            // if (geometry.computeMorphNormals) {
+            //     geometry.computeMorphNormals();
+            // }
 
-            geometry.elementsNeedUpdate = true;
-            geometry.verticesNeedUpdate = true;
-            geometry.uvsNeedUpdate = true;
-            geometry.normalsNeedUpdate = true;
-            geometry.colorsNeedUpdate = true;
+            // geometry.elementsNeedUpdate = true;
+            // geometry.verticesNeedUpdate = true;
+            // geometry.uvsNeedUpdate = true;
+            // geometry.normalsNeedUpdate = true;
+            // geometry.colorsNeedUpdate = true;
 
             let geo;
             if (geometry.isGeometry) {

@@ -22,7 +22,7 @@
         /**
          * @type {HC.Messaging}
          */
-        filesystem;
+        messaging;
 
         /**
          * @type {HC.LayeredControlSetsManager}
@@ -38,7 +38,7 @@
             this.controller = controller;
             this.config = controller.config;
             this.explorer = explorer;
-            this.filesystem = controller.messaging;
+            this.messaging = controller.messaging;
             this.settingsManager = controller.settingsManager;
         }
 
@@ -54,13 +54,13 @@
                 this.settingsManager.setLayerProperties(layer, false);
                 HC.TimeoutManager.add('loadPreset', 0, () => {
                     this.explorer.resetLayerStatus(layer+1);
-                    this.controller.updatePreset(false, this.settingsManager.prepareLayer(layer));
+                    this.updatePreset(false, this.settingsManager.prepareLayer(layer));
                 });
 
             } else {
                 //load shaders into present presets
                 if (loadShaders) {
-                    this.filesystem.load(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (data) => {
+                    this.messaging.load(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (data) => {
                         this.controller.transferShaderPasses(data.dir + '/' + data.name, JSON.parse(data.contents));
                     });
 
@@ -102,6 +102,7 @@
                             this.settingsManager.resetLayer(layer);
                             calls.push((_loaded) => {
                                 HC.TimeoutManager.add('loadPresets.' + layer, SKIP_TEN_FRAMES, () => {
+                                    // todo: updates ui per layer?
                                     this._loadPreset(child, layer, _loaded);
                                 });
                             });
@@ -132,13 +133,13 @@
         _loadPreset(child, layer, callback) {
 
             console.log('loading', child.getLabel());
-            this.filesystem.load(STORAGE_DIR, child.getParent().getLabel(), child.getLabel(), (data) => {
+            this.messaging.load(STORAGE_DIR, child.getParent().getLabel(), child.getLabel(), (data) => {
                 let key = data.dir + '/' + data.name;
                 let contents = JSON.parse(data.contents);
                 console.log('loaded', data.name);
                 this.explorer.resetLayerStatus(layer+1);
                 child.setInfo(layer+1);
-                this.controller.updatePreset(key, contents, layer);
+                this.updatePreset(key, contents, layer);
 
                 if (callback) {
                     callback();
@@ -160,7 +161,7 @@
                     if (layer >= 0 && child.getChanged()) {
                         let save = (layer, child) => {
                             let settings = this.settingsManager.prepareLayer(layer);
-                            this.filesystem.save(STORAGE_DIR, ctrl.getLabel(), child.getLabel(), settings, (result) => {
+                            this.messaging.save(STORAGE_DIR, ctrl.getLabel(), child.getLabel(), settings, (result) => {
                                 HC.log(result);
                                 child.setChanged(null);
                             }, '');
@@ -168,6 +169,143 @@
 
                         save(layer, child);
                     }
+                }
+            }
+        }
+
+        /**
+         *
+         * @param name
+         * @param data
+         * @param layer
+         */
+        updatePreset(name, data, layer) {
+
+            // fixme: this is chaos!!!
+
+            HC.log('preset', name);
+
+            if (layer === undefined) {
+                layer = this.config.ControlSettings.layer;
+            }
+
+            this.settingsManager.resetLayer(layer);
+
+            if (!('info' in data)) {
+                this.migrateSettings0(layer, data);
+
+                // example!
+                // } else if ('info' in data && data.info.version > 1.99) {
+                // this.migrateSettings1(layer, data, true, false, true);
+
+            } else {
+                this.controller.updateSettings(layer, data, false, false, true);
+                this.settingsManager.update(layer, 'info', 'name', name);
+            }
+
+            data = this.settingsManager.prepareLayer(layer);
+            if (this.settingsManager.get(layer, 'info').hasTutorial()) {
+                new HC.ScriptProcessor(this, name, Object.create(data.info.tutorial)).log();
+                data.info.tutorial = {};
+            }
+
+            this.messaging.emitSettings(layer, data, false, false, true);
+        }
+
+        /**
+         *
+         * @param name
+         * @param data
+         */
+        transferShaderPasses(name, data) {
+
+            HC.log('passes', name);
+
+            for (let i = 0; i < this.config.ControlValues.layers; i++) {
+                if (this.config.shuffleable(i+1) && !this.settingsManager.isDefault(i)) {
+                    if (!('info' in data)) {
+
+                        let shaders = {shaders: data.shaders};
+
+                        this.migrateSettings0(i, shaders, true);
+
+                        // example!
+                        // } else if ('info' in data && data.info.version > 1.99) {
+                        // this.migrateSettings1(layer, data, true, false, true);
+
+                    } else {
+                        let nu = data.passes.shaders;
+                        let passes = this.settingsManager.get(i, 'passes');
+
+                        for (let k in nu) {
+                            passes.addShaderPass(nu[k]);
+                        }
+                    }
+
+                    this.explorer.setChanged(i+1, true);
+                    this.controller.updateUiPasses();
+
+                    // chain execute calls including delay?
+                    this.messaging.emitSettings(i, this.settingsManager.prepareLayer(i), false, false, true);
+                }
+            }
+        }
+
+        /**
+         *
+         * @param layer {number}
+         * @param data {Object}
+         * @param keepPasses {boolean}
+         */
+        migrateSettings0(layer, data, keepPasses) {
+
+            let mappings = HC.LayeredControlSetsManager.mappings(() => {return HC.LayeredControlSetsManager.initAll(this.config.AnimationValues);});
+
+            let passes = this.settingsManager.get(layer, 'passes');
+            if (keepPasses !== true) {
+                passes.removeShaderPasses();
+            }
+
+            for (let k in data) {
+                let value = data[k];
+                if (k === 'shaders' || k === 'passes') {
+                    // sort shaders by index
+                    delete value._template;
+                    delete value.isdefault;
+                    delete value.initial;
+                    let keys = Object.keys(value);
+                    keys.sort(function (a, b) {
+                        let ia = value[a].index;
+                        let ib = value[b].index;
+
+                        return ia - ib;
+                    });
+
+                    for (let key in keys) {
+                        let name = keys[key];
+                        let sh = value[name];
+                        if (sh.apply) {
+                            let pass = {};
+                            pass[name] = sh;
+                            passes.addShaderPass(pass);
+                        }
+                    }
+                } else {
+                    let set = mappings[k];
+                    if (set) {
+                        this.settingsManager.update(layer, set, k, value);
+                    }
+                }
+
+            }
+            this.controller.updateUi(this.controller.animationSettingsGui);
+        }
+
+        restoreLoadedPresets() {
+            for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
+                let name = this.settingsManager.get(layer, 'info').get('name');
+                if (name) {
+                    this.explorer.setInfoByPath(name, layer+1);
                 }
             }
         }
@@ -182,7 +320,7 @@
             let label = ctrl.getLabel();
             settings.info.name = HC.filePath(dir, label);
 
-            this.filesystem.save(STORAGE_DIR, dir, label, settings, (result) => {
+            this.messaging.save(STORAGE_DIR, dir, label, settings, (result) => {
                 HC.log(result);
                 ctrl.setChanged(null);
             });
@@ -216,7 +354,7 @@
 
                 preset.info.name = HC.filePath(nu.dir, nu.name);
 
-                this.filesystem.save(STORAGE_DIR, nu.dir, nu.name, nu.settings, (result) => {
+                this.messaging.save(STORAGE_DIR, nu.dir, nu.name, nu.settings, (result) => {
                     HC.log(result);
                     ctrl.addPreset(nu, this);
                 }, '');
@@ -230,7 +368,7 @@
         deleteFolder(ctrl) {
             let confirmed = confirm('Do you want to delete "' + ctrl.getLabel() + '"?');
             if (confirmed) {
-                this.filesystem.delete(STORAGE_DIR, null, ctrl.getLabel(), (result) => {
+                this.messaging.delete(STORAGE_DIR, null, ctrl.getLabel(), (result) => {
                     HC.log(result);
                     ctrl.removeFromParent();
                 });
@@ -244,7 +382,7 @@
         deletePreset(ctrl) {
             let confirmed = confirm('Do you want to delete "' + ctrl.getLabel() + '"?');
             if (confirmed) {
-                this.filesystem.delete(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (result) => {
+                this.messaging.delete(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (result) => {
                     HC.log(result);
                     ctrl.removeFromParent();
                 });
@@ -263,7 +401,7 @@
             } while (label && ctrl.getChild(label));
 
             if (label) {
-                this.filesystem.mkdir(STORAGE_DIR, label, false, (result) => {
+                this.messaging.mkdir(STORAGE_DIR, label, false, (result) => {
                     HC.log(result);
                     let folder = ctrl.addFolder(label);
                     folder.finishLayout({}, this);
@@ -283,7 +421,7 @@
             } while (label && ctrl.getParent().getChild(label));
 
             if (label) {
-                this.filesystem.rename(STORAGE_DIR, null, ctrl.getLabel(), label, (result) => {
+                this.messaging.rename(STORAGE_DIR, null, ctrl.getLabel(), label, (result) => {
                     HC.log(result);
                     ctrl.rename(label);
                 });
@@ -311,7 +449,7 @@
             if (label) {
                 label += suffix;
 
-                this.filesystem.rename(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), label, (result) => {
+                this.messaging.rename(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), label, (result) => {
                     HC.log(result);
                     ctrl.rename(label);
                 });

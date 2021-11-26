@@ -655,6 +655,8 @@ HC.Controller.prototype.updateThumbs = function () {
     }
 };
 
+// todo: clip stuff should go into SourceControllerUi
+
 /**
  *
  * @param index
@@ -710,7 +712,7 @@ HC.Controller.prototype.updateClip = function (seq) {
 
     clip.update(sample, enabled, data);
 };
-
+// todo: thumb stuff should go to SourceSettingsUi also
 /**
  *
  */

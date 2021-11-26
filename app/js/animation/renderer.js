@@ -159,6 +159,7 @@
                     ol._dispose();
                 }
 
+                // todo: strictly seperate setting layers from rendering layers!
                 let layer = new HC.Layer(this.animation, this, i);
 
                 layer.controlSets = oldControlSets || HC.LayeredControlSetsManager.initAll(this.config.AnimationValues);

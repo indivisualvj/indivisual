@@ -62,7 +62,7 @@
             this.config = controller.config;
             this.gui = new HC.GuifyExplorer('Presets', 'presets', true, this);
             this.load(() => {
-                controller.restoreLoadedPresets();
+                this.presetMan.restoreLoadedPresets();
             });
         }
 

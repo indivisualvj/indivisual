@@ -13,36 +13,7 @@ let messaging;
  */
 document.addEventListener('DOMContentLoaded', function () {
 
-    onResize = function () {
-        let columns = document.querySelectorAll('.left');
-        let allover = document.body.clientHeight - 20;
-
-        for (let i = 0; i < columns.length; i++) {
-            let col = columns[i];
-
-            // calcuclate heights of FH elements to figure out the rest
-            let cells = col.querySelectorAll('.item.fh');
-            let reserved = 0;
-            let ii = 0;
-
-            for (ii = 0; ii < cells.length; ii++) {
-                reserved += cells[ii].clientHeight;
-            }
-
-            let spare = allover - reserved;
-
-            cells = col.querySelectorAll('.item:not(.fh)');
-            let cc = cells.length;
-
-            for (ii = 0; ii < cells.length; ii++) {
-                cells[ii].style.height = (spare / cc) + 'px';
-            }
-        }
-    };
-
-    window.addEventListener('resize', onResize);
-
-    let controller = new HC.Controller(G_INSTANCE);
+     let controller = new HC.Controller(G_INSTANCE);
     messaging = new HC.Messaging(controller);
     controller.config = new HC.Config(messaging);
 
@@ -61,11 +32,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 let sets = controller.config.initControlSets();
                 controller.settingsManager = new HC.LayeredControlSetsManager([], controller.config.AnimationValues);
                 controller.init(sets);
-                controller.loadSession();
-                controller.initKeyboard();
-                controller.initLogEvents();
-                controller.midi = new HC.Midi(controller);
-                controller.midi.init();
 
                 onResize();
             });
@@ -161,6 +127,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             this.monitor = new HC.Monitor();
             this.monitor.activate(false);
+            this.midi = new HC.Midi(this);
+            this.midi.init();
+
             this.controlSettingsGui = new HC.Guify('ControlSettings', 'control');
             this.displaySettingsGui = new HC.Guify('DisplaySettings', 'display');
             this.sourceSettingsGui = new HC.Guify('SourceSettings', 'source');
@@ -228,6 +197,9 @@ document.addEventListener('DOMContentLoaded', function () {
             this.addPassesFolder(HC.ShaderPassUi.onPasses);
 
             this.openTreeByPath('controls');
+
+            this.loadSession();
+            this.initEvents();
         }
 
         /**
@@ -274,56 +246,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 this._checkDisplayVisibility();
             });
-        }
-
-        /**
-         *
-         * @param layer {number}
-         * @param data {Object}
-         * @param keepPasses {boolean}
-         */
-        migrateSettings0(layer, data, keepPasses) {
-
-            let mappings = HC.LayeredControlSetsManager.mappings(() => {return HC.LayeredControlSetsManager.initAll(this.config.AnimationValues);});
-
-            let passes = this.settingsManager.get(layer, 'passes');
-            if (keepPasses !== true) {
-                passes.removeShaderPasses();
-            }
-
-            for (let k in data) {
-                let value = data[k];
-                if (k === 'shaders' || k === 'passes') {
-                    // sort shaders by index
-                    delete value._template;
-                    delete value.isdefault;
-                    delete value.initial;
-                    let keys = Object.keys(value);
-                    keys.sort(function (a, b) {
-                        let ia = value[a].index;
-                        let ib = value[b].index;
-
-                        return ia - ib;
-                    });
-
-                    for (let key in keys) {
-                        let name = keys[key];
-                        let sh = value[name];
-                        if (sh.apply) {
-                            let pass = {};
-                            pass[name] = sh;
-                            passes.addShaderPass(pass);
-                        }
-                    }
-                } else {
-                    let set = mappings[k];
-                    if (set) {
-                        this.settingsManager.update(layer, set, k, value);
-                    }
-                }
-
-            }
-            this.updateUi(this.animationSettingsGui);
         }
 
         /**
@@ -584,7 +506,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         *
+         * todo: settingsManager
          */
         cleanShaderPasses() {
 
@@ -777,7 +699,7 @@ document.addEventListener('DOMContentLoaded', function () {
         /**
          *
          */
-        updateSequenceUi() {
+        updateSequenceUi() { // todo: put to SourceSettingsUi
             if (this.config.SourceValues && this.config.SourceValues.sequence) {
                 for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
                     HC.TimeoutManager.add('updateSequenceUi' + seq, 0, () => {
@@ -804,7 +726,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         *
+         * todo: DisplayControllerUi
          * @param item
          * @param value
          * @param group
@@ -890,7 +812,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         resetShaders(all) {
-            return new Promise((resolve, reject) => {
+            return new Promise((resolve, reject) => { // todo: transferShaderpasses should work like this
                 let calls = [];
                 let layers = all ? Object.values(this.config.ControlValues.layer).map(x => x - 1) : [this.config.ControlSettings.layer];
                 for (let key in layers) {
@@ -946,83 +868,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
-         * @param name
-         * @param data
-         * @param layer
-         */
-        updatePreset(name, data, layer) {
-
-            // fixme: this is chaos!!!
-
-            HC.log('preset', name);
-
-            if (layer === undefined) {
-                layer = this.config.ControlSettings.layer;
-            }
-
-            this.settingsManager.resetLayer(layer);
-
-            if (!('info' in data)) {
-                this.migrateSettings0(layer, data);
-
-            // example!
-            // } else if ('info' in data && data.info.version > 1.99) {
-                // this.migrateSettings1(layer, data, true, false, true);
-
-            } else {
-                this.updateSettings(layer, data, false, false, true);
-                this.settingsManager.update(layer, 'info', 'name', name);
-            }
-
-            data = this.settingsManager.prepareLayer(layer);
-            if (this.settingsManager.get(layer, 'info').hasTutorial()) {
-                new HC.ScriptProcessor(this, name, Object.create(data.info.tutorial)).log();
-                data.info.tutorial = {};
-            }
-
-            this.messaging.emitSettings(layer, data, false, false, true);
-        }
-
-        /**
-         *
-         * @param name
-         * @param data
-         */
-        transferShaderPasses(name, data) {
-
-            HC.log('passes', name);
-
-            for (let i = 0; i < this.config.ControlValues.layers; i++) {
-                if (this.config.shuffleable(i+1) && !this.settingsManager.isDefault(i)) {
-                    if (!('info' in data)) {
-
-                        let shaders = {shaders: data.shaders};
-
-                        this.migrateSettings0(i, shaders, true);
-
-                    // example!
-                    // } else if ('info' in data && data.info.version > 1.99) {
-                    // this.migrateSettings1(layer, data, true, false, true);
-
-                    } else {
-                        let nu = data.passes.shaders;
-                        let passes = this.settingsManager.get(i, 'passes');
-
-                        for (let k in nu) {
-                            passes.addShaderPass(nu[k]);
-                        }
-                    }
-
-                    this.explorer.setChanged(i+1, true);
-                    this.updateUiPasses();
-
-                    this.messaging.emitSettings(i, this.settingsManager.prepareLayer(i), false, false, true);
-                }
-            }
-        }
-
-        /**
-         *
          */
         refreshLayersUi() {
             let preset = [];
@@ -1044,15 +889,6 @@ document.addEventListener('DOMContentLoaded', function () {
             };
 
             this.messaging.onAttr(config);
-        }
-
-        restoreLoadedPresets() {
-            for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
-                let name = this.settingsManager.get(layer, 'info').get('name');
-                if (name) {
-                    this.explorer.setInfoByPath(name, layer+1);
-                }
-            }
         }
 
         /**

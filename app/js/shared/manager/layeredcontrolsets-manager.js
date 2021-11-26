@@ -189,7 +189,7 @@
         /**
          *
          */
-        reset(heap) {
+        reset(excluded) {
 
             if (this.globalProperties) {
                 let controlSets = this.globalProperties.controlSets;
@@ -201,7 +201,7 @@
 
             for (let layer in this.layers) {
 
-                if (heap && heap.length && heap.indexOf(parseInt(layer)) > -1) {
+                if (excluded && excluded.length && excluded.indexOf(parseInt(layer)) > -1) {
                     continue;
                 }
 

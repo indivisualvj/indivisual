@@ -23,7 +23,7 @@
                 this.material.envMap = texture;
                 this.material.needsUpdate = true;
             };
-            // fixme: does not work after reload
+
             this.cubeTextureFromBackgroundInput(_onLoad);
             let id = this.id(index);
             HC.EventManager.getInstance().register('animation.updateSetting', id, function (data) { // todo use const

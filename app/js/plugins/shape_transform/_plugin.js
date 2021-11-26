@@ -19,7 +19,6 @@ HC.plugins.shape_transform = HC.plugins.shape_transform || {};
         }
 
         after(shape) {
-            // todo it indeed does not work wiz linemat?!?
             if (this.key !== 'off') {
                 if (shape.geometry.attributes.lineDistance) {
                     shape.geometry.attributes.lineDistance.needsUpdate = true;

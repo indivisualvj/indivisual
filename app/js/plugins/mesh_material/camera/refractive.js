@@ -28,7 +28,7 @@
             geometry.computeBoundingBox();
             let box3 = geometry.boundingBox;
             let height = box3.max.y - box3.min.y;
-            let cubeRenderTarget = new THREE.WebGLCubeRenderTarget( height * this.settings.material_volume, {
+            let cubeRenderTarget = new THREE.WebGLCubeRenderTarget( height, {
                 format: THREE.RGBFormat,
                 generateMipmaps: true,
                 minFilter: THREE.LinearMipmapLinearFilter,

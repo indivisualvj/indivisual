@@ -9,7 +9,7 @@
 
             let inst = this;
 
-            HC.EventManager.getInstance().register(EVENT_AUDIO_PEAK, this.objectName, function (target) {
+            HC.EventManager.register(EVENT_AUDIO_PEAK, this.objectName, function (target) {
                 inst.peaks++;
             });
         }

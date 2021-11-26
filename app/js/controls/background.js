@@ -13,7 +13,7 @@
                     switch (key) {
                         case 'background_wraps':
                         case 'background_wrapt':
-                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET, id, context, SKIP_TEN_FRAMES);
+                            HC.EventManager.fireEventId(EVENT_LAYER_RESET, id, context, SKIP_TEN_FRAMES);
                             break;
                     }
                 }

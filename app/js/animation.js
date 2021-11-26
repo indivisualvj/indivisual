@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 animation.renderer = renderer;
 
                 if (IS_ANIMATION) {
-                    HC.EventManager.getInstance().register(EVENT_WEBGL_CONTEXT_LOST, animation.name, function () {
+                    HC.EventManager.register(EVENT_WEBGL_CONTEXT_LOST, animation.name, function () {
                         // now reset...
                         HC.log('HC.Renderer', 'another context loss...', true, true);
 
@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         animate() {
 
-            HC.EventManager.getInstance().fireEvent(EVENT_ANIMATION_ANIMATE);
+            HC.EventManager.fireEvent(EVENT_ANIMATION_ANIMATE);
 
             this._preRender();
 
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (this.audioAnalyser.peak) {
                 this.messaging.emitMidi('glow', MIDI_PEAK_FEEDBACK, {timeout: 125});
 
-                HC.EventManager.getInstance().fireEvent(EVENT_AUDIO_PEAK, this.audioAnalyser);
+                HC.EventManager.fireEvent(EVENT_AUDIO_PEAK, this.audioAnalyser);
             }
         }
 
@@ -209,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         render() {
-            HC.EventManager.getInstance().fireEvent(EVENT_ANIMATION_RENDER);
+            HC.EventManager.fireEvent(EVENT_ANIMATION_RENDER);
             if (IS_ANIMATION) {
                 this.sourceManager.render();
             }
@@ -548,12 +548,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
             switch (property) {
                 case 'shaders':
-                    HC.EventManager.getInstance().fireEventId(EVENT_LAYER_UPDATE_SHADERS, layer.index, layer, SKIP_TEN_FRAMES);
+                    HC.EventManager.fireEventId(EVENT_LAYER_UPDATE_SHADERS, layer.index, layer, SKIP_TEN_FRAMES);
                     break;
 
                 case 'shape_vertices':
                     if (display) {
-                        HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_SHAPES, layer.index, layer, SKIP_TEN_FRAMES);
+                        HC.EventManager.fireEventId(EVENT_LAYER_RESET_SHAPES, layer.index, layer, SKIP_TEN_FRAMES);
                     }
                     break;
             }
@@ -562,7 +562,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.messaging.emitSettings(layerIndex, data, true, false, force);
             }
 
-            HC.EventManager.getInstance().fireEvent(EVENT_ANIMATION_UPDATE_SETTING, {layer: layer, item: property, value: value});
+            HC.EventManager.fireEvent(EVENT_ANIMATION_UPDATE_SETTING, {layer: layer, item: property, value: value});
         }
 
         /**
@@ -667,7 +667,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.sourceManager.updateSample(HC.numberExtract(item, 'sample'));
 
                     if (item.match(/sample\d+_(enabled|record)/)) { // never let samples be selected on enabled/record status change
-                        HC.EventManager.getInstance().fireEvent(EVENT_SAMPLE_STATUS_CHANGED, this.sourceManager.getSample(HC.numberExtract(item, 'sample')));
+                        HC.EventManager.fireEvent(EVENT_SAMPLE_STATUS_CHANGED, this.sourceManager.getSample(HC.numberExtract(item, 'sample')));
                     }
 
                 } else if (item.match(/display\d+_source/)) {
@@ -679,7 +679,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            HC.EventManager.getInstance().fireEvent(EVENT_SOURCE_SETTING_CHANGED, arguments);
+            HC.EventManager.fireEvent(EVENT_SOURCE_SETTING_CHANGED, arguments);
         }
 
         /**

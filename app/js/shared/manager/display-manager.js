@@ -117,7 +117,7 @@
         onMapping(id, mapping) {
             if (this.animation) {
                 let f = (id, mapping) => {
-                    HC.TimeoutManager.getInstance().add('onMapping.' + id, 125, () => {
+                    HC.TimeoutManager.add('onMapping.' + id, 125, () => {
                         this.animation.updateDisplay(id + '_mapping', JSON.stringify(mapping), false, true, false);
                     });
                 };

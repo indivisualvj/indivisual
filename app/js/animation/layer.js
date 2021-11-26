@@ -475,14 +475,14 @@
          * @private
          */
         _initListeners() {
-            let eventManager = HC.EventManager.getInstance();
+            let eventManager = HC.EventManager;
 
             eventManager.register(EVENT_LAYER_RESET, this.index, () => {
                 console.log(EVENT_LAYER_RESET, this.index);
                 this.needsReset = true;
 
                 // if layer is not animated right now, do it after some frames
-                HC.TimeoutManager.getInstance().add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
+                HC.TimeoutManager.add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
                     this._handleResets();
                 });
             });
@@ -490,7 +490,7 @@
             eventManager.register(EVENT_SHAPE_MATERIALS_UPDATE, this.index, () => {
                 this.shapeMaterialsNeedUpdate = true;
                 // if layer is not animated right now, do it after some frames
-                HC.TimeoutManager.getInstance().add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
+                HC.TimeoutManager.add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
                     this._handleResets();
                 });
             });
@@ -498,7 +498,7 @@
             eventManager.register(EVENT_LAYER_RESET_SHAPES, this.index, () => {
                 this.shapesNeedReset = true;
                 // if layer is not animated right now, do it after some frames
-                HC.TimeoutManager.getInstance().add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
+                HC.TimeoutManager.add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
                     this._handleResets();
                 });
             });
@@ -506,7 +506,7 @@
             eventManager.register(EVENT_LAYER_RESET_LIGHTING, this.index, () => {
                 this.lightingNeedsReset = true;
                 // if layer is not animated right now, do it after some frames
-                HC.TimeoutManager.getInstance().add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
+                HC.TimeoutManager.add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
                     this._handleResets();
                 });
             });
@@ -514,7 +514,7 @@
             eventManager.register(EVENT_LAYER_RESET_AMBIENT, this.index, () => {
                 this.ambientNeedsReset = true;
                 // if layer is not animated right now, do it after some frames
-                HC.TimeoutManager.getInstance().add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
+                HC.TimeoutManager.add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
                     this._handleResets();
                 });
             });
@@ -522,7 +522,7 @@
             eventManager.register(EVENT_LAYER_RESET_FOG, this.index, () => {
                 this.fogNeedsReset = true;
                 // if layer is not animated right now, do it after some frames
-                HC.TimeoutManager.getInstance().add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
+                HC.TimeoutManager.add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
                     this._handleResets();
                 });
             });
@@ -530,7 +530,7 @@
             eventManager.register(EVENT_LAYER_UPDATE_SHADERS, this.index, () => {
                 this.shadersNeedUpdate = true;
                 // if layer is not animated right now, do it after some frames
-                HC.TimeoutManager.getInstance().add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
+                HC.TimeoutManager.add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
                     this._handleResets();
                 });
             });

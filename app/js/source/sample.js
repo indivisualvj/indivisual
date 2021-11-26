@@ -158,7 +158,7 @@
 
             } else if (record) {
                 if (!this.started) {
-                    HC.EventManager.getInstance().register(EVENT_SOURCE_MANAGER_RENDER, this.id, (data) => {
+                    HC.EventManager.register(EVENT_SOURCE_MANAGER_RENDER, this.id, (data) => {
                         let speed = this.beatKeeper.getDefaultSpeed();
                         this.render(this.renderer.current(), speed, this.renderer.currentColor());
                     });
@@ -193,7 +193,7 @@
          * @private
          */
         _reset() {
-            HC.EventManager.getInstance().removeEventId(EVENT_RENDERER_BEFORE_RENDER, this.id, this);
+            HC.EventManager.removeEventId(EVENT_RENDERER_BEFORE_RENDER, this.id, this);
             this.initialized = false;
             this.pointer = 0;
             this.started = false;
@@ -223,9 +223,9 @@
 
             let fps = this.config.DisplaySettings.fps * 1.15;
             this.frameCount = Math.ceil(this.length / 1000 * fps);
-            HC.EventManager.getInstance().fireEventId(EVENT_SAMPLE_INIT_START, this.id, this);
+            HC.EventManager.fireEventId(EVENT_SAMPLE_INIT_START, this.id, this);
             this.initialized = true; // todo: does not make much sense
-            HC.EventManager.getInstance().fireEventId(EVENT_SAMPLE_INIT_END, this.id, this);
+            HC.EventManager.fireEventId(EVENT_SAMPLE_INIT_END, this.id, this);
 
         }
 
@@ -234,14 +234,14 @@
          */
         finish() {
 
-            HC.EventManager.getInstance().removeEventId(EVENT_SOURCE_MANAGER_RENDER, this.id);
+            HC.EventManager.removeEventId(EVENT_SOURCE_MANAGER_RENDER, this.id);
 
             if (this.pointer < this.frameCount / 2) {
                 this.started = false;
                 this.pointer = 0;
                 this.counter = 0;
 
-                HC.EventManager.getInstance().fireEventId(EVENT_SAMPLE_RENDER_ERROR, this.id, this);
+                HC.EventManager.fireEventId(EVENT_SAMPLE_RENDER_ERROR, this.id, this);
 
             } else {
                 this.samples.splice(this.pointer);
@@ -251,8 +251,8 @@
                 this.length = this.frameCount / 60 * 1000;
                 this.pointer = 0;
                 this.counter = 0;
-                HC.EventManager.getInstance().fireEventId(EVENT_SAMPLE_RENDER_END, this.id, this);
-                HC.EventManager.getInstance().fireEvent(EVENT_SAMPLE_READY, this);
+                HC.EventManager.fireEventId(EVENT_SAMPLE_RENDER_END, this.id, this);
+                HC.EventManager.fireEvent(EVENT_SAMPLE_READY, this);
             }
         }
 
@@ -268,7 +268,7 @@
             if (image && sample.samples) {
                 if (!sample.started) {
                     if (speed.starting()) {
-                        HC.EventManager.getInstance().fireEventId(EVENT_SAMPLE_RENDER_START, sample.id, sample);
+                        HC.EventManager.fireEventId(EVENT_SAMPLE_RENDER_START, sample.id, sample);
                         sample.started = true;
                     }
                 }
@@ -279,7 +279,7 @@
 
                         } else {
                             sample.counter++;
-                            HC.EventManager.getInstance().fireEventId(EVENT_SAMPLE_RENDER_PROGRESS, sample.id, sample);
+                            HC.EventManager.fireEventId(EVENT_SAMPLE_RENDER_PROGRESS, sample.id, sample);
                         }
 
                     }
@@ -297,7 +297,7 @@
                     }
                 }
             } else {
-                HC.EventManager.getInstance().fireEventId(EVENT_SAMPLE_RENDER_ERROR, sample.id, sample);
+                HC.EventManager.fireEventId(EVENT_SAMPLE_RENDER_ERROR, sample.id, sample);
             }
 
         }

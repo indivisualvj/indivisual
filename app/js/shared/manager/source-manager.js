@@ -204,7 +204,7 @@
                 return;
             }
 
-            HC.EventManager.getInstance().register(EVENT_SAMPLE_INIT_START, sample.id, function (target) {
+            HC.EventManager.register(EVENT_SAMPLE_INIT_START, sample.id, function (target) {
                 messaging.emitAttr('[id="' + target.id + '"]', 'style', '');
                 messaging.emitAttr('[id="' + target.id + '"]', 'data-label', 'initializing');
                 messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {delay: 50});
@@ -214,7 +214,7 @@
                 messaging.emitData(target.id, conf);
             });
 
-            HC.EventManager.getInstance().register(EVENT_SAMPLE_INIT_END, sample.id, (target) => {
+            HC.EventManager.register(EVENT_SAMPLE_INIT_END, sample.id, (target) => {
                 messaging.emitAttr('[id="' + target.id + '"]', 'style', '');
                 messaging.emitAttr('[id="' + target.id + '"]', 'data-label', 'enabled');
                 messaging.emitMidi('off', MIDI_ROW_ONE[target.index]);
@@ -224,12 +224,12 @@
                 messaging.emitData(target.id, conf);
             });
 
-            HC.EventManager.getInstance().register(EVENT_SAMPLE_RENDER_START, sample.id, (target) => {
+            HC.EventManager.register(EVENT_SAMPLE_RENDER_START, sample.id, (target) => {
                 messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {timeout: this.beatKeeper.getSpeed('eight').duration});
                 messaging.emitMidi('glow', MIDI_SAMPLE_FEEDBACK);
             });
 
-            HC.EventManager.getInstance().register(EVENT_SAMPLE_RENDER_PROGRESS, sample.id, (target) => {
+            HC.EventManager.register(EVENT_SAMPLE_RENDER_PROGRESS, sample.id, (target) => {
 
                 let progress = target.counter / target.beats * 100;
 
@@ -243,14 +243,14 @@
                 messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], conf);
             });
 
-            HC.EventManager.getInstance().register(EVENT_SAMPLE_RENDER_ERROR, sample.id, (target) => {
+            HC.EventManager.register(EVENT_SAMPLE_RENDER_ERROR, sample.id, (target) => {
                 messaging.emitAttr('[id="' + target.id + '"]', 'data-progress', '');
                 messaging.emitAttr('[id="' + target.id + '"]', 'data-label', '[!ERROR]');
                 messaging.emitMidi('glow', MIDI_ROW_ONE[sample.index], {timeout: 500, times: 3});
                 messaging.emitMidi('glow', MIDI_SAMPLE_FEEDBACK, {timeout: 500, times: 3});
             });
 
-            HC.EventManager.getInstance().register(EVENT_SAMPLE_RENDER_END, sample.id, (target) => {
+            HC.EventManager.register(EVENT_SAMPLE_RENDER_END, sample.id, (target) => {
                 let recordKey = getSampleRecordKey(target.index);
 
                 if (this.config.SourceSettings[recordKey]) { // reset smpX_record
@@ -266,7 +266,7 @@
                 messaging.emitMidi('off', MIDI_SAMPLE_FEEDBACK);
             });
 
-            HC.EventManager.getInstance().register(EVENT_SAMPLE_STATUS_CHANGED, sample.id, (target) => {
+            HC.EventManager.register(EVENT_SAMPLE_STATUS_CHANGED, sample.id, (target) => {
                 if (!target.enabled) {
                     messaging.emitAttr('[id="' + target.id + '"]', 'data-progress', '');
                     messaging.emitAttr('[id="' + target.id + '"]', 'data-label', '');
@@ -321,7 +321,7 @@
                     messaging._emit({action: 'unlinkall', dir: dir}, (files) => {
                         console.log('unlinkall', dir, files.length + ' files deleted');
 
-                        HC.EventManager.getInstance().register(ENENT_SAMPLE_STORE_END, sample.id, (target) => {
+                        HC.EventManager.register(ENENT_SAMPLE_STORE_END, sample.id, (target) => {
                             let key = getSampleStoreKey(target.index);
                             messaging.emitAttr('[data-id="' + key + '"]', 'data-label', '');
 
@@ -354,7 +354,7 @@
                     // sample.complete = true;
                     this.storeWorker.onmessage = null;
                     sample.samples = ev.data.samples;
-                    HC.EventManager.getInstance().fireEventId(ENENT_SAMPLE_STORE_END, sample.id, sample);
+                    HC.EventManager.fireEventId(ENENT_SAMPLE_STORE_END, sample.id, sample);
                 }
             };
             this.storeWorker.postMessage({
@@ -430,7 +430,7 @@
                                 if (loaded >= frameCount) {
                                     sample.pointer = sample.frameCount;
                                     sample.finish();
-                                    HC.EventManager.getInstance().fireEventId(EVENT_SAMPLE_READY, sample);
+                                    HC.EventManager.fireEventId(EVENT_SAMPLE_READY, sample);
                                 }
                             };
 
@@ -550,7 +550,7 @@
          *
          */
         render() {
-            HC.EventManager.getInstance().fireEvent(EVENT_SOURCE_MANAGER_RENDER);
+            HC.EventManager.fireEvent(EVENT_SOURCE_MANAGER_RENDER);
         }
 
         /**

@@ -40,17 +40,15 @@ HC.Controller.prototype._onShift = function (e) {
         return;
     }
     let key = 'HC.Controller._initDoubleShift';
-    let timeoutManager = HC.TimeoutManager.getInstance();
-
-    if (timeoutManager.has(key)) {
+    if (HC.TimeoutManager.has(key)) {
         let open = this.nextOpenFolder();
         if (open.gui.bar) {
             open.gui.bar.input.focus();
         }
-        timeoutManager.delete(key);
+        HC.TimeoutManager.delete(key);
 
     } else {
-        timeoutManager.add(key, 300, () => {
+        HC.TimeoutManager.add(key, 300, () => {
         });
     }
 };

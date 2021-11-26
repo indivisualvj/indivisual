@@ -52,7 +52,7 @@
                 // load default
                 let layer = this.config.ControlSettings.layer;
                 this.settingsManager.setLayerProperties(layer, false);
-                HC.TimeoutManager.getInstance().add('loadPreset', 0, () => {
+                HC.TimeoutManager.add('loadPreset', 0, () => {
                     this.explorer.resetLayerStatus(layer+1);
                     this.controller.updatePreset(false, this.settingsManager.prepareLayer(layer));
                 });
@@ -101,7 +101,7 @@
                             let child = candidates[candidate];
                             this.settingsManager.resetLayer(layer);
                             calls.push((_loaded) => {
-                                HC.TimeoutManager.getInstance().add('loadPresets.' + layer, SKIP_TEN_FRAMES, () => {
+                                HC.TimeoutManager.add('loadPresets.' + layer, SKIP_TEN_FRAMES, () => {
                                     this._loadPreset(child, layer, _loaded);
                                 });
                             });
@@ -109,7 +109,7 @@
 
                         } else { // always reset but do it slowly
                             calls.push((_synced) => {
-                                HC.TimeoutManager.getInstance().add('loadPresets.' + layer, SKIP_TEN_FRAMES, () => {
+                                HC.TimeoutManager.add('loadPresets.' + layer, SKIP_TEN_FRAMES, () => {
                                     this.controller.resetLayer(layer, _synced);
                                     this.explorer.resetLayerStatus(layer+1);
                                 });

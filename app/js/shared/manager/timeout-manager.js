@@ -4,9 +4,9 @@
 {
     HC.TimeoutManager = class TimeoutManager {
 
-        timeouts = [];
+        static timeouts = [];
 
-        add(key, timeout, fn) {
+        static add(key, timeout, fn) {
             this.remove(key);
             let _fn = () => {
                 this.delete(key);
@@ -23,7 +23,7 @@
             }
         }
 
-        get(key) {
+        static get(key) {
             if (this.has(key)) {
                 return this.timeouts[key];
             }
@@ -31,11 +31,11 @@
             throw new Error('timeout "' + key + '" not found');
         }
 
-        has(key) {
+        static has(key) {
             return this.timeouts.hasOwnProperty(key);
         }
 
-        remove(key) {
+        static remove(key) {
             if (this.has(key)) {
                 // console.log('clearing', key);
                 clearTimeout(this.get(key));
@@ -43,13 +43,13 @@
             }
         }
 
-        delete(key) {
+        static delete(key) {
             if (this.has(key)) {
                 delete this.timeouts[key];
             }
         }
 
-        removeAll() {
+        static removeAll() {
             for (const key in this.timeouts) {
                 this.remove(key);
             }
@@ -68,11 +68,6 @@
             };
 
             _load(0);
-        }
-
-        static _tm = new this();
-        static getInstance() {
-            return this._tm;
         }
     }
 }

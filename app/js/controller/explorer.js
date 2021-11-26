@@ -78,7 +78,7 @@
 
                         if (child.type === 'folder') {
                             calls.push((_loaded) => {
-                                HC.TimeoutManager.getInstance().add('HC.Explorer.load.' + k, SKIP_TWO_FRAMES, () => {
+                                HC.TimeoutManager.add('HC.Explorer.load.' + k, SKIP_TWO_FRAMES, () => {
                                     let folder = parent.addFolder(child.name, null, false);
                                     _insert(child.children, folder);
                                     folder.finishLayout(child, this.presetMan);

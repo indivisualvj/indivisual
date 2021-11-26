@@ -768,7 +768,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.updateUi(this.sourceSettingsGui);
             }
 
-            HC.TimeoutManager.getInstance().add('updateData', SKIP_TEN_FRAMES, () => {
+            HC.TimeoutManager.add('updateData', SKIP_TEN_FRAMES, () => {
                 this.updateSequenceUi();
                 this.updateThumbs();
             });
@@ -780,7 +780,7 @@ document.addEventListener('DOMContentLoaded', function () {
         updateSequenceUi() {
             if (this.config.SourceValues && this.config.SourceValues.sequence) {
                 for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
-                    HC.TimeoutManager.getInstance().add('updateSequenceUi' + seq, 0, () => {
+                    HC.TimeoutManager.add('updateSequenceUi' + seq, 0, () => {
                         this.updateClip(seq);
                         this.updateIndicator(seq);
                     });
@@ -859,7 +859,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
                     if (!shuffleable || -1 === shuffleable.indexOf(layer+1)) {
                         calls.push(/* _call = */(_synced) => {
-                            HC.TimeoutManager.getInstance().add('syncLayer.' + layer, SKIP_FOUR_FRAMES, () => {
+                            HC.TimeoutManager.add('syncLayer.' + layer, SKIP_FOUR_FRAMES, () => {
                                 this.syncLayer(layer, _synced);
                             });
                         })
@@ -896,7 +896,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 for (let key in layers) {
                     let layer = layers[key];
                     calls.push(/* _call = */(_synced) => {
-                        HC.TimeoutManager.getInstance().add('syncLayer.' + layer, SKIP_FOUR_FRAMES, () => {
+                        HC.TimeoutManager.add('syncLayer.' + layer, SKIP_FOUR_FRAMES, () => {
                             this.resetShader(layer, _synced)
                         })
                     })

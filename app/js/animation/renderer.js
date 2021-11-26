@@ -91,7 +91,7 @@
          * @param keepSettings
          */
         fullReset(keepSettings) {
-            HC.EventManager.getInstance().removeEvent(EVENT_RENDERER_BEFORE_RENDER);
+            HC.EventManager.removeEvent(EVENT_RENDERER_BEFORE_RENDER);
             this.resize();
             this.initLayers(keepSettings);
             this.setLayer(0);
@@ -112,7 +112,7 @@
                 canvas.id = 'threeWebGL';
                 canvas.style = {width: 1, height: 1};
                 canvas.addEventListener(EVENT_WEBGL_CONTEXT_LOST, () => {
-                    HC.EventManager.getInstance().fireEvent(EVENT_WEBGL_CONTEXT_LOST); // todo use const
+                    HC.EventManager.fireEvent(EVENT_WEBGL_CONTEXT_LOST); // todo use const
                 });
 
                 this.three.renderer.view = canvas;
@@ -169,7 +169,7 @@
 
                 this.layers[i] = layer;
 
-                HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET, layer.index, layer, 0);
+                HC.EventManager.fireEventId(EVENT_LAYER_RESET, layer.index, layer, 0);
             }
 
             this.currentLayer = this.layers[this.config.ControlSettings.layer];
@@ -383,7 +383,7 @@
                 this.three.scene.background = this.currentLayer._layer.background;
                 this.three.scene.fog = this.currentLayer._layer.fog;
 
-                HC.EventManager.getInstance().fireEvent(EVENT_RENDERER_BEFORE_RENDER, this);
+                HC.EventManager.fireEvent(EVENT_RENDERER_BEFORE_RENDER, this);
 
                 if (this.currentLayer.shaders()) {
                     this.currentLayer.doShaders();

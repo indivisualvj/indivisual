@@ -3,14 +3,14 @@
  */
 {
     HC.EventManager = class EventManager {
-        events = {};
+        static events = {};
         /**
          * (re)registers a event. no event can exist twice.
          * @param event
          * @param id
          * @param callback
          */
-        register(event, id, callback) {
+        static register(event, id, callback) {
             let _func = function (target) {
                 if (callback) {
                     callback(target);
@@ -27,7 +27,7 @@
          * @param event
          * @param id
          */
-        remove(event, id) {
+        static remove(event, id) {
             if (event in this.events) {
                 if (id && id in this.events[event]) {
                     delete this.events[event][id];
@@ -40,7 +40,7 @@
          *
          * @param event
          */
-        removeEvent(event) {
+        static removeEvent(event) {
             if (event in this.events) {
                 delete this.events[event];
             }
@@ -50,7 +50,7 @@
          *
          * @param id
          */
-        removeId(id) {
+        static removeId(id) {
             for (let e in this.events) {
                 let event = this.events[e];
 
@@ -67,7 +67,7 @@
          * @param event
          * @param id
          */
-        removeEventId(event, id) {
+        static removeEventId(event, id) {
             if (event in this.events && id in this.events[event]) {
                 delete this.events[event][id];
             }
@@ -77,7 +77,7 @@
          *
          * @param prefix
          */
-        removeLike(prefix) {
+        static removeLike(prefix) {
             for (let e in this.events) {
                 let event = this.events[e];
 
@@ -93,7 +93,7 @@
         /**
          *
          */
-        reset() {
+        static reset() {
             this.events = {};
         }
 
@@ -104,10 +104,10 @@
          * @param target
          * @param timeout
          */
-        fireEventId(event, id, target, timeout) {
+        static fireEventId(event, id, target, timeout) {
             if (event in this.events && id in this.events[event]) {
                 if (timeout) {
-                    HC.TimeoutManager.getInstance().add(event + '.' + id, timeout, () => {
+                    HC.TimeoutManager.add(event + '.' + id, timeout, () => {
                         this._doFireEvent(event, id, target);
                     });
 
@@ -127,7 +127,7 @@
          * @param target
          * @private
          */
-        _doFireEvent(event, id, target) {
+        static _doFireEvent(event, id, target) {
             let _call = this.events[event][id];
             if (_call) {
                 _call(target);
@@ -139,18 +139,12 @@
          * @param event
          * @param target
          */
-        fireEvent(event, target) {
+        static fireEvent(event, target) {
             if (event in this.events) {
                 for (let id in this.events[event]) {
                     this._doFireEvent(event, id, target);
                 }
             }
-        }
-
-
-        static _em = new this();
-        static getInstance() {
-            return this._em;
         }
     }
 }

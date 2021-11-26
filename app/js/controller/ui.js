@@ -512,7 +512,7 @@ HC.Controller.prototype.scrollToControl = function (control) {
 HC.Controller.prototype.updateUi = function (control) {
     let key = control ? control.getLabel() : 'all';
 
-    HC.TimeoutManager.getInstance().add('updateUi.' + key, SKIP_TEN_FRAMES, () => {
+    HC.TimeoutManager.add('updateUi.' + key, SKIP_TEN_FRAMES, () => {
         this.refreshLayersUi();
 
         if (!control) {

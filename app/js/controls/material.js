@@ -14,11 +14,11 @@
                     switch (key) {
                         case 'mesh_material':
                         case 'material_mapping':
-                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_SHAPES, id, context);
+                            HC.EventManager.fireEventId(EVENT_LAYER_RESET_SHAPES, id, context);
                             break;
 
                         default:
-                            HC.EventManager.getInstance().fireEventId(EVENT_SHAPE_MATERIALS_UPDATE, id, context);
+                            HC.EventManager.fireEventId(EVENT_SHAPE_MATERIALS_UPDATE, id, context);
                             break;
                     }
                 }

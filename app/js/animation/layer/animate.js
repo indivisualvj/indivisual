@@ -6,7 +6,7 @@ HC.Layer.prototype.animate = function () {
 
     this._handleResets();
 
-    HC.EventManager.getInstance().fireEvent(EVENT_LAYER_ANIMATE);
+    HC.EventManager.fireEvent(EVENT_LAYER_ANIMATE);
 
     this.updateTween();
 

@@ -22,7 +22,7 @@
                 this.active[shape.index] = true;
 
                 let inst = this;
-                HC.EventManager.getInstance().register(EVENT_ANIMATION_UPDATE_SETTING, this.id(shape.index), function (data) {
+                HC.EventManager.register(EVENT_ANIMATION_UPDATE_SETTING, this.id(shape.index), function (data) {
                     if (inst.layer === data.layer) {
                         switch (data.item) {
                             case inst.tree:
@@ -31,7 +31,7 @@
                                     params.mesh = false;
                                     shape.setMesh(params.original);
 
-                                    HC.EventManager.getInstance().removeId(inst.id(shape.index));
+                                    HC.EventManager.removeId(inst.id(shape.index));
                                 }
                                 break;
                         }
@@ -43,7 +43,7 @@
         reset() {
             if (this.active.length) {
                 this.active = [];
-                HC.EventManager.getInstance().removeLike(this.id());
+                HC.EventManager.removeLike(this.id());
             }
         }
     }
@@ -74,7 +74,7 @@
                 this.active[shape.index] = true;
 
                 let inst = this;
-                HC.EventManager.getInstance().register(EVENT_ANIMATION_UPDATE_SETTING, this.id(shape.index), function (data) {
+                HC.EventManager.register(EVENT_ANIMATION_UPDATE_SETTING, this.id(shape.index), function (data) {
                     if (inst.layer === data.layer) {
                         switch (data.item) {
                             case inst.tree:
@@ -83,7 +83,7 @@
                                     shape.setMesh(params.states[0]);
                                     params.states = false;
 
-                                    HC.EventManager.getInstance().removeId(inst.id(shape.index));
+                                    HC.EventManager.removeId(inst.id(shape.index));
                                 }
                                 break;
                         }
@@ -95,7 +95,7 @@
         reset() {
             if (this.active.length) {
                 this.active = [];
-                HC.EventManager.getInstance().removeLike(this.id());
+                HC.EventManager.removeLike(this.id());
             }
         }
     }

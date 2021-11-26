@@ -44,7 +44,7 @@
             let mesh = new THREE.Mesh(geometry, this.material);
             mesh.name = this.id(index);
 
-            HC.EventManager.getInstance().register(EVENT_RENDERER_BEFORE_RENDER, this.id(index), (renderer) => {
+            HC.EventManager.register(EVENT_RENDERER_BEFORE_RENDER, this.id(index), (renderer) => {
                 if (this.layer.isVisible()) {
                     mesh.visible = false;
 

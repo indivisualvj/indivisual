@@ -14,7 +14,7 @@
                     let id = isObject(context) ? context.index : context;
                     switch (key) {
                         case 'lighting_pattern_lights':
-                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_LIGHTING, id, context, SKIP_TEN_FRAMES);
+                            HC.EventManager.fireEventId(EVENT_LAYER_RESET_LIGHTING, id, context, SKIP_TEN_FRAMES);
                             break;
                     }
                 }

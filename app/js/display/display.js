@@ -122,7 +122,6 @@
          */
         setSource(source) {
             this._source = source;
-            this.updateClip();
         }
 
         /**
@@ -249,14 +248,9 @@
          *
          * @param width
          * @param height
+         * @param settings
          */
         update(width, height, settings) {
-
-            if (this.isFixedSize()) {
-                let b = this._source.bounds();
-                width = b.width;
-                height = b.height;
-            }
 
             if (!this._bounds || this.canvas.width !== width || this.canvas.height !== height) {
                 this.canvas.width = width;
@@ -382,42 +376,6 @@
             this.canvas.style.background = this.getSetBackground() ? this.config.DisplaySettings.background : 'none';
 
             return sh;
-        }
-
-        /**
-         *
-         */
-        updateClip() {
-            if (this._source) {
-                let ob = this._clipBounds(true);
-                let mb = this._clipBounds(false);
-                let sb = this._source.bounds();
-                if (sb && mb) {
-                    // quelle hat eine eigene und unveränderliche größe
-                    let dx = (ob.width - sb.width) / 2;
-                    let dy = (ob.height - sb.height) / 2;
-
-                    let clip = new HC.Rectangle(mb.x - dx, mb.y - dy, mb.width, mb.height);
-                    this.clip = clip;
-
-                } else {
-                    this.clip = false;
-                }
-            }
-        }
-
-        /**
-         *
-         * @returns {boolean}
-         */
-        isFixedSize() {
-            if (this._source) {
-                let sb = this._source.bounds();
-                if (sb) {
-                    return true;
-                }
-            }
-            return false;
         }
 
         /**

@@ -29,7 +29,7 @@
             this.cubeTextureFromBackgroundInput(_onLoad);
 
             let id = this.id(index);
-            HC.EventManager.getInstance().register('animation.updateSetting', id, function (data) { // todo use const
+            HC.EventManager.getInstance().register(EVENT_ANIMATION_UPDATE_SETTING, id, function (data) {
                 if (data.layer === inst.layer) {
                     switch (data.item) {
                         case 'background_input':

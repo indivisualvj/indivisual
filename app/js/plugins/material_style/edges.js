@@ -22,7 +22,7 @@
                 this.active[shape.index] = true;
 
                 let inst = this;
-                HC.EventManager.getInstance().register('animation.updateSetting', this.id(shape.index), function (data) { // todo use const
+                HC.EventManager.getInstance().register(EVENT_ANIMATION_UPDATE_SETTING, this.id(shape.index), function (data) {
                     if (inst.layer === data.layer) {
                         switch (data.item) {
                             case inst.tree:
@@ -74,7 +74,7 @@
                 this.active[shape.index] = true;
 
                 let inst = this;
-                HC.EventManager.getInstance().register('animation.updateSetting', this.id(shape.index), function (data) { // todo use const
+                HC.EventManager.getInstance().register(EVENT_ANIMATION_UPDATE_SETTING, this.id(shape.index), function (data) {
                     if (inst.layer === data.layer) {
                         switch (data.item) {
                             case inst.tree:

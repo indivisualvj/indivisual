@@ -111,8 +111,8 @@
 
                 canvas.id = 'threeWebGL';
                 canvas.style = {width: 1, height: 1};
-                canvas.addEventListener('webglcontextlost', () => {
-                    HC.EventManager.getInstance().fireEvent('webglcontextlost'); // todo use const
+                canvas.addEventListener(EVENT_WEBGL_CONTEXT_LOST, () => {
+                    HC.EventManager.getInstance().fireEvent(EVENT_WEBGL_CONTEXT_LOST); // todo use const
                 });
 
                 this.three.renderer.view = canvas;

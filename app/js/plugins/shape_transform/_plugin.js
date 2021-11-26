@@ -19,14 +19,13 @@ HC.plugins.shape_transform = HC.plugins.shape_transform || {};
         }
 
         after(shape) {
-            // todo geo.attributes.lineDistance.needsUpdate?
+            // todo it indeed does not work wiz linemat?!?
             if (this.key !== 'off') {
                 if (shape.geometry.attributes.lineDistance) {
                     shape.geometry.attributes.lineDistance.needsUpdate = true;
                 }
                 shape.geometry.attributes.position.needsUpdate = true;
             }
-            // fixme: these plugins can not be done per shape (eg. drawrange using shapespeed) because there is only one geometry at a time
         }
 
         setControlSets(controlSets) {

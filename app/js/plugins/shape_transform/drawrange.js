@@ -3,8 +3,6 @@
         static name = 'drawrange progress';
 
         apply(shape) {
-            // fixme: check range displayed
-            // fixme: check if all shapes are done
             let speed = this.layer.getCurrentSpeed();
             let p = shape.geometry.attributes.position;
             let l = p.count * p.itemSize * 2;
@@ -23,8 +21,6 @@
         static name = 'drawrange audio';
 
         apply(shape) {
-            // fixme: check range displayed
-            // fixme: check if all shapes are done
             let volume = this.audioAnalyser.volume * 2;
             let p = shape.geometry.attributes.position;
             let l = p.count * p.itemSize;

@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 animation.renderer = renderer;
 
                 if (IS_ANIMATION) {
-                    HC.EventManager.getInstance().register('webglcontextlost', animation.name, function () { // todo use const
+                    HC.EventManager.getInstance().register(EVENT_WEBGL_CONTEXT_LOST, animation.name, function () {
                         // now reset...
                         HC.log('HC.Renderer', 'another context loss...', true, true);
 
@@ -46,7 +46,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         animation.updateSource('override_material_input', 'none', true, true, false);
                         animation.updateSource('override_background_mode', 'none', true, true, false);
 
-                        alert('WebGL just died...');
+                        // todo maybe send full reset anywhere and reload page
+
                     });
 
                     animation.messaging.emitAttr('#play', 'data-color', '');
@@ -200,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (this.audioAnalyser.peak) {
                 this.messaging.emitMidi('glow', MIDI_PEAK_FEEDBACK, {timeout: 125});
 
-                HC.EventManager.getInstance().fireEvent('audio.peak', this.audioAnalyser); // todo use const
+                HC.EventManager.getInstance().fireEvent(EVENT_AUDIO_PEAK, this.audioAnalyser);
             }
         }
 
@@ -221,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         updatePlay() {
-            if (this.monitor) {
+            if (IS_MONITOR) {
                 this.config.ControlSettings.play = this.config.ControlSettings.monitor;
             }
 
@@ -312,8 +313,6 @@ document.addEventListener('DOMContentLoaded', function () {
             this._rmsc++;
             this._rmss += this.rms;
             this.last = this.now;
-
-            HC.EventManager.getInstance().fireEvent('animation.updateRuntime', this); // todo use const
         }
 
         /**
@@ -563,7 +562,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.messaging.emitSettings(layerIndex, data, true, false, force);
             }
 
-            HC.EventManager.getInstance().fireEvent('animation.updateSetting', {layer: layer, item: property, value: value}); // todo use const
+            HC.EventManager.getInstance().fireEvent(EVENT_ANIMATION_UPDATE_SETTING, {layer: layer, item: property, value: value});
         }
 
         /**
@@ -622,7 +621,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         break;
 
                     case 'monitor':
-                        if (!this.monitor) {
+                        if (!IS_MONITOR) {
                             break;
                         }
                     case 'play':
@@ -630,7 +629,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         break;
 
                     case 'audio':
-                        if (!this.monitor) {
+                        if (!IS_MONITOR) {
                             this.updateAudio();
                         }
                         break;
@@ -659,7 +658,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (display) {
                 if (item.match(/^sample\d+_load/) && value) {
-                    if (this.monitor) {
+                    if (IS_MONITOR) {
                         this.sourceManager.loadSample(HC.numberExtract(item, 'sample'), value);
                     }
                     this.updateSource(item, false, false, true, false);
@@ -675,10 +674,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     let display = this.displayManager.getDisplay(HC.numberExtract(item, 'display'));
                     this.sourceManager.updateSource(display);
 
-                    // if (display && display.isFixedSize()) { // todo what is it? needed by light display source make lighting manage it!
-                    //     this.displayManager.updateDisplay(display.index, false);
-                    // }
-
                 } else if (item.match(/display\d+_sequence/)) {
                     this.sourceManager.updateSource(this.displayManager.getDisplay(HC.numberExtract(item, 'display')));
                 }
@@ -693,16 +688,6 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateData(data) {
 
-        }
-
-        /**
-         *
-         * @param data
-         */
-        updateMidi(data) {
-            if (IS_ANIMATION && data.command === 'message') {
-                HC.EventManager.getInstance().fireEvent('midi.message', data.data); // todo use const
-            }
         }
 
         /**

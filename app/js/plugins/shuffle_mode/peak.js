@@ -9,7 +9,7 @@
 
             let inst = this;
 
-            HC.EventManager.getInstance().register('audio.peak', this.objectName, function (target) { // todo use const
+            HC.EventManager.getInstance().register(EVENT_AUDIO_PEAK, this.objectName, function (target) {
                 inst.peaks++;
             });
         }

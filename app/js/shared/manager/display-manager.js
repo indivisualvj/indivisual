@@ -284,8 +284,7 @@
                     this.animation.sourceManager.updateSource(display);
                     this.enableCliptastic(display, false);
                     display.updateMask();
-                    this.enableCliptastic(display, !display.isFixedSize());
-                    display.updateClip();
+                    this.enableCliptastic(display, true);
                     this.enableMaptastic(display, true);
 
                 } else {
@@ -293,7 +292,6 @@
                         case 'mask':
                         case 'mapping':
                             display.loadMask();
-                            display.updateClip();
                             this.refreshCliptastic();
                             this.enableMaptastic(display, true);
                             break;

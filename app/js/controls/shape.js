@@ -38,7 +38,7 @@
             shape_limit: false,
             shape_sync: true,
             shape_vertices: '',
-            shape_merge_tolerance: 1,
+            shape_merge_tolerance: 0,
             shape_modifier: 'off',
             shape_modifier_volume: 1,
             shape_transform: 'off',

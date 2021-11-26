@@ -124,10 +124,12 @@
                     let value = (deltaY / (resY/512));
 
                     if (value > 1) {
+                        document.body.classList.add('dragging', 'vertical');
                         this.incrementValue();
                         entry = e.screenY;
 
                     } else if (value < -1) {
+                        document.body.classList.add('dragging', 'vertical');
                         this.decrementValue();
                         entry = e.screenY;
                     }
@@ -135,6 +137,7 @@
 
                 window.addEventListener('mousemove', _handle);
                 window.addEventListener('mouseup', (e) => {
+                    document.body.classList.remove('dragging', 'vertical');
                     window.removeEventListener('mousemove', _handle);
                 });
             });

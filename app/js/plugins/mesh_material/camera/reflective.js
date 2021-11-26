@@ -38,7 +38,7 @@
 
             this.cameras.add(cubecam);
 
-            this.material = new THREE.MeshPhysicalMaterial({
+            this.material = new THREE.MeshPhongMaterial({
                 envMap: cubeRenderTarget.texture
             });
             let mesh = new THREE.Mesh(geometry, this.material);

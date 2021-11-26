@@ -1,3 +1,8 @@
+
+.dragging.vertical * {
+    cursor: ns-resize !important;
+}
+
 *::-webkit-scrollbar-corner {
     height: 0;
     display: none;

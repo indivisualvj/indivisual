@@ -17,7 +17,6 @@ THREE.CrossHatchShader = {
     ].join("\n"),
 
     fragmentShader: [
-        //"precision mediump float;",
 "varying vec2 vUv;",
 "uniform sampler2D tDiffuse;",
         "uniform float spacing;",

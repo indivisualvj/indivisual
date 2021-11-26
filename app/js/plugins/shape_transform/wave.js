@@ -4,53 +4,40 @@
         angle;
 
         apply(shape, source, axes) {
+            source = source || 'y';
+            axes = axes || new THREE.Vector3(1, 1, 1);
 
-            if (!shape.getVertices()) {
-                shape.setGeometry(shape.getRootGeometry());
+            if (this.angle === undefined) {
+                this.angle = 0;
+                this.min = 0;
+                this.max = 0;
             }
 
-            if (this.isFirstShape(shape)) {
-                source = source || 'y';
-                axes = axes || new THREE.Vector3(1, 1, 1);
+            let dir = this.settings.shape_transform_volume > 0 ? 1 : -1;
+            this.angle += dir * this.animation.getFrameDurationPercent(this.layer.getCurrentSpeed().duration, .005);
 
-                if (this.angle === undefined) {
-                    this.angle = 0;
-                    this.min = 0;
-                    this.max = 0;
-                }
+            let vertices = shape.geometry.getAttribute('position');
+            let vbackup = this.vertices;
 
-                let dir = this.settings.shape_transform_volume > 0 ? 1 : -1;
-                this.angle += dir * this.animation.getFrameDurationPercent(this.layer.getCurrentSpeed().duration, .005);
+            let vtc = new THREE.Vector3();
+            for (let i = 0; i < vertices.count; i++) {
 
-                let vertices = shape.getVertices();
-                let vbackup = shape.verticesCopy;
+                vtc.fromBufferAttribute(vertices, i);
+                let vtcb = vbackup[i];
 
-                if (vertices) {
+                let v = vtcb[source];
 
-                    for (let i = 0; i < vertices.length; i++) {
+                this.min = Math.min(v, this.min);
+                this.max = Math.max(v, this.max);
+                let div = Math.abs(this.min - this.max) / 20;
 
-                        let vtc = vertices[i];
-                        let vtcb = vbackup[i];
+                v = Math.sin(this.angle * RAD + ((v + .5 * div) / div)) / 4 * Math.abs(this.settings.shape_transform_volume);
 
-                        let v = vtcb[source];
-
-                        this.min = Math.min(v, this.min);
-                        this.max = Math.max(v, this.max);
-                        let div = Math.abs(this.min - this.max) / 20;
-
-                        v = Math.sin(this.angle * RAD + ((v + .5 * div) / div)) / 2 * Math.abs(this.settings.shape_transform_volume);
-
-                        vtc.x = vtcb.x + vtcb.x * v * axes.x;
-                        vtc.y = vtcb.y + vtcb.y * v * axes.y;
-                        vtc.z = vtcb.z + vtcb.z * v * axes.z;
-
-                    }
-                    shape.geometry.verticesNeedUpdate = true;
-                    shape.geometry.lineDistancesNeedUpdate = true;
-
-                } else if (!vertices) {
-                    console.warn('No transform for ' + shape.geometry.type);
-                }
+                vertices.setXYZ(i,
+                    vtcb.x + vtcb.x * v * axes.x,
+                    vtcb.y + vtcb.y * v * axes.y,
+                    vtcb.z + vtcb.z * v * axes.z
+                );
             }
         }
     }

@@ -5,9 +5,6 @@
             reflection: {
                 text: 'use background_input to change reflection'
             }
-
-
-
         };
 
         apply(geometry, index) {
@@ -26,10 +23,10 @@
                 this.material.envMap = texture;
                 this.material.needsUpdate = true;
             };
-            this.cubeTextureFromBackgroundInput(_onLoad);
 
+            this.cubeTextureFromBackgroundInput(_onLoad);
             let id = this.id(index);
-            HC.EventManager.getInstance().register('animation.updateSetting', id, function (data) {
+            HC.EventManager.getInstance().register('animation.updateSetting', id, function (data) { // todo use const
                 if (data.layer === inst.layer) {
                     switch (data.item) {
                         case 'background_input':

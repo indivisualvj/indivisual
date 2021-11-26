@@ -41,7 +41,7 @@
             this.index = index;
             this.color = color;
             this.mesh = mesh;
-            this.setGeometry(mesh.geometry);
+            this.geometry = mesh.geometry;
             this.normalScale = new THREE.Vector3(1, 1, 1).length();
 
             this.initPlugins();
@@ -56,17 +56,6 @@
 
         isVisible() {
             return this.visible;
-        }
-
-        setGeometry(geo) {
-
-            if (this.geometry) {
-                HC.dispose(this.geometry);
-            }
-
-            this.geometry = geo;
-            this.mesh.geometry = geo;
-            this.verticesCopy = this.copyVertices();
         }
 
         getGeometry() {
@@ -312,6 +301,9 @@
                     mat.emissive.setHSL(0, 0, 0);
                 }
             }
+            if (mat.specularColor) {
+                console.log(mat.specularColor);
+            }
 
             if (plugin.properties && plugin.properties.map) {
                 if (mat.map !== plugin.properties.map) {
@@ -347,33 +339,30 @@
             this.mesh.receiveShadow = settings.lighting_shadows;
 
             if (this.materialNeedsUpdate) {
-                this.materialNeedsUpdate = false;
-                if ('shininess' in mat && mat.shininess !== settings.material_shininess) {
-                    mat.shininess = settings.material_shininess;
-
-                } else if (mat.refractionRatio !== settings.material_shininess) {
-                    mat.refractionRatio = settings.material_shininess / 100;
-                }
-
+                mat.shininess = settings.material_shininess * 100;
+                mat.refractionRatio = settings.material_volume;
+                mat.reflectivity = settings.material_reflectivity;
                 mat.roughness = settings.material_roughness;
                 mat.metalness = settings.material_metalness;
+                mat.displacementScale = settings.material_disp_scale;
+                mat.displacementBias = settings.material_disp_bias;
 
                 this._updateMaterialBlending();
 
                 if (mat.flatShading === settings.material_softshading) { // reversed logic!
                     mat.flatShading = !settings.material_softshading; // reversed logic!
-                    mat.needsUpdate = true;
                 }
 
                 if (mat.side !== settings.material_side) {
                     mat.side = settings.material_side;
-                    mat.needsUpdate = true;
                 }
 
                 if (mat.shadowSide !== settings.material_shadowside) {
                     mat.shadowSide = settings.material_shadowside;
-                    mat.needsUpdate = true;
                 }
+
+                this.materialNeedsUpdate = false;
+                mat.needsUpdate = true;
             }
 
         }
@@ -392,7 +381,6 @@
 
                 if (mat.blending !== b) {
                     mat.blending = b;
-                    mat.needsUpdate = true;
                 }
             }
 
@@ -402,7 +390,6 @@
 
                 if (mat.blendEquation !== b) {
                     mat.blendEquation = b;
-                    mat.needsUpdate = true;
                 }
             }
 
@@ -412,7 +399,6 @@
 
                 if (mat.blendSrc !== b) {
                     mat.blendSrc = b;
-                    mat.needsUpdate = true;
                 }
             }
 
@@ -422,37 +408,8 @@
 
                 if (mat.blendDst !== b) {
                     mat.blendDst = b;
-                    mat.needsUpdate = true;
                 }
             }
-        }
-
-        getRootGeometry() {
-            let _get = function (g) {
-                return g.userData ? g.userData.geometry : false;
-            };
-            let geometry = this.geometry;
-            while(_get(geometry)) {
-                geometry = _get(geometry);
-            }
-
-            return geometry
-        }
-
-        getVertices() {
-            return this.geometry.vertices;
-        }
-
-        copyVertices() {
-            let geometry = this.geometry;
-            let vertices = [];
-            if (geometry.vertices) {
-                for (let i = 0; i < geometry.vertices.length; i++) {
-                    vertices.push(geometry.vertices[i].clone());
-                }
-            }
-
-            return vertices;
         }
     }
 }

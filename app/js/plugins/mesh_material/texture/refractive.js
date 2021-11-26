@@ -14,7 +14,7 @@
 
             let inst = this;
             let file = this.settings.background_input;
-            this.material = new THREE.MeshPhysicalMaterial({envMap: null});
+            this.material = new THREE.MeshPhongMaterial({envMap: null});
             let mesh = new THREE.Mesh(geometry, this.material);
             mesh.name = this.id(index);
 
@@ -29,7 +29,7 @@
             this.cubeTextureFromBackgroundInput(_onLoad);
 
             let id = this.id(index);
-            HC.EventManager.getInstance().register('animation.updateSetting', id, function (data) {
+            HC.EventManager.getInstance().register('animation.updateSetting', id, function (data) { // todo use const
                 if (data.layer === inst.layer) {
                     switch (data.item) {
                         case 'background_input':

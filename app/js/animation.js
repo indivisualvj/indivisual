@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 animation.renderer = renderer;
 
                 if (IS_ANIMATION) {
-                    HC.EventManager.getInstance().register('webglcontextlost', animation.name, function () {
+                    HC.EventManager.getInstance().register('webglcontextlost', animation.name, function () { // todo use const
                         // now reset...
                         HC.log('HC.Renderer', 'another context loss...', true, true);
 
@@ -45,6 +45,8 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                         animation.updateSource('override_material_input', 'none', true, true, false);
                         animation.updateSource('override_background_mode', 'none', true, true, false);
+
+                        alert('WebGL just died...');
                     });
 
                     animation.messaging.emitAttr('#play', 'data-color', '');
@@ -67,8 +69,10 @@ document.addEventListener('DOMContentLoaded', function () {
                     sample: new Array(animation.config.SourceValues.sample.length)
                 });
 
-                new HC.Animation.KeyboardListener().init(animation);
-                new HC.Animation.EventListener().init();
+                if (IS_ANIMATION) {
+                    new HC.Animation.KeyboardListener().init(animation);
+                    new HC.Animation.EventListener().init();
+                }
 
                 animation.loadSession();
             });
@@ -196,11 +200,9 @@ document.addEventListener('DOMContentLoaded', function () {
             if (this.audioAnalyser.peak) {
                 this.messaging.emitMidi('glow', MIDI_PEAK_FEEDBACK, {timeout: 125});
 
-                HC.EventManager.getInstance().fireEvent('audio.peak', this.audioAnalyser);
+                HC.EventManager.getInstance().fireEvent('audio.peak', this.audioAnalyser); // todo use const
             }
         }
-
-
 
         /**
          *
@@ -311,7 +313,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this._rmss += this.rms;
             this.last = this.now;
 
-            HC.EventManager.getInstance().fireEvent('animation.updateRuntime', this);
+            HC.EventManager.getInstance().fireEvent('animation.updateRuntime', this); // todo use const
         }
 
         /**
@@ -561,7 +563,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.messaging.emitSettings(layerIndex, data, true, false, force);
             }
 
-            HC.EventManager.getInstance().fireEvent('animation.updateSetting', {layer: layer, item: property, value: value});
+            HC.EventManager.getInstance().fireEvent('animation.updateSetting', {layer: layer, item: property, value: value}); // todo use const
         }
 
         /**
@@ -699,7 +701,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateMidi(data) {
             if (IS_ANIMATION && data.command === 'message') {
-                HC.EventManager.getInstance().fireEvent('midi.message', data.data);
+                HC.EventManager.getInstance().fireEvent('midi.message', data.data); // todo use const
             }
         }
 

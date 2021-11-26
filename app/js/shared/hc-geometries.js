@@ -106,8 +106,7 @@
             let div = Math.PI * 0.5;
             let hseg = -div + (div / edges) * dir;
 
-            let geo = new THREE.RingGeometry(this.innerRadius, this.outerRadius, edges, 1, hseg);
-            return geo;
+            return new THREE.RingGeometry(this.innerRadius, this.outerRadius, edges, 1, hseg);
         }
     }
 }
@@ -149,8 +148,7 @@
                 let y = Math.cos(step * i + hseg) * radius;
                 shape.lineTo(x, -y);
             }
-            let geometry = new THREE.ShapeGeometry(shape);
-            return geometry;
+            return new THREE.ShapeGeometry(shape);
         }
     }
 }
@@ -234,36 +232,26 @@
          *
          * @param vtcs
          * @param multiplier
-         * @returns {THREE.Geometry}
+         * @returns {THREE.BufferGeometry}
          */
         fromString(vtcs, multiplier) {
 
             vtcs = vtcs
                 ? '[' + vtcs + ']'
-                : '[[' + (-1) + ',' + (1) + ',0],[' + (1) + ',' + (1) + ',0],[' + (1) + ',' + (-1) + ',0]]';
+                : '[[' + (-1) + ',' + (-1) + ',1],[' + (1) + ',' + (-1) + ',1],[' + (-1) + ',' + (1) + ',1]]';
             vtcs = JSON.parse(vtcs);
 
-            let geometry = new THREE.Geometry();
-
+            let points = [];
             for (let i = 0; i < vtcs.length; i++) {
                 let vtc = vtcs[i];
                 let vec = new THREE.Vector3(round(multiplier * vtc[0], 0), round(multiplier * vtc[1], 0), 0);
-                geometry.vertices.push(vec);
-                if (i % 3 === 0) geometry.faces.push(new THREE.Face3(i + 0, i + 1, i + 2));
+                points.push(vec);
             }
-
-            geometry.computeFaceNormals();
-            let n = geometry.faces;
-            for (let i = 0; i < n.length; i++) {
-                let face = n[i];
-                if (face.normal.z < 0) { // _check for twisted faces and twist
-                    let tmp = face.a;
-                    face.a = face.c;
-                    face.c = tmp;
-                }
-            }
+            let geometry = new THREE.BufferGeometry().setFromPoints(points);
+            HC.BufferGeometryUtils.sortVertices(geometry);
 
             return geometry;
         }
+
     }
 }

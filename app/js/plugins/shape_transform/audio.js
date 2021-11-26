@@ -2,64 +2,51 @@
     HC.plugins.shape_transform.audio = class Plugin extends HC.ShapeTransformPlugin {
         static name = 'audio xyz';
 
+        vertices;
+
         apply(shape, axis) {
+            let vertices = shape.geometry.getAttribute('position');
+            let vbackup = this.vertices;
 
-            if (!shape.getVertices()) {
-                shape.setGeometry(shape.getRootGeometry());
-            }
+            let ai = 0;
+            for (let i = 0; i < vertices.count; i++) {
 
-            let vbackup = shape.verticesCopy;
-            let vertices = shape.getVertices();
+                let x = 1, y = 1, z = 1;
 
-            if (vertices && vbackup && this.isFirstShape(shape)) {
+                let v = this.settings.shape_sync ? this.audioAnalyser.volume : this.audioAnalyser.getVolume(ai++);
 
-                let ai = 0;
-                for (let i = 0; i < vertices.length; i++) {
+                v *= this.settings.shape_transform_volume;
 
-                    let x = 1, y = 1, z = 1;
-
-                    let v = this.settings.shape_sync ? this.audioAnalyser.volume : this.audioAnalyser.getVolume(ai++);
-
-                    v *= this.settings.shape_transform_volume;
-
-                    if (this.settings.shape_limit) {
-                        v += 1.0;
-                    }
-
-                    if (axis) {
-                        switch (axis) {
-                            case 'x':
-                                x *= v;
-                                break;
-                            case 'y':
-                                y *= v;
-                                break;
-                            case 'z':
-                                z *= v;
-                                break;
-                            case 'xy':
-                                x *= v;
-                                y *= v;
-                                break;
-                        }
-                    } else {
-                        x *= v;
-                        y *= v;
-                        z *= v;
-                    }
-
-                    let vtc = vertices[i];
-                    let vtcb = vbackup[i];
-                    vtc.x = vtcb.x * x;
-                    vtc.y = vtcb.y * y;
-                    vtc.z = vtcb.z * z;
-
+                if (this.settings.shape_limit) {
+                    v += 1.0;
                 }
-                shape.geometry.verticesNeedUpdate = true;
-                shape.geometry.lineDistancesNeedUpdate = true;
 
-            } else if (!vertices) {
-                console.warn('No transform for ' + shape.geometry.type);
+                if (axis) {
+                    switch (axis) {
+                        case 'x':
+                            x *= v;
+                            break;
+                        case 'y':
+                            y *= v;
+                            break;
+                        case 'z':
+                            z *= v;
+                            break;
+                        case 'xy':
+                            x *= v;
+                            y *= v;
+                            break;
+                    }
+                } else {
+                    x *= v;
+                    y *= v;
+                    z *= v;
+                }
+
+                let vtcb = vbackup[i];
+                vertices.setX(i, vtcb.x?vtcb.x * x : x*x*x);
+                vertices.setY(i, vtcb.y?vtcb.y * y : y*y*y);
+                vertices.setZ(i, vtcb.z?vtcb.z * z : z*z*z);
             }
         }
     }

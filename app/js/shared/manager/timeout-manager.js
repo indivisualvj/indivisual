@@ -55,7 +55,7 @@
             }
         }
 
-        chainExecuteCalls(calls, callback) {
+        static chainExecuteCalls(calls, callback) {
             let _load = function (index) {
                 if (index >= calls.length) {
                     callback();

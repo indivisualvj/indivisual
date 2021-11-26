@@ -6,81 +6,64 @@
 {
     HC.plugins.shape_transform.wobble = class Plugin extends HC.ShapeTransformPlugin {
         static name = 'wobble xyz';
-        injections = {
-            angle: false,
-            rumble: {
-                x: 0,
-                y: 0,
-                z: 0
-            }
-        };
+
+        angle;
+        rumble = {
+            x: 0,
+            y: 0,
+            z: 0
+        }
 
         apply(shape, axes) {
+            axes = axes || new THREE.Vector3(1, 1, 1);
 
-            if (!shape.getVertices()) {
-                shape.setGeometry(shape.getRootGeometry());
+            if (!this.angle) {
+                this.angle = 360;
+
+                this.osci = {
+                    osci1_period: .125,
+                    osci1_amp: 4,
+                    osci2_period: .066783782,
+                    osci2_amp: 1,
+                    osci3_period: .022342,
+                    osci3_amp: 2,
+                    rhythm: 'half',
+                    tempo: this.config.ControlSettings.tempo,
+                };
             }
 
-            if (this.isFirstShape(shape)) {
-                let params = this.params(shape);
+            this.osci.rhythm = this.controlSets.audio.get('rhythm');
 
-                axes = axes || new THREE.Vector3(1, 1, 1);
+            let multiplier = this.settings.shape_transform_volume * 15;
+            let vertices = shape.geometry.getAttribute('position');
+            let vbackup = this.vertices;
 
-                if (!params.angle) {
-                    params.angle = 360;
+            let vtc = new THREE.Vector3();
+            for (let i = 0; i < vertices.count; i++) {
 
-                    params.osci = {
-                        osci1_period: .125,
-                        osci1_amp: 4,
-                        osci2_period: .066783782,
-                        osci2_amp: 1,
-                        osci3_period: .022342,
-                        osci3_amp: 2,
-                        rhythm: 'half',
-                        tempo: this.config.ControlSettings.tempo,
+                vtc.fromBufferAttribute(vertices, i);
+                let vtcb = vbackup[i];
+                if (!vtcb._rumble) {
+                    vtcb._rumble = {
+                        x: randomFloat(0, Math.PI, 2, true),
+                        y: randomFloat(0, Math.PI, 2, true),
+                        z: randomFloat(0, Math.PI, 2, true)
                     };
                 }
 
-                params.osci.rhythm = this.controlSets.audio.get('rhythm');
+                vtcb._rumble.x += this.animation.diffPrc * randomFloat(0, .25 * Math.PI, 2, true);
+                vtcb._rumble.y += this.animation.diffPrc * randomFloat(0, .25 * Math.PI, 2, true);
+                vtcb._rumble.z += this.animation.diffPrc * randomFloat(0, .25 * Math.PI, 2, true);
 
-                let multiplier = this.settings.shape_transform_volume * 15;
-                let vertices = shape.getVertices();
-                let vbackup = shape.verticesCopy;
+                let w1 = multiplier * HC.Osci.wobble(this.beatKeeper, vtcb._rumble.x, this.osci);
+                let w2 = multiplier * HC.Osci.wobble(this.beatKeeper, vtcb._rumble.y, this.osci);
+                let w3 = multiplier * HC.Osci.wobble(this.beatKeeper, vtcb._rumble.z, this.osci);
 
-                if (vertices) {
-
-                    for (let i = 0; i < vertices.length; i++) {
-
-                        let vtc = vertices[i];
-                        let vtcb = vbackup[i];
-                        if (!vtcb._rumble) {
-                            vtcb._rumble = {
-                                x: randomFloat(0, Math.PI, 2, true),
-                                y: randomFloat(0, Math.PI, 2, true),
-                                z: randomFloat(0, Math.PI, 2, true)
-                            };
-                        }
-
-                        vtcb._rumble.x += this.animation.diffPrc * randomFloat(0, .25 * Math.PI, 2, true);
-                        vtcb._rumble.y += this.animation.diffPrc * randomFloat(0, .25 * Math.PI, 2, true);
-                        vtcb._rumble.z += this.animation.diffPrc * randomFloat(0, .25 * Math.PI, 2, true);
-
-                        let w1 = multiplier * HC.Osci.wobble(this.beatKeeper, vtcb._rumble.x, params.osci);
-                        let w2 = multiplier * HC.Osci.wobble(this.beatKeeper, vtcb._rumble.y, params.osci);
-                        let w3 = multiplier * HC.Osci.wobble(this.beatKeeper, vtcb._rumble.z, params.osci);
-
-                        vtc.x = vtcb.x + w1 * axes.x;
-                        vtc.y = vtcb.y + w2 * axes.y;
-                        vtc.z = vtcb.z + w3 * axes.z;
-
-                    }
-
-                    shape.geometry.verticesNeedUpdate = true;
-                    shape.geometry.lineDistancesNeedUpdate = true;
-
-                } else if (!vertices) {
-                    console.warn('No transform for ' + shape.geometry.type);
-                }
+                vertices.setXYZ(i,
+                    vtcb.x + w1 * axes.x,
+                    vtcb.y + w2 * axes.y,
+                    vtcb.z + w3 * axes.z
+                );
             }
         }
     }

@@ -27,8 +27,6 @@
 	].join("\n"),
 
 	fragmentShader: [
-//"        precision lowp float;",
-
 "uniform sampler2D tDiffuse;",
 "uniform vec2 resolution;",
 "uniform float time;",

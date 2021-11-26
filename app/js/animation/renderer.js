@@ -91,7 +91,7 @@
          * @param keepSettings
          */
         fullReset(keepSettings) {
-            HC.EventManager.getInstance().removeEvent(EVENT_RENDERER_RENDER);
+            HC.EventManager.getInstance().removeEvent(EVENT_RENDERER_BEFORE_RENDER);
             this.resize();
             this.initLayers(keepSettings);
             this.setLayer(0);
@@ -112,7 +112,7 @@
                 canvas.id = 'threeWebGL';
                 canvas.style = {width: 1, height: 1};
                 canvas.addEventListener('webglcontextlost', () => {
-                    HC.EventManager.getInstance().fireEvent('webglcontextlost');
+                    HC.EventManager.getInstance().fireEvent('webglcontextlost'); // todo use const
                 });
 
                 this.three.renderer.view = canvas;
@@ -121,6 +121,13 @@
                 this.three.perspective0 = new THREE.PerspectiveCamera(50, 1, 0.1, 500000);
                 this.three.perspective1 = new THREE.PerspectiveCamera(50, 1, 0.1, 500000);
                 this.three.perspective2 = new THREE.PerspectiveCamera(50, 1, 0.1, 500000);
+
+
+                // Observe a scene or a renderer
+                if (typeof __THREE_DEVTOOLS__ !== 'undefined') {
+                    __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: this.three.scene }));
+                    __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: this.three.scene }));
+                }
 
                 // listener.register('layer.doCameraMode', 'perspectives', function (cam) {
 
@@ -371,12 +378,12 @@
          *
          */
         render() {
-
             if (this._last !== this.animation.now) {
-                HC.EventManager.getInstance().fireEvent(EVENT_RENDERER_RENDER, this);
 
                 this.three.scene.background = this.currentLayer._layer.background;
                 this.three.scene.fog = this.currentLayer._layer.fog;
+
+                HC.EventManager.getInstance().fireEvent(EVENT_RENDERER_BEFORE_RENDER, this);
 
                 if (this.currentLayer.shaders()) {
                     this.currentLayer.doShaders();

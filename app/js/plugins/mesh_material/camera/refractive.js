@@ -28,7 +28,7 @@
             geometry.computeBoundingBox();
             let box3 = geometry.boundingBox;
             let height = box3.max.y - box3.min.y;
-            let cubeRenderTarget = new THREE.WebGLCubeRenderTarget( height * this.settings.material_volume, {
+            let cubeRenderTarget = new THREE.WebGLCubeRenderTarget( height, {
                 format: THREE.RGBFormat,
                 generateMipmaps: true,
                 minFilter: THREE.LinearMipmapLinearFilter,
@@ -37,12 +37,12 @@
             let cubecam = new THREE.CubeCamera(1, 10000, cubeRenderTarget);
             this.cameras.add(cubecam);
 
-            this.material = new THREE.MeshPhysicalMaterial({envMap: cubeRenderTarget.texture});
+            this.material = new THREE.MeshPhongMaterial({envMap: cubeRenderTarget.texture});
             let mesh = new THREE.Mesh(geometry, this.material);
             mesh.name = this.id(index);
 
             let inst = this;
-            HC.EventManager.getInstance().register(EVENT_RENDERER_RENDER, this.id(index), function (renderer) {
+            HC.EventManager.getInstance().register(EVENT_RENDERER_BEFORE_RENDER, this.id(index), function (renderer) {
                 if (inst.layer.isVisible()) {
                     mesh.visible = false;
 

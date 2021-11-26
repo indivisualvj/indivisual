@@ -21,6 +21,7 @@
                         case 'shape_moda':
                         case 'shape_modb':
                         case 'shape_modc':
+                        case 'shape_merge_tolerance':
                             HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_SHAPES, id, context, SKIP_TEN_FRAMES);
                             break;
                     }
@@ -37,6 +38,7 @@
             shape_limit: false,
             shape_sync: true,
             shape_vertices: '',
+            shape_merge_tolerance: 0,
             shape_modifier: 'off',
             shape_modifier_volume: 1,
             shape_transform: 'off',
@@ -47,15 +49,12 @@
         };
         
         types = {
-            shape_geometry: ['half'],
-            shape_sizedivider: [1, 64, 1, 'half'],
-            shape_limit: ['quarter'],
-            shape_sync: ['quarter'],
-            shape_moda: [0, 128, 1, 'half'],
-            shape_modb: [0, 128, 1, 'half'],
-            shape_modc: [0, 128, 1, 'half'],
-            shape_transform: ['half'],
-            shape_transform_volume: [-5, 5, 0.01, 'half'],
+            shape_sizedivider: [1, 64, 1],
+            shape_moda: [0, 128, 1],
+            shape_modb: [0, 128, 1],
+            shape_modc: [0, 128, 1],
+            shape_merge_tolerance: [0, 100, 0.1],
+            shape_transform_volume: [-5, 5, 0.01],
             shape_modifier: ['half'],
             shape_modifier_volume: [-5, 5, 0.01, 'half'],
             shape_rhythm: ['half'],
@@ -70,7 +69,8 @@
             shape_modc: ['half', 'clear'],
             shape_limit: ['quarter'],
             shape_sync: ['quarter'],
-            // shape_vertices: ['half'],
+            shape_vertices: ['half', 'clear'],
+            shape_merge_tolerance: ['half'],
             shape_modifier: ['half', 'clear'],
             shape_modifier_volume: ['half'],
             shape_transform: ['half', 'clear'],

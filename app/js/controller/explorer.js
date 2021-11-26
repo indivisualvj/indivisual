@@ -61,7 +61,9 @@
             this.presetMan = new HC.PresetManager(controller, this);
             this.config = controller.config;
             this.gui = new HC.GuifyExplorer('Presets', 'presets', true, this);
-            this.load();
+            this.load(() => {
+                controller.restoreLoadedPresets();
+            });
         }
 
         /**
@@ -69,21 +71,26 @@
          */
         load(callback) {
             this.messaging.files(STORAGE_DIR, (data) => {
-                let index = 0;
                 let _insert = (children, parent) => {
+                    let calls = [];
                     for (let k in children) {
                         let child = children[k];
 
                         if (child.type === 'folder') {
-                            HC.TimeoutManager.getInstance().add('HC.Explorer.load.' + k, SKIP_TWO_FRAMES * index++, () => {
-                                let folder = parent.addFolder(child.name, null, false);
-                                _insert(child.children, folder);
-                                folder.finishLayout(child, this.presetMan);
+                            calls.push((_loaded) => {
+                                HC.TimeoutManager.getInstance().add('HC.Explorer.load.' + k, SKIP_TWO_FRAMES, () => {
+                                    let folder = parent.addFolder(child.name, null, false);
+                                    _insert(child.children, folder);
+                                    folder.finishLayout(child, this.presetMan);
+                                    _loaded();
+                                });
                             });
                         } else {
                             parent.addPreset(child, this.presetMan);
                         }
                     }
+
+                    HC.TimeoutManager.chainExecuteCalls(calls, callback);
                 };
                 _insert(this.default, this.gui);
                 _insert(data, this.gui);
@@ -101,7 +108,7 @@
         /**
          * 
          */
-        resetPresets(heap) {
+        resetStatus(heap) {
             for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
                 if (heap && heap.length) {
                     if (heap.indexOf(parseInt(layer+1)) > -1) {
@@ -109,7 +116,7 @@
                     }
                 }
 
-                this.resetPreset(layer);
+                this.resetLayerStatus(layer);
             }
         }
 
@@ -117,7 +124,7 @@
          *
          * @param layer
          */
-        resetPreset(layer) {
+        resetLayerStatus(layer) {
             let ctrls = this.gui.getContainer().querySelectorAll('[data-label="' + (layer) + '"]');
             ctrls.forEach((ctrl) => {
                 ctrl.removeAttribute('data-label');

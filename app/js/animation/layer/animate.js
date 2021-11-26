@@ -6,8 +6,6 @@ HC.Layer.prototype.animate = function () {
 
     this._handleResets();
 
-    HC.EventManager.fireEvent(EVENT_LAYER_ANIMATE);
-
     this.updateTween();
 
     this.doOscillate(true);

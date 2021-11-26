@@ -37,7 +37,6 @@ EVENT_LAYER_UPDATE_SHADERS = 'layer.update_shaders';
 EVENT_SHAPE_MATERIALS_UPDATE = 'shape.materials_update';
 EVENT_SOURCE_MANAGER_RENDER = 'source-manager.render';
 EVENT_DISPLAY_MANAGER_RENDER = 'display-manager.render';
-EVENT_SAMPLE_INIT_START = 'sample.init.start';
 EVENT_SAMPLE_INIT_END = 'sample.init.end';
 EVENT_SAMPLE_RENDER_END = 'sample.render.end';
 EVENT_SAMPLE_RENDER_START = 'sample.render.start';

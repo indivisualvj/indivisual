@@ -223,8 +223,7 @@
 
             let fps = this.config.DisplaySettings.fps * 1.15;
             this.frameCount = Math.ceil(this.length / 1000 * fps);
-            HC.EventManager.fireEventId(EVENT_SAMPLE_INIT_START, this.id, this);
-            this.initialized = true; // todo: does not make much sense
+            this.initialized = true;
             HC.EventManager.fireEventId(EVENT_SAMPLE_INIT_END, this.id, this);
 
         }

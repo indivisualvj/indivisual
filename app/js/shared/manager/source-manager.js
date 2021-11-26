@@ -204,16 +204,6 @@
                 return;
             }
 
-            HC.EventManager.register(EVENT_SAMPLE_INIT_START, sample.id, function (target) {
-                messaging.emitAttr('[id="' + target.id + '"]', 'style', '');
-                messaging.emitAttr('[id="' + target.id + '"]', 'data-label', 'initializing');
-                messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {delay: 50});
-
-                let conf = {DataSettings: {}};
-                conf.DataSettings[target.id] = false;
-                messaging.emitData(target.id, conf);
-            });
-
             HC.EventManager.register(EVENT_SAMPLE_INIT_END, sample.id, (target) => {
                 messaging.emitAttr('[id="' + target.id + '"]', 'style', '');
                 messaging.emitAttr('[id="' + target.id + '"]', 'data-label', 'enabled');

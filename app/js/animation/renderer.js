@@ -129,9 +129,6 @@
                     __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: this.three.scene }));
                 }
 
-                // listener.register('layer.doCameraMode', 'perspectives', function (cam) {
-
-                // })
             }
         }
 

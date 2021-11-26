@@ -100,6 +100,19 @@
         /**
          *
          * @param event
+         * @param target
+         */
+        static fireEvent(event, target) {
+            if (event in this.events) {
+                for (let id in this.events[event]) {
+                    this._doFireEvent(event, id, target);
+                }
+            }
+        }
+
+        /**
+         *
+         * @param event
          * @param id
          * @param target
          * @param timeout
@@ -131,19 +144,6 @@
             let _call = this.events[event][id];
             if (_call) {
                 _call(target);
-            }
-        }
-
-        /**
-         *
-         * @param event
-         * @param target
-         */
-        static fireEvent(event, target) {
-            if (event in this.events) {
-                for (let id in this.events[event]) {
-                    this._doFireEvent(event, id, target);
-                }
             }
         }
     }

@@ -21,7 +21,7 @@
         static name = 'drawrange audio';
 
         apply(shape) {
-            let volume = this.audioAnalyser.volume * 2;
+            let volume = this.audioAnalyser.volume;
             let p = shape.geometry.attributes.position;
             let l = p.count * p.itemSize;
             let v = this.settings.shape_transform_volume;

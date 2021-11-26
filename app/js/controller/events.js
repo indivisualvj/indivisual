@@ -96,7 +96,6 @@ HC.Controller.prototype._initMnemonics = function () {
     for (let ci = 0; ci < MNEMONICS.length; ci++) {
         let char = MNEMONICS[ci];
         HC.Hotkey.add(char + ',shift+' + char, (e, h) => {
-            console.log(char);
             if (e.ctrlKey || e.altKey) {
                 return;
             }

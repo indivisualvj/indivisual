@@ -27,5 +27,11 @@
 
             return this.mesh;
         }
+
+        reset() {
+            super.reset();
+            this.mesh = null;
+            this.edges = null;
+        }
     }
 }

@@ -1,6 +1,10 @@
 {
     HC.BufferGeometryUtils = class BufferGeometryUtils {
 
+        /**
+         *
+         * @param geometry
+         */
         static front2back(geometry) {
             geometry.computeBoundingBox();
 
@@ -36,6 +40,11 @@
             geometry.attributes.uv.needsUpdate = true;
         }
 
+        /**
+         *
+         * @param geometry
+         * @returns {*}
+         */
         static sortVertices(geometry) {
             geometry.computeVertexNormals();
 
@@ -65,6 +74,20 @@
             }
 
             geometry.attributes.position.needsUpdate = true;
+
+            return geometry;
+        }
+
+        /**
+         *
+         * @param geometry
+         * @param tolerance
+         * @returns {*}
+         */
+        static mergeVertices(geometry, tolerance) {
+            if (geometry.attributes.position) {
+                return THREE.BufferGeometryUtils.mergeVertices(geometry, tolerance);
+            }
 
             return geometry;
         }

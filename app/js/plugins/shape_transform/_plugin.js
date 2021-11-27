@@ -5,7 +5,7 @@ HC.plugins.shape_transform = HC.plugins.shape_transform || {};
         vertices;
 
         before(shape) {
-            if (!this.vertices) {
+            if (this._doesThings() && !this.vertices) {
                 let vertices = shape.geometry.getAttribute('position');
                 this.vertices = [];
                 let v = new THREE.Vector3();
@@ -19,7 +19,7 @@ HC.plugins.shape_transform = HC.plugins.shape_transform || {};
         }
 
         after(shape) {
-            if (this.key !== 'off') {
+            if (this._doesThings()) {
                 if (shape.geometry.attributes.lineDistance) {
                     shape.geometry.attributes.lineDistance.needsUpdate = true;
                 }
@@ -35,6 +35,10 @@ HC.plugins.shape_transform = HC.plugins.shape_transform || {};
 
         reset() {
             this.vertices = null;
+        }
+
+        _doesThings() {
+            return true;
         }
     }
 }

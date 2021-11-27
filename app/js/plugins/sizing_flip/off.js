@@ -1,5 +1,5 @@
 {
-    HC.plugins.sizing_flip.off = class Plugin extends HC.ShapeTransformPlugin {
+    HC.plugins.sizing_flip.off = class Plugin extends HC.SizingFlipPlugin {
         static index = 1; // hast to be first @see HC.plugins.sizing_flip.random
         static name = 'off';
 

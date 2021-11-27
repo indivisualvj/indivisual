@@ -6,5 +6,9 @@
         apply(shape) {
 
         }
+
+        _doesThings() {
+            return false;
+        }
     }
 }

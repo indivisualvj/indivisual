@@ -348,7 +348,7 @@
                     this.config.messaging.program.cleanShaderPasses();
                     this.config.messaging.program.updateUiPasses();
                 }
-
+// todo this seems quite complicated hugh?
                 let passes = this.config.messaging.program.settingsManager.get(this.config.ControlSettings.layer, 'passes');
                 let data = {passes: {shaders: passes.getShaderPasses()}};
                 messaging.emitSettings(this.config.ControlSettings.layer, data, false, false, false);

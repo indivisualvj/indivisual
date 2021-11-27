@@ -197,8 +197,8 @@ HC.Statics = HC.Statics || {};
                 });
             };
 
-            _load(0, function () {
-                callback();
+            _load(0, () => {
+                callback(this);
             });
         }
 

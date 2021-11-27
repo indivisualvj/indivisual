@@ -4,8 +4,7 @@
 
 {
     /**
-     * todo better timing? https://tonejs.github.io/docs/r13/Transport
-     * @type {HC.BeatKeeper}
+     * better timing? https://tonejs.github.io/docs/r13/Transport
      */
     HC.BeatKeeper = class BeatKeeper {
 
@@ -17,14 +16,14 @@
         tempo = 120;
 
         /**
+         * @type {function}
+         */
+        now;
+
+        /**
          * @type {TWEEN.Group}
          */
         tween;
-
-        /**
-         * @type {HC.Animation}
-         */
-        animation;
 
         /**
          * @type {HC.Config}
@@ -39,11 +38,11 @@
 
         /**
          *
-         * @param {HC.Animation} animation
+         * @param {function} now
          * @param {HC.Config} config
          */
-        constructor(animation, config) {
-            this.animation = animation;
+        constructor(now, config) {
+            this.now = now;
             this.config = config;
             this.tween = new TWEEN.Group();
         }
@@ -210,7 +209,7 @@
                 this.updatePitch(tempo);
             }
 
-            this.tempo = tempo;
+            this.tempo = tempo; // todo: maybe we can ramp-up/down tempo via tween?
             this.tween.update(this.now(), false);
 
         }
@@ -255,8 +254,7 @@
 
             for (let s in this.speeds) {
                 s = this.speeds[s];
-                let beats = ebeats * s.divider;
-                s.beats = beats;
+                s.beats = ebeats * s.divider;
             }
         }
 
@@ -302,10 +300,6 @@
                 s.pitch = 0;
                 this._tween(s);
             }
-        }
-
-        now() {
-            return this.animation.now;
         }
 
         static initSpeeds() {

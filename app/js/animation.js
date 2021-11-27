@@ -16,65 +16,42 @@ document.addEventListener('DOMContentLoaded', function () {
     let animation = new HC.Animation(G_INSTANCE);
     messaging = new HC.Messaging(animation);
     let config = new HC.Config(messaging);
-    animation.config = config;
 
     messaging.connect(function (reconnect, animation) {
 
         HC.log(animation.name, 'connected', true, true);
 
         if (!reconnect) {
-            config.loadConfig(() => {
-                animation.config.initControlSets();
-
+            config.loadConfig((config) => {
+                config.initControlSets();
+                animation.config = config;
                 animation.audioManager = new HC.AudioManager();
                 animation.audioAnalyser = new HC.AudioAnalyser(animation);
-                animation.beatKeeper = new HC.BeatKeeper(animation, animation.config);
+                animation.beatKeeper = new HC.BeatKeeper(() => {return animation.now;}, config);
+                animation.settingsManager = new HC.LayeredControlSetsManager(config.AnimationValues);
 
                 let renderer = new HC.Renderer(animation, {
-                    layers: new Array(animation.config.ControlValues.layers)
+                    layers: new Array(config.ControlValues.layers)
                 });
                 animation.renderer = renderer;
-
-                if (IS_ANIMATION) {
-                    HC.EventManager.register(EVENT_WEBGL_CONTEXT_LOST, animation.name, function () {
-                        // now reset...
-                        HC.log('HC.Renderer', 'another context loss...', true, true);
-
-                        for (let i = 0; i < animation.config.SourceValues.sample.length; i++) {
-                            animation.updateSource(getSampleKey(i), false, true, true, false);
-                        }
-                        animation.updateSource('override_material_input', 'none', true, true, false);
-                        animation.updateSource('override_background_mode', 'none', true, true, false);
-
-                        // todo maybe send full reset anywhere and reload page
-
-                    });
-
-                    animation.messaging.emitAttr('#play', 'data-color', '');
-                }
-
-                animation.settingsManager = new HC.LayeredControlSetsManager(
-                    renderer.layers,
-                    animation.config.AnimationValues
-                );
                 renderer.initLayers(false);
 
                 let displayManager = new HC.DisplayManager(animation, {
-                    display: new Array(animation.config.DisplayValues.display.length)
+                    display: new Array(config.DisplayValues.display.length)
                 });
                 displayManager.resize(renderer.getResolution());
                 animation.displayManager = displayManager;
 
                 animation.sourceManager = new HC.SourceManager(animation, {
-                    config: animation.config,
-                    sample: new Array(animation.config.SourceValues.sample.length)
+                    config: config,
+                    sample: new Array(config.SourceValues.sample.length)
                 });
 
                 if (IS_ANIMATION) {
                     new HC.Animation.KeyboardListener().init(animation);
                     new HC.Animation.EventListener().init();
+                    animation.initSuperGau();
                 }
-
                 animation.loadSession();
             });
         }
@@ -257,13 +234,13 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.beatKeeper.updateSpeeds(this.diff, this.config.ControlSettings.tempo);
 
                     if (this.beatKeeper.getSpeed('sixteen').starting()) {
-                        this.doNotDisplay = false;
+                        this.doNotDisplay = false; // todo: so uggly
 
                     } else if (this.config.DisplaySettings.fps < 46) {
-                        this.doNotDisplay = false;
+                        this.doNotDisplay = false;// todo: so uggly
 
                     } else {
-                        this.doNotDisplay = !this.doNotDisplay;
+                        this.doNotDisplay = !this.doNotDisplay;// todo: so uggly
                     }
 
                     this.animate();
@@ -872,6 +849,24 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             return this.plugins[name];
+        }
+
+        initSuperGau() {
+            HC.EventManager.register(EVENT_WEBGL_CONTEXT_LOST, this.name, () => {
+                // now reset...
+                HC.log('HC.Renderer', 'another context loss...', true, true);
+
+                for (let i = 0; i < this.config.SourceValues.sample.length; i++) {
+                    this.updateSource(getSampleKey(i), false, true, true, false);
+                }
+                this.updateSource('override_material_input', 'none', true, true, false);
+                this.updateSource('override_background_mode', 'none', true, true, false);
+
+                // todo maybe send full reset anywhere and reload page
+
+            });
+
+            this.messaging.emitAttr('#play', 'data-color', '');
         }
     }
 }

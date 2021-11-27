@@ -56,8 +56,8 @@
          *
          * @param {HC.Controller}controller
          */
-        constructor(controller) {
-            this.gui = new HC.GuifyExplorer('Presets', 'presets', true, {
+        constructor(id, title, controller) {
+            this.gui = new HC.GuifyExplorer(id, title, true, {
                 create: () => {
                     this._createFolder(this.gui);
                 },

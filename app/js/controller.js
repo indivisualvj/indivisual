@@ -15,7 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
      let controller = new HC.Controller(G_INSTANCE);
     messaging = new HC.Messaging(controller);
-    controller.config = new HC.Config(messaging);
+    let config = new HC.Config(messaging);
 
     messaging.connect(function (reconnect, controller) {
 
@@ -27,10 +27,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!reconnect) {
 
-            controller.config.loadConfig(function () {
-
-                let sets = controller.config.initControlSets();
-                controller.settingsManager = new HC.LayeredControlSetsManager([], controller.config.AnimationValues);
+            config.loadConfig(function (config) {
+                let sets = config.initControlSets();
+                controller.config = config;
+                controller.settingsManager = new HC.LayeredControlSetsManager(controller.config.AnimationValues);
                 controller.init(sets);
 
                 onResize();
@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.sourceSettingsGui = new HC.Guify('SourceSettings', 'source');
             this.animationSettingsGui = new HC.Guify('AnimationSettings', 'animation');
             this.sequenceSettingsGui = new HC.Guify('SequenceSettings', 'sequence');
-            this.presetMan = new HC.PresetManager(this);
+            this.presetMan = new HC.PresetManager('Presets', 'presets', this);
             // this.configurationSettingsGui = new HC.Guify('ConfigurationSettings');
 
             this.guis = [
@@ -688,7 +688,7 @@ document.addEventListener('DOMContentLoaded', function () {
         /**
          *
          */
-        updateSequenceUi() { // todo: put to SourceSettingsUi
+        updateSequenceUi() {
             if (this.config.SourceValues && this.config.SourceValues.sequence) {
                 for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
                     HC.EventManager.fireEventId(EVENT_CLIP_UPDATE, seq);
@@ -713,7 +713,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         * todo: DisplayControllerUi
+         *
          * @param item
          * @param value
          * @param group

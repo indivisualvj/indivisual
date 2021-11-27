@@ -486,11 +486,11 @@ document.addEventListener('DOMContentLoaded', function () {
             let passes = this.settingsManager.get(layer, 'passes');
             let pass = {};
             pass[ctrl.name] = ctrl.getShader();
-            passes.addShaderPass(pass);
+            passes.pushProperty('shaders', pass);
 
             this.updateUi(this.animationSettingsGui);
 
-            let data = {passes: {shaders: passes.getShaderPasses()}};
+            let data = {passes: {shaders: passes.getProperty('shaders')}};
             this.messaging.emitSettings(layer, data, false, false, false);
         }
 
@@ -500,12 +500,12 @@ document.addEventListener('DOMContentLoaded', function () {
         cleanShaderPasses() {
 
             let cs = this.settingsManager.get(this.config.ControlSettings.layer, 'passes');
-            let passes = cs.getShaderPasses();
+            let passes = cs.getProperty('shaders');
 
             for (let key in passes) {
-                let sh = cs.getShader(key);
+                let sh = passes[key];
                 if (!sh || sh.apply === false) {
-                    cs.removeShaderPass(key);
+                    cs.removePropertyAt('shaders', key);
                 }
             }
         }
@@ -799,16 +799,16 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         resetShaders(all) {
-            return new Promise((resolve, reject) => { // todo: transferShaderpasses should work like this
+            return new Promise((resolve, reject) => {
                 let calls = [];
                 let layers = all ? Object.values(this.config.ControlValues.layer).map(x => x - 1) : [this.config.ControlSettings.layer];
                 for (let key in layers) {
                     let layer = layers[key];
                     calls.push(/* _call = */(_synced) => {
-                        HC.TimeoutManager.add('syncLayer.' + layer, SKIP_FOUR_FRAMES, () => {
+                        HC.TimeoutManager.add('syncLayer.' + layer, SKIP_TWO_FRAMES, () => {
                             this.resetShader(layer, _synced)
-                        })
-                    })
+                        });
+                    });
                 }
 
                 HC.TimeoutManager.chainExecuteCalls(calls, resolve);

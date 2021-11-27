@@ -426,15 +426,15 @@
 
             let shaders = null;
             let passes = this.animation.settingsManager.get(this.index, 'passes');
-            let shds = passes.getShaderPasses();
+            let count = passes.getProperty('shaders').length;
 
-            for (let index in shds) {
+            for (let index = 0; index < count; index++) {
 
-                let shader = passes.getShader(index);
+                let shader = passes.getPropertyAt('shaders', index);
 
                 if (shader && shader.apply) {
-                    let name = passes.getShaderName(index);
-                    let key = passes.getShaderPassKey(index);
+                    let name = passes.getShaderName(index); // fixme
+                    let key = passes.getShaderPassKey(index); // fixme
                     let plugin = this.getShaderPassPlugin(name, key, shader);
                     if (plugin) {
                         plugin.create();

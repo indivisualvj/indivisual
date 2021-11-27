@@ -300,6 +300,70 @@ HC.controls = HC.controls || {};
             return value;
         }
 
+
+
+        /**
+         *
+         * @param key
+         * @param value
+         */
+        pushProperty(key, value) {
+            this.properties[key].push(value);
+        }
+
+        /**
+         *
+         * @param key
+         * @param index
+         * @param value
+         */
+        insertProperty(key, index, value) {
+            this.properties[key].splice(index, 0, value);
+        }
+
+        /**
+         *
+         * @param key
+         * @param index
+         */
+        removePropertyAt(key, index) {
+            this.properties[key].splice(index, 1);
+        }
+
+        /**
+         *
+         * @param key
+         * @param value
+         */
+        resetProperty(key, value) {
+            this.properties[key] = [];
+        }
+
+        /**
+         *
+         * @param key
+         * @returns {*}
+         */
+        getProperty(key) {
+            return this.properties[key];
+        }
+
+        /**
+         *
+         * @param key
+         * @param index
+         * @returns {null|*}
+         */
+        getPropertyAt(key, index) {
+            let values = this.getProperty(key);
+
+            if (index in values) {
+                return values[index];
+            }
+
+            return null;
+        }
+
         /**
          * This is here for migrating settings from e.g. lighting_lookat_[property] to lookat_[property]
          * @param key

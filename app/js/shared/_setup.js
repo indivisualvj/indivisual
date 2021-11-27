@@ -47,6 +47,8 @@ EVENT_ANIMATION_ANIMATE = 'animation.animate';
 EVENT_WEBGL_CONTEXT_LOST = 'webglcontextlost'
 EVENT_ANIMATION_UPDATE_SETTING = 'animation.update_setting';
 EVENT_AUDIO_PEAK = 'audio.peak';
+EVENT_CLIP_UPDATE = 'clip.update';
+EVENT_CLIP_INDICATOR_UPDATE = 'clip.indicator_update'
 
 SKIP_ONE_FRAMES = 1000/60;
 SKIP_TWO_FRAMES = 1000/60*2;

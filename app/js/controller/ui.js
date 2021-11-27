@@ -39,25 +39,24 @@ HC.Controller.prototype.addGuifyDisplayControllers = function (groups, controlSe
 
 /**
  *
- * @param controlSets {Array}
+ * @param controlSets {{}}
  * @param uiClass {string}
  * @param parent {HC.GuifyFolder}
- * @param hook {Function|null}
  */
-HC.Controller.prototype.addGuifyControllers = function (controlSets, uiClass, parent, hook) {
+HC.Controller.prototype.addGuifyControllers = function (controlSets, uiClass, parent) {
     for (let k in controlSets) {
-        let inst = controlSets[k];
+        let controlSet = controlSets[k];
 
-        if (inst.visible !== false) {
-            let ui = new uiClass(inst, parent);
+        if (controlSet.visible !== false) {
+            let ui = new uiClass(controlSet, parent);
 
-            if (inst instanceof HC.IterableControlSet) {
+            if (controlSet instanceof HC.IterableControlSet) {
                 ui.folder = parent;
 
             } else {
                 ui.addFolder();
             }
-            ui.addControllers(hook);
+            ui.addControllers();
         }
     }
 };
@@ -655,8 +654,6 @@ HC.Controller.prototype.updateThumbs = function () {
     }
 };
 
-// todo: clip stuff should go into SourceControllerUi
-
 /**
  *
  * @param index
@@ -672,46 +669,6 @@ HC.Controller.prototype.loadClip = function (index) {
     });
 };
 
-/**
- * 
- * @param seq
- */
-HC.Controller.prototype.updateIndicator = function (seq) {
-
-    /** @type {HC.SourceControllerSequence} */
-    let clip = this.clips[seq];
-
-    let sample = this.sourceManager.getSampleBySequence(seq);
-    let sampleKey = getSampleKey(sample);
-    let data = false;
-    if (sampleKey in this.config.DataSettings) {
-        data = this.config.DataSettings[sampleKey];
-    }
-
-    clip.updateIndicator(data);
-};
-
-/**
- *
- * @param seq
- */
-HC.Controller.prototype.updateClip = function (seq) {
-
-    /** @type {HC.SourceControllerSequence} */
-    let clip = this.clips[seq];
-
-    let sample = this.sourceManager.getSampleBySequence(seq);
-    let sampleKey = getSampleKey(sample);
-
-    let data = false;
-    if (sampleKey in this.config.DataSettings) {
-        data = this.config.DataSettings[sampleKey];
-    }
-
-    let enabled = this.sourceManager.getSampleEnabledBySequence(seq) && (data !== false);
-
-    clip.update(sample, enabled, data);
-};
 // todo: thumb stuff should go to SourceSettingsUi also
 /**
  *

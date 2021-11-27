@@ -48,11 +48,6 @@ document.addEventListener('DOMContentLoaded', function () {
         guis;
 
         /**
-         * @type {HC.SourceControllerSequence[]}
-         */
-        clips;
-
-        /**
          * @type {HC.SourceControllerSample[]}
          */
         thumbs;
@@ -117,15 +112,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
-         * @param name
-         */
-        constructor(name) {
-            super(name);
-            this.clips = [];
-        }
-
-        /**
-         *
          * @param sets
          */
         init(sets) {
@@ -187,11 +173,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             this.addGuifyControllers(
                 sourceSets,
-                HC.SourceControllerUi,
-                this.sequenceSettingsGui,
-                (folder) => {
-                    this.clips.push(new HC.SourceControllerSequence(this, folder));
-                }
+                HC.SequenceControllerUi,
+                this.sequenceSettingsGui
             );
 
             // this.addConfigurationSettings();
@@ -708,10 +691,8 @@ document.addEventListener('DOMContentLoaded', function () {
         updateSequenceUi() { // todo: put to SourceSettingsUi
             if (this.config.SourceValues && this.config.SourceValues.sequence) {
                 for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
-                    HC.TimeoutManager.add('updateSequenceUi' + seq, 0, () => {
-                        this.updateClip(seq);
-                        this.updateIndicator(seq);
-                    });
+                    HC.EventManager.fireEventId(EVENT_CLIP_UPDATE, seq);
+                    HC.EventManager.fireEventId(EVENT_CLIP_INDICATOR_UPDATE, seq);
                 }
             }
         }

@@ -156,7 +156,7 @@
         /**
          *
          * @param key
-         * @returns {HC.GuifyItem}
+         * @returns {HC.GuifyItem|HC.GuifyFolder|HC.GuifyController}
          */
         getChild(key) {
             if (key in this.children) {

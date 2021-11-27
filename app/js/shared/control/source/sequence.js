@@ -69,9 +69,21 @@
             this.sourceManager = controller.sourceManager;
             this.config = controller.config;
             this.key = settingsFolder.getKey();
+            this.index = HC.numberExtract(this.key, 'sequence');
             this.settingsFolder = settingsFolder;
 
             this.init();
+            this.initEvents();
+        }
+
+        initEvents() {
+            HC.EventManager.register(EVENT_CLIP_UPDATE, this.index, (target) => {
+                this._updateClip();
+            })
+            HC.EventManager.register(EVENT_CLIP_INDICATOR_UPDATE, this.index, (target) => {
+                this._updateIndicator(false);
+            })
+
         }
 
         init() {
@@ -161,7 +173,7 @@
                 }
 
             } else {
-                this.updateIndicator(null);
+                this._doUpdateIndicator(null);
                 this.updatePointer(0);
                 this.thumbsNode.innerHTML = '';
             }
@@ -169,9 +181,24 @@
 
         /**
          *
-         * @param data
+         * @private
          */
-        updateIndicator(data) {
+        _updateIndicator() {
+            let sample = this.sourceManager.getSampleBySequence(this.index);
+            let sampleKey = getSampleKey(sample);
+            let data = false;
+            if (sampleKey in this.config.DataSettings) {
+                data = this.config.DataSettings[sampleKey];
+            }
+            this._doUpdateIndicator(data);
+        }
+
+        /**
+         *
+         * @param data
+         * @private
+         */
+        _doUpdateIndicator(data) {
             let indicatorNode = this.indicatorNode;
             if (indicatorNode) {
                 let left = 0;
@@ -187,7 +214,7 @@
                         length: 0
                     };
 
-                    this.controller.sourceManager.applySequenceSlice(sequence, length, start, end);
+                    this.sourceManager.applySequenceSlice(sequence, length, start, end);
 
                     let frameDuration = data.duration / length;
                     let beatDuration = data.duration / data.beats;
@@ -234,6 +261,24 @@
             return parseInt(value);
         }
 
+
+        /**
+         *
+         * @private
+         */
+        _updateClip() {
+            let sample = this.sourceManager.getSampleBySequence(this.index);
+            let sampleKey = getSampleKey(sample);
+
+            let data = false;
+            if (sampleKey in this.config.DataSettings) {
+                data = this.config.DataSettings[sampleKey];
+            }
+
+            let enabled = this.sourceManager.getSampleEnabledBySequence(this.index) && (data !== false);
+
+            this.update(sample, enabled, data);
+        };
 
         /**
          *

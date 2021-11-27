@@ -34,6 +34,74 @@
 
         /**
          *
+         * @param layer
+         */
+        resetLayerStatus(layer) {
+            let ctrls = this.getContainer().querySelectorAll('[data-label="' + (layer) + '"]');
+            ctrls.forEach((ctrl) => {
+                ctrl.removeAttribute('data-label');
+                ctrl.removeAttribute('data-mnemonic');
+                ctrl.removeAttribute('data-selected');
+            });
+        }
+
+        /**
+         *
+         * @param layer
+         * @param changed
+         */
+        setChanged(layer, changed) {
+            let ctrls = this.getContainer().querySelectorAll('[data-label="' + (layer) + '"]');
+            ctrls.forEach((ctrl) => {
+                ctrl.setAttribute('data-mnemonic', changed ? '!' : null);
+            });
+        }
+
+        /**
+         *
+         * @param path
+         * @param layer
+         */
+        setInfoByPath(path, layer) {
+            let control = this.findByPath(path);
+            if (control) {
+                control.setInfo(layer);
+            }
+        }
+
+
+        /**
+         *
+         * @param layer
+         * @param loaded
+         */
+        setSelected(layer, loaded) {
+            let ctrls = this.getContainer().querySelectorAll('[data-selected]');
+            ctrls.forEach((ctrl) => {
+                ctrl.removeAttribute('data-selected');
+            });
+
+            ctrls = this.getContainer().querySelectorAll('[data-label="' + (layer) + '"]');
+            ctrls.forEach((ctrl) => {
+                ctrl.setAttribute('data-selected', loaded ? 'true' : null);
+            });
+        }
+
+        /**
+         *
+         * @param {string}label
+         * @param {HC.GuifyExplorerFolder}parent
+         * @param opts
+         */
+        addPreset(label, parent, opts) {
+            opts.type = 'button';
+            opts.label = label;
+
+            parent.addPreset(opts);
+        }
+
+        /**
+         *
          * @param opts
          */
         finishLayout(opts) {

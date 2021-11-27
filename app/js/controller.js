@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.sourceSettingsGui,
                 this.animationSettingsGui,
                 this.sequenceSettingsGui,
-                this.presetMan.explorer.gui,
+                this.presetMan.gui,
             ];
             this.beatKeeper = new HC.BeatKeeper(null, this.config);
             this.sourceManager = new HC.SourceManager(null, { config: this.config, sample: [] });

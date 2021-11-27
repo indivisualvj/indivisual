@@ -15,9 +15,9 @@
         config;
 
         /**
-         * @type {HC.Explorer}
+         * @type {HC.GuifyExplorer}
          */
-        explorer;
+        gui;
 
         /**
          * @type {HC.Messaging}
@@ -57,9 +57,9 @@
          * @param {HC.Controller}controller
          */
         constructor(controller) {
-            this.explorer = new HC.Explorer(this, {
+            this.gui = new HC.GuifyExplorer('Presets', 'presets', true, {
                 create: () => {
-                    this._createFolder(this.explorer.gui);
+                    this._createFolder(this.gui);
                 },
                 reload: () => {
                     this.reload();
@@ -75,14 +75,15 @@
          *
          * @param {HC.GuifyExplorerPreset} ctrl
          * @param {boolean} loadShaders
+         * @private
          */
-        loadPreset(ctrl, loadShaders) {
+        _loadPreset(ctrl, loadShaders) {
             if (ctrl.getLabel() === '_default') {
                 // load default
                 let layer = this.config.ControlSettings.layer;
                 this.settingsManager.setLayerProperties(layer, false);
                 HC.TimeoutManager.add('loadPreset', 0, () => {
-                    this.explorer.resetLayerStatus(layer+1);
+                    this.gui.resetLayerStatus(layer+1);
                     this.updatePreset(false, this.settingsManager.prepareLayer(layer));
                 });
 
@@ -96,8 +97,8 @@
                 } else {
                     // load the preset
                     let layer = this.config.ControlSettings.layer;
-                    this._loadPreset(ctrl, layer, () => {
-                        this.explorer.setSelected(layer+1, true);
+                    this._doLoadPreset(ctrl, layer, () => {
+                        this.setSelected(layer+1, true);
                     });
                 }
             }
@@ -132,7 +133,7 @@
                             calls.push((_loaded) => {
                                 HC.TimeoutManager.add('loadPresets.' + layer, SKIP_TEN_FRAMES, () => {
                                     // todo: updates ui per layer?
-                                    this._loadPreset(child, layer, _loaded);
+                                    this._doLoadPreset(child, layer, _loaded);
                                 });
                             });
                             candidate++;
@@ -141,7 +142,7 @@
                             calls.push((_synced) => {
                                 HC.TimeoutManager.add('loadPresets.' + layer, SKIP_TEN_FRAMES, () => {
                                     this.controller.resetLayer(layer, _synced);
-                                    this.explorer.resetLayerStatus(layer+1);
+                                    this.gui.resetLayerStatus(layer+1);
                                 });
                             });
                         }
@@ -159,14 +160,14 @@
          * @param callback
          * @private
          */
-        _loadPreset(child, layer, callback) {
+        _doLoadPreset(child, layer, callback) {
 
             console.log('loading', child.getLabel());
             this.messaging.load(STORAGE_DIR, child.getParent().getLabel(), child.getLabel(), (data) => {
                 let key = data.dir + '/' + data.name;
                 let contents = JSON.parse(data.contents);
                 console.log('loaded', data.name);
-                this.explorer.resetLayerStatus(layer+1);
+                this.gui.resetLayerStatus(layer+1);
                 child.setInfo(layer+1);
                 this.updatePreset(key, contents, layer);
 
@@ -271,7 +272,7 @@
                         }
                     }
 
-                    this.explorer.setChanged(i+1, true);
+                    this.gui.setChanged(i+1, true);
                     this.controller.updateUiPasses();
 
                     // chain execute calls including delay?
@@ -334,7 +335,7 @@
             for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
                 let name = this.settingsManager.get(layer, 'info').get('name');
                 if (name) {
-                    this.explorer.setInfoByPath(name, layer+1);
+                    this.gui.setInfoByPath(name, layer+1);
                 }
             }
         }
@@ -342,8 +343,9 @@
         /**
          *
          * @param {HC.GuifyExplorerPreset} ctrl
+         * @private
          */
-        savePreset(ctrl) {
+        _savePreset(ctrl) {
             let settings = this.settingsManager.prepareLayer(this.config.ControlSettings.layer);
             let dir = ctrl.getParent().getLabel();
             let label = ctrl.getLabel();
@@ -456,7 +458,10 @@
                 }
             }
 
-            return this.explorer.addFolder(parent, label, opts)
+            let folder = this.gui.addFolder(parent, label, opts)
+            folder.finishLayout(opts);
+
+            return folder;
         }
 
 
@@ -471,27 +476,28 @@
                 type: 'button',
                 label: label,
                 action: (ctrl) => {
-                    this.loadPreset(ctrl, HC.Hotkey.isPressed('ctrl'));
+                    this._loadPreset(ctrl, HC.Hotkey.isPressed('ctrl'));
                 },
                 save: (ctrl) => {
-                    this.savePreset(ctrl);
+                    this._savePreset(ctrl);
                 },
                 rename: (ctrl) => {
-                    this.renamePreset(ctrl);
+                    this._renamePreset(ctrl);
                 },
                 delete: (ctrl) => {
-                    this.deletePreset(ctrl);
+                    this._deletePreset(ctrl);
                 }
             };
 
-            this.explorer.addPreset(label, parent, opts);
+            this.gui.addPreset(label, parent, opts);
         }
 
         /**
          *
          * @param {HC.GuifyExplorerPreset} ctrl
+         * @private
          */
-        deletePreset(ctrl) {
+        _deletePreset(ctrl) {
             let confirmed = confirm('Do you want to delete "' + ctrl.getLabel() + '"?');
             if (confirmed) {
                 this.messaging.delete(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (result) => {
@@ -525,8 +531,9 @@
         /**
          *
          * @param {HC.GuifyItem} ctrl
+         * @private
          */
-        renamePreset(ctrl) {
+        _renamePreset(ctrl) {
             let label = ctrl.getLabel();
             let split = label.split('.');
             let suffix = '';
@@ -557,7 +564,7 @@
          * @param changed
          */
         setChanged(layer, changed) {
-            this.explorer.setChanged(layer, changed);
+            this.gui.setChanged(layer, changed);
         }
 
         /**
@@ -566,7 +573,7 @@
          * @param loaded
          */
         setSelected(layer, loaded) {
-            this.explorer.setSelected(layer, loaded);
+            this.gui.setSelected(layer, loaded);
         }
 
         /**
@@ -574,21 +581,18 @@
          * @param excluded
          */
         resetStatus(excluded) {
-            let numberOfLayers = this.config.ControlValues.layers
-            let _layers = [];
-            for (let layer = 0; layer < numberOfLayers; layer++) {
+            for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
                 if (excluded && excluded.length) {
                     if (excluded.indexOf(layer+1) > -1) {
                         continue;
                     }
                 }
-                _layers.push(layer);
+                this.gui.resetLayerStatus(layer+1);
             }
-            this.explorer.resetStatus(_layers);
         }
 
         reload() {
-            this.explorer.removeChildren();
+            this.gui.removeChildren();
             this._load();
         }
 
@@ -605,7 +609,7 @@
 
                         if (child.type === 'folder') {
                             calls.push((_loaded) => {
-                                HC.TimeoutManager.add('HC.Explorer.load.' + k, SKIP_ONE_FRAMES, () => {
+                                HC.TimeoutManager.add('HC.gui.load.' + k, SKIP_ONE_FRAMES, () => {
                                     let folder = this._addFolder(parent, child.name, true);
                                     _insert(child.children, folder);
                                     _loaded();
@@ -620,8 +624,8 @@
                         this.restoreLoadedPresets();
                     });
                 };
-                _insert(this.default, this.explorer.gui);
-                _insert(data, this.explorer.gui);
+                _insert(this.default, this.gui);
+                _insert(data, this.gui);
             });
         }
 

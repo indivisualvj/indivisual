@@ -919,9 +919,11 @@ document.addEventListener('DOMContentLoaded', function () {
             this.config.SourceSettingsManager.reset();
             this.config.ControlSettingsManager.reset();
             this.config.DisplaySettingsManager.reset();
+
             let sources = this.config.SourceSettingsManager.prepareFlat();
             let controls = this.config.ControlSettingsManager.prepareFlat();
             let displays = this.config.DisplaySettingsManager.prepareFlat();
+
             controls.session = session;
 
             this.messaging.emitSources(sources, true, false, true);
@@ -930,6 +932,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.updateSources(sources, true, true, true);
             this.updateControls(controls, true, true, true);
             this.updateDisplays(displays, true, true, true);
+
             this.syncLayers().finally(() => {
                 this._checkDisplayVisibility();
             });

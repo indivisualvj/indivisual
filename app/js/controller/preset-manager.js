@@ -277,11 +277,11 @@
                 // this.updateMigrateSettings1(layer, data, true, false, true);
 
             } else {
-                let nu = data.passes.shaders;
-                let passes = this.settingsManager.get(layer, 'passes');
+                let newShaders = data.passes.shaders;
+                let controlSet = this.settingsManager.get(layer, 'passes');
 
-                for (let k in nu) {
-                    passes.pushProperty('shaders', nu[k]);
+                for (let key in newShaders) {
+                    controlSet.pushProperty('shaders', newShaders[key]);
                 }
             }
         }
@@ -294,7 +294,7 @@
          */
         updateMigrateSettings0(layer, data) {
             let mappings = HC.LayeredControlSetsManager.mappings(() => {return HC.LayeredControlSetsManager.initAll(this.config.AnimationValues);});
-            let passes = this.settingsManager.get(layer, 'passes');
+            let controlSet = this.settingsManager.get(layer, 'passes');
 
             for (let k in data) {
                 let value = data[k];
@@ -318,7 +318,7 @@
                             delete sh.index;
                             let pass = {};
                             pass[name] = sh;
-                            passes.pushProperty('shaders', pass);
+                            controlSet.pushProperty('shaders', pass);
                         }
                     }
                 } else {

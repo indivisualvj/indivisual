@@ -121,9 +121,9 @@ HC.Controller.prototype.initStatusBar = function () {
  */
 HC.Controller.prototype.addPassesFolder = function (onChange) {
 
-    let passes = this.animationSettingsGui.getChild('passes');
-    if (passes) {
-        this.animationSettingsGui.removeChild(passes);
+    let oldFolder = this.animationSettingsGui.getChild('passes');
+    if (oldFolder) {
+        this.animationSettingsGui.removeChild(oldFolder);
     }
     let ui = new HC.ControlSetGuifyUi(this.settingsManager.getGlobalProperties()['passes'], this.animationSettingsGui);
     let dir = ui.addFolder(false);
@@ -546,18 +546,18 @@ HC.Controller.prototype.updateUiPasses = function () {
     if (passFld && passFld.getChild('pass')) {
         passFld.getChild('pass').setValue(null);
 
-        let cs = this.settingsManager.get(this.config.ControlSettings.layer, 'passes');
-        let passes = cs.getProperty('shaders');
+        let controlSet = this.settingsManager.get(this.config.ControlSettings.layer, 'passes');
+        let shaders = controlSet.getProperty('shaders');
 
         for (let k in passFld.children) {
             if (k === 'pass')continue;
             passFld.removeChild(k);
         }
 
-        for (let k in passes) {
-            let key = cs.getShaderPassKey(k); // fixme
-            let name = cs.getShaderName(k); // fixme
-            let sh = cs.getShader(k); // fixme
+        for (let k in shaders) {
+            let key = controlSet.getShaderPassKey(k); // fixme
+            let name = controlSet.getShaderName(k); // fixme
+            let sh = controlSet.getShader(k); // fixme
             let ctrl = new HC.ShaderPassUi(name, this.config);
             ctrl.init(sh);
             this.addShaderPassController(key, ctrl, passFld);

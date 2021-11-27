@@ -335,8 +335,8 @@ HC.controls = HC.controls || {};
          * @param key
          * @param value
          */
-        resetProperty(key, value) {
-            this.properties[key] = [];
+        setProperty(key, value) {
+            this.properties[key] = value;
         }
 
         /**

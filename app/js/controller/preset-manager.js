@@ -507,12 +507,11 @@
             }
         }
 
-
         /**
          *
          * @param {HC.GuifyItem} ctrl
          */
-        renameFolder(ctrl) { // todo: presetman does not know of controls?
+        renameFolder(ctrl) {
             let label = ctrl.getLabel();
 
             do {

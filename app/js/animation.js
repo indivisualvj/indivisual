@@ -723,7 +723,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (force) {
                 this.settingsManager.updateData(layer, data);
-                HC.EventManager.fireEventId(EVENT_LAYER_RESET, this.config.ControlSettings.layer, this);
+                HC.EventManager.fireEventId(EVENT_LAYER_RESET, layer, this);
 
             } else {
                 for (let k in data) {

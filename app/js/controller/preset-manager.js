@@ -85,14 +85,14 @@
                 let layer = this.config.ControlSettings.layer;
                 HC.TimeoutManager.add('loadPreset', 0, () => {
                     this.gui.resetLayerStatus(layer+1);
-                    this.updatePreset(false, null); // case reset
+                    this._updatePreset(false, null); // case reset
                 });
 
             } else {
                 //load shaders into present presets
                 if (loadShaders) {
                     this.messaging.load(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (data) => {
-                        this.transferShaderPasses(data.dir + '/' + data.name, JSON.parse(data.contents)).finally();
+                        this._transferShaderPasses(data.dir + '/' + data.name, JSON.parse(data.contents)).finally();
                     });
 
                 } else {
@@ -109,8 +109,10 @@
          *
          * @param folder
          * @param append
+         * @returns {Promise<unknown>}
+         * @private
          */
-        loadPresets(folder, append) {
+        _loadPresets(folder, append) {
 
             return new Promise((resolve, reject) => {
 
@@ -169,11 +171,7 @@
                 console.log('loaded', data.name);
                 this.gui.resetLayerStatus(layer+1);
                 child.setInfo(layer+1);
-                this.updatePreset(key, contents, layer); // case actually load data
-
-                if (callback) {
-                    callback();
-                }
+                this._updatePreset(key, contents, layer, callback); // case actually load data
             });
         };
 
@@ -208,8 +206,9 @@
          * @param name
          * @param data
          * @param layer
+         * @private
          */
-        updatePreset(name, data, layer) {
+        _updatePreset(name, data, layer, _emitted) {
             HC.log('preset', name);
 
             if (layer === undefined) {
@@ -236,26 +235,29 @@
                 data.info.tutorial = {};
             }
 
-            this.messaging.emitSettings(layer, data, false, false, true);
+            this.messaging.emitSettings(layer, data, false, false, true, _emitted);
         }
 
         /**
          *
          * @param name
          * @param data
+         * @returns {Promise<unknown>}
+         * @private
          */
-        transferShaderPasses(name, data) {
-            return new Promise((resolve, reject) => { // todo: transferShaderpasses should work like this
+        _transferShaderPasses(name, data) {
+            return new Promise((resolve, reject) => {
                 HC.log('passes', name);
                 let calls = [];
                 for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
                     if (this.config.shuffleable(layer+1) && !this.settingsManager.isDefault(layer)) {
-                        calls.push(/* _call = */(_synced) => {
-                            HC.TimeoutManager.add('transferShader.' + layer, SKIP_TWO_FRAMES, () => {
+                        calls.push((_synced) => {
+                            HC.TimeoutManager.add('transferShader.' + layer, SKIP_TEN_FRAMES, () => {
                                 this._appendShaderPasses(layer, data);
                                 this.gui.setChanged(layer+1, true);
                                 this.controller.updateUiPasses();
-                                this.messaging.emitSettings(layer, this.settingsManager.prepareLayer(layer), false, false, true);
+                                HC.log('append_shaders', layer);
+                                this.messaging.emitSettings(layer, this.settingsManager.prepareLayer(layer), false, false, true, _synced);
                             });
                         });
                     }
@@ -444,7 +446,7 @@
                         this.newPreset(ctrl);
                     },
                     fill: (ctrl) => {
-                        this.loadPresets(ctrl, HC.Hotkey.isPressed('shift')).finally();
+                        this._loadPresets(ctrl, HC.Hotkey.isPressed('shift')).finally();
                     },
                     save: (ctrl) => {
                         this.savePresets(ctrl);

@@ -255,7 +255,7 @@
             let visible = this.config.DisplaySettings['display' + i + '_visible'];
             if (visible) {
                 if (!this.displays[i]) {
-                    this.displays[i] = new HC.Display(this.animation, i);
+                    this.displays[i] = new HC.Display(i, this);
                     this._addDisplay(i);
 
                     if (IS_SETUP) {

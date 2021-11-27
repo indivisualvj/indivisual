@@ -6,11 +6,6 @@
     HC.Display = class Display {
 
         /**
-         * @type {HC.Animation}
-         */
-        animation;
-
-        /**
          * @type {HC.Config}
          */
         config;
@@ -99,14 +94,13 @@
         _source;
 
         /**
-         * 
-         * @param {HC.Animation} animation
+         *
          * @param index
+         * @param {HC.DisplayManager} displayManager
          */
-        constructor(animation, index) {
-            this.animation = animation;
-            this.config = animation.config;
-            this.displayManager = animation.displayManager;
+        constructor(index, displayManager) {
+            this.config = displayManager.config;
+            this.displayManager = displayManager;
             this.index = index;
             this.id = 'display' + index;
             let canvas = document.createElement('canvas');

@@ -126,7 +126,7 @@ HC.Controller.prototype.addPassesFolder = function (onChange) {
         this.animationSettingsGui.removeChild(passes);
     }
     let ui = new HC.ControlSetGuifyUi(this.settingsManager.getGlobalProperties()['passes'], this.animationSettingsGui);
-    let dir = ui.addFolder();
+    let dir = ui.addFolder(false);
 
     dir.addSelectController('pass', 'pass', {pass: ''}, this.config.AnimationValues.shaders, onChange);
 };
@@ -547,7 +547,7 @@ HC.Controller.prototype.updateUiPasses = function () {
         passFld.getChild('pass').setValue(null);
 
         let cs = this.settingsManager.get(this.config.ControlSettings.layer, 'passes');
-        let passes = cs.getShaderPasses();
+        let passes = cs.getProperty('shaders');
 
         for (let k in passFld.children) {
             if (k === 'pass')continue;
@@ -555,9 +555,9 @@ HC.Controller.prototype.updateUiPasses = function () {
         }
 
         for (let k in passes) {
-            let key = cs.getShaderPassKey(k);
-            let name = cs.getShaderName(k);
-            let sh = cs.getShader(k);
+            let key = cs.getShaderPassKey(k); // fixme
+            let name = cs.getShaderName(k); // fixme
+            let sh = passes[k];
             let ctrl = new HC.ShaderPassUi(name, this.config);
             ctrl.init(sh);
             this.addShaderPassController(key, ctrl, passFld);

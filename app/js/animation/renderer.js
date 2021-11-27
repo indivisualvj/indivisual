@@ -159,11 +159,11 @@
                     ol._dispose();
                 }
 
-                // todo: strictly seperate setting layers from rendering layers!
-                let layer = new HC.Layer(this.animation, this, i);
-
-                layer.controlSets = oldControlSets || HC.LayeredControlSetsManager.initAll(this.config.AnimationValues);
-                layer.settings = HC.LayeredControlSetsManager.settingsProxy(oldControlSets || layer.controlSets);
+                let nuControlSets = oldControlSets || HC.LayeredControlSetsManager.initAll(this.config.AnimationValues);
+                let settings = HC.LayeredControlSetsManager.settingsProxy(nuControlSets);
+                let layer = new HC.Layer(this.animation, i, nuControlSets, settings);
+                layer.controlSets = nuControlSets;
+                this.animation.settingsManager.setLayerProperties(i, nuControlSets);
 
                 this.layers[i] = layer;
 
@@ -265,15 +265,11 @@
         }
 
         _isForceAnimate(layer) {
-            let shuffleable = !this.animation.settingsManager.isDefault(layer.index) && this.config.shuffleable(layer.index+1);
+            let shuffleable = !this.animation.settingsManager.isDefault(layer.index) && this.config.shuffleable(layer.index + 1);
             let fastShuffling = this.config.ControlSettings.shuffle_mode !== 'off' && this.config.ControlSettings.shuffle_every < 4;
             let shuffling = (shuffleable && fastShuffling);
 
-            if (layer.settings.layer_transvisible || shuffling) {
-                return true;
-            }
-
-            return false
+            return (layer.settings.layer_transvisible || shuffling);
         }
 
         /**

@@ -4,19 +4,41 @@
 {
     HC.LayeredControlSetsManager = class LayeredControlSetsManager {
 
+        /**
+         *
+         * @type {boolean}
+         * @private
+         */
         static _mappings = false;
+
+        /**
+         *
+         * @type {boolean}
+         * @private
+         */
         static _oscillatorProperties = false;
-        layers;
+
+        /**
+         *
+         * @type {[]}
+         */
+        layers = [];
+
+        /**
+         *
+         */
         pluggedValues;
+
+        /**
+         *
+         */
         globalProperties;
 
         /**
          *
-         * @param layers
          * @param pluggedValues
          */
-        constructor(layers, pluggedValues) {
-            this.layers = layers;
+        constructor(pluggedValues) {
             this.pluggedValues = pluggedValues;
         }
 

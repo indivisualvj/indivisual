@@ -20,11 +20,6 @@
         ready = false;
 
         /**
-         * @type {HC.Renderer}
-         */
-        renderer;
-
-        /**
          * @type {HC.BeatKeeper}
          */
         beatKeeper;
@@ -167,21 +162,23 @@
         /**
          *
          * @param {HC.Animation} animation
-         * @param {HC.Renderer} renderer
          * @param index
+         * @param controlSets
+         * @param settings
          */
-        constructor (animation, renderer, index) {
+        constructor (animation, index, controlSets, settings) {
             this.animation = animation;
             this.config = animation.config;
             this.beatKeeper = animation.beatKeeper;
-            this.renderer = renderer;
             this.index = index;
+            this.controlSets = controlSets;
+            this.settings = settings;
 
             this.tween = new TWEEN.Group();
             this._layer = new THREE.Scene();
             this._layer.name = '_layer' + index;
 
-            let three = renderer.three;
+            let three = animation.renderer.three;
             let camera = new THREE.PerspectiveCamera(50, 1, 0.1, 500000);
             let composer = new THREE.EffectComposer(three.renderer, three.target);
             let renderPass = new THREE.RenderPass(three.scene, camera, null);
@@ -196,7 +193,7 @@
                 composer: composer,
             };
 
-            this._resetSizes(renderer.resolution);
+            this._resetSizes(animation.renderer.resolution);
             this.needsReset = true;
         }
 

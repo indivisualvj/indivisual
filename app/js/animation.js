@@ -82,7 +82,6 @@ document.addEventListener('DOMContentLoaded', function () {
             this.now = HC.now();
             this.last = this.now;
             this.running = false;
-            this.doNotDisplay = false; // render displays only every second frame if FPS is set to 60
             this.diff = 0;
             this.diffPrc = 1;
             this.duration = 1000 / 60;
@@ -495,9 +494,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 layer = this.config.ControlSettings.layer;
             }
 
-            let layerIndex = layer;
-            // layer = this.renderer.layers[layer]; // fixme: did it make sense?
-
             let updated = this.settingsManager.updateData(layer, data);
             let property;
             let value;
@@ -800,37 +796,6 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         getFrameDurationPercent(duration, divider) {
             return this.diffPrc * this.duration / (duration * (divider || 1));
-        }
-
-        /**
-         *
-         */
-        doShuffle() { // todo move to renderer
-            let plugin = this.getShuffleModePlugin();
-            let result = plugin.apply();
-            if (result !== false) {
-                result = plugin.after();
-                if (result !== false) {
-                    this.renderer.nextLayer = this.renderer.layers[result];
-                }
-            }
-        }
-
-        /**
-         *
-         * @param name
-         */
-        getShuffleModePlugin(name) { // todo move to renderer
-            if (!this.plugins) {
-                this.plugins = {};
-            }
-            name = name || this.config.ControlSettings.shuffle_mode;
-
-            if (!this.plugins[name]) {
-                this.plugins[name] = new HC.shuffle_mode[name](this, this.config.ControlSettings);
-            }
-
-            return this.plugins[name];
         }
 
         /**

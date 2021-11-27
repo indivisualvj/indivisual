@@ -71,6 +71,11 @@
          */
         beatKeeper;
 
+        /**
+         * @type {{}}
+         */
+        plugins;
+
 
         /**
          *
@@ -258,7 +263,7 @@
          */
         animate() {
             if (IS_ANIMATION) {
-                this.animation.doShuffle();
+                this.doShuffle();
             }
             this.switchLayer(IS_MONITOR);
 
@@ -362,6 +367,39 @@
                 this._last = this.animation.now;
             }
         }
+
+
+        /**
+         *
+         */
+        doShuffle() {
+            let plugin = this.getShuffleModePlugin();
+            let result = plugin.apply();
+            if (result !== false) {
+                result = plugin.after();
+                if (result !== false) {
+                    this.nextLayer = this.layers[result];
+                }
+            }
+        }
+
+        /**
+         *
+         * @param name
+         */
+        getShuffleModePlugin(name) {
+            if (!this.plugins) {
+                this.plugins = {};
+            }
+            name = name || this.config.ControlSettings.shuffle_mode;
+
+            if (!this.plugins[name]) {
+                this.plugins[name] = new HC.shuffle_mode[name](this, this.config.ControlSettings); // todo: rename to HC.Renderer.shuffle_mode
+            }
+
+            return this.plugins[name];
+        }
+
 
         /**
          *

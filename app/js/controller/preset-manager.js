@@ -249,18 +249,16 @@
                 HC.log('passes', name);
                 let calls = [];
                 for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
-                    calls.push(/* _call = */(_synced) => {
-                        HC.TimeoutManager.add('transferShader.' + layer, SKIP_TWO_FRAMES, () => {
-                            if (this.config.shuffleable(layer+1) && !this.settingsManager.isDefault(layer)) {
+                    if (this.config.shuffleable(layer+1) && !this.settingsManager.isDefault(layer)) {
+                        calls.push(/* _call = */(_synced) => {
+                            HC.TimeoutManager.add('transferShader.' + layer, SKIP_TWO_FRAMES, () => {
                                 this._appendShaderPasses(layer, data);
                                 this.gui.setChanged(layer+1, true);
                                 this.controller.updateUiPasses();
-
-                                // chain execute calls including delay?
                                 this.messaging.emitSettings(layer, this.settingsManager.prepareLayer(layer), false, false, true);
-                            }
+                            });
                         });
-                    });
+                    }
                 }
 
                 HC.TimeoutManager.chainExecuteCalls(calls, resolve);
@@ -277,7 +275,7 @@
                 // this.updateMigrateSettings1(layer, data, true, false, true);
 
             } else {
-                let nu = data.passes;
+                let nu = data.passes.shaders;
                 let passes = this.settingsManager.get(layer, 'passes');
 
                 for (let k in nu) {
@@ -330,6 +328,9 @@
             }
         }
 
+        /**
+         *
+         */
         restoreLoadedPresets() {
             for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
                 let name = this.settingsManager.get(layer, 'info').get('name');
@@ -421,7 +422,7 @@
             if (label) {
                 this.messaging.mkdir(STORAGE_DIR, label, false, (result) => {
                     HC.log(result);
-                    this._addFolder(parent, label, true);
+                    this._addFolder(label, label, true);
                 });
             }
         }
@@ -457,7 +458,7 @@
                 }
             }
 
-            let folder = this.gui.addFolder(parent, label, false);
+            let folder = this.gui.addFolder(label, label, false);
             folder.finishLayout(opts);
 
             return folder;
@@ -608,7 +609,7 @@
                         if (child.type === 'folder') {
                             calls.push((_loaded) => {
                                 HC.TimeoutManager.add('HC.gui.load.' + k, SKIP_ONE_FRAMES, () => {
-                                    let folder = this._addFolder(parent, child.name, true);
+                                    let folder = this._addFolder(child.name, child.name, true);
                                     _insert(child.children, folder);
                                     _loaded();
                                 });

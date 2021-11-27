@@ -52,10 +52,11 @@
         /**
          *
          * @param index
-         * @returns {null|{}}
+         * @param name
+         * @returns {null|*}
          */
-        getShader(index) {
-            let pass = this.getShaderPass(index);
+        getShader(index, name) {
+            let pass = this.getPropertyAt('shaders', index);
             if (pass) {
                 let name = this.getShaderName(index);
                 return pass[name];

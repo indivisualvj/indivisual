@@ -430,7 +430,7 @@
 
             for (let index = 0; index < count; index++) {
 
-                let shader = passes.getPropertyAt('shaders', index);
+                let shader = passes.getShader(index);
 
                 if (shader && shader.apply) {
                     let name = passes.getShaderName(index); // fixme

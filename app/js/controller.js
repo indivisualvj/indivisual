@@ -503,7 +503,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let passes = cs.getProperty('shaders');
 
             for (let key in passes) {
-                let sh = passes[key];
+                let sh = cs.getShader(key);
                 if (!sh || sh.apply === false) {
                     cs.removePropertyAt('shaders', key);
                 }

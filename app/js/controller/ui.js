@@ -557,7 +557,7 @@ HC.Controller.prototype.updateUiPasses = function () {
         for (let k in passes) {
             let key = cs.getShaderPassKey(k); // fixme
             let name = cs.getShaderName(k); // fixme
-            let sh = passes[k];
+            let sh = cs.getShader(k); // fixme
             let ctrl = new HC.ShaderPassUi(name, this.config);
             ctrl.init(sh);
             this.addShaderPassController(key, ctrl, passFld);

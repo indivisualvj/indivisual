@@ -54,6 +54,8 @@
 
         /**
          *
+         * @param id
+         * @param title
          * @param {HC.Controller}controller
          */
         constructor(id, title, controller) {
@@ -81,17 +83,16 @@
             if (ctrl.getLabel() === '_default') {
                 // load default
                 let layer = this.config.ControlSettings.layer;
-                this.settingsManager.setLayerProperties(layer, false);
                 HC.TimeoutManager.add('loadPreset', 0, () => {
                     this.gui.resetLayerStatus(layer+1);
-                    this.updatePreset(false, this.settingsManager.prepareLayer(layer));
+                    this.updatePreset(false, null); // case reset
                 });
 
             } else {
                 //load shaders into present presets
                 if (loadShaders) {
                     this.messaging.load(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (data) => {
-                        this.transferShaderPasses(data.dir + '/' + data.name, JSON.parse(data.contents));
+                        this.transferShaderPasses(data.dir + '/' + data.name, JSON.parse(data.contents)).finally();
                     });
 
                 } else {
@@ -132,7 +133,6 @@
                             this.settingsManager.resetLayer(layer);
                             calls.push((_loaded) => {
                                 HC.TimeoutManager.add('loadPresets.' + layer, SKIP_TEN_FRAMES, () => {
-                                    // todo: updates ui per layer?
                                     this._doLoadPreset(child, layer, _loaded);
                                 });
                             });
@@ -169,7 +169,7 @@
                 console.log('loaded', data.name);
                 this.gui.resetLayerStatus(layer+1);
                 child.setInfo(layer+1);
-                this.updatePreset(key, contents, layer);
+                this.updatePreset(key, contents, layer); // case actually load data
 
                 if (callback) {
                     callback();
@@ -210,9 +210,6 @@
          * @param layer
          */
         updatePreset(name, data, layer) {
-
-            // fixme: this is chaos!!!
-
             HC.log('preset', name);
 
             if (layer === undefined) {
@@ -221,14 +218,14 @@
 
             this.settingsManager.resetLayer(layer);
 
-            if (!('info' in data)) {
-                this.migrateSettings0(layer, data);
+            if (data && !('info' in data)) {
+                this.updateMigrateSettings0(layer, data);
 
                 // example!
                 // } else if ('info' in data && data.info.version > 1.99) {
-                // this.migrateSettings1(layer, data, true, false, true);
+                // this.updateMigrateSettings1(layer, data, true, false, true);
 
-            } else {
+            } else if (data) {
                 this.controller.updateSettings(layer, data, false, false, true);
                 this.settingsManager.update(layer, 'info', 'name', name);
             }
@@ -248,53 +245,56 @@
          * @param data
          */
         transferShaderPasses(name, data) {
+            return new Promise((resolve, reject) => { // todo: transferShaderpasses should work like this
+                HC.log('passes', name);
+                let calls = [];
+                for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
+                    calls.push(/* _call = */(_synced) => {
+                        HC.TimeoutManager.add('transferShader.' + layer, SKIP_TWO_FRAMES, () => {
+                            if (this.config.shuffleable(layer+1) && !this.settingsManager.isDefault(layer)) {
+                                this._appendShaderPasses(layer, data);
+                                this.gui.setChanged(layer+1, true);
+                                this.controller.updateUiPasses();
 
-            HC.log('passes', name);
+                                // chain execute calls including delay?
+                                this.messaging.emitSettings(layer, this.settingsManager.prepareLayer(layer), false, false, true);
+                            }
+                        });
+                    });
+                }
 
-            for (let i = 0; i < this.config.ControlValues.layers; i++) {
-                if (this.config.shuffleable(i+1) && !this.settingsManager.isDefault(i)) {
-                    if (!('info' in data)) {
+                HC.TimeoutManager.chainExecuteCalls(calls, resolve);
+            });
+        }
 
-                        let shaders = {shaders: data.shaders};
+        _appendShaderPasses(layer, data) {
+            if (!('info' in data)) {
+                let shaders = {shaders: data.shaders};
+                this.updateMigrateSettings0(layer, shaders);
 
-                        this.migrateSettings0(i, shaders, true);
+                // example!
+                // } else if ('info' in data && data.info.version > 1.99) {
+                // this.updateMigrateSettings1(layer, data, true, false, true);
 
-                        // example!
-                        // } else if ('info' in data && data.info.version > 1.99) {
-                        // this.migrateSettings1(layer, data, true, false, true);
+            } else {
+                let nu = data.passes;
+                let passes = this.settingsManager.get(layer, 'passes');
 
-                    } else {
-                        let nu = data.passes.shaders;
-                        let passes = this.settingsManager.get(i, 'passes');
-
-                        for (let k in nu) {
-                            passes.addShaderPass(nu[k]);
-                        }
-                    }
-
-                    this.gui.setChanged(i+1, true);
-                    this.controller.updateUiPasses();
-
-                    // chain execute calls including delay?
-                    this.messaging.emitSettings(i, this.settingsManager.prepareLayer(i), false, false, true);
+                for (let k in nu) {
+                    passes.pushProperty('shaders', nu[k]);
                 }
             }
         }
 
         /**
+         * Given layer actually gets updated here.
          *
-         * @param layer {number}
-         * @param data {Object}
-         * @param keepPasses {boolean}
+         * @param layer
+         * @param data
          */
-        migrateSettings0(layer, data, keepPasses) {
-
+        updateMigrateSettings0(layer, data) {
             let mappings = HC.LayeredControlSetsManager.mappings(() => {return HC.LayeredControlSetsManager.initAll(this.config.AnimationValues);});
-
             let passes = this.settingsManager.get(layer, 'passes');
-            if (keepPasses !== true) {
-                passes.removeShaderPasses();
-            }
 
             for (let k in data) {
                 let value = data[k];
@@ -315,9 +315,10 @@
                         let name = keys[key];
                         let sh = value[name];
                         if (sh.apply) {
+                            delete sh.index;
                             let pass = {};
                             pass[name] = sh;
-                            passes.addShaderPass(pass);
+                            passes.pushProperty('shaders', pass);
                         }
                     }
                 } else {
@@ -326,9 +327,7 @@
                         this.settingsManager.update(layer, set, k, value);
                     }
                 }
-
             }
-            this.controller.updateUi(this.controller.animationSettingsGui);
         }
 
         restoreLoadedPresets() {
@@ -458,7 +457,7 @@
                 }
             }
 
-            let folder = this.gui.addFolder(parent, label, opts)
+            let folder = this.gui.addFolder(parent, label, false);
             folder.finishLayout(opts);
 
             return folder;

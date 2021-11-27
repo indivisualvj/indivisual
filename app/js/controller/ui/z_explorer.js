@@ -18,9 +18,9 @@
 
         /**
          *
-         * @param key
-         * @param name
-         * @param open
+         * @param {string}key
+         * @param {string}name
+         * @param {boolean}open
          * @returns {HC.GuifyExplorerFolder}
          */
         addFolder(key, name, open) {

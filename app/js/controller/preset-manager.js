@@ -256,7 +256,7 @@
                                 this._appendShaderPasses(layer, data);
                                 this.gui.setChanged(layer+1, true);
                                 this.controller.updateUiPasses();
-                                HC.log('append_shaders', layer);
+                                HC.log('append_shaders', layer+1);
                                 this.messaging.emitSettings(layer, this.settingsManager.prepareLayer(layer), false, false, true, _synced);
                             });
                         });

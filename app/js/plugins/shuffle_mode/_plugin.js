@@ -9,9 +9,9 @@ HC.shuffle_mode = HC.shuffle_mode || {};
         layer = 0;
 
         /**
-         * @type {HC.Animation}
+         * @type {HC.Renderer}
          */
-        animation;
+        renderer;
 
         /**
          * @type {HC.Config}
@@ -25,13 +25,13 @@ HC.shuffle_mode = HC.shuffle_mode || {};
 
         /**
          *
-         * @param {HC.Animation} animation
+         * @param {HC.Renderer} renderer
          * @param settings
          */
-        constructor(animation, settings) {
-            this.animation = animation;
-            this.config = animation.config;
-            this.beatKeeper = animation.beatKeeper;
+        constructor(renderer, settings) {
+            this.renderer = renderer;
+            this.config = renderer.config;
+            this.beatKeeper = renderer.beatKeeper;
             this.settings = settings;
         }
 
@@ -65,7 +65,7 @@ HC.shuffle_mode = HC.shuffle_mode || {};
         }
 
         validate(i) {
-            if (this.config.shuffleable(i + 1) && !this.animation.settingsManager.isDefault(i)) {
+            if (this.config.shuffleable(i + 1) && !this.renderer.animation.settingsManager.isDefault(i)) {
                 // alright!
                 return true;
             }

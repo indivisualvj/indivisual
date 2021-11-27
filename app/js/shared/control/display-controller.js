@@ -7,7 +7,6 @@ HC.DisplayController = HC.DisplayController || {};
 {
     HC.DisplayController.video = {};
 
-
     HC.DisplayController.video._general = class _general extends HC.ControlSet {
 
         static index = 10;

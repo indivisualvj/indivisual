@@ -3,10 +3,6 @@
  */
 
 {
-    /**
-     *
-     * @type {HC.ControlSetUi}
-     */
     HC.ControlSetUi = class ControlSetUi {
 
         /**
@@ -72,10 +68,6 @@
 }
 
 {
-    /**
-     *
-     * @type {HC.ControlsetGuifyUi}
-     */
     HC.ControlSetGuifyUi = class ControlsetGuifyUi extends HC.ControlSetUi {
 
         /**
@@ -301,10 +293,6 @@
 }
 
 {
-    /**
-     *
-     * @type {HC.ShaderPassUi}
-     */
     HC.ShaderPassUi = class ShaderPassUi {
 
         shader;

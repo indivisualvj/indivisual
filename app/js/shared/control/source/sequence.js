@@ -3,10 +3,6 @@
  */
 
 {
-    /**
-     *
-     * @type {HC.SourceControllerSequence}
-     */
     HC.SourceControllerSequence = class SourceControllerSequence {
 
         /**

@@ -3,10 +3,6 @@
  */
 
 {
-    /**
-     *
-     * @type {HC.DisplayControllerUi}
-     */
     HC.DisplayControllerUi = class DisplayControllerUi extends HC.ControlSetGuifyUi {
 
         /**

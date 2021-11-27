@@ -9,11 +9,11 @@
          * @param id
          * @param name
          * @param open
-         * @param {HC.Explorer} explorer
+         * @param opts
          */
-        constructor(id, name, open, explorer) {
+        constructor(id, name, open, opts) {
             super(id, name, open);
-            this.finishLayout(explorer);
+            this.finishLayout(opts);
         }
 
         /**
@@ -34,9 +34,9 @@
 
         /**
          *
-         * @param {HC.Explorer} explorer
+         * @param opts
          */
-        finishLayout(explorer) {
+        finishLayout(opts) {
 
             let container = this.getComponent().bar.element;
             if (this.getComponent().bar.input) {
@@ -50,14 +50,12 @@
             actions.childNodes.item(0).addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                explorer.presetMan.newFolder(this);
+                opts.create();
             });
             actions.childNodes.item(1).addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                explorer.reload(() => {
-                    explorer.controller.restoreLoadedPresets();
-                });
+                opts.reload();
 
             });
             container.appendChild(actions);
@@ -70,12 +68,11 @@
 
         /**
          *
-         * @param data
-         * @param {HC.PresetManager} presetMan
+         * @param {{}|null}opts
          */
-        finishLayout(data, presetMan) {
+        finishLayout(opts) {
 
-            if (!data.default) {
+            if (opts) {
                 let container = this.getComponent().container;
                 let actions = document.createElement('div');
                 actions.classList.add('actions');
@@ -87,23 +84,23 @@
                     '<div class="delete" title="Trash this file (Remains as .' + this.getLabel() + ')."></div>';
                 actions.childNodes.item(0).addEventListener('click', (e) => {
                     e.preventDefault(); e.stopPropagation();
-                    presetMan.newPreset(this);
+                    opts.create(this);
                 });
                 actions.childNodes.item(1).addEventListener('click', (e) => {
                     e.preventDefault(); e.stopPropagation();
-                        presetMan.loadPresets(this, e.shiftKey).finally();
+                    opts.fill(this);
                 });
                 actions.childNodes.item(2).addEventListener('click', (e) => {
                     e.preventDefault(); e.stopPropagation();
-                    presetMan.savePresets(this);
+                    opts.save(this);
                 });
                 actions.childNodes.item(3).addEventListener('click', (e) => {
                     e.preventDefault(); e.stopPropagation();
-                    presetMan.renameFolder(this);
+                    opts.rename(this);
                 });
                 actions.childNodes.item(4).addEventListener('click', (e) => {
                     e.preventDefault(); e.stopPropagation();
-                    presetMan.deleteFolder(this);
+                    opts.delete(this);
                 });
                 container.appendChild(actions);
             }
@@ -116,19 +113,11 @@
 
         /**
          *
-         * @param data
-         * @param {HC.PresetManager} presetMan
+         * @param opts
          * @returns {HC.GuifyExplorerPreset}
          */
-        addPreset(data, presetMan) {
-
-            let opts = {
-                type: 'button',
-                label: data.name
-            };
-
-            let controller = new HC.GuifyExplorerPreset(this, opts, presetMan);
-
+        addPreset(opts) {
+            let controller = new HC.GuifyExplorerPreset(this, opts);
             this.children[controller.getLabel()] = controller;
 
             return controller;
@@ -151,18 +140,18 @@
          *
          * @param parent
          * @param opts
-         * @param {HC.PresetManager} presetMan
          */
-        constructor(parent, opts, presetMan) {
+        constructor(parent, opts) {
 
+            let action = opts.action;
             opts.action = () => {
-                presetMan.loadPreset(this, HC.Hotkey.isPressed('ctrl'));
+                action(this);
             };
 
             super(parent, opts);
 
             if (opts.label !== '_default') {
-                this.finishLayout(presetMan);
+                this.finishLayout(opts);
             }
         }
 
@@ -202,9 +191,9 @@
 
         /**
          *
-         * @param {HC.PresetManager} presetMan
+         * @param opts
          */
-        finishLayout(presetMan) {
+        finishLayout(opts) {
             let container = this.getContainer();
             container.classList.add('preset');
             container.setAttribute('title', 'Press CTRL to append shader passes from this preset to all loaded (shuffleable) presets')
@@ -216,16 +205,19 @@
                 '<div class="rename" title="Rename this file."></div>' +
                 '<div class="delete" title="Trash this file (Remains as .' + this.getLabel() + ')."></div>';
             actions.childNodes.item(0).addEventListener('click', (e) => {
-                e.preventDefault(); e.stopPropagation();
-                presetMan.savePreset(this);
+                e.preventDefault();
+                e.stopPropagation();
+                opts.save(this);
             });
             actions.childNodes.item(1).addEventListener('click', (e) => {
-                e.preventDefault(); e.stopPropagation();
-                presetMan.renamePreset(this);
+                e.preventDefault();
+                e.stopPropagation();
+                opts.rename(this);
             });
             actions.childNodes.item(2).addEventListener('click', (e) => {
-                e.preventDefault(); e.stopPropagation();
-                presetMan.deletePreset(this);
+                e.preventDefault();
+                e.stopPropagation();
+                opts.delete(this);
             });
             container.appendChild(actions);
         }

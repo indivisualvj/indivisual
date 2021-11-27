@@ -29,17 +29,46 @@
          */
         settingsManager;
 
+
         /**
          *
-         * @param {HC.Controller} controller
-         * @param {HC.Explorer} explorer
+         * @type {Array}
          */
-        constructor(controller, explorer) {
+        default = [{
+            name: '_default',
+            type: 'folder',
+            default: true,
+            visible: true,
+            children: [
+                {
+                    index: 0,
+                    name: '_default',
+                    type: 'preset',
+                    default: true,
+                    loaded: false,
+                    layer: '',
+                    changed: ''
+                }
+            ]
+        }];
+
+        /**
+         *
+         * @param {HC.Controller}controller
+         */
+        constructor(controller) {
+            this.explorer = new HC.Explorer(this, {
+                create: () => {
+                    this._createFolder(this.explorer.gui);
+                },
+                reload: () => {
+                    this.reload();
+                }
+            });
             this.controller = controller;
-            this.config = controller.config;
-            this.explorer = explorer;
-            this.messaging = controller.messaging;
             this.settingsManager = controller.settingsManager;
+            this.messaging = controller.messaging;
+            this.config = controller.config;
         }
 
         /**
@@ -61,7 +90,7 @@
                 //load shaders into present presets
                 if (loadShaders) {
                     this.messaging.load(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (data) => {
-                        this.controller.transferShaderPasses(data.dir + '/' + data.name, JSON.parse(data.contents));
+                        this.transferShaderPasses(data.dir + '/' + data.name, JSON.parse(data.contents));
                     });
 
                 } else {
@@ -345,18 +374,18 @@
                 label += '.json';
 
                 let preset = this.settingsManager.prepareLayer(this.config.ControlSettings.layer);
-                let nu = {
+                let opts = {
                     type: 'file',
                     dir: ctrl.getLabel(),
                     name: label,
                     settings: preset
                 };
 
-                preset.info.name = HC.filePath(nu.dir, nu.name);
+                preset.info.name = HC.filePath(opts.dir, opts.name);
 
-                this.messaging.save(STORAGE_DIR, nu.dir, nu.name, nu.settings, (result) => {
+                this.messaging.save(STORAGE_DIR, opts.dir, opts.name, opts.settings, (result) => {
                     HC.log(result);
-                    ctrl.addPreset(nu, this);
+                    this._addPreset(opts.name, ctrl);
                 }, '');
             }
         }
@@ -364,8 +393,9 @@
         /**
          *
          * @param {HC.GuifyExplorerPreset} ctrl
+         * @private
          */
-        deleteFolder(ctrl) {
+        _deleteFolder(ctrl) {
             let confirmed = confirm('Do you want to delete "' + ctrl.getLabel() + '"?');
             if (confirmed) {
                 this.messaging.delete(STORAGE_DIR, null, ctrl.getLabel(), (result) => {
@@ -373,6 +403,88 @@
                     ctrl.removeFromParent();
                 });
             }
+        }
+
+        /**
+         *
+         * @param parent
+         * @private
+         */
+        _createFolder(parent) {
+            let label = '__NEW__';
+
+            do {
+                label = prompt('Please specify a name (no duplicates)', label);
+            } while (label && parent.getChild(label));
+
+            if (label) {
+                this.messaging.mkdir(STORAGE_DIR, label, false, (result) => {
+                    HC.log(result);
+                    this._addFolder(parent, label, true);
+                });
+            }
+        }
+
+        /**
+         *
+         * @param parent
+         * @param {string}label
+         * @param {boolean}addActions
+         * @returns {*}
+         * @private
+         */
+        _addFolder(parent, label, addActions) {
+
+            let opts = null;
+            if (addActions) {
+                opts = {
+                    create: (ctrl) => {
+                        this.newPreset(ctrl);
+                    },
+                    fill: (ctrl) => {
+                        this.loadPresets(ctrl, HC.Hotkey.isPressed('shift')).finally();
+                    },
+                    save: (ctrl) => {
+                        this.savePresets(ctrl);
+                    },
+                    rename: (ctrl) => {
+                        this.renameFolder(ctrl);
+                    },
+                    delete: (ctrl) => {
+                        this._deleteFolder(ctrl);
+                    },
+                }
+            }
+
+            return this.explorer.addFolder(parent, label, opts)
+        }
+
+
+        /**
+         *
+         * @param {string}label
+         * @param {HC.GuifyExplorerFolder}parent
+         * @private
+         */
+        _addPreset(label, parent) {
+            let opts = {
+                type: 'button',
+                label: label,
+                action: (ctrl) => {
+                    this.loadPreset(ctrl, HC.Hotkey.isPressed('ctrl'));
+                },
+                save: (ctrl) => {
+                    this.savePreset(ctrl);
+                },
+                rename: (ctrl) => {
+                    this.renamePreset(ctrl);
+                },
+                delete: (ctrl) => {
+                    this.deletePreset(ctrl);
+                }
+            };
+
+            this.explorer.addPreset(label, parent, opts);
         }
 
         /**
@@ -389,31 +501,12 @@
             }
         }
 
-        /**
-         *
-         * @param {HC.GuifyExplorer} ctrl
-         */
-        newFolder(ctrl) {
-            let label = '__NEW__';
-
-            do {
-                label = prompt('Please specify a name (no duplicates)', label);
-            } while (label && ctrl.getChild(label));
-
-            if (label) {
-                this.messaging.mkdir(STORAGE_DIR, label, false, (result) => {
-                    HC.log(result);
-                    let folder = ctrl.addFolder(label);
-                    folder.finishLayout({}, this);
-                });
-            }
-        }
 
         /**
          *
          * @param {HC.GuifyItem} ctrl
          */
-        renameFolder(ctrl) {
+        renameFolder(ctrl) { // todo: presetman does not know of controls?
             let label = ctrl.getLabel();
 
             do {
@@ -455,6 +548,91 @@
                 });
 
             }
+        }
+
+
+        /**
+         *
+         * @param layer
+         * @param changed
+         */
+        setChanged(layer, changed) {
+            this.explorer.setChanged(layer, changed);
+        }
+
+        /**
+         *
+         * @param layer
+         * @param loaded
+         */
+        setSelected(layer, loaded) {
+            this.explorer.setSelected(layer, loaded);
+        }
+
+        /**
+         *
+         * @param excluded
+         */
+        resetStatus(excluded) {
+            let numberOfLayers = this.config.ControlValues.layers
+            let _layers = [];
+            for (let layer = 0; layer < numberOfLayers; layer++) {
+                if (excluded && excluded.length) {
+                    if (excluded.indexOf(layer+1) > -1) {
+                        continue;
+                    }
+                }
+                _layers.push(layer);
+            }
+            this.explorer.resetStatus(_layers);
+        }
+
+        reload() {
+            this.explorer.removeChildren();
+            this._load();
+        }
+
+        /**
+         *
+         * @private
+         */
+        _load() {
+            this._fetchPresets((data) => {
+                let _insert = (children, parent) => {
+                    let calls = [];
+                    for (let k in children) {
+                        let child = children[k];
+
+                        if (child.type === 'folder') {
+                            calls.push((_loaded) => {
+                                HC.TimeoutManager.add('HC.Explorer.load.' + k, SKIP_ONE_FRAMES, () => {
+                                    let folder = this._addFolder(parent, child.name, true);
+                                    _insert(child.children, folder);
+                                    _loaded();
+                                });
+                            });
+                        } else {
+                            this._addPreset(child.name, parent);
+                        }
+                    }
+
+                    HC.TimeoutManager.chainExecuteCalls(calls, () => {
+                        this.restoreLoadedPresets();
+                    });
+                };
+                _insert(this.default, this.explorer.gui);
+                _insert(data, this.explorer.gui);
+            });
+        }
+
+
+        /**
+         *
+         * @param callback
+         * @private
+         */
+        _fetchPresets(callback) {
+            this.messaging.files(STORAGE_DIR, callback);
         }
     }
 }

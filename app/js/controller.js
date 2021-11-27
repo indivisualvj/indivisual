@@ -88,6 +88,11 @@ document.addEventListener('DOMContentLoaded', function () {
         sequenceSettingsGui;
 
         /**
+         * @type {HC.PresetManager}
+         */
+        presetMan;
+
+        /**
          * @type {HC.Monitor}
          */
         monitor;
@@ -135,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.sourceSettingsGui = new HC.Guify('SourceSettings', 'source');
             this.animationSettingsGui = new HC.Guify('AnimationSettings', 'animation');
             this.sequenceSettingsGui = new HC.Guify('SequenceSettings', 'sequence');
-            this.explorer = new HC.Explorer(this);
+            this.presetMan = new HC.PresetManager(this);
             // this.configurationSettingsGui = new HC.Guify('ConfigurationSettings');
 
             this.guis = [
@@ -144,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.sourceSettingsGui,
                 this.animationSettingsGui,
                 this.sequenceSettingsGui,
-                this.explorer.gui,
+                this.presetMan.explorer.gui,
             ];
             this.beatKeeper = new HC.BeatKeeper(null, this.config);
             this.sourceManager = new HC.SourceManager(null, { config: this.config, sample: [] });
@@ -199,6 +204,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.openTreeByPath('controls');
 
             this.loadSession();
+            this.presetMan.reload();
             this.initEvents();
         }
 
@@ -319,7 +325,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 this.updateSettings(i, data, true, false, true);
 
-                this.explorer.setChanged(i+1, true);
+                this.presetMan.setChanged(i+1, true);
 
                 this.messaging.emitSettings(i, data, false, false, true);
 
@@ -353,7 +359,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 this.updateSettings(i, data, false, false, true);
 
-                this.explorer.setChanged(i+1, true);
+                this.presetMan.setChanged(i+1, true);
                 this.messaging.emitSettings(i, data, false, false, true);
             }
         }
@@ -480,7 +486,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (display !== false) {
                 this.explainPlugin(property, value);
                 this.updateUi(this.animationSettingsGui);
-                this.explorer.setChanged(this.config.ControlSettings.layer+1, true);
+                this.presetMan.setChanged(this.config.ControlSettings.layer+1, true);
             }
         }
 
@@ -549,7 +555,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (item === 'layer') {
                 this.updateSettings(value, this.settingsManager.prepareLayer(value), true, false, true);
-                this.explorer.setSelected(value+1, true);
+                this.presetMan.setSelected(value+1, true);
                 HC.log(item, value+1);
 
                 let config = {
@@ -913,8 +919,8 @@ document.addEventListener('DOMContentLoaded', function () {
         fullReset() {
             let session = this.config.ControlSettings.session;
             assetman.disposeAll();
-            this.explorer.reload();
-            this.explorer.resetStatus();
+            this.presetMan.reload();
+            this.presetMan.resetStatus();
             this.settingsManager.reset();
             this.config.SourceSettingsManager.reset();
             this.config.ControlSettingsManager.reset();
@@ -956,7 +962,7 @@ document.addEventListener('DOMContentLoaded', function () {
             let shuffleable = this.config.ControlSettings.shuffleable.toIntArray((it)=>{return parseInt(it)-1;});
             this.settingsManager.reset(shuffleable);
             shuffleable = this.config.ControlSettings.shuffleable.toIntArray();
-            this.explorer.resetStatus(shuffleable);
+            this.presetMan.resetStatus(shuffleable);
             return this.syncLayers(shuffleable);
         }
 

@@ -5,118 +5,29 @@
     HC.Explorer = class Explorer {
 
         /**
-         * @type {HC.Controller}
-         */
-        controller;
-
-        /**
-         * @type {HC.Config}
-         */
-        config;
-
-        /**
          * @type {HC.GuifyExplorer}
          */
         gui;
 
         /**
-         * @type {HC.PresetManager}
-         */
-        presetMan;
-
-        /**
-         * @type {HC.Messaging}
-         */
-        messaging;
-
-        /**
          *
-         * @type {Array}
+         * @param opts
          */
-        default = [{
-            name: '_default',
-            type: 'folder',
-            default: true,
-            visible: true,
-            children: [
-                {
-                    index: 0,
-                    name: '_default',
-                    type: 'preset',
-                    default: true,
-                    loaded: false,
-                    layer: '',
-                    changed: ''
-                }
-            ]
-        }];
-
-        /**
-         *
-         * @param {HC.Controller} controller
-         */
-        constructor(controller) {
-            this.controller = controller;
-            this.messaging = controller.messaging;
-            this.presetMan = new HC.PresetManager(controller, this);
-            this.config = controller.config;
-            this.gui = new HC.GuifyExplorer('Presets', 'presets', true, this);
-            this.load(() => {
-                this.presetMan.restoreLoadedPresets();
-            });
+        constructor(opts) {
+            this.gui = new HC.GuifyExplorer('Presets', 'presets', true, opts);
         }
 
-        /**
-         * 
-         */
-        load(callback) {
-            this.messaging.files(STORAGE_DIR, (data) => {
-                let _insert = (children, parent) => {
-                    let calls = [];
-                    for (let k in children) {
-                        let child = children[k];
-
-                        if (child.type === 'folder') {
-                            calls.push((_loaded) => {
-                                HC.TimeoutManager.add('HC.Explorer.load.' + k, SKIP_TWO_FRAMES, () => {
-                                    let folder = parent.addFolder(child.name, null, false);
-                                    _insert(child.children, folder);
-                                    folder.finishLayout(child, this.presetMan);
-                                    _loaded();
-                                });
-                            });
-                        } else {
-                            parent.addPreset(child, this.presetMan);
-                        }
-                    }
-
-                    HC.TimeoutManager.chainExecuteCalls(calls, callback);
-                };
-                _insert(this.default, this.gui);
-                _insert(data, this.gui);
-                if (callback) {
-                    callback();
-                }
-            });
-        }
-
-        reload(callback) {
+        removeChildren() {
             this.gui.removeChildren();
-            this.load(callback);
         }
 
         /**
-         * 
+         *
+         * @param layers{[]}
          */
-        resetStatus(heap) {
-            for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
-                if (heap && heap.length) {
-                    if (heap.indexOf(parseInt(layer+1)) > -1) {
-                        continue;
-                    }
-                }
-
-                this.resetLayerStatus(layer);
+        resetStatus(layers) {
+            for (let i = 0; i < layers.length; i++) {
+                this.resetLayerStatus(layers[i]);
             }
         }
 
@@ -173,6 +84,33 @@
             ctrls.forEach((ctrl) => {
                 ctrl.setAttribute('data-selected', loaded ? 'true' : null);
             });
+        }
+
+        /**
+         *
+         * @param {string}label
+         * @param {HC.GuifyExplorerFolder}parent
+         * @param opts
+         */
+        addPreset(label, parent, opts) {
+            opts.type = 'button';
+            opts.label = label;
+
+            parent.addPreset(opts);
+        }
+
+        /**
+         *
+         * @param parent
+         * @param {string}label
+         * @param {{}}opts
+         * @returns {HC.GuifyExplorerFolder}
+         */
+        addFolder(parent, label, opts) {
+            let folder = parent.addFolder(label);
+            folder.finishLayout(opts);
+
+            return folder;
         }
     }
 }

@@ -97,7 +97,7 @@
          *
          * @param layer
          * @param set
-         * @returns HC.ControlSet
+         * @returns {HC.ControlSet}
          */
         get(layer, set) {
 

@@ -18,7 +18,7 @@
         before(shape) {
             if (!this.randshapes) {
                 this.randshapes = this._randshapes(this.layer.shapeCount());
-                this.diameter = this.animation.renderer.getResolution().diameter;
+                this.diameter = this.animation.getResolution().diameter;
             }
 
             let params = this.params(shape);

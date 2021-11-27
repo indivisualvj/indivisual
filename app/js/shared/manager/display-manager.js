@@ -40,6 +40,13 @@
         audioAnalyser;
 
         /**
+         *
+         * @type {boolean}
+         * @private
+         */
+        __renderToScreen = true;
+
+        /**
          * @param {HC.Animation} animation
          * @param config
          */
@@ -367,7 +374,23 @@
          *
          */
         render() {
-            this.renderDisplays();
+            if (this._renderToScreen()) {
+                this.renderDisplays();
+            }
+        }
+
+        _renderToScreen() {
+            if (this.beatKeeper.getSpeed('sixteen').starting()) {
+                this.__renderToScreen = false;
+
+            } else if (this.config.DisplaySettings.fps < 46) {
+                this.__renderToScreen = false;
+
+            } else {
+                this.__renderToScreen = !this.__renderToScreen;
+            }
+
+            return this.__renderToScreen;
         }
 
         /**

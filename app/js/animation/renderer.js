@@ -84,6 +84,7 @@
             this.layers = config.layers;
 
             this.initThreeJs();
+            this.initEvents();
         }
 
         /**
@@ -256,6 +257,11 @@
          *
          */
         animate() {
+            if (IS_ANIMATION) {
+                this.animation.doShuffle();
+            }
+            this.switchLayer(IS_MONITOR);
+
             for (let l in this.layers) {
                 let layer = this.layers[l];
                 if (layer === this.currentLayer || this._isForceAnimate(layer)) {
@@ -290,7 +296,7 @@
          *
          */
         resize() {
-            let res = this.getResolution();
+            let res = this.animation.getResolution();
             this.resolution = res;
 
             if (this.three.scene) {
@@ -312,26 +318,6 @@
                 this.three.perspective1.aspect = aspect;
                 this.three.perspective2.aspect = aspect;
             }
-        }
-
-        /**
-         *
-         * @returns {{aspect: number, x: number, y: number}}
-         */
-        getResolution() {
-            let resolution;
-
-            let res = this.config.DisplaySettings.resolution;
-            if (res) {
-                let sp = res.split(/[\:x]/);
-                if (sp.length > 1) {
-                    let w = parseInt(sp[0]);
-                    let h = parseInt(sp[1]);
-                    resolution = {x: w, y: h, aspect: w / h, diameter: new THREE.Vector2(w, h).length()};
-                }
-            }
-
-            return resolution;
         }
 
         /**
@@ -397,6 +383,18 @@
          */
         currentColor() {
             return this.currentLayer.shapeColor(false);
+        }
+
+        initEvents() {
+            HC.EventManager.register(EVENT_ANIMATION_ANIMATE, 'renderer', () => {
+                this.animate();
+            });
+            HC.EventManager.register(EVENT_ANIMATION_PLAY, 'renderer', () => {
+                this.resumeLayers();
+            });
+            HC.EventManager.register(EVENT_ANIMATION_PAUSE, 'renderer', () => {
+                this.pauseLayers();
+            });
         }
     }
 }

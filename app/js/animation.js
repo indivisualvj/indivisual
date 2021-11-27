@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 let displayManager = new HC.DisplayManager(animation, {
                     display: new Array(config.DisplayValues.display.length)
                 });
-                displayManager.resize(renderer.getResolution());
+                displayManager.resize(animation.getResolution());
                 animation.displayManager = displayManager;
 
                 animation.sourceManager = new HC.SourceManager(animation, {
@@ -117,23 +117,14 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         animate() {
 
+            this._preAnimate();
+
             HC.EventManager.fireEvent(EVENT_ANIMATION_ANIMATE);
 
-            this._preRender();
-
-            /**
-             * do layer stuff
-             */
-            if (IS_ANIMATION) {
-                this.doShuffle();
-            }
-            this.renderer.switchLayer(IS_MONITOR);
-
-            this.renderer.animate();
 
         }
 
-        _preRender() {
+        _preAnimate() {
             let speed = this.beatKeeper.getDefaultSpeed();
 
             if (IS_ANIMATION && speed.starting()) {
@@ -163,7 +154,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 let config = {
                     useWaveform: this.renderer.currentLayer.settings.audio_usewaveform,
                     volume: this.config.ControlSettings.volume,
-                    // resetPeakCountAfter: this.config.ControlSettings.shuffle_every,
                     tempo: this.config.ControlSettings.tempo,
                     minDiff: this.beatKeeper.getSpeed('sixteen').duration,
                     now: this.now,
@@ -190,9 +180,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (IS_ANIMATION) {
                 this.sourceManager.render();
             }
-            if (!this.doNotDisplay) {
-                this.displayManager.render();
-            }
+            this.displayManager.render();
         }
 
         /**
@@ -222,7 +210,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.lastUpdate = this.now - this.lastUpdate;
             }
             this.beatKeeper.play();
-            this.renderer.resumeLayers();
+            HC.EventManager.fireEvent(EVENT_ANIMATION_PLAY, this);
 
             let render = () => {
                 if (this.running) {
@@ -232,16 +220,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.updateRuntime();
 
                     this.beatKeeper.updateSpeeds(this.diff, this.config.ControlSettings.tempo);
-
-                    if (this.beatKeeper.getSpeed('sixteen').starting()) {
-                        this.doNotDisplay = false; // todo: so uggly
-
-                    } else if (this.config.DisplaySettings.fps < 46) {
-                        this.doNotDisplay = false;// todo: so uggly
-
-                    } else {
-                        this.doNotDisplay = !this.doNotDisplay;// todo: so uggly
-                    }
 
                     this.animate();
                     this.render();
@@ -262,7 +240,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
                 } else {
-                    this.renderer.pauseLayers();
+                    HC.EventManager.fireEvent(EVENT_ANIMATION_PAUSE, this);
                     this.beatKeeper.stop();
                 }
             };
@@ -495,7 +473,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         fullReset(keepsettings) {
             this.renderer.fullReset(keepsettings);
-            this.displayManager.resize(this.renderer.getResolution());
+            this.displayManager.resize(this.getResolution());
         }
 
         /**
@@ -823,7 +801,7 @@ document.addEventListener('DOMContentLoaded', function () {
         /**
          *
          */
-        doShuffle() {
+        doShuffle() { // todo move to renderer
             let plugin = this.getShuffleModePlugin();
             let result = plugin.apply();
             if (result !== false) {
@@ -838,7 +816,7 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          * @param name
          */
-        getShuffleModePlugin(name) {
+        getShuffleModePlugin(name) { // todo move to renderer
             if (!this.plugins) {
                 this.plugins = {};
             }
@@ -851,6 +829,29 @@ document.addEventListener('DOMContentLoaded', function () {
             return this.plugins[name];
         }
 
+        /**
+         *
+         * @returns {{aspect: number, x: number, y: number}}
+         */
+        getResolution() {
+            let resolution;
+
+            let res = this.config.DisplaySettings.resolution;
+            if (res) {
+                let sp = res.split(/[\:x]/);
+                if (sp.length > 1) {
+                    let w = parseInt(sp[0]);
+                    let h = parseInt(sp[1]);
+                    resolution = {x: w, y: h, aspect: w / h, diameter: new THREE.Vector2(w, h).length()};
+                }
+            }
+
+            return resolution;
+        }
+
+        /**
+         *
+         */
         initSuperGau() {
             HC.EventManager.register(EVENT_WEBGL_CONTEXT_LOST, this.name, () => {
                 // now reset...

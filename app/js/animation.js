@@ -450,7 +450,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 this.sourceManager.updateSources();
-                this.fullReset(true);
+                this.reset();
 
                 if (IS_MONITOR) {
                     this.monitor = new HC.Monitor();
@@ -469,11 +469,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
-         * @param keepsettings
          */
-        fullReset(keepsettings) {
-            this.renderer.fullReset(keepsettings);
-            this.displayManager.resize(this.getResolution());
+        fullReset() {
+            HC.EventManager.fireEvent(EVENT_FULL_RESET, this);
+        }
+
+        /**
+         *
+         */
+        reset() {
+            HC.EventManager.fireEvent(EVENT_RESET, this);
         }
 
         /**
@@ -491,7 +496,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             let layerIndex = layer;
-            layer = this.renderer.layers[layer];
+            // layer = this.renderer.layers[layer]; // fixme: did it make sense?
 
             let updated = this.settingsManager.updateData(layer, data);
             let property;
@@ -503,18 +508,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
             switch (property) {
                 case 'shaders':
-                    HC.EventManager.fireEventId(EVENT_LAYER_UPDATE_SHADERS, layer.index, layer, SKIP_TEN_FRAMES);
+                    HC.EventManager.fireEventId(EVENT_LAYER_UPDATE_SHADERS, layer, this, SKIP_TEN_FRAMES);
                     break;
 
                 case 'shape_vertices':
                     if (display) {
-                        HC.EventManager.fireEventId(EVENT_LAYER_RESET_SHAPES, layer.index, layer, SKIP_TEN_FRAMES);
+                        HC.EventManager.fireEventId(EVENT_LAYER_RESET_SHAPES, layer, this, SKIP_TEN_FRAMES);
                     }
                     break;
             }
 
             if (forward === true) {
-                this.messaging.emitSettings(layerIndex, data, true, false, force);
+                this.messaging.emitSettings(layer, data, true, false, force);
             }
 
             HC.EventManager.fireEvent(EVENT_ANIMATION_UPDATE_SETTING, {layer: layer, item: property, value: value});
@@ -554,18 +559,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 switch (item) {
                     case 'reset':
                         if (value) {
-                            if (this.renderer) {
-                                if (force) {
-                                    console.log('full reset');
-                                    assetman.disposeAll();
-                                    this.beatKeeper.reset();
-                                    this.fullReset(false);
 
-                                } else {
-                                    console.log('layer reset');
-                                    assetman.disposeAll();
-                                    this.renderer.resetLayer(this.renderer.currentLayer);
-                                }
+                            if (force) {
+                                console.log('full reset');
+                                assetman.disposeAll();
+                                this.beatKeeper.reset();
+                                HC.EventManager.fireEvent(EVENT_FULL_RESET, this);
+
+                            } else {
+                                console.log('layer reset');
+                                assetman.disposeAll();
+                                HC.EventManager.fireEventId(EVENT_LAYER_RESET, this.config.ControlSettings.layer, this);
                             }
                             this.updateControl('reset', false, false, true, false);
                         }
@@ -675,7 +679,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (display) {
                     switch (item) {
                         case 'resolution':
-                            this.fullReset(true);
+                            HC.EventManager.fireEvent(EVENT_RESIZE, this);
                             break;
 
                         case 'mapping':
@@ -723,7 +727,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (force) {
                 this.settingsManager.updateData(layer, data);
-                this.renderer.resetLayer(layer);
+                HC.EventManager.fireEventId(EVENT_LAYER_RESET, this.config.ControlSettings.layer, this);
 
             } else {
                 for (let k in data) {

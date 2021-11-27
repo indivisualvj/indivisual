@@ -280,20 +280,6 @@
 
         /**
          *
-         * @param layer
-         */
-        resetLayer(layer) {
-
-            if (isNumber(layer) || isString(layer)) {
-                layer = this.layers[layer];
-            }
-
-            this.nextLayer = false;
-            layer.needsReset = true;
-        }
-
-        /**
-         *
          */
         resize() {
             let res = this.animation.getResolution();
@@ -394,6 +380,15 @@
             });
             HC.EventManager.register(EVENT_ANIMATION_PAUSE, 'renderer', () => {
                 this.pauseLayers();
+            });
+            HC.EventManager.register(EVENT_FULL_RESET, 'renderer', (emitter) => {
+                this.fullReset(false);
+            });
+            HC.EventManager.register(EVENT_RESIZE, 'renderer', (emitter) => {
+                this.fullReset(true);
+            });
+            HC.EventManager.register(EVENT_RESET, 'renderer', (emitter) => {
+                this.fullReset(true);
             });
         }
     }

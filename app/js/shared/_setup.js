@@ -51,6 +51,9 @@ EVENT_CLIP_UPDATE = 'clip.update';
 EVENT_CLIP_INDICATOR_UPDATE = 'clip.indicator_update';
 EVENT_ANIMATION_PLAY = 'animation.play';
 EVENT_ANIMATION_PAUSE = 'animation.pause';
+EVENT_FULL_RESET = 'full_reset';
+EVENT_RESET = 'reset';
+EVENT_RESIZE = 'resize';
 
 SKIP_ONE_FRAMES = 1000/60;
 SKIP_TWO_FRAMES = 1000/60*2;

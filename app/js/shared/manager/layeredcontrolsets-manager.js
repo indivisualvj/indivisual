@@ -6,21 +6,21 @@
 
         /**
          *
-         * @type {boolean}
+         * @type {{}}
          * @private
          */
-        static _mappings = false;
+        static _mappings;
 
         /**
          *
-         * @type {boolean}
+         * @type {{}}
          * @private
          */
-        static _oscillatorProperties = false;
+        static _oscillatorProperties;
 
         /**
          *
-         * @type {[]}
+         * @type {[{controlSet: {string: HC.ControlSet}}]}
          */
         layers = [];
 

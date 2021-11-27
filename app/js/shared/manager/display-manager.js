@@ -65,6 +65,7 @@
 
             this.initBorderModePlugins();
             this.initVisibilityModePlugins();
+            this.initEvents();
         }
 
         /**
@@ -521,5 +522,13 @@
             return speed;
         }
 
+        initEvents() {
+            HC.EventManager.register(EVENT_FULL_RESET, 'displayman', (emitter) => {
+                this.resize(emitter.getResolution());
+            });
+            HC.EventManager.register(EVENT_RESIZE, 'displayman', (emitter) => {
+                this.resize(emitter.getResolution());
+            });
+        }
     }
 }

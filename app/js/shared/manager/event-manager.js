@@ -100,12 +100,12 @@
         /**
          *
          * @param event
-         * @param target
+         * @param emitter
          */
-        static fireEvent(event, target) {
+        static fireEvent(event, emitter) {
             if (event in this.events) {
                 for (let id in this.events[event]) {
-                    this._doFireEvent(event, id, target);
+                    this._doFireEvent(event, id, emitter);
                 }
             }
         }
@@ -114,18 +114,18 @@
          *
          * @param event
          * @param id
-         * @param target
+         * @param emitter
          * @param timeout
          */
-        static fireEventId(event, id, target, timeout) {
+        static fireEventId(event, id, emitter, timeout) {
             if (event in this.events && id in this.events[event]) {
                 if (timeout) {
                     HC.TimeoutManager.add(event + '.' + id, timeout, () => {
-                        this._doFireEvent(event, id, target);
+                        this._doFireEvent(event, id, emitter);
                     });
 
                 } else {
-                    this._doFireEvent(event, id, target);
+                    this._doFireEvent(event, id, emitter);
                 }
 
             } else {
@@ -137,13 +137,13 @@
          *
          * @param event
          * @param id
-         * @param target
+         * @param emitter
          * @private
          */
-        static _doFireEvent(event, id, target) {
+        static _doFireEvent(event, id, emitter) {
             let _call = this.events[event][id];
             if (_call) {
-                _call(target);
+                _call(emitter);
             }
         }
     }

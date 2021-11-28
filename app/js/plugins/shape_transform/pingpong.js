@@ -6,18 +6,11 @@
 
         apply(shape) {
 
-            let min = shape.geometry.boundingBox.min.clone();
-            let max = shape.geometry.boundingBox.max.clone();
-
+            let box = shape.geometry.boundingBox;
             let multiplier = this.settings.shape_transform_volume * (1.5 + this.explode * .0025);
+            this.explode = Math.max(0, this.explode - this.animation.diff);
 
-            if (this.explode > 0) {
-                min.multiplyScalar(1.5 * this.settings.shape_transform_volume);
-                max.multiplyScalar(1.5 * this.settings.shape_transform_volume);
-
-                this.explode = Math.max(0, this.explode - this.animation.diff);
-
-            } if (this.isExplosion()) {
+            if (this.isExplosion()) {
                 this.explode = .5 * this.layer.getCurrentSpeed().duration;
             }
 
@@ -37,7 +30,7 @@
                 vtc.y += this.animation.diffPrc * speed.y * multiplier;
                 vtc.z += this.animation.diffPrc * speed.z * multiplier;
 
-                this.fixBounds(min, max, speed, vtc);
+                this.fixBounds(box.min.clone(), box.max.clone(), speed, vtc);
                 this.clampSpeed(speed);
                 
                 vertices.setXYZ(i,
@@ -62,30 +55,46 @@
         /**
          * @param {THREE.Vector3} min
          * @param {THREE.Vector3} max
-         * @param {THREE.Vector3} speed
-         * @param {THREE.Vector3} vtc
+         * @param {THREE.Vector3} direction
+         * @param {THREE.Vector3} point
          */
-        fixBounds(min, max, speed, vtc) {
+        fixBounds(min, max, direction, point) {
 
-            if (vtc.x > max.x) {
-                speed.x = -this.randomTurn(speed.x);
+            if (this.explode > 0) {
+                min.multiplyScalar(1.5 * this.settings.shape_transform_volume);
+                max.multiplyScalar(1.5 * this.settings.shape_transform_volume);
             }
-            if (vtc.x < min.x) {
-                speed.x = this.randomTurn(speed.x);
+            if (point.x > max.x) {
+                direction.x = -this.randomTurn(direction.x);
             }
-            if (vtc.y > max.y) {
-                speed.y = -this.randomTurn(speed.y);
+            if (point.x < min.x) {
+                direction.x = this.randomTurn(direction.x);
             }
-            if (vtc.y < min.y) {
-                speed.y = this.randomTurn(speed.y);
+            if (point.y > max.y) {
+                direction.y = -this.randomTurn(direction.y);
             }
-            if (vtc.z > max.z) {
-                speed.z = -this.randomTurn(speed.z);
+            if (point.y < min.y) {
+                direction.y = this.randomTurn(direction.y);
             }
-            if (vtc.z < min.z) {
-                speed.z = this.randomTurn(speed.z);
+            if (point.z > max.z) {
+                direction.z = -this.randomTurn(direction.z);
+            }
+            if (point.z < min.z) {
+                direction.z = this.randomTurn(direction.z);
+            }
+
+            if (this.settings.shape_limit) {
+                min.multiplyScalar(.25);
+                max.multiplyScalar(.25);
+
+                let box = new THREE.Box3(min, max);
+                if (box.containsPoint(point)) {
+
+                }
             }
         }
+
+
 
         /**
          * @param {THREE.Vector3} speed

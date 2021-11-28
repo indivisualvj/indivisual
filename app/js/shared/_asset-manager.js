@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
+    _importThreeLoader('FontLoader');
 
     HC.AssetManager = class AssetManager {
         images = {};

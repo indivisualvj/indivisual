@@ -1,4 +1,6 @@
 {
+    _importThreeModule('examples/js/utils', 'BufferGeometryUtils');
+
     HC.BufferGeometryUtils = class BufferGeometryUtils {
 
         /**
@@ -85,7 +87,7 @@
          * @returns {*}
          */
         static mergeVertices(geometry, tolerance) {
-            if (geometry.attributes.position) {
+            if (geometry.attributes.position && tolerance > 0) {
                 return THREE.BufferGeometryUtils.mergeVertices(geometry, tolerance);
             }
 

@@ -59,7 +59,7 @@
                 }
 
                 let passes = this.config.messaging.program.settingsManager.get(this.config.ControlSettings.layer, 'passes');
-                let data = {passes: {shaders: passes.getProperty('shaders')}};
+                let data = {passes: {shaders: passes.getShaderPasses()}};
                 messaging.emitSettings(this.config.ControlSettings.layer, data, false, false, false);
 
                 HC.log(that.getParent().getLabel() + '/' + that.getLabel(), v);
@@ -71,12 +71,7 @@
          * @return {*}
          */
         getInitialSettings(key) {
-            let subSet = this.config.ShaderSettings[this.name];
-            if (subSet !== undefined && key in subSet) {
-                return subSet[key];
-            }
-
-            return subSet;
+            return this.config.ShaderSettings[this.name];
         }
 
         /**

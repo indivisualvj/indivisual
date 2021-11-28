@@ -16,11 +16,66 @@
 
         /**
          *
+         * @param shader
+         */
+        addShaderPass(shader) {
+            this.properties.shaders.push(shader);
+        }
+
+        /**
+         *
+         * @param index
+         * @param shader
+         */
+        insertShaderPass(index, shader) {
+            this.properties.shaders.splice(index, 0, shader);
+        }
+
+        /**
+         *
+         * @param index
+         */
+        removeShaderPass(index) {
+            this.properties.shaders.splice(index, 1);
+        }
+
+        /**
+         *
+         */
+        removeShaderPasses() {
+            this.properties.shaders = [];
+        }
+
+        /**
+         *
+         * @returns {[]}
+         */
+        getShaderPasses() {
+            return this.properties.shaders;
+        }
+
+        /**
+         *
+         * @param index
+         * @returns {null|{}}
+         */
+        getShaderPass(index) {
+            let passes = this.getShaderPasses();
+
+            if (index in passes) {
+                return passes[index];
+            }
+
+            return null;
+        }
+
+        /**
+         *
          * @param index
          * @returns {string}
          */
         getShaderName(index) {
-            let pass = this.getPropertyAt('shaders', index);
+            let pass = this.getShaderPass(index);
             if (pass) {
                 return Object.keys(pass)[0];
             }
@@ -56,7 +111,7 @@
          * @returns {null|*}
          */
         getShader(index, name) {
-            let pass = this.getPropertyAt('shaders', index);
+            let pass = this.getShaderPass(index);
             if (pass) {
                 let name = this.getShaderName(index);
                 return pass[name];

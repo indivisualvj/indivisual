@@ -486,11 +486,11 @@ document.addEventListener('DOMContentLoaded', function () {
             let passes = this.settingsManager.get(layer, 'passes');
             let pass = {};
             pass[ctrl.name] = ctrl.getShader();
-            passes.pushProperty('shaders', pass);
+            passes.addShaderPass(pass);
 
             this.updateUi(this.animationSettingsGui);
 
-            let data = {passes: {shaders: passes.getProperty('shaders')}};
+            let data = {passes: {shaders: passes.getShaderPasses()}};
             this.messaging.emitSettings(layer, data, false, false, false);
         }
 
@@ -499,13 +499,13 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         cleanShaderPasses() {
 
-            let cs = this.settingsManager.get(this.config.ControlSettings.layer, 'passes');
-            let passes = cs.getProperty('shaders');
+            let controlSet = this.settingsManager.get(this.config.ControlSettings.layer, 'passes');
+            let passes = controlSet.getShaderPasses();
 
             for (let key in passes) {
-                let sh = cs.getShader(key);
+                let sh = controlSet.getShader(key);
                 if (!sh || sh.apply === false) {
-                    cs.removePropertyAt('shaders', key);
+                    controlSet.removeShaderPass(key);
                 }
             }
         }

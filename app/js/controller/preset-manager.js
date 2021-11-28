@@ -282,7 +282,7 @@
                 let controlSet = this.settingsManager.get(layer, 'passes');
 
                 for (let key in newShaders) {
-                    controlSet.pushProperty('shaders', newShaders[key]);
+                    controlSet.addShaderPass(newShaders[key]);
                 }
             }
         }
@@ -319,7 +319,7 @@
                             delete sh.index;
                             let pass = {};
                             pass[name] = sh;
-                            controlSet.pushProperty('shaders', pass);
+                            controlSet.addShaderPass(pass);
                         }
                     }
                 } else {

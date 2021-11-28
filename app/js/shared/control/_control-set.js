@@ -165,7 +165,7 @@ HC.controls = HC.controls || {};
          * @returns Object
          */
         defaults() {
-            return {...this.settings};
+            return clone(this.settings);
         }
 
         /**
@@ -298,70 +298,6 @@ HC.controls = HC.controls || {};
             }
 
             return value;
-        }
-
-
-
-        /**
-         *
-         * @param key
-         * @param value
-         */
-        pushProperty(key, value) {
-            this.properties[key].push(value);
-        }
-
-        /**
-         *
-         * @param key
-         * @param index
-         * @param value
-         */
-        insertProperty(key, index, value) {
-            this.properties[key].splice(index, 0, value);
-        }
-
-        /**
-         *
-         * @param key
-         * @param index
-         */
-        removePropertyAt(key, index) {
-            this.properties[key].splice(index, 1);
-        }
-
-        /**
-         *
-         * @param key
-         * @param value
-         */
-        setProperty(key, value) {
-            this.properties[key] = value;
-        }
-
-        /**
-         *
-         * @param key
-         * @returns {*}
-         */
-        getProperty(key) {
-            return this.properties[key];
-        }
-
-        /**
-         *
-         * @param key
-         * @param index
-         * @returns {null|*}
-         */
-        getPropertyAt(key, index) {
-            let values = this.getProperty(key);
-
-            if (index in values) {
-                return values[index];
-            }
-
-            return null;
         }
 
         /**

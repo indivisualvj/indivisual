@@ -153,25 +153,19 @@ HC.Controller.prototype.addShaderPassController = function (key, control, parent
  *
  * @param folder
  * @param key
- * @param shaderSettings
+ * @param settings
  * @param parent
  * @param control
  */
-HC.Controller.prototype.addShaderController = function (folder, key, shaderSettings, parent, control) {
+HC.Controller.prototype.addShaderController = function (folder, key, settings, parent, control) {
 
     control = control || new HC.ShaderPassUi(parent, this.config);
-    let initialSettings = control.getInitialSettings(key) || {}; // fallback 4 cleaned settings from storage
+    let initialSettings = control.getInitialSettings() || {}; // fallback 4 cleaned settings from storage
     let submit = control.onChange();
 
-    for (let subsetKey in initialSettings) {
-        let settingSubset = shaderSettings[subsetKey];
-        let initialSubset = (subsetKey in initialSettings ? initialSettings[subsetKey] : {});
-
-        if (settingSubset === undefined) {
-            shaderSettings[subsetKey] =
-                settingSubset =
-                    {...initialSubset};
-        }
+    for (let subsetKey in settings) {
+        let setting = settings[subsetKey];
+        let initialSetting = initialSettings[subsetKey] || {};
 
         let label = subsetKey;
 
@@ -187,7 +181,7 @@ HC.Controller.prototype.addShaderController = function (folder, key, shaderSetti
             };
         };
 
-        let opts = _opts(label, submit, folder, subsetKey, shaderSettings);
+        let opts = _opts(label, submit, folder, subsetKey, settings);
 
         switch(subsetKey) {
             case 'apply':
@@ -200,29 +194,28 @@ HC.Controller.prototype.addShaderController = function (folder, key, shaderSetti
                 break;
         }
 
-        let subsetType = typeof initialSubset;
-        if (subsetType === 'boolean') { // apply, etc.
+        if (typeof setting === 'boolean') { // apply, etc.
             opts.type = 'checkbox';
             folder.addController(opts);
 
-        } else if (subsetType === 'number') {
+        } else if (typeof setting === 'number') {
             opts.type = 'range';
             opts.step = 1;
 
             folder.addController(opts);
 
         } else {
-            let settingValue = ('value' in settingSubset) ? settingSubset['value'] : null;
+            let v = ('value' in setting) ? setting['value'] : null;
 
-            if (settingValue !== null) {
-                let range = (('_type' in initialSubset) ? initialSubset['_type'] : null);
-                let audio = ('audio' in initialSubset) ? initialSubset['audio'] : null;
-                let stepwise = ('stepwise' in initialSubset) ? initialSubset['stepwise'] : null;
-                let oscillate = ('oscillate' in initialSubset) ? initialSubset['oscillate'] : null;
+            if (v !== null) {
+                let range = ('_type' in setting) ? setting['_type'] : (('_type' in initialSetting) ? initialSetting['_type'] : null);
+                let audio = ('audio' in setting) ? setting['audio'] : null;
+                let stepwise = ('stepwise' in setting) ? setting['stepwise'] : null;
+                let oscillate = ('oscillate' in setting) ? setting['oscillate'] : null;
 
                 label = (key ? (key + '_') : '') + subsetKey;
 
-                opts = _opts(label, submit, folder, 'value', settingSubset);
+                opts = _opts(label, submit, folder, 'value', setting);
 
                 let min, max, step;
                 if (range) {
@@ -238,8 +231,8 @@ HC.Controller.prototype.addShaderController = function (folder, key, shaderSetti
                     folder.addController(opts);
 
                 } else {
-                    let settingType = typeof settingValue;
-                    opts.type = settingType==='number' ? 'range' : settingType==='boolean' ? 'checkbox' : 'text';
+                    let type = typeof v;
+                    opts.type = type==='number' ? 'range' : type==='boolean' ? 'checkbox' : 'text';
 
                     folder.addController(opts);
                 }
@@ -247,7 +240,7 @@ HC.Controller.prototype.addShaderController = function (folder, key, shaderSetti
                 if (audio !== null) {
                     let _label = subsetKey + '_audio';
 
-                    opts = _opts(_label, submit, folder, 'audio', settingSubset);
+                    opts = _opts(_label, submit, folder, 'audio', setting);
                     opts.type = 'checkbox';
                     opts.dataClass = 'quarter';
                     opts.cssClasses = 'clear';
@@ -258,7 +251,7 @@ HC.Controller.prototype.addShaderController = function (folder, key, shaderSetti
                 if (stepwise !== null) {
                     let _label = subsetKey + '_stepwise';
 
-                    opts = _opts(_label, submit, folder, 'stepwise', settingSubset);
+                    opts = _opts(_label, submit, folder, 'stepwise', setting);
                     opts.type = 'checkbox';
                     opts.dataClass = 'quarter';
                     opts.cssClasses = 'noclear';
@@ -268,7 +261,7 @@ HC.Controller.prototype.addShaderController = function (folder, key, shaderSetti
 
                 if (oscillate !== null) {
                     let _label = subsetKey + '_oscillate';
-                    opts = _opts(_label, submit, folder, 'oscillate', settingSubset);
+                    opts = _opts(_label, submit, folder, 'oscillate', setting);
                     opts.type = 'select';
                     opts.options = this.config.AnimationValues.oscillate;
                     opts.dataClass = 'half';
@@ -278,7 +271,7 @@ HC.Controller.prototype.addShaderController = function (folder, key, shaderSetti
                 }
 
             } else { // go deeper
-                this.addShaderController(folder, subsetKey, settingSubset, parent, control);
+                this.addShaderController(folder, subsetKey, setting, parent, control);
             }
         }
     }
@@ -553,7 +546,7 @@ HC.Controller.prototype.updateUiPasses = function () {
         passFld.getChild('pass').setValue(null);
 
         let controlSet = this.settingsManager.get(this.config.ControlSettings.layer, 'passes');
-        let shaders = controlSet.getProperty('shaders');
+        let shaders = controlSet.getShaderPasses();
 
         for (let k in passFld.children) {
             if (k === 'pass')continue;

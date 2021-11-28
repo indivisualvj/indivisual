@@ -426,7 +426,7 @@
 
             let shaders = null;
             let controlSet = this.animation.settingsManager.get(this.index, 'passes');
-            let shaderPresets = controlSet.getProperty('shaders');
+            let shaderPresets = controlSet.getShaderPasses();
 
             for (let index in shaderPresets) {
 

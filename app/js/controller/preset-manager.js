@@ -82,7 +82,7 @@
                 HC.TimeoutManager.add('loadPreset', 0, () => {
                     this.gui.resetLayerStatus(layer+1);
                     this.settingsManager.resetLayer(layer);
-                    this._updatePreset(false, this.settingsManager.prepareLayer(layer), layer); // case reset
+                    this._updatePreset(false, {}, layer); // case reset
                 });
 
             } else {
@@ -173,9 +173,10 @@
 
         /**
          *
-         * @param {HC.GuifyExplorerFolder} ctrl
+         * @param ctrl
+         * @private
          */
-        savePresets(ctrl) {
+        _savePresets(ctrl) {
             let confirmed = confirm('Save all?');
             if (confirmed) {
                 for (let k in ctrl.children) {
@@ -361,9 +362,10 @@
 
         /**
          *
-         * @param {HC.GuifyExplorerFolder} ctrl
+         * @param ctrl
+         * @private
          */
-        newPreset(ctrl) {
+        _newPreset(ctrl) {
             let index = (Object.keys(ctrl.children).length + 1);
             while (ctrl.getChild(index + '.json')) { // lookup for existing
                 index++;
@@ -443,16 +445,16 @@
             if (addActions) {
                 opts = {
                     create: (ctrl) => {
-                        this.newPreset(ctrl);
+                        this._newPreset(ctrl);
                     },
                     fill: (ctrl) => {
                         this._loadPresets(ctrl, HC.Hotkey.isPressed('shift')).finally();
                     },
                     save: (ctrl) => {
-                        this.savePresets(ctrl);
+                        this._savePresets(ctrl);
                     },
                     rename: (ctrl) => {
-                        this.renameFolder(ctrl);
+                        this._renameFolder(ctrl);
                     },
                     delete: (ctrl) => {
                         this._deleteFolder(ctrl);
@@ -511,9 +513,10 @@
 
         /**
          *
-         * @param {HC.GuifyItem} ctrl
+         * @param ctrl
+         * @private
          */
-        renameFolder(ctrl) {
+        _renameFolder(ctrl) {
             let label = ctrl.getLabel();
 
             do {

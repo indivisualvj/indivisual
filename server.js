@@ -745,7 +745,9 @@ function _initGet() {
 }
 
 function filePath() {
-    let args = Array.prototype.slice.call(arguments);
+    let args = Array.prototype.slice.call(arguments).filter(v => {
+        return v !== null && v !== undefined;
+    });
     return args.join('/');
 }
 
@@ -981,7 +983,7 @@ function _initConnection() {
          */
         socket.on('delete', function (data, callback) {
             let old = filePath(_HOME, data.dir, data.file);
-            let nu = filePath(_HOME, data.dir, '.' + data.file);
+            let nu = filePath(_HOME, data.dir, '._' + data.file);
             fs.rename(old, nu, function () {
                 let msg = data.file + ' deleted';
                 console.log(msg);

@@ -3,7 +3,9 @@
  * @returns {string}
  */
 HC.filePath = function() {
-    let args = Array.prototype.slice.call(arguments);
+    let args = Array.prototype.slice.call(arguments).filter(v => {
+        return v !== null && v !== undefined;
+    });
     return args.join('/');
 }
 

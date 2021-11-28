@@ -34,23 +34,19 @@
          *
          * @type {Array}
          */
-        default = [{
+        default = {
             name: '_default',
             type: 'folder',
             default: true,
             visible: true,
             children: [
                 {
-                    index: 0,
                     name: '_default',
                     type: 'preset',
-                    default: true,
-                    loaded: false,
-                    layer: '',
-                    changed: ''
+                    default: true
                 }
             ]
-        }];
+        };
 
         /**
          *
@@ -80,12 +76,13 @@
          * @private
          */
         _loadPreset(ctrl, loadShaders) {
+            let layer = this.config.ControlSettings.layer;
             if (ctrl.getLabel() === '_default') {
                 // load default
-                let layer = this.config.ControlSettings.layer;
                 HC.TimeoutManager.add('loadPreset', 0, () => {
                     this.gui.resetLayerStatus(layer+1);
-                    this._updatePreset(false, null); // case reset
+                    this.settingsManager.resetLayer(layer);
+                    this._updatePreset(false, this.settingsManager.prepareLayer(layer), layer); // case reset
                 });
 
             } else {
@@ -97,7 +94,6 @@
 
                 } else {
                     // load the preset
-                    let layer = this.config.ControlSettings.layer;
                     this._doLoadPreset(ctrl, layer, () => {
                         this.setSelected(layer+1, true);
                     });
@@ -206,19 +202,17 @@
          * @param name
          * @param data
          * @param layer
+         * @param [_emitted]
          * @private
          */
         _updatePreset(name, data, layer, _emitted) {
             HC.log('preset', name);
 
-            if (layer === undefined) {
-                layer = this.config.ControlSettings.layer;
-            }
-
             this.settingsManager.resetLayer(layer);
 
             if (data && !('info' in data)) {
                 this.updateMigrateSettings0(layer, data);
+                this.controller.updateSettings(layer, this.settingsManager.prepareLayer(layer), false, false, true);
 
                 // example!
                 // } else if ('info' in data && data.info.version > 1.99) {
@@ -631,7 +625,8 @@
                         this.restoreLoadedPresets();
                     });
                 };
-                _insert(this.default, this.gui);
+
+                data.unshift(this.default);
                 _insert(data, this.gui);
             });
         }

@@ -69,8 +69,8 @@
     width: 0;
     height: 100%;
     min-height: 48px;
-    border-left: 4px solid greenyellow;
-    border-right: 4px solid orangered;
+    border-left: 4px solid var(--green);
+    border-right: 4px solid var(--red);
     outline: 1000px solid rgba(0,0,0, 0.6);
     box-sizing: border-box !important;
 }
@@ -82,7 +82,7 @@
     top: 0;
     width: 0;
     height: 100%;
-    border-right: 4px solid #2fa1d6;
+    border-right: 4px solid var(--blue);
     box-sizing: border-box;
     background: rgba(0, 0, 0, .3)
 }

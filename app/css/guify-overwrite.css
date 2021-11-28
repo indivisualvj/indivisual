@@ -58,7 +58,7 @@ input[type=checkbox].guify-checkbox_hxzak + label {
 }
 
 .guify-component-container[data-changed] > div > div {
-    color: #e61d5f !important;
+    color: var(--red) !important;
 }
 
 .guify-container_be6yU[data-mnemonic]:before {

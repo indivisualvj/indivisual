@@ -5,7 +5,7 @@ pre#log {
     height: 100%;
     padding: 0.15vw;
     margin: 0;
-    color: rgba(10, 255, 10, 1);
+    color: var(--green);
 }
 
 pre#log * {
@@ -26,7 +26,7 @@ pre#osd {
     border-radius: 1px;
     margin: 0 0 0 0;
     background: rgba(0, 0, 0, 0.8);
-    color: #2fa1d6;
+    color: var(--blue);
     font-size: 16px;
     z-index: 100;
     pointer-events: none;
@@ -57,22 +57,22 @@ pre div {
 
 pre a {
     cursor: pointer;
-    color: rgba(10, 190, 255, 1);
+    color: var(--blue);
     font-weight: bold;
 }
 
 pre .yellow {
-    color: rgba(255, 210, 10, 1);
+    color: var(--yellow);
     font-weight: bold;
 }
 
 pre .red {
-    color: rgba(255, 10, 10, 1);
+    color: var(--red);
     font-weight: bold;
 }
 
 pre .orange {
-    color: rgba(255, 175, 10, 1);
+    color: var(--orange);
     font-weight: bold;
 }
 
@@ -98,7 +98,7 @@ pre .orange {
 }
 
 .expandable:hover, .expandable[fixed] {
-    border: 1px solid #2fa1d6 !important;
+    border: 1px solid var(--blue) !important;
     background-color: rgba(0, 0, 0, 0.8) !important;
 }
 
@@ -106,7 +106,7 @@ pre .orange {
     content: ' click to expand/reduce';
     font-size: 10px;
     font-weight: bold;
-    color: #2fa1d6;
+    color: var(--blue);
 
     position: absolute;
     bottom: 4px;

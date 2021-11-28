@@ -33,7 +33,7 @@
 
 #samples .sample:hover .controls {
     display: block;
-    border: 1px solid #2fa1d6 !important;
+    border: 1px solid var(--blue) !important;
     background-color: rgba(0, 0, 0, 0.8) !important;
     width: 130px;
     height: 70px;
@@ -90,7 +90,7 @@
         background: black;
     }
     to {
-        background: #2fa1d6;
+        background: var(--blue);
     }
 }
 
@@ -107,7 +107,7 @@
         background: black;
     }
     to {
-        background: #2fd62f;
+        background: var(--green);
     }
 }
 
@@ -123,6 +123,6 @@
         background: black;
     }
     to {
-        background: #e61d5f;
+        background: var(--red);
     }
 }

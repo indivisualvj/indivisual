@@ -4,6 +4,7 @@
     --green: #1ee61e;
     --blue: #32aae6;
     --orange: #e6711e;
+    --changed: var(--red);
 }
 
 [data-color="red"] {
@@ -61,16 +62,16 @@
 }
 
 [data-changed] {
-    color: var(--orange) !important;
+    color: var(--changed) !important;
 }
 
 [data-changed] label,
 [data-changed] input {
-    color: var(--orange) !important;
+    color: var(--changed) !important;
 }
 
 [data-changed] select {
-    color: var(--orange) !important;
+    color: var(--changed) !important;
 }
 
 [data-changed] select:hover {

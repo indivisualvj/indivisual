@@ -14,6 +14,7 @@
                     let id = isObject(context) ? context.index : context;
                     switch (key) {
                         case 'lighting_type':
+                        case 'lighting_color':
                             HC.EventManager.fireEventId(EVENT_LAYER_RESET_LIGHTING, id, context, SKIP_TEN_FRAMES);
                             break;
                         case 'lighting_ambient':

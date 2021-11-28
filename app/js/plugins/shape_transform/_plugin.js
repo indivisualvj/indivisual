@@ -6,6 +6,8 @@ HC.plugins.shape_transform = HC.plugins.shape_transform || {};
 
         before(shape) {
             if (this._doesThings() && !this.vertices) {
+                shape.geometry.computeBoundingBox();
+                shape.geometry.computeBoundingSphere();
                 let vertices = shape.geometry.getAttribute('position');
                 this.vertices = [];
                 let v = new THREE.Vector3();

@@ -31,7 +31,8 @@
                     this.max = Math.max(v, this.max);
                     let div = Math.abs(this.min - this.max) / 20;
 
-                    v = Math.sin(this.angle * RAD + ((v + .5 * div) / div)) / (4 * sources.length * Math.abs(this.settings.shape_transform_volume));
+                    v = Math.sin(this.angle * RAD + ((v + .5 * div) / div));
+                    v = (v / (4 * sources.length)) * Math.abs(this.settings.shape_transform_volume);
 
                     vtc.set(
                         vtc.x + vtcb.x * v * axes.x,

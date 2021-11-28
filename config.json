@@ -12,6 +12,8 @@
   ],
 
   "animation": [
+    "lib/three/shaders",
+    "lib/three/postprocessing",
     "js/animation.js",
     "js/animation"
   ],
@@ -22,8 +24,7 @@
   ],
 
   "addons": [
-    "lib/three/shaders",
-    "lib/three/postprocessing"
+
   ],
 
   "directories": {

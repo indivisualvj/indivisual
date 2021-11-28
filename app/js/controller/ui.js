@@ -131,7 +131,6 @@ HC.Controller.prototype.addPassesFolder = function (onChange) {
     dir.addSelectController('pass', 'pass', {pass: ''}, this.config.AnimationValues.shaders, onChange);
 };
 
-
 /**
  *
  * @param key
@@ -154,21 +153,27 @@ HC.Controller.prototype.addShaderPassController = function (key, control, parent
  *
  * @param folder
  * @param key
- * @param sh
+ * @param shaderSettings
  * @param parent
  * @param control
  */
-HC.Controller.prototype.addShaderController = function (folder, key, sh, parent, control) {
+HC.Controller.prototype.addShaderController = function (folder, key, shaderSettings, parent, control) {
 
     control = control || new HC.ShaderPassUi(parent, this.config);
-    let shi = control.getInitialSettings() || {}; // fallback 4 cleaned settings from storage
+    let initialSettings = control.getInitialSettings(key) || {}; // fallback 4 cleaned settings from storage
     let submit = control.onChange();
 
-    for (let skey in sh) {
-        let shs = sh[skey];
-        let shis = shi[skey] || {};
+    for (let subsetKey in initialSettings) {
+        let settingSubset = shaderSettings[subsetKey];
+        let initialSubset = (subsetKey in initialSettings ? initialSettings[subsetKey] : {});
 
-        let label = skey;
+        if (settingSubset === undefined) {
+            shaderSettings[subsetKey] =
+                settingSubset =
+                    {...initialSubset};
+        }
+
+        let label = subsetKey;
 
         let _opts = function (label, onChange, folder, property, object) {
             return {
@@ -182,9 +187,9 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
             };
         };
 
-        let opts = _opts(label, submit, folder, skey, sh);
+        let opts = _opts(label, submit, folder, subsetKey, shaderSettings);
 
-        switch(skey) {
+        switch(subsetKey) {
             case 'apply':
                 opts.dataClass = 'half';
                 break;
@@ -195,28 +200,29 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                 break;
         }
 
-        if (typeof shs === 'boolean') { // apply, etc.
+        let subsetType = typeof initialSubset;
+        if (subsetType === 'boolean') { // apply, etc.
             opts.type = 'checkbox';
             folder.addController(opts);
 
-        } else if (typeof shs === 'number') {
+        } else if (subsetType === 'number') {
             opts.type = 'range';
             opts.step = 1;
 
             folder.addController(opts);
 
         } else {
-            let v = ('value' in shs) ? shs['value'] : null;
+            let settingValue = ('value' in settingSubset) ? settingSubset['value'] : null;
 
-            if (v !== null) {
-                let range = ('_type' in shs) ? shs['_type'] : (('_type' in shis) ? shis['_type'] : null);
-                let audio = ('audio' in shs) ? shs['audio'] : null;
-                let stepwise = ('stepwise' in shs) ? shs['stepwise'] : null;
-                let oscillate = ('oscillate' in shs) ? shs['oscillate'] : null;
+            if (settingValue !== null) {
+                let range = (('_type' in initialSubset) ? initialSubset['_type'] : null);
+                let audio = ('audio' in initialSubset) ? initialSubset['audio'] : null;
+                let stepwise = ('stepwise' in initialSubset) ? initialSubset['stepwise'] : null;
+                let oscillate = ('oscillate' in initialSubset) ? initialSubset['oscillate'] : null;
 
-                label = (key ? (key + '_') : '') + skey;
+                label = (key ? (key + '_') : '') + subsetKey;
 
-                opts = _opts(label, submit, folder, 'value', shs);
+                opts = _opts(label, submit, folder, 'value', settingSubset);
 
                 let min, max, step;
                 if (range) {
@@ -232,16 +238,16 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                     folder.addController(opts);
 
                 } else {
-                    let type = typeof v;
-                    opts.type = type==='number' ? 'range' : type==='boolean' ? 'checkbox' : 'text';
+                    let settingType = typeof settingValue;
+                    opts.type = settingType==='number' ? 'range' : settingType==='boolean' ? 'checkbox' : 'text';
 
                     folder.addController(opts);
                 }
 
                 if (audio !== null) {
-                    let _label = skey + '_audio';
+                    let _label = subsetKey + '_audio';
 
-                    opts = _opts(_label, submit, folder, 'audio', shs);
+                    opts = _opts(_label, submit, folder, 'audio', settingSubset);
                     opts.type = 'checkbox';
                     opts.dataClass = 'quarter';
                     opts.cssClasses = 'clear';
@@ -250,9 +256,9 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                 }
 
                 if (stepwise !== null) {
-                    let _label = skey + '_stepwise';
+                    let _label = subsetKey + '_stepwise';
 
-                    opts = _opts(_label, submit, folder, 'stepwise', shs);
+                    opts = _opts(_label, submit, folder, 'stepwise', settingSubset);
                     opts.type = 'checkbox';
                     opts.dataClass = 'quarter';
                     opts.cssClasses = 'noclear';
@@ -261,8 +267,8 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                 }
 
                 if (oscillate !== null) {
-                    let _label = skey + '_oscillate';
-                    opts = _opts(_label, submit, folder, 'oscillate', shs);
+                    let _label = subsetKey + '_oscillate';
+                    opts = _opts(_label, submit, folder, 'oscillate', settingSubset);
                     opts.type = 'select';
                     opts.options = this.config.AnimationValues.oscillate;
                     opts.dataClass = 'half';
@@ -272,7 +278,7 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                 }
 
             } else { // go deeper
-                this.addShaderController(folder, skey, shs, parent, control);
+                this.addShaderController(folder, subsetKey, settingSubset, parent, control);
             }
         }
     }

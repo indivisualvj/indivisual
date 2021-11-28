@@ -49,7 +49,9 @@ HC.plugins.shaders = HC.plugins.shaders || {};
             for (let skey in properties) {
                 let sProperty = properties[skey];
                 let sSetting = settings[skey];
-
+                if (sSetting === undefined) {
+                    continue;
+                }
                 if (typeof sProperty !== 'boolean' && typeof sProperty !== 'number') {
 
                     if ('value' in sProperty) {

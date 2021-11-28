@@ -70,8 +70,13 @@
          *
          * @return {*}
          */
-        getInitialSettings() {
-            return this.config.ShaderSettings[this.name];
+        getInitialSettings(key) {
+            let subSet = this.config.ShaderSettings[this.name];
+            if (subSet !== undefined && key in subSet) {
+                return subSet[key];
+            }
+
+            return subSet;
         }
 
         /**

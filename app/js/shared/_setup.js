@@ -65,7 +65,6 @@ MNEMONICS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 OSD_TIMEOUT = 2000;
 RAD = Math.PI / 180;
 DEG = 180 / Math.PI;
-SQUARE_DIAMETER = (Math.sqrt(2 * 2 + 2 * 2) / 2);
 ANTIALIAS = true;
 
 HC.now = window.performance.now.bind(window.performance);

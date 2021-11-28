@@ -252,7 +252,7 @@
                 for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
                     if (this.config.shuffleable(layer+1) && !this.settingsManager.isDefault(layer)) {
                         calls.push((_synced) => {
-                            HC.TimeoutManager.add('transferShader.' + layer, SKIP_TEN_FRAMES, () => {
+                            HC.TimeoutManager.add('transferShader.' + layer, SKIP_TWO_FRAMES, () => {
                                 this._appendShaderPasses(layer, data);
                                 this.gui.setChanged(layer+1, true);
                                 this.controller.updateUiPasses();
@@ -267,6 +267,12 @@
             });
         }
 
+        /**
+         *
+         * @param layer
+         * @param data
+         * @private
+         */
         _appendShaderPasses(layer, data) {
             if (!('info' in data)) {
                 let shaders = {shaders: data.shaders};

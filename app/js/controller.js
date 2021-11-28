@@ -767,13 +767,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 let calls = [];
                 for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
                     if (!shuffleable || -1 === shuffleable.indexOf(layer+1)) {
-                        if (!this.settingsManager.isDefault(layer)) {
-                            calls.push((_synced) => {
-                                HC.TimeoutManager.add('syncLayer.' + layer, SKIP_FOUR_FRAMES, () => {
-                                    this.syncLayer(layer, _synced);
-                                });
+                        calls.push((_synced) => {
+                            HC.TimeoutManager.add('syncLayer.' + layer, SKIP_TWO_FRAMES, () => {
+                                this.syncLayer(layer, _synced);
                             });
-                        }
+                        });
                     }
                 }
 

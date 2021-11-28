@@ -3183,11 +3183,13 @@ var ComponentManager = exports.ComponentManager = function () {
 
             var newComponent = new this.components[opts.type](root, opts, _theme.theme, this.uuid);
 
-            Object.assign(newComponent, {
-                Remove: function Remove() {
-                    this.container.parentNode.removeChild(this.container);
-                }
-            });
+            if (!newComponent.Remove) {
+                Object.assign(newComponent, {
+                    Remove: function Remove() {
+                        this.container.parentNode.removeChild(this.container);
+                    }
+                });
+            }
 
             return newComponent;
         }
@@ -5853,10 +5855,16 @@ var Folder = function () {
         this.SetOpen(this.open);
     }
 
-    // Toggle visibility
-
-
     _createClass(Folder, [{
+        key: 'Remove',
+        value: function Remove() {
+            this.container.parentNode.removeChild(this.container);
+            this.folderContainer.parentNode.removeChild(this.folderContainer);
+        }
+
+        // Toggle visibility
+
+    }, {
         key: 'Toggle',
         value: function Toggle() {
             this.open = !this.open;

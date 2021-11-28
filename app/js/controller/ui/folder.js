@@ -203,8 +203,8 @@
          *
          */
         remove() {
-            super.remove();
             this.removeChildren();
+            super.remove();
         }
 
         /**

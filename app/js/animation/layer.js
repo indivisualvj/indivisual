@@ -425,16 +425,16 @@
             this.shadersNeedUpdate = false;
 
             let shaders = null;
-            let passes = this.animation.settingsManager.get(this.index, 'passes');
-            let count = passes.getProperty('shaders').length;
+            let controlSet = this.animation.settingsManager.get(this.index, 'passes');
+            let shaderPresets = controlSet.getProperty('shaders');
 
-            for (let index = 0; index < count; index++) {
+            for (let index in shaderPresets) {
 
-                let shader = passes.getShader(index);
+                let shader = controlSet.getShader(index);
 
                 if (shader && shader.apply) {
-                    let name = passes.getShaderName(index); // fixme
-                    let key = passes.getShaderPassKey(index); // fixme
+                    let name = controlSet.getShaderName(index);
+                    let key = controlSet.getShaderPassKey(index);
                     let plugin = this.getShaderPassPlugin(name, key, shader);
                     if (plugin) {
                         plugin.create();

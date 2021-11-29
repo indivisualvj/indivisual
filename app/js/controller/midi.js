@@ -524,9 +524,14 @@
                             let n = sec.name;
                             let v = sec.value;
                             let setting = name + n;
-                            if (setting in settings) {
-                                let sv = settings[setting];
-                                if (sv === v) {
+                            let sv;
+                            try {
+                                sv = settings[setting]
+                            } catch (e) {
+                                console.log(id, name, setting, e);
+                            }
+                            if (sv !== null) {
+                                if (sv == v) {
                                     return [m, s];
                                 }
                             }
@@ -552,6 +557,7 @@
                 let glowing = this.midi_glow[key];
                 let delay = conf && conf.delay ? conf.delay : 0;
                 let timeout = conf && conf.timeout ? delay + conf.timeout : 0;
+
                 if (!pressed && !glowing) {
                     //let outputs = this.midi.outputs.values();
                     let noteon = [dat[0], dat[1], 126];
@@ -607,10 +613,10 @@
 
                 this._send(noteoff);
 
-                if (!keep) {
+                // if (!keep) {
                     let key = dat[0] + '' + dat[1];
                     this.midi_glow[key] = false;
-                }
+                // }
             }
         }
 

@@ -395,7 +395,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 this.messaging.emitMidi('glow', MIDI_BEAT_FEEDBACK, {timeout: 125});
                 if (detectedSpeed) {
-                    this.messaging.emitMidi('glow', MIDI_PEAKBPM_FEEDBACK, {timeout: 15000 / detectedSpeed, times: 8});
+                    this.messaging.emitMidi('glow', MIDI_PEAKBPM_FEEDBACK, {timeout: 60 / (detectedSpeed*4) * 1000, times: 8});
                 }
 
                 if (this.beatKeeper.getSpeed('half').starting()) {
@@ -406,6 +406,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             this.messaging.emitMidi('glow', MIDI_ROW_TWO[i], {timeout: 125});
                         }
                         if (use !== 'off') {
+                            console.log('glow sample', use);
                             this.messaging.emitMidi('glow', MIDI_ROW_ONE[use], {timeout: 125});
                         }
                     }

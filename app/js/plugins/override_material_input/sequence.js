@@ -60,16 +60,6 @@
             this.canvas = canvas;
             this.context = canvas.getContext('2d');
 
-            let offsetX = .5 * (image.width - width);
-            let offsetY = .5 * (image.height - height);
-
-            this.clip = {
-                x: offsetX,
-                y: offsetY,
-                width: width,
-                height: height
-            };
-
             this.clip = new HC.Rectangle(0, 0, image.width, image.height).cropTo(width, height);
 
             let tex = new THREE.CanvasTexture(canvas);

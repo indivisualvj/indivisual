@@ -187,7 +187,6 @@ HC.DisplayController = HC.DisplayController || {};
 
         settings = {
             display_visible: false,
-            display_keepbounds: true,
             display_1: 1,
             display_2: 2,
             display_3: 3,
@@ -204,7 +203,6 @@ HC.DisplayController = HC.DisplayController || {};
 
         styles = {
             display_visible: ['quarter', 'clear'],
-            display_keepbounds: ['quarter'],
             display_1: ['eight'],
             display_2: ['eight'],
             display_3: ['eight'],
@@ -221,7 +219,6 @@ HC.DisplayController = HC.DisplayController || {};
 
         parents = {
             display_visible: '',
-            display_keepbounds: '',
             display_1: '',
             display_2: '',
             display_3: '',

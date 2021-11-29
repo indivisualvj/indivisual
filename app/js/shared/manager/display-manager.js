@@ -281,14 +281,14 @@
         /**
          *
          * @param i
-         * @param mode
+         * @param refresh
          */
-        updateDisplay(i, mode) {
+        updateDisplay(i, refresh) {
             let display = this.getDisplay(i);
             if (display) {
                 display.update(this.width, this.height, this.config.DisplaySettings);
 
-                if (!mode) {
+                if (!refresh) {
                     this.animation.sourceManager.updateSource(display);
                     this.enableCliptastic(display, false);
                     display.updateMask();
@@ -296,17 +296,11 @@
                     this.enableMaptastic(display, true);
 
                 } else {
-                    switch (mode) {
-                        case 'mask':
-                        case 'mapping':
-                            display.loadMask();
-                            this.refreshCliptastic();
-                            this.enableMaptastic(display, true);
-                            break;
-                    }
+                    display.loadMask();
+                    this.refreshCliptastic();
+                    this.enableMaptastic(display, true);
                 }
             }
-
             this.updateDisplayMap();
         }
 

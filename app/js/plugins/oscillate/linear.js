@@ -4,7 +4,7 @@
         static index = 60;
 
         apply(key, speed) {
-            speed = speed || this.layer.getCurrentSpeed();
+            speed = speed || this.layer.currentSpeed();
             return this.layer.getOscillatePlugin('lininout').apply(key, speed, .5);
         }
     }

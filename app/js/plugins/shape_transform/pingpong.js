@@ -11,7 +11,7 @@
             this.explode = Math.max(0, this.explode - this.animation.diff);
 
             if (this.isExplosion()) {
-                this.explode = .5 * this.layer.getCurrentSpeed().duration;
+                this.explode = .5 * this.layer.currentSpeed().duration;
             }
 
             let vertices = shape.geometry.getAttribute('position');
@@ -42,7 +42,7 @@
         }
 
         isExplosion() {
-            return !this.settings.shape_sync && (this.audioAnalyser.peak || this.layer.getCurrentSpeed().starting()) && randomBool(3);
+            return !this.settings.shape_sync && (this.audioAnalyser.peak || this.layer.currentSpeed().starting()) && randomBool(3);
         }
 
         clampSpeed(speed) {

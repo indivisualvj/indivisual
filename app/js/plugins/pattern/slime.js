@@ -26,12 +26,12 @@
             let layer = this.layer;
 
             let params = this.params(shape);
-            let speed = layer.getShapeSpeed(shape);
+            let speed = layer.shapeSpeed(shape);
 
             if (!params.tween && speed.prc === 0) {
 
                 if (this.isFirstShape(shape)) {
-                    this.next = layer.random3dPosition(0, 0);
+                    this.next = this.random3dPosition(0, 0);
                     this.direction = randomBool() ? -1 : 1;
                     this.angle += randomFloat(0, Math.PI / 2, 2) * this.direction;
                 }
@@ -48,7 +48,7 @@
                     let x = params.current.x + Math.sin(params.current.angle) * params.current.radius;
                     let y = params.current.y + Math.cos(params.current.angle) * params.current.radius;
 
-                    inst.layer.positionIn2dSpace(shape, x, y, 0);
+                    inst.this.positionIn2dSpace(shape, x, y, 0);
 
                     let pos = shape.position();
                     if (pos.x > layer.resolution().x) {

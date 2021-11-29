@@ -65,7 +65,7 @@
             y = y * maxY;
             z = z * maxZ;
 
-            layer.positionIn3dSpace(shape, x, y, z);
+            this.positionIn3dSpace(shape, x, y, z);
         }
     }
 }

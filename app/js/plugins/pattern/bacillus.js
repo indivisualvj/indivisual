@@ -6,7 +6,7 @@
         apply(shape, move) {
             let layer = this.layer;
 
-            let speed = layer.getShapeSpeed(shape);
+            let speed = layer.shapeSpeed(shape);
             let params = this.params(shape);
 
             let prcp = layer.resolution().x / 600;
@@ -19,7 +19,7 @@
             if (!params.velocity) {
                 params.velocity = new THREE.Vector3(avx, avy, avz);
 
-                shape.position().copy(layer.random2dPosition(0), layer.shapeSize(1));
+                shape.position().copy(this.random2dPosition(0), layer.shapeSize(1));
             }
 
             let mpc =this.animation.diffPrc * 0.3;

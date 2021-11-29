@@ -251,7 +251,7 @@
          * @param name
          * @returns {HC.ShapeDelayPlugin}
          */
-        getShapeDelayPlugin(name) {
+        shapeDelayPlugin(name) {
             return this.getPlugin('shape_delay', name);
         };
 

@@ -4,7 +4,7 @@
 
         apply(shape) {
             let layer = this.layer;
-            let speed = layer.getShapeSpeed(shape);
+            let speed = layer.shapeSpeed(shape);
 
             let params = this.params(shape);
             let s = 0.01;
@@ -37,7 +37,7 @@
                 // grow
             } else {
 
-                let speed = layer.getShapeSpeed(shape);
+                let speed = layer.shapeSpeed(shape);
                 let jump = 1 / speed.duration * this.animation.diffPrc;
 
                 params.active += jump * 60 * this.settings.sizing_scale;

@@ -30,7 +30,7 @@
             let y = point.y * radius * py;
             let z = point.z * radius * pz;
 
-            layer.positionIn3dSpace(shape, x, y, z);
+            this.positionIn3dSpace(shape, x, y, z);
         }
 
         getDistributionOnSphere(n) {
@@ -140,7 +140,7 @@
 
             }
 
-            let speed = layer.getShapeSpeed(shape);
+            let speed = layer.shapeSpeed(shape);
             if (speed.progress < 1) { //
                 params.velocity *= -1;
 

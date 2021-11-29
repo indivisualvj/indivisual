@@ -47,7 +47,7 @@
                         z = 0;
                         break;
                 }
-                layer.positionIn3dSpace(shape, x, y, z);
+                this.positionIn3dSpace(shape, x, y, z);
 
             } else {
 
@@ -74,7 +74,7 @@
                 let y = (shapesPerDimension - 1) / -2 * stepy + position.y * stepy;
                 let z = (shapesPerDimension - 1) / -2 * stepz + position.z * stepz;
 
-                layer.positionIn3dSpace(shape, x, y, z);
+                this.positionIn3dSpace(shape, x, y, z);
             }
         }
 

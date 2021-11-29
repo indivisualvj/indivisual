@@ -5,7 +5,7 @@
 
         apply(key) {
             let layer = this.layer;
-            let speed = layer.getCurrentSpeed();
+            let speed = layer.currentSpeed();
             let prc = (speed.prc - 0.5);
             return this.activate(key, Math.pow(prc, 2) * 4);
         }
@@ -19,7 +19,7 @@
         apply(key) {
             let layer = this.layer;
             let pa = this.params(key);
-            let speed = layer.getCurrentSpeed();
+            let speed = layer.currentSpeed();
 
             // more xing than bounce example
             // let progress = speed.prc - .5;

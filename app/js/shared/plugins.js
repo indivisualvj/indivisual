@@ -131,8 +131,8 @@ HC.Shape.prototype.initPlugins = function () {
 
         tweenShape(shape, from, to) {
 
-            let speed = this.layer.getShapeSpeed(shape);
-            let delay = this.layer.getShapeDelay(shape);
+            let speed = this.layer.shapeSpeed(shape);
+            let delay = this.layer.shapeDelay(shape);
 
             let duration = speed.duration;
             let dly = delay.delay;

@@ -613,7 +613,7 @@
         /**
          * OscillatePlugin workaround...
          */
-        getCurrentSpeed() {
+        currentSpeed() {
             return this.beatKeeper.getSpeed('half');
         }
     }

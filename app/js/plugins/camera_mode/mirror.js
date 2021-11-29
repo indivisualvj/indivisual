@@ -5,7 +5,7 @@
 
         apply(peak) {
 
-            let speed = this.layer.getCurrentSpeed();
+            let speed = this.layer.currentSpeed();
             if ((peak && this.audioAnalyser.peak && randomBool()) || (!peak && speed.prc === 0)) {
                 this.mirror.x = randomBool() ? -1 : 1;
                 this.mirror.y = randomBool() ? -1 : 1;

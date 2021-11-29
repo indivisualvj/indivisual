@@ -117,13 +117,13 @@
             let params = this.params(shape);
             if (this.switcher) {
                 if (shape.index % 2 === 1) {
-                    let rp = layer.getShapeSpeed(shape);
+                    let rp = layer.shapeSpeed(shape);
                     params.delay = rp.duration;
                     rp.duration = 0;
                 }
             } else {
                 if (shape.index % 2 === 0) {
-                    let rp = layer.getShapeSpeed(shape);
+                    let rp = layer.shapeSpeed(shape);
                     params.delay = rp.duration;
                     rp.duration = 0;
                 }

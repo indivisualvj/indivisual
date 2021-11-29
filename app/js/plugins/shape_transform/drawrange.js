@@ -3,7 +3,7 @@
         static name = 'drawrange progress';
 
         apply(shape) {
-            let speed = this.layer.getCurrentSpeed();
+            let speed = this.layer.currentSpeed();
             let p = shape.geometry.attributes.position;
             let l = p.count * p.itemSize;
             let v = this.settings.shape_transform_volume;
@@ -39,7 +39,7 @@
         static name = 'drawrange random';
 
         apply(shape) {
-            if (this.layer.getCurrentSpeed().prc === 0 || (this.audioAnalyser.peak && randomBool(3))) {
+            if (this.layer.currentSpeed().prc === 0 || (this.audioAnalyser.peak && randomBool(3))) {
                 let p = shape.geometry.attributes.position;
                 let l = p.count * p.itemSize;
                 let a = randomInt(0, l/2);

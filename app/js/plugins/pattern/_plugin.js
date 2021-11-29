@@ -60,6 +60,55 @@ HC.plugins.pattern = HC.plugins.pattern || {};
             return new THREE.Vector3(this.patternCenterX(), this.patternCenterY() * (invertY ? -1 : 1), this.patternCenterZ());
         }
 
+        /**
+         *
+         * @param shape
+         * @param x
+         * @param y
+         * @param z
+         */
+        positionIn3dSpace(shape, x, y, z) {
+            let cp = new THREE.Vector3(x, y, z);
+            let plugin = this.getPatternRotationPlugin();
+            plugin.positionIn3dSpace(shape, cp);
+        }
+
+        /**
+         *
+         * @param shape
+         * @param x
+         * @param y
+         * @param z
+         */
+        positionIn2dSpace(shape, x, y, z) {
+            let cp = new THREE.Vector3(x, y, z);
+            cp.add(this.getPatternPlugin().patternCenterVector(true));
+            shape.position().copy(cp);
+        }
+
+
+        /**
+         *
+         * @param depthMultiplier
+         * @param reduce
+         * @returns {Vector3}
+         */
+        random3dPosition(depthMultiplier, reduce) {
+            return new THREE.Vector3(
+                randomInt(0, this.resolution('half').x * this.settings.pattern_paddingx - (reduce || 0), true),
+                randomInt(0, this.resolution('half').y * this.settings.pattern_paddingy - (reduce || 0), true),
+                randomInt(0, this.cameraDefaultDistance(depthMultiplier || 0) * this.settings.pattern_paddingz, true)
+            );
+        }
+
+        /**
+         *
+         * @param shape
+         * @param extend
+         * @param depthMultiplier
+         * @param velocity
+         * @returns {Vector3}
+         */
         boundsCheck(shape, extend, depthMultiplier, velocity) {
 
             let direction = new THREE.Vector3(0, 0, 0);

@@ -5,7 +5,7 @@
 
         apply(shape) {
             let layer = this.layer;
-            this.params(shape).speed = layer.getCurrentSpeed();
+            this.params(shape).speed = layer.currentSpeed();
         }
     }
 }

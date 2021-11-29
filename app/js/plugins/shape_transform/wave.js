@@ -15,7 +15,7 @@
             }
 
             let dir = this.settings.shape_transform_volume > 0 ? 1 : -1;
-            this.angle += dir * this.animation.getFrameDurationPercent(this.layer.getCurrentSpeed().duration, .005);
+            this.angle += dir * this.animation.getFrameDurationPercent(this.layer.currentSpeed().duration, .005);
 
             let vertices = shape.geometry.getAttribute('position');
             let vbackup = this.vertices;

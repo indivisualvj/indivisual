@@ -76,7 +76,7 @@
                     nu = this.nextShape(index, true);
 
                     let speed = this.getShapeRhythmPlugin();
-                    let delay = this.getShapeDelayPlugin();
+                    let delay = this.shapeDelayPlugin();
                     let direction = this.getRotationDirectionPlugin();
                     speed.params(nu, speed.params(shape));
                     delay.params(nu, delay.params(shape));

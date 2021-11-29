@@ -80,7 +80,7 @@
                 return;
             }
 
-            let speed = layer.getShapeSpeed(shape);
+            let speed = layer.shapeSpeed(shape);
             let prc = speed.prc;
 
             if (!shuffle && prc === 0) {
@@ -233,7 +233,7 @@
                 return;
             }
 
-            let speed = layer.getShapeSpeed(shape);
+            let speed = layer.shapeSpeed(shape);
             let prc = speed.prc;
 
             if (prc === 0) {
@@ -368,7 +368,7 @@
                 return;
             }
 
-            let speed = layer.getShapeSpeed(shape);
+            let speed = layer.shapeSpeed(shape);
             let prc = speed.prc;
 
             if (prc === 0) {

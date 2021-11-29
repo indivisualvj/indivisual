@@ -11,7 +11,7 @@
         apply(color) {
             let layer = this.layer;
 
-            let speed = layer.getCurrentSpeed();
+            let speed = layer.currentSpeed();
             if (this.backflash) {
                 let hsl = this.backflash;
 

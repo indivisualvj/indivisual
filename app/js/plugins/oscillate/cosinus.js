@@ -5,7 +5,7 @@
 
         apply(key) {
             let layer = this.layer;
-            let speed = layer.getCurrentSpeed();
+            let speed = layer.currentSpeed();
             return this.activate(key, HC.Osci.cosinus(speed.prc));
         }
     }
@@ -17,7 +17,7 @@
 
         apply(key) {
             let layer = this.layer;
-            let speed = layer.getCurrentSpeed();
+            let speed = layer.currentSpeed();
             return this.activate(key, HC.Osci.cosInOut(speed.prc));
         }
     }
@@ -29,7 +29,7 @@
 
         apply(key) {
             let layer = this.layer;
-            let speed = layer.getCurrentSpeed();
+            let speed = layer.currentSpeed();
             return this.activate(key, HC.Osci.cosInOut(speed.prc, .5));
         }
     }

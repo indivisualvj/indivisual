@@ -190,7 +190,7 @@
             if (this.nextLayer) {
                 if (this.currentLayer !== this.nextLayer) {
                     if (!force && this.config.ControlSettings.shuffle_mode !== 'off') {
-                        let speed = this.nextLayer.getCurrentSpeed();
+                        let speed = this.nextLayer.currentSpeed();
                         if (!speed.starting()) {
                             if (!this._isForceAnimate(this.nextLayer)) {
                                 console.log('HC.Renderer.switchLayer', 'fail', 'speed in progress')

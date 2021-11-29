@@ -67,7 +67,7 @@
 
             y += py + params.panmoy;
 
-            layer.positionIn3dSpace(shape, x, y, z);
+            layer.getPatternPlugin().positionIn3dSpace(shape, x, y, z);
         }
     }
 }

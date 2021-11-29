@@ -3,7 +3,7 @@
         apply(shape) {
             let layer = this.layer;
 
-            let speed = layer.getShapeSpeed(shape);
+            let speed = layer.shapeSpeed(shape);
             let color = shape.color;
             let v = 50 + 25 * (HC.Osci.sinInOut(speed.prc));
 

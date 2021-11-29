@@ -26,7 +26,7 @@
             let y = sin * r * py;
             let z = 0;
 
-            layer.positionIn3dSpace(shape, x, -y, z);
+            this.positionIn3dSpace(shape, x, -y, z);
         }
     }
 }

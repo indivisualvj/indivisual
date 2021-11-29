@@ -33,7 +33,7 @@
                 hex = HC.hslToHex(hsl);
             }
             return hex;
-        };
+        }
 
         getShape(index) {
             if (index in this.shapes) {
@@ -41,7 +41,7 @@
             }
 
             return null;
-        };
+        }
 
         /**
          *
@@ -54,7 +54,7 @@
                 this._shapeSizePixels = this.resolution().x / this._shapeSize;
             }
             return this._shapeSizePixels * (multiplier || 1);
-        };
+        }
 
         /**
          *
@@ -62,7 +62,7 @@
          */
         shapeCount() {
             return this.settings.pattern_shapes;
-        };
+        }
 
         /**
          *
@@ -71,15 +71,34 @@
         addShape(child) {
             child.parent = this;
             this._shapes.add(child.sceneObject());
-        };
+        }
 
         /**
          *
          * @returns {*}
          */
-        getRandomShape() {
-            return this.getShape(randomInt(0, this.shapes.length - 1));
-        };
+        randomShape() {
+            return this.getShape(randomInt(0, this.shapeCount() - 1));
+        }
+
+
+        /**
+         *
+         * @param shape
+         * @returns {*}
+         */
+        shapeSpeed(shape) {
+            return this.getShapeRhythmPlugin().params(shape);
+        }
+
+        /**
+         *
+         * @param shape
+         * @returns {*}
+         */
+        shapeDelay(shape) {
+            return this.shapeDelayPlugin().params(shape);
+        }
 
     }
 }

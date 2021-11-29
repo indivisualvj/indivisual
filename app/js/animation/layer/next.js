@@ -110,7 +110,7 @@
          */
         nextShapeDelay(shape) {
 
-            let delay = this.getShapeDelayPlugin();
+            let delay = this.shapeDelayPlugin();
             this.doPlugin(delay, shape);
 
         };

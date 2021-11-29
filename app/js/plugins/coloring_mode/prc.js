@@ -5,7 +5,7 @@
         apply(shape, grow, step, times) {
             let layer = this.layer;
             let color = shape.color;
-            let speed = layer.getShapeSpeed(shape);
+            let speed = layer.shapeSpeed(shape);
 
             if (step && times) {
                 let prc = round(1 / times, 1);

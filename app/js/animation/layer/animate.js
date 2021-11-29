@@ -75,7 +75,7 @@
         _animateShape(shape) {
 
             let duration = this.getShapeRhythmPlugin();
-            let delay = this.getShapeDelayPlugin();
+            let delay = this.shapeDelayPlugin();
 
             // wait until delay is over
             if (!delay.finished(shape)) {

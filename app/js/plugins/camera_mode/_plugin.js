@@ -10,9 +10,21 @@ HC.plugins.camera_mode = HC.plugins.camera_mode || {};
 
         before() {
             let layer = this.layer;
-            layer.centerCamera();
+            this.centerCamera();
             layer.updateCameraFov();
         }
+
+
+        /**
+         *
+         */
+        centerCamera() {
+            let cam = this.layer.getCamera();
+            cam.position.x = 0;
+            cam.position.y = 0;
+            cam.position.z = this.cameraDefaultDistance();
+        }
+
 
         after() {
             let layer = this.layer;

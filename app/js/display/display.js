@@ -141,11 +141,6 @@
         render(fallback) {
             let ctx = this.ctx;
             let bounds = this._clipBounds(false);
-            let clip = bounds;
-
-            if (this.clip) {
-                clip = this.clip;
-            }
 
             let image = this._source ? this._source.current(fallback) : fallback;
             let smearing = this.smear ? 1 : Math.max(this.config.DisplaySettings.smearing, this.smearing);
@@ -160,17 +155,12 @@
 
                 ctx.globalAlpha = Math.max(0.02, 1.0 - smearing) * this.config.DisplaySettings.transparency;
                 ctx.fillStyle = this.config.DisplaySettings.background;
-                ctx.fillRect(
-                    bounds.x, bounds.y, bounds.width, bounds.height
-                );
+                ctx.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
             }
 
             if (image) {
                 ctx.globalAlpha = br;
-                ctx.drawImage(image,
-                    clip.x, clip.y, clip.width, clip.height,
-                    bounds.x, bounds.y, bounds.width, bounds.height
-                );
+                ctx.drawImage(image, bounds.x, bounds.y, bounds.width, bounds.height);
                 this._dirty = true;
             }
 
@@ -303,7 +293,7 @@
             let canvas = this.canvas;
             let prefix = canvas.id + '_mask';
 
-            let sh = false;
+            let sh;
 
             switch (this.config.DisplaySettings[prefix + '_shape']) {
 
@@ -362,7 +352,6 @@
 
             } else {
                 this.canvas.style.webkitClipPath = '';
-                this.canvas.width = this.canvas.width;
                 this._points = this.points();
             }
             this.mask = sh;

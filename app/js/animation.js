@@ -24,34 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!reconnect) {
             config.loadConfig((config) => {
                 config.initControlSets();
-                animation.config = config;
-                animation.audioManager = new HC.AudioManager();
-                animation.audioAnalyser = new HC.AudioAnalyser(animation);
-                animation.beatKeeper = new HC.BeatKeeper(() => {return animation.now;}, config);
-                animation.settingsManager = new HC.LayeredControlSetsManager(config.AnimationValues);
-
-                let renderer = new HC.Renderer(animation, {
-                    layers: new Array(config.ControlValues.layers)
-                });
-                animation.renderer = renderer;
-                renderer.initLayers(false);
-
-                let displayManager = new HC.DisplayManager(animation, {
-                    display: new Array(config.DisplayValues.display.length)
-                });
-                displayManager.resize(animation.getResolution());
-                animation.displayManager = displayManager;
-
-                animation.sourceManager = new HC.SourceManager(animation, {
-                    config: config,
-                    sample: new Array(config.SourceValues.sample.length)
-                });
-
-                if (IS_ANIMATION) {
-                    new HC.Animation.KeyboardListener().init(animation);
-                    new HC.Animation.EventListener().init();
-                    animation.initSuperGau();
-                }
+                animation.init(config);
                 animation.loadSession();
             });
         }
@@ -100,6 +73,41 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (IS_ANIMATION) {
                     console.log(ex);
                 }
+            }
+        }
+
+        /**
+         *
+         * @param {HC.Config}config
+         */
+        init(config) {
+            this.config = config;
+            this.audioManager = new HC.AudioManager();
+            this.audioAnalyser = new HC.AudioAnalyser(this);
+            this.beatKeeper = new HC.BeatKeeper(() => {return this.now;}, config);
+            this.settingsManager = new HC.LayeredControlSetsManager(config.AnimationValues);
+
+            let renderer = new HC.Renderer(this, {
+                layers: new Array(config.ControlValues.layers)
+            });
+            this.renderer = renderer;
+            renderer.initLayers(false);
+
+            let displayManager = new HC.DisplayManager(this, {
+                display: new Array(config.DisplayValues.display.length)
+            });
+            displayManager.resize(this.getResolution());
+            this.displayManager = displayManager;
+
+            this.sourceManager = new HC.SourceManager(this, {
+                config: config,
+                sample: new Array(config.SourceValues.sample.length)
+            });
+
+            if (IS_ANIMATION) {
+                new HC.Animation.KeyboardListener().init(this);
+                new HC.Animation.EventListener().init();
+                this.initSuperGau();
             }
         }
 

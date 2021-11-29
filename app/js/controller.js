@@ -29,9 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             config.loadConfig(function (config) {
                 let sets = config.initControlSets();
-                controller.config = config;
-                controller.settingsManager = new HC.LayeredControlSetsManager(controller.config.AnimationValues);
-                controller.init(sets);
+                controller.init(config, sets);
 
                 onResize();
             });
@@ -112,10 +110,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
+         * @param {HC.Config}config
          * @param sets
          */
-        init(sets) {
+        init(config, sets) {
+            this.config = config;
 
+            this.settingsManager = new HC.LayeredControlSetsManager(config.AnimationValues);
             this.monitor = new HC.Monitor();
             this.monitor.activate(false);
             this.midi = new HC.Midi(this);
@@ -183,10 +184,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
             this.openTreeByPath('controls');
 
+            this.midi.init();
             this.loadSession();
             this.presetMan.reload();
             this.initEvents();
-            this.midi.init();
         }
 
         /**
@@ -201,6 +202,10 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         loadSession() {
+            let syncing = true;
+            this.midi.loading(() => {
+                return syncing;
+            })
             this.messaging.sync((session) => {
                 if ('controls' in session) {
                     HC.log('controls', 'synced');
@@ -229,6 +234,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.updateData();
                 }
 
+                syncing = false;
                 this.updateControl('layer', this.config.ControlSettings.layer, true, false, false);
 
                 this._checkDisplayVisibility();
@@ -788,7 +794,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         pushSources() {
             this._bypassMonitor(new Promise((resolve, reject) => {
-                this.messaging.emitSources(this.config.SourceSettingsManager.prepareFlat(), true, true, false);
+                this.messaging.emitSources(this.config.SourceSettingsManager.prepareFlat(), true, true, false, resolve);
             }));
         }
 
@@ -827,10 +833,15 @@ document.addEventListener('DOMContentLoaded', function () {
          * @private
          */
         _bypassMonitor(promise) {
+            let _done = false;
+            this.midi.loading(() => {
+                return _done;
+            });
             let monitorStatus = this.config.ControlSettings.monitor;
             this.updateControl('monitor', false, false, true, false);
             promise.finally(() => {
                 this.updateControl('monitor', monitorStatus, false, true, false);
+                _done = true;
             });
         }
 
@@ -896,6 +907,10 @@ document.addEventListener('DOMContentLoaded', function () {
          * reset all of all settings
          */
         fullReset() {
+            let _done = false;
+            this.midi.loading(() => {
+                return _done;
+            });
             let session = this.config.ControlSettings.session;
             assetman.disposeAll();
             this.presetMan.reload();
@@ -920,6 +935,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             this.syncLayers().finally(() => {
                 this._checkDisplayVisibility();
+                _done = true;
             });
         }
 

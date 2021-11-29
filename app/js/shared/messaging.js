@@ -324,8 +324,9 @@
          * @param display
          * @param forward
          * @param force
+         * @param callback
          */
-        emitSources(data, display, forward, force) {
+        emitSources(data, display, forward, force, callback) {
             if (data) {
                 let config = {
                     action: 'sources',
@@ -335,7 +336,7 @@
                     force: force
                 };
 
-                this._emit(config);
+                this._emit(config, callback);
             }
         }
 

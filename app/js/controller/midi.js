@@ -550,30 +550,31 @@
                 let key = this._dataId(dat);
                 let pressed = this.midi_pressed[key];
                 let glowing = this.midi_glow[key];
-
+                let delay = conf && conf.delay ? conf.delay : 0;
+                let timeout = conf && conf.timeout ? delay + conf.timeout : 0;
                 if (!pressed && !glowing) {
                     //let outputs = this.midi.outputs.values();
                     let noteon = [dat[0], dat[1], 126];
 
-                    if (conf && conf.delay) { // start glowing after delay
+                    if (delay) { // start glowing after delay
                         this.midi_timeouts[key] = setTimeout(() => {
                             this._send(noteon);
-                        }, conf.delay);
+                        }, delay);
 
                     } else { // start glowing now
                         this._send(noteon);
                     }
 
-                    if (conf && conf.timeout) { // stop glowing after timeout
+                    if (timeout) { // stop glowing after timeout
                         this.midi_timeouts[key] = setTimeout(() => {
                             this._off([dat[0], dat[1]], true);
                             if (conf.times) {
                                 conf.times--;
                                 this.midi_timeouts[key] = setTimeout(() => {
                                     this._glow(dat, conf)
-                                }, conf.timeout);
+                                }, timeout);
                             }
-                        }, conf.timeout);
+                        }, timeout);
 
                     } else { // block
                         clearTimeout(this.midi_timeouts[key]);
@@ -628,6 +629,39 @@
          */
         off(id) {
             this._off(id);
+        }
+
+        loading(_status) {
+            let rowOne = MIDI_ROW_ONE;
+            let rowTwo = MIDI_ROW_TWO;
+            let rol = Object.keys(rowOne).length;
+            let rtl = Object.keys(rowTwo).length;
+
+            let timeout = SKIP_TEN_FRAMES*2;
+            let delay = SKIP_FIVE_FRAMES;
+
+            let _circle = () => {
+                let counter = 0;
+                for (let i = 0; i < rol; i++) {
+                    this.glow(rowOne[i], {
+                        delay: (counter++)*delay,
+                        timeout: timeout
+                    });
+                }
+                for (let i = rtl-1; i >= 0; i--) {
+                    this.glow(rowTwo[i], {
+                        delay: (counter++)*delay,
+                        timeout: timeout
+                    });
+                }
+
+                if (!_status()) {
+                    HC.TimeoutManager.add('loading', (rtl + rol)*delay , () => {
+                        _circle();
+                    });
+                }
+            }
+            _circle();
         }
     }
 }

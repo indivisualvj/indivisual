@@ -381,15 +381,15 @@
         }
 
         _renderToScreen() {
-            if (this.beatKeeper.getSpeed('sixteen').starting()) {
-                this.__renderToScreen = false;
-
-            } else if (this.config.DisplaySettings.fps < 46) {
-                this.__renderToScreen = false;
-
-            } else {
-                this.__renderToScreen = !this.__renderToScreen;
-            }
+            // if (this.beatKeeper.getSpeed('sixteen').starting()) {
+            //     this.__renderToScreen = true;
+            //
+            // } else if (this.config.DisplaySettings.fps < 46) {
+                this.__renderToScreen = true;
+            //
+            // } else {
+            //     this.__renderToScreen = !this.__renderToScreen;
+            // }
 
             return this.__renderToScreen;
         }

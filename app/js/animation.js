@@ -105,8 +105,8 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             if (IS_ANIMATION) {
-                new HC.Animation.KeyboardListener().init(this);
-                new HC.Animation.EventListener().init();
+                this.initEvents();
+                this.initResize();
                 this.initSuperGau();
             }
         }
@@ -463,11 +463,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.monitor = new HC.Monitor();
                     this.monitor.init(this.config, () => {
                         this.displayManager.updateDisplay(0);
-                        new HC.Animation.ResizeListener().init(this.displayManager);
+                        this.initResize();
                         this.updatePlay();
                     });
-                } else {
-                    new HC.Animation.ResizeListener().init(this.displayManager);
                 }
             };
 

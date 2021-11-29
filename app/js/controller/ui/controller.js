@@ -213,7 +213,7 @@
         incrementValue(factor) {
             let v = this.getValue();
             let s = this.getStep();
-            let d = getDigits(s);
+            let d = s.digits();
 
             if (isFloat(s)) {
                 s *= Math.ceil(factor||1);
@@ -233,7 +233,7 @@
         decrementValue(factor) {
             let v = this.getValue();
             let s = this.getStep();
-            let d = getDigits(s);
+            let d = s.digits();
 
             if (isFloat(s)) {
                 s *= Math.ceil(factor||1);

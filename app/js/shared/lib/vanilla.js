@@ -62,3 +62,8 @@ String.prototype.toIntArray = function (mapFunction) {
 
     return [];
 };
+
+Number.prototype.digits = function () {
+    let digits = this.toString();
+    return digits.substr(digits.indexOf('.')+1).length;
+}

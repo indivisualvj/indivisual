@@ -63,60 +63,6 @@ HC.Controller.prototype.addGuifyControllers = function (controlSets, uiClass, pa
 
 /**
  *
- */
-HC.Controller.prototype.addConfigurationSettings = function () {
-
-    for (let k in this.config) {
-        if (k.endsWith('Types')) {
-            let object = this.config[k];
-            let folder = this.configurationSettingsGui.addFolder(k);
-
-            for (let p in object) {
-
-                let v = object[p];
-
-                if (isArray(v) && v.length > 1) {
-                    let opts = {
-                        type: 'interval',
-                        label: p,
-                        property: p,
-                        object: object,
-                        min: v[0]*2,
-                        max: v[1]*2
-                    };
-                    folder.addController(opts);
-                }
-            }
-        }
-    }
-};
-
-HC.Controller.prototype.initStatusBar = function () {
-
-    let ctrls = {
-        play: {
-            dataClass: 'quarter'
-        },
-        beat: {
-
-        },
-        sync: {
-
-        },
-        audio: {
-
-        },
-        layer: {
-
-        },
-        layers: {
-
-        }
-    };
-};
-
-/**
- *
  * @param onChange
  */
 HC.Controller.prototype.addPassesFolder = function (onChange) {

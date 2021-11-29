@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.animationSettingsGui = new HC.Guify('AnimationSettings', 'animation');
             this.sequenceSettingsGui = new HC.Guify('SequenceSettings', 'sequence');
             this.presetMan = new HC.PresetManager('Presets', 'presets', this);
-            // this.configurationSettingsGui = new HC.Guify('ConfigurationSettings');
+            this.configurationSettingsGui = new HC.Guify('ConfigurationSettings', 'config');
 
             this.guis = [
                 this.controlSettingsGui,
@@ -176,9 +176,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.sequenceSettingsGui
             );
 
-            // this.addConfigurationSettings();
-            this.initStatusBar(); // todo: refactor statusbar
-            // this.initThumbs();
+            this.initSamples();
 
             this.addAnimationControllers(this.settingsManager.getGlobalProperties());
             this.addPassesFolder(HC.ShaderPassUi.onPasses);

@@ -91,8 +91,3 @@ function sinAlpha(a, b) {
 
     return sina;
 }
-
-function getDigits(v) {
-    let digits = v.toString();
-    return digits.substr(digits.indexOf('.')+1).length;
-}

@@ -5,7 +5,6 @@
 {
     HC.Layer = class Layer extends HC.Layer {
 
-
         /**
          *
          * @param index

@@ -1,3 +1,7 @@
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+
 {
     HC.Layer = class Layer extends HC.Layer {
 

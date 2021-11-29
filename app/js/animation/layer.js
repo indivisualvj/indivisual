@@ -1,6 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+
 {
     HC.Layer = class Layer {
 
@@ -13,11 +14,6 @@
          * @type {HC.Config}
          */
         config;
-
-        /**
-         * @type boolean
-         */
-        ready = false;
 
         /**
          * @type {HC.BeatKeeper}
@@ -35,7 +31,10 @@
          */
         preset = false;
 
-        settings = false;
+        /**
+         *
+         */
+        settings;
 
         /**
          * @type {Object.<string, HC.ControlSet>}
@@ -84,7 +83,6 @@
          * @type {boolean}
          */
         fogNeedsReset = false;
-
 
         /**
          *

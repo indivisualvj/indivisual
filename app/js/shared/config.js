@@ -361,7 +361,7 @@ HC.Statics = HC.Statics || {};
          * @private
          */
         _loadShufflePlugins(settings) {
-            this._loadPlugins(settings, 'shuffle_mode', HC.shuffle_mode);
+            this._loadPlugins(settings, 'shuffle_mode', HC.Renderer.shuffle_mode);
         }
 
         /**

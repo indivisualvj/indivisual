@@ -1,412 +1,417 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-/**
- *
- * @param shape
- */
-HC.Layer.prototype.doPattern = function (shape) {
-    let mover = this.getPatternMoverPlugin();
-    if (mover && mover.before) {
-        mover.before(shape);
-    }
 
-    let pattern = this.getPatternPlugin();
-    this.doPlugin(pattern, shape);
+{
+    HC.Layer = class Layer extends HC.Layer {
 
-    if (mover) {
-        mover.apply(shape);
-    }
+        /**
+         *
+         * @param shape
+         */
+        doPattern(shape) {
+            let mover = this.getPatternMoverPlugin();
+            if (mover && mover.before) {
+                mover.before(shape);
+            }
 
-    this.doOverlay(shape);
-    this.doPairing(shape);
+            let pattern = this.getPatternPlugin();
+            this.doPlugin(pattern, shape);
 
-};
+            if (mover) {
+                mover.apply(shape);
+            }
 
-/**
- *
- * @param shape
- * @param v
- * @returns {number}
- */
-HC.Layer.prototype.doRotationOffset = function (shape) {
+            this.doOverlay(shape);
+            this.doPairing(shape);
 
-    let plugin = this.getRotationOffsetModePlugin();
-    this.doPlugin(plugin, shape);
+        }
 
-};
+        /**
+         *
+         * @param shape
+         * @param v
+         * @returns {number}
+         */
+        doRotationOffset(shape) {
 
-/**
- *
- * @param shape
- */
-HC.Layer.prototype.doPairing = function (shape) {
-    let plugin = this.getShapePairingPlugin();
-    this.doPlugin(plugin, shape);
-};
+            let plugin = this.getRotationOffsetModePlugin();
+            this.doPlugin(plugin, shape);
 
-/**
- *
- * @param shape
- */
-HC.Layer.prototype.doOverlay = function (shape) {
+        }
 
-    if (!shape.isVisible()) {
-        return;
-    }
+        /**
+         *
+         * @param shape
+         */
+        doPairing(shape) {
+            let plugin = this.getShapePairingPlugin();
+            this.doPlugin(plugin, shape);
+        }
 
-    if (this.settings.pattern_overlay !== 'off'
-        && this.settings.pattern_overlay_volume !== 0
-    ) {
+        /**
+         *
+         * @param shape
+         */
+        doOverlay(shape) {
 
-        let nu;
-        let index = shape.index;
+            if (!shape.isVisible()) {
+                return;
+            }
 
-        if (this.shapeCache
-            && this.shapeCache.length
-            && this.settings.pattern_overlay in this.shapeCache[index]
-        ) {
-            nu = this.shapeCache[index][this.settings.pattern_overlay];
+            if (this.settings.pattern_overlay !== 'off'
+                && this.settings.pattern_overlay_volume !== 0
+            ) {
 
-        } else {
-            nu = this.nextShape(index, true);
+                let nu;
+                let index = shape.index;
 
-            let speed = this.getShapeRhythmPlugin();
-            let delay = this.getShapeDelayPlugin();
-            let direction = this.getRotationDirectionPlugin();
-            speed.params(nu, speed.params(shape));
-            delay.params(nu, delay.params(shape));
-            direction.params(nu, direction.params(shape));
+                if (this.shapeCache
+                    && this.shapeCache.length
+                    && this.settings.pattern_overlay in this.shapeCache[index]
+                ) {
+                    nu = this.shapeCache[index][this.settings.pattern_overlay];
 
-            if (this.shapeCache && this.shapeCache.length) {
-                this.shapeCache[index][this.settings.pattern_overlay] = nu;
+                } else {
+                    nu = this.nextShape(index, true);
+
+                    let speed = this.getShapeRhythmPlugin();
+                    let delay = this.getShapeDelayPlugin();
+                    let direction = this.getRotationDirectionPlugin();
+                    speed.params(nu, speed.params(shape));
+                    delay.params(nu, delay.params(shape));
+                    direction.params(nu, direction.params(shape));
+
+                    if (this.shapeCache && this.shapeCache.length) {
+                        this.shapeCache[index][this.settings.pattern_overlay] = nu;
+                    }
+                }
+
+                let plugin = this.getPatternOverlayPlugin();
+                this.doPlugin(plugin, nu);
+
+                if (this.settings.pattern_overlay_volume !== 1) {
+                    let fade = ((2 * Math.abs(this.settings.pattern_overlay_volume)) - 1);
+
+                    let dx = (nu.x() - shape.x()) / 2;
+                    let dy = (nu.y() - shape.y()) / 2;
+                    let dz = (nu.z() - shape.z()) / 2;
+
+                    dx += dx * fade;
+                    dy += dy * fade;
+                    dz += dz * fade;
+
+                    shape.move(dx, dy, dz);
+
+                } else {
+                    shape.x(nu.x());
+                    shape.y(nu.y());
+                    shape.z(nu.z());
+                }
             }
         }
 
-        let plugin = this.getPatternOverlayPlugin();
-        this.doPlugin(plugin, nu);
+        /**
+         *
+         * @returns {*}
+         */
+        doOverrideMaterialInput() {
 
-        if (this.settings.pattern_overlay_volume !== 1) {
-            let fade = ((2 * Math.abs(this.settings.pattern_overlay_volume)) - 1);
+            let seq = this.config.SourceSettings.override_material_input;
+            let map = this.settings.material_input;
+            let color = false;
 
-            let dx = (nu.x() - shape.x()) / 2;
-            let dy = (nu.y() - shape.y()) / 2;
-            let dz = (nu.z() - shape.z()) / 2;
+            if (seq === 'webcam') {
+                let plugin = this.getOverrideMaterialInputPlugin('webcam');
+                color = this.doPlugin(plugin, map);
 
-            dx += dx * fade;
-            dy += dy * fade;
-            dz += dz * fade;
+            } else if (seq !== 'none') {
+                let plugin = this.getOverrideMaterialInputPlugin('sequence');
+                color = this.doPlugin(plugin, parseInt(seq));
 
-            shape.move(dx, dy, dz);
+            } else {
+                let plugin = this.getOverrideMaterialInputPlugin('texture');
+                color = this.doPlugin(plugin, map);
+            }
 
-        } else {
-            shape.x(nu.x());
-            shape.y(nu.y());
-            shape.z(nu.z());
+            return color;
         }
-    }
-};
-
-/**
- *
- * @returns {*}
- */
-HC.Layer.prototype.doOverrideMaterialInput = function () {
-
-    let seq = this.config.SourceSettings.override_material_input;
-    let map = this.settings.material_input;
-    let color = false;
-
-    if (seq === 'webcam') {
-        let plugin = this.getOverrideMaterialInputPlugin('webcam');
-        color = this.doPlugin(plugin, map);
-
-    } else if (seq !== 'none') {
-        let plugin = this.getOverrideMaterialInputPlugin('sequence');
-        color = this.doPlugin(plugin, parseInt(seq));
-
-    } else {
-        let plugin = this.getOverrideMaterialInputPlugin('texture');
-        color = this.doPlugin(plugin, map);
-    }
-
-    return color;
-};
 
 
-/**
- *
- * @returns {*}
- */
-HC.Layer.prototype.doOverrideBackgroundMode = function () {
+        /**
+         *
+         * @returns {*}
+         */
+        doOverrideBackgroundMode() {
 
-    let seq = this.config.SourceSettings.override_background_mode;
+            let seq = this.config.SourceSettings.override_background_mode;
 
-    if (seq === 'webcam') {
-        let plugin = this.getOverrideBackgroundModePlugin('webcam');
-        this.doPlugin(plugin);
+            if (seq === 'webcam') {
+                let plugin = this.getOverrideBackgroundModePlugin('webcam');
+                this.doPlugin(plugin);
 
-    } else if (seq !== 'none') {
-        let plugin = this.getOverrideBackgroundModePlugin('sequence');
-        plugin.setCropping(false);
-        this.doPlugin(plugin, parseInt(seq));
+            } else if (seq !== 'none') {
+                let plugin = this.getOverrideBackgroundModePlugin('sequence');
+                plugin.setCropping(false);
+                this.doPlugin(plugin, parseInt(seq));
 
-    } else {
-    }
-};
-
-/**
- *
- * @param shape
- */
-HC.Layer.prototype.doColoring = function (shape) {
-
-    let proceed = true;
-    let filter = this.getFilterModePlugin();
-    if (filter && filter.before) {
-        proceed = filter.before(shape);
-    }
-
-    if (proceed !== false) {
-        let coloring = this.getColoringModePlugin();
-        proceed = this.doPlugin(coloring, shape);
-
-        if (proceed !== false && filter && filter.apply) {
-            proceed = filter.apply(shape);
-            if (proceed !== false && filter.after) {
-                filter.after(shape);
+            } else {
             }
         }
-    }
-    let color = shape.color;
-    let multiplier = this.settings.material_blending !== 'NoBlending' ? color.o : ((this.settings.coloring_opacity > .99) ? 1 : color.o);
-    shape.opacity(multiplier * this.settings.coloring_opacity);
 
-    return proceed;
-};
+        /**
+         *
+         * @param shape
+         */
+        doColoring(shape) {
 
-/**
- *
- * @param shape
- */
-HC.Layer.prototype.doMaterial = function (shape) {
+            let proceed = true;
+            let filter = this.getFilterModePlugin();
+            if (filter && filter.before) {
+                proceed = filter.before(shape);
+            }
 
-    let style = this.getMaterialStylePlugin();
-    this.doPlugin(style, shape);
+            if (proceed !== false) {
+                let coloring = this.getColoringModePlugin();
+                proceed = this.doPlugin(coloring, shape);
 
-    shape.strokeWidth(this.settings.material_volume);
+                if (proceed !== false && filter && filter.apply) {
+                    proceed = filter.apply(shape);
+                    if (proceed !== false && filter.after) {
+                        filter.after(shape);
+                    }
+                }
+            }
+            let color = shape.color;
+            let multiplier = this.settings.material_blending !== 'NoBlending' ? color.o : ((this.settings.coloring_opacity > .99) ? 1 : color.o);
+            shape.opacity(multiplier * this.settings.coloring_opacity);
 
-    try {
-        let map = this.getOverrideMaterialInput();
-        shape.updateMaterial(map, this.settings.coloring_emissive);
-    } catch (e) {
-        console.error(e);
-    }
-};
+            return proceed;
+        }
 
-/**
- *
- */
-HC.Layer.prototype.doBackground = function () {
-    let plugin = this.getBackgroundModePlugin();
-    this.doPlugin(plugin);
-};
+        /**
+         *
+         * @param shape
+         */
+        doMaterial(shape) {
 
-/**
- *
- * @param materialColor
- */
-HC.Layer.prototype.doLighting = function (materialColor) {
-    if (materialColor || this.settings.lighting_color === '') {
-        this._lightColor(materialColor || this.shapeColor(false));
-    }
-    this._updateLighting();
-};
+            let style = this.getMaterialStylePlugin();
+            this.doPlugin(style, shape);
 
-/**
- *
- * @param shape
- */
-HC.Layer.prototype.doLockingShapeRotation = function (shape) {
+            shape.strokeWidth(this.settings.material_volume);
 
-    let roto = this.shape.rotation();
-    let plugin = this.getPatternRotationPlugin();
-    if (plugin.shared && plugin.shared.locking.disabled) {
-        roto = plugin.getShapeEuler(shape);
-    }
+            try {
+                let map = this.getOverrideMaterialInput();
+                shape.updateMaterial(map, this.settings.coloring_emissive);
+            } catch (e) {
+                console.error(e);
+            }
+        }
 
-    let eu = {x: 0, y: 0, z: 0};
+        /**
+         *
+         */
+        doBackground() {
+            let plugin = this.getBackgroundModePlugin();
+            this.doPlugin(plugin);
+        }
 
-    if (this.settings.locking_shapex) {
-        eu.x = roto.x * this.settings.locking_shapex_multiplier;
-        shape.rotation().x = eu.x;
-    }
+        /**
+         *
+         * @param materialColor
+         */
+        doLighting(materialColor) {
+            if (materialColor || this.settings.lighting_color === '') {
+                this._lightColor(materialColor || this.shapeColor(false));
+            }
+            this._updateLighting();
+        }
 
-    if (this.settings.locking_shapey) {
-        eu.y = roto.y * this.settings.locking_shapey_multiplier;
-        shape.rotation().y = eu.y;
-    }
+        /**
+         *
+         * @param shape
+         */
+        doLockingShapeRotation(shape) {
 
-    if (this.settings.locking_shapez) {
-        eu.z = roto.z * this.settings.locking_shapez_multiplier;
-        shape.rotation().z = eu.z;
-    }
+            let roto = this.shape.rotation();
+            let plugin = this.getPatternRotationPlugin();
+            if (plugin.shared && plugin.shared.locking.disabled) {
+                roto = plugin.getShapeEuler(shape);
+            }
 
-};
+            let eu = {x: 0, y: 0, z: 0};
 
-/**
- *
- * @param shape
- */
-HC.Layer.prototype.doShapeLookat = function (shape) {
-    let plugin = this.getShapeLookatPlugin();
-    this.doPlugin(plugin, shape);
-};
+            if (this.settings.locking_shapex) {
+                eu.x = roto.x * this.settings.locking_shapex_multiplier;
+                shape.rotation().x = eu.x;
+            }
 
-/**
- *
- * @param shape
- */
-HC.Layer.prototype.doSizing = function (shape) {
+            if (this.settings.locking_shapey) {
+                eu.y = roto.y * this.settings.locking_shapey_multiplier;
+                shape.rotation().y = eu.y;
+            }
 
-    let sizing = this.getSizingModePlugin();
-    this.doPlugin(sizing, shape);
+            if (this.settings.locking_shapez) {
+                eu.z = roto.z * this.settings.locking_shapez_multiplier;
+                shape.rotation().z = eu.z;
+            }
 
-    let flip = this.getSizingFlipPlugin();
-    this.doPlugin(flip, shape);
+        }
 
-};
+        /**
+         *
+         * @param shape
+         */
+        doShapeLookat(shape) {
+            let plugin = this.getShapeLookatPlugin();
+            this.doPlugin(plugin, shape);
+        }
 
-/**
- *
- * @param enable
- */
-HC.Layer.prototype.doOscillate = function (enable) {
-    let oscillator = HC.LayeredControlSetsManager.getAllOsciProperties();
-    for (let i = 0; i < oscillator.length; i++) {
-        let key = oscillator[i];
-        let okey = key + '_oscillate';
-        if (this.settings[okey] !== undefined) {
-            let osci = this.settings[okey];
-            if (osci in HC.plugins.oscillate) {
-                let plugin = this.getOscillatePlugin(osci);
-                if (plugin && plugin.apply) {
-                    if (enable) {
-                        plugin.store(key);
-                        plugin.apply(key);
+        /**
+         *
+         * @param shape
+         */
+        doSizing(shape) {
 
-                    } else {
-                        plugin.restore(key);
+            let sizing = this.getSizingModePlugin();
+            this.doPlugin(sizing, shape);
+
+            let flip = this.getSizingFlipPlugin();
+            this.doPlugin(flip, shape);
+
+        }
+
+        /**
+         *
+         * @param enable
+         */
+        doOscillate(enable) {
+            let oscillator = HC.LayeredControlSetsManager.getAllOsciProperties();
+            for (let i = 0; i < oscillator.length; i++) {
+                let key = oscillator[i];
+                let okey = key + '_oscillate';
+                if (this.settings[okey] !== undefined) {
+                    let osci = this.settings[okey];
+                    if (osci in HC.plugins.oscillate) {
+                        let plugin = this.getOscillatePlugin(osci);
+                        if (plugin && plugin.apply) {
+                            if (enable) {
+                                plugin.store(key);
+                                plugin.apply(key);
+
+                            } else {
+                                plugin.restore(key);
+                            }
+                        }
                     }
                 }
             }
         }
-    }
-};
 
-/**
- *
- * @param shape
- */
-HC.Layer.prototype.doShapeTransform = function (shape) {
+        /**
+         *
+         * @param shape
+         */
+        doShapeTransform(shape) {
 
-    let plugin = this.getShapeTransformPlugin();
-    this.doPlugin(plugin, shape);
-};
-
-/**
- *
- */
-HC.Layer.prototype.doShaders = function () {
-
-    let shaders = this.shaders();
-    if (shaders) {
-        let last;
-        for (let i = 0; i < shaders.length; i++) {
-            let plugin = shaders[i];
-            if (plugin.apply(false, false)) {
-                last = plugin;
-            }
-            plugin.pass.renderToScreen = false;
+            let plugin = this.getShapeTransformPlugin();
+            this.doPlugin(plugin, shape);
         }
 
-        if (last) {
-            this.three.composer.passes[0].renderToScreen = false;
-            last.pass.renderToScreen = true;
-        } else {
-            this.three.composer.passes[0].renderToScreen = true;
-        }
-    }
-};
+        /**
+         *
+         */
+        doShaders() {
 
-/**
- *
- * @param shape
- */
-HC.Layer.prototype.doOffsetMode = function (shape) {
+            let shaders = this.shaders();
+            if (shaders) {
+                let last;
+                for (let i = 0; i < shaders.length; i++) {
+                    let plugin = shaders[i];
+                    if (plugin.apply(false, false)) {
+                        last = plugin;
+                    }
+                    plugin.pass.renderToScreen = false;
+                }
 
-    let plugin = this.getOffsetModePlugin();
-    this.doPlugin(plugin, shape);
-};
-
-/**
- *
- * @param plugin
- * @param params
- * @returns {*}
- */
-HC.Layer.prototype.doPlugin = function (plugin, params) {
-
-    let result = true;
-    if (plugin && plugin.apply) {
-        if (plugin.before) {
-            if (params) {
-                result = plugin.before(params);
-            } else {
-                result = plugin.before();
+                if (last) {
+                    this.three.composer.passes[0].renderToScreen = false;
+                    last.pass.renderToScreen = true;
+                } else {
+                    this.three.composer.passes[0].renderToScreen = true;
+                }
             }
         }
 
-        if (result === false) {
-            return false;
-        }
-        if (params !== undefined) {
-            result = plugin.apply(params);
+        /**
+         *
+         * @param shape
+         */
+        doOffsetMode(shape) {
 
-        } else {
-            result = plugin.apply();
-        }
-
-        if (result === false) {
-            return false;
+            let plugin = this.getOffsetModePlugin();
+            this.doPlugin(plugin, shape);
         }
 
-        if (plugin.after) {
-            if (params) {
-                plugin.after(params);
+        /**
+         *
+         * @param plugin
+         * @param params
+         * @returns {*}
+         */
+        doPlugin(plugin, params) {
 
-            } else {
-                plugin.after();
+            let result = true;
+            if (plugin && plugin.apply) {
+                if (plugin.before) {
+                    if (params) {
+                        result = plugin.before(params);
+                    } else {
+                        result = plugin.before();
+                    }
+                }
+
+                if (result === false) {
+                    return false;
+                }
+                if (params !== undefined) {
+                    result = plugin.apply(params);
+
+                } else {
+                    result = plugin.apply();
+                }
+
+                if (result === false) {
+                    return false;
+                }
+
+                if (plugin.after) {
+                    if (params) {
+                        plugin.after(params);
+
+                    } else {
+                        plugin.after();
+                    }
+                }
             }
+
+            return result;
+        }
+
+        /**
+         *
+         */
+        doCameraMode() {
+            let plugin = this.getCameraModePlugin();
+            this.doPlugin(plugin);
+        }
+
+        /**
+         *
+         */
+        doPatternRotation() {
+            let plugin = this.getPatternRotationPlugin();
+            this.doPlugin(plugin);
         }
     }
-
-    return result;
-};
-
-/**
- *
- */
-HC.Layer.prototype.doCameraMode = function () {
-    let plugin = this.getCameraModePlugin();
-    this.doPlugin(plugin);
-};
-
-/**
- *
- */
-HC.Layer.prototype.doPatternRotation = function () {
-    let plugin = this.getPatternRotationPlugin();
-    this.doPlugin(plugin);
-};
-
+}

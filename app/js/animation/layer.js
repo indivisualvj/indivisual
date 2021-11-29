@@ -113,34 +113,34 @@
         /**
          *
          * @type {THREE.Group}
-         * @private
+         * @protected
          */
         _rotation;
 
         /**
          *
          * @type {Array.<HC.Shape>}
-         * @private
+         * @protected
          */
         _shapes;
 
         /**
          *
          * @type {THREE.Group}
-         * @private
+         * @protected
          */
         _lighting;
 
         /**
          *
          * @type {THREE.Group}
-         * @private
+         * @protected
          */
         _background;
 
         /**
          * @type {THREE.Texture}
-         * @private
+         * @protected
          */
         _hiddenBackgroundTexture;
 
@@ -199,7 +199,7 @@
 
         /**
          *
-         * @private
+         * @protected
          */
         _initRotator() {
             if (this._rotation) {
@@ -222,7 +222,7 @@
         /**
          *
          * @param resolution
-         * @private
+         * @protected
          */
         _initBoundaries(resolution) {
 
@@ -256,7 +256,7 @@
 
         /**
          *
-         * @private
+         * @protected
          */
         _fullReset() {
             this.needsReset = false;
@@ -274,7 +274,7 @@
         /**
          *
          * @param resolution
-         * @private
+         * @protected
          */
         _resetSizes(resolution) {
 
@@ -287,7 +287,7 @@
 
         /**
          *
-         * @private
+         * @protected
          */
         _resetShapes() {
 
@@ -322,7 +322,7 @@
 
         /**
          *
-         * @private
+         * @protected
          */
         _dispose() {
             let sc = this.three.scene;
@@ -356,7 +356,7 @@
 
         /**
          *
-         * @private
+         * @protected
          */
         _resetAnimation() {
             if (this.tween) {
@@ -368,7 +368,7 @@
         /**
          *
          * @returns {null|[]}
-         * @private
+         * @protected
          */
         _updateShaders() {
             let shaders = null;
@@ -419,7 +419,7 @@
         /**
          *
          * @returns {null|[]}
-         * @private
+         * @protected
          */
         _updateShaderPasses() {
             this.shadersNeedUpdate = false;
@@ -469,7 +469,7 @@
 
         /**
          *
-         * @private
+         * @protected
          */
         _initListeners() {
             let eventManager = HC.EventManager;

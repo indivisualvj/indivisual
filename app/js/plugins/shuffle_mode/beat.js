@@ -1,5 +1,5 @@
 {
-    HC.shuffle_mode.forward = class Plugin extends HC.ShuffleModePlugin {
+    HC.Renderer.shuffle_mode.forward = class Plugin extends HC.ShuffleModePlugin {
         static name = 'forward (beat)';
         static index = 5;
         beats = 0;
@@ -28,7 +28,7 @@
     }
 }
 {
-    HC.shuffle_mode.backward = class Plugin extends HC.shuffle_mode.forward {
+    HC.Renderer.shuffle_mode.backward = class Plugin extends HC.Renderer.shuffle_mode.forward {
         static name = 'backward (beat)';
         static index = 6;
 
@@ -43,7 +43,7 @@
     }
 }
 {
-    HC.shuffle_mode.random = class Plugin extends HC.shuffle_mode.forward {
+    HC.Renderer.shuffle_mode.random = class Plugin extends HC.Renderer.shuffle_mode.forward {
         static name = 'random (beat)';
         static index = 7;
 

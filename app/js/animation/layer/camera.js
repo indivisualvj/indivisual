@@ -1,59 +1,65 @@
-/**
- *
- * @returns {THREE.PerspectiveCamera}
- */
-HC.Layer.prototype.getCamera = function () {
-    return this.three.camera;
-};
+{
+    HC.Layer = class Layer extends HC.Layer {
 
-/**
- *
- */
-HC.Layer.prototype.centerCamera = function () {
-    let cam = this.getCamera();
-    cam.position.x = 0;
-    cam.position.y = 0;
-    cam.position.z = this.cameraDefaultDistance();
-};
+        /**
+         *
+         * @returns {THREE.PerspectiveCamera}
+         */
+        getCamera() {
+            return this.three.camera;
+        }
 
-/**
- *
- */
-HC.Layer.prototype.updateCameraFov = function () {
-    let cam = this.getCamera();
-    let sina = sinAlpha(this.resolution('half').y * 1.015, this.cameraDefaultDistance());
+        /**
+         *
+         */
+        centerCamera() {
+            let cam = this.getCamera();
+            cam.position.x = 0;
+            cam.position.y = 0;
+            cam.position.z = this.cameraDefaultDistance();
+        }
 
-    cam.fov = sina * this.config.DisplaySettings.fov;
-};
+        /**
+         *
+         */
+        updateCameraFov() {
+            let cam = this.getCamera();
+            let sina = sinAlpha(this.resolution('half').y * 1.015, this.cameraDefaultDistance());
 
-/**
- *
- * @param object
- * @returns {*}
- */
-HC.Layer.prototype.cameraIntersectsObject = function (object) {
-    let camera = this.getCamera();
-    let frustum = new THREE.Frustum();
-    let cameraViewProjectionMatrix = new THREE.Matrix4();
+            cam.fov = sina * this.config.DisplaySettings.fov;
+        }
 
-    // every time the camera or objects change position (or every frame)
+        /**
+         *
+         * @param object
+         * @returns {*}
+         */
+        cameraIntersectsObject(object) {
+            let camera = this.getCamera();
+            let frustum = new THREE.Frustum();
+            let cameraViewProjectionMatrix = new THREE.Matrix4();
 
-    camera.updateMatrixWorld(); // make sure the camera matrix is updated
-    camera.matrixWorldInverse.getInverse(camera.matrixWorld);
-    cameraViewProjectionMatrix.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse);
-    frustum.setFromMatrix(cameraViewProjectionMatrix);
+            // every time the camera or objects change position (or every frame)
 
-    // frustum is now ready to _check all the objects you need
+            camera.updateMatrixWorld(); // make sure the camera matrix is updated
+            camera.matrixWorldInverse.getInverse(camera.matrixWorld);
+            cameraViewProjectionMatrix.multiplyMatrices(camera.projectionMatrix, camera.matrixWorldInverse);
+            frustum.setFromMatrix(cameraViewProjectionMatrix);
 
-    return (frustum.intersectsObject(object));
-};
+            // frustum is now ready to _check all the objects you need
 
-/**
- *
- * @param multiplier
- * @returns {number}
- */
-HC.Layer.prototype.cameraDefaultDistance = function (multiplier) {
+            return (frustum.intersectsObject(object));
+        }
 
-    return this.resolution().length() * (multiplier || 1);
-};
+        /**
+         *
+         * @param multiplier
+         * @returns {number}
+         */
+        cameraDefaultDistance(multiplier) {
+
+            return this.resolution().length() * (multiplier || 1);
+        }
+
+    }
+}

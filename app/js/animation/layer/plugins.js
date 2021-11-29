@@ -367,7 +367,7 @@ HC.Layer.prototype.resetPlugins = function () {
 
 /**
  *
- * @private
+ * @protected
  */
 HC.Layer.prototype._reloadPlugins = function () {
 

@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+
 {
-    HC.Renderer = class Renderer {
+    class Renderer {
 
         /**
          *
@@ -394,7 +395,7 @@
             name = name || this.config.ControlSettings.shuffle_mode;
 
             if (!this.plugins[name]) {
-                this.plugins[name] = new HC.shuffle_mode[name](this, this.config.ControlSettings); // todo: rename to HC.Renderer.shuffle_mode
+                this.plugins[name] = new HC.Renderer.shuffle_mode[name](this, this.config.ControlSettings);
             }
 
             return this.plugins[name];
@@ -430,4 +431,7 @@
             });
         }
     }
+
+    HC.Renderer = Object.assign(Renderer, HC.Renderer);
+
 }

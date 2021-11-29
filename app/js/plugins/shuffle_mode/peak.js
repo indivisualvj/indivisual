@@ -1,5 +1,5 @@
 {
-    HC.shuffle_mode.forwardpeak = class Plugin extends HC.ShuffleModePlugin {
+    HC.Renderer.shuffle_mode.forwardpeak = class Plugin extends HC.ShuffleModePlugin {
         static name = 'forward (peak)';
         static index = 10;
         peaks = 0;
@@ -37,7 +37,7 @@
     }
 }
 {
-    HC.shuffle_mode.backwardpeak = class Plugin extends HC.shuffle_mode.forwardpeak {
+    HC.Renderer.shuffle_mode.backwardpeak = class Plugin extends HC.Renderer.shuffle_mode.forwardpeak {
         static name = 'backward (peak)';
         static index = 11;
 
@@ -52,7 +52,7 @@
     }
 }
 {
-    HC.shuffle_mode.randompeak = class Plugin extends HC.shuffle_mode.forwardpeak {
+    HC.Renderer.shuffle_mode.randompeak = class Plugin extends HC.Renderer.shuffle_mode.forwardpeak {
         static name = 'random (peak)';
         static index = 12;
 

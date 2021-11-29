@@ -1,12 +1,10 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+
 HC.Display.display_visibility = {};
+
 {
-    /**
-     *
-     * @type {HC.Display.BorderModePlugin}
-     */
     HC.Display.VisibilityModePlugin = class VisibilityModePlugin {
 
         static index = 99;

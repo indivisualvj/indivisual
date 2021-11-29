@@ -2,15 +2,9 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-
 HC.SourceController = HC.SourceController || {};
 
-
 {
-    /**
-     *
-     * @type {HC.SourceController.override}
-     */
     HC.SourceController.override = class source extends HC.ControlSet {
         static index = 10;
 
@@ -34,10 +28,6 @@ HC.SourceController = HC.SourceController || {};
 }
 
 {
-    /**
-     *
-     * @type {HC.SourceController.source}
-     */
     HC.SourceController.source = class source extends HC.ControlSet {
         static index = 20;
 
@@ -176,12 +166,8 @@ HC.SourceController = HC.SourceController || {};
 }
 
 {
-    /**
-     *
-     * @type {HC.SourceController.sequenceN}
-     */
     HC.SourceController.sequenceN = class sequenceN extends HC.IterableControlSet {
-        static index = 20;
+        static index = 40;
         prefix = 'sequence';
         folders = [];
         settings = {
@@ -339,12 +325,8 @@ HC.SourceController = HC.SourceController || {};
 }
 
 {
-    /**
-     *
-     * @type {HC.SourceController.sample}
-     */
     HC.SourceController.sample = class sample extends HC.ControlSet {
-        static index = 40;
+        static index = 20;
 
         settings = {
             sample0_enabled: false,

@@ -531,7 +531,7 @@
                                 console.log(id, name, setting, e);
                             }
                             if (sv !== null) {
-                                if (sv == v) {
+                                if (sv == v) { // keep it like this
                                     return [m, s];
                                 }
                             }

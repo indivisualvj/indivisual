@@ -79,7 +79,7 @@
             let layer = this.layer;
             let params = this.params(shape);
             let du = layer.getShapeDuration(shape) * 0.5;
-            let ox = Math.abs(layer.patternCenterX() - shape.x()) / layer.patternCenterX();
+            let ox = Math.abs(layer.getPatternPlugin().patternCenterX() - shape.x()) / layer.getPatternPlugin().patternCenterX();
             params.delay = du * ox;
         }
     }
@@ -93,7 +93,8 @@
             let layer = this.layer;
             let params = this.params(shape);
             let du = layer.getShapeDuration(shape) * 0.5;
-            let ox = Math.abs(layer.patternCenterX() - shape.x()) / layer.patternCenterX();
+            let plug = this.layer.getPatternPlugin();
+            let ox = Math.abs(plug.patternCenterX() - shape.x()) / plug.patternCenterX();
             params.delay = du - du * ox;
         }
     }

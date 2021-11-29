@@ -11,7 +11,7 @@
 
             if (this.isFirstShape(shape)) {
                 if (!this.mover) {
-                    this.mover = layer.patternCenterVector(true);
+                    this.mover = layer.getPatternPlugin().patternCenterVector(true);
                     pos = this.mover;
                 }
 

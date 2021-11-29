@@ -79,7 +79,7 @@
             ) {
                 layer.getPatternPlugin('sphere').apply(shape);
                 let sp = shape.position().clone();
-                let cv = layer.patternCenterVector(true);
+                let cv = this.patternCenterVector(true);
                 sp.sub(cv);
                 params.initial = sp;
                 shape.position().copy(cv);
@@ -131,7 +131,7 @@
             ) {
                 layer.getPatternPlugin('sphere').apply(shape);
                 let sp = shape.position().clone();
-                let cv = layer.patternCenterVector(true);
+                let cv = this.patternCenterVector(true);
                 sp.sub(cv);
                 params.initial = sp;
                 shape.position().copy(cv);

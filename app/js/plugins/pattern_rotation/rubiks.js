@@ -13,8 +13,7 @@
         apply() {
             if (!this.rubiks) {
                 let plugin = this.layer.getPatternPlugin('cube');
-                let spd = plugin.shapesPerDimension();
-                this.rubiks = spd;
+                this.rubiks = plugin.shapesPerDimension();
 
             }
 
@@ -29,7 +28,7 @@
         positionIn3dSpace(shape, cp) {
             let eu = this.getShapeEuler(shape);
             cp.applyEuler(eu);
-            cp.add(this.layer.patternCenterVector(true));
+            cp.add(this.layer.getPatternPlugin().patternCenterVector(true));
             shape.position().copy(cp);
         }
 

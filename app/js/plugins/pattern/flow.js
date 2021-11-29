@@ -17,7 +17,7 @@
             let matrix = layer.getPatternPlugin('matrix');
             let gridPosition = matrix.gridPosition(shape);
             let gap = layer.shapeSize(1) * this.settings.pattern_padding;
-            let ox = (layer.patternCenterX() * 2 - gap * matrix.columnCount(layer)) / 2 - layer.shapeSize(.5);
+            let ox = (this.patternCenterX() * 2 - gap * matrix.columnCount(layer)) / 2 - layer.shapeSize(.5);
             let x = 0, y = 0, z = 0;
 
             if (!params.velocity.y) {

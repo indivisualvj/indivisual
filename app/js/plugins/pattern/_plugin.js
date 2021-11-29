@@ -27,6 +27,39 @@ HC.plugins.pattern = HC.plugins.pattern || {};
             return this.shared;
         }
 
+        /**
+         *
+         * @returns {number}
+         */
+        patternCenterX() {
+            return this.layer.resolution('half').x + this.layer.cameraDefaultDistance(.25) * this.settings.pattern_centerx;
+        }
+
+        /**
+         *
+         * @returns {number}
+         */
+        patternCenterY() {
+            return this.layer.resolution('half').y + this.layer.cameraDefaultDistance(.25) * this.settings.pattern_centery;
+        }
+
+        /**
+         *
+         * @returns {number}
+         */
+        patternCenterZ() {
+            return this.layer.cameraDefaultDistance(.25) * this.settings.pattern_centerz;
+        }
+
+        /**
+         *
+         * @param invertY
+         * @returns {Vector3}
+         */
+        patternCenterVector(invertY) {
+            return new THREE.Vector3(this.patternCenterX(), this.patternCenterY() * (invertY ? -1 : 1), this.patternCenterZ());
+        }
+
         boundsCheck(shape, extend, depthMultiplier, velocity) {
 
             let direction = new THREE.Vector3(0, 0, 0);
@@ -50,7 +83,7 @@ HC.plugins.pattern = HC.plugins.pattern || {};
                 return height * camera.aspect;
             };
 
-            // bounds _check
+            // bounds check
 
             let world = new THREE.Vector3();
             shape.getWorldPosition(world);

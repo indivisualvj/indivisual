@@ -5,8 +5,9 @@
             let s = 1;
             let x = shape.x();
             let y = shape.y();
-            let mx = layer.patternCenterX();
-            let my = layer.patternCenterY();
+            let plug = this.layer.getPatternPlugin();
+            let mx = plug.patternCenterX();
+            let my = plug.patternCenterY();
             let dx = mx - x;
             let dy = my - y;
             let dt = Math.sqrt(mx * mx + my * my);

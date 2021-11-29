@@ -20,7 +20,7 @@ HC.plugins.pattern_rotation = HC.plugins.pattern_rotation || {};
 
         positionIn3dSpace(shape, cp) {
             cp.applyEuler(this.euler);
-            cp.add(this.layer.patternCenterVector(true));
+            cp.add(this.layer.getPatternPlugin().patternCenterVector(true));
             shape.position().copy(cp);
         }
     }

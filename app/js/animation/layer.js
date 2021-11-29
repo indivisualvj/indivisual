@@ -119,7 +119,7 @@
 
         /**
          *
-         * @type {Array.<HC.Shape>}
+         * @type {THREE.Group}
          * @protected
          */
         _shapes;

@@ -39,7 +39,7 @@
             }
 
             let pos = shape.position().clone();
-            pos.sub(layer.patternCenterVector());
+            pos.sub(layer.getPatternPlugin().patternCenterVector());
             let x = pos.x;
             let y = pos.y;
             let z = pos.z;

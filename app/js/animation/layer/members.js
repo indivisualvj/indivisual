@@ -61,7 +61,7 @@
          */
         positionIn2dSpace(shape, x, y, z) {
             let cp = new THREE.Vector3(x, y, z);
-            cp.add(this.patternCenterVector(true));
+            cp.add(this.getPatternPlugin().patternCenterVector(true));
             shape.position().copy(cp);
         };
 

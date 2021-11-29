@@ -119,7 +119,6 @@ document.addEventListener('DOMContentLoaded', function () {
             this.monitor = new HC.Monitor();
             this.monitor.activate(false);
             this.midi = new HC.Midi(this);
-            this.midi.init();
 
             this.controlSettingsGui = new HC.Guify('ControlSettings', 'control');
             this.displaySettingsGui = new HC.Guify('DisplaySettings', 'display');
@@ -178,8 +177,8 @@ document.addEventListener('DOMContentLoaded', function () {
             );
 
             // this.addConfigurationSettings();
-            this.initStatusBar();
-            this.initThumbs();
+            this.initStatusBar(); // todo: refactor statusbar
+            // this.initThumbs();
 
             this.addAnimationControllers(this.settingsManager.getGlobalProperties());
             this.addPassesFolder(HC.ShaderPassUi.onPasses);
@@ -189,6 +188,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.loadSession();
             this.presetMan.reload();
             this.initEvents();
+            this.midi.init();
         }
 
         /**

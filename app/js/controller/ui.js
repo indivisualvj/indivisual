@@ -554,9 +554,9 @@ HC.Controller.prototype.updateUiPasses = function () {
         }
 
         for (let k in shaders) {
-            let key = controlSet.getShaderPassKey(k); // fixme
-            let name = controlSet.getShaderName(k); // fixme
-            let sh = controlSet.getShader(k); // fixme
+            let key = controlSet.getShaderPassKey(k);
+            let name = controlSet.getShaderName(k);
+            let sh = controlSet.getShader(k);
             let ctrl = new HC.ShaderPassUi(name, this.config);
             ctrl.init(sh);
             this.addShaderPassController(key, ctrl, passFld);
@@ -668,11 +668,10 @@ HC.Controller.prototype.loadClip = function (index) {
     });
 };
 
-// todo: thumb stuff should go to SourceSettingsUi also
 /**
  *
  */
-HC.Controller.prototype.initThumbs = function () {
+HC.Controller.prototype.initSamples = function () {
 
     this.sequenceSettingsGui.setOpen(true);
 

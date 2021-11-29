@@ -6,20 +6,33 @@
 
         static timeouts = [];
 
-        static add(key, timeout, fn) {
-            this.remove(key);
+        /**
+         *
+         * @param key
+         * @param timeout
+         * @param fn
+         * @param onError
+         */
+        static add(key, timeout, fn, onError) {
+            this.stop(key);
             let _fn = () => {
                 this.delete(key);
                 requestAnimationFrame(() => {
-                    // console.log('executing', key);
-                    fn();
+                    try {
+                        fn();
+                    } catch (e) {
+                        if (onError) {
+                            onError(e);
+                        } else {
+                            throw e;
+                        }
+                    }
                 });
             };
             if (timeout) {
-                // console.log('setting', key);
                 this.timeouts[key] = setTimeout(_fn, timeout);
             } else {
-                fn();
+                _fn();
             }
         }
 
@@ -35,7 +48,7 @@
             return this.timeouts.hasOwnProperty(key);
         }
 
-        static remove(key) {
+        static stop(key) {
             if (this.has(key)) {
                 // console.log('clearing', key);
                 clearTimeout(this.get(key));
@@ -51,7 +64,7 @@
 
         static removeAll() {
             for (const key in this.timeouts) {
-                this.remove(key);
+                this.stop(key);
             }
         }
 

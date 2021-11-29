@@ -70,7 +70,7 @@
 
             y += py + params.panmoy;
 
-            this.positionIn3dSpace(shape, x, y, z);
+            this.layer.getPatternPlugin().positionIn3dSpace(shape, x, y, z);
 
         }
     }

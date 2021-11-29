@@ -22,7 +22,7 @@ HC.plugins.camera_mode = HC.plugins.camera_mode || {};
             let cam = this.layer.getCamera();
             cam.position.x = 0;
             cam.position.y = 0;
-            cam.position.z = this.cameraDefaultDistance();
+            cam.position.z = this.layer.cameraDefaultDistance();
         }
 
 

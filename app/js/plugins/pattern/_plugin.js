@@ -69,7 +69,7 @@ HC.plugins.pattern = HC.plugins.pattern || {};
          */
         positionIn3dSpace(shape, x, y, z) {
             let cp = new THREE.Vector3(x, y, z);
-            let plugin = this.getPatternRotationPlugin();
+            let plugin = this.layer.getPatternRotationPlugin();
             plugin.positionIn3dSpace(shape, cp);
         }
 
@@ -95,9 +95,9 @@ HC.plugins.pattern = HC.plugins.pattern || {};
          */
         random3dPosition(depthMultiplier, reduce) {
             return new THREE.Vector3(
-                randomInt(0, this.resolution('half').x * this.settings.pattern_paddingx - (reduce || 0), true),
-                randomInt(0, this.resolution('half').y * this.settings.pattern_paddingy - (reduce || 0), true),
-                randomInt(0, this.cameraDefaultDistance(depthMultiplier || 0) * this.settings.pattern_paddingz, true)
+                randomInt(0, this.layer.resolution('half').x * this.settings.pattern_paddingx - (reduce || 0), true),
+                randomInt(0, this.layer.resolution('half').y * this.settings.pattern_paddingy - (reduce || 0), true),
+                randomInt(0, this.layer.cameraDefaultDistance(depthMultiplier || 0) * this.settings.pattern_paddingz, true)
             );
         }
 

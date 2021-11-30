@@ -6,27 +6,9 @@
     class Renderer { // is asigned to HC later to not overwrite shuffle_mode plugins
 
         /**
-         *
-         * @type {string}
-         */
-        type = 'animation';
-
-        /**
          * @type {Array}
          */
         layers;
-
-        /**
-         *
-         * @type {number}
-         */
-        flipx = 1;
-
-        /**
-         *
-         * @type {number}
-         */
-        flipy = 1;
 
         /**
          *

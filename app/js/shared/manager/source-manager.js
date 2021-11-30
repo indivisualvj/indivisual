@@ -396,7 +396,7 @@
                         this.loadWorker.onmessage = null;
                         let blobs = ev.data.blobs;
                         sample.samples = [];
-
+// todo: come on the draw offscreen canvas part must be done in worker also hugh?
                         let loaded = 0;
                         for (let i = 0; i < blobs.length; i++) {
 
@@ -540,7 +540,7 @@
          *
          */
         render() {
-            HC.EventManager.fireEvent(EVENT_SOURCE_MANAGER_RENDER);
+            HC.EventManager.fireEvent(EVENT_SOURCE_MANAGER_RENDER, this);
         }
 
         /**

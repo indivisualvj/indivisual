@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', function () {
         /**
          * @type {HC.Guify}
          */
-        statusGui;
+        statusBar;
 
         /**
          * @type {HC.PresetManager}
@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.animationSettingsGui = new HC.Guify('AnimationSettings', 'animation');
             this.sequenceSettingsGui = new HC.Guify('SequenceSettings', 'sequence');
             this.presetMan = new HC.PresetManager('Presets', 'presets', this);
-            this.statusGui = new HC.GuifyStatus('StatusBar', 'status', true, config.DataStatus);
+            this.statusBar = new HC.StatusBar('StatusBar', 'status', true, config.DataStatus);
 
             this.guis = [
                 this.controlSettingsGui,

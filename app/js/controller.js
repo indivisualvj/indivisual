@@ -81,6 +81,11 @@ document.addEventListener('DOMContentLoaded', function () {
         sequenceSettingsGui;
 
         /**
+         * @type {HC.Guify}
+         */
+        statusGui;
+
+        /**
          * @type {HC.PresetManager}
          */
         presetMan;
@@ -127,7 +132,44 @@ document.addEventListener('DOMContentLoaded', function () {
             this.animationSettingsGui = new HC.Guify('AnimationSettings', 'animation');
             this.sequenceSettingsGui = new HC.Guify('SequenceSettings', 'sequence');
             this.presetMan = new HC.PresetManager('Presets', 'presets', this);
-            this.configurationSettingsGui = new HC.Guify('ConfigurationSettings', 'config');
+            this.statusGui = new HC.GuifyStatus('StatusBar', 'status', true, [
+                {
+                    label: 'fps',
+                    fps: 60,
+                    // dataClass: 'hex',
+                    cssClasses: ''
+                },
+                {
+                    label: 'rms',
+                    rms: 0,
+                    // dataClass: 'hex',
+                    cssClasses: ''
+                },
+                {
+                    label: 'bpm',
+                    bpm: 120,
+                    // dataClass: 'hex',
+                    cssClasses: ''
+                },
+                {
+                    label: 'beats',
+                    beats: 0,
+                    // dataClass: 'hex',
+                    cssClasses: ''
+                },
+                {
+                    label: 'duration',
+                    duration: 400,
+                    // dataClass: 'hex',
+                    cssClasses: ''
+                },
+                {
+                    label: 'offset',
+                    offset: 0,
+                    // dataClass: 'hex',
+                    cssClasses: 'clear'
+                }
+            ]);
 
             this.guis = [
                 this.controlSettingsGui,

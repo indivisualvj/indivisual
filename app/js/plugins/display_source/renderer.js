@@ -2,7 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    HC.SourceManager.display_source.live = class Plugin extends HC.SourceManager.DisplaySourcePlugin {
+    HC.SourceManager.display_source.renderer = class Plugin extends HC.SourceManager.DisplaySourcePlugin {
         static index = 1;
 
         /**

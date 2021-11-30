@@ -56,7 +56,7 @@ HC.SourceController = HC.SourceController || {};
         };
 
         values = {
-            display_source: 'live',
+            display_source: 'renderer',
             display_sequence: 0
         };
 

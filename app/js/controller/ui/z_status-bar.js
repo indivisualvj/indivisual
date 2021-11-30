@@ -3,7 +3,7 @@
  */
 {
     HC.StatusBar = class GuifyStatus extends HC.Guify {
-
+// todo: do this for samples
         config = {
             bpm: {
                 label: 'current bpm',

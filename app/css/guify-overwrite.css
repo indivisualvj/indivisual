@@ -52,6 +52,7 @@ input[type=checkbox].guify-checkbox_hxzak + label {
 #StatusBar div[data-class] > div:first-child {
     width: 60% !important;
 }
+
 #StatusBar div[data-class] > div:nth-child(2) {
     width: 35.5% !important;
 }

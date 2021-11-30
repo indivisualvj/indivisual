@@ -549,7 +549,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.presetMan.setSelected(value+1, true);
                 HC.log(item, value+1);
 
-                let config = { data: { DataStatus: {current_layer: value+1 } } };
+                let config = { data: { DataStatus: {selected_layer: value+1 } } };
                 this.updateData(config);
 
             } else if (item === 'reset') {

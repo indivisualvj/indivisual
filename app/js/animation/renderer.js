@@ -226,7 +226,7 @@
          * @private
          */
         _setLayer(index) {
-
+// todo: set layer event to set all necessary layers after loadpresets or reset etc. pp.
             for (let i in this.layers) {
                 i = parseInt(i);
                 let layer = this.layers[i];

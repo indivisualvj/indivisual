@@ -591,8 +591,8 @@ HC.Controller.prototype.updateThumbs = function () {
         let sampleKey = getSampleKey(i);
 
         let data = false;
-        if (sampleKey in this.config.DataSettings) {
-            data = this.config.DataSettings[sampleKey];
+        if (sampleKey in this.config.DataSamples) {
+            data = this.config.DataSamples[sampleKey];
         }
 
         this.thumbs[i].update(data);
@@ -608,8 +608,8 @@ HC.Controller.prototype.loadClip = function (index) {
 
     this.sourceManager.loadClip(smp,
     (clip) => {
-        let data = {data: {DataSettings: {}}};
-        data.data.DataSettings[smp.id] = clip;
+        let data = {data: {DataSamples: {}}};
+        data.data.DataSamples[smp.id] = clip;
         this.updateData(data);
     });
 };

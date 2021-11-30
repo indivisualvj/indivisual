@@ -132,44 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.animationSettingsGui = new HC.Guify('AnimationSettings', 'animation');
             this.sequenceSettingsGui = new HC.Guify('SequenceSettings', 'sequence');
             this.presetMan = new HC.PresetManager('Presets', 'presets', this);
-            this.statusGui = new HC.GuifyStatus('StatusBar', 'status', true, [
-                {
-                    label: 'fps',
-                    fps: 60,
-                    // dataClass: 'hex',
-                    cssClasses: ''
-                },
-                {
-                    label: 'rms',
-                    rms: 0,
-                    // dataClass: 'hex',
-                    cssClasses: ''
-                },
-                {
-                    label: 'bpm',
-                    bpm: 120,
-                    // dataClass: 'hex',
-                    cssClasses: ''
-                },
-                {
-                    label: 'beats',
-                    beats: 0,
-                    // dataClass: 'hex',
-                    cssClasses: ''
-                },
-                {
-                    label: 'duration',
-                    duration: 400,
-                    // dataClass: 'hex',
-                    cssClasses: ''
-                },
-                {
-                    label: 'offset',
-                    offset: 0,
-                    // dataClass: 'hex',
-                    cssClasses: 'clear'
-                }
-            ]);
+            this.statusGui = new HC.GuifyStatus('StatusBar', 'status', true, config.DataStatus);
 
             this.guis = [
                 this.controlSettingsGui,
@@ -541,10 +504,9 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         * todo: settingsManager
+         * todo: controlSet.clean()
          */
         cleanShaderPasses() {
-
             let controlSet = this.settingsManager.get(this.config.ControlSettings.layer, 'passes');
             let passes = controlSet.getShaderPasses();
 
@@ -587,14 +549,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.presetMan.setSelected(value+1, true);
                 HC.log(item, value+1);
 
-                let config = {
-                    action: 'attr',
-                    query: '#layer',
-                    key: 'data-mnemonic',
-                    value: value + 1
-                };
-
-                this.messaging.onAttr(config);
+                let config = { data: { DataStatus: {current_layer: value+1 } } };
+                this.updateData(config);
 
             } else if (item === 'reset') {
                 if (value && force) {
@@ -711,9 +667,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param data
          */
         updateData(data) {
-
-            if (data && data.data) {
-
+            if (data && this.config) {
                 for (let key in data.data) {
                     if (key in this.config) {
                         let sec = data.data[key];
@@ -722,13 +676,17 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     }
                 }
-                this.updateUi(this.sourceSettingsGui);
+                if (data.data.updateUi) {
+                    this.updateUi(this.sourceSettingsGui);
+                }
             }
 
-            HC.TimeoutManager.add('updateData', SKIP_TEN_FRAMES, () => {
-                this.updateSequenceUi();
-                this.updateThumbs();
-            });
+            if (!data || 'DataSamples' in data.data || 'SourceTypes' in data.data) {
+                HC.TimeoutManager.add('updateData', SKIP_TEN_FRAMES, () => {
+                    this.updateSequenceUi();
+                    this.updateThumbs();
+                });
+            }
         }
 
         /**
@@ -919,14 +877,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            let config = {
-                action: 'attr',
-                query: '#layers',
-                key: 'data-label',
-                value: preset.join('|')
-            };
-
-            this.messaging.onAttr(config);
+            this.config.DataStatus.changed_layers = preset.join('|');
         }
 
         /**
@@ -996,7 +947,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @returns {Promise}
          */
         resetLayers() {
-            let shuffleable = this.config.ControlSettings.shuffleable.toIntArray((it)=>{return parseInt(it)-1;});
+            let shuffleable = this.config.ControlSettings.shuffleable.toIntArray().map(x=>{return x-1;});
             this.settingsManager.reset(shuffleable);
             shuffleable = this.config.ControlSettings.shuffleable.toIntArray();
             this.presetMan.resetStatus(shuffleable);

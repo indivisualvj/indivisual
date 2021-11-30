@@ -209,8 +209,8 @@
                 messaging.emitAttr('[id="' + target.id + '"]', 'data-label', 'enabled');
                 messaging.emitMidi('off', MIDI_ROW_ONE[target.index]);
                 messaging.emitMidi('off', MIDI_SAMPLE_FEEDBACK);
-                let conf = {DataSettings: {}};
-                conf.DataSettings[target.id] = false;
+                let conf = {DataSamples: {}};
+                conf.DataSamples[target.id] = false;
                 messaging.emitData(target.id, conf);
             });
 

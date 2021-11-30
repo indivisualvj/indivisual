@@ -39,7 +39,7 @@ Number.prototype.toIntArray = function () {
     return [this];
 };
 
-String.prototype.toIntArray = function (mapFunction) {
+String.prototype.toIntArray = function () {
     if (this.length) {
         let arr = [];
 
@@ -55,7 +55,7 @@ String.prototype.toIntArray = function (mapFunction) {
             arr = this.split(',');
         }
 
-        return arr.map(mapFunction || function (it) {
+        return arr.map(it => {
             return parseInt(it);
         });
     }

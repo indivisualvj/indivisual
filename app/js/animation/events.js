@@ -5,7 +5,7 @@
 HC.Animation.prototype.initEvents = function () {
 
     HC.Hotkey.add('space', (e) => {
-        animation.updateControl('play', !animation.config.ControlSettings.play, true, true, false);
+        this.updateControl('play', !this.config.ControlSettings.play, true, true, false);
     });
 
     document.onselectstart = function () {

@@ -1,4 +1,6 @@
-
+.guify-bar_hrfSP {
+    background: #232323 !important;
+}
 .guify-container_be6yU[data-mnemonic]:before {
     top: 3px;
     left: 49px;
@@ -25,14 +27,45 @@
     width: calc(100%) !important;
 }
 
-.guify-panel-container_39NJay
-{
+.guify-panel_39NJay {
+    padding: 2px !important;
+}
+
+.guify-panel-container_39NJay {
     position: relative !important;
+}
+
+.guify-folder-contents_1FExAJ[data-border] {
+    padding-top: 8px;
+    background: #1a1a1a !important;
 }
 
 input[type=checkbox].guify-checkbox_hxzak + label {
     position: absolute;
     right: 2px;
+}
+
+#StatusBar div[data-class] > [aria-label] {
+    text-align: right;
+}
+
+#StatusBar div[data-class] > div:first-child {
+    width: 60% !important;
+}
+#StatusBar div[data-class] > div:nth-child(2) {
+    width: 35.5% !important;
+}
+
+#StatusBar div[data-color] {
+    padding-left: 4px;
+}
+
+#StatusBar div[data-class="full"] > div:first-child {
+    width: 24.5% !important;
+}
+
+#StatusBar div[data-class="full"] > div:nth-child(2) {
+    width: 73% !important;
 }
 
 .guify-component-container {
@@ -72,6 +105,6 @@ input[type=checkbox].guify-checkbox_hxzak + label {
 }
 
 .guify-component-container[role="button"][data-mnemonic]:before {
-    top: 7px;
-    left: -8px;
+    top: 0px;
+    left: 16px;
 }

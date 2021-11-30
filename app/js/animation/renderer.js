@@ -3,7 +3,7 @@
  */
 
 {
-    class Renderer {
+    class Renderer { // is asigned to HC later to not overwrite shuffle_mode plugins
 
         /**
          *
@@ -89,7 +89,7 @@
             this.beatKeeper = animation.beatKeeper;
             this.layers = config.layers;
 
-            this.initThreeJs();
+            this._initThreeJs();
             this.initEvents();
         }
 
@@ -101,13 +101,14 @@
             HC.EventManager.removeEvent(EVENT_RENDERER_BEFORE_RENDER);
             this.resize();
             this.initLayers(keepSettings);
-            this.setLayer(0);
+            this._setLayer(0);
         }
 
         /**
          *
+         * @private
          */
-        initThreeJs() {
+        _initThreeJs() {
             if (!this.three.renderer) {
                 let canvas = new OffscreenCanvas(1, 1);
 
@@ -115,14 +116,13 @@
                 this.three.renderer = new THREE.WebGLRenderer(conf);
                 this.three.renderer.shadowMap.enabled = true;
                 this.three.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                this.three.renderer.view = canvas;
 
                 canvas.id = 'threeWebGL';
                 canvas.style = {width: 1, height: 1};
                 canvas.addEventListener(EVENT_WEBGL_CONTEXT_LOST, () => {
                     HC.EventManager.fireEvent(EVENT_WEBGL_CONTEXT_LOST);
                 });
-
-                this.three.renderer.view = canvas;
 
                 this.three.scene = new THREE.Scene();
                 this.three.perspective0 = new THREE.PerspectiveCamera(50, 1, 0.1, 500000);
@@ -184,8 +184,9 @@
         /**
          *
          * @param force
+         * @private
          */
-        switchLayer(force) {
+        _switchLayer(force) {
 
             if (this.nextLayer) {
                 if (this.currentLayer !== this.nextLayer) {
@@ -207,13 +208,13 @@
                     if (!this._isForceAnimate(this.nextLayer)) {
                         this.nextLayer.resume();
                     }
-                    this.setLayer(this.nextLayer.index);
+                    this._setLayer(this.nextLayer.index);
 
                     this.currentLayer = this.nextLayer;
                     this.nextLayer = false;
 
                 } else {
-                    this.setLayer(this.nextLayer.index);
+                    this._setLayer(this.nextLayer.index);
                     this.nextLayer = false;
                 }
             }
@@ -222,8 +223,9 @@
         /**
          *
          * @param index
+         * @private
          */
-        setLayer(index) {
+        _setLayer(index) {
 
             for (let i in this.layers) {
                 i = parseInt(i);
@@ -243,8 +245,9 @@
 
         /**
          *
+         * @private
          */
-        pauseLayers() {
+        _pauseLayers() {
             for (let i = 0; i < this.layers.length; i++) {
                 this.layers[i].pause();
             }
@@ -252,8 +255,9 @@
 
         /**
          *
+         * @private
          */
-        resumeLayers() {
+        _resumeLayers() {
             for (let i = 0; i < this.layers.length; i++) {
                 this.layers[i].resume();
             }
@@ -261,12 +265,13 @@
 
         /**
          *
+         * @private
          */
-        animate() {
+        _animate() {
             if (IS_ANIMATION) {
-                this.doShuffle();
+                this._doShuffle();
             }
-            this.switchLayer(IS_MONITOR);
+            this._switchLayer(IS_MONITOR);
 
             for (let l in this.layers) {
                 let layer = this.layers[l];
@@ -274,6 +279,22 @@
                     layer.animate();
                 }
             }
+        }
+
+        /**
+         *
+         * @returns {number[]}
+         */
+        renderedLayers() {
+            let rendered = [];
+            for (let l = 0; l < this.layers.length; l++) {
+                let layer = this.layers[l];
+                if (layer === this.currentLayer || this._isForceAnimate(layer)) {
+                    rendered.push(l);
+                }
+            }
+
+            return rendered;
         }
 
         _isForceAnimate(layer) {
@@ -314,10 +335,10 @@
 
         /**
          *
-         * @returns {boolean|*}
+         * @returns {null|OffscreenCanvas}
          */
         current() {
-            this.render();
+            this._render();
 
             let renderer = this.three.renderer;
             if (renderer && renderer.view) {
@@ -325,7 +346,7 @@
                 return renderer.view;
 
             } else {
-                return false;
+                return null;
             }
         }
 
@@ -339,17 +360,8 @@
 
         /**
          *
-         * @param reference
-         * @returns {*}
          */
-        bounds(reference) {
-            return reference;
-        }
-
-        /**
-         *
-         */
-        render() {
+        _render() {
             if (this._last !== this.animation.now) {
 
                 this.three.scene.background = this.currentLayer._layer.background;
@@ -372,9 +384,10 @@
 
         /**
          *
+         * @private
          */
-        doShuffle() {
-            let plugin = this.getShuffleModePlugin();
+        _doShuffle() {
+            let plugin = this._getShuffleModePlugin();
             let result = plugin.apply();
             if (result !== false) {
                 result = plugin.after();
@@ -387,8 +400,10 @@
         /**
          *
          * @param name
+         * @returns {*}
+         * @private
          */
-        getShuffleModePlugin(name) {
+        _getShuffleModePlugin(name) {
             if (!this.plugins) {
                 this.plugins = {};
             }
@@ -412,13 +427,13 @@
 
         initEvents() {
             HC.EventManager.register(EVENT_ANIMATION_ANIMATE, 'renderer', () => {
-                this.animate();
+                this._animate();
             });
             HC.EventManager.register(EVENT_ANIMATION_PLAY, 'renderer', () => {
-                this.resumeLayers();
+                this._resumeLayers();
             });
             HC.EventManager.register(EVENT_ANIMATION_PAUSE, 'renderer', () => {
-                this.pauseLayers();
+                this._pauseLayers();
             });
             HC.EventManager.register(EVENT_FULL_RESET, 'renderer', (emitter) => {
                 this.fullReset(false);

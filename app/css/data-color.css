@@ -5,6 +5,7 @@
     --blue: #32aae6;
     --orange: #e6711e;
     --changed: var(--red);
+    --gray: #363636;
 }
 
 [data-color="red"] {
@@ -17,6 +18,14 @@
 
 [data-color="green"] {
     border-left: 6px solid var(--green) !important;
+}
+
+[data-color="blue"] {
+    border-left: 6px solid var(--blue) !important;
+}
+
+[data-color="gray"] {
+    border-left: 6px solid var(--gray) !important;
 }
 
 [data-background="blue"] {
@@ -98,7 +107,7 @@
     color: var(--green);
     top: -5px;
     left: 3px;
-    font-size: 10px;
+    font-size: 8px;
     font-weight: bold;
     z-index: 1;
 }

@@ -34,7 +34,8 @@ HC.Statics = HC.Statics || {};
         SourceValues;
 
         ShaderSettings;
-        DataSettings;
+        DataSamples;
+        DataStatus;
 
         config = [
             {
@@ -223,7 +224,20 @@ HC.Statics = HC.Statics || {};
             this.SourceTypes = this.SourceSettingsManager.typesProxy();
             this.SourceValues = this.SourceSettingsManager.valuesProxy(this.SourceValues);
 
-            this.DataSettings = {};
+            this.DataSamples = {};
+            this.DataStatus = {
+                bpm: 0,
+                beats: 0,
+                duration: 0,
+                pitch: 0,
+                fps: 0,
+                rms: 0,
+                input_level: 0,
+                peak_bpm: 0,
+                selected_layer: 0,
+                rendered_layers: '',
+                changed_layers: '',
+            };
             
             return {
                 controlSets: controlSets,

@@ -187,8 +187,8 @@
             let sample = this.sourceManager.getSampleBySequence(this.index);
             let sampleKey = getSampleKey(sample);
             let data = false;
-            if (sampleKey in this.config.DataSettings) {
-                data = this.config.DataSettings[sampleKey];
+            if (sampleKey in this.config.DataSamples) {
+                data = this.config.DataSamples[sampleKey];
             }
             this._doUpdateIndicator(data);
         }
@@ -271,8 +271,8 @@
             let sampleKey = getSampleKey(sample);
 
             let data = false;
-            if (sampleKey in this.config.DataSettings) {
-                data = this.config.DataSettings[sampleKey];
+            if (sampleKey in this.config.DataSamples) {
+                data = this.config.DataSamples[sampleKey];
             }
 
             let enabled = this.sourceManager.getSampleEnabledBySequence(this.index) && (data !== false);

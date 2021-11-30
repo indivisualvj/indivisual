@@ -371,26 +371,25 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         postStatus(detectedSpeed) {
 
+            let statusData = {};
+
             if (this.config.ControlSettings.beat) {
                 let speed = this.beatKeeper.getDefaultSpeed();
-                let color = detectedSpeed ? 'green' : (this.audioAnalyser.peakReliable ? 'yellow' : '');
+                if (detectedSpeed) {
+                    this.messaging.emitAttr('[data-id="bpm"]', 'data-color', 'green', 'gray', speed.duration*16);
+                } else if (this.audioAnalyser.peakReliable) {
+                    this.messaging.emitAttr('[data-id="bpm"]', 'data-color', 'blue', 'gray', speed.duration*16);
+                }
 
-                this.messaging.emitAttr('#beat', 'color', color, '', speed.duration);
 
-                let btk = ['bpm:' + this.beatKeeper.bpm,
-                    'b:' + speed.beats,
-                    'd:' + speed.duration.toFixed(0),
-                    'p:' + this.beatKeeper.speeds.quarter.pitch.toFixed(0)
-                ];
-
-                this.messaging.emitAttr('#beat', 'data-label', btk.join(' / '));
+                statusData.bpm = this.beatKeeper.bpm;
+                statusData.beats = speed.beats;
+                statusData.duration = speed.duration.toFixed(0);
+                statusData.pitch = this.beatKeeper.speeds.quarter.pitch.toFixed(0);
 
                 if (this.audioManager.isActive()) {
-                    let au = [
-                        round(this.audioAnalyser.avgVolume, 2) + '',
-                        this.audioAnalyser.peakBPM.toFixed(2),
-                    ];
-                    this.messaging.emitAttr('#audio', 'data-label', au.join(' / '));
+                    statusData.input_level = this.audioAnalyser.avgVolume.toFixed(2);
+                    statusData.peak_bpm = this.audioAnalyser.peakBPM.toFixed(2);
                 }
 
                 this.messaging.emitMidi('glow', MIDI_BEAT_FEEDBACK, {timeout: 125});
@@ -413,14 +412,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            this.messaging.emitAttr('#layers', 'data-mnemonic', (this.renderer.currentLayer.index + 1));
+
+            statusData.rendered_layers = this.renderer.renderedLayers().map(x=>{return x+1}).join('|');
 
             if (this.stats) {
-                let vals = [
-                    'fps:' + this.fps,
-                    'rms:' + this.rmsAverage()];
-                this.messaging.emitAttr('#play', 'data-label', vals.join(' / '));
+                statusData.fps = this.fps;
+                statusData.rms = this.rmsAverage();
             }
+
+            this.messaging.emitData('status', { DataStatus: statusData });
         }
 
         /**
@@ -842,8 +842,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 // todo maybe send full reset anywhere and reload page
 
             });
-
-            this.messaging.emitAttr('#play', 'data-color', '');
         }
     }
 }

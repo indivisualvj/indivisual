@@ -13,38 +13,9 @@ let messaging;
  */
 document.addEventListener('DOMContentLoaded', function () {
 
-    onResize = function () {
-        let columns = document.querySelectorAll('.left');
-        let allover = document.body.clientHeight - 20;
-
-        for (let i = 0; i < columns.length; i++) {
-            let col = columns[i];
-
-            // calcuclate heights of FH elements to figure out the rest
-            let cells = col.querySelectorAll('.item.fh');
-            let reserved = 0;
-            let ii = 0;
-
-            for (ii = 0; ii < cells.length; ii++) {
-                reserved += cells[ii].clientHeight;
-            }
-
-            let spare = allover - reserved;
-
-            cells = col.querySelectorAll('.item:not(.fh)');
-            let cc = cells.length;
-
-            for (ii = 0; ii < cells.length; ii++) {
-                cells[ii].style.height = (spare / cc) + 'px';
-            }
-        }
-    };
-
-    window.addEventListener('resize', onResize);
-
-    let controller = new HC.Controller(G_INSTANCE);
+     let controller = new HC.Controller(G_INSTANCE);
     messaging = new HC.Messaging(controller);
-    controller.config = new HC.Config(messaging);
+    let config = new HC.Config(messaging);
 
     messaging.connect(function (reconnect, controller) {
 
@@ -56,16 +27,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (!reconnect) {
 
-            controller.config.loadConfig(function () {
-
-                let sets = controller.config.initControlSets();
-                controller.settingsManager = new HC.LayeredControlSetsManager([], controller.config.AnimationValues);
-                controller.init(sets);
-                controller.loadSession();
-                controller.initKeyboard();
-                controller.initLogEvents();
-                controller.midi = new HC.Midi(controller);
-                controller.midi.init();
+            config.loadConfig(function (config) {
+                let sets = config.initControlSets();
+                controller.init(config, sets);
 
                 onResize();
             });
@@ -80,11 +44,6 @@ document.addEventListener('DOMContentLoaded', function () {
          * @type {HC.Guify[]}
          */
         guis;
-
-        /**
-         * @type {HC.SourceControllerSequence[]}
-         */
-        clips;
 
         /**
          * @type {HC.SourceControllerSample[]}
@@ -122,6 +81,16 @@ document.addEventListener('DOMContentLoaded', function () {
         sequenceSettingsGui;
 
         /**
+         * @type {HC.Guify}
+         */
+        statusBar;
+
+        /**
+         * @type {HC.PresetManager}
+         */
+        presetMan;
+
+        /**
          * @type {HC.Monitor}
          */
         monitor;
@@ -146,28 +115,24 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
-         * @param name
-         */
-        constructor(name) {
-            super(name);
-            this.clips = [];
-        }
-
-        /**
-         *
+         * @param {HC.Config}config
          * @param sets
          */
-        init(sets) {
+        init(config, sets) {
+            this.config = config;
 
+            this.settingsManager = new HC.LayeredControlSetsManager(config.AnimationValues);
             this.monitor = new HC.Monitor();
             this.monitor.activate(false);
+            this.midi = new HC.Midi(this);
+
             this.controlSettingsGui = new HC.Guify('ControlSettings', 'control');
             this.displaySettingsGui = new HC.Guify('DisplaySettings', 'display');
             this.sourceSettingsGui = new HC.Guify('SourceSettings', 'source');
             this.animationSettingsGui = new HC.Guify('AnimationSettings', 'animation');
             this.sequenceSettingsGui = new HC.Guify('SequenceSettings', 'sequence');
-            this.explorer = new HC.Explorer(this);
-            // this.configurationSettingsGui = new HC.Guify('ConfigurationSettings');
+            this.presetMan = new HC.PresetManager('Presets', 'presets', this);
+            this.statusBar = new HC.StatusBar('StatusBar', 'status', true, config.DataStatus);
 
             this.guis = [
                 this.controlSettingsGui,
@@ -175,7 +140,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.sourceSettingsGui,
                 this.animationSettingsGui,
                 this.sequenceSettingsGui,
-                this.explorer.gui,
+                this.presetMan.gui,
             ];
             this.beatKeeper = new HC.BeatKeeper(null, this.config);
             this.sourceManager = new HC.SourceManager(null, { config: this.config, sample: [] });
@@ -213,21 +178,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
             this.addGuifyControllers(
                 sourceSets,
-                HC.SourceControllerUi,
-                this.sequenceSettingsGui,
-                (folder) => {
-                    this.clips.push(new HC.SourceControllerSequence(this, folder));
-                }
+                HC.SequenceControllerUi,
+                this.sequenceSettingsGui
             );
 
-            // this.addConfigurationSettings();
-            this.initStatusBar();
-            this.initThumbs();
+            this.initSamples();
 
             this.addAnimationControllers(this.settingsManager.getGlobalProperties());
             this.addPassesFolder(HC.ShaderPassUi.onPasses);
 
             this.openTreeByPath('controls');
+
+            this.midi.init();
+            this.loadSession();
+            this.presetMan.reload();
+            this.initEvents();
         }
 
         /**
@@ -242,6 +207,10 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         loadSession() {
+            let syncing = true;
+            this.midi.loading(() => {
+                return syncing;
+            })
             this.messaging.sync((session) => {
                 if ('controls' in session) {
                     HC.log('controls', 'synced');
@@ -270,60 +239,11 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.updateData();
                 }
 
+                syncing = false;
                 this.updateControl('layer', this.config.ControlSettings.layer, true, false, false);
 
                 this._checkDisplayVisibility();
             });
-        }
-
-        /**
-         *
-         * @param layer {number}
-         * @param data {Object}
-         * @param keepPasses {boolean}
-         */
-        migrateSettings0(layer, data, keepPasses) {
-
-            let mappings = HC.LayeredControlSetsManager.mappings(() => {return HC.LayeredControlSetsManager.initAll(this.config.AnimationValues);});
-
-            let passes = this.settingsManager.get(layer, 'passes');
-            if (keepPasses !== true) {
-                passes.removeShaderPasses();
-            }
-
-            for (let k in data) {
-                let value = data[k];
-                if (k === 'shaders' || k === 'passes') {
-                    // sort shaders by index
-                    delete value._template;
-                    delete value.isdefault;
-                    delete value.initial;
-                    let keys = Object.keys(value);
-                    keys.sort(function (a, b) {
-                        let ia = value[a].index;
-                        let ib = value[b].index;
-
-                        return ia - ib;
-                    });
-
-                    for (let key in keys) {
-                        let name = keys[key];
-                        let sh = value[name];
-                        if (sh.apply) {
-                            let pass = {};
-                            pass[name] = sh;
-                            passes.addShaderPass(pass);
-                        }
-                    }
-                } else {
-                    let set = mappings[k];
-                    if (set) {
-                        this.settingsManager.update(layer, set, k, value);
-                    }
-                }
-
-            }
-            this.updateUi(this.animationSettingsGui);
         }
 
         /**
@@ -397,7 +317,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 this.updateSettings(i, data, true, false, true);
 
-                this.explorer.setChanged(i+1, true);
+                this.presetMan.setChanged(i+1, true);
 
                 this.messaging.emitSettings(i, data, false, false, true);
 
@@ -431,7 +351,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 this.updateSettings(i, data, false, false, true);
 
-                this.explorer.setChanged(i+1, true);
+                this.presetMan.setChanged(i+1, true);
                 this.messaging.emitSettings(i, data, false, false, true);
             }
         }
@@ -558,7 +478,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (display !== false) {
                 this.explainPlugin(property, value);
                 this.updateUi(this.animationSettingsGui);
-                this.explorer.setChanged(this.config.ControlSettings.layer+1, true);
+                this.presetMan.setChanged(this.config.ControlSettings.layer+1, true);
             }
         }
 
@@ -584,17 +504,16 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         *
+         * todo: controlSet.clean()
          */
         cleanShaderPasses() {
-
-            let cs = this.settingsManager.get(this.config.ControlSettings.layer, 'passes');
-            let passes = cs.getShaderPasses();
+            let controlSet = this.settingsManager.get(this.config.ControlSettings.layer, 'passes');
+            let passes = controlSet.getShaderPasses();
 
             for (let key in passes) {
-                let sh = cs.getShader(key);
+                let sh = controlSet.getShader(key);
                 if (!sh || sh.apply === false) {
-                    cs.removeShaderPass(key);
+                    controlSet.removeShaderPass(key);
                 }
             }
         }
@@ -627,17 +546,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (item === 'layer') {
                 this.updateSettings(value, this.settingsManager.prepareLayer(value), true, false, true);
-                this.explorer.setSelected(value+1, true);
+                this.presetMan.setSelected(value+1, true);
                 HC.log(item, value+1);
 
-                let config = {
-                    action: 'attr',
-                    query: '#layer',
-                    key: 'data-mnemonic',
-                    value: value + 1
-                };
-
-                this.messaging.onAttr(config);
+                let config = { data: { DataStatus: {selected_layer: value+1 } } };
+                this.updateData(config);
 
             } else if (item === 'reset') {
                 if (value && force) {
@@ -754,9 +667,7 @@ document.addEventListener('DOMContentLoaded', function () {
          * @param data
          */
         updateData(data) {
-
-            if (data && data.data) {
-
+            if (data && this.config) {
                 for (let key in data.data) {
                     if (key in this.config) {
                         let sec = data.data[key];
@@ -765,13 +676,17 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     }
                 }
-                this.updateUi(this.sourceSettingsGui);
+                if (data.data.updateUi) {
+                    this.updateUi(this.sourceSettingsGui);
+                }
             }
 
-            HC.TimeoutManager.getInstance().add('updateData', SKIP_TEN_FRAMES, () => {
-                this.updateSequenceUi();
-                this.updateThumbs();
-            });
+            if (!data || 'DataSamples' in data.data || 'SourceTypes' in data.data) {
+                HC.TimeoutManager.add('updateData', SKIP_TEN_FRAMES, () => {
+                    this.updateSequenceUi();
+                    this.updateThumbs();
+                });
+            }
         }
 
         /**
@@ -780,10 +695,8 @@ document.addEventListener('DOMContentLoaded', function () {
         updateSequenceUi() {
             if (this.config.SourceValues && this.config.SourceValues.sequence) {
                 for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
-                    HC.TimeoutManager.getInstance().add('updateSequenceUi' + seq, 0, () => {
-                        this.updateClip(seq);
-                        this.updateIndicator(seq);
-                    });
+                    HC.EventManager.fireEventId(EVENT_CLIP_UPDATE, seq);
+                    HC.EventManager.fireEventId(EVENT_CLIP_INDICATOR_UPDATE, seq);
                 }
             }
         }
@@ -858,11 +771,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 let calls = [];
                 for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
                     if (!shuffleable || -1 === shuffleable.indexOf(layer+1)) {
-                        calls.push(/* _call = */(_synced) => {
-                            HC.TimeoutManager.getInstance().add('syncLayer.' + layer, SKIP_FOUR_FRAMES, () => {
+                        calls.push((_synced) => {
+                            HC.TimeoutManager.add('syncLayer.' + layer, SKIP_TWO_FRAMES, () => {
                                 this.syncLayer(layer, _synced);
                             });
-                        })
+                        });
                     }
                 }
 
@@ -881,7 +794,7 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         pushSources() {
             this._bypassMonitor(new Promise((resolve, reject) => {
-                this.messaging.emitSources(this.config.SourceSettingsManager.prepareFlat(), true, true, false);
+                this.messaging.emitSources(this.config.SourceSettingsManager.prepareFlat(), true, true, false, resolve);
             }));
         }
 
@@ -895,11 +808,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 let layers = all ? Object.values(this.config.ControlValues.layer).map(x => x - 1) : [this.config.ControlSettings.layer];
                 for (let key in layers) {
                     let layer = layers[key];
-                    calls.push(/* _call = */(_synced) => {
-                        HC.TimeoutManager.getInstance().add('syncLayer.' + layer, SKIP_FOUR_FRAMES, () => {
+                    calls.push((_synced) => {
+                        HC.TimeoutManager.add('syncLayer.' + layer, SKIP_TWO_FRAMES, () => {
                             this.resetShader(layer, _synced)
-                        })
-                    })
+                        });
+                    });
                 }
 
                 HC.TimeoutManager.chainExecuteCalls(calls, resolve);
@@ -920,10 +833,15 @@ document.addEventListener('DOMContentLoaded', function () {
          * @private
          */
         _bypassMonitor(promise) {
+            let _done = false;
+            this.midi.loading(() => {
+                return _done;
+            });
             let monitorStatus = this.config.ControlSettings.monitor;
             this.updateControl('monitor', false, false, true, false);
             promise.finally(() => {
                 this.updateControl('monitor', monitorStatus, false, true, false);
+                _done = true;
             });
         }
 
@@ -946,83 +864,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
-         * @param name
-         * @param data
-         * @param layer
-         */
-        updatePreset(name, data, layer) {
-
-            // fixme: this is chaos!!!
-
-            HC.log('preset', name);
-
-            if (layer === undefined) {
-                layer = this.config.ControlSettings.layer;
-            }
-
-            this.settingsManager.resetLayer(layer);
-
-            if (!('info' in data)) {
-                this.migrateSettings0(layer, data);
-
-            // example!
-            // } else if ('info' in data && data.info.version > 1.99) {
-                // this.migrateSettings1(layer, data, true, false, true);
-
-            } else {
-                this.updateSettings(layer, data, false, false, true);
-                this.settingsManager.update(layer, 'info', 'name', name);
-            }
-
-            data = this.settingsManager.prepareLayer(layer);
-            if (this.settingsManager.get(layer, 'info').hasTutorial()) {
-                new HC.ScriptProcessor(this, name, Object.create(data.info.tutorial)).log();
-                data.info.tutorial = {};
-            }
-
-            this.messaging.emitSettings(layer, data, false, false, true);
-        }
-
-        /**
-         *
-         * @param name
-         * @param data
-         */
-        transferShaderPasses(name, data) {
-
-            HC.log('passes', name);
-
-            for (let i = 0; i < this.config.ControlValues.layers; i++) {
-                if (this.config.shuffleable(i+1) && !this.settingsManager.isDefault(i)) {
-                    if (!('info' in data)) {
-
-                        let shaders = {shaders: data.shaders};
-
-                        this.migrateSettings0(i, shaders, true);
-
-                    // example!
-                    // } else if ('info' in data && data.info.version > 1.99) {
-                    // this.migrateSettings1(layer, data, true, false, true);
-
-                    } else {
-                        let nu = data.passes.shaders;
-                        let passes = this.settingsManager.get(i, 'passes');
-
-                        for (let k in nu) {
-                            passes.addShaderPass(nu[k]);
-                        }
-                    }
-
-                    this.explorer.setChanged(i+1, true);
-                    this.updateUiPasses();
-
-                    this.messaging.emitSettings(i, this.settingsManager.prepareLayer(i), false, false, true);
-                }
-            }
-        }
-
-        /**
-         *
          */
         refreshLayersUi() {
             let preset = [];
@@ -1036,23 +877,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
 
-            let config = {
-                action: 'attr',
-                query: '#layers',
-                key: 'data-label',
-                value: preset.join('|')
-            };
-
-            this.messaging.onAttr(config);
-        }
-
-        restoreLoadedPresets() {
-            for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
-                let name = this.settingsManager.get(layer, 'info').get('name');
-                if (name) {
-                    this.explorer.setInfoByPath(name, layer+1);
-                }
-            }
+            this.config.DataStatus.changed_layers = preset.join('|');
         }
 
         /**
@@ -1075,17 +900,23 @@ document.addEventListener('DOMContentLoaded', function () {
          * reset all of all settings
          */
         fullReset() {
+            let _done = false;
+            this.midi.loading(() => {
+                return _done;
+            });
             let session = this.config.ControlSettings.session;
             assetman.disposeAll();
-            this.explorer.reload();
-            this.explorer.resetStatus();
+            this.presetMan.reload();
+            this.presetMan.resetStatus();
             this.settingsManager.reset();
             this.config.SourceSettingsManager.reset();
             this.config.ControlSettingsManager.reset();
             this.config.DisplaySettingsManager.reset();
+
             let sources = this.config.SourceSettingsManager.prepareFlat();
             let controls = this.config.ControlSettingsManager.prepareFlat();
             let displays = this.config.DisplaySettingsManager.prepareFlat();
+
             controls.session = session;
 
             this.messaging.emitSources(sources, true, false, true);
@@ -1094,8 +925,10 @@ document.addEventListener('DOMContentLoaded', function () {
             this.updateSources(sources, true, true, true);
             this.updateControls(controls, true, true, true);
             this.updateDisplays(displays, true, true, true);
+
             this.syncLayers().finally(() => {
                 this._checkDisplayVisibility();
+                _done = true;
             });
         }
 
@@ -1114,10 +947,10 @@ document.addEventListener('DOMContentLoaded', function () {
          * @returns {Promise}
          */
         resetLayers() {
-            let shuffleable = this.config.ControlSettings.shuffleable.toIntArray((it)=>{return parseInt(it)-1;});
+            let shuffleable = this.config.ControlSettings.shuffleable.toIntArray().map(x=>{return x-1;});
             this.settingsManager.reset(shuffleable);
             shuffleable = this.config.ControlSettings.shuffleable.toIntArray();
-            this.explorer.resetStatus(shuffleable);
+            this.presetMan.resetStatus(shuffleable);
             return this.syncLayers(shuffleable);
         }
 

@@ -5,7 +5,7 @@
 
         apply(shape, chess) {
             let layer = this.layer;
-            let speed = layer.getShapeSpeed(shape);
+            let speed = layer.shapeSpeed(shape);
             if (this.isFirstShape(shape)) {
                 this.angle += this.animation.diff / speed.duration * 90;
             }
@@ -53,7 +53,7 @@
         apply(shape, onpeak) {
             let layer = this.layer;
 
-            let speed = layer.getShapeSpeed(shape);
+            let speed = layer.shapeSpeed(shape);
             let params = this.params(shape);
 
             if (!params.angle) {

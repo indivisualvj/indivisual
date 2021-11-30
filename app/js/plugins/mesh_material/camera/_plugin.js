@@ -25,7 +25,7 @@
                 this.cameras.traverse(HC.dispose);
                 this.cameras = undefined;
 
-                HC.EventManager.getInstance().removeLike(this.id());
+                HC.EventManager.removeLike(this.id());
             }
         }
     }

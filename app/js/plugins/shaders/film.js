@@ -18,7 +18,7 @@
                 _type: [-10, 10, 0.01],
                 audio: false,
                 stepwise: false,
-                oscillate: "off"
+                oscillate: "incrementalpeak"
             },
             scanlines: {
                 value: 512,

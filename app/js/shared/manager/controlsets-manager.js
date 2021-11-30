@@ -166,14 +166,13 @@
 
         /**
          *
-         * @param controlSets
          * @returns {Proxy}
          */
         settingsProxy() {
 
             let mappings = this.mappings();
 
-            let proxy = new Proxy(this.controlSets, {
+            return new Proxy(this.controlSets, {
 
                 has(target, name) {
                     let key = mappings[name];
@@ -218,8 +217,6 @@
                     return false;
                 }
             });
-
-            return proxy;
         }
 
         /**

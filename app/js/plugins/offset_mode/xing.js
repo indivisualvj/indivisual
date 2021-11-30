@@ -9,7 +9,7 @@
         apply(shape) {
             let layer = this.layer;
 
-            let speed = layer.getShapeSpeed(shape);
+            let speed = layer.shapeSpeed(shape);
             let params = this.params(shape);
 
             let xx = this.settings.offset_x !== 0;

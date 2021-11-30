@@ -28,7 +28,7 @@
             let y = oy + gridPosition.y * gapy - gapys;
             let z = 0;
 
-            layer.positionIn3dSpace(shape, x, -y, z);
+            this.positionIn3dSpace(shape, x, -y, z);
 
             this.sharedMoverParams(ox, oy, gapx, gapy);
         }
@@ -87,7 +87,7 @@
             let y = oy + gridPosition.y * gapy - gapys;
             let z = 0;
 
-            layer.positionIn3dSpace(shape, x, -y, z);
+            this.positionIn3dSpace(shape, x, -y, z);
 
             this.sharedMoverParams(ox, oy, gapx, gapy);
         }
@@ -123,7 +123,7 @@
             let y = oy + gridPosition.y * gapy - gapys;
             let z = 0;
 
-            layer.positionIn3dSpace(shape, x, -y, z);
+            this.positionIn3dSpace(shape, x, -y, z);
 
             this.sharedMoverParams(ox, oy, gapx, gapy);
         }

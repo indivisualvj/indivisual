@@ -1,9 +1,8 @@
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
 
 {
-    /**
-     *
-     * @type {HC.Display.display_visibility.visible}
-     */
     HC.Display.display_visibility.visible = class visible extends HC.Display.VisibilityModePlugin  {
 
         static index = 10;
@@ -18,10 +17,6 @@
 }
 
 {
-    /**
-     *
-     * @type {HC.Display.display_visibility.randomall}
-     */
     HC.Display.display_visibility.randomall = class randomall extends HC.Display.VisibilityModePlugin  {
 
         static index = 999;
@@ -57,10 +52,6 @@
 }
 
 {
-    /**
-     *
-     * @type {HC.Display.display_visibility.stackoneoff}
-     */
     HC.Display.display_visibility.stackoneoff = class stackoneoff extends HC.Display.VisibilityModePlugin {
 
         static name = 'stack one off';
@@ -86,10 +77,6 @@
 }
 
 {
-    /**
-     *
-     * @type {HC.Display.display_visibility.stackoneoffr}
-     */
     HC.Display.display_visibility.stackoneoffr = class stackoneoffr extends HC.Display.display_visibility.stackoneoff {
 
         static name = 'stack one off reversed';
@@ -108,10 +95,6 @@
 }
 
 {
-    /**
-     *
-     * @type {HC.Display.display_visibility.stackoneon}
-     */
     HC.Display.display_visibility.stackoneon = class stackoneon extends HC.Display.display_visibility.stackoneoff {
 
         static name = 'stack one on';
@@ -123,10 +106,6 @@
 }
 
 {
-    /**
-     *
-     * @type {HC.Display.display_visibility.stackoneonr}
-     */
     HC.Display.display_visibility.stackoneonr = class stackoneonr extends HC.Display.display_visibility.stackoneoffr {
 
         static name = 'stack one on reversed';
@@ -138,10 +117,6 @@
 }
 
 {
-    /**
-     *
-     * @type {HC.Display.display_visibility.random}
-     */
     HC.Display.display_visibility.random = class random extends HC.Display.VisibilityModePlugin {
 
         static name = 'random';
@@ -165,21 +140,12 @@
         }
 
         apply (display) {
-            if (display.index in this.visible) {
-                display.visible = true;
-
-            } else {
-                display.visible = false;
-            }
+            display.visible = display.index in this.visible;
         }
     }
 }
 
 {
-    /**
-     *
-     * @type {HC.Display.display_visibility.randomoneoff}
-     */
     HC.Display.display_visibility.randomoneoff = class randomoneoff extends HC.Display.display_visibility.stackoneoff {
 
         static name = 'random one off';
@@ -194,10 +160,6 @@
 }
 
 {
-    /**
-     *
-     * @type {HC.Display.display_visibility.randomoneon}
-     */
     HC.Display.display_visibility.randomoneon = class randomoneon extends HC.Display.display_visibility.stackoneon {
 
         static name = 'random one on';
@@ -212,10 +174,6 @@
 }
 
 {
-    /**
-     *
-     * @type {HC.Display.display_visibility.randomflash}
-     */
     HC.Display.display_visibility.randomflash = class randomflash extends HC.Display.VisibilityModePlugin {
 
         static name = 'random flash';
@@ -258,10 +216,6 @@
 }
 
 {
-    /**
-     *
-     * @type {HC.Display.display_visibility.randomblitz}
-     */
     HC.Display.display_visibility.randomblitz = class randomblitz extends HC.Display.display_visibility.randomflash  {
 
         static name = 'random blitz';
@@ -297,10 +251,6 @@
 }
 
 {
-    /**
-     *
-     * @type {HC.Display.display_visibility.randomsmear}
-     */
     HC.Display.display_visibility.randomsmear = class randomsmear extends HC.Display.display_visibility.randomflash  {
 
         static name = 'random smear';

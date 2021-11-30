@@ -20,7 +20,7 @@
                 params.centered = true;
             }
 
-            if (!this.points || (this.isFirstShape(shape) && this.layer.getShapeSpeed(shape).prc === 0)) {
+            if (!this.points || (this.isFirstShape(shape) && this.layer.shapeSpeed(shape).prc === 0)) {
                 this.points = this.points || [];
                 let numPoints = 12;//clamp(this.layer.settings.pattern_shapes, 12, 24);
                 for (let i = 0; i < numPoints; i++)  {
@@ -29,7 +29,7 @@
                         this.layer._shapes.remove(this.points[i]._mesh);
                     }
 
-                    let p = this.layer.random2dPosition(0);//new THREE.Vector3(640, -600*i, 0);//
+                    let p = this.random2dPosition(0);//new THREE.Vector3(640, -600*i, 0);//
                     p.z = 0;
                     this.points[i] = p;
 

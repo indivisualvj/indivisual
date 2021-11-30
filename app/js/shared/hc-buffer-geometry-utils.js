@@ -1,6 +1,12 @@
 {
+    _importThreeModule('examples/js/utils', 'BufferGeometryUtils');
+
     HC.BufferGeometryUtils = class BufferGeometryUtils {
 
+        /**
+         *
+         * @param geometry
+         */
         static front2back(geometry) {
             geometry.computeBoundingBox();
 
@@ -36,6 +42,11 @@
             geometry.attributes.uv.needsUpdate = true;
         }
 
+        /**
+         *
+         * @param geometry
+         * @returns {*}
+         */
         static sortVertices(geometry) {
             geometry.computeVertexNormals();
 
@@ -65,6 +76,20 @@
             }
 
             geometry.attributes.position.needsUpdate = true;
+
+            return geometry;
+        }
+
+        /**
+         *
+         * @param geometry
+         * @param tolerance
+         * @returns {*}
+         */
+        static mergeVertices(geometry, tolerance) {
+            if (geometry.attributes.position && tolerance > 0) {
+                return THREE.BufferGeometryUtils.mergeVertices(geometry, tolerance);
+            }
 
             return geometry;
         }

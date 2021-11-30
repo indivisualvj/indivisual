@@ -16,64 +16,15 @@ document.addEventListener('DOMContentLoaded', function () {
     let animation = new HC.Animation(G_INSTANCE);
     messaging = new HC.Messaging(animation);
     let config = new HC.Config(messaging);
-    animation.config = config;
 
     messaging.connect(function (reconnect, animation) {
 
         HC.log(animation.name, 'connected', true, true);
 
         if (!reconnect) {
-            config.loadConfig(() => {
-                animation.config.initControlSets();
-
-                animation.audioManager = new HC.AudioManager();
-                animation.audioAnalyser = new HC.AudioAnalyser(animation);
-                animation.beatKeeper = new HC.BeatKeeper(animation, animation.config);
-
-                let renderer = new HC.Renderer(animation, {
-                    layers: new Array(animation.config.ControlValues.layers)
-                });
-                animation.renderer = renderer;
-
-                if (IS_ANIMATION) {
-                    HC.EventManager.getInstance().register('webglcontextlost', animation.name, function () { // todo use const
-                        // now reset...
-                        HC.log('HC.Renderer', 'another context loss...', true, true);
-
-                        for (let i = 0; i < animation.config.SourceValues.sample.length; i++) {
-                            animation.updateSource(getSampleKey(i), false, true, true, false);
-                        }
-                        animation.updateSource('override_material_input', 'none', true, true, false);
-                        animation.updateSource('override_background_mode', 'none', true, true, false);
-
-                        alert('WebGL just died...');
-                    });
-
-                    animation.messaging.emitAttr('#play', 'data-color', '');
-                }
-
-                animation.settingsManager = new HC.LayeredControlSetsManager(
-                    renderer.layers,
-                    animation.config.AnimationValues
-                );
-                renderer.initLayers(false);
-
-                let displayManager = new HC.DisplayManager(animation, {
-                    display: new Array(animation.config.DisplayValues.display.length)
-                });
-                displayManager.resize(renderer.getResolution());
-                animation.displayManager = displayManager;
-
-                animation.sourceManager = new HC.SourceManager(animation, {
-                    config: animation.config,
-                    sample: new Array(animation.config.SourceValues.sample.length)
-                });
-
-                if (IS_ANIMATION) {
-                    new HC.Animation.KeyboardListener().init(animation);
-                    new HC.Animation.EventListener().init();
-                }
-
+            config.loadConfig((config) => {
+                config.initControlSets();
+                animation.init(config);
                 animation.loadSession();
             });
         }
@@ -104,7 +55,6 @@ document.addEventListener('DOMContentLoaded', function () {
             this.now = HC.now();
             this.last = this.now;
             this.running = false;
-            this.doNotDisplay = false; // render displays only every second frame if FPS is set to 60
             this.diff = 0;
             this.diffPrc = 1;
             this.duration = 1000 / 60;
@@ -128,6 +78,41 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
+         * @param {HC.Config}config
+         */
+        init(config) {
+            this.config = config;
+            this.audioManager = new HC.AudioManager();
+            this.audioAnalyser = new HC.AudioAnalyser(this);
+            this.beatKeeper = new HC.BeatKeeper(() => {return this.now;}, config);
+            this.settingsManager = new HC.LayeredControlSetsManager(config.AnimationValues);
+
+            let renderer = new HC.Renderer(this, {
+                layers: new Array(config.ControlValues.layers)
+            });
+            this.renderer = renderer;
+            renderer.initLayers(false);
+
+            let displayManager = new HC.DisplayManager(this, {
+                display: new Array(config.DisplayValues.display.length)
+            });
+            displayManager.resize(this.getResolution());
+            this.displayManager = displayManager;
+
+            this.sourceManager = new HC.SourceManager(this, {
+                config: config,
+                sample: new Array(config.SourceValues.sample.length)
+            });
+
+            if (IS_ANIMATION) {
+                this.initEvents();
+                this.initResize();
+                this.initSuperGau();
+            }
+        }
+
+        /**
+         *
          * @param {HC.Messaging} messaging
          */
         setMessaging(messaging) {
@@ -139,23 +124,14 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         animate() {
 
-            HC.EventManager.getInstance().fireEvent(EVENT_ANIMATION_ANIMATE);
+            this._preAnimate();
 
-            this._preRender();
+            HC.EventManager.fireEvent(EVENT_ANIMATION_ANIMATE);
 
-            /**
-             * do layer stuff
-             */
-            if (IS_ANIMATION) {
-                this.doShuffle();
-            }
-            this.renderer.switchLayer(IS_MONITOR);
-
-            this.renderer.animate();
 
         }
 
-        _preRender() {
+        _preAnimate() {
             let speed = this.beatKeeper.getDefaultSpeed();
 
             if (IS_ANIMATION && speed.starting()) {
@@ -185,7 +161,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 let config = {
                     useWaveform: this.renderer.currentLayer.settings.audio_usewaveform,
                     volume: this.config.ControlSettings.volume,
-                    // resetPeakCountAfter: this.config.ControlSettings.shuffle_every,
                     tempo: this.config.ControlSettings.tempo,
                     minDiff: this.beatKeeper.getSpeed('sixteen').duration,
                     now: this.now,
@@ -200,7 +175,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (this.audioAnalyser.peak) {
                 this.messaging.emitMidi('glow', MIDI_PEAK_FEEDBACK, {timeout: 125});
 
-                HC.EventManager.getInstance().fireEvent('audio.peak', this.audioAnalyser); // todo use const
+                HC.EventManager.fireEvent(EVENT_AUDIO_PEAK, this.audioAnalyser);
             }
         }
 
@@ -208,20 +183,18 @@ document.addEventListener('DOMContentLoaded', function () {
          *
          */
         render() {
-            HC.EventManager.getInstance().fireEvent(EVENT_ANIMATION_RENDER);
+            HC.EventManager.fireEvent(EVENT_ANIMATION_RENDER);
             if (IS_ANIMATION) {
                 this.sourceManager.render();
             }
-            if (!this.doNotDisplay) {
-                this.displayManager.render();
-            }
+            this.displayManager.render();
         }
 
         /**
          *
          */
         updatePlay() {
-            if (this.monitor) {
+            if (IS_MONITOR) {
                 this.config.ControlSettings.play = this.config.ControlSettings.monitor;
             }
 
@@ -244,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.lastUpdate = this.now - this.lastUpdate;
             }
             this.beatKeeper.play();
-            this.renderer.resumeLayers();
+            HC.EventManager.fireEvent(EVENT_ANIMATION_PLAY, this);
 
             let render = () => {
                 if (this.running) {
@@ -254,16 +227,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.updateRuntime();
 
                     this.beatKeeper.updateSpeeds(this.diff, this.config.ControlSettings.tempo);
-
-                    if (this.beatKeeper.getSpeed('sixteen').starting()) {
-                        this.doNotDisplay = false;
-
-                    } else if (this.config.DisplaySettings.fps < 46) {
-                        this.doNotDisplay = false;
-
-                    } else {
-                        this.doNotDisplay = !this.doNotDisplay;
-                    }
 
                     this.animate();
                     this.render();
@@ -284,7 +247,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
                 } else {
-                    this.renderer.pauseLayers();
+                    HC.EventManager.fireEvent(EVENT_ANIMATION_PAUSE, this);
                     this.beatKeeper.stop();
                 }
             };
@@ -312,8 +275,6 @@ document.addEventListener('DOMContentLoaded', function () {
             this._rmsc++;
             this._rmss += this.rms;
             this.last = this.now;
-
-            HC.EventManager.getInstance().fireEvent('animation.updateRuntime', this); // todo use const
         }
 
         /**
@@ -410,31 +371,30 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         postStatus(detectedSpeed) {
 
+            let statusData = {};
+
             if (this.config.ControlSettings.beat) {
                 let speed = this.beatKeeper.getDefaultSpeed();
-                let color = detectedSpeed ? 'green' : (this.audioAnalyser.peakReliable ? 'yellow' : '');
+                if (detectedSpeed) {
+                    this.messaging.emitAttr('[data-id="bpm"]', 'data-color', 'green', 'gray', speed.duration*16);
+                } else if (this.audioAnalyser.peakReliable) {
+                    this.messaging.emitAttr('[data-id="bpm"]', 'data-color', 'blue', 'gray', speed.duration*16);
+                }
 
-                this.messaging.emitAttr('#beat', 'color', color, '', speed.duration);
 
-                let btk = ['bpm:' + this.beatKeeper.bpm,
-                    'b:' + speed.beats,
-                    'd:' + speed.duration.toFixed(0),
-                    'p:' + this.beatKeeper.speeds.quarter.pitch.toFixed(0)
-                ];
-
-                this.messaging.emitAttr('#beat', 'data-label', btk.join(' / '));
+                statusData.bpm = this.beatKeeper.bpm;
+                statusData.beats = speed.beats;
+                statusData.duration = speed.duration.toFixed(0);
+                statusData.pitch = this.beatKeeper.speeds.quarter.pitch.toFixed(0);
 
                 if (this.audioManager.isActive()) {
-                    let au = [
-                        round(this.audioAnalyser.avgVolume, 2) + '',
-                        this.audioAnalyser.peakBPM.toFixed(2),
-                    ];
-                    this.messaging.emitAttr('#audio', 'data-label', au.join(' / '));
+                    statusData.input_level = this.audioAnalyser.avgVolume.toFixed(2);
+                    statusData.peak_bpm = this.audioAnalyser.peakBPM.toFixed(2);
                 }
 
                 this.messaging.emitMidi('glow', MIDI_BEAT_FEEDBACK, {timeout: 125});
                 if (detectedSpeed) {
-                    this.messaging.emitMidi('glow', MIDI_PEAKBPM_FEEDBACK, {timeout: 15000 / detectedSpeed, times: 8});
+                    this.messaging.emitMidi('glow', MIDI_PEAKBPM_FEEDBACK, {timeout: 60 / (detectedSpeed*4) * 1000, times: 8});
                 }
 
                 if (this.beatKeeper.getSpeed('half').starting()) {
@@ -445,20 +405,22 @@ document.addEventListener('DOMContentLoaded', function () {
                             this.messaging.emitMidi('glow', MIDI_ROW_TWO[i], {timeout: 125});
                         }
                         if (use !== 'off') {
+                            console.log('glow sample', use);
                             this.messaging.emitMidi('glow', MIDI_ROW_ONE[use], {timeout: 125});
                         }
                     }
                 }
             }
 
-            this.messaging.emitAttr('#layers', 'data-mnemonic', (this.renderer.currentLayer.index + 1));
+
+            statusData.rendered_layers = this.renderer.renderedLayers().map(x=>{return x+1}).join('|');
 
             if (this.stats) {
-                let vals = [
-                    'fps:' + this.fps,
-                    'rms:' + this.rmsAverage()];
-                this.messaging.emitAttr('#play', 'data-label', vals.join(' / '));
+                statusData.fps = this.fps;
+                statusData.rms = this.rmsAverage();
             }
+
+            this.messaging.emitData('status', { DataStatus: statusData });
         }
 
         /**
@@ -496,17 +458,15 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 this.sourceManager.updateSources();
-                this.fullReset(true);
+                this.reset();
 
                 if (IS_MONITOR) {
                     this.monitor = new HC.Monitor();
                     this.monitor.init(this.config, () => {
                         this.displayManager.updateDisplay(0);
-                        new HC.Animation.ResizeListener().init(this.displayManager);
+                        this.initResize();
                         this.updatePlay();
                     });
-                } else {
-                    new HC.Animation.ResizeListener().init(this.displayManager);
                 }
             };
 
@@ -515,11 +475,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
-         * @param keepsettings
          */
-        fullReset(keepsettings) {
-            this.renderer.fullReset(keepsettings);
-            this.displayManager.resize(this.renderer.getResolution());
+        fullReset() {
+            HC.EventManager.fireEvent(EVENT_FULL_RESET, this);
+        }
+
+        /**
+         *
+         */
+        reset() {
+            HC.EventManager.fireEvent(EVENT_RESET, this);
         }
 
         /**
@@ -536,9 +501,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 layer = this.config.ControlSettings.layer;
             }
 
-            let layerIndex = layer;
-            layer = this.renderer.layers[layer];
-
             let updated = this.settingsManager.updateData(layer, data);
             let property;
             let value;
@@ -549,21 +511,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
             switch (property) {
                 case 'shaders':
-                    HC.EventManager.getInstance().fireEventId(EVENT_LAYER_UPDATE_SHADERS, layer.index, layer, SKIP_TEN_FRAMES);
+                    HC.EventManager.fireEventId(EVENT_LAYER_UPDATE_SHADERS, layer, this, SKIP_TEN_FRAMES);
                     break;
 
                 case 'shape_vertices':
                     if (display) {
-                        HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_SHAPES, layer.index, layer, SKIP_TEN_FRAMES);
+                        HC.EventManager.fireEventId(EVENT_LAYER_RESET_SHAPES, layer, this, SKIP_TEN_FRAMES);
                     }
                     break;
             }
 
             if (forward === true) {
-                this.messaging.emitSettings(layerIndex, data, true, false, force);
+                this.messaging.emitSettings(layer, data, true, false, force);
             }
 
-            HC.EventManager.getInstance().fireEvent('animation.updateSetting', {layer: layer, item: property, value: value}); // todo use const
+            HC.EventManager.fireEvent(EVENT_ANIMATION_UPDATE_SETTING, {layer: layer, item: property, value: value});
         }
 
         /**
@@ -600,18 +562,17 @@ document.addEventListener('DOMContentLoaded', function () {
                 switch (item) {
                     case 'reset':
                         if (value) {
-                            if (this.renderer) {
-                                if (force) {
-                                    console.log('full reset');
-                                    assetman.disposeAll();
-                                    this.beatKeeper.reset();
-                                    this.fullReset(false);
 
-                                } else {
-                                    console.log('layer reset');
-                                    assetman.disposeAll();
-                                    this.renderer.resetLayer(this.renderer.currentLayer);
-                                }
+                            if (force) {
+                                console.log('full reset');
+                                assetman.disposeAll();
+                                this.beatKeeper.reset();
+                                HC.EventManager.fireEvent(EVENT_FULL_RESET, this);
+
+                            } else {
+                                console.log('layer reset');
+                                assetman.disposeAll();
+                                HC.EventManager.fireEventId(EVENT_LAYER_RESET, this.config.ControlSettings.layer, this);
                             }
                             this.updateControl('reset', false, false, true, false);
                         }
@@ -622,7 +583,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         break;
 
                     case 'monitor':
-                        if (!this.monitor) {
+                        if (!IS_MONITOR) {
                             break;
                         }
                     case 'play':
@@ -630,7 +591,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         break;
 
                     case 'audio':
-                        if (!this.monitor) {
+                        if (!IS_MONITOR) {
                             this.updateAudio();
                         }
                         break;
@@ -659,7 +620,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (display) {
                 if (item.match(/^sample\d+_load/) && value) {
-                    if (this.monitor) {
+                    if (IS_MONITOR) {
                         this.sourceManager.loadSample(HC.numberExtract(item, 'sample'), value);
                     }
                     this.updateSource(item, false, false, true, false);
@@ -668,23 +629,19 @@ document.addEventListener('DOMContentLoaded', function () {
                     this.sourceManager.updateSample(HC.numberExtract(item, 'sample'));
 
                     if (item.match(/sample\d+_(enabled|record)/)) { // never let samples be selected on enabled/record status change
-                        HC.EventManager.getInstance().fireEvent(EVENT_SAMPLE_STATUS_CHANGED, this.sourceManager.getSample(HC.numberExtract(item, 'sample')));
+                        HC.EventManager.fireEvent(EVENT_SAMPLE_STATUS_CHANGED, this.sourceManager.getSample(HC.numberExtract(item, 'sample')));
                     }
 
                 } else if (item.match(/display\d+_source/)) {
                     let display = this.displayManager.getDisplay(HC.numberExtract(item, 'display'));
                     this.sourceManager.updateSource(display);
 
-                    // if (display && display.isFixedSize()) { // todo what is it? needed by light display source make lighting manage it!
-                    //     this.displayManager.updateDisplay(display.index, false);
-                    // }
-
                 } else if (item.match(/display\d+_sequence/)) {
                     this.sourceManager.updateSource(this.displayManager.getDisplay(HC.numberExtract(item, 'display')));
                 }
             }
 
-            HC.EventManager.getInstance().fireEvent(EVENT_SOURCE_SETTING_CHANGED, arguments);
+            HC.EventManager.fireEvent(EVENT_SOURCE_SETTING_CHANGED, arguments);
         }
 
         /**
@@ -693,16 +650,6 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateData(data) {
 
-        }
-
-        /**
-         *
-         * @param data
-         */
-        updateMidi(data) {
-            if (IS_ANIMATION && data.command === 'message') {
-                HC.EventManager.getInstance().fireEvent('midi.message', data.data); // todo use const
-            }
         }
 
         /**
@@ -735,7 +682,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (display) {
                     switch (item) {
                         case 'resolution':
-                            this.fullReset(true);
+                            HC.EventManager.fireEvent(EVENT_RESIZE, this);
                             break;
 
                         case 'mapping':
@@ -783,7 +730,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (force) {
                 this.settingsManager.updateData(layer, data);
-                this.renderer.resetLayer(layer);
+                HC.EventManager.fireEventId(EVENT_LAYER_RESET, layer, this);
 
             } else {
                 for (let k in data) {
@@ -860,33 +807,41 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
+         * @returns {{aspect: number, x: number, y: number}}
          */
-        doShuffle() {
-            let plugin = this.getShuffleModePlugin();
-            let result = plugin.apply();
-            if (result !== false) {
-                result = plugin.after();
-                if (result !== false) {
-                    this.renderer.nextLayer = this.renderer.layers[result];
+        getResolution() {
+            let resolution;
+
+            let res = this.config.DisplaySettings.resolution;
+            if (res) {
+                let sp = res.split(/[\:x]/);
+                if (sp.length > 1) {
+                    let w = parseInt(sp[0]);
+                    let h = parseInt(sp[1]);
+                    resolution = {x: w, y: h, aspect: w / h, diameter: new THREE.Vector2(w, h).length()};
                 }
             }
+
+            return resolution;
         }
 
         /**
          *
-         * @param name
          */
-        getShuffleModePlugin(name) {
-            if (!this.plugins) {
-                this.plugins = {};
-            }
-            name = name || this.config.ControlSettings.shuffle_mode;
+        initSuperGau() {
+            HC.EventManager.register(EVENT_WEBGL_CONTEXT_LOST, this.name, () => {
+                // now reset...
+                HC.log('HC.Renderer', 'another context loss...', true, true);
 
-            if (!this.plugins[name]) {
-                this.plugins[name] = new HC.shuffle_mode[name](this, this.config.ControlSettings);
-            }
+                for (let i = 0; i < this.config.SourceValues.sample.length; i++) {
+                    this.updateSource(getSampleKey(i), false, true, true, false);
+                }
+                this.updateSource('override_material_input', 'none', true, true, false);
+                this.updateSource('override_background_mode', 'none', true, true, false);
 
-            return this.plugins[name];
+                // todo maybe send full reset anywhere and reload page
+
+            });
         }
     }
 }

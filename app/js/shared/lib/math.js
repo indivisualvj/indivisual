@@ -2,7 +2,7 @@
  *
  * @param min
  * @param max
- * @param negative
+ * @param [negative]
  * @returns {number}
  */
 function randomInt(min, max, negative) {
@@ -16,8 +16,8 @@ function randomInt(min, max, negative) {
 
 /**
  *
- * @param distraction
- * @returns {boolean}
+ * @param {int}[distraction]
+ * @returns {boolean} returns true if randomInt(0, disctraction) is hit, otherwise returns true if Math.random < .5
  */
 function randomBool(distraction) {
     if (distraction) {
@@ -29,14 +29,14 @@ function randomBool(distraction) {
 
 /**
  *
- * @param min
- * @param max
- * @param digits
- * @param negative
+ * @param {number}min
+ * @param {number}max
+ * @param {int}[digits] default=2
+ * @param {boolean}[negative]
  * @returns {number}
  */
 function randomFloat(min, max, digits, negative) {
-    let v = round(Math.random() * (max - min) + min, digits);
+    let v = round(Math.random() * (max - min) + min, Math.ceil(digits || 2));
     if (negative) {
         v *= (randomBool() ? 1 : -1);
     }
@@ -46,16 +46,16 @@ function randomFloat(min, max, digits, negative) {
 
 /**
  *
- * @param v
- * @param digits
+ * @param {number}value
+ * @param {int}[digits] default=0
  * @returns {number}
  */
-function round(v, digits) {
-    let p = Math.pow(10, digits || 0);
-    v = Math.round(p * v);
-    v = v / p;
+function round(value, digits) {
+    let p = Math.pow(10, Math.ceil(digits || 0));
+    value = Math.round(p * value);
+    value = value / p;
 
-    return v;
+    return value;
 }
 
 /**
@@ -90,9 +90,4 @@ function sinAlpha(a, b) {
     let sina = Math.asin(a / c) * 2 * DEG;
 
     return sina;
-}
-
-function getDigits(v) {
-    let digits = v.toString();
-    return digits.substr(digits.indexOf('.')+1).length;
 }

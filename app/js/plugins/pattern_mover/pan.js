@@ -39,7 +39,7 @@
             }
 
             let pos = shape.position().clone();
-            pos.sub(layer.patternCenterVector());
+            pos.sub(layer.getPatternPlugin().patternCenterVector());
             let x = pos.x;
             let y = pos.y;
             let z = pos.z;
@@ -70,7 +70,7 @@
 
             y += py + params.panmoy;
 
-            layer.positionIn3dSpace(shape, x, y, z);
+            this.layer.getPatternPlugin().positionIn3dSpace(shape, x, y, z);
 
         }
     }
@@ -92,7 +92,7 @@
 
         apply(shape) {
             let layer = this.layer;
-            let speed = this.layer.getShapeSpeed(shape);
+            let speed = this.layer.shapeSpeed(shape);
             if (this.isFirstShape(shape) && speed.prc === 0) {
                 this.dir = randomBool();
             }

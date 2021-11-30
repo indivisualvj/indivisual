@@ -4,7 +4,7 @@
         static index = 60;
 
         apply(key, speed, add) {
-            speed = speed || this.layer.getCurrentSpeed();
+            speed = speed || this.layer.currentSpeed();
             let prc = HC.Osci.linInOut(speed.prc, add);
             return this.activate(key, prc);
         }

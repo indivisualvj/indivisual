@@ -102,7 +102,6 @@ var HC = HC || {};
          * @param data
          */
         updateMidi(data) {
-            console.warn('not implemented');
         }
 
         /**

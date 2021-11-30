@@ -15,7 +15,7 @@
        };
 
        apply(shape) {
-           let speed = this.layer.getShapeSpeed(shape);
+           let speed = this.layer.shapeSpeed(shape);
            let params = this.params(shape);
 
            if (!params.opacity) {

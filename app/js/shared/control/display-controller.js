@@ -7,7 +7,6 @@ HC.DisplayController = HC.DisplayController || {};
 {
     HC.DisplayController.video = {};
 
-
     HC.DisplayController.video._general = class _general extends HC.ControlSet {
 
         static index = 10;
@@ -17,7 +16,10 @@ HC.DisplayController = HC.DisplayController || {};
                 switch (key) {
                     case 'resolution':
                         if (!value || !value.length) {
-                            return window.screen.availWidth + 'x' + window.screen.availHeight;
+                            let ratio = window.devicePixelRatio
+                            let width = window.screen.width * ratio;
+                            let height = window.screen.height * ratio;
+                            return width + 'x' + height;
                         }
                         break;
                 }
@@ -46,7 +48,7 @@ HC.DisplayController = HC.DisplayController || {};
                     }
                 }
                 this.config.messaging.program.updateDisplays(updates, true, true, true);
-                this.config.emitDisplays(updates, true, false, true);
+                this.config.messaging.emitDisplays(updates, true, false, true);
             },
             mask_reset: () => {
                 let updates = {};
@@ -59,7 +61,7 @@ HC.DisplayController = HC.DisplayController || {};
                     }
                 }
                 this.config.messaging.program.updateDisplays(updates, true, true, true);
-                this.config.emitDisplays(updates, true, false, true);
+                this.config.messaging.emitDisplays(updates, true, false, true);
             },
             auto: () => {
                 for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
@@ -67,7 +69,7 @@ HC.DisplayController = HC.DisplayController || {};
                     key += '_mapping';
                     let data = {};
                     data[key] = '';
-                    this.config.emitDisplays(data, true, true, false);
+                    this.config.messaging.emitDisplays(data, true, true, false);
                 }
             },
             full: () => {
@@ -78,7 +80,7 @@ HC.DisplayController = HC.DisplayController || {};
                         key += '_' + 1;
                         let data = {};
                         data[key] = 1;
-                        this.config.emitDisplays(data, true, true, false);
+                        this.config.messaging.emitDisplays(data, true, true, false);
                     }
                 }
             },
@@ -90,7 +92,7 @@ HC.DisplayController = HC.DisplayController || {};
                         key += '_' + 2;
                         let data = {};
                         data[key] = 2;
-                        this.config.emitDisplays(data, true, true, false);
+                        this.config.messaging.emitDisplays(data, true, true, false);
                     }
                 }
             },
@@ -102,7 +104,7 @@ HC.DisplayController = HC.DisplayController || {};
                         key += '_' + 3;
                         let data = {};
                         data[key] = 3;
-                        this.config.emitDisplays(data, true, true, false);
+                        this.config.messaging.emitDisplays(data, true, true, false);
                     }
                 }
             }
@@ -185,7 +187,6 @@ HC.DisplayController = HC.DisplayController || {};
 
         settings = {
             display_visible: false,
-            display_keepbounds: true,
             display_1: 1,
             display_2: 2,
             display_3: 3,
@@ -202,7 +203,6 @@ HC.DisplayController = HC.DisplayController || {};
 
         styles = {
             display_visible: ['quarter', 'clear'],
-            display_keepbounds: ['quarter'],
             display_1: ['eight'],
             display_2: ['eight'],
             display_3: ['eight'],
@@ -219,7 +219,6 @@ HC.DisplayController = HC.DisplayController || {};
 
         parents = {
             display_visible: '',
-            display_keepbounds: '',
             display_1: '',
             display_2: '',
             display_3: '',

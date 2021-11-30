@@ -4,7 +4,7 @@
 
         apply(key) {
             let layer = this.layer;
-            let speed = layer.getCurrentSpeed();
+            let speed = layer.currentSpeed();
             return this.activate(key, Math.pow(speed.prc, 2));
         }
     }
@@ -15,7 +15,7 @@
 
         apply(key) {
             let layer = this.layer;
-            let speed = layer.getCurrentSpeed();
+            let speed = layer.currentSpeed();
             return this.activate(key, Math.sqrt(speed.prc));
         }
     }
@@ -26,7 +26,7 @@
 
         apply(key) {
             let layer = this.layer;
-            let speed = layer.getCurrentSpeed();
+            let speed = layer.currentSpeed();
             return this.activate(key, speed.prc);
         }
     }

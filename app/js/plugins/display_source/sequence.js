@@ -95,7 +95,7 @@
          */
         static initListeners(sourceManager) {
             if (IS_ANIMATION) {
-                HC.EventManager.getInstance().register(EVENT_SOURCE_SETTING_CHANGED, 'sequence', (data) => {
+                HC.EventManager.register(EVENT_SOURCE_SETTING_CHANGED, 'sequence', (data) => {
                     let item = data[0];
                     let display = data[2];
 
@@ -217,16 +217,16 @@
                     conf.SourceTypes[getSequenceEndKey(this.index)] = type;
                     messaging.emitData(this.sample.id, conf);
                 } else {
-                    HC.EventManager.getInstance().register(EVENT_SAMPLE_READY, this.id, (target) => {
+                    HC.EventManager.register(EVENT_SAMPLE_READY, this.id, (target) => {
                         if (this.sample && this.sample.id === target.id) {
-                            HC.EventManager.getInstance().removeEventId(EVENT_SAMPLE_READY, this.id);
+                            HC.EventManager.removeEventId(EVENT_SAMPLE_READY, this.id);
                             this.updateSource();
                         }
                     });
                 }
             }
 
-            HC.EventManager.getInstance().register(EVENT_SAMPLE_STATUS_CHANGED, this.id, (target) => {
+            HC.EventManager.register(EVENT_SAMPLE_STATUS_CHANGED, this.id, (target) => {
                 if (this.sample && this.sample.id === target.id) {
                     this.animation.updateSource(getSequenceSampleKey(this.index), 'off', true, true);
                 }
@@ -613,7 +613,7 @@
         /**
          * OscillatePlugin workaround...
          */
-        getCurrentSpeed() {
+        currentSpeed() {
             return this.beatKeeper.getSpeed('half');
         }
     }

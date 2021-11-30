@@ -18,7 +18,7 @@
                 _type: [-3, 3, 0.001],
                 audio: false,
                 stepwise: false,
-                oscillate: "off"
+                oscillate: "incrementalpeak"
             },
             strength: {
                 value: 0.25,

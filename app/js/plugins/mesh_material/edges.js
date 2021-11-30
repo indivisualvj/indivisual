@@ -1,19 +1,26 @@
 {
     HC.plugins.mesh_material.edges = class Plugin extends HC.MeshMaterialPlugin {
         static index = 10;
-        // static name = 'line (no transform)';
+
+        mesh;
+        edges;
 
         apply(geometry) {
-            let material = new THREE.LineBasicMaterial();
-            this.material = material;
-            let edges = new THREE.EdgesGeometry(geometry);
-            this.geometry = edges;
-            let mesh = new THREE.LineSegments(edges, material);
-            this.mesh = mesh;
-            edges.userData.geometry = geometry;
-            mesh.computeLineDistances();
+            this.material = new THREE.LineBasicMaterial();
+            if (!this.edges) {
+                this.edges = new THREE.EdgesGeometry(geometry);
+            }
+            this.mesh = new THREE.LineSegments(this.edges, this.material);
 
-            return mesh;
+            this.mesh.computeLineDistances();
+
+            return this.mesh;
+        }
+
+        reset() {
+            super.reset();
+            this.mesh = null;
+            this.edges = null;
         }
     }
 }

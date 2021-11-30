@@ -1,6 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+
 {
     HC.Layer = class Layer {
 
@@ -13,16 +14,6 @@
          * @type {HC.Config}
          */
         config;
-
-        /**
-         * @type boolean
-         */
-        ready = false;
-
-        /**
-         * @type {HC.Renderer}
-         */
-        renderer;
 
         /**
          * @type {HC.BeatKeeper}
@@ -40,7 +31,10 @@
          */
         preset = false;
 
-        settings = false;
+        /**
+         *
+         */
+        settings;
 
         /**
          * @type {Object.<string, HC.ControlSet>}
@@ -90,7 +84,6 @@
          */
         fogNeedsReset = false;
 
-
         /**
          *
          * @type {boolean}
@@ -118,34 +111,34 @@
         /**
          *
          * @type {THREE.Group}
-         * @private
+         * @protected
          */
         _rotation;
 
         /**
          *
-         * @type {Array.<HC.Shape>}
-         * @private
+         * @type {THREE.Group}
+         * @protected
          */
         _shapes;
 
         /**
          *
          * @type {THREE.Group}
-         * @private
+         * @protected
          */
         _lighting;
 
         /**
          *
          * @type {THREE.Group}
-         * @private
+         * @protected
          */
         _background;
 
         /**
          * @type {THREE.Texture}
-         * @private
+         * @protected
          */
         _hiddenBackgroundTexture;
 
@@ -167,21 +160,23 @@
         /**
          *
          * @param {HC.Animation} animation
-         * @param {HC.Renderer} renderer
          * @param index
+         * @param controlSets
+         * @param settings
          */
-        constructor (animation, renderer, index) {
+        constructor (animation, index, controlSets, settings) {
             this.animation = animation;
             this.config = animation.config;
             this.beatKeeper = animation.beatKeeper;
-            this.renderer = renderer;
             this.index = index;
+            this.controlSets = controlSets;
+            this.settings = settings;
 
             this.tween = new TWEEN.Group();
             this._layer = new THREE.Scene();
             this._layer.name = '_layer' + index;
 
-            let three = renderer.three;
+            let three = animation.renderer.three;
             let camera = new THREE.PerspectiveCamera(50, 1, 0.1, 500000);
             let composer = new THREE.EffectComposer(three.renderer, three.target);
             let renderPass = new THREE.RenderPass(three.scene, camera, null);
@@ -196,13 +191,13 @@
                 composer: composer,
             };
 
-            this._resetSizes(renderer.resolution);
+            this._resetSizes(animation.renderer.resolution);
             this.needsReset = true;
         }
 
         /**
          *
-         * @private
+         * @protected
          */
         _initRotator() {
             if (this._rotation) {
@@ -225,7 +220,7 @@
         /**
          *
          * @param resolution
-         * @private
+         * @protected
          */
         _initBoundaries(resolution) {
 
@@ -259,7 +254,7 @@
 
         /**
          *
-         * @private
+         * @protected
          */
         _fullReset() {
             this.needsReset = false;
@@ -277,7 +272,7 @@
         /**
          *
          * @param resolution
-         * @private
+         * @protected
          */
         _resetSizes(resolution) {
 
@@ -290,7 +285,7 @@
 
         /**
          *
-         * @private
+         * @protected
          */
         _resetShapes() {
 
@@ -325,7 +320,7 @@
 
         /**
          *
-         * @private
+         * @protected
          */
         _dispose() {
             let sc = this.three.scene;
@@ -359,7 +354,7 @@
 
         /**
          *
-         * @private
+         * @protected
          */
         _resetAnimation() {
             if (this.tween) {
@@ -371,7 +366,7 @@
         /**
          *
          * @returns {null|[]}
-         * @private
+         * @protected
          */
         _updateShaders() {
             let shaders = null;
@@ -422,22 +417,22 @@
         /**
          *
          * @returns {null|[]}
-         * @private
+         * @protected
          */
         _updateShaderPasses() {
             this.shadersNeedUpdate = false;
 
             let shaders = null;
-            let passes = this.animation.settingsManager.get(this.index, 'passes');
-            let shds = passes.getShaderPasses();
+            let controlSet = this.animation.settingsManager.get(this.index, 'passes');
+            let shaderPresets = controlSet.getShaderPasses();
 
-            for (let index in shds) {
+            for (let index in shaderPresets) {
 
-                let shader = passes.getShader(index);
+                let shader = controlSet.getShader(index);
 
                 if (shader && shader.apply) {
-                    let name = passes.getShaderName(index);
-                    let key = passes.getShaderPassKey(index);
+                    let name = controlSet.getShaderName(index);
+                    let key = controlSet.getShaderPassKey(index);
                     let plugin = this.getShaderPassPlugin(name, key, shader);
                     if (plugin) {
                         plugin.create();
@@ -472,67 +467,67 @@
 
         /**
          *
-         * @private
+         * @protected
          */
         _initListeners() {
-            let eventManager = HC.EventManager.getInstance();
-
+            let eventManager = HC.EventManager;
+            let onError = (e)=>{console.log(e);};
             eventManager.register(EVENT_LAYER_RESET, this.index, () => {
                 console.log(EVENT_LAYER_RESET, this.index);
                 this.needsReset = true;
 
                 // if layer is not animated right now, do it after some frames
-                HC.TimeoutManager.getInstance().add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
+                HC.TimeoutManager.add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
                     this._handleResets();
-                });
+                }, onError);
             });
 
             eventManager.register(EVENT_SHAPE_MATERIALS_UPDATE, this.index, () => {
                 this.shapeMaterialsNeedUpdate = true;
                 // if layer is not animated right now, do it after some frames
-                HC.TimeoutManager.getInstance().add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
+                HC.TimeoutManager.add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
                     this._handleResets();
-                });
+                }, onError);
             });
 
             eventManager.register(EVENT_LAYER_RESET_SHAPES, this.index, () => {
                 this.shapesNeedReset = true;
                 // if layer is not animated right now, do it after some frames
-                HC.TimeoutManager.getInstance().add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
+                HC.TimeoutManager.add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
                     this._handleResets();
-                });
+                }, onError);
             });
 
             eventManager.register(EVENT_LAYER_RESET_LIGHTING, this.index, () => {
                 this.lightingNeedsReset = true;
                 // if layer is not animated right now, do it after some frames
-                HC.TimeoutManager.getInstance().add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
+                HC.TimeoutManager.add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
                     this._handleResets();
-                });
+                }, onError);
             });
 
             eventManager.register(EVENT_LAYER_RESET_AMBIENT, this.index, () => {
                 this.ambientNeedsReset = true;
                 // if layer is not animated right now, do it after some frames
-                HC.TimeoutManager.getInstance().add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
+                HC.TimeoutManager.add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
                     this._handleResets();
-                });
+                }, onError);
             });
 
             eventManager.register(EVENT_LAYER_RESET_FOG, this.index, () => {
                 this.fogNeedsReset = true;
                 // if layer is not animated right now, do it after some frames
-                HC.TimeoutManager.getInstance().add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
+                HC.TimeoutManager.add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
                     this._handleResets();
-                });
+                }, onError);
             });
 
             eventManager.register(EVENT_LAYER_UPDATE_SHADERS, this.index, () => {
                 this.shadersNeedUpdate = true;
                 // if layer is not animated right now, do it after some frames
-                HC.TimeoutManager.getInstance().add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
+                HC.TimeoutManager.add('_handleResets.' + this.index, SKIP_TEN_FRAMES, () => {
                     this._handleResets();
-                });
+                }, onError);
             });
         }
     }

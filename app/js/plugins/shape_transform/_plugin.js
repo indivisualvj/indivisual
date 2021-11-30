@@ -5,7 +5,9 @@ HC.plugins.shape_transform = HC.plugins.shape_transform || {};
         vertices;
 
         before(shape) {
-            if (!this.vertices) {
+            if (this._doesThings() && !this.vertices) {
+                shape.geometry.computeBoundingBox();
+                shape.geometry.computeBoundingSphere();
                 let vertices = shape.geometry.getAttribute('position');
                 this.vertices = [];
                 let v = new THREE.Vector3();
@@ -19,14 +21,12 @@ HC.plugins.shape_transform = HC.plugins.shape_transform || {};
         }
 
         after(shape) {
-            // todo geo.attributes.lineDistance.needsUpdate?
-            if (this.key !== 'off') {
+            if (this._doesThings()) {
                 if (shape.geometry.attributes.lineDistance) {
                     shape.geometry.attributes.lineDistance.needsUpdate = true;
                 }
                 shape.geometry.attributes.position.needsUpdate = true;
             }
-            // fixme: these plugins can not be done per shape (eg. drawrange using shapespeed) because there is only one geometry at a time
         }
 
         setControlSets(controlSets) {
@@ -37,6 +37,10 @@ HC.plugins.shape_transform = HC.plugins.shape_transform || {};
 
         reset() {
             this.vertices = null;
+        }
+
+        _doesThings() {
+            return true;
         }
     }
 }

@@ -40,6 +40,13 @@
         audioAnalyser;
 
         /**
+         *
+         * @type {boolean}
+         * @private
+         */
+        __renderToScreen = true;
+
+        /**
          * @param {HC.Animation} animation
          * @param config
          */
@@ -58,6 +65,7 @@
 
             this.initBorderModePlugins();
             this.initVisibilityModePlugins();
+            this.initEvents();
         }
 
         /**
@@ -117,7 +125,7 @@
         onMapping(id, mapping) {
             if (this.animation) {
                 let f = (id, mapping) => {
-                    HC.TimeoutManager.getInstance().add('onMapping.' + id, 125, () => {
+                    HC.TimeoutManager.add('onMapping.' + id, 125, () => {
                         this.animation.updateDisplay(id + '_mapping', JSON.stringify(mapping), false, true, false);
                     });
                 };
@@ -247,7 +255,7 @@
             let visible = this.config.DisplaySettings['display' + i + '_visible'];
             if (visible) {
                 if (!this.displays[i]) {
-                    this.displays[i] = new HC.Display(this.animation, i);
+                    this.displays[i] = new HC.Display(i, this);
                     this._addDisplay(i);
 
                     if (IS_SETUP) {
@@ -273,34 +281,26 @@
         /**
          *
          * @param i
-         * @param mode
+         * @param refresh
          */
-        updateDisplay(i, mode) {
+        updateDisplay(i, refresh) {
             let display = this.getDisplay(i);
             if (display) {
                 display.update(this.width, this.height, this.config.DisplaySettings);
 
-                if (!mode) {
+                if (!refresh) {
                     this.animation.sourceManager.updateSource(display);
                     this.enableCliptastic(display, false);
                     display.updateMask();
-                    this.enableCliptastic(display, !display.isFixedSize());
-                    display.updateClip();
+                    this.enableCliptastic(display, true);
                     this.enableMaptastic(display, true);
 
                 } else {
-                    switch (mode) {
-                        case 'mask':
-                        case 'mapping':
-                            display.loadMask();
-                            display.updateClip();
-                            this.refreshCliptastic();
-                            this.enableMaptastic(display, true);
-                            break;
-                    }
+                    display.loadMask();
+                    this.refreshCliptastic();
+                    this.enableMaptastic(display, true);
                 }
             }
-
             this.updateDisplayMap();
         }
 
@@ -369,7 +369,23 @@
          *
          */
         render() {
-            this.renderDisplays();
+            if (this._renderToScreen()) {
+                this.renderDisplays();
+            }
+        }
+
+        _renderToScreen() {
+            if (this.beatKeeper.getSpeed('sixteen').starting()) {
+                this.__renderToScreen = true;
+
+            } else if (this.config.DisplaySettings.fps < 30) {
+                this.__renderToScreen = true;
+
+            } else {
+                this.__renderToScreen = !this.__renderToScreen;
+            }
+
+            return this.__renderToScreen;
         }
 
         /**
@@ -500,5 +516,13 @@
             return speed;
         }
 
+        initEvents() {
+            HC.EventManager.register(EVENT_FULL_RESET, 'displayman', (emitter) => {
+                this.resize(emitter.getResolution());
+            });
+            HC.EventManager.register(EVENT_RESIZE, 'displayman', (emitter) => {
+                this.resize(emitter.getResolution());
+            });
+        }
     }
 }

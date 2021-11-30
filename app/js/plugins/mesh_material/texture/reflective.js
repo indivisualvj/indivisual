@@ -26,7 +26,7 @@
 
             this.cubeTextureFromBackgroundInput(_onLoad);
             let id = this.id(index);
-            HC.EventManager.getInstance().register('animation.updateSetting', id, function (data) { // todo use const
+            HC.EventManager.register(EVENT_ANIMATION_UPDATE_SETTING, id, function (data) {
                 if (data.layer === inst.layer) {
                     switch (data.item) {
                         case 'background_input':
@@ -43,7 +43,7 @@
         }
 
         reset() {
-            HC.EventManager.getInstance().removeLike(this.id());
+            HC.EventManager.removeLike(this.id());
         }
     }
 }

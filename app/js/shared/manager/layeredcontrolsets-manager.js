@@ -4,19 +4,41 @@
 {
     HC.LayeredControlSetsManager = class LayeredControlSetsManager {
 
-        static _mappings = false;
-        static _oscillatorProperties = false;
-        layers;
+        /**
+         *
+         * @type {{}}
+         * @private
+         */
+        static _mappings;
+
+        /**
+         *
+         * @type {{}}
+         * @private
+         */
+        static _oscillatorProperties;
+
+        /**
+         *
+         * @type {[{controlSet: {string: HC.ControlSet}}]}
+         */
+        layers = [];
+
+        /**
+         *
+         */
         pluggedValues;
+
+        /**
+         *
+         */
         globalProperties;
 
         /**
          *
-         * @param layers
          * @param pluggedValues
          */
-        constructor(layers, pluggedValues) {
-            this.layers = layers;
+        constructor(pluggedValues) {
             this.pluggedValues = pluggedValues;
         }
 
@@ -75,7 +97,7 @@
          *
          * @param layer
          * @param set
-         * @returns HC.ControlSet
+         * @returns {HC.ControlSet}
          */
         get(layer, set) {
 
@@ -189,7 +211,7 @@
         /**
          *
          */
-        reset(heap) {
+        reset(excluded) {
 
             if (this.globalProperties) {
                 let controlSets = this.globalProperties.controlSets;
@@ -201,7 +223,7 @@
 
             for (let layer in this.layers) {
 
-                if (heap && heap.length && heap.indexOf(parseInt(layer)) > -1) {
+                if (excluded && excluded.length && excluded.indexOf(parseInt(layer)) > -1) {
                     continue;
                 }
 

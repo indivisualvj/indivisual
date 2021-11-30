@@ -13,7 +13,6 @@
             this.program = program;
             this.socket = false;
             this.sid = false;
-            this.timeouts = {};
 
             this.init();
         }
@@ -163,29 +162,24 @@
                 let elem = document.querySelector(data.query);
                 if (elem) {
                     if (data.value === '') {
+                        if (data.timeout && HC.TimeoutManager.has(key)) {
+                            return;
+                        }
                         elem.removeAttribute(data.key);
 
                     } else {
-
                         elem.setAttribute(data.key, data.value);
                     }
 
                     if (data.resetValue !== undefined) {
-
-                        if (that.timeouts[key]) {
-                            clearTimeout(that.timeouts[key]);
-                        }
-
-                        that.timeouts[key] = setTimeout(() => {
-
+                        HC.TimeoutManager.add(key, data.timeout ? data.timeout : 125, () => {
                             if (data.resetValue === '') {
                                 elem.removeAttribute(data.key);
 
                             } else {
                                 elem.setAttribute(data.key, data.resetValue);
                             }
-                            delete that.timeouts[key];
-                        }, data.timeout ? data.timeout : 125);
+                        });
                     }
                 }
             });
@@ -324,8 +318,9 @@
          * @param display
          * @param forward
          * @param force
+         * @param callback
          */
-        emitSources(data, display, forward, force) {
+        emitSources(data, display, forward, force, callback) {
             if (data) {
                 let config = {
                     action: 'sources',
@@ -335,7 +330,7 @@
                     force: force
                 };
 
-                this._emit(config);
+                this._emit(config, callback);
             }
         }
 

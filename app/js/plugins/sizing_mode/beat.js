@@ -18,7 +18,7 @@
 
         calculate(shape) {
             let layer = this.layer;
-            let speed = layer.getShapeSpeed(shape);
+            let speed = layer.shapeSpeed(shape);
             let prc   = speed.prc;
             let thrs  = this.threshold * this.settings.sizing_scale;
             let thrsS = 1 - thrs;

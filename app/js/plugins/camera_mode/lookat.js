@@ -31,7 +31,7 @@
 
             if (!this.shape || (!peak && speed.prc === 0) || (peak && this.audioAnalyser.peak && randomBool())) {
 
-                let shape = layer.getRandomShape();
+                let shape = layer.randomShape();
                 if (shape !== this.shape) {
                     this.shape = shape;
                     this._tween = true;

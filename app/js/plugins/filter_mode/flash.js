@@ -12,7 +12,7 @@
             let color = this.color;
 
             if (this.isFirstShape(shape) || overwrite === true) {
-                let speed = layer.getShapeSpeed(shape);
+                let speed = layer.shapeSpeed(shape);
 
                 if (speed.progress > speed.duration - 50) {
                     let diff = Math.abs(speed.duration - speed.progress);
@@ -70,7 +70,7 @@
             let color = this.color;
 
             if (this.isFirstShape(shape) || overwrite === true) {
-                let speed = layer.getShapeSpeed(shape);
+                let speed = layer.shapeSpeed(shape);
 
                 let pm = randomInt(80, 110);
                 if (speed.progress > speed.duration - pm

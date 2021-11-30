@@ -4,7 +4,7 @@
 
         apply(shape) {
             let layer = this.layer;
-            let pos = layer.patternCenterVector(true);
+            let pos = layer.getPatternPlugin().patternCenterVector(true);
 
             let a = shape.position().distanceTo(pos);
             let m = a * layer.shapeSize(.01);

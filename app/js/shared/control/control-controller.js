@@ -46,7 +46,13 @@ HC.ControlController = HC.ControlController || {};
                         this.config.messaging.program.fullReset();
                     }
                 } else if (HC.Hotkey.isPressed('shift')) {
-                    this.config.messaging.program.resetLayers().finally();
+                    let _done = false;
+                    this.config.messaging.program.midi.loading(() => {
+                        return _done;
+                    });
+                    this.config.messaging.program.resetLayers().finally(() => {
+                        _done = true;
+                    });
 
                 } else {
                     this.config.messaging.program.updateControl('reset', true, true, true, false);

@@ -165,7 +165,7 @@ HC.controls = HC.controls || {};
          * @returns Object
          */
         defaults() {
-            return {...this.settings};
+            return clone(this.settings);
         }
 
         /**

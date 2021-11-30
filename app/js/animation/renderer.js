@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+
 {
-    HC.Renderer = class Renderer {
+    class Renderer { // is asigned to HC later to not overwrite shuffle_mode plugins
 
         /**
          *
@@ -71,6 +72,11 @@
          */
         beatKeeper;
 
+        /**
+         * @type {{}}
+         */
+        plugins;
+
 
         /**
          *
@@ -83,7 +89,8 @@
             this.beatKeeper = animation.beatKeeper;
             this.layers = config.layers;
 
-            this.initThreeJs();
+            this._initThreeJs();
+            this.initEvents();
         }
 
         /**
@@ -91,16 +98,17 @@
          * @param keepSettings
          */
         fullReset(keepSettings) {
-            HC.EventManager.getInstance().removeEvent(EVENT_RENDERER_BEFORE_RENDER);
+            HC.EventManager.removeEvent(EVENT_RENDERER_BEFORE_RENDER);
             this.resize();
             this.initLayers(keepSettings);
-            this.setLayer(0);
+            this._setLayer(0);
         }
 
         /**
          *
+         * @private
          */
-        initThreeJs() {
+        _initThreeJs() {
             if (!this.three.renderer) {
                 let canvas = new OffscreenCanvas(1, 1);
 
@@ -108,14 +116,13 @@
                 this.three.renderer = new THREE.WebGLRenderer(conf);
                 this.three.renderer.shadowMap.enabled = true;
                 this.three.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+                this.three.renderer.view = canvas;
 
                 canvas.id = 'threeWebGL';
                 canvas.style = {width: 1, height: 1};
-                canvas.addEventListener('webglcontextlost', () => {
-                    HC.EventManager.getInstance().fireEvent('webglcontextlost'); // todo use const
+                canvas.addEventListener(EVENT_WEBGL_CONTEXT_LOST, () => {
+                    HC.EventManager.fireEvent(EVENT_WEBGL_CONTEXT_LOST);
                 });
-
-                this.three.renderer.view = canvas;
 
                 this.three.scene = new THREE.Scene();
                 this.three.perspective0 = new THREE.PerspectiveCamera(50, 1, 0.1, 500000);
@@ -129,9 +136,6 @@
                     __THREE_DEVTOOLS__.dispatchEvent(new CustomEvent('observe', { detail: this.three.scene }));
                 }
 
-                // listener.register('layer.doCameraMode', 'perspectives', function (cam) {
-
-                // })
             }
         }
 
@@ -162,14 +166,15 @@
                     ol._dispose();
                 }
 
-                let layer = new HC.Layer(this.animation, this, i);
-
-                layer.controlSets = oldControlSets || HC.LayeredControlSetsManager.initAll(this.config.AnimationValues);
-                layer.settings = HC.LayeredControlSetsManager.settingsProxy(oldControlSets || layer.controlSets);
+                let nuControlSets = oldControlSets || HC.LayeredControlSetsManager.initAll(this.config.AnimationValues);
+                let settings = HC.LayeredControlSetsManager.settingsProxy(nuControlSets);
+                let layer = new HC.Layer(this.animation, i, nuControlSets, settings);
+                layer.controlSets = nuControlSets;
+                this.animation.settingsManager.setLayerProperties(i, nuControlSets);
 
                 this.layers[i] = layer;
 
-                HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET, layer.index, layer, 0);
+                HC.EventManager.fireEventId(EVENT_LAYER_RESET, layer.index, layer, 0);
             }
 
             this.currentLayer = this.layers[this.config.ControlSettings.layer];
@@ -179,13 +184,14 @@
         /**
          *
          * @param force
+         * @private
          */
-        switchLayer(force) {
+        _switchLayer(force) {
 
             if (this.nextLayer) {
                 if (this.currentLayer !== this.nextLayer) {
                     if (!force && this.config.ControlSettings.shuffle_mode !== 'off') {
-                        let speed = this.nextLayer.getCurrentSpeed();
+                        let speed = this.nextLayer.currentSpeed();
                         if (!speed.starting()) {
                             if (!this._isForceAnimate(this.nextLayer)) {
                                 console.log('HC.Renderer.switchLayer', 'fail', 'speed in progress')
@@ -202,13 +208,13 @@
                     if (!this._isForceAnimate(this.nextLayer)) {
                         this.nextLayer.resume();
                     }
-                    this.setLayer(this.nextLayer.index);
+                    this._setLayer(this.nextLayer.index);
 
                     this.currentLayer = this.nextLayer;
                     this.nextLayer = false;
 
                 } else {
-                    this.setLayer(this.nextLayer.index);
+                    this._setLayer(this.nextLayer.index);
                     this.nextLayer = false;
                 }
             }
@@ -217,9 +223,10 @@
         /**
          *
          * @param index
+         * @private
          */
-        setLayer(index) {
-
+        _setLayer(index) {
+// todo: set layer event to set all necessary layers after loadpresets or reset etc. pp.
             for (let i in this.layers) {
                 i = parseInt(i);
                 let layer = this.layers[i];
@@ -238,8 +245,9 @@
 
         /**
          *
+         * @private
          */
-        pauseLayers() {
+        _pauseLayers() {
             for (let i = 0; i < this.layers.length; i++) {
                 this.layers[i].pause();
             }
@@ -247,8 +255,9 @@
 
         /**
          *
+         * @private
          */
-        resumeLayers() {
+        _resumeLayers() {
             for (let i = 0; i < this.layers.length; i++) {
                 this.layers[i].resume();
             }
@@ -256,8 +265,14 @@
 
         /**
          *
+         * @private
          */
-        animate() {
+        _animate() {
+            if (IS_ANIMATION) {
+                this._doShuffle();
+            }
+            this._switchLayer(IS_MONITOR);
+
             for (let l in this.layers) {
                 let layer = this.layers[l];
                 if (layer === this.currentLayer || this._isForceAnimate(layer)) {
@@ -266,37 +281,35 @@
             }
         }
 
+        /**
+         *
+         * @returns {number[]}
+         */
+        renderedLayers() {
+            let rendered = [];
+            for (let l = 0; l < this.layers.length; l++) {
+                let layer = this.layers[l];
+                if (layer === this.currentLayer || this._isForceAnimate(layer)) {
+                    rendered.push(l);
+                }
+            }
+
+            return rendered;
+        }
+
         _isForceAnimate(layer) {
-            let shuffleable = !this.animation.settingsManager.isDefault(layer.index) && this.config.shuffleable(layer.index+1);
+            let shuffleable = !this.animation.settingsManager.isDefault(layer.index) && this.config.shuffleable(layer.index + 1);
             let fastShuffling = this.config.ControlSettings.shuffle_mode !== 'off' && this.config.ControlSettings.shuffle_every < 4;
             let shuffling = (shuffleable && fastShuffling);
 
-            if (layer.settings.layer_transvisible || shuffling) {
-                return true;
-            }
-
-            return false
-        }
-
-        /**
-         *
-         * @param layer
-         */
-        resetLayer(layer) {
-
-            if (isNumber(layer) || isString(layer)) {
-                layer = this.layers[layer];
-            }
-
-            this.nextLayer = false;
-            layer.needsReset = true;
+            return (layer.settings.layer_transvisible || shuffling);
         }
 
         /**
          *
          */
         resize() {
-            let res = this.getResolution();
+            let res = this.animation.getResolution();
             this.resolution = res;
 
             if (this.three.scene) {
@@ -322,30 +335,10 @@
 
         /**
          *
-         * @returns {{aspect: number, x: number, y: number}}
-         */
-        getResolution() {
-            let resolution;
-
-            let res = this.config.DisplaySettings.resolution;
-            if (res) {
-                let sp = res.split(/[\:x]/);
-                if (sp.length > 1) {
-                    let w = parseInt(sp[0]);
-                    let h = parseInt(sp[1]);
-                    resolution = {x: w, y: h, aspect: w / h, diameter: new THREE.Vector2(w, h).length()};
-                }
-            }
-
-            return resolution;
-        }
-
-        /**
-         *
-         * @returns {boolean|*}
+         * @returns {null|OffscreenCanvas}
          */
         current() {
-            this.render();
+            this._render();
 
             let renderer = this.three.renderer;
             if (renderer && renderer.view) {
@@ -353,7 +346,7 @@
                 return renderer.view;
 
             } else {
-                return false;
+                return null;
             }
         }
 
@@ -367,23 +360,14 @@
 
         /**
          *
-         * @param reference
-         * @returns {*}
          */
-        bounds(reference) {
-            return reference;
-        }
-
-        /**
-         *
-         */
-        render() {
+        _render() {
             if (this._last !== this.animation.now) {
 
                 this.three.scene.background = this.currentLayer._layer.background;
                 this.three.scene.fog = this.currentLayer._layer.fog;
 
-                HC.EventManager.getInstance().fireEvent(EVENT_RENDERER_BEFORE_RENDER, this);
+                HC.EventManager.fireEvent(EVENT_RENDERER_BEFORE_RENDER, this);
 
                 if (this.currentLayer.shaders()) {
                     this.currentLayer.doShaders();
@@ -397,6 +381,42 @@
             }
         }
 
+
+        /**
+         *
+         * @private
+         */
+        _doShuffle() {
+            let plugin = this._getShuffleModePlugin();
+            let result = plugin.apply();
+            if (result !== false) {
+                result = plugin.after();
+                if (result !== false) {
+                    this.nextLayer = this.layers[result];
+                }
+            }
+        }
+
+        /**
+         *
+         * @param name
+         * @returns {*}
+         * @private
+         */
+        _getShuffleModePlugin(name) {
+            if (!this.plugins) {
+                this.plugins = {};
+            }
+            name = name || this.config.ControlSettings.shuffle_mode;
+
+            if (!this.plugins[name]) {
+                this.plugins[name] = new HC.Renderer.shuffle_mode[name](this, this.config.ControlSettings);
+            }
+
+            return this.plugins[name];
+        }
+
+
         /**
          *
          * @returns {string}
@@ -404,5 +424,29 @@
         currentColor() {
             return this.currentLayer.shapeColor(false);
         }
+
+        initEvents() {
+            HC.EventManager.register(EVENT_ANIMATION_ANIMATE, 'renderer', () => {
+                this._animate();
+            });
+            HC.EventManager.register(EVENT_ANIMATION_PLAY, 'renderer', () => {
+                this._resumeLayers();
+            });
+            HC.EventManager.register(EVENT_ANIMATION_PAUSE, 'renderer', () => {
+                this._pauseLayers();
+            });
+            HC.EventManager.register(EVENT_FULL_RESET, 'renderer', (emitter) => {
+                this.fullReset(false);
+            });
+            HC.EventManager.register(EVENT_RESIZE, 'renderer', (emitter) => {
+                this.fullReset(true);
+            });
+            HC.EventManager.register(EVENT_RESET, 'renderer', (emitter) => {
+                this.fullReset(true);
+            });
+        }
     }
+
+    HC.Renderer = Object.assign(Renderer, HC.Renderer);
+
 }

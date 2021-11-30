@@ -46,7 +46,7 @@
             if (this.settings.pattern_limit && !firstRun) {
                 let position = shape.position();
 
-                let distance = position.distanceTo(layer.patternCenterVector());
+                let distance = position.distanceTo(this.patternCenterVector());
                 speed = shape.size() / distance * 25;
             }
 
@@ -65,7 +65,7 @@
             y = y * maxY;
             z = z * maxZ;
 
-            layer.positionIn3dSpace(shape, x, y, z);
+            this.positionIn3dSpace(shape, x, y, z);
         }
     }
 }

@@ -39,81 +39,26 @@ HC.Controller.prototype.addGuifyDisplayControllers = function (groups, controlSe
 
 /**
  *
- * @param controlSets {Array}
+ * @param controlSets {{}}
  * @param uiClass {string}
  * @param parent {HC.GuifyFolder}
- * @param hook {Function|null}
  */
-HC.Controller.prototype.addGuifyControllers = function (controlSets, uiClass, parent, hook) {
+HC.Controller.prototype.addGuifyControllers = function (controlSets, uiClass, parent) {
     for (let k in controlSets) {
-        let inst = controlSets[k];
+        let controlSet = controlSets[k];
 
-        if (inst.visible !== false) {
-            let ui = new uiClass(inst, parent);
+        if (controlSet.visible !== false) {
+            let ui = new uiClass(controlSet, parent);
 
-            if (inst instanceof HC.IterableControlSet) {
+            if (controlSet instanceof HC.IterableControlSet) {
                 ui.folder = parent;
 
             } else {
                 ui.addFolder();
             }
-            ui.addControllers(hook);
+            ui.addControllers();
         }
     }
-};
-
-/**
- *
- */
-HC.Controller.prototype.addConfigurationSettings = function () {
-
-    for (let k in this.config) {
-        if (k.endsWith('Types')) {
-            let object = this.config[k];
-            let folder = this.configurationSettingsGui.addFolder(k);
-
-            for (let p in object) {
-
-                let v = object[p];
-
-                if (isArray(v) && v.length > 1) {
-                    let opts = {
-                        type: 'interval',
-                        label: p,
-                        property: p,
-                        object: object,
-                        min: v[0]*2,
-                        max: v[1]*2
-                    };
-                    folder.addController(opts);
-                }
-            }
-        }
-    }
-};
-
-HC.Controller.prototype.initStatusBar = function () {
-
-    let ctrls = {
-        play: {
-            dataClass: 'quarter'
-        },
-        beat: {
-
-        },
-        sync: {
-
-        },
-        audio: {
-
-        },
-        layer: {
-
-        },
-        layers: {
-
-        }
-    };
 };
 
 /**
@@ -122,16 +67,15 @@ HC.Controller.prototype.initStatusBar = function () {
  */
 HC.Controller.prototype.addPassesFolder = function (onChange) {
 
-    let passes = this.animationSettingsGui.getChild('passes');
-    if (passes) {
-        this.animationSettingsGui.removeChild(passes);
+    let oldFolder = this.animationSettingsGui.getChild('passes');
+    if (oldFolder) {
+        this.animationSettingsGui.removeChild(oldFolder);
     }
     let ui = new HC.ControlSetGuifyUi(this.settingsManager.getGlobalProperties()['passes'], this.animationSettingsGui);
-    let dir = ui.addFolder();
+    let dir = ui.addFolder(false);
 
     dir.addSelectController('pass', 'pass', {pass: ''}, this.config.AnimationValues.shaders, onChange);
 };
-
 
 /**
  *
@@ -155,21 +99,21 @@ HC.Controller.prototype.addShaderPassController = function (key, control, parent
  *
  * @param folder
  * @param key
- * @param sh
+ * @param settings
  * @param parent
  * @param control
  */
-HC.Controller.prototype.addShaderController = function (folder, key, sh, parent, control) {
+HC.Controller.prototype.addShaderController = function (folder, key, settings, parent, control) {
 
     control = control || new HC.ShaderPassUi(parent, this.config);
-    let shi = control.getInitialSettings() || {}; // fallback 4 cleaned settings from storage
+    let initialSettings = control.getInitialSettings() || {}; // fallback 4 cleaned settings from storage
     let submit = control.onChange();
 
-    for (let skey in sh) {
-        let shs = sh[skey];
-        let shis = shi[skey] || {};
+    for (let subsetKey in settings) {
+        let setting = settings[subsetKey];
+        let initialSetting = initialSettings[subsetKey] || {};
 
-        let label = skey;
+        let label = subsetKey;
 
         let _opts = function (label, onChange, folder, property, object) {
             return {
@@ -183,9 +127,9 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
             };
         };
 
-        let opts = _opts(label, submit, folder, skey, sh);
+        let opts = _opts(label, submit, folder, subsetKey, settings);
 
-        switch(skey) {
+        switch(subsetKey) {
             case 'apply':
                 opts.dataClass = 'half';
                 break;
@@ -196,28 +140,28 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                 break;
         }
 
-        if (typeof shs === 'boolean') { // apply, etc.
+        if (typeof setting === 'boolean') { // apply, etc.
             opts.type = 'checkbox';
             folder.addController(opts);
 
-        } else if (typeof shs === 'number') {
+        } else if (typeof setting === 'number') {
             opts.type = 'range';
             opts.step = 1;
 
             folder.addController(opts);
 
         } else {
-            let v = ('value' in shs) ? shs['value'] : null;
+            let v = ('value' in setting) ? setting['value'] : null;
 
             if (v !== null) {
-                let range = ('_type' in shs) ? shs['_type'] : (('_type' in shis) ? shis['_type'] : null);
-                let audio = ('audio' in shs) ? shs['audio'] : null;
-                let stepwise = ('stepwise' in shs) ? shs['stepwise'] : null;
-                let oscillate = ('oscillate' in shs) ? shs['oscillate'] : null;
+                let range = ('_type' in setting) ? setting['_type'] : (('_type' in initialSetting) ? initialSetting['_type'] : null);
+                let audio = ('audio' in setting) ? setting['audio'] : null;
+                let stepwise = ('stepwise' in setting) ? setting['stepwise'] : null;
+                let oscillate = ('oscillate' in setting) ? setting['oscillate'] : null;
 
-                label = (key ? (key + '_') : '') + skey;
+                label = (key ? (key + '_') : '') + subsetKey;
 
-                opts = _opts(label, submit, folder, 'value', shs);
+                opts = _opts(label, submit, folder, 'value', setting);
 
                 let min, max, step;
                 if (range) {
@@ -240,9 +184,9 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                 }
 
                 if (audio !== null) {
-                    let _label = skey + '_audio';
+                    let _label = subsetKey + '_audio';
 
-                    opts = _opts(_label, submit, folder, 'audio', shs);
+                    opts = _opts(_label, submit, folder, 'audio', setting);
                     opts.type = 'checkbox';
                     opts.dataClass = 'quarter';
                     opts.cssClasses = 'clear';
@@ -251,9 +195,9 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                 }
 
                 if (stepwise !== null) {
-                    let _label = skey + '_stepwise';
+                    let _label = subsetKey + '_stepwise';
 
-                    opts = _opts(_label, submit, folder, 'stepwise', shs);
+                    opts = _opts(_label, submit, folder, 'stepwise', setting);
                     opts.type = 'checkbox';
                     opts.dataClass = 'quarter';
                     opts.cssClasses = 'noclear';
@@ -262,8 +206,8 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                 }
 
                 if (oscillate !== null) {
-                    let _label = skey + '_oscillate';
-                    opts = _opts(_label, submit, folder, 'oscillate', shs);
+                    let _label = subsetKey + '_oscillate';
+                    opts = _opts(_label, submit, folder, 'oscillate', setting);
                     opts.type = 'select';
                     opts.options = this.config.AnimationValues.oscillate;
                     opts.dataClass = 'half';
@@ -273,7 +217,7 @@ HC.Controller.prototype.addShaderController = function (folder, key, sh, parent,
                 }
 
             } else { // go deeper
-                this.addShaderController(folder, skey, shs, parent, control);
+                this.addShaderController(folder, subsetKey, setting, parent, control);
             }
         }
     }
@@ -512,7 +456,7 @@ HC.Controller.prototype.scrollToControl = function (control) {
 HC.Controller.prototype.updateUi = function (control) {
     let key = control ? control.getLabel() : 'all';
 
-    HC.TimeoutManager.getInstance().add('updateUi.' + key, SKIP_TEN_FRAMES, () => {
+    HC.TimeoutManager.add('updateUi.' + key, SKIP_TEN_FRAMES, () => {
         this.refreshLayersUi();
 
         if (!control) {
@@ -547,18 +491,18 @@ HC.Controller.prototype.updateUiPasses = function () {
     if (passFld && passFld.getChild('pass')) {
         passFld.getChild('pass').setValue(null);
 
-        let cs = this.settingsManager.get(this.config.ControlSettings.layer, 'passes');
-        let passes = cs.getShaderPasses();
+        let controlSet = this.settingsManager.get(this.config.ControlSettings.layer, 'passes');
+        let shaders = controlSet.getShaderPasses();
 
         for (let k in passFld.children) {
             if (k === 'pass')continue;
             passFld.removeChild(k);
         }
 
-        for (let k in passes) {
-            let key = cs.getShaderPassKey(k);
-            let name = cs.getShaderName(k);
-            let sh = cs.getShader(k);
+        for (let k in shaders) {
+            let key = controlSet.getShaderPassKey(k);
+            let name = controlSet.getShaderName(k);
+            let sh = controlSet.getShader(k);
             let ctrl = new HC.ShaderPassUi(name, this.config);
             ctrl.init(sh);
             this.addShaderPassController(key, ctrl, passFld);
@@ -647,8 +591,8 @@ HC.Controller.prototype.updateThumbs = function () {
         let sampleKey = getSampleKey(i);
 
         let data = false;
-        if (sampleKey in this.config.DataSettings) {
-            data = this.config.DataSettings[sampleKey];
+        if (sampleKey in this.config.DataSamples) {
+            data = this.config.DataSamples[sampleKey];
         }
 
         this.thumbs[i].update(data);
@@ -664,57 +608,16 @@ HC.Controller.prototype.loadClip = function (index) {
 
     this.sourceManager.loadClip(smp,
     (clip) => {
-        let data = {data: {DataSettings: {}}};
-        data.data.DataSettings[smp.id] = clip;
+        let data = {data: {DataSamples: {}}};
+        data.data.DataSamples[smp.id] = clip;
         this.updateData(data);
     });
 };
 
 /**
- * 
- * @param seq
- */
-HC.Controller.prototype.updateIndicator = function (seq) {
-
-    /** @type {HC.SourceControllerSequence} */
-    let clip = this.clips[seq];
-
-    let sample = this.sourceManager.getSampleBySequence(seq);
-    let sampleKey = getSampleKey(sample);
-    let data = false;
-    if (sampleKey in this.config.DataSettings) {
-        data = this.config.DataSettings[sampleKey];
-    }
-
-    clip.updateIndicator(data);
-};
-
-/**
- *
- * @param seq
- */
-HC.Controller.prototype.updateClip = function (seq) {
-
-    /** @type {HC.SourceControllerSequence} */
-    let clip = this.clips[seq];
-
-    let sample = this.sourceManager.getSampleBySequence(seq);
-    let sampleKey = getSampleKey(sample);
-
-    let data = false;
-    if (sampleKey in this.config.DataSettings) {
-        data = this.config.DataSettings[sampleKey];
-    }
-
-    let enabled = this.sourceManager.getSampleEnabledBySequence(seq) && (data !== false);
-
-    clip.update(sample, enabled, data);
-};
-
-/**
  *
  */
-HC.Controller.prototype.initThumbs = function () {
+HC.Controller.prototype.initSamples = function () {
 
     this.sequenceSettingsGui.setOpen(true);
 

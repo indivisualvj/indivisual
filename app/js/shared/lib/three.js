@@ -41,11 +41,9 @@ HC.traverse = function (obj) {
     if (!isObject(obj)) return;
 
     if (obj.dispose && typeof obj.dispose === 'function') {
-        console.log(obj.constructor.name, 'dispose');
         obj.dispose();
     }
     if (obj.traverse && typeof obj.traverse === 'function') {
-        console.log(obj.constructor.name, 'traverse');
         obj.traverse(HC.traverse);
     }
 
@@ -59,7 +57,6 @@ HC.traverse = function (obj) {
                 prop.traverse(HC.dispose);
 
             } else if (prop.dispose && typeof prop.dispose === 'function') {
-                console.log(prop.constructor.name, 'dispose', key);
                 prop.dispose();
             }
         }

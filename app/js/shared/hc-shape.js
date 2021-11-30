@@ -301,9 +301,6 @@
                     mat.emissive.setHSL(0, 0, 0);
                 }
             }
-            if (mat.specularColor) {
-                console.log(mat.specularColor);
-            }
 
             if (plugin.properties && plugin.properties.map) {
                 if (mat.map !== plugin.properties.map) {

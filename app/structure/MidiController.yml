@@ -316,7 +316,7 @@
       display:
         type: function
         section: Source
-        name: g0animation
+        name: g0renderer
       layout:
         type: function
         section: Control
@@ -471,7 +471,7 @@
       display:
         type: function
         section: Source
-        name: g1animation
+        name: g1renderer
 
     25:
       default:

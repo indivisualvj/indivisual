@@ -18,7 +18,7 @@
         before(shape) {
             if (!this.randshapes) {
                 this.randshapes = this._randshapes(this.layer.shapeCount());
-                this.diameter = this.animation.renderer.getResolution().diameter;
+                this.diameter = this.animation.getResolution().diameter;
             }
 
             let params = this.params(shape);
@@ -30,9 +30,9 @@
                 params.targetLook = new THREE.Vector3();
                 this.randPosition(params);
             }
-            params.speed = this.layer.getShapeSpeed(shape);
+            params.speed = this.layer.shapeSpeed(shape);
             if (!params.speed) {
-                params.speed = this.layer.getCurrentSpeed();
+                params.speed = this.layer.currentSpeed();
             }
         }
 
@@ -43,7 +43,7 @@
         }
 
         randPosition(params, shape) {
-            let rand = this.layer.random3dPosition(.5, 0);
+            let rand = this.random3dPosition(.5, 0);
             params.targetLook.copy(rand);
             if (shape) {
                 this.randshapes.add(shape);
@@ -105,7 +105,7 @@
 
             } else {
 
-                let bro = this.randshapes.get() || layer.getRandomShape();
+                let bro = this.randshapes.get() || layer.randomShape();
                 let dist = bro ? bro.position().distanceTo(cam.position) : 0;
 
                 if (bro !== shape && dist > layer.shapeSize(1)) {
@@ -116,7 +116,7 @@
 
                 } else {
                     // turn to random point
-                    let rand = layer.random3dPosition(.5, 0);
+                    let rand = this.random3dPosition(.5, 0);
                     params.targetLook.copy(rand);
                     this.randPosition(params, shape);
                 }

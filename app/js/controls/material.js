@@ -14,11 +14,11 @@
                     switch (key) {
                         case 'mesh_material':
                         case 'material_mapping':
-                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_SHAPES, id, context);
+                            HC.EventManager.fireEventId(EVENT_LAYER_RESET_SHAPES, id, context);
                             break;
 
                         default:
-                            HC.EventManager.getInstance().fireEventId(EVENT_SHAPE_MATERIALS_UPDATE, id, context);
+                            HC.EventManager.fireEventId(EVENT_SHAPE_MATERIALS_UPDATE, id, context);
                             break;
                     }
                 }
@@ -72,7 +72,7 @@
             material_centerx: [0, 1, 0.001],
             material_centery: [0, 1, 0.001],
             material_rotation: [-180, 180, 0.1],
-            material_volume: [0, 10, 0.01]
+            material_volume: [0.01, 10, 0.01]
         };
 
         styles = {

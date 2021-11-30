@@ -2,6 +2,7 @@
     HC.plugins.pattern.disc = class Plugin extends HC.PatternPlugin {
         static name = 'disc';
         injections = {shellIndex: false};
+        squareDiameter = (Math.sqrt(2 * 2 + 2 * 2) / 2);
 
         apply(shape) {
             let layer = this.layer;
@@ -12,7 +13,7 @@
 
             if (index > 0) {
 
-                let diameter = layer.shapeSize(SQUARE_DIAMETER);
+                let diameter = layer.shapeSize(this.squareDiameter);
 
                 if (!params.shellIndex) {
 
@@ -47,7 +48,7 @@
 
             }
 
-            layer.positionIn3dSpace(shape, x, y, z);
+            this.positionIn3dSpace(shape, x, y, z);
         }
     }
 }

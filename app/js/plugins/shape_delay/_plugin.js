@@ -26,7 +26,7 @@ HC.plugins.shape_delay = HC.plugins.shape_delay || {};
         after(shape) {
             let layer = this.layer;
             let params = this.params(shape);
-            let rp = layer.getShapeSpeed(shape);
+            let rp = layer.shapeSpeed(shape);
 
             params.delay -= params.delay * rp.speed.prc;
             params.delay = clamp(params.delay, 0, rp.duration); // bondage to 0 or duration ...

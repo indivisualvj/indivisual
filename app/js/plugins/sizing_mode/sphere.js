@@ -6,7 +6,7 @@
             let layer = this.layer;
 
 
-            let size = this.calculate(shape, revert, layer.patternCenterVector(true));
+            let size = this.calculate(shape, revert, layer.getPatternPlugin().patternCenterVector(true));
 
             shape.scale(size.x, size.y, size.z);
         }

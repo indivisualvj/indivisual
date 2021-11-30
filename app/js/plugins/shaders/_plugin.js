@@ -35,7 +35,7 @@ HC.plugins.shaders = HC.plugins.shaders || {};
             settings = settings || this.__proto__.constructor.settings;
 
             if (properties.random) {
-                if ((this.animation.audioManager.isActive() && this.audioAnalyser.peak && randomBool(3)) || (this.layer.getCurrentSpeed().prc === 0 && randomBool())) {
+                if ((this.animation.audioManager.isActive() && this.audioAnalyser.peak && randomBool(3)) || (this.layer.currentSpeed().prc === 0 && randomBool())) {
                     glsh.enabled = !glsh.enabled;
                 }
             } else {
@@ -49,7 +49,9 @@ HC.plugins.shaders = HC.plugins.shaders || {};
             for (let skey in properties) {
                 let sProperty = properties[skey];
                 let sSetting = settings[skey];
-
+                if (sSetting === undefined) {
+                    continue;
+                }
                 if (typeof sProperty !== 'boolean' && typeof sProperty !== 'number') {
 
                     if ('value' in sProperty) {

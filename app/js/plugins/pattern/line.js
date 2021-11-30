@@ -5,7 +5,7 @@
         apply(shape) {
             let layer = this.layer;
             let pos = this.calculate(shape);
-            layer.positionIn3dSpace(shape, pos.x, pos.y, pos.z);
+            this.positionIn3dSpace(shape, pos.x, pos.y, pos.z);
         }
 
         calculate(shape) {
@@ -33,7 +33,7 @@
         apply(shape) {
             let layer = this.layer;
             let pos = this.calculate(shape);
-            layer.positionIn3dSpace(shape, pos.x, pos.y, pos.z);
+            this.positionIn3dSpace(shape, pos.x, pos.y, pos.z);
         }
 
         calculate(shape) {

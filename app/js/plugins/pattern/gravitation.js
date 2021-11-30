@@ -29,7 +29,7 @@
                 let particle = params.particle;
 
                 if (!particle) {
-                    particle = new Particle(shape, this.layer.random2dPosition(0));
+                    particle = new Particle(shape, this.random2dPosition(0));
                     this.particles.push(particle);
                     params.particle = particle;
                 }

@@ -148,14 +148,6 @@ HC.SourceManager.display_source = {};
 
         /**
          *
-         * @returns {boolean|HC.Rectangle}
-         */
-        bounds() {
-            return false;
-        }
-
-        /**
-         *
          * @param fallback
          * @param passthrough
          * @returns {*}

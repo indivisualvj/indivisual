@@ -6,11 +6,6 @@
     HC.Display = class Display {
 
         /**
-         * @type {HC.Animation}
-         */
-        animation;
-
-        /**
          * @type {HC.Config}
          */
         config;
@@ -64,12 +59,6 @@
 
         /**
          * 
-         * @type {boolean}
-         */
-        keepbounds = true;
-
-        /**
-         * 
          * @type {number}
          */
         smearing = 0.0;
@@ -79,7 +68,7 @@
          * @type {boolean}
          * @private
          */
-        _dirty = true;
+        _dirty;
 
         /**
          * @type {HC.Rectangle}
@@ -99,14 +88,13 @@
         _source;
 
         /**
-         * 
-         * @param {HC.Animation} animation
+         *
          * @param index
+         * @param {HC.DisplayManager} displayManager
          */
-        constructor(animation, index) {
-            this.animation = animation;
-            this.config = animation.config;
-            this.displayManager = animation.displayManager;
+        constructor(index, displayManager) {
+            this.config = displayManager.config;
+            this.displayManager = displayManager;
             this.index = index;
             this.id = 'display' + index;
             let canvas = document.createElement('canvas');
@@ -122,7 +110,6 @@
          */
         setSource(source) {
             this._source = source;
-            this.updateClip();
         }
 
         /**
@@ -147,18 +134,13 @@
          */
         render(fallback) {
             let ctx = this.ctx;
-            let bounds = this._clipBounds(false);
-            let clip = bounds;
-
-            if (this.clip) {
-                clip = this.clip;
-            }
+            let bounds = this.getBounds();
 
             let image = this._source ? this._source.current(fallback) : fallback;
             let smearing = this.smear ? 1 : Math.max(this.config.DisplaySettings.smearing, this.smearing);
 
-            if (bounds && smearing === 0 || !image) {
-                this.clear(bounds);
+            if (smearing === 0 || !image) {
+                this.clear();
             }
 
             let br = this.brightness();
@@ -167,17 +149,14 @@
 
                 ctx.globalAlpha = Math.max(0.02, 1.0 - smearing) * this.config.DisplaySettings.transparency;
                 ctx.fillStyle = this.config.DisplaySettings.background;
-                ctx.fillRect(
-                    bounds.x, bounds.y, bounds.width, bounds.height
-                );
+                ctx.fillRect(bounds.x, bounds.y, bounds.width, bounds.height);
             }
 
             if (image) {
                 ctx.globalAlpha = br;
                 ctx.drawImage(image,
-                    clip.x, clip.y, clip.width, clip.height,
-                    bounds.x, bounds.y, bounds.width, bounds.height
-                );
+                    this.clip.x, this.clip.y, this.clip.width, this.clip.height,
+                    this.clip.x, this.clip.y, bounds.width, bounds.height);
                 this._dirty = true;
             }
 
@@ -201,24 +180,13 @@
 
         /**
          *
-         * @param bounds
          */
-        clear(bounds) {
+        clear() {
             if (this._dirty) {
-                bounds = bounds || this._clipBounds();
+                let bounds = this.clip;
                 this.ctx.clearRect(bounds.x, bounds.y, bounds.width, bounds.height);
                 this._dirty = false;
             }
-        }
-
-        /**
-         *
-         * @param keepbounds
-         * @returns {*}
-         * @private
-         */
-        _clipBounds(keepbounds) {
-            return !this.mask || keepbounds ? this._bounds : this.mask.bounds;
         }
 
         /**
@@ -249,14 +217,9 @@
          *
          * @param width
          * @param height
+         * @param settings
          */
         update(width, height, settings) {
-
-            if (this.isFixedSize()) {
-                let b = this._source.bounds();
-                width = b.width;
-                height = b.height;
-            }
 
             if (!this._bounds || this.canvas.width !== width || this.canvas.height !== height) {
                 this.canvas.width = width;
@@ -267,7 +230,6 @@
             this.canvas.style.zIndex = settings[this.id + '_zindex'];
             this.static = settings[this.id + '_static'];
             this.noborder = settings[this.id + '_noborder'];
-            this.keepbounds = settings[this.id + '_keepbounds'];
             this.smearing = settings[this.id + '_smearing'];
             this.transparent = settings[this.id + '_transparent'];
 
@@ -315,109 +277,75 @@
             let canvas = this.canvas;
             let prefix = canvas.id + '_mask';
 
-            let sh = false;
+            let mask;
 
             switch (this.config.DisplaySettings[prefix + '_shape']) {
 
                 default:
-                    sh = false;
+                    mask = false;
                     break;
 
                 case 'triangle':
-                    sh = new HC.Mask(this.id, this.canvas, 'polygon', {sides: 3});
+                    mask = new HC.Mask(this.id, this.canvas, 'polygon', {sides: 3});
                     break;
 
                 case 'trianglesquare':
-                    sh = new HC.Mask(this.id, this.canvas, 'polygon', {sides: 3});
+                    mask = new HC.Mask(this.id, this.canvas, 'polygon', {sides: 3});
                     break;
 
                 case 'rect':
-                    sh = new HC.Mask(this.id, this.canvas, 'rect');
+                    mask = new HC.Mask(this.id, this.canvas, 'rect');
                     break;
 
                 case 'quad':
                     let m = Math.min(this.canvas.width, this.canvas.height);
-                    sh = new HC.Mask(this.id, this.canvas, 'rect', {width: m, height: m});
+                    mask = new HC.Mask(this.id, this.canvas, 'rect', {width: m, height: m});
                     break;
 
                 case 'pentagon':
-                    sh = new HC.Mask(this.id, this.canvas, 'polygon', {sides: 5});
+                    mask = new HC.Mask(this.id, this.canvas, 'polygon', {sides: 5});
                     break;
 
                 case 'hexagon':
-                    sh = new HC.Mask(this.id, this.canvas, 'polygon', {sides: 6});
+                    mask = new HC.Mask(this.id, this.canvas, 'polygon', {sides: 6});
                     break;
 
                 case 'octagon':
-                    sh = new HC.Mask(this.id, this.canvas, 'polygon', {sides: 8});
+                    mask = new HC.Mask(this.id, this.canvas, 'polygon', {sides: 8});
                     break;
 
                 case 'decagon':
-                    sh = new HC.Mask(this.id, this.canvas, 'polygon', {sides: 10});
+                    mask = new HC.Mask(this.id, this.canvas, 'polygon', {sides: 10});
                     break;
 
                 case 'dodecagon':
-                    sh = new HC.Mask(this.id, this.canvas, 'polygon', {sides: 12});
+                    mask = new HC.Mask(this.id, this.canvas, 'polygon', {sides: 12});
                     break;
 
                 case 'hectagon':
-                    sh = new HC.Mask(this.id, this.canvas, 'polygon', {sides: 16});
+                    mask = new HC.Mask(this.id, this.canvas, 'polygon', {sides: 16});
                     break;
 
                 case 'icosagon':
-                    sh = new HC.Mask(this.id, this.canvas, 'polygon', {sides: 30});
+                    mask = new HC.Mask(this.id, this.canvas, 'polygon', {sides: 30});
                     break;
             }
 
-            if (sh) {
-                this._points = false;
+            if (mask) {
+                this._points = null;
+                mask.init();
 
             } else {
-                this.canvas.style.webkitClipPath = '';
-                this.canvas.width = this.canvas.width;
+                this.canvas.style.clipPath = '';
                 this._points = this.points();
             }
-            this.mask = sh;
+            this.mask = mask;
 
             this.canvas.style.background = this.getSetBackground() ? this.config.DisplaySettings.background : 'none';
 
-            return sh;
-        }
+            this.updateClip();
 
-        /**
-         *
-         */
-        updateClip() {
-            if (this._source) {
-                let ob = this._clipBounds(true);
-                let mb = this._clipBounds(false);
-                let sb = this._source.bounds();
-                if (sb && mb) {
-                    // quelle hat eine eigene und unveränderliche größe
-                    let dx = (ob.width - sb.width) / 2;
-                    let dy = (ob.height - sb.height) / 2;
-
-                    let clip = new HC.Rectangle(mb.x - dx, mb.y - dy, mb.width, mb.height);
-                    this.clip = clip;
-
-                } else {
-                    this.clip = false;
-                }
-            }
-        }
-
-        /**
-         *
-         * @returns {boolean}
-         */
-        isFixedSize() {
-            if (this._source) {
-                let sb = this._source.bounds();
-                if (sb) {
-                    return true;
-                }
-            }
-            return false;
+            return mask;
         }
 
         /**
@@ -447,6 +375,17 @@
                     mask.init();
                 }
             }
+
+            this.updateClip();
+        }
+
+        getBounds() {
+            return this.mask ? this.mask.bounds : this._bounds;
+        }
+
+        updateClip() {
+            let bounds = this.getBounds();
+            this.clip = new HC.Rectangle(bounds.x, bounds.y, bounds.width, bounds.height);
         }
 
         /**
@@ -454,7 +393,7 @@
          * @returns {{sourcePoints: *[], targetPoints: *[]}}
          */
         loadMapping() {
-            let bounds = this._clipBounds(this.keepbounds);
+            let bounds = this._bounds;
             let sourcePoints = this._getMaptasticPoints(bounds);
             let targetPoints = false;
             let stored = this.getMapping();

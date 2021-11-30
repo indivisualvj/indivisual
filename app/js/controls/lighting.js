@@ -14,13 +14,14 @@
                     let id = isObject(context) ? context.index : context;
                     switch (key) {
                         case 'lighting_type':
-                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_LIGHTING, id, context, SKIP_TEN_FRAMES);
+                        case 'lighting_color':
+                            HC.EventManager.fireEventId(EVENT_LAYER_RESET_LIGHTING, id, context, SKIP_TEN_FRAMES);
                             break;
                         case 'lighting_ambient':
-                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_AMBIENT, id, context, SKIP_TEN_FRAMES);
+                            HC.EventManager.fireEventId(EVENT_LAYER_RESET_AMBIENT, id, context, SKIP_TEN_FRAMES);
                             break;
                         case 'lighting_fog':
-                            HC.EventManager.getInstance().fireEventId(EVENT_LAYER_RESET_FOG, id, context, SKIP_TEN_FRAMES);
+                            HC.EventManager.fireEventId(EVENT_LAYER_RESET_FOG, id, context, SKIP_TEN_FRAMES);
                             break;
 
                     }

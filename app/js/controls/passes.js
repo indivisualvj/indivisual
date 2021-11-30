@@ -2,7 +2,6 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-
     HC.controls.passes = class ControlSet extends HC.ControlSet {
 
         static index = 190;
@@ -108,9 +107,10 @@
         /**
          *
          * @param index
-         * @returns {null|{}}
+         * @param name
+         * @returns {null|*}
          */
-        getShader(index) {
+        getShader(index, name) {
             let pass = this.getShaderPass(index);
             if (pass) {
                 let name = this.getShaderName(index);

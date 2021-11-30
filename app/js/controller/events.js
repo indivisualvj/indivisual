@@ -2,7 +2,42 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-HC.Controller.prototype.initLogEvents = function () {
+HC.Controller.prototype.initEvents = function () {
+
+    this._initKeyboard();
+    this._initLogEvents();
+
+    onResize = function () {
+        let columns = document.querySelectorAll('.left');
+        let allover = document.body.clientHeight - 20;
+
+        for (let i = 0; i < columns.length; i++) {
+            let col = columns[i];
+
+            // calcuclate heights of FH elements to figure out the rest
+            let cells = col.querySelectorAll('.item.fh');
+            let reserved = 0;
+            let ii = 0;
+
+            for (ii = 0; ii < cells.length; ii++) {
+                reserved += cells[ii].clientHeight;
+            }
+
+            let spare = allover - reserved;
+
+            cells = col.querySelectorAll('.item:not(.fh)');
+            let cc = cells.length;
+
+            for (ii = 0; ii < cells.length; ii++) {
+                cells[ii].style.height = (spare / cc) + 'px';
+            }
+        }
+    };
+
+    window.addEventListener('resize', onResize);
+};
+
+HC.Controller.prototype._initLogEvents = function () {
     let expandables = document.getElementsByClassName('expandable');
 
     for (let c = 0; c < expandables.length; c++) {
@@ -21,7 +56,7 @@ HC.Controller.prototype.initLogEvents = function () {
 /**
  *
  */
-HC.Controller.prototype.initKeyboard = function () {
+HC.Controller.prototype._initKeyboard = function () {
 
     this._initMnemonics();
     this._initLayerKeys();
@@ -40,17 +75,15 @@ HC.Controller.prototype._onShift = function (e) {
         return;
     }
     let key = 'HC.Controller._initDoubleShift';
-    let timeoutManager = HC.TimeoutManager.getInstance();
-
-    if (timeoutManager.has(key)) {
+    if (HC.TimeoutManager.has(key)) {
         let open = this.nextOpenFolder();
         if (open.gui.bar) {
             open.gui.bar.input.focus();
         }
-        timeoutManager.delete(key);
+        HC.TimeoutManager.delete(key);
 
     } else {
-        timeoutManager.add(key, 300, () => {
+        HC.TimeoutManager.add(key, 300, () => {
         });
     }
 };
@@ -98,7 +131,6 @@ HC.Controller.prototype._initMnemonics = function () {
     for (let ci = 0; ci < MNEMONICS.length; ci++) {
         let char = MNEMONICS[ci];
         HC.Hotkey.add(char + ',shift+' + char, (e, h) => {
-            console.log(char);
             if (e.ctrlKey || e.altKey) {
                 return;
             }

@@ -9,7 +9,7 @@
         apply(shape) {
             let layer = this.layer;
 
-            let speed = layer.getShapeSpeed(shape);
+            let speed = layer.shapeSpeed(shape);
             let params = this.params(shape);
 
             if (!params.tween && speed.prc === 0) {
@@ -37,7 +37,7 @@
                 let tween = this.tweenShape(shape, params.current, params.next);
                 tween.easing(TWEEN.Easing.Quadratic.InOut);
                 tween.onUpdate(function () {
-                    layer.positionIn3dSpace(shape, params.current.x, params.current.y, params.current.z);
+                    this.positionIn3dSpace(shape, params.current.x, params.current.y, params.current.z);
                 });
                 tween.onComplete(function () {
                     params.tween = false;

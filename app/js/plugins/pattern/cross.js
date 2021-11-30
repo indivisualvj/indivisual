@@ -20,7 +20,7 @@
                 y = Math.cos(deg * RAD) * rad;
             }
 
-            layer.positionIn3dSpace(shape, x, y, z);
+            this.positionIn3dSpace(shape, x, y, z);
         }
     }
 }

@@ -30,7 +30,7 @@
             let y = point.y * radius * py;
             let z = point.z * radius * pz;
 
-            layer.positionIn3dSpace(shape, x, y, z);
+            this.positionIn3dSpace(shape, x, y, z);
         }
 
         getDistributionOnSphere(n) {
@@ -79,7 +79,7 @@
             ) {
                 layer.getPatternPlugin('sphere').apply(shape);
                 let sp = shape.position().clone();
-                let cv = layer.patternCenterVector(true);
+                let cv = this.patternCenterVector(true);
                 sp.sub(cv);
                 params.initial = sp;
                 shape.position().copy(cv);
@@ -131,7 +131,7 @@
             ) {
                 layer.getPatternPlugin('sphere').apply(shape);
                 let sp = shape.position().clone();
-                let cv = layer.patternCenterVector(true);
+                let cv = this.patternCenterVector(true);
                 sp.sub(cv);
                 params.initial = sp;
                 shape.position().copy(cv);
@@ -140,7 +140,7 @@
 
             }
 
-            let speed = layer.getShapeSpeed(shape);
+            let speed = layer.shapeSpeed(shape);
             if (speed.progress < 1) { //
                 params.velocity *= -1;
 

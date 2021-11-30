@@ -4,21 +4,25 @@
 {
     HC.ShaderPassUi = class ShaderPassUi {
 
-        shader;
         name;
+
+        controlSet;
 
         /**
          * @type {HC.Config}
          */
         config;
 
+        shader;
         /**
          *
          * @param name
-         * @param {HC.Config} config
+         * @param controlSet
+         * @param config
          */
-        constructor(name, config) {
+        constructor(name, controlSet, config) {
             this.name = name;
+            this.controlSet = controlSet;
             this.config = config;
         }
 
@@ -54,13 +58,12 @@
         onChange() {
             return (v, that) => {
                 if (that.getProperty() === 'apply' && v === false) {
-                    this.config.messaging.program.cleanShaderPasses();
+                    this.controlSet.cleanShaderPasses();
                     this.config.messaging.program.updateUiPasses();
                 }
 
-                let passes = this.config.messaging.program.settingsManager.get(this.config.ControlSettings.layer, 'passes');
-                let data = {passes: {shaders: passes.getShaderPasses()}};
-                messaging.emitSettings(this.config.ControlSettings.layer, data, false, false, false);
+                let data = {passes: {shaders: this.controlSet.getShaderPasses()}};
+                this.config.messaging.program.pushShaderPasses(null, data);
 
                 HC.log(that.getParent().getLabel() + '/' + that.getLabel(), v);
             };
@@ -70,7 +73,7 @@
          *
          * @return {*}
          */
-        getInitialSettings(key) {
+        getInitialSettings() {
             return this.config.ShaderSettings[this.name];
         }
 

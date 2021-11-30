@@ -46,11 +46,25 @@
          */
         lights = [];
 
-        ambientLight = false;
+        /**
+         * @type {THREE.AmbientLight|null}
+         */
+        ambientLight;
 
-        shapes = false;
+        /**
+         * @type {[]}
+         */
+        shapes;
 
-        shape = false;
+        /**
+         * @type {[]}
+         */
+        shapeCache;
+
+        /**
+         * @type {HC.Shape}
+         */
+        shape;
 
         materialColor;
 

@@ -503,7 +503,7 @@ HC.Controller.prototype.updateUiPasses = function () {
             let key = controlSet.getShaderPassKey(k);
             let name = controlSet.getShaderName(k);
             let sh = controlSet.getShader(k);
-            let ctrl = new HC.ShaderPassUi(name, this.config);
+            let ctrl = new HC.ShaderPassUi(name, controlSet, this.config);
             ctrl.init(sh);
             this.addShaderPassController(key, ctrl, passFld);
         }

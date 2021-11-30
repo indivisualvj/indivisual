@@ -209,7 +209,7 @@
                 this.updatePitch(tempo);
             }
 
-            this.tempo = tempo; // todo: maybe we can ramp-up/down tempo via tween?
+            this.tempo = tempo;
             this.tween.update(this.now(), false);
 
         }

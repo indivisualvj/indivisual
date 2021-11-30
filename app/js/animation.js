@@ -839,8 +839,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.updateSource('override_material_input', 'none', true, true, false);
                 this.updateSource('override_background_mode', 'none', true, true, false);
 
-                // todo maybe send full reset anywhere and reload page
-
             });
         }
     }

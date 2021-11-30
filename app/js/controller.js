@@ -504,21 +504,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         * todo: controlSet.clean()
-         */
-        cleanShaderPasses() {
-            let controlSet = this.settingsManager.get(this.config.ControlSettings.layer, 'passes');
-            let passes = controlSet.getShaderPasses();
-
-            for (let key in passes) {
-                let sh = controlSet.getShader(key);
-                if (!sh || sh.apply === false) {
-                    controlSet.removeShaderPass(key);
-                }
-            }
-        }
-
-        /**
          *
          * @param item
          * @param value
@@ -800,6 +785,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         pushLayers() {
             this._bypassMonitor(this.syncLayers());
+        }
+
+        pushShaderPasses(layer, data) {
+            layer = layer !== null ? layer : this.config.ControlSettings.layer;
+            this.messaging.emitSettings(layer, data, false, false, false);
         }
 
         resetShaders(all) {

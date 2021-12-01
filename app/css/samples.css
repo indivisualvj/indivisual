@@ -1,54 +1,59 @@
 
-#samples {
-    width: 100%;
-    box-sizing: content-box;
-    margin-bottom: 2px;
-    white-space: nowrap;
+#SampleBar [data-class="hex"] {
+    width: 16.666% !important;
+    font-size: 8px;
+    padding-left: 2px;
+    border: 0 !important;
+    margin-bottom: 0;
 }
 
-#samples .sample {
+#SampleBar [data-class="hex"] span {
+    display: none;
+}
+
+#SampleBar [data-class="hex"] input[type=checkbox].guify-checkbox_hxzak + label:before {
+    content: "";
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+}
+
+#SampleBar [data-class="hex"] input[type=checkbox]:checked.guify-checkbox_hxzak + label:before {
+    width: calc(8px - (2px * 2));
+    height: calc(8px - (2px * 2));
+}
+
+#SampleBar [data-class="hex"] .guify-select-dropdown_3QiKDz {
+    position: absolute;
+    width: 25%;
+    height: 12px;
+    right: 3%;
+    font-size: 8px;
+    text-align: right;
+    padding-right: 1.4%;
+}
+
+#SampleBar [data-class="hex"] .guify-component-container[data-id] {
+    height: 14px !important;
+    min-height: 14px !important;
+}
+
+#SampleBar [data-class="hex"] .guify-component-container[data-id] div div {
+    line-height: 12px !important;
+}
+
+#SampleBar .sample {
     cursor: move;
     position: relative;
-    display: inline-block;
-    box-sizing: border-box;
-    width: 16.33%;
-    height: 100%;
-    margin-right: 0.4%;
-}
-
-#samples .sample .controls {
-    cursor: default;
-    z-index: 999;
-    left: -1px;
-    display: none;
-    top: -89px;
-    width: 130px;
-    height: 70px;
-    padding: 8px;
-    position: absolute;
-    background-color: rgba(0, 0, 0, 0.0) !important;
-    border: 1px solid transparent !important;
-    transition: all 125ms;
-}
-
-#samples .sample:hover .controls {
+    top: -1px;
     display: block;
-    border: 1px solid var(--blue) !important;
-    background-color: rgba(0, 0, 0, 0.8) !important;
-    width: 130px;
-    height: 70px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 50px;
+    left: -2px;
 }
 
-#samples .sample .controls .guify-component-container {
-    position: relative;
-    opacity: 0;
-}
-
-#samples .sample:hover .controls .guify-component-container {
-    opacity: 1;
-}
-
-#samples .sample[data-mnemonic]:before {
+#SampleBar .sample[data-mnemonic]:before {
     top: auto;
     bottom: -1px;
     left: 0px;
@@ -63,7 +68,7 @@
     color: #ebebeb;
 }
 
-#samples .sample[data-label]:after {
+#SampleBar .sample[data-label]:after {
     box-sizing: border-box;
     max-width: 94%;
     right: 0;
@@ -78,7 +83,7 @@
     border-radius: 3px 0 0 3px;
 }
 
-#samples .sample[data-label="enabled"] {
+#SampleBar .sample[data-label="enabled"] {
     animation-name: enabled;
     animation-iteration-count: 3;
     animation-duration: 142.8ms;
@@ -94,8 +99,7 @@
     }
 }
 
-
-#samples .sample[data-label="ready"] {
+#SampleBar .sample[data-label="ready"] {
     animation-name: ready;
     animation-iteration-count: 3;
     animation-duration: 142.8ms;
@@ -111,7 +115,7 @@
     }
 }
 
-#samples .sample[data-label="\[!ERROR\]"] {
+#SampleBar .sample[data-label="\[!ERROR\]"] {
     animation-name: error;
     animation-iteration-count: 3;
     animation-duration: 142.8ms;

@@ -2,8 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    HC.StatusBar = class GuifyStatus extends HC.Guify {
-// todo: do this for samples
+    HC.StatusBar = class StatusBar extends HC.Guify {
+
         config = {
             bpm: {
                 label: 'current bpm',

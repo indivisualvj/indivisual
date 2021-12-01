@@ -131,7 +131,7 @@
          * @param folder
          * @param key
          * @param border
-         * @private
+         * @protected
          */
         _styleFolder(folder, key, border) {
             let container = folder.getFolderContainer();

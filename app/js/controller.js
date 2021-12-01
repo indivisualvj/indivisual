@@ -46,11 +46,6 @@ document.addEventListener('DOMContentLoaded', function () {
         guis;
 
         /**
-         * @type {HC.SourceControllerSample[]}
-         */
-        thumbs;
-
-        /**
          * @type {HC.Guify}
          */
         controlSettingsGui;
@@ -73,17 +68,17 @@ document.addEventListener('DOMContentLoaded', function () {
         /**
          * @type {HC.Guify}
          */
-        configurationSettingsGui;
-
-        /**
-         * @type {HC.Guify}
-         */
         sequenceSettingsGui;
 
         /**
-         * @type {HC.Guify}
+         * @type {HC.StatusBar}
          */
         statusBar;
+
+        /**
+         * @type {HC.SampleBar}
+         */
+        sampleBar;
 
         /**
          * @type {HC.PresetManager}
@@ -146,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
             this.sourceManager = new HC.SourceManager(null, { config: this.config, sample: [] });
 
             let controlSets = sets.controlSets;
-            this.config.ControlSettings.session = _HASH; // ugly workaround
+            this.config.ControlSettings.session = _HASH; // #uglyworkaround
 
             this.addGuifyControllers(
                 controlSets,
@@ -165,6 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             let sourceSets = sets.sourceSets;
             sourceSets.sequenceN.visible = false;
+            sourceSets.sample.visible = false;
             this.addGuifyControllers(
                 sourceSets,
                 HC.SourceControllerUi,
@@ -172,7 +168,6 @@ document.addEventListener('DOMContentLoaded', function () {
             );
 
             sourceSets.sequenceN.visible = true;
-            sourceSets.sample.visible = false;
             sourceSets.override.visible = false;
             sourceSets.source.visible = false;
 
@@ -182,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.sequenceSettingsGui
             );
 
-            this.initSamples();
+            this.sampleBar = new HC.SampleBar('SampleBar', 'sample', true, sets.sourceSets.sample, this);
 
             this.addAnimationControllers(this.settingsManager.getGlobalProperties());
             this.addPassesFolder(HC.ShaderPassUi.onPasses);
@@ -628,7 +623,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     if (!value) { // set record to false if enabled == false
                         let smp = HC.numberExtract(item, 'sample');
                         this.updateSource(getSampleRecordKey(smp), false, true, true, false);
-                        this.updateThumbs();
+                        HC.EventManager.fireEventId(EVENT_THUMB_UPDATE, smp, {});
                     }
 
                 } else if (item.match(/_(load)/)) {
@@ -664,13 +659,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (data.data.updateUi) {
                     this.updateUi(this.sourceSettingsGui);
                 }
+
+                if ('DataSamples' in data.data) {
+                    HC.TimeoutManager.add('updateData', SKIP_TEN_FRAMES, () => {
+                        this.updateThumbsUi();
+                    });
+                }
             }
 
-            if (!data || 'DataSamples' in data.data || 'SourceTypes' in data.data) {
+            if (!data || 'SourceTypes' in data.data) { // todo use DataSequences
                 HC.TimeoutManager.add('updateData', SKIP_TEN_FRAMES, () => {
                     this.updateSequenceUi();
-                    this.updateThumbs();
                 });
+            }
+        }
+
+        updateThumbsUi() {
+            if (this.config.SourceValues && this.config.SourceValues.sample)
+            for (let smp = 0; smp < this.config.SourceValues.sample.length; smp++) {
+                HC.EventManager.fireEventId(EVENT_THUMB_UPDATE, smp, this.config.DataSamples);
             }
         }
 

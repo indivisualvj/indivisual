@@ -211,7 +211,7 @@
                 messaging.emitMidi('off', MIDI_SAMPLE_FEEDBACK);
                 let conf = {DataSamples: {}};
                 conf.DataSamples[target.id] = false;
-                messaging.emitData(target.id, conf);
+                messaging.emitData(target.id, conf); // todo: emit sampleData
             });
 
             HC.EventManager.register(EVENT_SAMPLE_RENDER_START, sample.id, (target) => {

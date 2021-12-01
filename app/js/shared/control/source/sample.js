@@ -3,10 +3,6 @@
  */
 
 {
-    /**
-     *
-     * @type {HC.SourceControllerSample}
-     */
     HC.SourceControllerSample = class SourceControllerSample {
 
         /**
@@ -25,32 +21,25 @@
         index;
 
         /**
-         * @type {HC.Controller}
+         *
+         * @type {boolean}
          */
-        controller;
+        enabled = false;
 
-        /**
-         * @type {HC.Config}
-         */
-        config;
 
         /**
          *
-         * @param {HC.Controller} controller
          * @param index
          */
-        constructor(controller, index) {
-            this.controller = controller;
-            this.config = controller.config;
+        constructor(index) {
             this.index = index;
         }
 
         /**
          *
+         * @param {HTMLElement}container
          */
-        init() {
-            let el = document.getElementById('samples');
-
+        init(container) {
             this.node = document.createElement('div');
             this.node.id = 'sample' + this.index;
             this.node.setAttribute('data-mnemonic', this.node.id);
@@ -58,23 +47,11 @@
             this.node.setAttribute('class', 'sample control');
             this.node.setAttribute('draggable', 'true');
 
-            this.controls = document.createElement('div');
-            this.controls.classList.add('controls');
+            container.appendChild(this.node);
 
-            this.controller.sourceSettingsGui.findFolderByKey('sample').setVisible(false);
-
-            let ctrl = this.controller.sourceSettingsGui.findControlByProperty(getSampleEnabledKey(this.index));
-            this.controls.appendChild(ctrl.getContainer());
-            ctrl = this.controller.sourceSettingsGui.findControlByProperty(getSampleRecordKey(this.index));
-            this.controls.appendChild(ctrl.getContainer());
-            ctrl = this.controller.sourceSettingsGui.findControlByProperty(getSampleBeatKey(this.index));
-            this.controls.appendChild(ctrl.getContainer());
-
-            this.node.appendChild(this.controls);
-
-            el.appendChild(this.node);
-
-            window.addEventListener('resize', this._onResize);
+            window.addEventListener('resize', () => {
+                this._onResize();
+            });
 
             this._onResize();
 
@@ -92,13 +69,13 @@
         /**
          *
          */
-        initDragAndDrop(sequences) {
+        initDragAndDrop(onDragStart, onDragEnd) {
 
             let currentSequence;
-
+            let sequences = document.querySelectorAll('#SequenceSettings .sequence');
             this.node.addEventListener('dragstart', (e) => {
                 let enabledKey = getSampleEnabledKey(this.index);
-                if (!this.config.SourceSettingsManager.get('sample').get(enabledKey)) {
+                if (!this.enabled) {
                     e.stopPropagation();
                     e.preventDefault();
                     return false;
@@ -108,11 +85,7 @@
                 e.dataTransfer.effectAllowed = 'link';
 
                 e.dataTransfer.setDragImage(new Image(0, 0), 0, 0);
-                this.controller.sequenceSettingsGui.setOpen(true);
-                for (let key in this.controller.sequenceSettingsGui.children) {
-                    this.controller.sequenceSettingsGui.getChild(key).setOpen(true);
-                }
-
+                onDragStart();
                 sequences.forEach((sequence) => {
                     sequence._dragOver = (e) => {
                         if ((currentSequence = e.target.ancestorOfClass('sequence'))) {
@@ -126,8 +99,7 @@
             this.node.addEventListener('dragend', (e) => {
                 if (e.dataTransfer.dropEffect === 'link' && currentSequence) {
                     let seq = HC.numberExtract(currentSequence.getAttribute('data-sequence'), 'sequence');
-                    let smp = this.index;
-                    this.controller.updateSource(getSequenceSampleKey(seq), smp, true, true, false);
+                    onDragEnd(seq, this.index);
                     currentSequence = null;
                 }
 
@@ -140,18 +112,31 @@
 
         /**
          *
-         * @param data
          */
-        update(data) {
-            let enabled = this.controller.sourceManager.getSampleEnabledBySample(this.index) && (data !== false);
-            if (enabled && data && data.thumbs) {
+        initEvents() {
+            HC.EventManager.register(EVENT_THUMB_UPDATE, this.index, (config) => {
+                this.update(config);
+            });
+        }
+
+        /**
+         *
+         * @param config
+         */
+        update(config) {
+            let sampleKey = getSampleKey(this.index);
+            let data = config[sampleKey];
+
+            if (data && data.thumbs) {
                 let src = data.thumbs[Math.round(data.thumbs.length / 2)].src;
                 this.node.style.backgroundImage = 'url(' + src + ')';
                 this.node.style.backgroundPositionX = 'center';
                 this.node.style.backgroundPositionY = 'center';
                 this.node.setAttribute('data-label', 'ready');
+                this.enabled = true;
 
             } else {
+                this.enabled = false;
                 this.node.style.backgroundImage = '';
             }
         }
@@ -163,9 +148,9 @@
         setProgress(prc) {
             if (!prc || prc < 0 || prc > 100) {
                 this.node.style.background = '';
+
             } else {
-                let bg = 'linear-gradient(90deg, #2fa1d6, #2fa1d6 ' + prc + '%, black, black 0%)';
-                this.node.style.background = bg;
+                this.node.style.background = 'linear-gradient(90deg, #2fa1d6, #2fa1d6 ' + prc + '%, black, black 0%)';
             }
         }
 
@@ -174,10 +159,11 @@
          * @private
          */
         _onResize() {
-            let el = document.getElementById('samples');
-            let ow = el.clientWidth;
+            let el = document.getElementById('sample' + this.index);
+            let ow = el.parentNode.parentNode.clientWidth;
             let nh = (ow / 5 * 9 / 16);
             el.style.height = nh + 'px';
         }
+
     }
 }

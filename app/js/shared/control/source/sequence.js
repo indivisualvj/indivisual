@@ -79,11 +79,10 @@
         initEvents() {
             HC.EventManager.register(EVENT_CLIP_UPDATE, this.index, (target) => {
                 this._updateClip();
-            })
+            });
             HC.EventManager.register(EVENT_CLIP_INDICATOR_UPDATE, this.index, (target) => {
                 this._updateIndicator(false);
-            })
-
+            });
         }
 
         init() {
@@ -188,7 +187,7 @@
             let sampleKey = getSampleKey(sample);
             let data = false;
             if (sampleKey in this.config.DataSamples) {
-                data = this.config.DataSamples[sampleKey];
+                data = this.config.DataSamples[sampleKey]; // todo: submit data and so
             }
             this._doUpdateIndicator(data);
         }
@@ -272,7 +271,7 @@
 
             let data = false;
             if (sampleKey in this.config.DataSamples) {
-                data = this.config.DataSamples[sampleKey];
+                data = this.config.DataSamples[sampleKey]; // todo: can we make it more elegant without using sourceManager?
             }
 
             let enabled = this.sourceManager.getSampleEnabledBySequence(this.index) && (data !== false);

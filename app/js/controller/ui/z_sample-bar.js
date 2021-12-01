@@ -30,7 +30,6 @@
             }, (seq, smp) => {
                 controller.updateSource(getSequenceSampleKey(seq), smp, true, true, false);
             });
-            this.ui.initDragAndDrop();
             this._finishFolder(this.gui.panel.panel);
 
         }

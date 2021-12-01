@@ -209,9 +209,6 @@
                 messaging.emitAttr('[id="' + target.id + '"]', 'data-label', 'enabled');
                 messaging.emitMidi('off', MIDI_ROW_ONE[target.index]);
                 messaging.emitMidi('off', MIDI_SAMPLE_FEEDBACK);
-                let conf = {DataSamples: {}};
-                conf.DataSamples[target.id] = false;
-                messaging.emitData(target.id, conf); // todo: emit sampleData
             });
 
             HC.EventManager.register(EVENT_SAMPLE_RENDER_START, sample.id, (target) => {
@@ -243,10 +240,7 @@
             HC.EventManager.register(EVENT_SAMPLE_RENDER_END, sample.id, (target) => {
                 let recordKey = getSampleRecordKey(target.index);
 
-                if (this.config.SourceSettings[recordKey]) { // reset smpX_record
-                    this.animation.updateSource(recordKey, false, true, true, false);
-                }
-
+                this.animation.updateSource(recordKey, false, true, true, false);
                 let scale = 320 / target.canvas.width;
                 this.storeSample(target.index, target.id, scale);
 

@@ -117,6 +117,9 @@
             HC.EventManager.register(EVENT_THUMB_UPDATE, this.index, (config) => {
                 this.update(config);
             });
+            HC.EventManager.register(EVENT_CLIP_LOADED, this.index, (config) => {
+                this.update(config);
+            });
         }
 
         /**

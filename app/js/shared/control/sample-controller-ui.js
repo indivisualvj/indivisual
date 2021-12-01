@@ -74,18 +74,5 @@
             messaging.program.updateSource(that.getProperty(), value, true, true, false);
         }
 
-        initDragAndDrop() { // todo this can be moved to sequence ui
-            let sequences = document.querySelectorAll('#SequenceSettings .sequence');
-            document.body.addEventListener('dragover', (e) => {
-                if (!e.target.ancestorOfClass('sequence')) {
-                    e.dataTransfer.dropEffect = 'none';
-                    e.preventDefault();
-                    sequences.forEach((sequence) => {
-                        sequence.style.border = '';
-                    });
-                }
-                e.preventDefault();
-            });
-        }
     }
 }

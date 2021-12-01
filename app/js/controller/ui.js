@@ -583,7 +583,7 @@ HC.Controller.prototype._updateValuesChanged = function (folder) {
 };
 
 /**
- * // todo: move to sequence ui
+ *
  * @param index
  */
 HC.Controller.prototype.loadClip = function (index) {
@@ -591,8 +591,7 @@ HC.Controller.prototype.loadClip = function (index) {
 
     this.sourceManager.loadClip(smp,
     (clip) => {
-        let data = {data: {DataSamples: {}}};
-        data.data.DataSamples[smp.id] = clip;
-        this.updateData(data);
+        this.config.DataSamples[smp.id] = clip;
+        HC.EventManager.fireEventId(EVENT_CLIP_LOADED, index, this.config.DataSamples);
     });
 };

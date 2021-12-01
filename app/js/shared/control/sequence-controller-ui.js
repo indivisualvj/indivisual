@@ -17,6 +17,7 @@
         addControllers() {
             super.addControllers();
             this._initSequences();
+            this._initDragAndDrop();
         }
 
         _initSequences() {
@@ -24,6 +25,21 @@
             for (let folder of folders) {
                 new HC.SourceControllerSequence(messaging.program, folder);
             }
+        }
+
+
+        _initDragAndDrop() {
+            let sequences = document.querySelectorAll('#SequenceSettings .sequence');
+            document.body.addEventListener('dragover', (e) => {
+                if (!e.target.ancestorOfClass('sequence')) {
+                    e.dataTransfer.dropEffect = 'none';
+                    e.preventDefault();
+                    sequences.forEach((sequence) => {
+                        sequence.style.border = '';
+                    });
+                }
+                e.preventDefault();
+            });
         }
     }
 }

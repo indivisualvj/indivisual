@@ -77,10 +77,10 @@
         }
 
         initEvents() {
-            HC.EventManager.register(EVENT_CLIP_UPDATE, this.index, (target) => {
+            HC.EventManager.register(EVENT_CLIP_UPDATE, this.index, (config) => {
                 this._updateClip();
             });
-            HC.EventManager.register(EVENT_CLIP_INDICATOR_UPDATE, this.index, (target) => {
+            HC.EventManager.register(EVENT_CLIP_INDICATOR_UPDATE, this.index, () => {
                 this._updateIndicator(false);
             });
         }

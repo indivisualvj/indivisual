@@ -605,8 +605,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (display !== false) {
 
-                if (item.match(/_(start|end|sequence|input|source)$/)) {
-                    this.updateSequenceUi();
+                if (item.match(/sequence\d_(start|end)$/)) {
+                    this._fireClipIndicatorUpdate(HC.numberExtract(item, 'sequence'));
+
+                } else if (item.match(/sequence\d_(|input)$/)) {
+                    this._fireClipUpdate(HC.numberExtract(item, 'sequence'));
 
                 } else if (item.match(/_(enabled)/)) {
                     if (!value) { // set record to false if enabled == false
@@ -650,7 +653,7 @@ document.addEventListener('DOMContentLoaded', function () {
         /**
          *
          */
-        updateSequenceUi() {
+        _refreshSequenceUi() {
             if (this.config.SourceValues && this.config.SourceValues.sequence) {
                 for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
 
@@ -667,6 +670,42 @@ document.addEventListener('DOMContentLoaded', function () {
                     HC.EventManager.fireEventId(EVENT_CLIP_INDICATOR_UPDATE, seq, data);
                 }
             }
+        }
+
+        /**
+         *
+         * @param seq
+         * @private
+         */
+        _fireClipUpdate(seq) {
+            let sample = this.sourceManager.getSampleBySequence(seq);
+            let sampleKey = getSampleKey(sample);
+
+            let enabled = this.sourceManager.getSampleEnabledBySequence(seq);
+            let data = null;
+            if (enabled && sampleKey in this.config.DataSamples) {
+                data = this.config.DataSamples[sampleKey];
+            }
+
+            HC.EventManager.fireEventId(EVENT_CLIP_UPDATE, seq, data);
+        }
+
+        /**
+         *
+         * @param seq
+         * @private
+         */
+        _fireClipIndicatorUpdate(seq) {
+            let sample = this.sourceManager.getSampleBySequence(seq);
+            let sampleKey = getSampleKey(sample);
+
+            let enabled = this.sourceManager.getSampleEnabledBySequence(seq);
+            let data = null;
+            if (enabled && sampleKey in this.config.DataSamples) {
+                data = this.config.DataSamples[sampleKey];
+            }
+
+            HC.EventManager.fireEventId(EVENT_CLIP_INDICATOR_UPDATE, seq, data);
         }
 
         /**

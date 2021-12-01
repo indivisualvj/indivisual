@@ -229,10 +229,6 @@ document.addEventListener('DOMContentLoaded', function () {
                         this.updateSettings(layer, settings[layer], true, false, true);
                     }
                 }
-                if ('data' in session) {
-                    HC.log('data', 'synced');
-                    this.updateData();
-                }
 
                 syncing = false;
                 this.updateControl('layer', this.config.ControlSettings.layer, true, false, false);
@@ -529,8 +525,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.presetMan.setSelected(value+1, true);
                 HC.log(item, value+1);
 
-                let config = { data: { DataStatus: {selected_layer: value+1 } } };
-                this.updateData(config);
+                this.config.DataStatus.selected_layer = value+1;
 
             } else if (item === 'reset') {
                 if (value && force) {
@@ -545,13 +540,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (display !== false) {
-
-                if (item.match(/_(sequence|sample|source)/)) {
-                    alert('now! line number->console');
-                    console.log('now!');
-                    this.updateData();
-
-                } else if (item === 'monitor') {
+                if (item === 'monitor') {
                     this.monitor.activate(value);
                 }
 
@@ -617,7 +606,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (display !== false) {
 
                 if (item.match(/_(start|end|sequence|input|source)$/)) {
-                    this.updateData();
+                    this.updateSequenceUi();
 
                 } else if (item.match(/_(enabled)/)) {
                     if (!value) { // set record to false if enabled == false
@@ -659,25 +648,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (data.data.updateUi) {
                     this.updateUi(this.sourceSettingsGui);
                 }
-
-                if ('DataSamples' in data.data) {
-                    HC.TimeoutManager.add('updateData', SKIP_TEN_FRAMES, () => {
-                        this.updateThumbsUi();
-                    });
-                }
-            }
-
-            if (!data || 'SourceTypes' in data.data) { // todo use DataSequences
-                HC.TimeoutManager.add('updateData', SKIP_TEN_FRAMES, () => {
-                    this.updateSequenceUi();
-                });
-            }
-        }
-
-        updateThumbsUi() {
-            if (this.config.SourceValues && this.config.SourceValues.sample)
-            for (let smp = 0; smp < this.config.SourceValues.sample.length; smp++) {
-                HC.EventManager.fireEventId(EVENT_THUMB_UPDATE, smp, this.config.DataSamples);
             }
         }
 

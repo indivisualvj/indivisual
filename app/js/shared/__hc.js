@@ -94,7 +94,6 @@ var HC = HC || {};
          * @param data
          */
         updateData(data) {
-            console.warn('not implemented');
         }
 
         /**

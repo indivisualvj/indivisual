@@ -40,10 +40,6 @@
          */
         pointerNode;
 
-        sample;
-
-        enabled = false;
-
         /**
          * @type {HC.Controller}
          */
@@ -59,33 +55,34 @@
          */
         config;
 
+        clip;
+
         /**
          *
          * @param {HC.Controller} controller
          * @param {HC.GuifyFolder} settingsFolder
          */
         constructor(controller, settingsFolder) {
-            this.controller = controller;
             this.sourceManager = controller.sourceManager;
             this.config = controller.config;
             this.key = settingsFolder.getKey();
             this.index = HC.numberExtract(this.key, 'sequence');
             this.settingsFolder = settingsFolder;
 
-            this.init();
-            this.initEvents();
+            this._initUi();
+            this._initEvents();
         }
 
-        initEvents() {
+        _initEvents() {
             HC.EventManager.register(EVENT_CLIP_UPDATE, this.index, (config) => {
-                this._updateClip();
+                this._updateClip(config);
             });
-            HC.EventManager.register(EVENT_CLIP_INDICATOR_UPDATE, this.index, () => {
-                this._updateIndicator(false);
+            HC.EventManager.register(EVENT_CLIP_INDICATOR_UPDATE, this.index, (config) => {
+                this._updateIndicator(config);
             });
         }
 
-        init() {
+        _initUi() {
             this.clipNode = document.createElement('div');
             this.clipNode.id = this.key;
             this.clipNode.setAttribute('class', 'sequence control');
@@ -106,61 +103,51 @@
             this.pointerNode.setAttribute('class', 'progress');
             this.indicatorNode.appendChild(this.pointerNode);
 
-            this.initControls();
+            this.controlsNode = this.settingsFolder.getFolderContainer();
+            let clear = document.createElement('div');
+            clear.classList.add('guify-component-container');
+            clear.classList.add('clear');
+            this.controlsNode.appendChild(clear);
+            this.controlsNode.appendChild(this.clipNode);
 
+            this._initObserver();
+
+            window.addEventListener('resize', this._onResize());
+        }
+
+        _initObserver() {
             let mo = new MutationObserver((mutations) => {
                 mutations.forEach((mutation) => {
                     if (mutation.attributeName === 'data-progress') {
-                        this.updatePointer(mutation.target.getAttribute(mutation.attributeName));
+                        requestAnimationFrame(() => {
+                            this._updatePointer(mutation.target.getAttribute(mutation.attributeName));
+                        });
                     }
                 });
             });
 
             mo.observe(this.clipNode, {attributes: true});
-
-            this.controlsNode.appendChild(this.clipNode);
-
-            window.addEventListener('resize', this._onResize());
-        }
-
-        initControls() {
-            this.controlsNode = this.settingsFolder.getFolderContainer();
-
-            let clear = document.createElement('div');
-            clear.classList.add('guify-component-container');
-            clear.classList.add('clear');
-            this.controlsNode.appendChild(clear);
-
         }
 
         /**
          *
-         * @param sample
-         * @param enabled
-         * @param data
+         * @param clip
+         * @private
          */
-        update(sample, enabled, data) {
-            let clipSample = this.sample;
-            let clipEnabled = this.enabled;
-            this.sample = sample;
-            this.enabled = enabled;
+        _updateClip(clip) {
 
-            if (data) {
-                if (clipEnabled !== enabled || clipSample !== sample) {
-                    this.thumbsNode.innerHTML = '';
+            if (clip) {
+                this.thumbsNode.innerHTML = '';
+                let thumbs = clip.thumbs;
 
-                } else {
-                    return;
-                }
-
-                let thumbs = data.thumbs;
-
-                if (thumbs) {
+                if (thumbs && clip !== this.clip) {
+                    this.clip = clip;
+                    console.log('updated clip');
                     for (let i = 0; i < thumbs.length; i++) {
 
-                        let frameIndex = data.thumbs[i]._index;
+                        let frameIndex = clip.thumbs[i]._index;
 
-                        let img = data.thumbs[i].cloneNode();
+                        let img = clip.thumbs[i].cloneNode();
                         let div = document.createElement('div');
                         div.setAttribute('class', 'thumb');
                         div.setAttribute('data-index', frameIndex);
@@ -172,51 +159,38 @@
                 }
 
             } else {
-                this._doUpdateIndicator(null);
-                this.updatePointer(0);
+                this._updateIndicator(null);
+                this._updatePointer(0);
                 this.thumbsNode.innerHTML = '';
+                this.clip = null;
             }
         }
 
         /**
          *
+         * @param clip
          * @private
          */
-        _updateIndicator() {
-            let sample = this.sourceManager.getSampleBySequence(this.index);
-            let sampleKey = getSampleKey(sample);
-            let data = false;
-            if (sampleKey in this.config.DataSamples) {
-                data = this.config.DataSamples[sampleKey]; // todo: submit data and so
-            }
-            this._doUpdateIndicator(data);
-        }
-
-        /**
-         *
-         * @param data
-         * @private
-         */
-        _doUpdateIndicator(data) {
+        _updateIndicator(clip) {
             let indicatorNode = this.indicatorNode;
             if (indicatorNode) {
                 let left = 0;
                 let width = .5;
                 let beats = 0;
-                if (data) {
-                    let length = data.length;
-                    let start = this.getSequenceStart(this.key);
-                    let end = this.getSequenceEnd(this.key);
+                if (clip) {
+                    let length = clip.length;
+                    let start = this._getSequenceStart(this.key);
+                    let end = this._getSequenceEnd(this.key);
                     let sequence = {
                         start: 0,
                         end: 0,
                         length: 0
                     };
 
-                    this.sourceManager.applySequenceSlice(sequence, length, start, end);
+                    this.sourceManager.applySequenceSlice(sequence, length, start, end); // todo: maybe at the end this is a static
 
-                    let frameDuration = data.duration / length;
-                    let beatDuration = data.duration / data.beats;
+                    let frameDuration = clip.duration / length;
+                    let beatDuration = clip.duration / clip.beats;
                     let sliceDuration = sequence.length * frameDuration;
                     beats = sliceDuration / beatDuration;
                     width = sequence.length / length * 100;
@@ -233,7 +207,7 @@
          *
          * @param progress
          */
-        updatePointer(progress) {
+        _updatePointer(progress) {
             this.pointerNode.style.width = (progress) + '%';
             this.pointerNode.style.opacity = (progress?1:0).toString();
         }
@@ -243,7 +217,7 @@
          * @param i
          * @returns {number}
          */
-        getSequenceStart(i) {
+        _getSequenceStart(i) {
             let key = getSequenceStartKey(i);
             let value = this.config.SourceSettings[key];
             return parseInt(value);
@@ -251,33 +225,15 @@
 
         /**
          *
-         * @param i {number}
+         * @param i
          * @returns {number}
+         * @private
          */
-        getSequenceEnd(i) {
+        _getSequenceEnd(i) {
             let key = getSequenceEndKey(i);
             let value = this.config.SourceSettings[key];
             return parseInt(value);
         }
-
-
-        /**
-         *
-         * @private
-         */
-        _updateClip() {
-            let sample = this.sourceManager.getSampleBySequence(this.index);
-            let sampleKey = getSampleKey(sample);
-
-            let data = false;
-            if (sampleKey in this.config.DataSamples) {
-                data = this.config.DataSamples[sampleKey]; // todo: can we make it more elegant without using sourceManager?
-            }
-
-            let enabled = this.sourceManager.getSampleEnabledBySequence(this.index) && (data !== false);
-
-            this.update(sample, enabled, data);
-        };
 
         /**
          *

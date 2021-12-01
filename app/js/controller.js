@@ -637,16 +637,12 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateData(data) {
             if (data && this.config) {
-                for (let key in data.data) {
-                    if (key in this.config) {
-                        let sec = data.data[key];
-                        for (let tkey in sec) {
-                            this.config[key][tkey] = sec[tkey];
-                        }
+                let key = data.key;
+                if (key in this.config) {
+                    let sec = data.data;
+                    for (let tkey in sec) {
+                        this.config[key][tkey] = sec[tkey];
                     }
-                }
-                if (data.data.updateUi) {
-                    this.updateUi(this.sourceSettingsGui);
                 }
             }
         }
@@ -657,8 +653,18 @@ document.addEventListener('DOMContentLoaded', function () {
         updateSequenceUi() {
             if (this.config.SourceValues && this.config.SourceValues.sequence) {
                 for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
-                    HC.EventManager.fireEventId(EVENT_CLIP_UPDATE, seq);
-                    HC.EventManager.fireEventId(EVENT_CLIP_INDICATOR_UPDATE, seq);
+
+                    let sample = this.sourceManager.getSampleBySequence(seq);
+                    let sampleKey = getSampleKey(sample);
+
+                    let enabled = this.sourceManager.getSampleEnabledBySequence(seq);
+                    let data = null;
+                    if (enabled && sampleKey in this.config.DataSamples) {
+                        data = this.config.DataSamples[sampleKey];
+                    }
+
+                    HC.EventManager.fireEventId(EVENT_CLIP_UPDATE, seq, data);
+                    HC.EventManager.fireEventId(EVENT_CLIP_INDICATOR_UPDATE, seq, data);
                 }
             }
         }

@@ -236,10 +236,10 @@
         }
 
         _emitSourceType(startKey, endKey, start, end) {
-            let conf = {SourceTypes: {}};
-            conf.SourceTypes[startKey] = start;
-            conf.SourceTypes[endKey] = end;
-            messaging.emitData(this.sample.id, conf);
+            let conf = {};
+            conf[startKey] = start;
+            conf[endKey] = end;
+            messaging.emitData('SourceTypes', conf);
         }
 
         /**

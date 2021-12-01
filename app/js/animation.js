@@ -420,7 +420,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 statusData.rms = this.rmsAverage();
             }
 
-            this.messaging.emitData('status', { DataStatus: statusData });
+            this.messaging.emitData('DataStatus', statusData);
         }
 
         /**
@@ -646,14 +646,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         /**
          *
-         * @param data
-         */
-        updateData(data) {
-
-        }
-
-        /**
-         *
          * @param item
          * @param value
          * @param display
@@ -790,7 +782,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             for (let k in data) {
                 let value = data[k];
-                this.updateSource(k, value, display, forward, force);
+                this.updateSource(k, value, display, false, force);
             }
 
         }

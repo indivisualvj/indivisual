@@ -19,9 +19,6 @@ function _importThreeModule(dir, cname) {
 }
 
 function _importNodeModule(namespace, path, cname) {
-    // if (!window[namespace]) {
-    //     window[namespace] = {};
-    // }
     if (window[namespace] && (!(cname in window[namespace]) || (typeof window[namespace][cname]) === 'function')) {
         document.writeln(`<script type='text/javascript' src='/node_modules/${path}'></script>`);
     }

@@ -1,3 +1,4 @@
+_importThreeShader('DotScreenShader');
 {
     HC.plugins.shaders.dotscreen = class Plugin extends HC.ShaderPlugin {
         static index = 200;

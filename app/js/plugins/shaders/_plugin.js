@@ -2,6 +2,10 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
+_importThreePostprocessing('Pass');
+_importThreePostprocessing('RenderPass');
+_importThreePostprocessing('ShaderPass');
+
 HC.plugins.shaders = HC.plugins.shaders || {};
 
 {

@@ -1,7 +1,6 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-HC.Statics = HC.Statics || {};
 {
 
     HC.Config = class Config {

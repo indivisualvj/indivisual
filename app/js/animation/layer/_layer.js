@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
+_importThreePostprocessing('EffectComposer');
+
 {
     HC.Layer = class Layer {
 

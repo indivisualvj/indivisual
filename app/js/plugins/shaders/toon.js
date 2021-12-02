@@ -1,3 +1,4 @@
+_importThreeShader('ToonShader');
 {
     HC.plugins.shaders.toon = class Plugin extends HC.ShaderPlugin {
         static index = 245;

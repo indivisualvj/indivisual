@@ -174,8 +174,8 @@
                     let os = this.start;
                     let oe = this.end;
                     let frameCount = this.sample.frameCount;
-                    HC.SourceControllerSequence
-                    this.sourceManager.applySequenceSlice(this, frameCount, start, end);
+
+                    applySequenceSlice(this, frameCount, start, end);
 
                     if (os !== this.start) {
                         this.pointer = this.start;
@@ -209,13 +209,12 @@
             let type = [0, 0, 1];
             if (this.sample) {
                 if (this.sample.isReady()) {
-                    type[1] = this.sample.frameCount - 1;
-                    type[2] = round(this.sample.frameCount / 50, 0);
+                    type[1] = this.sample.frameCount - 1; // max
+                    type[2] = round(this.sample.frameCount / 50, 0); // precision
 
-                    let conf = {SourceTypes: {}};
-                    conf.SourceTypes[getSequenceStartKey(this.index)] = type;
-                    conf.SourceTypes[getSequenceEndKey(this.index)] = type;
-                    messaging.emitData(this.sample.id, conf);
+                    // controller needs to know...
+                    this._emitSourceType(getSequenceStartKey(this.index), getSequenceEndKey(this.index), type, type);
+
                 } else {
                     HC.EventManager.register(EVENT_SAMPLE_READY, this.id, (target) => {
                         if (this.sample && this.sample.id === target.id) {
@@ -234,6 +233,13 @@
 
             this.animation.updateSource(getSequenceStartKey(this.index), 0, false, true);
             this.animation.updateSource(getSequenceEndKey(this.index), type[1], true, true);
+        }
+
+        _emitSourceType(startKey, endKey, start, end) {
+            let conf = {};
+            conf[startKey] = start;
+            conf[endKey] = end;
+            messaging.emitData('SourceTypes', conf);
         }
 
         /**

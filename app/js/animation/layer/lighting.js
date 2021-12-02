@@ -115,7 +115,7 @@
             if (this.ambientLight) {
                 this._lighting.remove(this.ambientLight);
                 this.ambientLight.traverse(HC.dispose);
-                this.ambientLight = false;
+                this.ambientLight = null;
             }
 
             if (this.settings.lighting_ambient) {

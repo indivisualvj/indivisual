@@ -32,9 +32,7 @@
             let layer = this.layer;
 
 
-            let geometry = new HC.RightTriangle({width: layer.shapeSize(1), height: layer.shapeSize(1)}).create();
-
-            return geometry;
+            return new HC.RightTriangle({width: layer.shapeSize(1), height: layer.shapeSize(1)}).create();
         }
     }
 }

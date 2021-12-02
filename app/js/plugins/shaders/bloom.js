@@ -1,3 +1,6 @@
+_importThreeShader('CopyShader');
+_importThreeShader('LuminosityHighPassShader');
+_importThreePostprocessing('UnrealBloomPass');
 {
     HC.plugins.shaders.bloom = class Plugin extends HC.ShaderPlugin {
         static index = 40;

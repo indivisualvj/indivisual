@@ -18,7 +18,8 @@ HC.SourceController = HC.SourceController || {};
         };
 
         styles = {
-
+            override_material_input: [''],
+            override_background_mode: ['']
         };
 
         values = {

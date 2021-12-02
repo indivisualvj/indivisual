@@ -41,49 +41,44 @@ document.addEventListener('DOMContentLoaded', function () {
     HC.Controller = class Controller extends HC.Program {
 
         /**
-         * @type {HC.Guify[]}
+         * @type {HC.PropertyUi[]}
          */
         guis;
 
         /**
-         * @type {HC.SourceControllerSample[]}
-         */
-        thumbs;
-
-        /**
-         * @type {HC.Guify}
+         * @type {HC.PropertyUi}
          */
         controlSettingsGui;
 
         /**
-         * @type {HC.Guify}
+         * @type {HC.DisplaySettingsUi}
          */
         displaySettingsGui;
 
         /**
-         * @type {HC.Guify}
+         * @type {HC.PropertyUi}
          */
         sourceSettingsGui;
 
         /**
-         * @type {HC.Guify}
+         * @type {HC.AnimationSettingsUi}
          */
         animationSettingsGui;
 
         /**
-         * @type {HC.Guify}
-         */
-        configurationSettingsGui;
-
-        /**
-         * @type {HC.Guify}
+         * @type {HC.PropertyUi}
          */
         sequenceSettingsGui;
 
         /**
-         * @type {HC.Guify}
+         * @type {HC.StatusBar}
          */
         statusBar;
+
+        /**
+         * @type {HC.SampleBar}
+         */
+        sampleBar;
 
         /**
          * @type {HC.PresetManager}
@@ -126,11 +121,11 @@ document.addEventListener('DOMContentLoaded', function () {
             this.monitor.activate(false);
             this.midi = new HC.Midi(this);
 
-            this.controlSettingsGui = new HC.Guify('ControlSettings', 'control');
-            this.displaySettingsGui = new HC.Guify('DisplaySettings', 'display');
-            this.sourceSettingsGui = new HC.Guify('SourceSettings', 'source');
-            this.animationSettingsGui = new HC.Guify('AnimationSettings', 'animation');
-            this.sequenceSettingsGui = new HC.Guify('SequenceSettings', 'sequence');
+            this.controlSettingsGui = new HC.PropertyUi('ControlSettings', 'control', false, config);
+            this.displaySettingsGui = new HC.DisplaySettingsUi('DisplaySettings', 'display', false, config);
+            this.sourceSettingsGui = new HC.PropertyUi('SourceSettings', 'source', false, config);
+            this.animationSettingsGui = new HC.AnimationSettingsUi('AnimationSettings', 'animation', false, config);
+            this.sequenceSettingsGui = new HC.PropertyUi('SequenceSettings', 'sequence', false, config);
             this.presetMan = new HC.PresetManager('Presets', 'presets', this);
             this.statusBar = new HC.StatusBar('StatusBar', 'status', true, config.DataStatus);
 
@@ -146,46 +141,46 @@ document.addEventListener('DOMContentLoaded', function () {
             this.sourceManager = new HC.SourceManager(null, { config: this.config, sample: [] });
 
             let controlSets = sets.controlSets;
-            this.config.ControlSettings.session = _HASH; // ugly workaround
+            this.config.ControlSettings.session = _HASH; // #uglyworkaround
 
-            this.addGuifyControllers(
+            this.controlSettingsGui.addControllers(
                 controlSets,
-                HC.ControlControllerUi,
-                this.controlSettingsGui
+                HC.ControlControllerUi
             );
 
             let displaySets = sets.displaySets;
 
-            this.addGuifyDisplayControllers(
+            this.displaySettingsGui.addControllers(
                 HC.DisplayController,
                 displaySets,
-                HC.DisplayControllerUi,
-                this.displaySettingsGui
+                HC.DisplayControllerUi
             );
 
             let sourceSets = sets.sourceSets;
             sourceSets.sequenceN.visible = false;
-            this.addGuifyControllers(
+            sourceSets.sample.visible = false;
+            this.sourceSettingsGui.addControllers(
                 sourceSets,
-                HC.SourceControllerUi,
-                this.sourceSettingsGui
+                HC.SourceControllerUi
             );
 
             sourceSets.sequenceN.visible = true;
-            sourceSets.sample.visible = false;
             sourceSets.override.visible = false;
             sourceSets.source.visible = false;
 
-            this.addGuifyControllers(
+            this.sequenceSettingsGui.addControllers(
                 sourceSets,
-                HC.SequenceControllerUi,
-                this.sequenceSettingsGui
+                HC.SequenceControllerUi
             );
 
-            this.initSamples();
+            this.sampleBar = new HC.SampleBar('SampleBar', 'sample', true, sets.sourceSets.sample, this);
 
-            this.addAnimationControllers(this.settingsManager.getGlobalProperties());
-            this.addPassesFolder(HC.ShaderPassUi.onPasses);
+            this.animationSettingsGui.addControllers(this.settingsManager.getGlobalProperties());
+            this.animationSettingsGui.addPassesFolder(
+                HC.ShaderPassUi.onPasses,
+                this.settingsManager.getGlobalProperties()['passes'],
+                this.config.AnimationValues.shaders
+            );
 
             this.openTreeByPath('controls');
 
@@ -233,10 +228,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     for (let layer in settings) {
                         this.updateSettings(layer, settings[layer], true, false, true);
                     }
-                }
-                if ('data' in session) {
-                    HC.log('data', 'synced');
-                    this.updateData();
                 }
 
                 syncing = false;
@@ -504,21 +495,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         /**
-         * todo: controlSet.clean()
-         */
-        cleanShaderPasses() {
-            let controlSet = this.settingsManager.get(this.config.ControlSettings.layer, 'passes');
-            let passes = controlSet.getShaderPasses();
-
-            for (let key in passes) {
-                let sh = controlSet.getShader(key);
-                if (!sh || sh.apply === false) {
-                    controlSet.removeShaderPass(key);
-                }
-            }
-        }
-
-        /**
          *
          * @param item
          * @param value
@@ -549,8 +525,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 this.presetMan.setSelected(value+1, true);
                 HC.log(item, value+1);
 
-                let config = { data: { DataStatus: {selected_layer: value+1 } } };
-                this.updateData(config);
+                this.config.DataStatus.selected_layer = value+1;
 
             } else if (item === 'reset') {
                 if (value && force) {
@@ -565,13 +540,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             if (display !== false) {
-
-                if (item.match(/_(sequence|sample|source)/)) {
-                    alert('now! line number->console');
-                    console.log('now!');
-                    this.updateData();
-
-                } else if (item === 'monitor') {
+                if (item === 'monitor') {
                     this.monitor.activate(value);
                 }
 
@@ -636,14 +605,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
             if (display !== false) {
 
-                if (item.match(/_(start|end|sequence|input|source)$/)) {
-                    this.updateData();
+                if (item.match(/sequence\d_(start|end)$/)) {
+                    this._fireClipIndicatorUpdate(HC.numberExtract(item, 'sequence'));
+
+                } else if (item.match(/sequence\d_(|input)$/)) {
+                    this._fireClipUpdate(HC.numberExtract(item, 'sequence'));
 
                 } else if (item.match(/_(enabled)/)) {
                     if (!value) { // set record to false if enabled == false
                         let smp = HC.numberExtract(item, 'sample');
                         this.updateSource(getSampleRecordKey(smp), false, true, true, false);
-                        this.updateThumbs();
+                        HC.EventManager.fireEventId(EVENT_THUMB_UPDATE, smp, {});
                     }
 
                 } else if (item.match(/_(load)/)) {
@@ -668,37 +640,50 @@ document.addEventListener('DOMContentLoaded', function () {
          */
         updateData(data) {
             if (data && this.config) {
-                for (let key in data.data) {
-                    if (key in this.config) {
-                        let sec = data.data[key];
-                        for (let tkey in sec) {
-                            this.config[key][tkey] = sec[tkey];
-                        }
+                let key = data.key;
+                if (key in this.config) {
+                    let sec = data.data;
+                    for (let tkey in sec) {
+                        this.config[key][tkey] = sec[tkey];
                     }
                 }
-                if (data.data.updateUi) {
-                    this.updateUi(this.sourceSettingsGui);
-                }
-            }
-
-            if (!data || 'DataSamples' in data.data || 'SourceTypes' in data.data) {
-                HC.TimeoutManager.add('updateData', SKIP_TEN_FRAMES, () => {
-                    this.updateSequenceUi();
-                    this.updateThumbs();
-                });
             }
         }
 
         /**
          *
+         * @param seq
+         * @private
          */
-        updateSequenceUi() {
-            if (this.config.SourceValues && this.config.SourceValues.sequence) {
-                for (let seq = 0; seq < this.config.SourceValues.sequence.length; seq++) {
-                    HC.EventManager.fireEventId(EVENT_CLIP_UPDATE, seq);
-                    HC.EventManager.fireEventId(EVENT_CLIP_INDICATOR_UPDATE, seq);
-                }
+        _fireClipUpdate(seq) {
+            let sample = this.sourceManager.getSampleBySequence(seq);
+            let sampleKey = getSampleKey(sample);
+
+            let enabled = this.sourceManager.getSampleEnabledBySequence(seq);
+            let data = null;
+            if (enabled && sampleKey in this.config.DataSamples) {
+                data = this.config.DataSamples[sampleKey];
             }
+
+            HC.EventManager.fireEventId(EVENT_CLIP_UPDATE, seq, data);
+        }
+
+        /**
+         *
+         * @param seq
+         * @private
+         */
+        _fireClipIndicatorUpdate(seq) {
+            let sample = this.sourceManager.getSampleBySequence(seq);
+            let sampleKey = getSampleKey(sample);
+
+            let enabled = this.sourceManager.getSampleEnabledBySequence(seq);
+            let data = null;
+            if (enabled && sampleKey in this.config.DataSamples) {
+                data = this.config.DataSamples[sampleKey];
+            }
+
+            HC.EventManager.fireEventId(EVENT_CLIP_INDICATOR_UPDATE, seq, data);
         }
 
         /**
@@ -800,6 +785,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
         pushLayers() {
             this._bypassMonitor(this.syncLayers());
+        }
+
+        pushShaderPasses(layer, data) {
+            layer = layer !== null ? layer : this.config.ControlSettings.layer;
+            this.messaging.emitSettings(layer, data, false, false, false);
         }
 
         resetShaders(all) {

@@ -102,6 +102,10 @@
             this.gui.bar.label.textContent = label;
         }
 
+        getTitle() {
+            return this.getLabel();
+        }
+
         /**
          *
          * @return {boolean}

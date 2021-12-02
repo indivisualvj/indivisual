@@ -525,6 +525,8 @@ function _sources(req, sources) {
                 if (fs.statSync(f).isDirectory()) {
                     let subs = exists ? fs.readdirSync(f) : [];
 
+                    __find(subs, f);
+
                     subs.sort(function (a, b) {
                         let fa = HC.filePath(f, a);
                         let fb = HC.filePath(f, b);
@@ -537,8 +539,6 @@ function _sources(req, sources) {
 
                         return a.localeCompare(b);
                     });
-
-                    __find(subs, f);
 
                 } else {
                     files.push(f);

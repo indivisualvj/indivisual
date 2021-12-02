@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
+_importThreePostprocessing('EffectComposer');
+
 {
     HC.Layer = class Layer {
 
@@ -46,11 +48,25 @@
          */
         lights = [];
 
-        ambientLight = false;
+        /**
+         * @type {THREE.AmbientLight|null}
+         */
+        ambientLight;
 
-        shapes = false;
+        /**
+         * @type {[]}
+         */
+        shapes;
 
-        shape = false;
+        /**
+         * @type {[]}
+         */
+        shapeCache;
+
+        /**
+         * @type {HC.Shape}
+         */
+        shape;
 
         materialColor;
 

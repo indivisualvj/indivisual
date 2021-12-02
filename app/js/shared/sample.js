@@ -158,7 +158,7 @@
 
             } else if (record) {
                 if (!this.started) {
-                    HC.EventManager.register(EVENT_SOURCE_MANAGER_RENDER, this.id, (data) => {
+                    HC.EventManager.register(EVENT_SOURCE_MANAGER_RENDER, this.id, (sourceManager) => {
                         let speed = this.beatKeeper.getDefaultSpeed();
                         this.render(this.renderer.current(), speed, this.renderer.currentColor());
                     });

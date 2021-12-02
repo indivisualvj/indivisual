@@ -4,15 +4,14 @@
   "port": 8081,
 
   "shared": [
+    "js/entrypoint",
     "js/shared",
-    "js/source",
     "js/display",
     "js/plugins",
-    "js/controls"
+    "js/controlsets"
   ],
 
   "animation": [
-    "lib/three/shaders",
     "lib/three/postprocessing",
     "js/animation.js",
     "js/animation"

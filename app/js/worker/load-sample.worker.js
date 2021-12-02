@@ -13,14 +13,14 @@ onmessage = function (ev) {
         file = path + '/' + file;
 
         load(file, i, (blob, index) => {
-            blob.arrayBuffer().then((buf) => {
-                blobs[index] = buf;
-                    loaded++;
+            createImageBitmap(blob).then((bmp) => {
+                bmp._index = index;
+                blobs[bmp._index] = bmp;
+                loaded++;
                 if (loaded >= length) {
                     self.postMessage({id: ev.data.id, blobs: blobs}, blobs);
                 }
             });
-
         });
     }
 };

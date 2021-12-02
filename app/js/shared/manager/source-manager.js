@@ -209,9 +209,6 @@
                 messaging.emitAttr('[id="' + target.id + '"]', 'data-label', 'enabled');
                 messaging.emitMidi('off', MIDI_ROW_ONE[target.index]);
                 messaging.emitMidi('off', MIDI_SAMPLE_FEEDBACK);
-                let conf = {DataSamples: {}};
-                conf.DataSamples[target.id] = false;
-                messaging.emitData(target.id, conf);
             });
 
             HC.EventManager.register(EVENT_SAMPLE_RENDER_START, sample.id, (target) => {
@@ -243,10 +240,7 @@
             HC.EventManager.register(EVENT_SAMPLE_RENDER_END, sample.id, (target) => {
                 let recordKey = getSampleRecordKey(target.index);
 
-                if (this.config.SourceSettings[recordKey]) { // reset smpX_record
-                    this.animation.updateSource(recordKey, false, true, true, false);
-                }
-
+                this.animation.updateSource(recordKey, false, true, true, false);
                 let scale = 320 / target.canvas.width;
                 this.storeSample(target.index, target.id, scale);
 
@@ -387,56 +381,33 @@
                 sample.beats = Math.ceil((frameCount / 60) * 1000 / sample.duration);
                 sample.frameCount = frameCount;
                 let blobs = [];
-                for (let i = 0; i < frameCount; i++) {
-                    blobs.push(new ArrayBuffer(0));
-                }
 
-                this.loadWorker.onmessage = (ev) => {
-                    if (ev.data.id === sample.id) {
-                        this.loadWorker.onmessage = null;
-                        let blobs = ev.data.blobs;
-                        sample.samples = [];
-
-                        let loaded = 0;
-                        for (let i = 0; i < blobs.length; i++) {
-
-                            let blob = blobs[i];
-                            let image = new Image();
-                            image._index = i;
-                            image.onload = () => {
-
-                                let canvas = new OffscreenCanvas(sample.width, sample.height);
-                                let ctx = canvas.getContext('2d');
-
-                                ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-
-                                let bmp = canvas.transferToImageBitmap();
-                                bmp._index = image._index;
-                                sample.samples[bmp._index] = bmp;
-
-                                URL.revokeObjectURL(image.src);
-
-                                loaded++;
-                                if (loaded >= frameCount) {
-                                    sample.pointer = sample.frameCount;
-                                    sample.finish();
-                                    HC.EventManager.fireEventId(EVENT_SAMPLE_READY, sample);
-                                }
-                            };
-
-                            let arrayBufferView = new Uint8Array(blob);
-                            blob = new Blob( [ arrayBufferView ], { type: "image/png" } );
-                            image.src = URL.createObjectURL(blob);
+                let _proceed = () => {
+                    this.loadWorker.onmessage = (ev) => {
+                        if (ev.data.id === sample.id) {
+                            this.loadWorker.onmessage = null;
+                            sample.samples = ev.data.blobs;
+                            sample.pointer = sample.frameCount;
+                            sample.finish();// fixme: monitor does not listen
                         }
-                    }
+                    };
+                    this.loadWorker.postMessage({
+                        length: sample.frameCount,
+                        files: files,
+                        path: HC.filePath(SAMPLE_DIR, name),
+                        id: sample.id,
+                        blobs: blobs
+                    }, blobs);
                 };
-                this.loadWorker.postMessage({
-                    length: sample.frameCount,
-                    files: files,
-                    blobs: blobs,
-                    path: HC.filePath(SAMPLE_DIR, name),
-                    id: sample.id
-                }, blobs);
+
+                for (let i = 0; i < frameCount; i++) {
+                    createImageBitmap(new ImageData(sample.width, sample.height)).then((img) => {
+                        blobs.push(img);
+                        if (i === frameCount-1) {
+                            _proceed()
+                        }
+                    });
+                }
             });
         }
 
@@ -540,7 +511,7 @@
          *
          */
         render() {
-            HC.EventManager.fireEvent(EVENT_SOURCE_MANAGER_RENDER);
+            HC.EventManager.fireEvent(EVENT_SOURCE_MANAGER_RENDER, this);
         }
 
         /**
@@ -672,29 +643,6 @@
             }
 
             return false;
-        }
-
-        /**
-         *
-         * @param sequence
-         * @param length
-         * @param start
-         * @param end
-         */
-        applySequenceSlice(sequence, length, start, end) {
-            let end2end = length - end;
-            let prc = (length - end2end) / length;
-            let sp = start;
-            let ep = sp + prc * length;
-            let l = ep - sp;
-            let ve = sp + l;
-            if (ve > length) {
-                sp -= ve - length;
-            }
-
-            sequence.start = Math.min(length - 1, Math.round(sp));
-            sequence.end = Math.min(length - 1, Math.round(ep));
-            sequence.length = sequence.end - sequence.start;
         }
 
         /**

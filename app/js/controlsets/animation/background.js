@@ -51,10 +51,8 @@
         styles = {
             background_mode: ['half', 'clear'],
             background_color: ['half'],
-            // background_input: ['half'],
             background_volume: ['half', 'clear'],
             background_volume_oscillate: ['half'],
-            // override_background_modeping: ['half'],
             background_wraps: ['half', 'clear'],
             background_wrapt: ['half'],
             background_repeatx: ['half', 'clear'],
@@ -63,7 +61,6 @@
             background_offsety: ['half'],
             background_centerx: ['half', 'clear'],
             background_centery: ['half'],
-            // background_rotation: ['half'],
         };
     }
 }

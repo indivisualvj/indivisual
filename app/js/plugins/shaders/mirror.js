@@ -1,3 +1,4 @@
+_importThreeShader('MirrorShader');
 {
     HC.plugins.shaders.mirror = class Plugin extends HC.ShaderPlugin {
         static index = 50;

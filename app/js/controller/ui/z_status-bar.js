@@ -2,7 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    HC.StatusBar = class GuifyStatus extends HC.Guify {
+    HC.StatusBar = class StatusBar extends HC.Guify {
 
         config = {
             bpm: {

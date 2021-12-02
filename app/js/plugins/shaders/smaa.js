@@ -1,3 +1,5 @@
+_importThreeShader('SMAAShader');
+_importThreePostprocessing('SMAAPass');
 {
     HC.plugins.shaders.smaa = class Plugin extends HC.ShaderPlugin {
         static index = 5;

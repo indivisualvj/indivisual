@@ -2,8 +2,8 @@
     HC.plugins.override_material_input.sequence = class Plugin extends HC.OverrideMaterialInputPlugin {
 
         apply(i) {
-            let seq = this.animation.sourceManager.getSequence(i);
-            let image = seq.current(this.layer.renderer.current(), true);
+            let seq = this.sourceManager.getSequence(i);
+            let image = seq.current(this.sourceManager.getSourcePlugin('renderer').current(), true);
 
             if (image) {
                 if (!this.properties.map) {

@@ -48,6 +48,20 @@
 
         /**
          *
+         */
+        cleanShaderPasses() {
+            let passes = this.getShaderPasses();
+
+            for (let key in passes) {
+                let sh = this.getShader(key);
+                if (!sh || sh.apply === false) {
+                    this.removeShaderPass(key);
+                }
+            }
+        }
+
+        /**
+         *
          * @returns {[]}
          */
         getShaderPasses() {

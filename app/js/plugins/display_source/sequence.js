@@ -174,8 +174,8 @@
                     let os = this.start;
                     let oe = this.end;
                     let frameCount = this.sample.frameCount;
-                    HC.SourceControllerSequence
-                    this.sourceManager.applySequenceSlice(this, frameCount, start, end);
+
+                    applySequenceSlice(this, frameCount, start, end);
 
                     if (os !== this.start) {
                         this.pointer = this.start;

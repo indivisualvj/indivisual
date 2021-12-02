@@ -388,8 +388,7 @@
                             this.loadWorker.onmessage = null;
                             sample.samples = ev.data.blobs;
                             sample.pointer = sample.frameCount;
-                            sample.finish();
-                            HC.EventManager.fireEventId(EVENT_SAMPLE_READY, sample);
+                            sample.finish();// fixme: monitor does not listen
                         }
                     };
                     this.loadWorker.postMessage({
@@ -644,29 +643,6 @@
             }
 
             return false;
-        }
-
-        /**
-         *
-         * @param sequence
-         * @param length
-         * @param start
-         * @param end
-         */
-        applySequenceSlice(sequence, length, start, end) {
-            let end2end = length - end;
-            let prc = (length - end2end) / length;
-            let sp = start;
-            let ep = sp + prc * length;
-            let l = ep - sp;
-            let ve = sp + l;
-            if (ve > length) {
-                sp -= ve - length;
-            }
-
-            sequence.start = Math.min(length - 1, Math.round(sp));
-            sequence.end = Math.min(length - 1, Math.round(ep));
-            sequence.length = sequence.end - sequence.start;
         }
 
         /**

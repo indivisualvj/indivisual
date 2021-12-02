@@ -46,11 +46,6 @@
         controller;
 
         /**
-         * @type {HC.SourceManager}
-         */
-        sourceManager;
-
-        /**
          * @type {HC.Config}
          */
         config;
@@ -63,7 +58,6 @@
          * @param {HC.GuifyFolder} settingsFolder
          */
         constructor(controller, settingsFolder) {
-            this.sourceManager = controller.sourceManager;
             this.config = controller.config;
             this.key = settingsFolder.getKey();
             this.index = HC.numberExtract(this.key, 'sequence');
@@ -187,7 +181,7 @@
                         length: 0
                     };
 
-                    this.sourceManager.applySequenceSlice(sequence, length, start, end); // todo: maybe at the end this is a static
+                    applySequenceSlice(sequence, length, start, end);
 
                     let frameDuration = clip.duration / length;
                     let beatDuration = clip.duration / clip.beats;

@@ -23,7 +23,7 @@
         _initSequences() {
             let folders = this.folder.getFolders();
             for (let folder of folders) {
-                new HC.SourceControllerSequence(messaging.program, folder);
+                new HC.SequenceUi(messaging.program, folder);
             }
         }
 

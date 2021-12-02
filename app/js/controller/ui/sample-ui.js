@@ -3,7 +3,7 @@
  */
 
 {
-    HC.SourceControllerSample = class SourceControllerSample {
+    HC.SampleUi = class SampleUi {
 
         /**
          * @type {HTMLElement}

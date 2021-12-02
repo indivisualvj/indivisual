@@ -3,7 +3,7 @@
  */
 
 {
-    HC.SourceControllerSequence = class SourceControllerSequence {
+    HC.SequenceUi = class SequenceUi {
 
         /**
          * @type {number}

@@ -17,7 +17,7 @@
                 let key = getSampleKey(i);
                 this.addFolder(key)
 
-                let thumb = new HC.SourceControllerSample(i);
+                let thumb = new HC.SampleUi(i);
                 thumb.init(this.folder.getFolderContainer());
                 thumb.initDragAndDrop(onDragStart, onDragEnd);
                 thumb.initEvents();

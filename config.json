@@ -8,7 +8,7 @@
     "js/source",
     "js/display",
     "js/plugins",
-    "js/controls"
+    "js/controlsets"
   ],
 
   "animation": [

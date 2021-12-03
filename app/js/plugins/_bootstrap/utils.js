@@ -1,3 +1,7 @@
+if (!IS_CONTROLLER) {
+    _importThreeModule('examples/js/utils', 'BufferGeometryUtils');
+}
+
 HC.GeometryUtils = class GeometryUtils {
 
     /**

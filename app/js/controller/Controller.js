@@ -21,6 +21,7 @@ import {BeatKeeper} from "../shared/BeatKeeper";
 import {SourceManager} from "../manager/SourceManager";
 import {Messaging} from "../lib/Messaging";
 import {ShaderPassUi} from "./ui/ShaderPassUi";
+import {AssetManager} from "../lib/AssetManager";
 
 class Controller extends Program {
 

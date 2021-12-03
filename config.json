@@ -8,7 +8,7 @@
     "js/shared",
     "js/display",
     "js/plugins",
-    "js/controlsets"
+    "js/control_set"
   ],
 
   "animation": [

@@ -4,7 +4,7 @@
 
 {
 
-    HC.controls.lighting = class ControlSet extends HC.ControlSet {
+    HC.control_set.lighting = class ControlSet extends HC.ControlSet {
 
         static index = 40;
 

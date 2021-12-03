@@ -331,7 +331,7 @@
         static initAll(pluggedValues) {
             let controlSets = {};
             for (let key in messaging.program.config.ControlSets) { // statics.ControlSets SORTED
-                let cs = new HC.controls[key](key);
+                let cs = new HC.control_set[key](key);
                 cs.init(pluggedValues);
 
                 controlSets[key] = cs;

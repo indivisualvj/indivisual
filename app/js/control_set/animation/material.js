@@ -3,7 +3,7 @@
  */
 {
 
-    HC.controls.material = class ControlSet extends HC.ControlSet {
+    HC.control_set.material = class ControlSet extends HC.ControlSet {
 
         static index = 110;
 

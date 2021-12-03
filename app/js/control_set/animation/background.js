@@ -2,7 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    HC.controls.background = class ControlSet extends HC.ControlSet {
+    HC.control_set.background = class ControlSet extends HC.ControlSet {
 
         static index = 70;
 

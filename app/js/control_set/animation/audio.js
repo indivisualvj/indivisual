@@ -3,7 +3,7 @@
  */
 {
 
-    HC.controls.audio = class ControlSet extends HC.ControlSet {
+    HC.control_set.audio = class ControlSet extends HC.ControlSet {
 
         static index = 20;
         static _name = 'audio & timing';

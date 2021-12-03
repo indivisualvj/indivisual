@@ -4,7 +4,7 @@
 
 {
 
-    HC.controls.sizing = class ControlSet extends HC.ControlSet {
+    HC.control_set.sizing = class ControlSet extends HC.ControlSet {
 
         static index = 160;
 

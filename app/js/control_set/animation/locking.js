@@ -3,7 +3,7 @@
  */
 {
 
-    HC.controls.locking = class ControlSet extends HC.ControlSet {
+    HC.control_set.locking = class ControlSet extends HC.ControlSet {
 
         static index = 150;
 

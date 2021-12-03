@@ -3,7 +3,7 @@
  */
 {
 
-    HC.controls.rotation = class ControlSet extends HC.ControlSet {
+    HC.control_set.rotation = class ControlSet extends HC.ControlSet {
 
         static index = 140;
 

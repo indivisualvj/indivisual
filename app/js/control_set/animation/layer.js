@@ -3,7 +3,7 @@
  */
 
 {
-    HC.controls.layer = class ControlSet extends HC.ControlSet {
+    HC.control_set.layer = class ControlSet extends HC.ControlSet {
 
         static index = 10;
 

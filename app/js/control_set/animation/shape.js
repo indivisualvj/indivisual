@@ -2,7 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    HC.controls.shape = class ControlSet extends HC.ControlSet {
+    HC.control_set.shape = class ControlSet extends HC.ControlSet {
 
         static index = 100;
 

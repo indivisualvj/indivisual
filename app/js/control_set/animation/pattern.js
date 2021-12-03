@@ -3,7 +3,7 @@
  */
 {
 
-    HC.controls.pattern = class ControlSet extends HC.ControlSet {
+    HC.control_set.pattern = class ControlSet extends HC.ControlSet {
 
         static index = 90;
 

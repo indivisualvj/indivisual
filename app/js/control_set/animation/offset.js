@@ -3,7 +3,7 @@
  */
 {
 
-    HC.controls.offset = class ControlSet extends HC.ControlSet {
+    HC.control_set.offset = class ControlSet extends HC.ControlSet {
 
         static index = 170;
 

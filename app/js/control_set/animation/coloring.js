@@ -3,7 +3,7 @@
  */
 {
 
-    HC.controls.coloring = class ControlSet extends HC.ControlSet {
+    HC.control_set.coloring = class ControlSet extends HC.ControlSet {
 
         static index = 120;
 

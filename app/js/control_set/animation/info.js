@@ -3,7 +3,7 @@
  */
 {
 
-    HC.controls.info = class ControlSet extends HC.ControlSet {
+    HC.control_set.info = class ControlSet extends HC.ControlSet {
 
         static index = 5;
         static _name = 'info';

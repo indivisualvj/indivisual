@@ -339,7 +339,7 @@
         _loadControlSets() {
 
             this.ControlSets = {};
-            let plugins = HC.controls;
+            let plugins = HC.control_set;
             let keys = Object.keys(plugins);
 
             keys.sort(this._sort(plugins, 'ControlSet'));
@@ -347,7 +347,7 @@
             for (let i = 0; i < keys.length; i++) {
 
                 let key = keys[i];
-                let plugin = HC.controls[key];
+                let plugin = HC.control_set[key];
                 let name = plugin._name || key;
 
                 if (name === 'ControlSet') {

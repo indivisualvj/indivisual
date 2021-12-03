@@ -2,7 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
-    HC.controls.passes = class ControlSet extends HC.ControlSet {
+    HC.control_set.passes = class ControlSet extends HC.ControlSet {
 
         static index = 190;
         static _name = 'shader passes';

@@ -2,7 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-import {EventManager} from "../../manager/EventManager";
+
 
 {
 
@@ -17,13 +17,13 @@ import {EventManager} from "../../manager/EventManager";
                     switch (key) {
                         case 'lighting_type':
                         case 'lighting_color':
-                            EventManager.fireEventId(EVENT_LAYER_RESET_LIGHTING, id, context, SKIP_TEN_FRAMES);
+                            this.eventManager.fireEventId(EVENT_LAYER_RESET_LIGHTING, id, context, SKIP_TEN_FRAMES);
                             break;
                         case 'lighting_ambient':
-                            EventManager.fireEventId(EVENT_LAYER_RESET_AMBIENT, id, context, SKIP_TEN_FRAMES);
+                            this.eventManager.fireEventId(EVENT_LAYER_RESET_AMBIENT, id, context, SKIP_TEN_FRAMES);
                             break;
                         case 'lighting_fog':
-                            EventManager.fireEventId(EVENT_LAYER_RESET_FOG, id, context, SKIP_TEN_FRAMES);
+                            this.eventManager.fireEventId(EVENT_LAYER_RESET_FOG, id, context, SKIP_TEN_FRAMES);
                             break;
 
                     }

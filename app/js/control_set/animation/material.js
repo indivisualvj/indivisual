@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {EventManager} from "../../manager/EventManager";
+
 
 {
 
@@ -16,11 +16,11 @@ import {EventManager} from "../../manager/EventManager";
                     switch (key) {
                         case 'mesh_material':
                         case 'material_mapping':
-                            EventManager.fireEventId(EVENT_LAYER_RESET_SHAPES, id, context);
+                            this.eventManager.fireEventId(EVENT_LAYER_RESET_SHAPES, id, context);
                             break;
 
                         default:
-                            EventManager.fireEventId(EVENT_SHAPE_MATERIALS_UPDATE, id, context);
+                            this.eventManager.fireEventId(EVENT_SHAPE_MATERIALS_UPDATE, id, context);
                             break;
                     }
                 }

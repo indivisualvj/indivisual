@@ -2,7 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-import {EventManager} from "../../manager/EventManager";
+
 
 {
 
@@ -16,7 +16,7 @@ import {EventManager} from "../../manager/EventManager";
                     let id = isObject(context) ? context.index : context;
                     switch (key) {
                         case 'lighting_pattern_lights':
-                            EventManager.fireEventId(EVENT_LAYER_RESET_LIGHTING, id, context, SKIP_TEN_FRAMES);
+                            this.eventManager.fireEventId(EVENT_LAYER_RESET_LIGHTING, id, context, SKIP_TEN_FRAMES);
                             break;
                     }
                 }

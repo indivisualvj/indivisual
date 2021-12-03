@@ -1,6 +1,8 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {Messaging} from "../lib/Messaging";
+
 class BeatKeeper {
 
     beatStartTime = 0;
@@ -114,7 +116,7 @@ class BeatKeeper {
                 this.resetTrigger();
             }, 1333);
 
-            messaging.program.updateControl('tempo', bpm, true, false, false);
+            Messaging.program.updateControl('tempo', bpm, true, false, false);
 
         } else { // first trigger
             this.firstTrigger = HC.now();

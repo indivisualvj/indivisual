@@ -12,6 +12,7 @@
 
                 if (e.dataTransfer.files.length) {
                     HC.AudioManager.plugins.mediafile.dropEvent = e;
+                    // fixme
                     messaging.program.updateControl('audio', 'mediafile', true, true, false);
                 }
             };

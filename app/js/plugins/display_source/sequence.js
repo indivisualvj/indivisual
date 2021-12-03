@@ -217,16 +217,16 @@
                     this._emitSourceType(getSequenceStartKey(this.index), getSequenceEndKey(this.index), type, type);
 
                 } else {
-                    EventManager.register(EVENT_SAMPLE_READY, this.id, (target) => {
+                    this.config.getEventManager().register(EVENT_SAMPLE_READY, this.id, (target) => {
                         if (this.sample && this.sample.id === target.id) {
-                            EventManager.removeEventId(EVENT_SAMPLE_READY, this.id);
+                            this.config.getEventManager().removeEventId(EVENT_SAMPLE_READY, this.id);
                             this.updateSource();
                         }
                     });
                 }
             }
 
-            EventManager.register(EVENT_SAMPLE_STATUS_CHANGED, this.id, (target) => {
+            this.config.getEventManager().register(EVENT_SAMPLE_STATUS_CHANGED, this.id, (target) => {
                 if (this.sample && this.sample.id === target.id) {
                     this.animation.updateSource(getSequenceSampleKey(this.index), 'off', true, true);
                 }
@@ -240,7 +240,7 @@
             let conf = {};
             conf[startKey] = start;
             conf[endKey] = end;
-            messaging.emitData('SourceTypes', conf);
+            this.config.getMessaging().emitData('SourceTypes', conf);
         }
 
         /**
@@ -335,7 +335,7 @@
             if (this.dirty) {
                 let prc = Math.min(100, ((pointer-this.start) / this.length) * 100);
                 if (Math.ceil(prc) % 2 === 0) {
-                    messaging.emitAttr('#' + this.id, 'data-progress', prc);
+                    this.config.getMessaging().emitAttr('#' + this.id, 'data-progress', prc);
                 }
             }
 

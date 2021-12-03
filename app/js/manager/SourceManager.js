@@ -73,7 +73,7 @@ class SourceManager {
      */
     initPlugins() {
         for (let p in HC.SourceManager.display_source) {
-            HC.SourceManager.display_source[p].initListeners(this);
+            HC.SourceManager.display_source[p].initListeners(this, EventManager);
         }
     }
 

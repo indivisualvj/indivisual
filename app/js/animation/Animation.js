@@ -94,14 +94,6 @@ class Animation extends Program {
 
     /**
      *
-     * @param {Messaging} messaging
-     */
-    setMessaging(messaging) {
-        this.messaging = messaging;
-    }
-
-    /**
-     *
      */
     animate() {
 

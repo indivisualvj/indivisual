@@ -332,7 +332,6 @@ class LayeredControlSetManager {
      */
     static initAll(pluggedValues) {
         let controlSets = {};
-        // fixme: ooooh what a mess using Messaging here...
         for (let key in Messaging.program.config.ControlSets) { // statics.ControlSets SORTED
             let cs = new HC.control_set[key](key, null, Messaging, EventManager);
             cs.init(pluggedValues);

@@ -36,22 +36,22 @@ HC.SourceManager.display_source = {};
         canvas;
 
         /**
-         * @type {HC.Program}
+         * @type {Program}
          */
         animation;
 
         /**
-         * @type {HC.DisplayManager}
+         * @type {DisplayManager}
          */
         displayManager;
 
         /**
-         * @type {HC.SourceManager}
+         * @type {SourceManager}
          */
         sourceManager;
 
         /**
-         * @type {HC.Renderer}
+         * @type {Renderer}
          */
         renderer;
 
@@ -61,12 +61,12 @@ HC.SourceManager.display_source = {};
         config;
 
         /**
-         * @type {HC.BeatKeeper}
+         * @type {BeatKeeper}
          */
         beatKeeper;
 
         /**
-         * @type {HC.AudioAnalyser}
+         * @type {AudioAnalyser}
          */
         audioAnalyser;
 
@@ -84,7 +84,7 @@ HC.SourceManager.display_source = {};
 
         /**
          *
-         * @param {HC.Program} owner
+         * @param {Program} owner
          */
         constructor(owner) {
             this.animation = owner;

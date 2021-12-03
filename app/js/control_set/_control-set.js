@@ -108,7 +108,7 @@ HC.control_set = HC.control_set || {};
          * @param {Messaging}messaging
          * @param {EventManager}eventManager
          */
-        constructor(name, config, messaging, eventManager) {
+        constructor(name, config, messaging, eventManager) { // fixme: inject program
             this._className = name;
             this.config = config;
             this.messaging = messaging;

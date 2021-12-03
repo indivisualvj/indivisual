@@ -12,12 +12,22 @@ HC.control_set = HC.control_set || {};
     HC.ControlSet = class ControlSet {
 
         /**
-         *
+         * @type {Messaging}
+         */
+        messaging;
+
+        /**
+         * @type {EventManager}
+         */
+        eventManager;
+
+        /**
+         * @type {string}
          */
         _name;
 
         /**
-         *
+         * @type {string}
          */
         _className;
 
@@ -94,11 +104,15 @@ HC.control_set = HC.control_set || {};
         /**
          *
          * @param name
-         * @param {Config} config
+         * @param {Config}config
+         * @param {Messaging}messaging
+         * @param {EventManager}eventManager
          */
-        constructor(name, config) {
+        constructor(name, config, messaging, eventManager) {
             this._className = name;
             this.config = config;
+            this.messaging = messaging;
+            this.eventManager = eventManager;
 
             if (!this.constructor._name) {
                 this._name = name;

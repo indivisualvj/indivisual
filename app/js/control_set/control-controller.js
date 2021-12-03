@@ -43,71 +43,71 @@ HC.ControlController = HC.ControlController || {};
                 if (HC.Hotkey.isPressed('shift') && HC.Hotkey.isPressed('ctrl')) {
                     let yes = confirm('Reset everything?');
                     if (yes) {
-                        this.config.messaging.program.fullReset();
+                        this.messaging.program.fullReset();
                     }
                 } else if (HC.Hotkey.isPressed('shift')) {
                     let _done = false;
-                    this.config.messaging.program.midi.loading(() => {
+                    this.messaging.program.midi.loading(() => {
                         return _done;
                     });
-                    this.config.messaging.program.resetLayers().finally(() => {
+                    this.messaging.program.resetLayers().finally(() => {
                         _done = true;
                     });
 
                 } else {
-                    this.config.messaging.program.updateControl('reset', true, true, true, false);
+                    this.messaging.program.updateControl('reset', true, true, true, false);
                 }
             },
 
             monitor: false,
             push_layers: () => {
-                this.config.messaging.program.pushLayers();
+                this.messaging.program.pushLayers();
             },
             push_sources: () => {
-                this.config.messaging.program.pushSources();
+                this.messaging.program.pushSources();
             },
             rst_shaders: () => {
-                this.config.messaging.program.resetShaders(HC.Hotkey.isPressed('shift')).finally(()=>{});
+                this.messaging.program.resetShaders(HC.Hotkey.isPressed('shift')).finally(()=>{});
             },
             enable_mic: () => {
-                this.config.messaging.program.updateControl('audio', 'microphone', true, true, false);
+                this.messaging.program.updateControl('audio', 'microphone', true, true, false);
             },
             reset_overrides: () => {
-                this.config.messaging.program.updateSource('override_material_input', 'none', true, true, false);
-                this.config.messaging.program.updateSource('override_background_mode', 'none', true, true, false);
+                this.messaging.program.updateSource('override_material_input', 'none', true, true, false);
+                this.messaging.program.updateSource('override_background_mode', 'none', true, true, false);
             },
             layout_close: () => {
-                this.config.messaging.program.closeAll();
+                this.messaging.program.closeAll();
             },
             layout_control: () => {
-                this.config.messaging.program.closeAll();
-                this.config.messaging.program.openTreeByPath('controls');
+                this.messaging.program.closeAll();
+                this.messaging.program.openTreeByPath('controls');
             },
             layout_display: () => {
-                this.config.messaging.program.closeAll();
-                this.config.messaging.program.openTreeByPath('displays/_general');
+                this.messaging.program.closeAll();
+                this.messaging.program.openTreeByPath('displays/_general');
             },
             layout_source: () => {
-                this.config.messaging.program.closeAll();
-                this.config.messaging.program.openTreeByPath('source');
+                this.messaging.program.closeAll();
+                this.messaging.program.openTreeByPath('source');
             },
             layout_override: () => {
-                this.config.messaging.program.closeAll();
-                this.config.messaging.program.openTreeByPath('override');
+                this.messaging.program.closeAll();
+                this.messaging.program.openTreeByPath('override');
             },
             layout_animation: () => {
-                this.config.messaging.program.closeAll();
-                let control = this.config.messaging.program.guis[3];
+                this.messaging.program.closeAll();
+                let control = this.messaging.program.guis[3];
                 control.setOpen(true);
             },
             layout_sequence: () => {
-                this.config.messaging.program.closeAll();
-                let control = this.config.messaging.program.guis[4];
-                this.config.messaging.program.openAll(control);
+                this.messaging.program.closeAll();
+                let control = this.messaging.program.guis[4];
+                this.messaging.program.openAll(control);
             },
             layout_presets: () => {
-                this.config.messaging.program.closeAll();
-                this.config.messaging.program.toggleByKey(5);
+                this.messaging.program.closeAll();
+                this.messaging.program.toggleByKey(5);
             },
             debug: false,
             tempo: 120.00,
@@ -209,13 +209,13 @@ HC.ControlController = HC.ControlController || {};
                 });
             },
             play: (inst) => { return new HC.Hotkey('space', (e) => {
-                this.config.messaging.program.updateControl('play', !this.config.ControlSettings.play, true, true, false);
+                this.messaging.program.updateControl('play', !this.config.ControlSettings.play, true, true, false);
             }, 'spc')},
             reset: (inst) => { return new HC.Hotkey('delete,shift+delete,ctrl+shift+delete', (e) => {
                 inst.settings.reset();
             }, 'del')},
             monitor: (inst) => { return new HC.Hotkey('home', (e) => {
-                this.config.messaging.program.updateControl('monitor', !this.config.ControlSettings.monitor, true, true, false);
+                this.messaging.program.updateControl('monitor', !this.config.ControlSettings.monitor, true, true, false);
             }, 'hm')},
             push_layers: (inst) => { return new HC.Hotkey('end', (e) => {
                 inst.settings.push_layers();

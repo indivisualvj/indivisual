@@ -3,6 +3,8 @@ import {_Controller} from "./Controller";
 import {Guify} from "./ui/guify/Guify";
 import {GuifyFolder} from "./ui/guify/GuifyFolder";
 import {TimeoutManager} from "../manager/TimeoutManager";
+import {Sample} from "../shared/Sample";
+import {ScriptProcessor} from "./ScriptProcessor";
 
 class Controller extends _Controller
 {
@@ -165,7 +167,7 @@ class Controller extends _Controller
                 let desc = proto.tutorial;
                 if (desc) {
                     let key = item + '.' + value;
-                    new HC.ScriptProcessor(this, key, desc).log();
+                    new ScriptProcessor(this, key, desc).log();
                 }
             }
         }

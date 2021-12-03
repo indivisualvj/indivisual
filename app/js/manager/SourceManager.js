@@ -3,7 +3,8 @@
  */
 
 import {EventManager} from "./EventManager";
-import {Sample} from "../shared/Sample";
+import {Clip, Sample} from "../shared/Sample";
+import {Messaging} from "../lib/Messaging";
 
 class SourceManager {
     /**
@@ -207,15 +208,15 @@ class SourceManager {
         }
 
         EventManager.register(EVENT_SAMPLE_INIT_END, sample.id, (target) => {
-            messaging.emitAttr('[id="' + target.id + '"]', 'style', '');
-            messaging.emitAttr('[id="' + target.id + '"]', 'data-label', 'enabled');
-            messaging.emitMidi('off', MIDI_ROW_ONE[target.index]);
-            messaging.emitMidi('off', MIDI_SAMPLE_FEEDBACK);
+            Messaging.emitAttr('[id="' + target.id + '"]', 'style', '');
+            Messaging.emitAttr('[id="' + target.id + '"]', 'data-label', 'enabled');
+            Messaging.emitMidi('off', MIDI_ROW_ONE[target.index]);
+            Messaging.emitMidi('off', MIDI_SAMPLE_FEEDBACK);
         });
 
         EventManager.register(EVENT_SAMPLE_RENDER_START, sample.id, (target) => {
-            messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {timeout: this.beatKeeper.getSpeed('eight').duration});
-            messaging.emitMidi('glow', MIDI_SAMPLE_FEEDBACK);
+            Messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {timeout: this.beatKeeper.getSpeed('eight').duration});
+            Messaging.emitMidi('glow', MIDI_SAMPLE_FEEDBACK);
         });
 
         EventManager.register(EVENT_SAMPLE_RENDER_PROGRESS, sample.id, (target) => {
@@ -223,20 +224,20 @@ class SourceManager {
             let progress = target.counter / target.beats * 100;
 
             let msg = 'recording' + ' (' + this.animation.fps + 'fps)';
-            messaging.emitAttr('[id="' + target.id + '"]', 'data-label', msg);
-            messaging.emitAttr('[id="' + target.id + '"]', 'data-progress', progress);
+            Messaging.emitAttr('[id="' + target.id + '"]', 'data-label', msg);
+            Messaging.emitAttr('[id="' + target.id + '"]', 'data-progress', progress);
             let conf = {
                 timeout: this.beatKeeper.getSpeed('eight').duration,
                 times: 2
             };
-            messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], conf);
+            Messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], conf);
         });
 
         EventManager.register(EVENT_SAMPLE_RENDER_ERROR, sample.id, (target) => {
-            messaging.emitAttr('[id="' + target.id + '"]', 'data-progress', '');
-            messaging.emitAttr('[id="' + target.id + '"]', 'data-label', '[!ERROR]');
-            messaging.emitMidi('glow', MIDI_ROW_ONE[sample.index], {timeout: 500, times: 3});
-            messaging.emitMidi('glow', MIDI_SAMPLE_FEEDBACK, {timeout: 500, times: 3});
+            Messaging.emitAttr('[id="' + target.id + '"]', 'data-progress', '');
+            Messaging.emitAttr('[id="' + target.id + '"]', 'data-label', '[!ERROR]');
+            Messaging.emitMidi('glow', MIDI_ROW_ONE[sample.index], {timeout: 500, times: 3});
+            Messaging.emitMidi('glow', MIDI_SAMPLE_FEEDBACK, {timeout: 500, times: 3});
         });
 
         EventManager.register(EVENT_SAMPLE_RENDER_END, sample.id, (target) => {
@@ -246,16 +247,16 @@ class SourceManager {
             let scale = 320 / target.canvas.width;
             this.storeSample(target.index, target.id, scale);
 
-            messaging.emitAttr('[id="' + target.id + '"]', 'data-progress', '');
-            messaging.emitAttr('[id="' + target.id + '"]', 'data-label', 'loading thumbs');
-            messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {delay: 50});
-            messaging.emitMidi('off', MIDI_SAMPLE_FEEDBACK);
+            Messaging.emitAttr('[id="' + target.id + '"]', 'data-progress', '');
+            Messaging.emitAttr('[id="' + target.id + '"]', 'data-label', 'loading thumbs');
+            Messaging.emitMidi('glow', MIDI_ROW_ONE[target.index], {delay: 50});
+            Messaging.emitMidi('off', MIDI_SAMPLE_FEEDBACK);
         });
 
         EventManager.register(EVENT_SAMPLE_STATUS_CHANGED, sample.id, (target) => {
             if (!target.enabled) {
-                messaging.emitAttr('[id="' + target.id + '"]', 'data-progress', '');
-                messaging.emitAttr('[id="' + target.id + '"]', 'data-label', '');
+                Messaging.emitAttr('[id="' + target.id + '"]', 'data-progress', '');
+                Messaging.emitAttr('[id="' + target.id + '"]', 'data-label', '');
             }
         });
     }
@@ -281,7 +282,7 @@ class SourceManager {
                     }
 
                     if (warn) {
-                        messaging.emitMidi('glow', MIDI_SAMPLE_FEEDBACK, {timeout: 50, times: 5});
+                        Messaging.emitMidi('glow', MIDI_SAMPLE_FEEDBACK, {timeout: 50, times: 5});
                     }
                 }
             }
@@ -304,12 +305,12 @@ class SourceManager {
         if (sample) {
             let dir = HC.filePath(SAMPLE_DIR, name);
             let callback = () => {
-                messaging._emit({action: 'unlinkall', dir: dir}, (files) => {
+                Messaging._emit({action: 'unlinkall', dir: dir}, (files) => {
                     console.log('unlinkall', dir, files.length + ' files deleted');
 
                     EventManager.register(ENENT_SAMPLE_STORE_END, sample.id, (target) => {
                         let key = getSampleStoreKey(target.index);
-                        messaging.emitAttr('[data-id="' + key + '"]', 'data-label', '');
+                        Messaging.emitAttr('[data-id="' + key + '"]', 'data-label', '');
 
                         if (IS_ANIMATION) { // forward load sample to monitor
                             this.animation.updateSource(getSampleLoadKey(sample.index), sample.id, false, true, false);
@@ -319,7 +320,7 @@ class SourceManager {
                 });
             };
 
-            messaging.samples(dir, callback);
+            Messaging.samples(dir, callback);
 
         }
     }
@@ -374,7 +375,7 @@ class SourceManager {
 
         let file = HC.filePath(SAMPLE_DIR, name);
 
-        messaging._emit({action: 'samples', file: file}, (files) => {
+        Messaging._emit({action: 'samples', file: file}, (files) => {
 
             let frameCount = files.length;
             sample.enabled = true;
@@ -420,12 +421,12 @@ class SourceManager {
      */
     loadClip(sample, callback) {
         if (!sample.getClip()) {
-            let clip = new Sample.Clip(sample.id);
+            let clip = new Clip(sample.id);
             sample.setClip(clip);
 
             let file = HC.filePath(SAMPLE_DIR, sample.id);
 
-            messaging.samples(file, (files) => {
+            Messaging.samples(file, (files) => {
 
                 let loaded = 0;
                 let frameCount = files.length;

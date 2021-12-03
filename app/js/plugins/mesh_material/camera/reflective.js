@@ -44,16 +44,16 @@
             let mesh = new THREE.Mesh(geometry, this.material);
             mesh.name = this.id(index);
 //fixme:
-//             HC.EventManager.register(EVENT_RENDERER_BEFORE_RENDER, this.id(index), (renderer) => {
-//                 if (this.layer.isVisible()) {
-//                     mesh.visible = false;
-//
-//                     mesh.getWorldPosition(cubecam.position);
-//                     cubecam.update(this.layer.three.renderer, this.layer.three.scene);
-//
-//                     mesh.visible = true;
-//                 }
-//             });
+            this.config.getEventManager().register(EVENT_RENDERER_BEFORE_RENDER, this.id(index), (renderer) => {
+                if (this.layer.isVisible()) {
+                    mesh.visible = false;
+
+                    mesh.getWorldPosition(cubecam.position);
+                    cubecam.update(this.layer.three.renderer, this.layer.three.scene);
+
+                    mesh.visible = true;
+                }
+            });
 
             return mesh;
         }

@@ -37,16 +37,15 @@
                     let path = HC.filePath(IMAGE_DIR, file);
                     this.loading = true;
 
-                    //fixme:
-                    // AssetManager.loadMaterialMap(this.properties, path, function (mat) {
-                    //     inst.file = file;
-                    //     inst.loading = false;
-                    //
-                    //     if (!mat.emissiveMap) {
-                    //         inst.properties.emissiveMap = mat.map;
-                    //     }
-                    //
-                    // }, this.reset);
+                    this.config.getAssetManager().loadMaterialMap(this.properties, path, function (mat) {
+                        inst.file = file;
+                        inst.loading = false;
+
+                        if (!mat.emissiveMap) {
+                            inst.properties.emissiveMap = mat.map;
+                        }
+
+                    }, this.reset);
 
                 }
             }

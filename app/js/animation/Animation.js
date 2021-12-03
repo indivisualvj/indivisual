@@ -4,6 +4,7 @@
 import {Program} from "../lib/Program";
 import {AudioManager} from "../manager/AudioManager";
 import {AudioAnalyser} from "./AudioAnalyser";
+import {AssetManager} from "../lib/AssetManager";
 import {BeatKeeper} from "../shared/BeatKeeper";
 import {LayeredControlSetManager} from "../manager/LayeredControlSetManager";
 import {Renderer} from "./Renderer";

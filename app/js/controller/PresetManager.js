@@ -5,6 +5,7 @@
 import {TimeoutManager} from "../manager/TimeoutManager";
 import {Messaging} from "../lib/Messaging";
 import {PresetUi} from "./ui/PresetUi";
+import {ScriptProcessor} from "./ScriptProcessor";
 
 class PresetManager {
 
@@ -224,7 +225,7 @@ class PresetManager {
 
         data = this.settingsManager.prepareLayer(layer);
         if (this.settingsManager.get(layer, 'info').hasTutorial()) {
-            new HC.ScriptProcessor(this, name, Object.create(data.info.tutorial)).log();
+            new ScriptProcessor(this, name, Object.create(data.info.tutorial)).log();
             data.info.tutorial = {};
         }
 

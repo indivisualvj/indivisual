@@ -43,16 +43,16 @@
 
             let inst = this;
             //fixme:
-            // HC.EventManager.register(EVENT_RENDERER_BEFORE_RENDER, this.id(index), function (renderer) {
-            //     if (inst.layer.isVisible()) {
-            //         mesh.visible = false;
-            //
-            //         mesh.getWorldPosition(cubecam.position);
-            //         cubecam.update(inst.layer.three.renderer, inst.layer.three.scene);
-            //
-            //         mesh.visible = true;
-            //     }
-            // });
+            this.config.getEventManager().register(EVENT_RENDERER_BEFORE_RENDER, this.id(index), function (renderer) {
+                if (inst.layer.isVisible()) {
+                    mesh.visible = false;
+
+                    mesh.getWorldPosition(cubecam.position);
+                    cubecam.update(inst.layer.three.renderer, inst.layer.three.scene);
+
+                    mesh.visible = true;
+                }
+            });
 
             return mesh;
         }

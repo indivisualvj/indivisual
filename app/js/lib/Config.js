@@ -6,6 +6,7 @@ import {BeatKeeper} from "../shared/BeatKeeper";
 import {AssetManager} from "./AssetManager";
 import {ControlSetManager} from "../manager/ControlSetManager";
 import {Messaging} from "./Messaging";
+import {EventManager} from "../manager/EventManager";
 
 class Config {
 
@@ -253,7 +254,7 @@ class Config {
             let group = HC.DisplayController[cs];
             for (let s in group) {
                 let set = group[s];
-                let inst = new set(s, this);
+                let inst = new set(s, this, Messaging, EventManager);
                 inst.init(this.DisplayValues);
                 instances[cs + '.' + s] = inst;
             }
@@ -283,7 +284,7 @@ class Config {
         for (let cs in tree) {
             let set = tree[cs];
             /*** @type {HC.ControlSet} */
-            let inst = new set(cs, this);
+            let inst = new set(cs, this, Messaging, EventManager);
             inst.init(values);
             instances[cs] = inst;
         }
@@ -479,5 +480,19 @@ class Config {
             return cmpi;
         }
     }
+
+    getEventManager() {
+        return EventManager;
+    }
+
+    getAssetManager() {
+        return AssetManager;
+    }
+
+    getMessaging() {
+        return Messaging;
+    }
+
+
 }
 export {Config};

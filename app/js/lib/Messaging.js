@@ -1,6 +1,8 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {TimeoutManager} from "../manager/TimeoutManager";
+
 class Messaging {
     static program;
     static socket;
@@ -161,7 +163,7 @@ class Messaging {
             let elem = document.querySelector(data.query);
             if (elem) {
                 if (data.value === '') {
-                    if (data.timeout && HC.TimeoutManager.has(key)) {
+                    if (data.timeout && TimeoutManager.has(key)) {
                         return;
                     }
                     elem.removeAttribute(data.key);
@@ -171,7 +173,7 @@ class Messaging {
                 }
 
                 if (data.resetValue !== undefined) {
-                    HC.TimeoutManager.add(key, data.timeout ? data.timeout : 125, () => {
+                    TimeoutManager.add(key, data.timeout ? data.timeout : 125, () => {
                         if (data.resetValue === '') {
                             elem.removeAttribute(data.key);
 

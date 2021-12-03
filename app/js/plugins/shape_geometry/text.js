@@ -30,7 +30,7 @@
         }
 
         _loadCoolvetica() {
-            AssetManager.loadFont(HC.filePath(FONT_DIR, 'coolvetica.json'), function (font) {
+            this.config.getAssetManager().loadFont(HC.filePath(FONT_DIR, 'coolvetica.json'), function (font) {
                 coolvetica = font;
             });
         }

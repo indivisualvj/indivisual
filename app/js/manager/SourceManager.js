@@ -48,7 +48,7 @@ class SourceManager {
     plugins = {};
 
     /**
-     * @param {Animation} animation
+     * @param {null|Animation} animation
      * @param options
      */
     constructor(animation, options) {

@@ -3,7 +3,7 @@
  */
 HC.plugins.shaders = HC.plugins.shaders || {};
 {
-    if (IS_ANIMATION) {
+    if (!IS_CONTROLLER) {
         _importThreePostprocessing('Pass');
         _importThreePostprocessing('RenderPass');
         _importThreePostprocessing('ShaderPass');

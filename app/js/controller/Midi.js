@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {TimeoutManager} from "../manager/TimeoutManager";
+import {Messaging} from "../lib/Messaging";
 
 class Midi {
 
@@ -193,7 +194,7 @@ class Midi {
         if (this.data.length < 2) return;
         // console.log('', this.data); // MIDI data [144, 63, 73]
 
-        messaging.emitMidi('message', this.data, {});
+        Messaging.emitMidi('message', this.data, {});
 
         let cmd = this.data[0];
         let id = this.data[1];

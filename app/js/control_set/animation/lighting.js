@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
+import {EventManager} from "../../manager/EventManager";
+
 {
 
     HC.control_set.lighting = class ControlSet extends HC.ControlSet {
@@ -15,13 +17,13 @@
                     switch (key) {
                         case 'lighting_type':
                         case 'lighting_color':
-                            HC.EventManager.fireEventId(EVENT_LAYER_RESET_LIGHTING, id, context, SKIP_TEN_FRAMES);
+                            EventManager.fireEventId(EVENT_LAYER_RESET_LIGHTING, id, context, SKIP_TEN_FRAMES);
                             break;
                         case 'lighting_ambient':
-                            HC.EventManager.fireEventId(EVENT_LAYER_RESET_AMBIENT, id, context, SKIP_TEN_FRAMES);
+                            EventManager.fireEventId(EVENT_LAYER_RESET_AMBIENT, id, context, SKIP_TEN_FRAMES);
                             break;
                         case 'lighting_fog':
-                            HC.EventManager.fireEventId(EVENT_LAYER_RESET_FOG, id, context, SKIP_TEN_FRAMES);
+                            EventManager.fireEventId(EVENT_LAYER_RESET_FOG, id, context, SKIP_TEN_FRAMES);
                             break;
 
                     }

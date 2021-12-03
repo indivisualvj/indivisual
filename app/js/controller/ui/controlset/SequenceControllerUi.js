@@ -4,6 +4,7 @@
 
 import {ControlSetGuifyUi} from "./ControlSetGuifyUi";
 import {Messaging} from "../../../lib/Messaging";
+import {SequenceUi} from "../SequenceUi";
 
 class SequenceControllerUi extends ControlSetGuifyUi {
 

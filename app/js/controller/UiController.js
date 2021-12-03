@@ -1,5 +1,8 @@
 import {EventManager} from "../manager/EventManager";
 import {_Controller} from "./Controller";
+import {Guify} from "./ui/guify/Guify";
+import {GuifyFolder} from "./ui/guify/GuifyFolder";
+import {TimeoutManager} from "../manager/TimeoutManager";
 
 class Controller extends _Controller
 {
@@ -82,14 +85,14 @@ class Controller extends _Controller
                 ;
         }
 
-        if (control instanceof HC.Guify && !control.isExpanded()) {
+        if (control instanceof Guify && !control.isExpanded()) {
             return false;
         }
 
         if (control.children) {
             for (let k in control.children) {
                 let child = control.getChild(k);
-                if (child instanceof HC.GuifyFolder) {
+                if (child instanceof GuifyFolder) {
 
                     if (child.isExpanded()) {
                         control = this.nextOpenFolder(child);
@@ -181,10 +184,10 @@ class Controller extends _Controller
             return;
         }
 
-        if (control instanceof HC.Guify) {
+        if (control instanceof Guify) {
             control.setOpen(false);
 
-        } else if (control instanceof HC.GuifyFolder) {
+        } else if (control instanceof GuifyFolder) {
             control.setOpen(false);
         }
 
@@ -192,7 +195,7 @@ class Controller extends _Controller
         if (control.children) {
             for (let k in control.children) {
                 let child = control.getChild(k);
-                if (child instanceof HC.GuifyFolder) {
+                if (child instanceof GuifyFolder) {
                     child.setOpen(false);
                     result = child;
                     this.closeAll(child);
@@ -217,10 +220,10 @@ class Controller extends _Controller
             return;
         }
 
-        if (control instanceof HC.Guify) {
+        if (control instanceof Guify) {
             control.setOpen(true);
 
-        } else if (control instanceof HC.GuifyFolder) {
+        } else if (control instanceof GuifyFolder) {
             control.setOpen(true);
         }
 
@@ -228,7 +231,7 @@ class Controller extends _Controller
         if (control.children) {
             for (let k in control.children) {
                 let child = control.getChild(k);
-                if (child instanceof HC.GuifyFolder) {
+                if (child instanceof GuifyFolder) {
                     child.setOpen(true);
                     result = child;
                     this.openAll(child);
@@ -298,7 +301,7 @@ class Controller extends _Controller
     updateUi(control) {
         let key = control ? control.getLabel() : 'all';
 
-        HC.TimeoutManager.add('updateUi.' + key, SKIP_TEN_FRAMES, () => {
+        TimeoutManager.add('updateUi.' + key, SKIP_TEN_FRAMES, () => {
             this.refreshLayersUi();
 
             if (!control) {
@@ -317,7 +320,7 @@ class Controller extends _Controller
             for (let key in control.children) {
                 let child = control.getChild(key);
 
-                if (child instanceof HC.GuifyFolder) {
+                if (child instanceof GuifyFolder) {
                     this._updateValuesChanged(child);
                 }
             }

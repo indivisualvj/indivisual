@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
+import {EventManager} from "../../manager/EventManager";
+
 {
 
     HC.control_set.lighting_pattern = class ControlSet extends HC.ControlSet {
@@ -14,7 +16,7 @@
                     let id = isObject(context) ? context.index : context;
                     switch (key) {
                         case 'lighting_pattern_lights':
-                            HC.EventManager.fireEventId(EVENT_LAYER_RESET_LIGHTING, id, context, SKIP_TEN_FRAMES);
+                            EventManager.fireEventId(EVENT_LAYER_RESET_LIGHTING, id, context, SKIP_TEN_FRAMES);
                             break;
                     }
                 }

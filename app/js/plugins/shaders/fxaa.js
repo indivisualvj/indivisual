@@ -1,5 +1,5 @@
 {
-    if (IS_ANIMATION) {
+    if (!IS_CONTROLLER) {
         _importThreeShader('FXAAShader');
     }
     HC.plugins.shaders.fxaa = class Plugin extends HC.ShaderPlugin {

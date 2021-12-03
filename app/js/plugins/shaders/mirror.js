@@ -1,5 +1,5 @@
 {
-    if (IS_ANIMATION) {
+    if (!IS_CONTROLLER) {
         _importThreeShader('MirrorShader');
     }
     HC.plugins.shaders.mirror = class Plugin extends HC.ShaderPlugin {

@@ -1,5 +1,5 @@
 {
-    if (IS_ANIMATION) {
+    if (!IS_CONTROLLER) {
         _importThreeShader('ToonShader');
     }
 

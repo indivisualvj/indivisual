@@ -1,6 +1,8 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {EventManager} from "../../manager/EventManager";
+
 {
 
     HC.control_set.material = class ControlSet extends HC.ControlSet {
@@ -14,11 +16,11 @@
                     switch (key) {
                         case 'mesh_material':
                         case 'material_mapping':
-                            HC.EventManager.fireEventId(EVENT_LAYER_RESET_SHAPES, id, context);
+                            EventManager.fireEventId(EVENT_LAYER_RESET_SHAPES, id, context);
                             break;
 
                         default:
-                            HC.EventManager.fireEventId(EVENT_SHAPE_MATERIALS_UPDATE, id, context);
+                            EventManager.fireEventId(EVENT_SHAPE_MATERIALS_UPDATE, id, context);
                             break;
                     }
                 }

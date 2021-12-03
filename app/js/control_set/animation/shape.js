@@ -1,6 +1,8 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {EventManager} from "../../manager/EventManager";
+
 {
     HC.control_set.shape = class ControlSet extends HC.ControlSet {
 
@@ -12,7 +14,7 @@
                     let id = isObject(context) ? context.index : context;
                     switch (key) {
                         case 'shape_sizedivider':
-                            HC.EventManager.fireEventId(EVENT_LAYER_RESET, id, context, SKIP_TEN_FRAMES);
+                            EventManager.fireEventId(EVENT_LAYER_RESET, id, context, SKIP_TEN_FRAMES);
                             break;
                         case 'shape_modifier':
                         case 'shape_modifier_volume':
@@ -22,7 +24,7 @@
                         case 'shape_modb':
                         case 'shape_modc':
                         case 'shape_merge_tolerance':
-                            HC.EventManager.fireEventId(EVENT_LAYER_RESET_SHAPES, id, context, SKIP_TEN_FRAMES);
+                            EventManager.fireEventId(EVENT_LAYER_RESET_SHAPES, id, context, SKIP_TEN_FRAMES);
                             break;
                     }
                 }

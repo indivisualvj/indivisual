@@ -1,6 +1,8 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {EventManager} from "../../manager/EventManager";
+
 {
 
     HC.control_set.pattern = class ControlSet extends HC.ControlSet {
@@ -13,11 +15,11 @@
                     let id = isObject(context) ? context.index : context;
                     switch (key) {
                         case 'pattern_shapes':
-                            HC.EventManager.fireEventId(EVENT_LAYER_RESET, id, context, SKIP_TEN_FRAMES);
+                            EventManager.fireEventId(EVENT_LAYER_RESET, id, context, SKIP_TEN_FRAMES);
                             break;
                         case 'pattern':
                         case 'pattern_mover':
-                            HC.EventManager.fireEventId(EVENT_LAYER_RESET_SHAPES, id, context, SKIP_TEN_FRAMES);
+                            EventManager.fireEventId(EVENT_LAYER_RESET_SHAPES, id, context, SKIP_TEN_FRAMES);
                             break;
                     }
                 }

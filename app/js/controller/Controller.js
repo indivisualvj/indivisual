@@ -5,7 +5,7 @@ import {Program} from "../lib/Program";
 import {TimeoutManager} from "../manager/TimeoutManager";
 import {EventManager} from "../manager/EventManager";
 import {LayeredControlSetManager} from "../manager/LayeredControlSetManager";
-import {Monitor} from "./Monitor";
+import {Monitor} from "../shared/Monitor";
 import {Midi} from "./Midi";
 import {PropertyUi} from "./ui/PropertyUi";
 import {StatusBar} from "./ui/StatusBar";
@@ -20,6 +20,7 @@ import {SampleBar} from "./ui/SampleBar";
 import {BeatKeeper} from "../shared/BeatKeeper";
 import {SourceManager} from "../manager/SourceManager";
 import {Messaging} from "../lib/Messaging";
+import {ShaderPassUi} from "./ui/ShaderPassUi";
 
 class Controller extends Program {
 
@@ -134,7 +135,7 @@ class Controller extends Program {
         let displaySets = sets.displaySets;
 
         this.displaySettingsGui.addControllers(
-            DisplayController,
+            HC.DisplayController,
             displaySets,
             DisplayControllerUi
         );

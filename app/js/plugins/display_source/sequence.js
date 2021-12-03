@@ -94,7 +94,7 @@
          * @param {SourceManager} sourceManager
          */
         static initListeners(sourceManager) {
-            if (IS_ANIMATION) {
+            if (!IS_CONTROLLER) {
                 // fixme: !
                 // EventManager.register(EVENT_SOURCE_SETTING_CHANGED, 'sequence', (data) => {
                 //     let item = data[0];

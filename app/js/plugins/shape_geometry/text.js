@@ -1,6 +1,6 @@
 {
     let coolvetica = false;
-    if (IS_ANIMATION) {
+    if (!IS_CONTROLLER) {
         _importThreeGeometry('TextGeometry');
     }
 

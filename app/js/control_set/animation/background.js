@@ -1,6 +1,8 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {EventManager} from "../../manager/EventManager";
+
 {
     HC.control_set.background = class ControlSet extends HC.ControlSet {
 
@@ -13,7 +15,7 @@
                     switch (key) {
                         case 'background_wraps':
                         case 'background_wrapt':
-                            HC.EventManager.fireEventId(EVENT_LAYER_RESET, id, context, SKIP_TEN_FRAMES);
+                            EventManager.fireEventId(EVENT_LAYER_RESET, id, context, SKIP_TEN_FRAMES);
                             break;
                     }
                 }

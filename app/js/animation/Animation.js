@@ -10,6 +10,8 @@ import {Renderer} from "./Renderer";
 import {DisplayManager} from "../manager/DisplayManager";
 import {SourceManager} from "../manager/SourceManager";
 import {EventManager} from "../manager/EventManager";
+import {Messaging} from "../lib/Messaging";
+import {Monitor} from "../shared/Monitor";
 
 class Animation extends Program {
     /**

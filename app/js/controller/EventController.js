@@ -2,7 +2,9 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {_Controller} from "./UiController";
-
+import {Guify} from "./ui/guify/Guify";
+import {GuifyFolder} from "./ui/guify/GuifyFolder";
+import {TimeoutManager} from "../manager/TimeoutManager";
 
 class Controller extends _Controller {
 

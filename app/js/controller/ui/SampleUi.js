@@ -1,6 +1,8 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {EventManager} from "../../manager/EventManager";
+
 
 class SampleUi {
 
@@ -113,10 +115,10 @@ class SampleUi {
      *
      */
     initEvents() {
-        HC.EventManager.register(EVENT_THUMB_UPDATE, this.index, (config) => {
+        EventManager.register(EVENT_THUMB_UPDATE, this.index, (config) => {
             this.update(config);
         });
-        HC.EventManager.register(EVENT_CLIP_LOADED, this.index, (config) => {
+        EventManager.register(EVENT_CLIP_LOADED, this.index, (config) => {
             this.update(config);
         });
     }

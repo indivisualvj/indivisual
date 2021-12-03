@@ -24,7 +24,7 @@ class GuifyItem {
 
     /**
      *
-     * @returns {HC.GuifyFolder}
+     * @returns {GuifyFolder}
      */
     getParent() {
         return this.parent;

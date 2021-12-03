@@ -4,6 +4,8 @@
 
 import {ControlSetGuifyUi} from "./ControlSetGuifyUi";
 import {Messaging} from "../../../lib/Messaging";
+import {GuifyFolder} from "../guify/GuifyFolder";
+import {SampleUi} from "../SampleUi";
 
 class SampleControllerUi extends ControlSetGuifyUi {
 
@@ -60,7 +62,7 @@ class SampleControllerUi extends ControlSetGuifyUi {
     }
 
     addFolder(key) {
-        let folder = new HC.GuifyFolder(this.gui, null, key, true);
+        let folder = new GuifyFolder(this.gui, null, key, true);
         folder.setKey(key);
         this.folder = folder;
 

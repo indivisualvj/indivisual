@@ -17,7 +17,7 @@
             let layer = this.layer;
 
             let geometry = new HC.RoundedRect(layer.shapeSize(1), this.getModA(1, 1), this.getModB(1, 12)).create();
-            HC.BufferGeometryUtils.front2back(geometry);
+            HC.GeometryUtils.front2back(geometry);
 
             geometry.rotateZ(45 * RAD * this.getModC(0, 0));
 

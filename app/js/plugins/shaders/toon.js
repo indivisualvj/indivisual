@@ -1,5 +1,8 @@
-_importThreeShader('ToonShader');
 {
+    if (IS_ANIMATION) {
+        _importThreeShader('ToonShader');
+    }
+
     HC.plugins.shaders.toon = class Plugin extends HC.ShaderPlugin {
         static index = 245;
         create() {

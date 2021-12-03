@@ -8,10 +8,10 @@
             super(renderer, settings);
 
             let inst = this;
-
-            HC.EventManager.register(EVENT_AUDIO_PEAK, this.objectName, function (target) {
-                inst.peaks++;
-            });
+            //fixme:
+            // HC.EventManager.register(EVENT_AUDIO_PEAK, this.objectName, function (target) {
+            //     inst.peaks++;
+            // });
         }
 
         apply() {

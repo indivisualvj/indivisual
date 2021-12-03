@@ -1,14 +1,14 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-
-_importThreePostprocessing('Pass');
-_importThreePostprocessing('RenderPass');
-_importThreePostprocessing('ShaderPass');
-
 HC.plugins.shaders = HC.plugins.shaders || {};
-
 {
+    if (IS_ANIMATION) {
+        _importThreePostprocessing('Pass');
+        _importThreePostprocessing('RenderPass');
+        _importThreePostprocessing('ShaderPass');
+    }
+
     HC.ShaderPlugin = class Plugin extends HC.AnimationPlugin {
 
         pass;

@@ -1,7 +1,8 @@
 {
     let coolvetica = false;
-
-    _importThreeGeometry('TextGeometry');
+    if (IS_ANIMATION) {
+        _importThreeGeometry('TextGeometry');
+    }
 
     HC.plugins.shape_geometry.text = class Plugin extends HC.ShapeGeometryPlugin {
         static name = 'text (coolvetica)';
@@ -29,7 +30,7 @@
         }
 
         _loadCoolvetica() {
-            assetman.loadFont(HC.filePath(FONT_DIR, 'coolvetica.json'), function (font) {
+            AssetManager.loadFont(HC.filePath(FONT_DIR, 'coolvetica.json'), function (font) {
                 coolvetica = font;
             });
         }

@@ -344,38 +344,10 @@ class Server
         /**
          *
          */
-        this.app.get('*worker/*.js', (req, res) => {
-            res.sendFile(path.resolve('app/js' + req.originalUrl));
-        });
-
-        /**
-         *
-         */
-        this.app.get('/node_modules/*.js', (req, res) => {
+        this.app.get('/app/*.js', (req, res) => {
             let url = req.originalUrl.replace('/', '');
             url = path.resolve(url);
             res.sendFile(url);
-        });
-
-        /**
-         *
-         */
-        this.app.get('/app/lib/*', (req, res) => {
-            let url = req.originalUrl.replace('/', '') + '.js';
-            url = path.resolve(url);
-            res.sendFile(url);
-        });
-
-        /**
-         *
-         */
-        this.app.get('/bin/animation.js', (req, res) => {
-
-            let sources = [].concat(conf.shared).concat(conf.animation);
-            let file = _sources(req, sources);
-
-            res.sendFile(file);
-
         });
 
         /**
@@ -389,16 +361,64 @@ class Server
             res.sendFile(file);
         });
 
+
         /**
          *
          */
-        this.app.get('/bin/addons.js', (req, res) => {
+        this.app.get('/bin/lib.js', (req, res) => {
 
-            let sources = [].concat(conf.addons);
+            let sources = ['js/shared/lib'];
             let file = _sources(req, sources);
 
             res.sendFile(file);
+        });
 
+        /**
+         *
+         */
+        this.app.get('/bin/controlset.js', (req, res) => {
+
+            let sources = ['js/control_set'];
+            let file = _sources(req, sources);
+
+            res.sendFile(file);
+        });
+
+
+        /**
+         *
+         */
+        this.app.get('/bin/plugins.js', (req, res) => {
+
+            let sources = ['js/plugins'];
+            let file = _sources(req, sources);
+
+            res.sendFile(file);
+        });
+
+        /**
+         *
+         */
+        this.app.get('*worker/*.js', (req, res) => {
+            res.sendFile(path.resolve('app/js' + req.originalUrl));
+        });
+
+        /**
+         *
+         */
+        this.app.get('*node_modules/*', (req, res) => {
+            let url = req.originalUrl.replace(new RegExp('.*(node_modules/.*)'), '$1.js');
+            url = path.resolve(url);
+            res.sendFile(url);
+        });
+
+        /**
+         *
+         */
+        this.app.get('/app/js/*/*', (req, res) => {
+            let url = req.originalUrl.replace('/', '') + '.js';
+            url = path.resolve(url);
+            res.sendFile(url);
         });
 
         /**

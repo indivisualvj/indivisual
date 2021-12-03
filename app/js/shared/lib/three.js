@@ -1,5 +1,3 @@
-HC = HC || {};
-
 /**
  *
  * @param obj

@@ -22,28 +22,30 @@
                 this.active[shape.index] = true;
 
                 let inst = this;
-                HC.EventManager.register(EVENT_ANIMATION_UPDATE_SETTING, this.id(shape.index), function (data) {
-                    if (inst.layer === data.layer) {
-                        switch (data.item) {
-                            case inst.tree:
-                                if (data.value !== inst.key && params.original) {
-                                    inst.active[shape.index] = false;
-                                    params.mesh = false;
-                                    shape.setMesh(params.original);
-
-                                    HC.EventManager.removeId(inst.id(shape.index));
-                                }
-                                break;
-                        }
-                    }
-                });
+                //fixme:
+                // HC.EventManager.register(EVENT_ANIMATION_UPDATE_SETTING, this.id(shape.index), function (data) {
+                //     if (inst.layer === data.layer) {
+                //         switch (data.item) {
+                //             case inst.tree:
+                //                 if (data.value !== inst.key && params.original) {
+                //                     inst.active[shape.index] = false;
+                //                     params.mesh = false;
+                //                     shape.setMesh(params.original);
+                //
+                //                     HC.EventManager.removeId(inst.id(shape.index));
+                //                 }
+                //                 break;
+                //         }
+                //     }
+                // });
             }
         }
 
         reset() {
             if (this.active.length) {
                 this.active = [];
-                HC.EventManager.removeLike(this.id());
+                //fixme:
+                // HC.EventManager.removeLike(this.id());
             }
         }
     }
@@ -74,28 +76,30 @@
                 this.active[shape.index] = true;
 
                 let inst = this;
-                HC.EventManager.register(EVENT_ANIMATION_UPDATE_SETTING, this.id(shape.index), function (data) {
-                    if (inst.layer === data.layer) {
-                        switch (data.item) {
-                            case inst.tree:
-                                if (data.value !== inst.key && params.states) {
-                                    inst.active[shape.index] = false;
-                                    shape.setMesh(params.states[0]);
-                                    params.states = false;
-
-                                    HC.EventManager.removeId(inst.id(shape.index));
-                                }
-                                break;
-                        }
-                    }
-                });
+                //fixme:
+                // HC.EventManager.register(EVENT_ANIMATION_UPDATE_SETTING, this.id(shape.index), function (data) {
+                //     if (inst.layer === data.layer) {
+                //         switch (data.item) {
+                //             case inst.tree:
+                //                 if (data.value !== inst.key && params.states) {
+                //                     inst.active[shape.index] = false;
+                //                     shape.setMesh(params.states[0]);
+                //                     params.states = false;
+                //
+                //                     HC.EventManager.removeId(inst.id(shape.index));
+                //                 }
+                //                 break;
+                //         }
+                //     }
+                // });
             }
         }
 
         reset() {
             if (this.active.length) {
                 this.active = [];
-                HC.EventManager.removeLike(this.id());
+                //fixme:
+                // HC.EventManager.removeLike(this.id());
             }
         }
     }

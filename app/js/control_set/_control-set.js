@@ -87,14 +87,14 @@ HC.control_set = HC.control_set || {};
         attributes = {}
 
         /**
-         * @type {HC.Config}
+         * @type {Config}
          */
         config;
 
         /**
          *
          * @param name
-         * @param {HC.Config} config
+         * @param {Config} config
          */
         constructor(name, config) {
             this._className = name;
@@ -349,7 +349,7 @@ HC.control_set = HC.control_set || {};
 
         /**
          *
-         * @param {HC.Config} pluggedValues
+         * @param {Config} pluggedValues
          */
         init(pluggedValues) {
             this.initMembers();

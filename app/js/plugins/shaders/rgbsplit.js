@@ -1,5 +1,8 @@
-_importThreeShader('RGBShiftShader');
 {
+    if (IS_ANIMATION) {
+        _importThreeShader('RGBShiftShader');
+    }
+
     HC.plugins.shaders.rgbsplit = class Plugin extends HC.ShaderPlugin {
         static index = 190;
 

@@ -57,7 +57,7 @@
                 geometry = new THREE.ExtrudeGeometry(shape, conf);
                 geometry.center();
 
-                HC.BufferGeometryUtils.front2back(geometry);
+                HC.GeometryUtils.front2back(geometry);
             }
 
             return geometry;

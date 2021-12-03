@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-
+HC.plugins.background_mode = HC.plugins.background_mode || {};
 HC.plugins.background_mode = HC.plugins.background_mode || {};
 {
     HC.BackgroundModePlugin = class BackgroundModePlugin extends HC.AnimationTexturePlugin {

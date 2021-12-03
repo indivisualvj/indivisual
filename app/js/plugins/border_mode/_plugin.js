@@ -1,6 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+HC.Display = HC.Display || {};
 HC.Display.border_mode = {};
 {
 

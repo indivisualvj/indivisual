@@ -9,13 +9,13 @@
             if (this.needsUpdate()) {
                 this._dispose();
 
-                let file = assetman.getImage(i);
+                let file = AssetManager.getImage(i);
                 if (file) {
                     this.current(id);
                     let inst = this;
                     let path = HC.filePath(IMAGE_DIR, file);
 
-                    assetman.loadTexture(path, function (texture) {
+                    AssetManager.loadTexture(path, function (texture) {
                         texture.center.set(.5, .5);
                         inst.texture = texture;
                         inst.layer.setBackground(texture);

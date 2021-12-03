@@ -16,7 +16,7 @@ HC.Renderer.shuffle_mode = {};
         renderer;
 
         /**
-         * @type {HC.Config}
+         * @type {Config}
          */
         config;
 

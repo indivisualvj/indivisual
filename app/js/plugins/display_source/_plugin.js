@@ -1,10 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-/**
- *
- * @type {Object<string, HC.SourceManager.DisplaySourcePlugin>}
- */
+HC.SourceManager = HC.SourceManager || {};
 HC.SourceManager.display_source = {};
 {
 
@@ -59,7 +56,7 @@ HC.SourceManager.display_source = {};
         renderer;
 
         /**
-         * @type {HC.Config}
+         * @type {Config}
          */
         config;
 

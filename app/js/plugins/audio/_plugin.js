@@ -1,3 +1,4 @@
+HC.AudioManager = HC.AudioManager || {};
 HC.AudioManager.plugins = HC.AudioManager.plugins || {};
 {
     HC.AudioPlugin = class Plugin {

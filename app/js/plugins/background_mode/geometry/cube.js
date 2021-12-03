@@ -29,9 +29,9 @@
 
                 this.layer.setBackground(mesh);
 
-                let file = assetman.getImage(this.settings.background_input);
+                let file = AssetManager.getImage(this.settings.background_input);
                 if (file) {
-                    assetman.loadMaterialMap(mat, HC.filePath(IMAGE_DIR, file), function (mat) {
+                    AssetManager.loadMaterialMap(mat, HC.filePath(IMAGE_DIR, file), function (mat) {
                         if (!mat.emissiveMap) {
                             mat.emissiveMap = mat.map;
                         }

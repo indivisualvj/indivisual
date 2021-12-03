@@ -13,7 +13,7 @@
         type = 'sequence';
 
         /**
-         * @type {HC.Sample}
+         * @type {Sample}
          */
         sample;
 
@@ -91,25 +91,26 @@
 
         /**
          *
-         * @param {HC.SourceManager} sourceManager
+         * @param {SourceManager} sourceManager
          */
         static initListeners(sourceManager) {
             if (IS_ANIMATION) {
-                HC.EventManager.register(EVENT_SOURCE_SETTING_CHANGED, 'sequence', (data) => {
-                    let item = data[0];
-                    let display = data[2];
-
-                    if (display && item.startsWith('sequence')) {
-                        let seq = HC.numberExtract(item, 'sequence');
-
-                        if (item.match(/^sequence\d+_input$/)) {
-                            sourceManager.updatePluginNrSource('sequence', seq);
-
-                        } else {
-                            sourceManager.updatePluginNr('sequence', seq);
-                        }
-                    }
-                });
+                // fixme: !
+                // EventManager.register(EVENT_SOURCE_SETTING_CHANGED, 'sequence', (data) => {
+                //     let item = data[0];
+                //     let display = data[2];
+                //
+                //     if (display && item.startsWith('sequence')) {
+                //         let seq = HC.numberExtract(item, 'sequence');
+                //
+                //         if (item.match(/^sequence\d+_input$/)) {
+                //             sourceManager.updatePluginNrSource('sequence', seq);
+                //
+                //         } else {
+                //             sourceManager.updatePluginNr('sequence', seq);
+                //         }
+                //     }
+                // });
             }
         }
 
@@ -216,16 +217,16 @@
                     this._emitSourceType(getSequenceStartKey(this.index), getSequenceEndKey(this.index), type, type);
 
                 } else {
-                    HC.EventManager.register(EVENT_SAMPLE_READY, this.id, (target) => {
+                    EventManager.register(EVENT_SAMPLE_READY, this.id, (target) => {
                         if (this.sample && this.sample.id === target.id) {
-                            HC.EventManager.removeEventId(EVENT_SAMPLE_READY, this.id);
+                            EventManager.removeEventId(EVENT_SAMPLE_READY, this.id);
                             this.updateSource();
                         }
                     });
                 }
             }
 
-            HC.EventManager.register(EVENT_SAMPLE_STATUS_CHANGED, this.id, (target) => {
+            EventManager.register(EVENT_SAMPLE_STATUS_CHANGED, this.id, (target) => {
                 if (this.sample && this.sample.id === target.id) {
                     this.animation.updateSource(getSequenceSampleKey(this.index), 'off', true, true);
                 }

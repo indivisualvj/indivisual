@@ -26,24 +26,26 @@
 
             this.cubeTextureFromBackgroundInput(_onLoad);
             let id = this.id(index);
-            HC.EventManager.register(EVENT_ANIMATION_UPDATE_SETTING, id, function (data) {
-                if (data.layer === inst.layer) {
-                    switch (data.item) {
-                        case 'background_input':
-                            if (data.value !== file) {
-                                file = data.value;
-                                inst.cubeTextureFromBackgroundInput(_onLoad);
-                            }
-                            break;
-                    }
-                }
-            });
+            //fixme:
+            // HC.EventManager.register(EVENT_ANIMATION_UPDATE_SETTING, id, function (data) {
+            //     if (data.layer === inst.layer) {
+            //         switch (data.item) {
+            //             case 'background_input':
+            //                 if (data.value !== file) {
+            //                     file = data.value;
+            //                     inst.cubeTextureFromBackgroundInput(_onLoad);
+            //                 }
+            //                 break;
+            //         }
+            //     }
+            // });
 
             return mesh;
         }
 
         reset() {
-            HC.EventManager.removeLike(this.id());
+            //fixme:
+            // HC.EventManager.removeLike(this.id());
         }
     }
 }

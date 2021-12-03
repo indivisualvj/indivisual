@@ -1,5 +1,8 @@
-_importThreeShader('DotScreenShader');
 {
+    if (IS_ANIMATION) {
+        _importThreeShader('DotScreenShader');
+    }
+
     HC.plugins.shaders.dotscreen = class Plugin extends HC.ShaderPlugin {
         static index = 200;
 

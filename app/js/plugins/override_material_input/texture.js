@@ -24,8 +24,8 @@
         };
 
         apply(file) {
-
-            file = assetman.getImage(file);
+//fixme:
+            // file = AssetManager.getImage(file);
 
             if (this.properties.map && this.file !== file) {
                 this.reset();
@@ -37,15 +37,16 @@
                     let path = HC.filePath(IMAGE_DIR, file);
                     this.loading = true;
 
-                    assetman.loadMaterialMap(this.properties, path, function (mat) {
-                        inst.file = file;
-                        inst.loading = false;
-
-                        if (!mat.emissiveMap) {
-                            inst.properties.emissiveMap = mat.map;
-                        }
-
-                    }, this.reset);
+                    //fixme:
+                    // AssetManager.loadMaterialMap(this.properties, path, function (mat) {
+                    //     inst.file = file;
+                    //     inst.loading = false;
+                    //
+                    //     if (!mat.emissiveMap) {
+                    //         inst.properties.emissiveMap = mat.map;
+                    //     }
+                    //
+                    // }, this.reset);
 
                 }
             }

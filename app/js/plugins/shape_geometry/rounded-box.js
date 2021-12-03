@@ -1,5 +1,7 @@
 {
-    _importThreeGeometry('RoundedBoxGeometry');
+    if (IS_ANIMATION) {
+        _importThreeGeometry('RoundedBoxGeometry');
+    }
 
     HC.plugins.shape_geometry.rounded_box = class Plugin extends HC.ShapeGeometryPlugin {
         static name = 'cube (rounded)';

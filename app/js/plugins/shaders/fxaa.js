@@ -1,5 +1,7 @@
-_importThreeShader('FXAAShader');
 {
+    if (IS_ANIMATION) {
+        _importThreeShader('FXAAShader');
+    }
     HC.plugins.shaders.fxaa = class Plugin extends HC.ShaderPlugin {
         static index = 10;
 

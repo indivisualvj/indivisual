@@ -1,6 +1,6 @@
 
 {
-    logHistory = {};
+    const logHistory = {};
 
     /**
      *
@@ -29,7 +29,7 @@
     };
 
     /**
-     *
+     * fixme: make this a module
      * @param key
      * @param value
      * @param force
@@ -49,7 +49,9 @@
                 }
 
                 if (IS_CONTROLLER || force) {
-                    messaging.emitLog(key, value);
+                    console.log(key, 'wanted to emit log', value);
+                    // fixme: inject
+                    // messaging.emitLog(key, value);
                 }
 
                 let txt = '';

@@ -91,26 +91,26 @@
 
         /**
          *
-         * @param {SourceManager} sourceManager
+         * @param sourceManager
+         * @param eventManager
          */
-        static initListeners(sourceManager) {
+        static initListeners(sourceManager, eventManager) {
             if (!IS_CONTROLLER) {
-                // fixme: !
-                // EventManager.register(EVENT_SOURCE_SETTING_CHANGED, 'sequence', (data) => {
-                //     let item = data[0];
-                //     let display = data[2];
-                //
-                //     if (display && item.startsWith('sequence')) {
-                //         let seq = HC.numberExtract(item, 'sequence');
-                //
-                //         if (item.match(/^sequence\d+_input$/)) {
-                //             sourceManager.updatePluginNrSource('sequence', seq);
-                //
-                //         } else {
-                //             sourceManager.updatePluginNr('sequence', seq);
-                //         }
-                //     }
-                // });
+                eventManager.register(EVENT_SOURCE_SETTING_CHANGED, 'sequence', (data) => {
+                    let item = data[0];
+                    let display = data[2];
+
+                    if (display && item.startsWith('sequence')) {
+                        let seq = HC.numberExtract(item, 'sequence');
+
+                        if (item.match(/^sequence\d+_input$/)) {
+                            sourceManager.updatePluginNrSource('sequence', seq);
+
+                        } else {
+                            sourceManager.updatePluginNr('sequence', seq);
+                        }
+                    }
+                });
             }
         }
 

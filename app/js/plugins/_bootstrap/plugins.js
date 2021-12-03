@@ -82,7 +82,6 @@ HC.Shape.prototype.initPlugins = function (shape) {
             return this.audioAnalyser.getVolume(shape.index);
         }
 
-        //fixme: inject singleton managers
         /**
          *
          * @param {Animation} animation

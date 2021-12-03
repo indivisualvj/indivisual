@@ -22,7 +22,6 @@
                 this.active[shape.index] = true;
 
                 let inst = this;
-                //fixme:
                 this.config.getEventManager().register(EVENT_ANIMATION_UPDATE_SETTING, this.id(shape.index), function (data) {
                     if (inst.layer === data.layer) {
                         switch (data.item) {
@@ -44,7 +43,6 @@
         reset() {
             if (this.active.length) {
                 this.active = [];
-                //fixme:
                 this.config.getEventManager().removeLike(this.id());
             }
         }
@@ -76,7 +74,6 @@
                 this.active[shape.index] = true;
 
                 let inst = this;
-                //fixme:
                 this.config.getEventManager().register(EVENT_ANIMATION_UPDATE_SETTING, this.id(shape.index), function (data) {
                     if (inst.layer === data.layer) {
                         switch (data.item) {
@@ -98,7 +95,6 @@
         reset() {
             if (this.active.length) {
                 this.active = [];
-                //fixme:
                 this.config.getEventManager().removeLike(this.id());
             }
         }

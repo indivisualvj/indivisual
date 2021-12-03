@@ -26,7 +26,6 @@
 
             this.cubeTextureFromBackgroundInput(_onLoad);
             let id = this.id(index);
-            //fixme:
             this.config.getEventManager().register(EVENT_ANIMATION_UPDATE_SETTING, id, function (data) {
                 if (data.layer === inst.layer) {
                     switch (data.item) {
@@ -44,7 +43,6 @@
         }
 
         reset() {
-            //fixme:
             this.config.getEventManager().removeLike(this.id());
         }
     }

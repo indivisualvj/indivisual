@@ -100,9 +100,10 @@ HC.SourceManager.display_source = {};
 
         /**
          *
-         * @param {HC.SourceManager} sourceManager
+         * @param sourceManager
+         * @param eventManager
          */
-        static initListeners(sourceManager) {
+        static initListeners(sourceManager, eventManager) {
 
         }
 

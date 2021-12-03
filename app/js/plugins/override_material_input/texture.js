@@ -24,8 +24,7 @@
         };
 
         apply(file) {
-//fixme:
-            // file = AssetManager.getImage(file);
+            file = this.config.getAssetManager().getImage(file);
 
             if (this.properties.map && this.file !== file) {
                 this.reset();

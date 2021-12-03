@@ -43,7 +43,6 @@
             });
             let mesh = new THREE.Mesh(geometry, this.material);
             mesh.name = this.id(index);
-//fixme:
             this.config.getEventManager().register(EVENT_RENDERER_BEFORE_RENDER, this.id(index), (renderer) => {
                 if (this.layer.isVisible()) {
                     mesh.visible = false;

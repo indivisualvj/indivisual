@@ -185,7 +185,7 @@ class ControlSetGuifyUi extends ControlSetUi {
 
         if (events) {
             let e = events(this.controlSet);
-            if (e instanceof HC.Event) { // fixme: exists?
+            if (e instanceof HC.Event) {
                 controller.setMnemonic(e.label);
                 e.register(window);
             }

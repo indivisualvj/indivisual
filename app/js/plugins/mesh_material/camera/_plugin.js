@@ -24,7 +24,6 @@
                 this.layer.three.scene.remove(this.cameras);
                 this.cameras.traverse(HC.dispose);
                 this.cameras = undefined;
-//fixme:
                 this.config.getEventManager().removeLike(this.id());
             }
         }

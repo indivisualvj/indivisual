@@ -1,6 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {Messaging} from "./Messaging";
 
 class AssetManager {
     static images = {};
@@ -8,15 +9,12 @@ class AssetManager {
     static videos = {};
     static textures = {};
     static progress = {};
-    static messaging;
 
     /**
      *
      */
-    static init(messaging) {
-        this.messaging = messaging;
-
-        if (IS_ANIMATION) {
+    static init() {
+        if (!IS_CONTROLLER) {
             THREE.Cache.enabled = true;
         }
     }
@@ -348,7 +346,7 @@ class AssetManager {
      * @private
      */
     static _files(path, callback) {
-        this.messaging.files(path, callback);
+        Messaging.files(path, callback);
     }
 
     /**
@@ -358,7 +356,7 @@ class AssetManager {
      * @private
      */
     static _load(file, callback) {
-        this.messaging._emit({action: 'load', file: file, name: file}, function (data) {
+        Messaging._emit({action: 'load', file: file, name: file}, function (data) {
             callback(data);
         });
     }

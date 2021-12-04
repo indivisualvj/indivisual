@@ -50,7 +50,6 @@ class Logger
                 }
 
                 if (IS_CONTROLLER || force) {
-                    console.log(key, 'wanted to emit log', value);
                     Messaging.emitLog(key, value);
                 }
 

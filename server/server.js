@@ -365,9 +365,9 @@ class Server
         /**
          *
          */
-        this.app.get('/bin/lib.js', (req, res) => {
+        this.app.get('/bin/vanilla.js', (req, res) => {
 
-            let sources = ['js/shared/lib'];
+            let sources = ['js/shared/vanilla'];
             let file = _sources(req, sources);
 
             res.sendFile(file);

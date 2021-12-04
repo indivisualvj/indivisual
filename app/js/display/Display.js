@@ -3,6 +3,7 @@
  */
 
 import {Rectangle} from "../shared/Rectangle";
+import {Mask} from "./Mask";
 
 class Display {
 
@@ -72,7 +73,7 @@ class Display {
     _dirty;
 
     /**
-     * @type {HC.Rectangle}
+     * @type {Rectangle}
      */
     _bounds;
 
@@ -91,7 +92,7 @@ class Display {
     /**
      *
      * @param index
-     * @param {HC.DisplayManager} displayManager
+     * @param {DisplayManager} displayManager
      */
     constructor(index, displayManager) {
         this.config = displayManager.config;
@@ -432,14 +433,12 @@ class Display {
         let r = points.width + points.x;
         let b = points.height + points.y;
 
-        let bounds = [
+        return [
             [l, t],
             [r, t],
             [r, b],
             [l, b]
         ];
-
-        return bounds;
     }
 
     /**

@@ -267,7 +267,7 @@ class DisplayManager {
                         if (this.shapetastic) {
                             this.shapetastic.destroy();
                         }
-                        this.shapetastic = Shapetastic(this.displays[i]);
+                        this.shapetastic = Shapetastic(this.displays[i], this.animation);
 
                     } else {
                         this.displays[i].canvas.style.pointerEvents = 'none';

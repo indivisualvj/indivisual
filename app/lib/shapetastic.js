@@ -2,13 +2,13 @@
  * inspired by maptastic
  * @author indivisualvj / https://github.com/indivisualvj
  *
- * @param inst {HC.Display}
+ * @param display {Display}
+ * @param animation {Animation}
  */
-Shapetastic = function (inst) {
+Shapetastic = function (display, animation) {
 
-    let animation = inst.animation;
-    let renderer = inst.animation.renderer;
-    let ctx = inst.canvas.ctx;
+    let renderer = animation.renderer;
+    let ctx = display.canvas.ctx;
     let enabled = false;
     let orientation = 'default';
 
@@ -48,8 +48,8 @@ Shapetastic = function (inst) {
      */
     let _drawShape = function (e, vtcs, fill) {
 
-        let cx = inst.canvas.width / 2;
-        let cy = inst.canvas.height / 2;
+        let cx = display.canvas.width / 2;
+        let cy = display.canvas.height / 2;
         let m = renderer.currentLayer.shapeSize(.5);
 
         let ix = __getIx();
@@ -111,8 +111,8 @@ Shapetastic = function (inst) {
 
         let vtc = e.x ? _vtc(e) : e;
         let n = _nearest(_vtcs(), vtc);
-        let cx = inst.canvas.width / 2;
-        let cy = inst.canvas.height / 2;
+        let cx = display.canvas.width / 2;
+        let cy = display.canvas.height / 2;
         let m = renderer.currentLayer.shapeSize(.5);
         if (n) {
 
@@ -169,8 +169,8 @@ Shapetastic = function (inst) {
      */
     let _drawCrosshair = function (e) {
         let layer = renderer.currentLayer;
-        let cx = inst.canvas.width / 2;
-        let cy = inst.canvas.height / 2;
+        let cx = display.canvas.width / 2;
+        let cy = display.canvas.height / 2;
         let l = cx - layer.shapeSize(.5);
         let r = cx + layer.shapeSize(.5);
         let t = cy - layer.shapeSize(.5);
@@ -185,7 +185,7 @@ Shapetastic = function (inst) {
         ctx.lineTo(r, t);
         ctx.stroke();
 
-        ctx.strokeRect(inst.canvas.width / 2 - layer.shapeSize(.5), inst.canvas.height / 2 - layer.shapeSize(.5), layer.shapeSize(1), layer.shapeSize(1));
+        ctx.strokeRect(display.canvas.width / 2 - layer.shapeSize(.5), display.canvas.height / 2 - layer.shapeSize(.5), layer.shapeSize(1), layer.shapeSize(1));
     };
 
     /**
@@ -194,8 +194,8 @@ Shapetastic = function (inst) {
      * @private
      */
     let _clear = function (e) {
-        let ctx = inst.canvas.ctx;
-        ctx.clearRect(0, 0, inst.canvas.width, inst.canvas.height);
+        let ctx = display.canvas.ctx;
+        ctx.clearRect(0, 0, display.canvas.width, display.canvas.height);
     };
 
     /**
@@ -204,16 +204,16 @@ Shapetastic = function (inst) {
      * @private
      */
     let _drawPosition = function (e) {
-        let ctx = inst.canvas.ctx;
+        let ctx = display.canvas.ctx;
         let co = _relativeXY(e);
         let x = co.x;
         let y = co.y;
-        let rect = inst.canvas.getBoundingClientRect();
+        let rect = display.canvas.getBoundingClientRect();
         let cx = e.x - rect.left;
         let cy = e.y - rect.top;
 
-        cx = cx * (inst.canvas.width / rect.width);
-        cy = cy * (inst.canvas.height / rect.height);
+        cx = cx * (display.canvas.width / rect.width);
+        cy = cy * (display.canvas.height / rect.height);
 
         ctx.font = "16px sans-serif";
         ctx.fillStyle = "yellow";
@@ -225,9 +225,9 @@ Shapetastic = function (inst) {
         ctx.lineWidth = 1;
         ctx.beginPath();
         ctx.moveTo(0, cy);
-        ctx.lineTo(inst.canvas.width, cy);
+        ctx.lineTo(display.canvas.width, cy);
         ctx.moveTo(cx, 0);
-        ctx.lineTo(cx, inst.canvas.height);
+        ctx.lineTo(cx, display.canvas.height);
         ctx.stroke();
     };
 
@@ -494,15 +494,15 @@ Shapetastic = function (inst) {
      * @private
      */
     let _relativeXY = function (e) {
-        let rect = inst.canvas.getBoundingClientRect();
+        let rect = display.canvas.getBoundingClientRect();
         let x = e.x - rect.left;
         let y = e.y - rect.top;
 
-        let cx = x * (inst.canvas.width / rect.width);
-        let cy = y * (inst.canvas.height / rect.height);
+        let cx = x * (display.canvas.width / rect.width);
+        let cy = y * (display.canvas.height / rect.height);
 
-        let cntx = inst.canvas.width / 2;
-        let cnty = inst.canvas.height / 2;
+        let cntx = display.canvas.width / 2;
+        let cnty = display.canvas.height / 2;
         x = cx - cntx;
         y = cy - cnty;
         x = x / renderer.currentLayer.shapeSize(.5);

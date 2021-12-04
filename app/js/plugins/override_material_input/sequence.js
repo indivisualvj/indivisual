@@ -1,3 +1,4 @@
+
 {
     HC.plugins.override_material_input.sequence = class Plugin extends HC.OverrideMaterialInputPlugin {
 
@@ -60,7 +61,15 @@
             this.canvas = canvas;
             this.context = canvas.getContext('2d');
 
-            this.clip = new HC.Rectangle(0, 0, image.width, image.height).cropTo(width, height);
+            let offsetX = .5 * (this.width - width);
+            let offsetY = .5 * (this.height - height);
+
+            this.clip = {
+                x: offsetX,
+                y: offsetY,
+                width: width,
+                height: height,
+            };
 
             let tex = new THREE.CanvasTexture(canvas);
             this.properties.map = tex;

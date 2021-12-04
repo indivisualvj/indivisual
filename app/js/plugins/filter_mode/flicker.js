@@ -31,7 +31,7 @@
                    params.current.opacity = 1.5;
                    let tween = this.tweenShape(shape, params.current, params.next);
                    tween.easing(TWEEN.Easing.Circular.Out);
-                   tween.onUpdate(function () {
+                   tween.onUpdate(() => {
                        shape.color.o = params.current.opacity;
                    });
                    tween.onComplete(function () {

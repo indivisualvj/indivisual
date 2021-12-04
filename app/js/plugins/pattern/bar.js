@@ -46,7 +46,7 @@
 
                 let tween = this.tweenShape(shape, from, to);
                 tween.easing(TWEEN.Easing.Quadratic.InOut);
-                tween.onUpdate(function () {
+                tween.onUpdate(() => {
                     this.positionIn3dSpace(shape, from.x, from.y, from.z);
                 });
                 tween.onComplete(function () {

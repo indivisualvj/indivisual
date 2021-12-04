@@ -51,7 +51,7 @@
                 console.log(ex);
             }
         }
-
+// fixme: if back on "none", does not reset on all layers immediately
         reset() {
             if (this.video) {
                 this.stream.getTracks().forEach((track) => {

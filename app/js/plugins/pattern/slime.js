@@ -41,14 +41,13 @@
                 params.next.angle = this.angle + (Math.PI / layer.shapeCount() * shape.index) * randomFloat(1 / Math.PI, 2 / Math.PI, 2);
                 params.next.radius = randomInt(layer.shapeSize(1.5), layer.shapeSize(2) * this.settings.pattern_padding);
 
-                let inst = this;
                 let tween = this.tweenShape(shape, params.current, params.next);
                 tween.easing(TWEEN.Easing.Quadratic.InOut);
-                tween.onUpdate(function () {
+                tween.onUpdate(() => {
                     let x = params.current.x + Math.sin(params.current.angle) * params.current.radius;
                     let y = params.current.y + Math.cos(params.current.angle) * params.current.radius;
 
-                    inst.this.positionIn2dSpace(shape, x, y, 0);
+                    this.positionIn2dSpace(shape, x, y, 0);
 
                     let pos = shape.position();
                     if (pos.x > layer.resolution().x) {

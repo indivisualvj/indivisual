@@ -2,7 +2,7 @@
 #Presets button {
     text-align: left;
 }
-
+/* fixme: layerinfo not in the place */
 .actions {
     position: absolute;
     right: 4px;

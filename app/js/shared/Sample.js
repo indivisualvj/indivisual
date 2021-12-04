@@ -201,7 +201,7 @@ class Sample {
         this.complete = false;
         this.counter = 0;
         this.clip = null;
-// fixme: delete clip images
+
         for (const sample of this.samples) {
             sample.close();
         }
@@ -371,6 +371,10 @@ class Clip {
      */
     constructor(id) {
         this.id = id;
+    }
+
+    reset() {
+        this.thumbs = [];
     }
 
 }

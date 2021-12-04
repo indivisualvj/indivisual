@@ -4,7 +4,7 @@ HC.AudioManager.plugins = HC.AudioManager.plugins || {};
     HC.AudioPlugin = class Plugin {
 
         /**
-         * @type {HC.AudioManager}
+         * @type {AudioManager}
          */
         manager;
 
@@ -14,7 +14,7 @@ HC.AudioManager.plugins = HC.AudioManager.plugins || {};
 
         /**
          *
-         * @param {HC.AudioManager} manager
+         * @param {AudioManager} manager
          */
         constructor(manager) {
             this.manager = manager;

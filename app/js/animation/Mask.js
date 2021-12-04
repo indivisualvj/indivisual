@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {Rectangle} from "../shared/Rectangle";
+import {Rectangle} from "./Rectangle";
 
 class Mask {
 

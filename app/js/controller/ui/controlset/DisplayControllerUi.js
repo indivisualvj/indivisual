@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {Messaging} from "../../../lib/Messaging";
+import {Messaging} from "../../../shared/Messaging";
 import {ControlSetGuifyUi} from "./ControlSetGuifyUi";
 
 class DisplayControllerUi extends ControlSetGuifyUi {

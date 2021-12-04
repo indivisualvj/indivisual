@@ -3,7 +3,7 @@
  */
 
 import {EventManager} from "./EventManager";
-import {Display} from "../display/Display";
+import {Display} from "../animation/Display";
 import {TimeoutManager} from "./TimeoutManager";
 
 class DisplayManager {

@@ -3,7 +3,7 @@
  */
 
 import {TimeoutManager} from "../manager/TimeoutManager";
-import {Messaging} from "../lib/Messaging";
+import {Messaging} from "../shared/Messaging";
 import {PresetUi} from "./ui/PresetUi";
 import {ScriptProcessor} from "./ScriptProcessor";
 import {LayeredControlSetManager} from "../manager/LayeredControlSetManager";

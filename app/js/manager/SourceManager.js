@@ -4,7 +4,7 @@
 
 import {EventManager} from "./EventManager";
 import {Clip, Sample} from "../shared/Sample";
-import {Messaging} from "../lib/Messaging";
+import {Messaging} from "../shared/Messaging";
 
 class SourceManager {
     /**

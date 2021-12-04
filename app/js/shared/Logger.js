@@ -1,4 +1,4 @@
-import {Messaging} from "../lib/Messaging";
+import {Messaging} from "./Messaging";
 
 class Logger
 {

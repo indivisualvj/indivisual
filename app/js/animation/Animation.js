@@ -1,17 +1,17 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {Program} from "../lib/Program";
+import {Program} from "../shared/Program";
 import {AudioManager} from "../manager/AudioManager";
 import {AudioAnalyser} from "./AudioAnalyser";
-import {AssetManager} from "../lib/AssetManager";
+import {AssetManager} from "../manager/AssetManager";
 import {BeatKeeper} from "../shared/BeatKeeper";
 import {LayeredControlSetManager} from "../manager/LayeredControlSetManager";
 import {Renderer} from "./Renderer";
 import {DisplayManager} from "../manager/DisplayManager";
 import {SourceManager} from "../manager/SourceManager";
 import {EventManager} from "../manager/EventManager";
-import {Messaging} from "../lib/Messaging";
+import {Messaging} from "../shared/Messaging";
 import {Monitor} from "../shared/Monitor";
 import {Logger} from "../shared/Logger";
 

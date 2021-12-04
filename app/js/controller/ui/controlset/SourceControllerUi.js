@@ -3,7 +3,7 @@
  */
 
 import {ControlSetGuifyUi} from "./ControlSetGuifyUi";
-import {Messaging} from "../../../lib/Messaging";
+import {Messaging} from "../../../shared/Messaging";
 
 class SourceControllerUi extends ControlSetGuifyUi {
 

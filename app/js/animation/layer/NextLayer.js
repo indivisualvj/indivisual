@@ -2,7 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {_Layer} from "./MemberLayer";
-import {Shape} from "../../shared/Shape";
+import {Shape} from "../Shape";
 
 class Layer extends _Layer {
 

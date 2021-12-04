@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {Program} from "../lib/Program";
+import {Program} from "../shared/Program";
 import {TimeoutManager} from "../manager/TimeoutManager";
 import {EventManager} from "../manager/EventManager";
 import {LayeredControlSetManager} from "../manager/LayeredControlSetManager";
@@ -19,9 +19,9 @@ import {SequenceControllerUi} from "./ui/controlset/SequenceControllerUi";
 import {SampleBar} from "./ui/SampleBar";
 import {BeatKeeper} from "../shared/BeatKeeper";
 import {SourceManager} from "../manager/SourceManager";
-import {Messaging} from "../lib/Messaging";
+import {Messaging} from "../shared/Messaging";
 import {ShaderPassUi} from "./ui/ShaderPassUi";
-import {AssetManager} from "../lib/AssetManager";
+import {AssetManager} from "../manager/AssetManager";
 import {Logger} from "../shared/Logger";
 
 class Controller extends Program {

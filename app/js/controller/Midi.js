@@ -2,7 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {TimeoutManager} from "../manager/TimeoutManager";
-import {Messaging} from "../lib/Messaging";
+import {Messaging} from "../shared/Messaging";
 
 class Midi {
 

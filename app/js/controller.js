@@ -3,8 +3,8 @@
  */
 
 import {Controller} from "./controller/EventController";
-import {Messaging} from "./lib/Messaging";
-import {Config} from "./lib/Config";
+import {Messaging} from "./shared/Messaging";
+import {Config} from "./shared/Config";
 import {Logger} from "./shared/Logger";
 
 /**

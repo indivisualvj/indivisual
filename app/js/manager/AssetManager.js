@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {Messaging} from "./Messaging";
+import {Messaging} from "../shared/Messaging";
 
 class AssetManager {
     static images = {};

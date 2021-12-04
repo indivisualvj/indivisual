@@ -2,8 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-import {BeatKeeper} from "../shared/BeatKeeper";
-import {AssetManager} from "./AssetManager";
+import {BeatKeeper} from "./BeatKeeper";
+import {AssetManager} from "../manager/AssetManager";
 import {ControlSetManager} from "../manager/ControlSetManager";
 import {Messaging} from "./Messaging";
 import {EventManager} from "../manager/EventManager";

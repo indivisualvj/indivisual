@@ -3,8 +3,8 @@
  */
 
 import {Animation} from "./animation/Animation";
-import {Config} from "./lib/Config";
-import {Messaging} from "./lib/Messaging";
+import {Config} from "./shared/Config";
+import {Messaging} from "./shared/Messaging";
 import {Logger} from "./shared/Logger";
 
 // workaround:

@@ -2,7 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {TimeoutManager} from "../manager/TimeoutManager";
-import {Logger} from "../shared/Logger";
+import {Logger} from "./Logger";
 
 class Messaging {
     static program;

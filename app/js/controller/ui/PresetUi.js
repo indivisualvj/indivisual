@@ -142,7 +142,10 @@ class Folder extends GuifyFolder {
     finishLayout(opts) {
 
         if (opts) {
-            let container = this.getComponent().container;
+            let container = this.getContainer();
+            let folderContainer = this.getFolderContainer()
+            folderContainer.classList.add('folder');
+
             let actions = document.createElement('div');
             actions.classList.add('actions');
             actions.innerHTML =

@@ -1,7 +1,7 @@
 {
     let coolvetica = false;
     if (!IS_CONTROLLER) {
-        _importThreeGeometry('TextGeometry');
+        _importThreeGeometry('TextGeometry'); // fixme does not load zuverlässig
     }
 
     HC.plugins.shape_geometry.text = class Plugin extends HC.ShapeGeometryPlugin {

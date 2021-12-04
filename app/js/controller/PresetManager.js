@@ -473,7 +473,7 @@ class PresetManager {
     /**
      *
      * @param {string}label
-     * @param {GuifyExplorerFolder}parent
+     * @param {Folder}parent
      * @private
      */
     _addPreset(label, parent) {
@@ -499,7 +499,7 @@ class PresetManager {
 
     /**
      *
-     * @param {GuifyExplorerPreset} ctrl
+     * @param {Preset} ctrl
      * @private
      */
     _deletePreset(ctrl) {

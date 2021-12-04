@@ -592,6 +592,7 @@ class Controller extends Program {
             } else if (item.match(/_(enabled)/)) {
                 if (!value) { // set record to false if enabled == false
                     let smp = HC.numberExtract(item, 'sample');
+                    // fixme: delete clip. where to search ? e.g. config.SampleData? who needs SampleData really?
                     this.updateSource(getSampleRecordKey(smp), false, true, true, false);
                     EventManager.fireEventId(EVENT_THUMB_UPDATE, smp, {});
                 }

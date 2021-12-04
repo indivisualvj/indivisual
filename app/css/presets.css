@@ -2,7 +2,7 @@
 #Presets button {
     text-align: left;
 }
-/* fixme: layerinfo not in the place */
+
 .actions {
     position: absolute;
     right: 4px;
@@ -35,9 +35,16 @@
     filter: brightness(0);
 }
 
+.folder {
+    padding-left: 20px !important;
+}
+
 .preset [data-label]:after {
     top: 0;
-    right: -18px;
+    left: -21px;
+    right: auto;
+    line-height: 20px;
+    height: 18px;
 }
 
 .preset [data-mnemonic]:after {

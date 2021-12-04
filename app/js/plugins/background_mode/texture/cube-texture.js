@@ -9,12 +9,12 @@
             if (this.needsUpdate()) {
                 this._dispose();
 
-                let file = AssetManager.getCube(i);
+                let file = this.config.getAssetManager().getCube(i);
                 if (file) {
                     this.current(id);
                     let path = HC.filePath(CUBE_DIR, file);
 
-                    AssetManager.loadCubeTexture(path, (texture) => {
+                    this.config.getAssetManager().loadCubeTexture(path, (texture) => {
                         this.texture = texture;
                         this.layer.setBackground(texture);
                     });

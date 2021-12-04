@@ -10,8 +10,8 @@ class AudioManager
      * @param callback
      */
     initPlugin(name, callback) {
-        this.plugin = new HC.AudioManager.plugins[name](this);
-        this.plugin.init(callback);
+        // this.plugin = new HC.AudioManager.plugins[name](this);
+        // this.plugin.init(callback);
     }
 
     /**

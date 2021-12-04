@@ -3,11 +3,6 @@
 
   "port": 8081,
 
-  "controller": [
-    "js/controller.js",
-    "js/controller"
-  ],
-
   "directories": {
     "app": "app",
     "bin": "bin",

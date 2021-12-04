@@ -344,6 +344,19 @@ class Server
         /**
          *
          */
+        this.app.get('/app/js/modules/*.js', (req, res) => {
+
+            let originalUrl = req.originalUrl;
+            let path = originalUrl.replace(new RegExp('\.+/(.+)\.js'), '$1');
+            let sources = ['js/modules/' + path];
+            let file = _sources('/bin/' + path + '.js', sources);
+
+            res.sendFile(file);
+        });
+
+        /**
+         *
+         */
         this.app.get('/app/*.js', (req, res) => {
             let url = req.originalUrl.replace('/', '');
             url = path.resolve(url);
@@ -353,22 +366,10 @@ class Server
         /**
          *
          */
-        this.app.get('/bin/controller.js', (req, res) => {
-
-            let sources = [].concat(conf.shared).concat(conf.controller);
-            let file = _sources(req, sources);
-
-            res.sendFile(file);
-        });
-
-
-        /**
-         *
-         */
         this.app.get('/bin/vanilla.js', (req, res) => {
 
             let sources = ['js/shared/vanilla'];
-            let file = _sources(req, sources);
+            let file = _sources(req.originalUrl, sources);
 
             res.sendFile(file);
         });
@@ -379,11 +380,10 @@ class Server
         this.app.get('/bin/controlset.js', (req, res) => {
 
             let sources = ['js/control_set'];
-            let file = _sources(req, sources);
+            let file = _sources(req.originalUrl, sources);
 
             res.sendFile(file);
         });
-
 
         /**
          *
@@ -391,7 +391,7 @@ class Server
         this.app.get('/bin/plugins.js', (req, res) => {
 
             let sources = ['js/plugins'];
-            let file = _sources(req, sources);
+            let file = _sources(req.originalUrl, sources);
 
             res.sendFile(file);
         });
@@ -526,19 +526,19 @@ function _logConnectionInfo() {
 
 /**
  *
- * @param req
+ * @param originalUrl
  * @param sources
  * @returns {string}
  * @private
  */
-function _sources(req, sources) {
+function _sources(originalUrl, sources) {
 
     let compress = false;
-    let name = req.originalUrl.replace('bin/', '');
+    let name = originalUrl.replace('/bin/', '');
 
     _existCreate(_BIN);
 
-    let file = HC.filePath(_BIN, name.substr(1)); // do not use file_path! req originalUrl already contains leading slash ...
+    let file = HC.filePath(_BIN, name); // do not use file_path! req originalUrl already contains leading slash ...
     let files = [];
     let __find = function (list, base) {
         for (let i = 0; i < list.length; i++) {
@@ -555,9 +555,6 @@ function _sources(req, sources) {
             if (exists) {
                 if (fs.statSync(f).isDirectory()) {
                     let subs = exists ? fs.readdirSync(f) : [];
-
-                    __find(subs, f);
-
                     subs.sort(function (a, b) {
                         let fa = HC.filePath(f, a);
                         let fb = HC.filePath(f, b);
@@ -571,6 +568,7 @@ function _sources(req, sources) {
                         return a.localeCompare(b);
                     });
 
+                    __find(subs, f);
                 } else {
                     files.push(f);
                 }

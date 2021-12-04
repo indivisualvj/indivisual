@@ -7,6 +7,7 @@ import {AssetManager} from "../manager/AssetManager";
 import {ControlSetManager} from "../manager/ControlSetManager";
 import {Messaging} from "./Messaging";
 import {EventManager} from "../manager/EventManager";
+import {PluginManager} from "../manager/PluginManager";
 
 class Config {
 
@@ -357,7 +358,10 @@ class Config {
      * @private
      */
     _loadAudioPlugins(settings) {
-        this._loadPlugins(settings, 'audio', HC.AudioManager.plugins);
+
+        PluginManager.loadAudioPlugins();
+
+        // this._loadPlugins(settings, 'audio', HC.AudioManager.plugins);
     }
 
     /**

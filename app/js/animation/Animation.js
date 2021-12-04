@@ -12,7 +12,7 @@ import {DisplayManager} from "../manager/DisplayManager";
 import {SourceManager} from "../manager/SourceManager";
 import {EventManager} from "../manager/EventManager";
 import {Messaging} from "../shared/Messaging";
-import {Monitor} from "../shared/Monitor";
+import {PreviewManager} from "../manager/PreviewManager";
 import {Logger} from "../shared/Logger";
 
 class Animation extends Program {
@@ -27,9 +27,9 @@ class Animation extends Program {
     settingsManager;
 
     /**
-     * @type {Monitor}
+     * @type {PreviewManager}
      */
-    monitor;
+    previewManager;
 
 
     constructor(name) {
@@ -168,8 +168,8 @@ class Animation extends Program {
      *
      */
     updatePlay() {
-        if (IS_MONITOR) {
-            this.config.ControlSettings.play = this.config.ControlSettings.monitor;
+        if (IS_PREVIEW) {
+            this.config.ControlSettings.play = this.config.ControlSettings.preview;
         }
 
         if (this.config.ControlSettings.play) {
@@ -434,9 +434,9 @@ class Animation extends Program {
             this.sourceManager.updateSources();
             this.reset();
 
-            if (IS_MONITOR) { // todo: does not belong in load session i guess
-                this.monitor = new Monitor();
-                this.monitor.init(this.config, () => {
+            if (IS_PREVIEW) { // todo: does not belong in load session i guess
+                this.previewManager = new PreviewManager();
+                this.previewManager.init(this.config, () => {
                     this.displayManager.updateDisplay(0);
                     this.initResize();
                     this.updatePlay();
@@ -556,8 +556,8 @@ class Animation extends Program {
                     this.renderer.nextLayer = this.renderer.layers[value];
                     break;
 
-                case 'monitor':
-                    if (!IS_MONITOR) {
+                case 'preview':
+                    if (!IS_PREVIEW) {
                         break;
                     }
                 case 'play':
@@ -565,7 +565,7 @@ class Animation extends Program {
                     break;
 
                 case 'audio':
-                    if (!IS_MONITOR) {
+                    if (!IS_PREVIEW) {
                         this.updateAudio();
                     }
                     break;
@@ -594,7 +594,7 @@ class Animation extends Program {
 
         if (display) {
             if (item.match(/^sample\d+_load/) && value) {
-                if (IS_MONITOR) {
+                if (IS_PREVIEW) {
                     this.sourceManager.loadSample(HC.numberExtract(item, 'sample'), value);
                 }
                 this.updateSource(item, false, false, true, false);

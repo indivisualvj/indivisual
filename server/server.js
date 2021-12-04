@@ -16,14 +16,14 @@ const _PORT = options.port ? options.port : conf.port;
 const _HTTPS = typeof options.https != "undefined";
 
 let sessions = {};
-let members = ['animation', 'controller', 'client', 'setup', 'monitor'];
+let members = ['animation', 'controller', 'client', 'setup', 'preview'];
 
 let targetsGroups = {
     animation: ['controls', 'displays', 'sources', 'settings', 'log', 'midi'],
     controller: ['controls', 'displays', 'sources', 'settings', 'log', 'attr', 'midi', 'data'],
     client: ['controls', 'displays', 'sources', 'settings', 'log', 'midi'],
     setup: ['displays', 'data', 'settings'],
-    monitor: ['displays', 'controls', 'settings', 'sources'], // displays added to have updates on resolution. HC.Monitor.init() takes care of the other settings.
+    preview: ['displays', 'controls', 'settings', 'sources'], // displays added to have updates on resolution. HC.PreviewManager.init() takes care of the other settings.
     log: ['log']
 };
 
@@ -32,7 +32,7 @@ let sourcesGroups = {
     controller: ['controls', 'displays', 'sources', 'settings', 'log', 'attr', 'midi'],
     client: ['log'],
     setup: ['displays', 'data', 'settings'],
-    monitor: ['log']
+    preview: ['log']
 };
 
 let log = {};
@@ -40,7 +40,7 @@ let log = {};
 let checkups = [
     function (ses) {
         if (ses && 'controls' in ses) {
-            if (ses.controls.monitor) {
+            if (ses.controls.preview) {
                 return false;
             }
         }
@@ -53,7 +53,7 @@ let groupsCheckups = {
     controller: [],
     client: checkups,
     setup: checkups,
-    monitor: []
+    preview: []
 };
 
 
@@ -163,7 +163,7 @@ class Server
                     let result = {};
                     for (let i = 0; i < keys.length; i++) {
                         let key = keys[i];
-                        if (_validTarget(target, key, false)) { // false instead of session to avoid checkups (regarding monitor)
+                        if (_validTarget(target, key, false)) { // false instead of session to avoid checkups (regarding preview)
                             result[key] = session[key];
                         }
                     }

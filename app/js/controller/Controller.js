@@ -5,7 +5,7 @@ import {Program} from "../shared/Program";
 import {TimeoutManager} from "../manager/TimeoutManager";
 import {EventManager} from "../manager/EventManager";
 import {LayeredControlSetManager} from "../manager/LayeredControlSetManager";
-import {Monitor} from "../shared/Monitor";
+import {PreviewManager} from "../manager/PreviewManager";
 import {Midi} from "./Midi";
 import {PropertyUi} from "./ui/PropertyUi";
 import {StatusBar} from "./ui/StatusBar";
@@ -72,9 +72,9 @@ class Controller extends Program {
     presetMan;
 
     /**
-     * @type {Monitor}
+     * @type {PreviewManager}
      */
-    monitor;
+    previewManager;
 
     /**
      *
@@ -103,8 +103,8 @@ class Controller extends Program {
         this.config = config;
 
         this.settingsManager = new LayeredControlSetManager(config.AnimationValues);
-        this.monitor = new Monitor();
-        this.monitor.activate(false);
+        this.previewManager = new PreviewManager();
+        this.previewManager.activate(false);
         this.midi = new Midi(this);
 
         this.controlSettingsGui = new PropertyUi('ControlSettings', 'control', false, config);
@@ -518,8 +518,8 @@ class Controller extends Program {
         }
 
         if (display !== false) {
-            if (item === 'monitor') {
-                this.monitor.activate(value);
+            if (item === 'preview') {
+                this.previewManager.activate(value);
             }
 
             this.updateUi(this.controlSettingsGui);
@@ -805,10 +805,10 @@ class Controller extends Program {
         this.midi.loading(() => {
             return _done;
         });
-        let monitorStatus = this.config.ControlSettings.monitor;
-        this.updateControl('monitor', false, false, true, false);
+        let previewStatus = this.config.ControlSettings.preview;
+        this.updateControl('preview', false, false, true, false);
         promise.finally(() => {
-            this.updateControl('monitor', monitorStatus, false, true, false);
+            this.updateControl('preview', previewStatus, false, true, false);
             _done = true;
         });
     }

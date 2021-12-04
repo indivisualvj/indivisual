@@ -1,12 +1,12 @@
 
-#monitor {
+#preview {
     transition: all 125ms;
     padding-top: 52%;
     position: relative;
     margin-bottom: 1px;
 }
 
-.monitor {
+.preview {
     position: absolute;
     top: 0;
     box-sizing: border-box;

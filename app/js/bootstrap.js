@@ -19,12 +19,12 @@ const _CONTROLLER = 'controller';
 const _ANIMATION = 'animation';
 const _SETUP = 'setup';
 const _CLIENT = 'client';
-const _MONITOR = 'monitor';
+const _PREVIEW = 'preview';
 
 const IS_CONTROLLER = G_INSTANCE === _CONTROLLER;
 const IS_SETUP = G_INSTANCE === _SETUP;
 const IS_ANIMATION = G_INSTANCE === _ANIMATION || G_INSTANCE === _CLIENT;
-const IS_MONITOR = G_INSTANCE === _MONITOR;
+const IS_PREVIEW = G_INSTANCE === _PREVIEW;
 
 const EVENT_SOURCE_SETTING_CHANGED = 'source.setting.changed';
 const EVENT_SAMPLE_READY = 'sample.ready';

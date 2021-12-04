@@ -256,7 +256,7 @@ class Renderer {
         if (IS_ANIMATION) {
             this._doShuffle();
         }
-        this._switchLayer(IS_MONITOR);
+        this._switchLayer(IS_PREVIEW);
 
         for (let l in this.layers) {
             let layer = this.layers[l];

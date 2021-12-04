@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-class Monitor {
+class PreviewManager {
 // todo: manager/PreviewManager IS_PREVIEW seems more logical...
     /**
      * @type {HTMLElement}
@@ -12,7 +12,7 @@ class Monitor {
      *
      */
     constructor() {
-        this.node = document.getElementById('monitor');
+        this.node = document.getElementById('preview');
     }
 
     /**
@@ -23,7 +23,7 @@ class Monitor {
     init (config, hook) {
         config.DisplaySettingsManager.reset();
         config.ControlSettings.play = false;
-        config.ControlSettings.monitor = false;
+        config.ControlSettings.preview = false;
         config.DisplaySettings.fps = 30;
         config.DisplaySettings.display0_visible = true;
 
@@ -42,4 +42,4 @@ class Monitor {
     }
 }
 
-export {Monitor}
+export {PreviewManager}

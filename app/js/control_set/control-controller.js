@@ -59,7 +59,7 @@ HC.ControlController = HC.ControlController || {};
                 }
             },
 
-            monitor: false,
+            preview: false,
             push_layers: () => {
                 this.messaging.program.pushLayers();
             },
@@ -133,7 +133,7 @@ HC.ControlController = HC.ControlController || {};
         styles = {
             play: ['eight', 'clear'],
             reset: ['eight'],
-            monitor: ['hex'],
+            preview: ['hex'],
             push_layers: ['hex'],
             push_sources: ['hex'],
             rst_shaders: ['quarter'],
@@ -214,8 +214,8 @@ HC.ControlController = HC.ControlController || {};
             reset: (inst) => { return new HC.Hotkey('delete,shift+delete,ctrl+shift+delete', (e) => {
                 inst.settings.reset();
             }, 'del')},
-            monitor: (inst) => { return new HC.Hotkey('home', (e) => {
-                this.messaging.program.updateControl('monitor', !this.config.ControlSettings.monitor, true, true, false);
+            preview: (inst) => { return new HC.Hotkey('home', (e) => {
+                this.messaging.program.updateControl('preview', !this.config.ControlSettings.preview, true, true, false);
             }, 'hm')},
             push_layers: (inst) => { return new HC.Hotkey('end', (e) => {
                 inst.settings.push_layers();

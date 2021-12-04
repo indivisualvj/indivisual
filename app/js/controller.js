@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function () {
     Messaging.connect(function (reconnect, controller) {
 
         setTimeout(() => {
-            document.querySelector('iframe.monitor').setAttribute('src', 'monitor.html#' + Messaging.sid);
+            document.querySelector('iframe.preview').setAttribute('src', 'preview.html#' + Messaging.sid);
         }, 1500);
 
         Logger.log(controller.name, 'connected', true, true);
@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function () {
             config.loadConfig(function (config) {
                 let sets = config.initControlSets();
                 controller.init(config, sets);
-
                 controller.onResize();
             });
         }

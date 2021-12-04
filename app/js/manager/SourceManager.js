@@ -203,7 +203,7 @@ class SourceManager {
      */
     initSampleEvents(sample) {
 
-        if (IS_MONITOR) {
+        if (IS_PREVIEW) {
             return;
         }
 
@@ -297,7 +297,7 @@ class SourceManager {
      */
     storeSample(i, name, scale) {
 
-        if (IS_MONITOR) {
+        if (IS_PREVIEW) {
             return;
         }
 
@@ -312,7 +312,7 @@ class SourceManager {
                         let key = getSampleStoreKey(target.index);
                         Messaging.emitAttr('[data-id="' + key + '"]', 'data-label', '');
 
-                        if (IS_ANIMATION) { // forward load sample to monitor
+                        if (IS_ANIMATION) { // forward load sample to preview
                             this.animation.updateSource(getSampleLoadKey(sample.index), sample.id, false, true, false);
                         }
                     });
@@ -391,7 +391,7 @@ class SourceManager {
                         this.loadWorker.onmessage = null;
                         sample.samples = ev.data.blobs;
                         sample.pointer = sample.frameCount;
-                        sample.finish();// fixme: monitor does not listen
+                        sample.finish();// fixme: preview does not listen
                     }
                 };
                 this.loadWorker.postMessage({

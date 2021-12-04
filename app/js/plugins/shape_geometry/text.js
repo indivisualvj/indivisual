@@ -9,7 +9,7 @@
 
         create() {
             let geometry;
-
+            // fixme does not load zuverlässig after reload and even after reset layer only if re preset
             if (this.ready()) {
                 geometry = new THREE.TextGeometry(this.settings.shape_vertices || 'indivisual', {
                     font: coolvetica,

@@ -299,7 +299,7 @@ class AssetManager {
      * @param callback
      * @param error
      */
-    static loadMaterialMap(target, path, callback, error) {
+    static loadMaterialMap(target, path, callback, error) { // todo: materialloader?
         let inst = this;
         let _assign = function (to, from) {
             let keys = Object.keys(from);
@@ -348,7 +348,7 @@ class AssetManager {
      * @private
      */
     static _files(path, callback) {
-        messaging.files(path, callback);
+        this.messaging.files(path, callback);
     }
 
     /**
@@ -358,7 +358,7 @@ class AssetManager {
      * @private
      */
     static _load(file, callback) {
-        messaging._emit({action: 'load', file: file, name: file}, function (data) {
+        this.messaging._emit({action: 'load', file: file, name: file}, function (data) {
             callback(data);
         });
     }

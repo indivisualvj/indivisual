@@ -7,7 +7,7 @@
             let layer = this.layer;
 
             if (!this.color) {
-                this.color = HC.randomColor();
+                this.color = randomColor();
             }
             let color = this.color;
 
@@ -64,7 +64,7 @@
             let layer = this.layer;
 
             if (!this.color) {
-                this.color = HC.randomColor();
+                this.color = randomColor();
             }
 
             let color = this.color;

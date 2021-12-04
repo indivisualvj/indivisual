@@ -28,9 +28,9 @@ class Layer extends _Layer {
             let shape = this.getShape(index);
             let hsl = shape.color;
             if (complementary) {
-                hsl = HC.hslComplementary(hsl);
+                hsl = hslComplementary(hsl);
             }
-            hex = HC.hslToHex(hsl);
+            hex = hslToHex(hsl);
         }
         return hex;
     }

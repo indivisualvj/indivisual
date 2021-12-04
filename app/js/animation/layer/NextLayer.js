@@ -17,7 +17,7 @@ class Layer extends _Layer {
             ? new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial())
             : this.nextMesh(index);
 
-        let shape = new Shape(mesh, index, HC.randomColor());
+        let shape = new Shape(mesh, index, randomColor());
         if (dummy) {
             shape.setVisible(false);
         }

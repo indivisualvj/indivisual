@@ -6,7 +6,7 @@
             let layer = this.layer;
 
             let color = shape.color;
-            color = HC.hslToRgb(color);
+            color = hslToRgb(color);
             let matrix = layer.getPatternPlugin('matrix');
             let gridPosition = matrix.gridPosition(shape);
 
@@ -48,8 +48,8 @@
             color.g = (Math.sin(prc + 60 * RAD) / 2 + 0.5) * 255;
             color.b = (Math.sin(prc + 120 * RAD) / 2 + 0.5) * 255;
 
-            color = HC.rgbToHsl(color);
-            HC.copyHsl(color, shape.color);
+            color = rgbToHsl(color);
+            copyHsl(color, shape.color);
         }
     }
 }

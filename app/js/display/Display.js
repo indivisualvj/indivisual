@@ -166,7 +166,7 @@ class Display {
             let color = '#00ffbb';
             if (image && image._color) {
                 color = image._color;
-                color = HC.hslToHex(HC.hslComplementary(HC.hexToHsl(color)));
+                color = hslToHex(hslComplementary(hexToHsl(color)));
             }
 
             ctx.fillStyle = color;

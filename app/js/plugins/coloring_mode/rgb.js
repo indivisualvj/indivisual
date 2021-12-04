@@ -15,10 +15,10 @@
                 let g = (Math.sin(prc + 60 * RAD) / 2 + 0.5) * 255;
                 let b = (Math.sin(prc + 120 * RAD) / 2 + 0.5) * 255;
 
-                this.color = HC.rgbToHsl({r: r, g: g, b: b});
+                this.color = rgbToHsl({r: r, g: g, b: b});
             }
 
-            HC.copyHsl(this.color, shape.color);
+            copyHsl(this.color, shape.color);
         }
 
     }

@@ -195,6 +195,8 @@ class _Layer {
         let three = animation.renderer.three;
         let camera = new THREE.PerspectiveCamera(50, 1, 0.1, 500000);
         let composer = new THREE.EffectComposer(three.renderer, three.target);
+        composer.readBuffer.stencilBuffer = true;
+        composer.writeBuffer.stencilBuffer = true;
         let renderPass = new THREE.RenderPass(three.scene, camera, null);
         composer.addPass(renderPass);
 

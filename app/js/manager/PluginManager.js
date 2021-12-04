@@ -3,12 +3,21 @@
  */
 
 import * as AudioPlugins from "../modules/audio.js"
+import * as ShuffleModePlugins from "../modules/shuffle_mode.js";
+import {AudioManager} from "./AudioManager";
+import {Renderer} from "../animation/Renderer";
 
 class PluginManager
 {
 
-    static loadAudioPlugins() {
-        console.log(AudioPlugins);
+    static assignAudioPlugins(settings, config) {
+        AudioManager.plugins = {};
+        this._assignPlugins(settings, 'audio', AudioPlugins, AudioManager.plugins, config);
+    }
+
+    static assignShuffleModePlugins(settings, config) {
+        Renderer.plugins = {};
+        this._assignPlugins(settings, 'shuffle_mode', ShuffleModePlugins, Renderer.plugins, config);
     }
 
     /**
@@ -16,29 +25,38 @@ class PluginManager
      * @param settings
      * @param section
      * @param plugins
-     * @param className
+     * @param target
+     * @param config{Config}
      * @private
      */
-    static _loadPlugins(settings, section, plugins, className) {
+    static _assignPlugins(settings, section, plugins, target, config) {
 
         let pluginKeys = Object.keys(plugins);
 
-        pluginKeys.sort(this._sort(plugins, className||'Plugin'));
+        pluginKeys.sort(this._sort(plugins));
 
         for (let i = 0; i < pluginKeys.length; i++) {
 
             let pluginKey = pluginKeys[i];
             let plugin = plugins[pluginKey];
+            pluginKey = pluginKey.toLowerCase();
+
+            if (plugin.index === -1) {
+                continue;
+            }
+
             let name = plugin.name || pluginKey;
 
-            if (name === (className||'Plugin')) {
-                name = pluginKey;
-            }
             if (!(section in settings)) {
                 settings[section] = {};
             }
+            if (!(section in target)) {
+                target[section] = {};
+            }
 
-            settings[section][pluginKey] = name;
+            target[section][pluginKey] = plugin;
+            settings[section][pluginKey] = name.toLowerCase();
+            plugin.boot(this, config);
 
         }
     }
@@ -47,23 +65,15 @@ class PluginManager
     /**
      *
      * @param plugins
-     * @param className
-     * @returns {(function(*, *): (*))|*}
+     * @return {(function(*, *): (*))|*}
      * @private
      */
-    static _sort (plugins, className) {
+    static _sort (plugins) {
         return (a, b) => {
             let ai = plugins[a].index || 99999;
             let bi = plugins[b].index || 99999;
             let an = plugins[a].name || a;
             let bn = plugins[b].name || b;
-
-            if (an === className) {
-                an = a;
-            }
-            if (bn === className) {
-                bn = b;
-            }
 
             let cmpi = ai - bi;
             if (cmpi === 0) {

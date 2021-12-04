@@ -12,9 +12,9 @@ class MediaFile extends AudioPlugin {
     buffer;
 
     init(callback) {
-        if (HC.AudioManager.plugins.mediafile.dropEvent) {
-            this.onDrop(HC.AudioManager.plugins.mediafile.dropEvent, callback);
-            HC.AudioManager.plugins.mediafile.dropEvent = false;
+        if (MediaFile.dropEvent) {
+            this.onDrop(MediaFile.dropEvent, callback);
+            MediaFile.dropEvent = false;
 
         } else {
             // now in tutorial
@@ -67,26 +67,23 @@ class MediaFile extends AudioPlugin {
         }
     }
 
-    boot() {
+    static boot(pluginManager, config) {
         if (IS_ANIMATION) {
-            document.addEventListener('DOMContentLoaded', function () {
-                console.log('HC.AudioManager.plugins.mediafile: adding events for playback on media file drop');
-                document.addEventListener('dragover', function (e) {
-                    e.preventDefault();
-                }, false);
+            console.log('MediaFile', 'adding events for playback on media file drop');
+            document.addEventListener('dragover', function (e) {
+                e.preventDefault();
+            }, false);
 
-                let onDocumentDrop = function (e) {
-                    e.preventDefault();
+            let onDocumentDrop = function (e) {
+                e.preventDefault();
 
-                    if (e.dataTransfer.files.length) {
-                        HC.AudioManager.plugins.mediafile.dropEvent = e;
-                        // fixme
-                        HC.AudioManager.plugins.mediafile.updateControl('audio', 'mediafile', true, true, false);
-                    }
-                };
+                if (e.dataTransfer.files.length) {
+                    MediaFile.dropEvent = e;
+                    config.getMessaging().program.updateControl('audio', 'mediafile', true, true, false);
+                }
+            };
 
-                document.addEventListener('drop', onDocumentDrop, false);
-            });
+            document.addEventListener('drop', onDocumentDrop, false);
         }
     }
 }

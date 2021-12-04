@@ -358,10 +358,7 @@ class Config {
      * @private
      */
     _loadAudioPlugins(settings) {
-
-        PluginManager.loadAudioPlugins();
-
-        // this._loadPlugins(settings, 'audio', HC.AudioManager.plugins);
+        PluginManager.assignAudioPlugins(settings, this);
     }
 
     /**
@@ -370,7 +367,7 @@ class Config {
      * @private
      */
     _loadShufflePlugins(settings) {
-        this._loadPlugins(settings, 'shuffle_mode', HC.Renderer.shuffle_mode);
+        PluginManager.assignShuffleModePlugins(settings, this);
     }
 
     /**

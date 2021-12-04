@@ -14,7 +14,7 @@ class Messaging {
      * @param program
      */
     static init(program) {
-        this.program = program;
+        Messaging.program = program;
         this.socket = false;
         this.sid = false;
 
@@ -45,8 +45,8 @@ class Messaging {
      */
     static _init() {
         if (this.initSID()) {
-            this.program.name += '@' + this.sid;
-            G_INSTANCE = this.program.name;
+            Messaging.program.name += '@' + this.sid;
+            G_INSTANCE = Messaging.program.name;
         }
     }
 
@@ -75,18 +75,18 @@ class Messaging {
      * @param callback
      */
     static connect(callback) {
-        Logger.log(this.program.name, 'connecting...', true);
+        Logger.log(Messaging.program.name, 'connecting...', true);
         this.socket = io.connect(null, {'secure': true, 'forceNew': true});
 
         this.initEvents();
 
         this.socket.once('connect', () => {
             this._join();
-            callback(false, this.program);
+            callback(false, Messaging.program);
 
             this.socket.on('connect', () => {
                 this._join();
-                callback(true, this.program);
+                callback(true, Messaging.program);
             });
         });
     }
@@ -96,7 +96,7 @@ class Messaging {
      * @private
      */
     static _join() {
-        this._emit({action: 'join', name: this.program.name});
+        this._emit({action: 'join', name: Messaging.program.name});
     }
 
     /**
@@ -366,7 +366,7 @@ class Messaging {
     static emitData(key, data) {
         let config = {
             action: 'data',
-            from: this.program.name,
+            from: Messaging.program.name,
             key: key,
             data: data
         };
@@ -380,7 +380,7 @@ class Messaging {
     static _emit(data, callback) {
 
         data.sid = this.sid;
-        data.from = this.program.name;
+        data.from = Messaging.program.name;
         this.socket.emit(data.action, data, callback);
     }
 
@@ -390,14 +390,14 @@ class Messaging {
      */
     static sync(callback) {
 
-        this.program.ready = true;
+        Messaging.program.ready = true;
 
-        Logger.log(this.program.name, 'syncing...', true);
+        Logger.log(Messaging.program.name, 'syncing...', true);
 
         let data = {
             sid: this.sid,
             action: 'sync',
-            from: this.program.name,
+            from: Messaging.program.name,
             force: true,
             controls: true,
             forward: false

@@ -395,7 +395,7 @@ class Renderer {
         name = name || this.config.ControlSettings.shuffle_mode;
 
         if (!this.plugins[name]) {
-            this.plugins[name] = new HC.Renderer.shuffle_mode[name](this, this.config.ControlSettings);
+            this.plugins[name] = new Renderer.plugins.shuffle_mode[name](this, this.config.ControlSettings);
         }
 
         return this.plugins[name];

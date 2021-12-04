@@ -1,5 +1,7 @@
 class AudioPlugin {
 
+    static index = -1;
+
     /**
      * @type {AudioManager}
      */
@@ -15,6 +17,10 @@ class AudioPlugin {
      */
     constructor(manager) {
         this.manager = manager;
+    }
+
+    static boot() {
+
     }
 
     start() {
@@ -39,10 +45,6 @@ class AudioPlugin {
 
     getContext() {
         return this.manager.initContext();
-    }
-
-    boot() {
-
     }
 }
 

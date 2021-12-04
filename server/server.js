@@ -433,6 +433,15 @@ class Server
         });
 
         /**
+         * fixme: imports from within plugins do double load resources
+         */
+        this.app.get('/app/*/*', (req, res) => {
+            let url = req.originalUrl.replace('/app', 'app/js') + '.js';
+            url = path.resolve(url);
+            res.sendFile(url);
+        });
+
+        /**
          *
          */
         this.app.get('/lib/*.js', (req, res) => {

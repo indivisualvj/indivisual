@@ -36,7 +36,8 @@
 }
 
 .folder {
-    padding-left: 20px !important;
+    padding-left: 22px !important;
+    border-left: 0 !important;
 }
 
 .preset [data-label]:after {

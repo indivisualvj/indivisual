@@ -3,6 +3,7 @@
  */
 import {TimeoutManager} from "../manager/TimeoutManager";
 import {Messaging} from "../shared/Messaging";
+import {Logger} from "../shared/Logger";
 
 class Midi {
 

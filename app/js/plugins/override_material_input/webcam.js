@@ -25,7 +25,7 @@
         initTexture() {
             let that = this;
             try {
-                let resolution = this.layer.renderer.getResolution();
+                let resolution = this.animation.getResolution();
                 let config = {
                     video: {
                         width: {min: 640, ideal: resolution.x, max: 1920},

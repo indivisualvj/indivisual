@@ -590,11 +590,8 @@ class Controller extends Program {
                 this._fireClipUpdate(HC.numberExtract(item, 'sequence'));
 
             } else if (item.match(/_(enabled)/)) {
-                if (!value) { // set record to false if enabled == false
-                    let smp = HC.numberExtract(item, 'sample');
-                    // fixme: delete clip. where to search ? e.g. config.SampleData? who needs SampleData really?
-                    this.updateSource(getSampleRecordKey(smp), false, true, true, false);
-                    EventManager.fireEventId(EVENT_THUMB_UPDATE, smp, {});
+                if (!value) {
+                    this._disableSample(HC.numberExtract(item, 'sample'))
                 }
 
             } else if (item.match(/_(load)/)) {
@@ -626,6 +623,32 @@ class Controller extends Program {
                     this.config[key][tkey] = sec[tkey];
                 }
             }
+        }
+    }
+
+    /**
+     *
+     * @param {number}smp
+     * @private
+     */
+    _disableSample(smp) {
+        // set record to false if was enabled
+        this.updateSource(getSampleRecordKey(smp), false, true, true, false);
+        this._resetClip(smp)
+        EventManager.fireEventId(EVENT_THUMB_UPDATE, smp, {});
+    }
+
+    /**
+     *
+     * @param {number}smp
+     * @private
+     */
+    _resetClip(smp) {
+        let key = getSampleKey(smp);
+        if (this.config.DataSamples[key]) {
+            let clip = this.config.DataSamples[key];
+            clip.reset();
+            delete this.config.DataSamples[key];
         }
     }
 

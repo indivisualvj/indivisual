@@ -407,8 +407,19 @@ class Server
          *
          */
         this.app.get('*node_modules/*', (req, res) => {
-            let url = req.originalUrl.replace(new RegExp('.*(node_modules/.*)'), '$1.js');
-            url = path.resolve(url);
+            let url = req.originalUrl;
+            url = url.replace(new RegExp('.*(node_modules/.*)'), '$1');
+            url = url.replace(new RegExp('(.*)(\\?.*)'), '$1');
+
+            let suffix = url.replace(new RegExp('([^\\.]*)(\\.[^\\.]+)$'), '$2');
+            if (suffix === url) {
+                suffix = '.js';
+            } else {
+                suffix = '';
+            }
+
+            url = path.resolve(url + suffix);
+            console.log('serving', url);
             res.sendFile(url);
         });
 

@@ -295,6 +295,11 @@ fresh@0.5.2:
   resolved "https://registry.yarnpkg.com/fresh/-/fresh-0.5.2.tgz#3d8cadd90d976569fa835ab1f8e4b23a105605a7"
   integrity sha1-PYyt2Q2XZWn6g1qx+OSyOhBWBac=
 
+hack-font@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/hack-font/-/hack-font-3.3.0.tgz#be36ffe9cfc318c555aa04c8c26a48d0e53230d5"
+  integrity sha512-RohrcAr3UaKiIoxDlOytCjObcUAucfFc6V5fKu6gBrvmvTfIXeBqZwR0Q5kb9qpbluThJWt326LClLKIGiFyug==
+
 has-binary2@~1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/has-binary2/-/has-binary2-1.0.3.tgz#7776ac627f3ea77250cfc332dab7ddf5e4f5d11d"

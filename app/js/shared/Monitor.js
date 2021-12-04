@@ -2,7 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 class Monitor {
-
+// todo: manager/PreviewManager IS_PREVIEW seems more logical...
     /**
      * @type {HTMLElement}
      */

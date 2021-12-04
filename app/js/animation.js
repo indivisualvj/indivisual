@@ -5,6 +5,7 @@
 import {Animation} from "./animation/Animation";
 import {Config} from "./lib/Config";
 import {Messaging} from "./lib/Messaging";
+import {Logger} from "./shared/Logger";
 
 // workaround:
 _importThreeLoader('FontLoader');
@@ -20,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     Messaging.init(animation);
     Messaging.connect(function (reconnect, animation) {
-        HC.log(animation.name, 'connected', true, true);
+        Logger.log(animation.name, 'connected', true, true);
 
         if (!reconnect) {
             config.loadConfig((config) => {

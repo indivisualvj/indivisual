@@ -247,7 +247,7 @@ class BeatKeeper {
         let elapsed = HC.now() - this.beatStartTime;
         let ebeats = Math.floor((elapsed / duration) / 4);
 
-        // HC.log('resetCounters', {ebeats:ebeats}, false, DEBUG);
+        // Logger.log('resetCounters', {ebeats:ebeats}, false, DEBUG);
 
         for (let s in this.speeds) {
             s = this.speeds[s];

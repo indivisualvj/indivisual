@@ -7,6 +7,7 @@ import {Messaging} from "../lib/Messaging";
 import {PresetUi} from "./ui/PresetUi";
 import {ScriptProcessor} from "./ScriptProcessor";
 import {LayeredControlSetManager} from "../manager/LayeredControlSetManager";
+import {Logger} from "../shared/Logger";
 
 class PresetManager {
 
@@ -187,7 +188,7 @@ class PresetManager {
                     let save = (layer, child) => {
                         let settings = this.settingsManager.prepareLayer(layer);
                         Messaging.save(STORAGE_DIR, ctrl.getLabel(), child.getLabel(), settings, (result) => {
-                            HC.log(result);
+                            Logger.log(result);
                             child.setChanged(null);
                         }, '');
                     };
@@ -207,7 +208,7 @@ class PresetManager {
      * @private
      */
     _updatePreset(name, data, layer, _emitted) {
-        HC.log('preset', name);
+        Logger.log('preset', name);
 
         this.settingsManager.resetLayer(layer);
 
@@ -242,7 +243,7 @@ class PresetManager {
      */
     _transferShaderPasses(name, data) {
         return new Promise((resolve, reject) => {
-            HC.log('passes', name);
+            Logger.log('passes', name);
             let calls = [];
             for (let layer = 0; layer < this.config.ControlValues.layers; layer++) {
                 if (this.config.shuffleable(layer+1) && !this.settingsManager.isDefault(layer)) {
@@ -251,7 +252,7 @@ class PresetManager {
                             this._appendShaderPasses(layer, data);
                             this.gui.setChanged(layer+1, true);
                             this.controller.updateUiPasses();
-                            HC.log('append_shaders', layer+1);
+                            Logger.log('append_shaders', layer+1);
                             Messaging.emitSettings(layer, this.settingsManager.prepareLayer(layer), false, false, true, _synced);
                         });
                     });
@@ -355,7 +356,7 @@ class PresetManager {
         settings.info.name = HC.filePath(dir, label);
 
         Messaging.save(STORAGE_DIR, dir, label, settings, (result) => {
-            HC.log(result);
+            Logger.log(result);
             ctrl.setChanged(null);
         });
     }
@@ -390,7 +391,7 @@ class PresetManager {
             preset.info.name = HC.filePath(opts.dir, opts.name);
 
             Messaging.save(STORAGE_DIR, opts.dir, opts.name, opts.settings, (result) => {
-                HC.log(result);
+                Logger.log(result);
                 this._addPreset(opts.name, ctrl);
             }, '');
         }
@@ -405,7 +406,7 @@ class PresetManager {
         let confirmed = confirm('Do you want to delete "' + ctrl.getLabel() + '"?');
         if (confirmed) {
             Messaging.delete(STORAGE_DIR, null, ctrl.getLabel(), (result) => {
-                HC.log(result);
+                Logger.log(result);
                 ctrl.removeFromParent();
             });
         }
@@ -425,7 +426,7 @@ class PresetManager {
 
         if (label) {
             Messaging.mkdir(STORAGE_DIR, label, false, (result) => {
-                HC.log(result);
+                Logger.log(result);
                 this._addFolder(label, label, true);
             });
         }
@@ -505,7 +506,7 @@ class PresetManager {
         let confirmed = confirm('Do you want to delete "' + ctrl.getLabel() + '"?');
         if (confirmed) {
             Messaging.delete(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), (result) => {
-                HC.log(result);
+                Logger.log(result);
                 ctrl.removeFromParent();
             });
         }
@@ -525,7 +526,7 @@ class PresetManager {
 
         if (label) {
             Messaging.rename(STORAGE_DIR, null, ctrl.getLabel(), label, (result) => {
-                HC.log(result);
+                Logger.log(result);
                 ctrl.rename(label);
             });
 
@@ -554,7 +555,7 @@ class PresetManager {
             label += suffix;
 
             Messaging.rename(STORAGE_DIR, ctrl.getParent().getLabel(), ctrl.getLabel(), label, (result) => {
-                HC.log(result);
+                Logger.log(result);
                 ctrl.rename(label);
             });
 

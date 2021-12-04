@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {Messaging} from "../../lib/Messaging";
+import {Logger} from "../../shared/Logger";
 
 class ShaderPassUi {
 
@@ -66,7 +67,7 @@ class ShaderPassUi {
             let data = {passes: {shaders: this.controlSet.getShaderPasses()}};
             Messaging.program.pushShaderPasses(null, data);
 
-            HC.log(that.getParent().getLabel() + '/' + that.getLabel(), v);
+            Logger.log(that.getParent().getLabel() + '/' + that.getLabel(), v);
         };
     }
 

@@ -1,18 +1,19 @@
+import {Messaging} from "../lib/Messaging";
 
+class Logger
 {
-    const logHistory = {};
+    static history = {};
 
     /**
      *
      * @param key
      * @param func
      */
-    HC.logFunction = function (key, func) {
-
+    static function(key, func) {
         requestAnimationFrame(function () {
             let co = document.getElementById('log');
             if (co) {
-                let a = HC.logGetAnchor(key);
+                let a = Logger.getAnchor(key);
                 a.onclick = function (e) {
                     let co;
                     if ((co = e.target.closest('.expandable'))) {
@@ -26,16 +27,16 @@
                 co.scrollTop = co.scrollHeight;
             }
         });
-    };
+    }
 
     /**
-     * fixme: make this a module
+     *
      * @param key
      * @param value
      * @param force
      * @param _console
      */
-    HC.log = function log (key, value, force, _console) {
+    static log(key, value, force, _console) {
         if (_console) {
             console.log(key, value);
         }
@@ -50,8 +51,7 @@
 
                 if (IS_CONTROLLER || force) {
                     console.log(key, 'wanted to emit log', value);
-                    // fixme: inject
-                    // messaging.emitLog(key, value);
+                    Messaging.emitLog(key, value);
                 }
 
                 let txt = '';
@@ -63,12 +63,12 @@
                     txt = key;
                 }
 
-                if (key in logHistory) {
-                    elem = logHistory[key];
+                if (key in Logger.history) {
+                    elem = Logger.history[key];
 
                 } else {
                     elem = document.createElement('div');
-                    logHistory[key] = elem;
+                    Logger.history[key] = elem;
                 }
 
                 elem.innerHTML = txt;
@@ -78,36 +78,16 @@
 
             }
         });
-    };
+    }
 
     /**
      *
      */
-    HC.clearLog = function () {
+    static clear() {
         let co = document.getElementById('log');
         if (co) {
             co.innerHTML = '';
         }
-    };
-
-    /**
-     *
-     * @param value
-     * @returns {string}
-     */
-    HC.logGetRed = function (value) {
-        return '<span class="red">' + value + '</span>';
-
-    };
-
-    /**
-     *
-     * @param value
-     * @returns {string}
-     */
-    HC.logGetOrange = function (value) {
-        return '<span class="orange">' + value + '</span>';
-
     }
 
     /**
@@ -115,19 +95,39 @@
      * @param value
      * @returns {string}
      */
-    HC.logGetYellow = function (value) {
+    static getRed(value) {
+        return '<span class="red">' + value + '</span>';
+    }
+
+    /**
+     *
+     * @param value
+     * @returns {string}
+     */
+    static getOrange(value) {
+        return '<span class="orange">' + value + '</span>';
+    }
+
+    /**
+     *
+     * @param value
+     * @returns {string}
+     */
+    static getYellow(value) {
         return '<span class="yellow">' + value + '</span>';
-    };
+    }
 
     /**
      *
      * @param value
      * @returns {HTMLAnchorElement}
      */
-    HC.logGetAnchor = function (value) {
+    static getAnchor(value) {
         let a = document.createElement('a');
         a.innerText = value;
 
         return a;
-    };
+    }
 }
+
+export {Logger}

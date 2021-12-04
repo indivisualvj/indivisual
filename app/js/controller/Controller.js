@@ -22,6 +22,7 @@ import {SourceManager} from "../manager/SourceManager";
 import {Messaging} from "../lib/Messaging";
 import {ShaderPassUi} from "./ui/ShaderPassUi";
 import {AssetManager} from "../lib/AssetManager";
+import {Logger} from "../shared/Logger";
 
 class Controller extends Program {
 
@@ -185,22 +186,22 @@ class Controller extends Program {
         })
         Messaging.sync((session) => {
             if ('controls' in session) {
-                HC.log('controls', 'synced');
+                Logger.log('controls', 'synced');
                 let controls = session.controls;
                 this.updateControls(controls, true, false, true);
             }
             if ('displays' in session) {
-                HC.log('displays', 'synced');
+                Logger.log('displays', 'synced');
                 let displays = session.displays;
                 this.updateDisplays(displays, true, false, true);
             }
             if ('sources' in session) {
-                HC.log('sources', 'synced');
+                Logger.log('sources', 'synced');
                 let sources = session.sources;
                 this.updateSources(sources, true, false, true);
             }
             if ('settings' in session) {
-                HC.log('settings', 'synced');
+                Logger.log('settings', 'synced');
                 let settings = session.settings;
                 for (let layer in settings) {
                     this.updateSettings(layer, settings[layer], true, false, true);
@@ -482,7 +483,7 @@ class Controller extends Program {
     updateControl(item, value, display, forward, force) {
 
         if (typeof value !== 'object') {
-            HC.log(item, value);
+            Logger.log(item, value);
             this.explainPlugin(item, value, HC);
         }
 
@@ -500,7 +501,7 @@ class Controller extends Program {
         if (item === 'layer') {
             this.updateSettings(value, this.settingsManager.prepareLayer(value), true, false, true);
             this.presetMan.setSelected(value+1, true);
-            HC.log(item, value+1);
+            Logger.log(item, value+1);
 
             this.config.DataStatus.selected_layer = value+1;
 
@@ -542,7 +543,7 @@ class Controller extends Program {
     updateDisplay(item, value, display, forward, force) {
 
         if (typeof value !== 'object') {
-            HC.log(item, value);
+            Logger.log(item, value);
             // this.explainPlugin(item, value);
         }
 
@@ -574,7 +575,7 @@ class Controller extends Program {
     updateSource(item, value, display, forward, force) {
 
         if (typeof value !== 'object') {
-            HC.log(item, value);
+            Logger.log(item, value);
             // this.explainPlugin(item, value);
         }
 
@@ -742,7 +743,7 @@ class Controller extends Program {
             }
 
             calls.push((_synced) => {
-                HC.log('layer', 1);
+                Logger.log('layer', 1);
                 this.updateControl('layer', 0, true, true, false);
                 _synced();
             });
@@ -790,7 +791,7 @@ class Controller extends Program {
         this.settingsManager.update(layer, 'passes', 'shaders', []);
         let data = this.settingsManager.get(layer, 'passes').prepare();
         this.updateSettings(layer, data, false, false, true);
-        HC.log('reset_shader', layer+1);
+        Logger.log('reset_shader', layer+1);
         Messaging.emitSettings(layer, data, false, false, true, callback);
     }
 
@@ -821,7 +822,7 @@ class Controller extends Program {
         let settings = this.settingsManager.prepareLayer(layer);
 
         if (settings) {
-            HC.log('sync_layer', layer+1);
+            Logger.log('sync_layer', layer+1);
             Messaging.emitSettings(layer, settings, true, false, true, callback);
 
         } else if (callback) {

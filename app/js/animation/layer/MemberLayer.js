@@ -44,7 +44,7 @@ class Layer extends _Layer {
      * @param x
      * @param y
      * @param z
-     * @returns {*|HC.Shape.rotation|number|UniformsLib.sprite.rotation|{value}|rotation}
+     * @return {*}
      */
     rotation(x, y, z) {
         if (x !== undefined) {

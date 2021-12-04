@@ -5,6 +5,7 @@
 import {Controller} from "./controller/EventController";
 import {Messaging} from "./lib/Messaging";
 import {Config} from "./lib/Config";
+import {Logger} from "./shared/Logger";
 
 /**
  *
@@ -21,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.querySelector('iframe.monitor').setAttribute('src', 'monitor.html#' + Messaging.sid);
         }, 1500);
 
-        HC.log(controller.name, 'connected', true, true);
+        Logger.log(controller.name, 'connected', true, true);
 
         if (!reconnect) {
             config.loadConfig(function (config) {

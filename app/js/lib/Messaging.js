@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {TimeoutManager} from "../manager/TimeoutManager";
+import {Logger} from "../shared/Logger";
 
 class Messaging {
     static program;
@@ -74,7 +75,7 @@ class Messaging {
      * @param callback
      */
     static connect(callback) {
-        HC.log(this.program.name, 'connecting...', true);
+        Logger.log(this.program.name, 'connecting...', true);
         this.socket = io.connect(null, {'secure': true, 'forceNew': true});
 
         this.initEvents();
@@ -212,7 +213,7 @@ class Messaging {
      */
     static onLog(data) {
 
-        HC.log(data.key, data.value);
+        Logger.log(data.key, data.value);
     }
 
     /**
@@ -391,7 +392,7 @@ class Messaging {
 
         this.program.ready = true;
 
-        HC.log(this.program.name, 'syncing...', true);
+        Logger.log(this.program.name, 'syncing...', true);
 
         let data = {
             sid: this.sid,

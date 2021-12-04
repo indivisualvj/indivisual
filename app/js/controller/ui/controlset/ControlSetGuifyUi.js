@@ -3,6 +3,7 @@
  */
 import {Messaging} from "../../../lib/Messaging";
 import {ControlSetUi} from "./ControlSetUi";
+import {Logger} from "../../../shared/Logger";
 
 
 class ControlSetGuifyUi extends ControlSetUi {
@@ -223,7 +224,7 @@ class ControlSetGuifyUi extends ControlSetUi {
 
         Messaging.program.updateSetting(undefined, data, true, true, false);
 
-        HC.log(set + '/' + that.getProperty(), value);
+        Logger.log(set + '/' + that.getProperty(), value);
 
     }
 }

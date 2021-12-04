@@ -10,7 +10,7 @@ class Layer extends _Layer {
      *
      * @param index
      * @param dummy
-     * @returns {HC.Shape}
+     * @returns {Shape}
      */
     nextShape(index, dummy) {
         let mesh = dummy

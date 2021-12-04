@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
+import {Logger} from "../shared/Logger";
+
 class ScriptProcessor {
 
     /**
@@ -116,16 +118,16 @@ class ScriptProcessor {
      */
     log() {
 
-        HC.clearLog();
-        HC.log(HC.logGetRed('tutorial'), this.key);
+        Logger.clear();
+        Logger.log(Logger.getRed('tutorial'), this.key);
 
         for (let i in this.desc) {
             let d = this.desc[i];
 
-            HC.log(HC.logGetRed(i), HC.logGetYellow(d.text));
+            Logger.log(Logger.getRed(i), Logger.getYellow(d.text));
 
             if (d.action) {
-                HC.logFunction('>>let\'s do it!<<', d.action);
+                Logger.function('>>let\'s do it!<<', d.action);
             }
         }
     }

@@ -13,6 +13,7 @@ import {SourceManager} from "../manager/SourceManager";
 import {EventManager} from "../manager/EventManager";
 import {Messaging} from "../lib/Messaging";
 import {Monitor} from "../shared/Monitor";
+import {Logger} from "../shared/Logger";
 
 class Animation extends Program {
     /**
@@ -404,19 +405,19 @@ class Animation extends Program {
         let callback = (session) => {
 
             if ('displays' in session) {
-                HC.log('displays', 'synced');
+                Logger.log('displays', 'synced');
                 let displays = session.displays;
                 this.updateDisplays(displays, true, false, true);
             }
 
             if ('sources' in session) {
-                HC.log('sources', 'synced');
+                Logger.log('sources', 'synced');
                 let sources = session.sources;
                 this.updateSources(sources, true, false, true);
             }
 
             if ('settings' in session) {
-                HC.log('settings', 'synced');
+                Logger.log('settings', 'synced');
                 let settings = session.settings;
 
                 for (let k in settings) {
@@ -425,7 +426,7 @@ class Animation extends Program {
             }
 
             if ('controls' in session) {
-                HC.log('controls', 'synced');
+                Logger.log('controls', 'synced');
                 let controls = session.controls;
                 this.updateControls(controls, true, false, true);
             }
@@ -433,7 +434,7 @@ class Animation extends Program {
             this.sourceManager.updateSources();
             this.reset();
 
-            if (IS_MONITOR) {
+            if (IS_MONITOR) { // todo: does not belong in load session i guess
                 this.monitor = new Monitor();
                 this.monitor.init(this.config, () => {
                     this.displayManager.updateDisplay(0);
@@ -796,7 +797,7 @@ class Animation extends Program {
     initSuperGau() {
         EventManager.register(EVENT_WEBGL_CONTEXT_LOST, this.name, () => {
             // now reset...
-            HC.log('HC.Renderer', 'another context loss...', true, true);
+            Logger.log('HC.Renderer', 'another context loss...', true, true);
 
             for (let i = 0; i < this.config.SourceValues.sample.length; i++) {
                 this.updateSource(getSampleKey(i), false, true, true, false);

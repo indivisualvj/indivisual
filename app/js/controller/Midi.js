@@ -251,13 +251,13 @@ class Midi {
                         }
                     }
                 } else {
-                    HC.log('midi_miss', this.data);
+                    Logger.log('midi_miss', this.data);
                 }
             } else {
-                HC.log('midi_miss', this.data);
+                Logger.log('midi_miss', this.data);
             }
         } else {
-            HC.log('midi_miss', this.data);
+            Logger.log('midi_miss', this.data);
         }
     }
 

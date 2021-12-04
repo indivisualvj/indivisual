@@ -307,11 +307,11 @@ class AudioAnalyser {
     fakeVolume(speeds) {
         let v = 0;
         let i = 0;
-        let m = HC.Osci.sinInOut(speeds['quarter'].prc) / 2.2;
+        let m = this._sinus(speeds['quarter'].prc) / 2.2;
         for (let k in speeds) {
             let prc = speeds[k].prc * 600;
             let w = m / ++i;
-            v += w * HC.Osci.sinInOut(prc);
+            v += w * this._sinus(prc);
         }
 
         let last = this.volume || .1;
@@ -319,6 +319,13 @@ class AudioAnalyser {
         v = Math.max(v, last - reduce);
         this.volume = v;
         this.volumes = [this.volume];
+    }
+
+    _sinus(prc) {
+        let p = Math.PI * 2 * prc;
+        p = Math.sin(p);
+
+        return p / 2 + .5;
     }
 
     /**

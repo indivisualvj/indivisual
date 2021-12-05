@@ -1,1 +1,1 @@
-import {ControlSet, IterableControlSet} from "../../../shared/ControlSet";
+import {ControlSet, IterableControlSet} from "../../../js/shared/ControlSet";

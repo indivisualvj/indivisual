@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {ModulePlugin} from "../../shared/ModulePlugin";
+import {ModulePlugin} from "../../js/shared/ModulePlugin";
 
 class AudioPlugin extends ModulePlugin
 {

@@ -5,6 +5,7 @@
 import {EventManager} from "./EventManager";
 import {Display} from "../animation/Display";
 import {TimeoutManager} from "./TimeoutManager";
+import {PluginManager} from "./PluginManager";
 
 class DisplayManager {
 
@@ -69,6 +70,7 @@ class DisplayManager {
         this.maptastic = this.initMaptastic();
         this.cliptastic = this.initCliptastic();
 
+        PluginManager.bootPlugins(DisplayManager.plugins, this, config);
         this.initBorderModePlugins();
         this.initVisibilityModePlugins();
         this.initEvents();
@@ -78,12 +80,9 @@ class DisplayManager {
      *
      */
     initBorderModePlugins() {
-        for (let k in DisplayManager.plugins.border_mode) {
-            let plugin = DisplayManager.plugins.border_mode[k];
-            plugin = new plugin(this);
-            DisplayManager.plugins.border_mode[k] = plugin;
+        PluginManager.instantiatePlugins(this, DisplayManager.plugins.border_mode, {}, (plugin) => {
             plugin.init(DisplayManager.plugins.border_mode);
-        }
+        });
     }
 
 
@@ -91,12 +90,9 @@ class DisplayManager {
      *
      */
     initVisibilityModePlugins() {
-        for (let k in DisplayManager.plugins.display_visibility) {
-            let plugin = DisplayManager.plugins.display_visibility[k];
-            plugin = new plugin(this);
-            DisplayManager.plugins.display_visibility[k] = plugin;
+        PluginManager.instantiatePlugins(this, DisplayManager.plugins.display_visibility, {}, (plugin) => {
             plugin.init(DisplayManager.plugins.display_visibility);
-        }
+        });
     }
 
     /**

@@ -6,6 +6,8 @@ class Sequence extends DisplaySourcePlugin
 {
     static index = 10;
 
+    _index;
+
     /**
      *
      * @type {string}
@@ -92,11 +94,11 @@ class Sequence extends DisplaySourcePlugin
     /**
      *
      * @param sourceManager
-     * @param eventManager
+     * @param config
      */
-    static initListeners(sourceManager, eventManager) { // todo: this is boot() now
+    static boot(sourceManager, config) {
         if (!IS_CONTROLLER) {
-            eventManager.register(EVENT_SOURCE_SETTING_CHANGED, 'sequence', (data) => {
+            config.getEventManager().register(EVENT_SOURCE_SETTING_CHANGED, 'sequence', (data) => {
                 let item = data[0];
                 let display = data[2];
 
@@ -119,9 +121,7 @@ class Sequence extends DisplaySourcePlugin
      * @param index
      */
     init(index) {
-        this.index = index;
-        // todo: rename it to not use the static index property
-        //      or rename the sorting index property to sort/priority etc.
+        this._index = index;
         this.id = this.type + index;
         this.canvas = new OffscreenCanvas(1, 1);
         this.canvas.id = this.id;
@@ -138,6 +138,10 @@ class Sequence extends DisplaySourcePlugin
         this.peak = 1;
         this.oscillators = {};
         this.loadOscillators();
+    }
+
+    getIndex() {
+        return this._index;
     }
 
     /**
@@ -216,7 +220,7 @@ class Sequence extends DisplaySourcePlugin
                 type[2] = round(this.sample.frameCount / 50, 0); // precision
 
                 // controller needs to know...
-                this._emitSourceType(getSequenceStartKey(this.index), getSequenceEndKey(this.index), type, type);
+                this._emitSourceType(getSequenceStartKey(this.getIndex()), getSequenceEndKey(this.getIndex()), type, type);
 
             } else {
                 this.config.getEventManager().register(EVENT_SAMPLE_READY, this.id, (target) => {
@@ -230,12 +234,12 @@ class Sequence extends DisplaySourcePlugin
 
         this.config.getEventManager().register(EVENT_SAMPLE_STATUS_CHANGED, this.id, (target) => {
             if (this.sample && this.sample.id === target.id) {
-                this.animation.updateSource(getSequenceSampleKey(this.index), 'off', true, true);
+                this.animation.updateSource(getSequenceSampleKey(this.getIndex()), 'off', true, true);
             }
         });
 
-        this.animation.updateSource(getSequenceStartKey(this.index), 0, false, true);
-        this.animation.updateSource(getSequenceEndKey(this.index), type[1], true, true);
+        this.animation.updateSource(getSequenceStartKey(this.getIndex()), 0, false, true);
+        this.animation.updateSource(getSequenceEndKey(this.getIndex()), type[1], true, true);
     }
 
     _emitSourceType(startKey, endKey, start, end) {

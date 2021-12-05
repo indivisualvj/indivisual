@@ -297,7 +297,7 @@ class AssetManager {
      * @param callback
      * @param error
      */
-    static loadMaterialMap(target, path, callback, error) { // todo: materialloader?
+    static loadMaterialMap(target, path, callback, error) {
         let inst = this;
         let _assign = function (to, from) {
             let keys = Object.keys(from);

@@ -16,35 +16,99 @@ import {Renderer} from "../animation/Renderer";
 import {DisplayManager} from "./DisplayManager";
 import {SourceManager} from "./SourceManager";
 import {LayeredControlSetManager} from "./LayeredControlSetManager";
+import {Logger} from "../shared/Logger";
 
 class PluginManager
 {
+    /**
+     *
+     * @param plugins
+     * @param initiator
+     * @param config
+     */
+    static bootPlugins(plugins, initiator, config) {
+        for (let s in plugins) {
+            let subset = plugins[s];
+            for (let p in subset) {
+                subset[p].boot(initiator, config);
+                // Logger.log(s + '.' + p, 'booted');
+            }
+        }
+    }
 
+    /**
+     *
+     * @param initiator
+     * @param plugins
+     * @param settings
+     * @param hook
+     */
+    static instantiatePlugins(initiator, plugins, settings, hook) {
+        for (let k in plugins) {
+            let plugin = plugins[k];
+            plugin = new plugin(initiator, settings);
+            plugins[k] = plugin;
+            if (hook) {
+                hook(plugin);
+            }
+            // Logger.log(k, 'instantiated');
+        }
+    }
+
+    /**
+     *
+     * @param settings
+     * @param config
+     */
     static assignAudioPlugins(settings, config) {
         AudioManager.plugins = AudioManager.plugins || {};
         this._assignPlugins(settings, 'audio', AudioPlugins, AudioManager.plugins, config);
     }
 
+    /**
+     *
+     * @param settings
+     * @param config
+     */
     static assignShuffleModePlugins(settings, config) {
         Renderer.plugins = Renderer.plugins || {};
         this._assignPlugins(settings, 'shuffle_mode', ShuffleModePlugins, Renderer.plugins, config);
     }
 
+    /**
+     *
+     * @param settings
+     * @param config
+     */
     static assignDisplayVisibilityPlugins(settings, config) {
         DisplayManager.plugins = DisplayManager.plugins || {};
         this._assignPlugins(settings, 'display_visibility', DisplayVisibilityPlugins, DisplayManager.plugins, config);
     }
 
+    /**
+     *
+     * @param settings
+     * @param config
+     */
     static assignBorderModePlugins(settings, config) {
         DisplayManager.plugins = DisplayManager.plugins || {};
         this._assignPlugins(settings, 'border_mode', BorderModePlugins, DisplayManager.plugins, config);
     }
 
+    /**
+     *
+     * @param settings
+     * @param config
+     */
     static assignDisplaySourcePlugins(settings, config) {
         SourceManager.plugins = SourceManager.plugins || {};
         this._assignPlugins(settings, 'display_source', DisplaySourcePlugins, SourceManager.plugins, config);
     }
 
+    /**
+     *
+     * @param target
+     */
     static assignControlSets(target) {
         LayeredControlSetManager.plugins = { control_set: {} };
 
@@ -64,14 +128,26 @@ class PluginManager
         }
     }
 
+    /**
+     *
+     * @return {{session?: session, controls?: controls}}
+     */
     static getControlSets() {
         return ControlControlSets;
     }
 
+    /**
+     *
+     * @return {{override?: override, sequenceN?: sequenceN, sample?: sample, source?: source}}
+     */
     static getSourceSets() {
         return SourceControlSets;
     }
 
+    /**
+     *
+     * @return {{displays?: {}, video?: {}}}
+     */
     static getDisplaySets() {
         return DisplayControlSets;
     }
@@ -88,6 +164,8 @@ class PluginManager
      * @private
      */
     static _assignPlugins(settings, section, plugins, target, config) {
+
+        Logger.log('assign', section);
 
         let pluginKeys = Object.keys(plugins);
 
@@ -110,8 +188,6 @@ class PluginManager
 
             target[section][pluginKey] = plugin;
             settings[section][pluginKey] = name.toLowerCase();
-            plugin.boot(this, config);
-
         }
     }
 

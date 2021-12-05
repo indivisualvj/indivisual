@@ -36,7 +36,7 @@ function _importApp(namespace, dir, cname) {
 
 function _import(namespace, path, cname) {
     if (window[namespace] && (!(cname in window[namespace]) || (typeof window[namespace][cname]) === 'function')) {
-        console.log(cname);
+        // console.log(cname);
         let script = document.createElement('script');
         script.type = 'text/javascript';
         script.src = `/${path}/${cname}`

@@ -67,7 +67,7 @@ class MediaFile extends AudioPlugin {
         }
     }
 
-    static boot(pluginManager, config) {
+    static boot(initiator, config) {
         if (IS_ANIMATION) {
             console.log('MediaFile', 'adding events for playback on media file drop');
             document.addEventListener('dragover', function (e) {
@@ -79,7 +79,7 @@ class MediaFile extends AudioPlugin {
 
                 if (e.dataTransfer.files.length) {
                     MediaFile.dropEvent = e;
-                    config.getMessaging().program.updateControl('audio', 'mediafile', true, true, false);
+                    config.getMessaging().program.updateControl('audio', 'media_file', true, true, false);
                 }
             };
 

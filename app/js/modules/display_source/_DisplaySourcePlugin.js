@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {ModulePlugin} from "../../js/shared/ModulePlugin";
+import {ModulePlugin} from "../../js/shared/ModulePlugin"; // fixme: try to parse in server.js instead of having ugly here
 
 class DisplaySourcePlugin extends ModulePlugin {
 

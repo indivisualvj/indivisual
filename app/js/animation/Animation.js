@@ -64,9 +64,10 @@ class Animation extends Program {
      */
     init(config) {
         this.config = config;
-        this.audioManager = new AudioManager();
+        this.audioManager = new AudioManager(config);
         this.audioAnalyser = new AudioAnalyser(this);
         this.beatKeeper = new BeatKeeper(() => {return this.now;}, config);
+        // fixme why not hold in config like all the other settings?
         this.settingsManager = new LayeredControlSetManager(config.AnimationValues, config);
 
         let renderer = new Renderer(this, {

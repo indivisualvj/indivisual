@@ -1,7 +1,8 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-
+//fixme: do import Root Plugins and remove duplicates from source in server.js to make it hübsch here
+//       or maybe we can avoid it at all by doing things like const plugins = {}, foreach(files)plugins[fkey] = await import(file);
 class Random extends DisplayVisibilityPlugin {
 
     static name = 'random';

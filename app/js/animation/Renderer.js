@@ -5,6 +5,7 @@
 import {EventManager} from "../manager/EventManager";
 import {LayeredControlSetManager} from "../manager/LayeredControlSetManager";
 import {Layer} from "./layer/ShapeLayer";
+import {PluginManager} from "../manager/PluginManager";
 
 class Renderer {
 
@@ -78,6 +79,8 @@ class Renderer {
 
         this._initThreeJs();
         this.initEvents();
+        PluginManager.bootPlugins(Renderer.plugins, this, this.config);
+        this.initShuffleModePlugins();
     }
 
     /**
@@ -213,7 +216,7 @@ class Renderer {
      * @private
      */
     _setLayer(index) {
-// todo: set layer event to set all necessary layers after loadpresets or reset etc. pp.
+// todo: "EVENT_SET_LAYER" to set all necessary layers after loadpresets or reset etc. pp.
         for (let i in this.layers) {
             i = parseInt(i);
             let layer = this.layers[i];
@@ -386,21 +389,21 @@ class Renderer {
 
     /**
      *
+     */
+    initShuffleModePlugins() {
+        PluginManager.instantiatePlugins(this, Renderer.plugins.shuffle_mode, this.config.ControlSettings);
+    }
+
+    /**
+     *
      * @param name
      * @returns {*}
      * @private
      */
     _getShuffleModePlugin(name) {
-        if (!this.plugins) {
-            this.plugins = {};
-        }
         name = name || this.config.ControlSettings.shuffle_mode;
 
-        if (!this.plugins[name]) {
-            this.plugins[name] = new Renderer.plugins.shuffle_mode[name](this, this.config.ControlSettings);
-        }
-
-        return this.plugins[name];
+        return Renderer.plugins.shuffle_mode[name];
     }
 
 

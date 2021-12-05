@@ -28,7 +28,7 @@ class ForwardPeak extends ShuffleModePlugin {
         }
     }
 
-    static boot(pluginManager, config) {
+    static boot(initiator, config) {
         config.getEventManager().register(EVENT_AUDIO_PEAK, this.objectName, () => {
             ForwardPeak.peaks++;
         });

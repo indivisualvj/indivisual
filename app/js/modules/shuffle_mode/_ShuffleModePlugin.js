@@ -70,7 +70,7 @@ class ShuffleModePlugin extends ModulePlugin
     }
 
     validate(i) {
-        if (this.config.shuffleable(i + 1) && !this.renderer.animation.settingsManager.isDefault(i)) {
+        if (this.config.shuffleable(i + 1) && !this.config.getProgram().settingsManager.isDefault(i)) {
             // alright!
             return true;
         }

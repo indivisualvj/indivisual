@@ -5,6 +5,7 @@
 import {EventManager} from "./EventManager";
 import {Clip, Sample} from "../shared/Sample";
 import {Messaging} from "../shared/Messaging";
+import {PluginManager} from "./PluginManager";
 
 class SourceManager {
 
@@ -65,19 +66,10 @@ class SourceManager {
         this.config = options.config;
         this.samples = options.sample;
 
-        this.initPlugins();
+        PluginManager.bootPlugins(SourceManager.plugins, this, this.config);
 
         this.storeWorker = new Worker('worker/store-sample.worker.js');
         this.loadWorker = new Worker('worker/load-sample.worker.js');
-    }
-
-    /**
-     *
-     */
-    initPlugins() {
-        for (let p in SourceManager.plugins.display_source) {
-            SourceManager.plugins.display_source[p].initListeners(this, EventManager);
-        }
     }
 
     /**

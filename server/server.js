@@ -433,7 +433,7 @@ class Server
         });
 
         /**
-         * fixme: imports from within plugins do double load resources
+         * fixme: imports from within plugins do double load resources (static values issue)
          */
         this.app.get('/app/*/*', (req, res) => {
             let url = req.originalUrl.replace('/app', 'app/js') + '.js';

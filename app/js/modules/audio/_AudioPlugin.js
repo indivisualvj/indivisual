@@ -1,4 +1,10 @@
-class AudioPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ModulePlugin} from "../../shared/ModulePlugin";
+
+class AudioPlugin extends ModulePlugin
+{
 
     static index = -1;
 
@@ -16,6 +22,7 @@ class AudioPlugin {
      * @param {AudioManager} manager
      */
     constructor(manager) {
+        super();
         this.manager = manager;
     }
 

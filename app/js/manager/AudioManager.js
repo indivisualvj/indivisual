@@ -4,6 +4,8 @@
 
 class AudioManager
 {
+    static plugins;
+
     /**
      *
      * @param name

@@ -1,8 +1,10 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {ModulePlugin} from "../../shared/ModulePlugin";
 
-class ShuffleModePlugin {
+class ShuffleModePlugin extends ModulePlugin
+{
     static index = -1;
     settings;
     layer = 0;
@@ -28,6 +30,7 @@ class ShuffleModePlugin {
      * @param settings
      */
     constructor(renderer, settings) {
+        super();
         this.renderer = renderer;
         this.config = renderer.config;
         this.beatKeeper = renderer.beatKeeper;

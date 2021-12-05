@@ -4,8 +4,11 @@
 
 import * as AudioPlugins from "../modules/audio.js"
 import * as ShuffleModePlugins from "../modules/shuffle_mode.js";
+import * as DisplayVisibilityPlugins from "../modules/display_visibility.js";
 import {AudioManager} from "./AudioManager";
 import {Renderer} from "../animation/Renderer";
+import {DisplayManager} from "./DisplayManager";
+import {ModulePlugin} from "../shared/ModulePlugin";
 
 class PluginManager
 {
@@ -18,6 +21,11 @@ class PluginManager
     static assignShuffleModePlugins(settings, config) {
         Renderer.plugins = {};
         this._assignPlugins(settings, 'shuffle_mode', ShuffleModePlugins, Renderer.plugins, config);
+    }
+
+    static assignDisplayVisibilityPlugins(settings, config) {
+        DisplayManager.plugins = {};
+        this._assignPlugins(settings, 'display_visibility', DisplayVisibilityPlugins, DisplayManager.plugins, config);
     }
 
     /**
@@ -40,6 +48,8 @@ class PluginManager
             let pluginKey = pluginKeys[i];
             let plugin = plugins[pluginKey];
             pluginKey = pluginKey.toLowerCase();
+
+            console.log(pluginKey, plugin, (plugin instanceof ModulePlugin));
 
             if (plugin.index === -1) {
                 continue;

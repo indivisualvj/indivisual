@@ -8,6 +8,8 @@ import {TimeoutManager} from "./TimeoutManager";
 
 class DisplayManager {
 
+    static plugins;
+
     settings = {
         visibility: {
             index: 0,
@@ -89,10 +91,10 @@ class DisplayManager {
      *
      */
     initVisibilityModePlugins() {
-        for (let k in HC.Display.display_visibility) {
-            let plugin = HC.Display.display_visibility[k];
+        for (let k in DisplayManager.plugins.display_visibility) {
+            let plugin = DisplayManager.plugins.display_visibility[k];
             plugin = new plugin(this);
-            HC.Display.display_visibility[k] = plugin;
+            DisplayManager.plugins.display_visibility[k] = plugin;
             plugin.init();
         }
     }
@@ -470,7 +472,7 @@ class DisplayManager {
     }
 
     doDisplayVisibility(display, index) {
-        let plugin = HC.Display.display_visibility[this.config.DisplaySettings.display_visibility];
+        let plugin = DisplayManager.plugins.display_visibility[this.config.DisplaySettings.display_visibility];
 
         if (plugin.before(display)) {
             plugin.apply(display);

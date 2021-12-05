@@ -8,6 +8,8 @@ import {Layer} from "./layer/ShapeLayer";
 
 class Renderer {
 
+    static plugins;
+
     /**
      * @type {Array}
      */

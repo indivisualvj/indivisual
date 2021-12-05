@@ -385,7 +385,7 @@ class Config {
      * @private
      */
     _loadDisplayVisibilityPlugins(settings) {
-        this._loadPlugins(settings, 'display_visibility', HC.Display.display_visibility);
+        PluginManager.assignDisplayVisibilityPlugins(settings);
     }
 
     /**

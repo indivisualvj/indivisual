@@ -40,7 +40,7 @@ class Config {
     /**
      * @type {Program}
      */
-    program;
+    _program;
 
     config = [
         {
@@ -160,7 +160,7 @@ class Config {
                 let cubes = AssetManager.addCubes(files, 'name');
                 // add cubes into AnimationValues by name
                 for (let i in cubes) {
-                    this.AnimationValues.background_input[i] = name = i + '.cube';
+                    this.AnimationValues.background_input[i] = i + '.cube';
                 }
 
                 finished();
@@ -173,9 +173,16 @@ class Config {
      * @param program{Program}
      */
     constructor(program) {
-        this.program = program;
+        this._program = program;
     }
 
+    /**
+     *
+     * @return {Program}
+     */
+    getProgram() {
+        return this._program;
+    }
 
     /**
      *
@@ -269,7 +276,7 @@ class Config {
             let group = HC.DisplayController[cs];
             for (let s in group) {
                 let set = group[s];
-                let inst = new set(s, this, this.program);
+                let inst = new set(s, this);
                 inst.init(this.DisplayValues);
                 instances[cs + '.' + s] = inst;
             }
@@ -298,7 +305,7 @@ class Config {
 
         for (let cs in tree) {
             let set = tree[cs];
-            let inst = new set(cs, this, this.program);
+            let inst = new set(cs, this);
             inst.init(values);
             instances[cs] = inst;
         }
@@ -407,7 +414,6 @@ class Config {
      * @private
      */
     _loadDisplaySourcePlugins(settings) {
-        // Object.assign(HC.plugins.override_background_mode, HC.plugins.override_material_input); // fixme: solution?
         PluginManager.assignDisplaySourcePlugins(settings, this);
     }
 

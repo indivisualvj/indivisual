@@ -165,7 +165,7 @@ class SourceManager {
      * @returns {DisplaySourcePlugin}
      */
     getSequence(i) {
-        if (i instanceof HC.DisplaySourcePlugin) {
+        if (isObject(i)) {
             return i;
         }
 

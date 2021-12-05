@@ -67,7 +67,7 @@ class Animation extends Program {
         this.audioManager = new AudioManager();
         this.audioAnalyser = new AudioAnalyser(this);
         this.beatKeeper = new BeatKeeper(() => {return this.now;}, config);
-        this.settingsManager = new LayeredControlSetManager(config.AnimationValues, this, config);
+        this.settingsManager = new LayeredControlSetManager(config.AnimationValues, config);
 
         let renderer = new Renderer(this, {
             layers: new Array(config.ControlValues.layers)

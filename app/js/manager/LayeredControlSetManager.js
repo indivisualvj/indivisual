@@ -36,19 +36,18 @@ class LayeredControlSetManager
      */
     globalProperties;
 
-    static program;
-
+    /**
+     * @type {Config}
+     */
     static config;
 
     /**
      *
      * @param pluggedValues
-     * @param program{Program}
      * @param config{Config}
      */
-    constructor(pluggedValues, program, config) {
+    constructor(pluggedValues, config) {
         this.pluggedValues = pluggedValues;
-        LayeredControlSetManager.program = program;
         LayeredControlSetManager.config = config;
     }
 
@@ -340,8 +339,8 @@ class LayeredControlSetManager
      */
     static initAll(pluggedValues) {
         let controlSets = {};
-        for (let key in Messaging.program.config.ControlSets) { // statics.ControlSets SORTED
-            let cs = new HC.control_set[key](key, LayeredControlSetManager.config, LayeredControlSetManager.program);
+        for (let key in LayeredControlSetManager.config.ControlSets) { // statics.ControlSets SORTED
+            let cs = new HC.control_set[key](key, LayeredControlSetManager.config);
             cs.init(pluggedValues);
 
             controlSets[key] = cs;

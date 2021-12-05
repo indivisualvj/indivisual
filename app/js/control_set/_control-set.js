@@ -105,12 +105,11 @@ HC.control_set = HC.control_set || {};
          *
          * @param name
          * @param {Config}config
-         * @param {Program}program
          */
-        constructor(name, config, program) { // fixme: inject program
+        constructor(name, config) {
             this._className = name;
             this.config = config;
-            this.program = program;
+            this.program = config.getProgram();
 
             if (!this.constructor._name) {
                 this._name = name;

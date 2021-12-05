@@ -67,7 +67,7 @@ class Animation extends Program {
         this.audioManager = new AudioManager();
         this.audioAnalyser = new AudioAnalyser(this);
         this.beatKeeper = new BeatKeeper(() => {return this.now;}, config);
-        this.settingsManager = new LayeredControlSetManager(config.AnimationValues);
+        this.settingsManager = new LayeredControlSetManager(config.AnimationValues, this, config);
 
         let renderer = new Renderer(this, {
             layers: new Array(config.ControlValues.layers)
@@ -286,7 +286,7 @@ class Animation extends Program {
     }
 
     /**
-     *
+     * // todo: autoGain
      */
     autoVolume() {
         let gain = 0;

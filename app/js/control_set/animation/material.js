@@ -16,11 +16,11 @@
                     switch (key) {
                         case 'mesh_material':
                         case 'material_mapping':
-                            this.eventManager.fireEventId(EVENT_LAYER_RESET_SHAPES, id, context);
+                            this.config.getEventManager().fireEventId(EVENT_LAYER_RESET_SHAPES, id, context);
                             break;
 
                         default:
-                            this.eventManager.fireEventId(EVENT_SHAPE_MATERIALS_UPDATE, id, context);
+                            this.config.getEventManager().fireEventId(EVENT_SHAPE_MATERIALS_UPDATE, id, context);
                             break;
                     }
                 }

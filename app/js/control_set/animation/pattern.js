@@ -15,11 +15,11 @@
                     let id = isObject(context) ? context.index : context;
                     switch (key) {
                         case 'pattern_shapes':
-                            this.eventManager.fireEventId(EVENT_LAYER_RESET, id, context, SKIP_TEN_FRAMES);
+                            this.config.getEventManager().fireEventId(EVENT_LAYER_RESET, id, context, SKIP_TEN_FRAMES);
                             break;
                         case 'pattern':
                         case 'pattern_mover':
-                            this.eventManager.fireEventId(EVENT_LAYER_RESET_SHAPES, id, context, SKIP_TEN_FRAMES);
+                            this.config.getEventManager().fireEventId(EVENT_LAYER_RESET_SHAPES, id, context, SKIP_TEN_FRAMES);
                             break;
                     }
                 }

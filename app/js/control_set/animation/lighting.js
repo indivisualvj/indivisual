@@ -17,13 +17,13 @@
                     switch (key) {
                         case 'lighting_type':
                         case 'lighting_color':
-                            this.eventManager.fireEventId(EVENT_LAYER_RESET_LIGHTING, id, context, SKIP_TEN_FRAMES);
+                            this.config.getEventManager().fireEventId(EVENT_LAYER_RESET_LIGHTING, id, context, SKIP_TEN_FRAMES);
                             break;
                         case 'lighting_ambient':
-                            this.eventManager.fireEventId(EVENT_LAYER_RESET_AMBIENT, id, context, SKIP_TEN_FRAMES);
+                            this.config.getEventManager().fireEventId(EVENT_LAYER_RESET_AMBIENT, id, context, SKIP_TEN_FRAMES);
                             break;
                         case 'lighting_fog':
-                            this.eventManager.fireEventId(EVENT_LAYER_RESET_FOG, id, context, SKIP_TEN_FRAMES);
+                            this.config.getEventManager().fireEventId(EVENT_LAYER_RESET_FOG, id, context, SKIP_TEN_FRAMES);
                             break;
 
                     }

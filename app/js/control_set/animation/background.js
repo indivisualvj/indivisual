@@ -15,7 +15,7 @@
                     switch (key) {
                         case 'background_wraps':
                         case 'background_wrapt':
-                            this.eventManager.fireEventId(EVENT_LAYER_RESET, id, context, SKIP_TEN_FRAMES);
+                            this.config.getEventManager().fireEventId(EVENT_LAYER_RESET, id, context, SKIP_TEN_FRAMES);
                             break;
                     }
                 }

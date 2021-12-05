@@ -47,8 +47,8 @@ HC.DisplayController = HC.DisplayController || {};
                         updates[key] = this.config.DisplaySettings[okey];
                     }
                 }
-                this.messaging.program.updateDisplays(updates, true, true, true);
-                this.messaging.emitDisplays(updates, true, false, true);
+                this.program.updateDisplays(updates, true, true, true);
+                this.config.getMessaging().emitDisplays(updates, true, false, true);
             },
             mask_reset: () => {
                 let updates = {};
@@ -60,8 +60,8 @@ HC.DisplayController = HC.DisplayController || {};
                         updates[key] = this.config.DisplaySettingsManager.get('video.displayN').getDefault(key);
                     }
                 }
-                this.messaging.program.updateDisplays(updates, true, true, true);
-                this.messaging.emitDisplays(updates, true, false, true);
+                this.program.updateDisplays(updates, true, true, true);
+                this.config.getMessaging().emitDisplays(updates, true, false, true);
             },
             auto: () => {
                 for (let i = 0; i < this.config.DisplayValues.display.length; i++) {
@@ -69,7 +69,7 @@ HC.DisplayController = HC.DisplayController || {};
                     key += '_mapping';
                     let data = {};
                     data[key] = '';
-                    this.messaging.emitDisplays(data, true, true, false);
+                    this.config.getMessaging().emitDisplays(data, true, true, false);
                 }
             },
             full: () => {
@@ -80,7 +80,7 @@ HC.DisplayController = HC.DisplayController || {};
                         key += '_' + 1;
                         let data = {};
                         data[key] = 1;
-                        this.messaging.emitDisplays(data, true, true, false);
+                        this.config.getMessaging().emitDisplays(data, true, true, false);
                     }
                 }
             },
@@ -92,7 +92,7 @@ HC.DisplayController = HC.DisplayController || {};
                         key += '_' + 2;
                         let data = {};
                         data[key] = 2;
-                        this.messaging.emitDisplays(data, true, true, false);
+                        this.config.getMessaging().emitDisplays(data, true, true, false);
                     }
                 }
             },
@@ -104,7 +104,7 @@ HC.DisplayController = HC.DisplayController || {};
                         key += '_' + 3;
                         let data = {};
                         data[key] = 3;
-                        this.messaging.emitDisplays(data, true, true, false);
+                        this.config.getMessaging().emitDisplays(data, true, true, false);
                     }
                 }
             }
@@ -252,7 +252,7 @@ HC.DisplayController = HC.DisplayController || {};
                         let _key = (key + '_' + factor);
                         let data = {};
                         data[_key] = factor;
-                        this.messaging.emitDisplays(data, true, true, false);
+                        this.config.getMessaging().emitDisplays(data, true, true, false);
                     };
                 };
 

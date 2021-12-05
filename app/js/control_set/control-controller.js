@@ -43,71 +43,71 @@ HC.ControlController = HC.ControlController || {};
                 if (HC.Hotkey.isPressed('shift') && HC.Hotkey.isPressed('ctrl')) {
                     let yes = confirm('Reset everything?');
                     if (yes) {
-                        this.messaging.program.fullReset();
+                        this.program.fullReset();
                     }
                 } else if (HC.Hotkey.isPressed('shift')) {
                     let _done = false;
-                    this.messaging.program.midi.loading(() => {
+                    this.program.midi.loading(() => {
                         return _done;
                     });
-                    this.messaging.program.resetLayers().finally(() => {
+                    this.program.resetLayers().finally(() => {
                         _done = true;
                     });
 
                 } else {
-                    this.messaging.program.updateControl('reset', true, true, true, false);
+                    this.program.updateControl('reset', true, true, true, false);
                 }
             },
 
             preview: false,
             push_layers: () => {
-                this.messaging.program.pushLayers();
+                this.program.pushLayers();
             },
             push_sources: () => {
-                this.messaging.program.pushSources();
+                this.program.pushSources();
             },
             rst_shaders: () => {
-                this.messaging.program.resetShaders(HC.Hotkey.isPressed('shift')).finally(()=>{});
+                this.program.resetShaders(HC.Hotkey.isPressed('shift')).finally(()=>{});
             },
             enable_mic: () => {
-                this.messaging.program.updateControl('audio', 'microphone', true, true, false);
+                this.program.updateControl('audio', 'microphone', true, true, false);
             },
             reset_overrides: () => {
-                this.messaging.program.updateSource('override_material_input', 'none', true, true, false);
-                this.messaging.program.updateSource('override_background_mode', 'none', true, true, false);
+                this.program.updateSource('override_material_input', 'none', true, true, false);
+                this.program.updateSource('override_background_mode', 'none', true, true, false);
             },
             layout_close: () => {
-                this.messaging.program.closeAll();
+                this.program.closeAll();
             },
             layout_control: () => {
-                this.messaging.program.closeAll();
-                this.messaging.program.openTreeByPath('controls');
+                this.program.closeAll();
+                this.program.openTreeByPath('controls');
             },
             layout_display: () => {
-                this.messaging.program.closeAll();
-                this.messaging.program.openTreeByPath('displays/_general');
+                this.program.closeAll();
+                this.program.openTreeByPath('displays/_general');
             },
             layout_source: () => {
-                this.messaging.program.closeAll();
-                this.messaging.program.openTreeByPath('source');
+                this.program.closeAll();
+                this.program.openTreeByPath('source');
             },
             layout_override: () => {
-                this.messaging.program.closeAll();
-                this.messaging.program.openTreeByPath('override');
+                this.program.closeAll();
+                this.program.openTreeByPath('override');
             },
             layout_animation: () => {
-                this.messaging.program.closeAll();
-                let control = this.messaging.program.guis[3];
+                this.program.closeAll();
+                let control = this.program.guis[3];
                 control.setOpen(true);
             },
             layout_sequence: () => {
-                this.messaging.program.closeAll();
-                let control = this.messaging.program.guis[4];
-                this.messaging.program.openAll(control);
+                this.program.closeAll();
+                let control = this.program.guis[4];
+                this.program.openAll(control);
             },
             layout_presets: () => {
-                this.messaging.program.closeAll();
-                this.messaging.program.toggleByKey(5);
+                this.program.closeAll();
+                this.program.toggleByKey(5);
             },
             debug: false,
             tempo: 120.00,
@@ -209,13 +209,13 @@ HC.ControlController = HC.ControlController || {};
                 });
             },
             play: (inst) => { return new HC.Hotkey('space', (e) => {
-                this.messaging.program.updateControl('play', !this.config.ControlSettings.play, true, true, false);
+                this.program.updateControl('play', !this.config.ControlSettings.play, true, true, false);
             }, 'spc')},
             reset: (inst) => { return new HC.Hotkey('delete,shift+delete,ctrl+shift+delete', (e) => {
                 inst.settings.reset();
             }, 'del')},
             preview: (inst) => { return new HC.Hotkey('home', (e) => {
-                this.messaging.program.updateControl('preview', !this.config.ControlSettings.preview, true, true, false);
+                this.program.updateControl('preview', !this.config.ControlSettings.preview, true, true, false);
             }, 'hm')},
             push_layers: (inst) => { return new HC.Hotkey('end', (e) => {
                 inst.settings.push_layers();

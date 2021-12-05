@@ -102,7 +102,7 @@ class Controller extends Program {
     init(config, sets) {
         this.config = config;
 
-        this.settingsManager = new LayeredControlSetManager(config.AnimationValues);
+        this.settingsManager = new LayeredControlSetManager(config.AnimationValues, this, config);
         this.previewManager = new PreviewManager();
         this.previewManager.activate(false);
         this.midi = new Midi(this);

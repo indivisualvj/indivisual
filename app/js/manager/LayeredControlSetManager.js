@@ -4,8 +4,8 @@
 import {Messaging} from "../shared/Messaging";
 import {EventManager} from "./EventManager";
 
-class LayeredControlSetManager {
-
+class LayeredControlSetManager
+{
     /**
      *
      * @type {{}}
@@ -36,12 +36,20 @@ class LayeredControlSetManager {
      */
     globalProperties;
 
+    static program;
+
+    static config;
+
     /**
      *
      * @param pluggedValues
+     * @param program{Program}
+     * @param config{Config}
      */
-    constructor(pluggedValues) {
+    constructor(pluggedValues, program, config) {
         this.pluggedValues = pluggedValues;
+        LayeredControlSetManager.program = program;
+        LayeredControlSetManager.config = config;
     }
 
     /**
@@ -333,7 +341,7 @@ class LayeredControlSetManager {
     static initAll(pluggedValues) {
         let controlSets = {};
         for (let key in Messaging.program.config.ControlSets) { // statics.ControlSets SORTED
-            let cs = new HC.control_set[key](key, null, Messaging, EventManager);
+            let cs = new HC.control_set[key](key, LayeredControlSetManager.config, LayeredControlSetManager.program);
             cs.init(pluggedValues);
 
             controlSets[key] = cs;
@@ -357,9 +365,6 @@ class LayeredControlSetManager {
                     if (prop + '_oscillate' in settings) {
                         oscis.push(prop);
                     }
-                    // if (prop.endsWith('_oscillate')) {
-                    //     oscis.push(prop.replace('_oscillate', ''));
-                    // }
                 }
             }
 

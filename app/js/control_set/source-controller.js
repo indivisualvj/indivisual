@@ -89,7 +89,7 @@ HC.SourceController = HC.SourceController || {};
         createGroupSettings(pluggedValues) {
             let _create = (value, group) => {
                 return () => {
-                    this.messaging.program.setAllDisplaysTo('source', value, group);
+                    this.program.setAllDisplaysTo('source', value, group);
                 }
             };
             let _add = (group) => {
@@ -143,22 +143,22 @@ HC.SourceController = HC.SourceController || {};
          */
         appendSeqButtons() {
             this.settings.seq_0 = () => {
-                this.messaging.program.setAllDisplaysTo('sequence', 0);
+                this.program.setAllDisplaysTo('sequence', 0);
             };
             this.settings.seq_1 = () => {
-                this.messaging.program.setAllDisplaysTo('sequence', 1);
+                this.program.setAllDisplaysTo('sequence', 1);
             };
             this.settings.seq_2 = () => {
-                this.messaging.program.setAllDisplaysTo('sequence', 2);
+                this.program.setAllDisplaysTo('sequence', 2);
             };
             this.settings.seq_3 = () => {
-                this.messaging.program.setAllDisplaysTo('sequence', 3);
+                this.program.setAllDisplaysTo('sequence', 3);
             };
             this.settings.seq_4 = () => {
-                this.messaging.program.setAllDisplaysTo('sequence', 4);
+                this.program.setAllDisplaysTo('sequence', 4);
             };
             this.settings.seq_inc = () => {
-                this.messaging.program.setAllDisplaysTo('sequence', false);
+                this.program.setAllDisplaysTo('sequence', false);
             };
 
 
@@ -298,8 +298,8 @@ HC.SourceController = HC.SourceController || {};
                     let endKey = getSequenceEndKey(seq);
                     updates[endKey] = 0;
 
-                    this.messaging.program.updateSources(updates, true, false, false);
-                    this.messaging.emitSources(updates, true, true, false);
+                    this.program.updateSources(updates, true, false, false);
+                    this.config.getMessaging().emitSources(updates, true, true, false);
                 };
             };
 
@@ -315,8 +315,8 @@ HC.SourceController = HC.SourceController || {};
                     updates[key + '_osci'] = this.settings[key + '_osci'];
                     updates[key + '_brightness'] = this.settings[key + '_brightness'];
 
-                    this.messaging.program.updateSources(updates, true, false, false);
-                    this.messaging.emitSources(updates, true, true, false);
+                    this.program.updateSources(updates, true, false, false);
+                    this.config.getMessaging().emitSources(updates, true, true, false);
                 };
             };
 

@@ -2,7 +2,6 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ModulePlugin} from "../../shared/ModulePlugin";
-import {DisplayManager} from "../../manager/DisplayManager";
 
 class BorderModePlugin extends ModulePlugin {
 

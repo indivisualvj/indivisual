@@ -7,10 +7,15 @@ import * as ShuffleModePlugins from "../modules/shuffle_mode.js";
 import * as DisplayVisibilityPlugins from "../modules/display_visibility.js";
 import * as BorderModePlugins from "../modules/border_mode.js";
 import * as DisplaySourcePlugins from "../modules/display_source.js";
+import * as AnimationControlSets from "../modules/control_set/animation.js";
+import * as ControlControlSets from "../modules/control_set/Control";
+import * as SourceControlSets from "../modules/control_set/Source";
+import * as DisplayControlSets from "../modules/control_set/Display";
 import {AudioManager} from "./AudioManager";
 import {Renderer} from "../animation/Renderer";
 import {DisplayManager} from "./DisplayManager";
 import {SourceManager} from "./SourceManager";
+import {LayeredControlSetManager} from "./LayeredControlSetManager";
 
 class PluginManager
 {
@@ -40,6 +45,37 @@ class PluginManager
         this._assignPlugins(settings, 'display_source', DisplaySourcePlugins, SourceManager.plugins, config);
     }
 
+    static assignControlSets(target) {
+        LayeredControlSetManager.plugins = { control_set: {} };
+
+        let plugins = AnimationControlSets;
+        let keys = Object.keys(plugins);
+
+        keys.sort(this._sort(plugins));
+
+        for (let k in keys) {
+
+            let key = keys[k].toSnakeCase();
+            let plugin = plugins[keys[k]];
+
+            target[key] = plugin._name || key;
+
+            LayeredControlSetManager.plugins.control_set[key] = plugin;
+        }
+    }
+
+    static getControlSets() {
+        return ControlControlSets;
+    }
+
+    static getSourceSets() {
+        return SourceControlSets;
+    }
+
+    static getDisplaySets() {
+        return DisplayControlSets;
+    }
+
     // todo: port all getPlugin/doPlugin to here?
 
     /**
@@ -61,7 +97,7 @@ class PluginManager
 
             let pluginKey = pluginKeys[i];
             let plugin = plugins[pluginKey];
-            pluginKey = pluginKey.toLowerCase();
+            pluginKey = pluginKey.toSnakeCase();
 
             let name = plugin.name || pluginKey;
 

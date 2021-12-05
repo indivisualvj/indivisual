@@ -263,7 +263,8 @@ class Config {
      *
      */
     initControlControlSets() {
-        return this._initControlSets(HC.ControlController, this.ControlValues);
+
+        return this._initControlSets(PluginManager.getControlSets(), this.ControlValues);
     }
 
     /**
@@ -271,9 +272,9 @@ class Config {
      */
     initDisplayControlSets() {
         let instances = {};
-
-        for (let cs in HC.DisplayController) {
-            let group = HC.DisplayController[cs];
+        let sets = PluginManager.getDisplaySets();
+        for (let cs in sets) {
+            let group = sets[cs];
             for (let s in group) {
                 let set = group[s];
                 let inst = new set(s, this);
@@ -289,7 +290,7 @@ class Config {
      *
      */
     initSourceControlSets() {
-        return this._initControlSets(HC.SourceController, this.SourceValues);
+        return this._initControlSets(PluginManager.getSourceSets(), this.SourceValues);
     }
 
     shuffleable (index) {
@@ -352,24 +353,27 @@ class Config {
     _loadControlSets() {
 
         this.ControlSets = {};
-        let plugins = HC.control_set;
-        let keys = Object.keys(plugins);
 
-        keys.sort(this._sort(plugins, 'ControlSet'));
+        PluginManager.assignControlSets(this.ControlSets);
 
-        for (let i = 0; i < keys.length; i++) {
-
-            let key = keys[i];
-            let plugin = HC.control_set[key];
-            let name = plugin._name || key;
-
-            if (name === 'ControlSet') {
-                name = key;
-            }
-
-            this.ControlSets[key] = name;
-
-        }
+        // let plugins = HC.control_set;
+        // let keys = Object.keys(plugins);
+        //
+        // keys.sort(this._sort(plugins, 'ControlSet'));
+        //
+        // for (let i = 0; i < keys.length; i++) {
+        //
+        //     let key = keys[i];
+        //     let plugin = HC.control_set[key];
+        //     let name = plugin._name || key;
+        //
+        //     if (name === 'ControlSet') {
+        //         name = key;
+        //     }
+        //
+        //     this.ControlSets[key] = name;
+        //
+        // }
     }
 
     /**

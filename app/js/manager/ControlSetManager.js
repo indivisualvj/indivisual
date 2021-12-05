@@ -1,10 +1,10 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-class ControlSetManager {
-
+class ControlSetManager
+{
     /**
-     * @type {Object.<string, HC.ControlSet>}
+     * @type {Object.<string, ControlSet>}
      */
     controlSets;
 

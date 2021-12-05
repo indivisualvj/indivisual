@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {Guify} from "./guify/Guify";
+import {IterableControlSet} from "../../shared/ControlSet";
 
 class PropertyUi extends Guify {
 
@@ -27,7 +28,7 @@ class PropertyUi extends Guify {
             if (controlSet.visible !== false) {
                 let ui = new uiClass(controlSet, parent);
 
-                if (controlSet instanceof HC.IterableControlSet) {
+                if (controlSet instanceof IterableControlSet) {
                     ui.folder = parent;
 
                 } else {

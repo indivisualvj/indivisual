@@ -3,9 +3,12 @@
  */
 import {Messaging} from "../shared/Messaging";
 import {EventManager} from "./EventManager";
+import {ControlSetManager} from "./ControlSetManager";
 
 class LayeredControlSetManager
 {
+    static plugins;
+
     /**
      *
      * @type {{}}
@@ -340,7 +343,7 @@ class LayeredControlSetManager
     static initAll(pluggedValues) {
         let controlSets = {};
         for (let key in LayeredControlSetManager.config.ControlSets) { // statics.ControlSets SORTED
-            let cs = new HC.control_set[key](key, LayeredControlSetManager.config);
+            let cs = new LayeredControlSetManager.plugins.control_set[key](key, LayeredControlSetManager.config);
             cs.init(pluggedValues);
 
             controlSets[key] = cs;

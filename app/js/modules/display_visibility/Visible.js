@@ -4,7 +4,7 @@
 
 class Visible extends DisplayVisibilityPlugin  {
 
-    static index = 0;
+    static index = 1;
 
     apply (display) {
         display.visible = true;

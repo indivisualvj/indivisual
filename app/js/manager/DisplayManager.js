@@ -78,11 +78,11 @@ class DisplayManager {
      *
      */
     initBorderModePlugins() {
-        for (let k in HC.Display.border_mode) {
-            let plugin = HC.Display.border_mode[k];
+        for (let k in DisplayManager.plugins.border_mode) {
+            let plugin = DisplayManager.plugins.border_mode[k];
             plugin = new plugin(this);
-            HC.Display.border_mode[k] = plugin;
-            plugin.init();
+            DisplayManager.plugins.border_mode[k] = plugin;
+            plugin.init(DisplayManager.plugins.border_mode);
         }
     }
 
@@ -95,7 +95,7 @@ class DisplayManager {
             let plugin = DisplayManager.plugins.display_visibility[k];
             plugin = new plugin(this);
             DisplayManager.plugins.display_visibility[k] = plugin;
-            plugin.init();
+            plugin.init(DisplayManager.plugins.display_visibility);
         }
     }
 

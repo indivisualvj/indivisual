@@ -5,7 +5,6 @@
 class StackOneOff extends DisplayVisibilityPlugin {
 
     static name = 'stack one off';
-
     current = 0;
 
     doFirstItemStuff() {

@@ -2,11 +2,10 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-class RandomAll extends DisplayVisibilityPlugin  {
-
+class RandomAll extends BorderModePlugin
+{
     static index = 999;
     static name = 'random all';
-    static plugins;
 
     current = 0;
     modes = {};
@@ -15,8 +14,7 @@ class RandomAll extends DisplayVisibilityPlugin  {
     currentMode = 0;
 
     init(plugins) {
-        RandomAll.plugins = plugins;
-
+        super.init(plugins);
         for (let k in plugins) {
             let plugin = plugins[k]
             if (plugin.constructor.name !== this.constructor.name) {
@@ -26,15 +24,11 @@ class RandomAll extends DisplayVisibilityPlugin  {
         }
     }
 
-    doFirstItemStuff() {
-        if (this.getSpeed().starting() && randomBool(4)) {
+    apply (ctx, points, pc, speed, prc) {
+        if (speed.starting()) {
             this.currentMode = randomInt(0, this.modeCount-1);
         }
-        RandomAll.plugins[this.modeKeys[this.currentMode]].doFirstItemStuff();
-    }
-
-    apply (display) {
-        RandomAll.plugins[this.modeKeys[this.currentMode]].apply(display);
+        BorderModePlugin.plugins[this.modeKeys[this.currentMode]].apply(ctx, points, pc, speed, prc);
     }
 }
 

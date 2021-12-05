@@ -5,6 +5,7 @@
 import * as AudioPlugins from "../modules/audio.js"
 import * as ShuffleModePlugins from "../modules/shuffle_mode.js";
 import * as DisplayVisibilityPlugins from "../modules/display_visibility.js";
+import * as BorderModePlugins from "../modules/border_mode.js";
 import {AudioManager} from "./AudioManager";
 import {Renderer} from "../animation/Renderer";
 import {DisplayManager} from "./DisplayManager";
@@ -14,18 +15,23 @@ class PluginManager
 {
 
     static assignAudioPlugins(settings, config) {
-        AudioManager.plugins = {};
+        AudioManager.plugins = AudioManager.plugins || {};
         this._assignPlugins(settings, 'audio', AudioPlugins, AudioManager.plugins, config);
     }
 
     static assignShuffleModePlugins(settings, config) {
-        Renderer.plugins = {};
+        Renderer.plugins = Renderer.plugins || {};
         this._assignPlugins(settings, 'shuffle_mode', ShuffleModePlugins, Renderer.plugins, config);
     }
 
     static assignDisplayVisibilityPlugins(settings, config) {
-        DisplayManager.plugins = {};
+        DisplayManager.plugins = DisplayManager.plugins || {};
         this._assignPlugins(settings, 'display_visibility', DisplayVisibilityPlugins, DisplayManager.plugins, config);
+    }
+
+    static assignBorderModePlugins(settings, config) {
+        DisplayManager.plugins = DisplayManager.plugins || {};
+        this._assignPlugins(settings, 'border_mode', BorderModePlugins, DisplayManager.plugins, config);
     }
 
     /**

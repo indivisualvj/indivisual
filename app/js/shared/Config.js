@@ -376,7 +376,7 @@ class Config {
      * @private
      */
     _loadBorderModePlugins(settings) {
-        this._loadPlugins(settings, 'border_mode', HC.Display.border_mode);
+        PluginManager.assignBorderModePlugins(settings);
     }
 
     /**

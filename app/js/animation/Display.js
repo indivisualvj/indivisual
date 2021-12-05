@@ -4,6 +4,7 @@
 
 import {Rectangle} from "./Rectangle";
 import {Mask} from "./Mask";
+import {DisplayManager} from "../manager/DisplayManager";
 
 class Display {
 
@@ -471,7 +472,7 @@ class Display {
         let pc = points.length / 2;
 
         if (pc > 1) {
-            HC.Display.border_mode[mode].apply(ctx, points, pc, speed, prc);
+            DisplayManager.plugins.border_mode[mode].apply(ctx, points, pc, speed, prc);
             this._dirty = true;
         }
     }

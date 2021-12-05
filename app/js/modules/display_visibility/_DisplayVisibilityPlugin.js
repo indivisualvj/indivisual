@@ -5,8 +5,6 @@ import {ModulePlugin} from "../../shared/ModulePlugin";
 
 class DisplayVisibilityPlugin extends ModulePlugin
 {
-    static index = -1;
-
     /**
      * @type {DisplayManager}
      */
@@ -78,7 +76,4 @@ class DisplayVisibilityPlugin extends ModulePlugin
 
         return true;
     }
-
 }
-
-export {DisplayVisibilityPlugin}

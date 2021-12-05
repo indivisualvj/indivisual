@@ -5,9 +5,6 @@ import {ModulePlugin} from "../../shared/ModulePlugin";
 
 class AudioPlugin extends ModulePlugin
 {
-
-    static index = -1;
-
     /**
      * @type {AudioManager}
      */
@@ -54,5 +51,3 @@ class AudioPlugin extends ModulePlugin
         return this.manager.initContext();
     }
 }
-
-export {AudioPlugin}

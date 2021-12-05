@@ -23,6 +23,7 @@ import {Messaging} from "../shared/Messaging";
 import {ShaderPassUi} from "./ui/ShaderPassUi";
 import {AssetManager} from "../manager/AssetManager";
 import {Logger} from "../shared/Logger";
+import {PluginManager} from "../manager/PluginManager";
 
 class Controller extends Program {
 
@@ -137,7 +138,7 @@ class Controller extends Program {
         let displaySets = sets.displaySets;
 
         this.displaySettingsGui.addControllers(
-            HC.DisplayController,
+            PluginManager.getDisplaySets(),
             displaySets,
             DisplayControllerUi
         );

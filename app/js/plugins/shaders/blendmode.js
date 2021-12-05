@@ -1,3 +1,18 @@
+/**
+ * multiply    a * b
+ * screen    1 - (1 - a) * (1 - b)
+ * darken    min(a, b)
+ * lighten    max(a, b)
+ * difference    abs(a - b)
+ * negation    1 - abs(1 - a - b)
+ * exclusion    a + b - 2 * a * b
+ * overlay    a < .5 ? (2 * a * b) : (1 - 2 * (1 - a) * (1 - b))
+ * hard light    b < .5 ? (2 * a * b) : (1 - 2 * (1 - a) * (1 - b))
+ * soft light    b < .5 ? (2 * a * b + a * a * (1 - 2 * b)) : (sqrt(a) * (2 * b - 1) + (2 * a) * (1 - b))
+ * dodge    a / (1 - b)
+ * burn    1 - (1 - a) / b
+ */
+
 {
     HC.plugins.shaders.blendmode = class Plugin extends HC.ShaderPlugin {
         static index = 30;

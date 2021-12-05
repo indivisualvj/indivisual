@@ -1,9 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {ControlSet, IterableControlSet} from "../../../shared/ControlSet";
-
-HC.SourceController = HC.SourceController || {};
+import {ControlSet, IterableControlSet} from "../../../js/shared/ControlSet";
 
 class override extends ControlSet
 {

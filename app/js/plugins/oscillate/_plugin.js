@@ -4,8 +4,8 @@ HC.plugins.oscillate = HC.plugins.oscillate || {};
 
         /**
          *
-         * @param {HC.Animation} animation
-         * @param {HC.Layer} layer
+         * @param {Animation} animation
+         * @param {Layer} layer
          * @param settings
          * @param tree
          * @param key

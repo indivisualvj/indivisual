@@ -14,7 +14,7 @@ HC.plugins.shaders = HC.plugins.shaders || {};
         pass;
 
         create() {
-            console.error('HC.ShaderPlugin: .create() must be implemented in derived plugin.');
+            console.error('ShaderPlugin: .create() must be implemented in derived plugin.');
         }
 
         updateResolution() {

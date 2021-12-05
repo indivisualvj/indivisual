@@ -23,7 +23,7 @@ let targetsGroups = {
     controller: ['controls', 'displays', 'sources', 'settings', 'log', 'attr', 'midi', 'data'],
     client: ['controls', 'displays', 'sources', 'settings', 'log', 'midi'],
     setup: ['displays', 'data', 'settings'],
-    preview: ['displays', 'controls', 'settings', 'sources'], // displays added to have updates on resolution. HC.PreviewManager.init() takes care of the other settings.
+    preview: ['displays', 'controls', 'settings', 'sources'], // displays added to have updates on resolution. PreviewManager.init() takes care of the other settings.
     log: ['log']
 };
 

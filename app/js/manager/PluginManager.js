@@ -10,7 +10,6 @@ import * as DisplaySourcePlugins from "../modules/display_source.js";
 import {AudioManager} from "./AudioManager";
 import {Renderer} from "../animation/Renderer";
 import {DisplayManager} from "./DisplayManager";
-import {ModulePlugin} from "../shared/ModulePlugin";
 import {SourceManager} from "./SourceManager";
 
 class PluginManager
@@ -40,6 +39,8 @@ class PluginManager
         SourceManager.plugins = SourceManager.plugins || {};
         this._assignPlugins(settings, 'display_source', DisplaySourcePlugins, SourceManager.plugins, config);
     }
+
+    // todo: port all getPlugin/doPlugin to here?
 
     /**
      *

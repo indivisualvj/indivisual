@@ -6,10 +6,12 @@ import * as AudioPlugins from "../modules/audio.js"
 import * as ShuffleModePlugins from "../modules/shuffle_mode.js";
 import * as DisplayVisibilityPlugins from "../modules/display_visibility.js";
 import * as BorderModePlugins from "../modules/border_mode.js";
+import * as DisplaySourcePlugins from "../modules/display_source.js";
 import {AudioManager} from "./AudioManager";
 import {Renderer} from "../animation/Renderer";
 import {DisplayManager} from "./DisplayManager";
 import {ModulePlugin} from "../shared/ModulePlugin";
+import {SourceManager} from "./SourceManager";
 
 class PluginManager
 {
@@ -34,6 +36,11 @@ class PluginManager
         this._assignPlugins(settings, 'border_mode', BorderModePlugins, DisplayManager.plugins, config);
     }
 
+    static assignDisplaySourcePlugins(settings, config) {
+        SourceManager.plugins = SourceManager.plugins || {};
+        this._assignPlugins(settings, 'display_source', DisplaySourcePlugins, SourceManager.plugins, config);
+    }
+
     /**
      *
      * @param settings
@@ -54,12 +61,6 @@ class PluginManager
             let pluginKey = pluginKeys[i];
             let plugin = plugins[pluginKey];
             pluginKey = pluginKey.toLowerCase();
-
-            console.log(pluginKey, plugin, (plugin instanceof ModulePlugin));
-
-            if (plugin.index === -1) {
-                continue;
-            }
 
             let name = plugin.name || pluginKey;
 
@@ -101,10 +102,3 @@ class PluginManager
 }
 
 export {PluginManager}
-
-class Plugin
-{
-
-}
-
-export {Plugin}

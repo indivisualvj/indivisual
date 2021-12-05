@@ -7,6 +7,9 @@ import {Clip, Sample} from "../shared/Sample";
 import {Messaging} from "../shared/Messaging";
 
 class SourceManager {
+
+    static plugins;
+
     /**
      * @type {Animation}
      */
@@ -44,7 +47,7 @@ class SourceManager {
 
     /**
      *
-     * @type {Object.<string, SourceManager.DisplaySourcePlugin>}
+     * @type {Object.<string, DisplaySourcePlugin>}
      */
     plugins = {};
 
@@ -72,15 +75,15 @@ class SourceManager {
      *
      */
     initPlugins() {
-        for (let p in HC.SourceManager.display_source) {
-            HC.SourceManager.display_source[p].initListeners(this, EventManager);
+        for (let p in SourceManager.plugins.display_source) {
+            SourceManager.plugins.display_source[p].initListeners(this, EventManager);
         }
     }
 
     /**
      * @param type
      * @param index
-     * @returns {SourceManager.DisplaySourcePlugin}
+     * @returns {DisplaySourcePlugin}
      */
     getSourcePlugin(type, index) {
 
@@ -90,7 +93,7 @@ class SourceManager {
 
         let plugin;
         if (!(index in this.plugins[type])) {
-            plugin = new HC.SourceManager.display_source[type](this.animation);
+            plugin = new SourceManager.plugins.display_source[type](this.animation);
             plugin.init(index);
 
         } else {
@@ -108,7 +111,7 @@ class SourceManager {
     /**
      *
      * @param type
-     * @returns {Object<string, SourceManager.DisplaySourcePlugin>}
+     * @returns {Object<string, DisplaySourcePlugin>}
      */
     getPluginInstances(type) {
         if (!(type in this.plugins)) {
@@ -159,10 +162,10 @@ class SourceManager {
     /**
      *
      * @param i
-     * @returns {SourceManager.DisplaySourcePlugin}
+     * @returns {DisplaySourcePlugin}
      */
     getSequence(i) {
-        if (i instanceof HC.SourceManager.DisplaySourcePlugin) {
+        if (i instanceof HC.DisplaySourcePlugin) {
             return i;
         }
 
@@ -495,7 +498,7 @@ class SourceManager {
      *
      * @param type
      * @param index
-     * @returns {SourceManager.DisplaySourcePlugin}
+     * @returns {DisplaySourcePlugin}
      */
     getPluginNrInstance(type, index) {
         let plugins = this.getPluginInstances(type);

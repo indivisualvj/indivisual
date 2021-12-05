@@ -5,7 +5,6 @@ import {ModulePlugin} from "../../shared/ModulePlugin";
 
 class ShuffleModePlugin extends ModulePlugin
 {
-    static index = -1;
     settings;
     layer = 0;
 
@@ -79,5 +78,3 @@ class ShuffleModePlugin extends ModulePlugin
         return false;
     }
 }
-
-export {ShuffleModePlugin}

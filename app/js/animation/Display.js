@@ -85,7 +85,7 @@ class Display {
 
     /**
      *
-     * @type {HC.SourceManager.DisplaySourcePlugin}
+     * @type {HC.DisplaySourcePlugin}
      * @private
      */
     _source;

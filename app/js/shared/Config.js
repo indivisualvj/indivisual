@@ -8,6 +8,7 @@ import {ControlSetManager} from "../manager/ControlSetManager";
 import {Messaging} from "./Messaging";
 import {EventManager} from "../manager/EventManager";
 import {PluginManager} from "../manager/PluginManager";
+import {SourceManager} from "../manager/SourceManager";
 
 class Config {
 
@@ -376,7 +377,7 @@ class Config {
      * @private
      */
     _loadBorderModePlugins(settings) {
-        PluginManager.assignBorderModePlugins(settings);
+        PluginManager.assignBorderModePlugins(settings, this);
     }
 
     /**
@@ -385,7 +386,7 @@ class Config {
      * @private
      */
     _loadDisplayVisibilityPlugins(settings) {
-        PluginManager.assignDisplayVisibilityPlugins(settings);
+        PluginManager.assignDisplayVisibilityPlugins(settings, this);
     }
 
     /**
@@ -394,8 +395,8 @@ class Config {
      * @private
      */
     _loadDisplaySourcePlugins(settings) {
-        Object.assign(HC.plugins.override_background_mode, HC.plugins.override_material_input);
-        this._loadPlugins(settings, 'display_source', HC.SourceManager.display_source);
+        // Object.assign(HC.plugins.override_background_mode, HC.plugins.override_material_input); // fixme: solution?
+        PluginManager.assignDisplaySourcePlugins(settings, this);
     }
 
 

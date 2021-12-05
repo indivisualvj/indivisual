@@ -1,6 +1,6 @@
 {
     HC.plugins.shaders.blur = class Plugin extends HC.ShaderPlugin {
-        static index = 130;
+        static index = 120;
 
         create() {
             if (!this.pass) {

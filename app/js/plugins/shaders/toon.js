@@ -29,7 +29,7 @@
             fragmentShader: `
                 uniform sampler2D tDiffuse;
                 uniform vec2 resolution;
-                varying vec2 vUv;    
+                varying vec2 vUv;
                 // median filter by Morgan McGuire
                 #define s2(a, b) temp = a; a = min(a, b); b = max(temp, b);
                 #define mn3(a, b, c) s2(a, b); s2(a, c);

@@ -1,6 +1,6 @@
 {
     HC.plugins.shaders.paint = class Plugin extends HC.ShaderPlugin {
-        static index = 120;
+        static index = 130;
 
         create() {
             if (!this.pass) {

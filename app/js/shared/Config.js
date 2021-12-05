@@ -414,6 +414,7 @@ class Config {
      * @private
      */
     _loadDisplaySourcePlugins(settings) {
+        Object.assign(HC.plugins.override_background_mode, HC.plugins.override_material_input);
         PluginManager.assignDisplaySourcePlugins(settings, this);
     }
 

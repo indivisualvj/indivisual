@@ -187,7 +187,7 @@ class PluginManager
                             Logger.log(dir + '/' + pluginKey, 'imported');
                         }
                         _loaded();
-                    })
+                    });
                 });
             });
 

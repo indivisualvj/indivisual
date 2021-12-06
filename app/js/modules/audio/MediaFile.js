@@ -1,5 +1,7 @@
-
-// handling media files inspired by https://uberviz.io/viz/word-problems/
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {AudioPlugin} from "../../shared/AudioPlugin";
 
 class MediaFile extends AudioPlugin {
     static index = 20;

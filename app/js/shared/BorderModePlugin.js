@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {ModulePlugin} from "../../js/shared/ModulePlugin";
+import {ModulePlugin} from "./ModulePlugin";
 
 class BorderModePlugin extends ModulePlugin {
 
@@ -48,3 +48,5 @@ class BorderModePlugin extends ModulePlugin {
         return nu;
     }
 }
+
+export {BorderModePlugin}

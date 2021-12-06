@@ -1,6 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {ControlSet} from "../../../shared/ControlSet";
 
 class Camera extends ControlSet {
 

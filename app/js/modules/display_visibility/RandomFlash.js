@@ -1,6 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {DisplayVisibilityPlugin} from "../../shared/DisplayVisibilityPlugin";
 
 class RandomFlash extends DisplayVisibilityPlugin {
 

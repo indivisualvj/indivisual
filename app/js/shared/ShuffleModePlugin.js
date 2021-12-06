@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {ModulePlugin} from "../../js/shared/ModulePlugin";
+import {ModulePlugin} from "./ModulePlugin";
 
 class ShuffleModePlugin extends ModulePlugin
 {
@@ -78,3 +78,5 @@ class ShuffleModePlugin extends ModulePlugin
         return false;
     }
 }
+
+export {ShuffleModePlugin}

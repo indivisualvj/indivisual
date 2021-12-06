@@ -71,36 +71,41 @@ class Config {
                     settings.layer[i] = i+1;
                 }
 
-                this._loadAudioPlugins(settings);
-                this._loadShufflePlugins(settings);
-                this._loadControlSets();
-                settings.session[_HASH] = _HASH;
+                this._loadAudioPlugins(settings, f=>{
+                    this._loadShufflePlugins(settings, f=>{
+                        this._loadControlSets(f=>{
+                            settings.session[_HASH] = _HASH;
 
-                this.ControlValues = settings;
-                finished();
+                            this.ControlValues = settings;
+                            finished();
+                        });
+                    });
+                });
             }
         },
         {
             file: 'structure/DisplayValues.yml',
             callback: (data, finished) => {
                 this.DisplayValues = jsyaml.load(data.contents);
-                this._loadBorderModePlugins(this.DisplayValues);
-                this._loadDisplayVisibilityPlugins(this.DisplayValues);
-                finished();
+                this._loadBorderModePlugins(this.DisplayValues, f=> {
+                    this._loadDisplayVisibilityPlugins(this.DisplayValues, f=> {
+                        finished();
+                    });
+                });
             }
         },
         {
             file: 'structure/SourceValues.yml',
             callback: (data, finished) => {
                 this.SourceValues = jsyaml.load(data.contents);
-                this._loadDisplaySourcePlugins(this.SourceValues);
-                finished();
+                this._loadDisplaySourcePlugins(this.SourceValues, f=> {
+                    finished();
+                });
             }
         },
         {
             file: 'structure/MidiController.yml',
             callback: (data, finished) => {
-
                 let settings = jsyaml.load(data.contents);
 
                 // create MIDI_ constants
@@ -348,78 +353,65 @@ class Config {
 
     /**
      *
+     * @param callback
      * @private
      */
-    _loadControlSets() {
+    _loadControlSets(callback) {
 
         this.ControlSets = {};
 
-        PluginManager.assignControlSets(this.ControlSets);
-
-        // let plugins = HC.control_set;
-        // let keys = Object.keys(plugins);
-        //
-        // keys.sort(this._sort(plugins, 'ControlSet'));
-        //
-        // for (let i = 0; i < keys.length; i++) {
-        //
-        //     let key = keys[i];
-        //     let plugin = HC.control_set[key];
-        //     let name = plugin._name || key;
-        //
-        //     if (name === 'ControlSet') {
-        //         name = key;
-        //     }
-        //
-        //     this.ControlSets[key] = name;
-        //
-        // }
+        PluginManager.assignControlSets(this.ControlSets, callback);
     }
 
     /**
      *
      * @param settings
+     * @param callback
      * @private
      */
-    _loadAudioPlugins(settings) {
-        PluginManager.assignAudioPlugins(settings, this);
+    _loadAudioPlugins(settings, callback) {
+        PluginManager.assignAudioPlugins(settings, this, callback);
     }
 
     /**
      *
      * @param settings
+     * @param callback
      * @private
      */
-    _loadShufflePlugins(settings) {
-        PluginManager.assignShuffleModePlugins(settings, this);
+    _loadShufflePlugins(settings, callback) {
+        PluginManager.assignShuffleModePlugins(settings, this, callback);
     }
 
     /**
      *
      * @param settings
+     * @param callback
      * @private
      */
-    _loadBorderModePlugins(settings) {
-        PluginManager.assignBorderModePlugins(settings, this);
+    _loadBorderModePlugins(settings, callback) {
+        PluginManager.assignBorderModePlugins(settings, this, callback);
     }
 
     /**
      *
      * @param settings
+     * @param callback
      * @private
      */
-    _loadDisplayVisibilityPlugins(settings) {
-        PluginManager.assignDisplayVisibilityPlugins(settings, this);
+    _loadDisplayVisibilityPlugins(settings, callback) {
+        PluginManager.assignDisplayVisibilityPlugins(settings, this, callback);
     }
 
     /**
      *
      * @param settings
+     * @param callback
      * @private
      */
-    _loadDisplaySourcePlugins(settings) {
+    _loadDisplaySourcePlugins(settings, callback) {
         Object.assign(HC.plugins.override_background_mode, HC.plugins.override_material_input);
-        PluginManager.assignDisplaySourcePlugins(settings, this);
+        PluginManager.assignDisplaySourcePlugins(settings, this, callback);
     }
 
 

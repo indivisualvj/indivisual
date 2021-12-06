@@ -344,15 +344,15 @@ class Server
         /**
          *
          */
-        this.app.get('/app/js/modules/*.js', (req, res) => {
-
-            let originalUrl = req.originalUrl;
-            let path = originalUrl.replace(new RegExp('/app/js/modules/(.*)\.js'), '$1');
-            let sources = ['js/modules/' + path];
-            let file = _sources('/bin/' + path.replace('/', '_') + '.js', sources);
-
-            res.sendFile(file);
-        });
+        // this.app.get('/app/js/modules/*.js', (req, res) => {
+        //
+        //     let originalUrl = req.originalUrl;
+        //     let path = originalUrl.replace(new RegExp('/app/js/modules/(.*)\.js'), '$1');
+        //     let sources = ['js/modules/' + path];
+        //     let file = _sources('/bin/' + path.replace('/', '_') + '.js', sources);
+        //
+        //     res.sendFile(file);
+        // });
 
         /**
          *

@@ -1,6 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {BorderModePlugin} from "../../shared/BorderModePlugin";
 
 class JumpClockwise extends BorderModePlugin {
 

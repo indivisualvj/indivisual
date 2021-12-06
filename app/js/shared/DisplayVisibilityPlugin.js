@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {ModulePlugin} from "../../js/shared/ModulePlugin";
+import {ModulePlugin} from "./ModulePlugin";
 
 class DisplayVisibilityPlugin extends ModulePlugin
 {
@@ -77,3 +77,5 @@ class DisplayVisibilityPlugin extends ModulePlugin
         return true;
     }
 }
+
+export {DisplayVisibilityPlugin}

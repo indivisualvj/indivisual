@@ -1,6 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {DisplaySourcePlugin} from "../../shared/DisplaySourcePlugin";
 
 class Sequence extends DisplaySourcePlugin
 {

@@ -1,3 +1,8 @@
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {AudioPlugin} from "../../shared/AudioPlugin";
+
 class Microphone extends AudioPlugin
 {
     static index = 10;

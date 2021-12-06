@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {ModulePlugin} from "../../js/shared/ModulePlugin";
+import {ModulePlugin} from "./ModulePlugin";
 
 class AudioPlugin extends ModulePlugin
 {
@@ -51,3 +51,5 @@ class AudioPlugin extends ModulePlugin
         return this.manager.initContext();
     }
 }
+
+export {AudioPlugin}

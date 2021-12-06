@@ -16,6 +16,15 @@ import {TimeoutManager} from "./TimeoutManager";
 
 class PluginManager
 {
+    static assignLayerPlugins(settings, section, target, config, callback) {
+
+        this._importPlugins(HC.filePath('layer', section), (plugins) => {
+            this._assignPlugins(settings, section, plugins, target, config);
+            callback();
+        });
+    }
+
+
     /**
      *
      * @param settings
@@ -208,6 +217,13 @@ class PluginManager
      */
     static _assignPlugins(settings, section, plugins, target, config) {
 
+        if (!(section in settings)) {
+            settings[section] = {};
+        }
+        if (!(section in target)) {
+            target[section] = {};
+        }
+
         let pluginKeys = Object.keys(plugins);
 
         pluginKeys.sort(this._sort(plugins));
@@ -219,13 +235,6 @@ class PluginManager
             pluginKey = pluginKey.toSnakeCase();
 
             let name = plugin.name || pluginKey;
-
-            if (!(section in settings)) {
-                settings[section] = {};
-            }
-            if (!(section in target)) {
-                target[section] = {};
-            }
 
             target[section][pluginKey] = plugin;
             settings[section][pluginKey] = name.toLowerCase();

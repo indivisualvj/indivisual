@@ -8,6 +8,7 @@ import {ControlSetManager} from "../manager/ControlSetManager";
 import {Messaging} from "./Messaging";
 import {EventManager} from "../manager/EventManager";
 import {PluginManager} from "../manager/PluginManager";
+import {TimeoutManager} from "../manager/TimeoutManager";
 
 class Config {
 
@@ -48,16 +49,17 @@ class Config {
             callback: (data, finished) => {
                 let settings = jsyaml.load(data.contents);
 
-                this._loadAnimationPlugins(settings);
-                this.ShaderSettings = this._loadShaderSettings(settings.shaders);
-                this.Passes = [null];
-                for (let sh in this.ShaderSettings) {
-                    this.Passes.push(sh);
-                }
-                this._loadRhythms(settings);
-                this.AnimationValues = settings;
-                this.AnimationValues.shaders[''] = '';
-                finished();
+                this._loadAnimationPlugins(settings, f=> {
+                    this.ShaderSettings = this._loadShaderSettings(settings.shaders);
+                    this.Passes = [null];
+                    for (let sh in this.ShaderSettings) {
+                        this.Passes.push(sh);
+                    }
+                    this._loadRhythms(settings);
+                    this.AnimationValues = settings;
+                    this.AnimationValues.shaders[''] = '';
+                    finished();
+                });
             }
         },
         {
@@ -418,23 +420,40 @@ class Config {
     /**
      *
      * @param settings
+     * @param callback
      * @private
      */
-    _loadAnimationPlugins(settings) {
+    _loadAnimationPlugins(settings, callback) {
 
-        Object.assign(HC.plugins.pattern_overlay, HC.plugins.pattern);
+        let calls = [];
+        calls.push((_finished) => {
+            PluginManager.assignLayerPlugins(settings, 'filter_mode', HC.plugins, this, f => {
+                _finished();
+            });
+        });
+        calls.push((_finished) => {
+            PluginManager.assignLayerPlugins(settings, 'sizing_flip', HC.plugins, this, f => {
+                _finished();
+            });
+        });
 
-        let sectionKeys = Object.keys(HC.plugins);
+        TimeoutManager.chainExecuteCalls(calls, () => {
+            Object.assign(HC.plugins.pattern_overlay, HC.plugins.pattern);
 
-        for (let pi = 0; pi < sectionKeys.length; pi++) {
+            let sectionKeys = Object.keys(HC.plugins);
 
-            let section = sectionKeys[pi];
+            for (let pi = 0; pi < sectionKeys.length; pi++) {
 
-            // create plugin namespaces to work in
-            HC.Shape.prototype.injected.plugins[section] = {};
+                let section = sectionKeys[pi];
 
-            this._loadPlugins(settings, section, HC.plugins[section]);
-        }
+                // create plugin namespaces to work in
+                HC.Shape.prototype.injected.plugins[section] = {};
+
+                this._loadPlugins(settings, section, HC.plugins[section]);
+            }
+
+            callback();
+        });
     }
 
     /**

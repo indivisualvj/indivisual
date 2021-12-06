@@ -83,6 +83,7 @@ class Controller extends _Controller
                 || this.nextOpenFolder(this.sourceSettingsGui)
                 || this.nextOpenFolder(this.animationSettingsGui)
                 || this.nextOpenFolder(this.sequenceSettingsGui)
+                || this.nextOpenFolder(this.presetMan.gui)
                 || this.controlSettingsGui
                 ;
         }

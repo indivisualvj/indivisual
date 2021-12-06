@@ -2,11 +2,6 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-// import * as ShuffleModePlugins from "../modules/shuffle_mode.js";
-// import * as DisplayVisibilityPlugins from "../modules/display_visibility.js";
-// import * as BorderModePlugins from "../modules/border_mode.js";
-// import * as DisplaySourcePlugins from "../modules/display_source.js";
-// import * as AnimationControlSets from "../modules/control_set/animation.js";
 import * as ControlControlSets from "../modules/control_set/Control";
 import * as SourceControlSets from "../modules/control_set/Source";
 import * as DisplayControlSets from "../modules/control_set/Display";
@@ -154,7 +149,7 @@ class PluginManager
             let subset = plugins[s];
             for (let p in subset) {
                 subset[p].boot(initiator, config);
-                // Logger.log(s + '.' + p, 'booted');
+                Logger.log(s + '.' + p, 'booted');
             }
         }
     }
@@ -171,10 +166,10 @@ class PluginManager
             let plugin = plugins[k];
             plugin = new plugin(initiator, settings);
             plugins[k] = plugin;
+            Logger.log(k, 'instantiated');
             if (hook) {
                 hook(plugin);
             }
-            // Logger.log(k, 'instantiated');
         }
     }
 
@@ -188,7 +183,7 @@ class PluginManager
                 imports.push((_loaded) => {
                     import(HC.filePath(importPath, file.name)).then((plugin) => {
                         for (const pluginKey in plugin) {
-                            plugins[pluginKey] = plugin;
+                            plugins[pluginKey] = plugin[pluginKey];
                             Logger.log(dir + '/' + pluginKey, 'imported');
                         }
                         _loaded();

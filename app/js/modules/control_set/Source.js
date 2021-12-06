@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {ControlSet, IterableControlSet} from "../../../js/shared/ControlSet";
+import {ControlSet, IterableControlSet} from "../../shared/ControlSet";
 
 class override extends ControlSet
 {

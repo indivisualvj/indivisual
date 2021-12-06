@@ -193,7 +193,7 @@ class PluginManager
 
             TimeoutManager.chainExecuteCalls(imports, () => {
                 callback(plugins);
-            })
+            });
         });
     }
 

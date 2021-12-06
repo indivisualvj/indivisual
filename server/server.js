@@ -324,7 +324,6 @@ class Server
         }, 2 * 1000);
     }
 
-
     _initGet() {
 
         /**
@@ -340,19 +339,6 @@ class Server
         this.app.get('*.html', (req, res) => {
             res.sendFile(path.resolve('app/' + req.originalUrl));
         });
-
-        /**
-         *
-         */
-        // this.app.get('/app/js/modules/*.js', (req, res) => {
-        //
-        //     let originalUrl = req.originalUrl;
-        //     let path = originalUrl.replace(new RegExp('/app/js/modules/(.*)\.js'), '$1');
-        //     let sources = ['js/modules/' + path];
-        //     let file = _sources('/bin/' + path.replace('/', '_') + '.js', sources);
-        //
-        //     res.sendFile(file);
-        // });
 
         /**
          *

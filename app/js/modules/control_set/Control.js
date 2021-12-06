@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {ControlSet} from "../../../js/shared/ControlSet";
+import {ControlSet} from "../../shared/ControlSet";
 
 class session extends ControlSet
 {

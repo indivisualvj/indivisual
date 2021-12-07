@@ -1,5 +1,9 @@
-{
-    HC.plugins.material_style.fillorstroke = class Plugin extends HC.MaterialStylePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {MaterialStylePlugin} from "../MaterialStylePlugin";
+
+class fillorstroke extends MaterialStylePlugin {
         static name = 'chess (fill | stroke)';
 
         apply(shape) {
@@ -7,9 +11,9 @@
             params.stroke = (shape.index % 2 ? true : false);
         }
     }
-}
-{
-    HC.plugins.material_style.strokeorfill = class Plugin extends HC.MaterialStylePlugin {
+
+
+class strokeorfill extends MaterialStylePlugin {
         static name = 'chess (stroke | fill)';
 
         apply(shape) {
@@ -17,4 +21,5 @@
             params.stroke = (shape.index % 2) ? false : true;
         }
     }
-}
+
+export {fillorstroke, strokeorfill};

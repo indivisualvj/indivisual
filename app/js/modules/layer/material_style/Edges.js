@@ -1,5 +1,9 @@
-{
-    HC.plugins.material_style.chessedges = class Plugin extends HC.MaterialStylePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {MaterialStylePlugin} from "../MaterialStylePlugin";
+
+class chessedges extends MaterialStylePlugin {
         static name = 'chess (fill | edges)';
         active = [];
 
@@ -47,9 +51,9 @@
             }
         }
     }
-}
-{
-    HC.plugins.material_style.randompeakedges = class Plugin extends HC.MaterialStylePlugin {
+
+
+class randompeakedges extends MaterialStylePlugin {
         static name = 'random on peak (edges)';
         active = [];
 
@@ -99,4 +103,5 @@
             }
         }
     }
-}
+
+export {chessedges, randompeakedges};

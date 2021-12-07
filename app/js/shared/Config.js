@@ -433,6 +433,7 @@ class Config {
             PluginManager.assignLayerPlugins(settings, 'offset_mode', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'coloring_mode', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'filter_mode', HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'material_style', HC.plugins, this),
         ];
 
         Promise.all(calls).then(() => {

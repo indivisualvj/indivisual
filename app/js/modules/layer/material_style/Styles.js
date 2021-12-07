@@ -1,5 +1,9 @@
-{
-    HC.plugins.material_style.fill = class Plugin extends HC.MaterialStylePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {MaterialStylePlugin} from "../MaterialStylePlugin";
+
+class fill extends MaterialStylePlugin {
         static index = 1;
         static name = 'fill';
 
@@ -8,9 +12,9 @@
             params.stroke = false;
         }
     }
-}
-{
-    HC.plugins.material_style.stroke = class Plugin extends HC.MaterialStylePlugin {
+
+
+class stroke extends MaterialStylePlugin {
         static name = 'stroke';
 
         apply(shape) {
@@ -18,9 +22,9 @@
             params.stroke = true;
         }
     }
-}
-{
-    HC.plugins.material_style.peak = class Plugin extends HC.MaterialStylePlugin {
+
+
+class peak extends MaterialStylePlugin {
         static name = 'switch on peak';
         state = false;
 
@@ -35,4 +39,5 @@
             params.stroke = this.state;
         }
     }
-}
+
+export {fill, peak, stroke};

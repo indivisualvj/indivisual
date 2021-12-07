@@ -1,5 +1,9 @@
-{
-    HC.plugins.material_style.random = class Plugin extends HC.MaterialStylePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {MaterialStylePlugin} from "../MaterialStylePlugin";
+
+class random extends MaterialStylePlugin {
         static name = 'random';
         injections = {
             state: undefined
@@ -15,9 +19,9 @@
             params.stroke = pa.state;
         }
     }
-}
-{
-    HC.plugins.material_style.randompeak = class Plugin extends HC.MaterialStylePlugin {
+
+
+class randompeak extends MaterialStylePlugin {
         static name = 'random on peak';
         injections = {
             state: undefined
@@ -33,4 +37,5 @@
             params.stroke = pa.state;
         }
     }
-}
+
+export {randompeak, random};

@@ -41,3 +41,5 @@ class beat extends SizingModePlugin {
         }
     }
 }
+
+export {beat}

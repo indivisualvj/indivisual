@@ -69,10 +69,15 @@ Number.prototype.digits = function () {
 }
 
 String.prototype.toSnakeCase = function() {
-    const toSnakeCase = str =>
-        str && str
-            .match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g)
-            .map(x => x.toLowerCase())
-            .join('_');
-    return toSnakeCase(this);
+    return this
+        .match(/[A-Z0-9]{2,}(?=[A-Z0-9][a-z0-9]+)|[A-Z0-9]?[a-z0-9]+|[A-Z0-9]/g)
+        .map(x => x.toLowerCase())
+        .join('_');
+}
+
+String.prototype.toKebapCase = function() {
+    return this
+        .match(/[A-Z0-9]{2,}(?=[A-Z0-9][a-z0-9]+)|[A-Z0-9]?[a-z0-9]+|[A-Z0-9]/g)
+        .map(x => x.toLowerCase())
+        .join('-');
 }

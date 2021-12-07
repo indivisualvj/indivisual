@@ -6,7 +6,6 @@ class off extends SizingFlipPlugin
     static name = 'off';
 
     apply(shape) {
-        let layer = this.layer;
         shape.flip(1, 1, 1);
     }
 }

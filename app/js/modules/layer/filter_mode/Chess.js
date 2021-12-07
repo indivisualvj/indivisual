@@ -5,7 +5,7 @@ import {FilterModePlugin} from "../FilterModePlugin";
 
 class chess2 extends FilterModePlugin
 {
-    static name = 'chess ²';
+    static name = 'chess²';
     invert = false;
 
     apply(shape, plugin) {
@@ -61,7 +61,7 @@ class chess2 extends FilterModePlugin
 
 class chess2flash extends FilterModePlugin
 {
-    static name = 'chess ² flash';
+    static name = 'chess²flash';
 
     apply(shape) {
         let layer = this.layer;
@@ -72,7 +72,7 @@ class chess2flash extends FilterModePlugin
 
 class chess2strobe extends FilterModePlugin
 {
-    static name = 'chess ² strobe';
+    static name = 'chess²strobe';
 
     apply(shape) {
         let layer = this.layer;

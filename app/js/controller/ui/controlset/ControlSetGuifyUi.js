@@ -196,7 +196,7 @@ class ControlSetGuifyUi extends ControlSetUi {
              * if style is not set, hide from user.
              */
             if (!styles) {
-                container.setAttribute('data-class', 'hidden');
+                container.setAttribute('data-class', 'hidden'); // fixme: seems to be overwritten after search
             }
         }
 

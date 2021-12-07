@@ -134,7 +134,7 @@ class PluginManager
      * @return {{session?: session, controls?: controls}}
      */
     static getControlSets() {
-        return ControlControlSets;
+        return this._sort(ControlControlSets);
     }
 
     /**
@@ -142,7 +142,7 @@ class PluginManager
      * @return {{override?: override, sequenceN?: sequenceN, sample?: sample, source?: source}}
      */
     static getSourceSets() {
-        return SourceControlSets;
+        return this._sort(SourceControlSets);
     }
 
     /**
@@ -150,7 +150,10 @@ class PluginManager
      * @return {{displays?: {}, video?: {}}}
      */
     static getDisplaySets() {
-        return DisplayControlSets;
+        return { // workaround to achieve the correct order
+            video: DisplayControlSets.video,
+            displays: DisplayControlSets.displays
+        };
     }
     /**
      *
@@ -255,23 +258,19 @@ class PluginManager
 
     /**
      *
-     * @param plugins
+     * @param _object
      * @return {(function(*, *): (*))|*}
      * @private
      */
-    static _sort (plugins) {
-        return (a, b) => {
-            let ai = plugins[a].index || 99999;
-            let bi = plugins[b].index || 99999;
-            let an = plugins[a].name || a;
-            let bn = plugins[b].name || b;
-
-            let cmpi = ai - bi;
-            if (cmpi === 0) {
-                return an.localeCompare(bn);
-            }
-            return cmpi;
+    static _sort (_object) {
+        let sets = {};
+        let keys = Object.sortedKeys(_object);
+        for (let i = 0; i < keys.length; i++) {
+            let key = keys[i];
+            sets[key] = _object[key];
         }
+
+        return sets;
     }
 }
 

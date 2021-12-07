@@ -113,9 +113,7 @@ class PluginManager
         LayeredControlSetManager.plugins = { control_set: {} };
 
         this._importPlugins(HC.filePath('control_set', 'animation')).then((plugins) => {
-            let keys = Object.keys(plugins);
-
-            keys.sort(this._sort(plugins));
+            let keys = Object.sortedKeys(plugins);
 
             for (let k in keys) {
 
@@ -239,9 +237,7 @@ class PluginManager
             target[section] = {};
         }
 
-        let pluginKeys = Object.keys(plugins);
-
-        pluginKeys.sort(this._sort(plugins));
+        let pluginKeys = Object.sortedKeys(plugins);
 
         for (let i = 0; i < pluginKeys.length; i++) {
 

@@ -35,7 +35,7 @@ class PropertyUi extends Guify {
                     ui.addFolder();
                 }
                 ui.addControllers();
-            }
+            } // fixme: no space after select fields (shaders, session) ?
         }
     }
 }

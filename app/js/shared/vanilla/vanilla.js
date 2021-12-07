@@ -1,4 +1,3 @@
-
 HTMLElement.prototype.ancestorOfClass = function (classname) {
     let _getAncestor = (target) => {
         if (target && target.classList && target.classList.contains(classname)) {
@@ -80,4 +79,22 @@ String.prototype.toKebapCase = function() {
         .match(/[A-Z0-9]{2,}(?=[A-Z0-9][a-z0-9]+)|[A-Z0-9]?[a-z0-9]+|[A-Z0-9]/g)
         .map(x => x.toLowerCase())
         .join('-');
+}
+
+Object.sortedKeys = function (_object) {
+    let keys = Object.keys(_object);
+    keys.sort((a, b) => {
+        let ai = _object[a].index || 99999;
+        let bi = _object[b].index || 99999;
+        let an = _object[a].name || a;
+        let bn = _object[b].name || b;
+
+        let cmpi = ai - bi;
+        if (cmpi === 0) {
+            return an.localeCompare(bn);
+        }
+        return cmpi;
+    });
+
+    return keys;
 }

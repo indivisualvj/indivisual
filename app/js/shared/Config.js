@@ -426,6 +426,7 @@ class Config {
     _loadAnimationPlugins(settings, callback) {
 
         let calls = [
+            PluginManager.assignLayerPlugins(settings, 'sizing_mode', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'sizing_flip', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'offset_mode', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'filter_mode', HC.plugins, this),

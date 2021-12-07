@@ -32,7 +32,6 @@ class PluginManager
         });
     }
 
-
     /**
      *
      * @param settings
@@ -249,7 +248,7 @@ class PluginManager
             let pluginKey = pluginKeys[i];
             let plugin = plugins[pluginKey];
             let name = plugin.name || pluginKey.toKebapCase();
-            pluginKey = pluginKey.toSnakeCase();
+            pluginKey = pluginKey.toLowerCase();
 
             target[section][pluginKey] = plugin;
             settings[section][pluginKey] = name.toLowerCase();

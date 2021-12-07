@@ -37,7 +37,7 @@ class manualcenter extends manual {
         static name = 'static lookat center';
 
         apply() {
-            HC.plugins.camera_mode.manual.prototype.apply.call(this, new THREE.Vector3(0, 0, 0));
+            super.apply(new THREE.Vector3(0, 0, 0));
         }
     }
 
@@ -49,7 +49,7 @@ class lightingpatternxyz extends manual {
 
         apply() {
             let plugin = this.layer.getLightingPatternPlugin();
-            HC.plugins.camera_mode.manual.prototype.apply.call(this, plugin.centerVector());
+            super.apply(plugin.centerVector());
         }
     }
 
@@ -60,7 +60,7 @@ class lightinglookatxyz extends manual {
 
         apply() {
             let plugin = this.layer.getLightingLookatPlugin();
-            HC.plugins.camera_mode.manual.prototype.apply.call(this, plugin.centerVector());
+            super.apply(plugin.centerVector());
         }
     }
 

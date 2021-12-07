@@ -59,7 +59,7 @@ class wavexzby extends wave {
     static name = 'wave (xz by y)';
 
     apply(shape) {
-        HC.plugins.shape_transform.wave.prototype.apply.call(this, shape, ['y'], new THREE.Vector3(1, 0, 1));
+        super.apply(shape, ['y'], new THREE.Vector3(1, 0, 1));
     }
 }
 
@@ -68,7 +68,7 @@ class wavexby extends wave {
     static name = 'wave (x by y)';
 
     apply(shape) {
-        HC.plugins.shape_transform.wave.prototype.apply.call(this, shape, ['y'], new THREE.Vector3(1, 0, 0));
+        super.apply(shape, ['y'], new THREE.Vector3(1, 0, 0));
     }
 }
 
@@ -77,16 +77,16 @@ class wavexybz extends wave {
     static name = 'wave (xy by z)';
 
     apply(shape) {
-        HC.plugins.shape_transform.wave.prototype.apply.call(this, shape, ['z'], new THREE.Vector3(1, 1, 0));
+        super.apply(shape, ['z'], new THREE.Vector3(1, 1, 0));
     }
 }
 
 
-class waveall extends ShapeTransformPlugin {
+class waveall extends wave {
     static name = 'wave (all)';
 
     apply(shape) {
-        HC.plugins.shape_transform.wave.prototype.apply.call(this, shape, ['x', 'y', 'z'], new THREE.Vector3(1, 1, 1));
+        super.apply(shape, ['x', 'y', 'z'], new THREE.Vector3(1, 1, 1));
     }
 }
 

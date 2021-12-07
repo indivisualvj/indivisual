@@ -72,7 +72,7 @@ class wobblex extends wobble {
     static name = 'wobble x';
 
     apply(shape) {
-        HC.plugins.shape_transform.wobble.prototype.apply.call(this, shape, new THREE.Vector3(1, 0, 0));
+        super.apply(shape, new THREE.Vector3(1, 0, 0));
     }
 }
 
@@ -81,7 +81,7 @@ class wobbley extends wobble {
     static name = 'wobble y';
 
     apply(shape) {
-        HC.plugins.shape_transform.wobble.prototype.apply.call(this, shape, new THREE.Vector3(0, 1, 0));
+        super.apply(shape, new THREE.Vector3(0, 1, 0));
     }
 }
 
@@ -90,7 +90,7 @@ class wobblez extends wobble {
     static name = 'wobble z';
 
     apply(shape) {
-        HC.plugins.shape_transform.wobble.prototype.apply.call(this, shape, new THREE.Vector3(0, 0, 1));
+        super.apply(shape, new THREE.Vector3(0, 0, 1));
     }
 }
 

@@ -426,6 +426,7 @@ class Config {
     _loadAnimationPlugins(settings, callback) {
 
         let calls = [
+            PluginManager.assignLayerPlugins(settings, 'shape_transform', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'sizing_mode', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'sizing_flip', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'shape_pairing', HC.plugins, this),

@@ -1,6 +1,8 @@
-HC.plugins.offset_mode = HC.plugins.offset_mode || {};
-{
-    HC.OffsetModePlugin = class Plugin extends HC.AnimationPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+
+class OffsetModePlugin extends HC.AnimationPlugin {
 
         setControlSets(controlSets) {
             super.setControlSets(controlSets);
@@ -28,4 +30,5 @@ HC.plugins.offset_mode = HC.plugins.offset_mode || {};
             }
         }
     }
-}
+
+export {OffsetModePlugin}

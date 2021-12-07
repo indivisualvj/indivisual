@@ -425,19 +425,13 @@ class Config {
      */
     _loadAnimationPlugins(settings, callback) {
 
-        let calls = [];
-        calls.push((_finished) => {
-            PluginManager.assignLayerPlugins(settings, 'filter_mode', HC.plugins, this, f => {
-                _finished();
-            });
-        });
-        calls.push((_finished) => {
-            PluginManager.assignLayerPlugins(settings, 'sizing_flip', HC.plugins, this, f => {
-                _finished();
-            });
-        });
+        let calls = [
+            PluginManager.assignLayerPlugins(settings, 'sizing_flip', HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'offset_mode', HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'filter_mode', HC.plugins, this),
+        ];
 
-        TimeoutManager.chainExecuteCalls(calls, () => {
+        Promise.all(calls).then(() => {
             Object.assign(HC.plugins.pattern_overlay, HC.plugins.pattern);
 
             let sectionKeys = Object.keys(HC.plugins);

@@ -12,15 +12,23 @@ import {SourceManager} from "./SourceManager";
 import {LayeredControlSetManager} from "./LayeredControlSetManager";
 import {Logger} from "../shared/Logger";
 import {Messaging} from "../shared/Messaging";
-import {TimeoutManager} from "./TimeoutManager";
 
 class PluginManager
 {
-    static assignLayerPlugins(settings, section, target, config, callback) {
-
-        this._importPlugins(HC.filePath('layer', section), (plugins) => {
-            this._assignPlugins(settings, section, plugins, target, config);
-            callback();
+    /**
+     *
+     * @param settings
+     * @param section
+     * @param target
+     * @param config
+     * @return {Promise<unknown>}
+     */
+    static assignLayerPlugins(settings, section, target, config) {
+        return new Promise((resolve) => {
+            this._importPlugins(HC.filePath('layer', section)).then((plugins) => {
+                this._assignPlugins(settings, section, plugins, target, config);
+                resolve();
+            });
         });
     }
 
@@ -33,7 +41,7 @@ class PluginManager
      */
     static assignAudioPlugins(settings, config, callback) {
 
-        this._importPlugins('audio', (plugins) => {
+        this._importPlugins('audio').then((plugins) => {
             AudioManager.plugins = AudioManager.plugins || {};
             this._assignPlugins(settings, 'audio', plugins, AudioManager.plugins, config);
             callback();
@@ -48,7 +56,7 @@ class PluginManager
      */
     static assignShuffleModePlugins(settings, config, callback) {
 
-        this._importPlugins('shuffle_mode', (plugins) => {
+        this._importPlugins('shuffle_mode').then((plugins) => {
             Renderer.plugins = Renderer.plugins || {};
             this._assignPlugins(settings, 'shuffle_mode', plugins, Renderer.plugins, config);
             callback();
@@ -62,7 +70,7 @@ class PluginManager
      * @param callback
      */
     static assignDisplayVisibilityPlugins(settings, config, callback) {
-        this._importPlugins('display_visibility', (plugins) => {
+        this._importPlugins('display_visibility').then((plugins) => {
             DisplayManager.plugins = DisplayManager.plugins || {};
             this._assignPlugins(settings, 'display_visibility', plugins, DisplayManager.plugins, config);
             callback();
@@ -76,7 +84,7 @@ class PluginManager
      * @param callback
      */
     static assignBorderModePlugins(settings, config, callback) {
-        this._importPlugins('border_mode', (plugins) => {
+        this._importPlugins('border_mode').then((plugins) => {
             DisplayManager.plugins = DisplayManager.plugins || {};
             this._assignPlugins(settings, 'border_mode', plugins, DisplayManager.plugins, config);
             callback();
@@ -90,7 +98,7 @@ class PluginManager
      * @param callback
      */
     static assignDisplaySourcePlugins(settings, config, callback) {
-        this._importPlugins('display_source', (plugins) => {
+        this._importPlugins('display_source').then((plugins) => {
             SourceManager.plugins = SourceManager.plugins || {};
             this._assignPlugins(settings, 'display_source', plugins, SourceManager.plugins, config);
             callback();
@@ -105,7 +113,7 @@ class PluginManager
     static assignControlSets(target, callback) {
         LayeredControlSetManager.plugins = { control_set: {} };
 
-        this._importPlugins(HC.filePath('control_set', 'animation'), (plugins) => {
+        this._importPlugins(HC.filePath('control_set', 'animation')).then((plugins) => {
             let keys = Object.keys(plugins);
 
             keys.sort(this._sort(plugins));
@@ -182,26 +190,34 @@ class PluginManager
         }
     }
 
-    static _importPlugins(dir, callback) {
-        let searchPath = HC.filePath(APP_DIR, 'js', 'modules', dir);
-        let importPath = HC.filePath('..', 'modules', dir);
-        let plugins = {};
-        let imports = [];
-        Messaging.samples(searchPath, (files) => {
-            files.forEach((file) => {
-                imports.push((_loaded) => {
-                    import(HC.filePath(importPath, file.name)).then((plugin) => {
+    /**
+     *
+     * @param dir
+     * @return {Promise<unknown>}
+     * @private
+     */
+    static _importPlugins(dir) {
+
+        return new Promise((resolve) => {
+            let searchPath = HC.filePath(APP_DIR, 'js', 'modules', dir);
+            let importPath = HC.filePath('..', 'modules', dir);
+            let plugins = {};
+            let imports = [];
+
+            Messaging.samples(searchPath, (files) => {
+                files.forEach((file) => {
+                    imports.push(import(HC.filePath(importPath, file.name)));
+                });
+
+                Promise.all(imports).then(function () {
+                    for (const plugin of arguments[0]) {
                         for (const pluginKey in plugin) {
                             plugins[pluginKey] = plugin[pluginKey];
                             Logger.log(dir + '/' + pluginKey, 'imported');
                         }
-                        _loaded();
-                    });
+                    }
+                    resolve(plugins);
                 });
-            });
-
-            TimeoutManager.chainExecuteCalls(imports, () => {
-                callback(plugins);
             });
         });
     }

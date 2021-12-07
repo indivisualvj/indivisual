@@ -1,5 +1,9 @@
-{
-    HC.plugins.lighting_pattern.ring = class Plugin extends HC.LightingPatternPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {LightingPatternPlugin} from "../LightingPatternPlugin";
+
+class ring extends LightingPatternPlugin {
         static name = 'ring';
 
         apply(light, sides) {
@@ -28,4 +32,5 @@
             this.positionIn2dSpace(light, x, -y, z);
         }
     }
-}
+
+export {ring};

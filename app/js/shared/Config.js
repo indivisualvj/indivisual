@@ -439,6 +439,7 @@ class Config {
             PluginManager.assignLayerPlugins(settings, 'material_style', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'lighting_type', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'lighting_lookat', HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'lighting_pattern', HC.plugins, this),
         ];
 
         Promise.all(calls).then(() => {

@@ -1,5 +1,9 @@
-{
-    HC.plugins.camera_mode.thirdperson = class Plugin extends HC.CameraModePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {CameraModePlugin} from "../CameraModePlugin";
+
+class thirdperson extends CameraModePlugin {
         static name = 'third person view';
 
         apply() {
@@ -23,4 +27,5 @@
             camera.lookAt(lookAt);
         }
     }
-}
+
+export {thirdperson};

@@ -1,5 +1,9 @@
-{
-    HC.plugins.camera_mode.mirror = class Plugin extends HC.CameraModePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {CameraModePlugin} from "../CameraModePlugin";
+
+class mirror extends CameraModePlugin {
         static name = 'mirror XYZ position (current)';
         mirror = new THREE.Vector3(1, 1, 1);
 
@@ -21,13 +25,14 @@
             cam.lookAt(new THREE.Vector3(0, 0, 0));
         }
     }
-}
-{
-    HC.plugins.camera_mode.mirrorpeak = class Plugin extends HC.CameraModePlugin {
+
+
+class mirrorpeak extends CameraModePlugin {
         static name = 'mirror XYZ position (peak)';
 
         apply() {
             this.layer.getCameraModePlugin('mirror').apply(true);
         }
     }
-}
+
+export {mirror, mirrorpeak};

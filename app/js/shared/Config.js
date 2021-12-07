@@ -8,7 +8,6 @@ import {ControlSetManager} from "../manager/ControlSetManager";
 import {Messaging} from "./Messaging";
 import {EventManager} from "../manager/EventManager";
 import {PluginManager} from "../manager/PluginManager";
-import {TimeoutManager} from "../manager/TimeoutManager";
 
 class Config {
 
@@ -426,6 +425,7 @@ class Config {
     _loadAnimationPlugins(settings, callback) {
 
         let calls = [
+            PluginManager.assignLayerPlugins(settings, 'camera_mode', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'shape_transform', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'sizing_mode', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'sizing_flip', HC.plugins, this),

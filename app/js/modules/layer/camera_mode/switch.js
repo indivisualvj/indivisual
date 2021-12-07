@@ -1,5 +1,9 @@
-{
-    HC.plugins.camera_mode.switch = class Plugin extends HC.CameraModePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {CameraModePlugin} from "../CameraModePlugin";
+
+class switchposition extends CameraModePlugin {
         static name = 'switch position (current)';
 
         before() {
@@ -22,33 +26,33 @@
             }
         }
     }
-}
-{
-    HC.plugins.camera_mode.switchpeak = class Plugin extends HC.CameraModePlugin {
+
+
+class switchpeak extends CameraModePlugin {
         static name = 'switch position (peak)';
 
         before() {
-            this.layer.getCameraModePlugin('switch').before();
+            this.layer.getCameraModePlugin('switchposition').before();
         }
 
         apply() {
-            this.layer.getCameraModePlugin('switch').apply(true);
+            this.layer.getCameraModePlugin('switchposition').apply(true);
         }
     }
-}
-{
-    HC.plugins.camera_mode.switchlookat = class Plugin extends HC.CameraModePlugin {
+
+
+class switchlookat extends CameraModePlugin {
         static name = 'switch position lookat shape (current)';
         shape = false;
         lookAtVector = false;
 
         before() {
-            this.layer.getCameraModePlugin('switch').before();
+            this.layer.getCameraModePlugin('switchposition').before();
         }
 
         apply(peak) {
 
-            let change = this.layer.getCameraModePlugin('switch').apply(peak);
+            let change = this.layer.getCameraModePlugin('switchposition').apply(peak);
 
             if (change) {
                 let shape = this.layer.randomShape();
@@ -64,19 +68,20 @@
             }
         }
     }
-}
-{
-    HC.plugins.camera_mode.switchlookatpeak = class Plugin extends HC.CameraModePlugin {
+
+
+class switchlookatpeak extends CameraModePlugin {
         static name = 'switch position lookat shape (peak)';
         shape = false;
         lookAtVector = false;
 
         before() {
-            this.layer.getCameraModePlugin('switch').before();
+            this.layer.getCameraModePlugin('switchposition').before();
         }
 
         apply() {
             this.layer.getCameraModePlugin('switchlookat').apply(true);
         }
     }
-}
+
+export {switchlookat, switchlookatpeak, switchpeak, switchposition};

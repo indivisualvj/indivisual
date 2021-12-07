@@ -1,5 +1,9 @@
-{
-    HC.plugins.camera_mode.lookatshape = class Plugin extends HC.CameraModePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {CameraModePlugin} from "../CameraModePlugin";
+
+class lookatshape extends CameraModePlugin {
         static name = 'look at a shape';
         targetLook = new THREE.Vector3(0, 0, 0);
         currentLook = new THREE.Vector3(0, 0, 0);
@@ -68,13 +72,14 @@
             this.shared.currentLook = this.currentLook;
         }
     }
-}
-{
-    HC.plugins.camera_mode.lookatshapepeak = class Plugin extends HC.CameraModePlugin {
+
+
+class lookatshapepeak extends CameraModePlugin {
         static name = 'look at a shape on peak';
 
         apply() {
             this.layer.getCameraModePlugin('lookatshape').apply(true);
         }
     }
-}
+
+export {lookatshape, lookatshapepeak};

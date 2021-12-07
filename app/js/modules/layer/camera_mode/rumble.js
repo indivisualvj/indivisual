@@ -1,5 +1,9 @@
-{
-    HC.plugins.camera_mode.rumble = class Plugin extends HC.CameraModePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {CameraModePlugin} from "../CameraModePlugin";
+
+class rumble extends CameraModePlugin {
         static name = 'static rumble';
         params = {
             multiplier: false,
@@ -72,9 +76,9 @@
             cam.position.add(new THREE.Vector3(x, y, z));
         }
     }
-}
-{
-    HC.plugins.camera_mode.rumblepeak = class Plugin extends HC.CameraModePlugin {
+
+
+class rumblepeak extends CameraModePlugin {
         static name = 'static rumble on peak';
 
         apply() {
@@ -83,4 +87,5 @@
             layer.getCameraModePlugin('rumble').apply(true);
         }
     }
-}
+
+export {rumblepeak, rumble};

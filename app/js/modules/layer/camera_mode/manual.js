@@ -1,5 +1,9 @@
-{
-    HC.plugins.camera_mode.manual = class Plugin extends HC.CameraModePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {CameraModePlugin} from "../CameraModePlugin";
+
+class manual extends CameraModePlugin {
         static index = 1;
         static name = 'static look forward';
 
@@ -26,9 +30,9 @@
             }
         }
     }
-}
-{
-    HC.plugins.camera_mode.manualcenter = class Plugin extends HC.plugins.camera_mode.manual {
+
+
+class manualcenter extends manual {
         static index = 2;
         static name = 'static lookat center';
 
@@ -36,10 +40,10 @@
             HC.plugins.camera_mode.manual.prototype.apply.call(this, new THREE.Vector3(0, 0, 0));
         }
     }
-}
 
-{
-    HC.plugins.camera_mode.lightingpatternxyz = class Plugin extends HC.plugins.camera_mode.manual {
+
+
+class lightingpatternxyz extends manual {
         static name = 'look at lighting_patternxyz';
         static index = 99999;
 
@@ -48,9 +52,9 @@
             HC.plugins.camera_mode.manual.prototype.apply.call(this, plugin.centerVector());
         }
     }
-}
-{
-    HC.plugins.camera_mode.lightinglookatxyz = class Plugin extends HC.plugins.camera_mode.manual {
+
+
+class lightinglookatxyz extends manual {
         static name = 'look at lighting_lookatxyz';
         static index = 99999;
 
@@ -59,4 +63,5 @@
             HC.plugins.camera_mode.manual.prototype.apply.call(this, plugin.centerVector());
         }
     }
-}
+
+export {lightinglookatxyz, lightingpatternxyz, manual, manualcenter};

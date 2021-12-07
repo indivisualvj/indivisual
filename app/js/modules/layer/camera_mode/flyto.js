@@ -1,5 +1,9 @@
-{
-    HC.plugins.camera_mode.flytoshape = class Plugin extends HC.CameraModePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {CameraModePlugin} from "../CameraModePlugin";
+
+class flytoshape extends CameraModePlugin {
         static name = 'fly to shape';
 
         before() {
@@ -27,9 +31,9 @@
             }
         }
     }
-}
-{
-    HC.plugins.camera_mode.flytoshapepeak = class Plugin extends HC.CameraModePlugin {
+
+
+class flytoshapepeak extends CameraModePlugin {
         static name = 'fly to shape on peak';
 
         apply() {
@@ -38,4 +42,5 @@
             layer.getCameraModePlugin('flytoshape').apply(true);
         }
     }
-}
+
+export {flytoshape, flytoshapepeak};

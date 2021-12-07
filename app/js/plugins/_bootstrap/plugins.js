@@ -112,7 +112,7 @@ HC.Shape.prototype.initPlugins = function (shape) {
          * use this for custom code on construction
          */
         init() {
-            //
+
         }
 
         setControlSets(controlSets) {

@@ -1,15 +1,25 @@
-{
-    HC.plugins.rotation_mode.default = class Plugin extends HC.RotationModePlugin {
-        /**
-         * @see HC.RotationModePlugin.injections
-         */
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {RotationModePlugin} from "../RotationModePlugin";
 
-        apply(shape) {
+const Judder = {
+    InOut(v) {
+        return Math.floor(v * 10) / 10;
+    }
+};
 
-            let params = this.params(shape);
+class _default extends RotationModePlugin {
+    /**
+     * @see HC.RotationModePlugin.injections
+     */
 
-            if (params.tween) {
-                // apply is only called if duration is over.
+    apply(shape) {
+
+        let params = this.params(shape);
+
+        if (params.tween) {
+            // apply is only called if duration is over.
                 // hence this tween must be overdue and has to be stopped.
                 params.tween.stop();
             }
@@ -54,7 +64,7 @@
         }
 
         easing() {
-            let easing = this.settings.rotation_easing;
+            let easing = this.settings.rotation_easing; // todo: screams after a plugin solution
             switch (easing) {
                 case 'quint':
                     return TWEEN.Easing.Quintic.InOut;
@@ -66,7 +76,7 @@
                     return TWEEN.Easing.Back.InOut;
 
                 case 'judder':
-                    return TWEEN.Easing.Judder.InOut;
+                    return Judder.InOut;
 
                 case 'off':
                 default:
@@ -132,5 +142,6 @@
 
             return current;
         }
-    }
 }
+
+export {_default};

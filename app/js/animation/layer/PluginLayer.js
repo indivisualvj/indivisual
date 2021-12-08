@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {_Layer} from "./NextLayer";
+import {Shape} from "../Shape";
 
 class Layer extends _Layer {
 
@@ -402,7 +403,7 @@ class Layer extends _Layer {
                 let instance = this.loadPlugin(plugin, key);
                 instance.construct(this.animation, this, this.settings, plugin, key);
                 instance.setControlSets(this.controlSets);
-                instance.inject();
+                instance.inject(Shape);
                 this.setPlugin(plugin, key, instance);
             }
         }

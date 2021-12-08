@@ -3,25 +3,7 @@
  */
 
 HC.plugins = HC.plugins || {};
-HC.Shape = HC.Shape || {prototype: {injected: {plugins: {}}}};
 
-/**
- *
- * @param shape
- */
-HC.Shape.prototype.initPlugins = function (shape) {
-
-    if (!HC.Shape.prototype._plugins) {
-        HC.Shape.prototype._plugins = {};
-        let plugins = Object.keys(HC.Shape.prototype.injected.plugins);
-        for (let p = 0; p < plugins.length; p++) {
-            let key = plugins[p];
-            let plugin = HC.Shape.prototype.injected.plugins[key];
-            HC.Shape.prototype._plugins[key] = clone(plugin);
-        }
-    }
-    shape.plugins = clone(HC.Shape.prototype._plugins);
-};
 {
 
     HC.AnimationPlugin = class AnimationPlugin {
@@ -119,10 +101,9 @@ HC.Shape.prototype.initPlugins = function (shape) {
             this.controlSets = controlSets;
         }
 
-        inject() {
-            let inst = this;
-            HC.Shape.prototype.injected.plugins[this.tree][this.key] = {
-                values: inst.injections || {}
+        inject(shapeClass) {
+            shapeClass.injected.plugins[this.tree][this.key] = {
+                values: this.injections || {}
             };
         }
 

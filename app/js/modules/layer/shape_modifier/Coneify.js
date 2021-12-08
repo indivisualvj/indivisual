@@ -1,5 +1,9 @@
-{
-    HC.plugins.shape_modifier.coneify = class Plugin extends HC.ShapeModifierPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShapeModifierPlugin} from "../ShapeModifierPlugin";
+
+class coneify extends ShapeModifierPlugin {
         static name = 'coneify xyz by y';
 
         create(geometry, source, axes) {
@@ -10,7 +14,6 @@
             let vertices = geometry.getAttribute('position');
 
             if (vertices) {
-
                 this.min = this.max = 0;
                 let vtc = new THREE.Vector3();
                 for (let i = 0; i < vertices.count; i++) {
@@ -40,31 +43,33 @@
             return geometry
         }
     }
-}
-{
-    HC.plugins.shape_modifier.coneifyxzby = class Plugin extends HC.plugins.shape_modifier.coneify {
+
+
+    class coneifyxzby extends coneify {
         static name = 'coneify xz by y';
 
         create(shape) {
-            return HC.plugins.shape_modifier.coneify.prototype.create.call(this, shape, 'y', new THREE.Vector3(1, 0, 1));
+            return super.create(shape, 'y', new THREE.Vector3(1, 0, 1));
         }
     }
-}
-{
-    HC.plugins.shape_modifier.coneifyxby = class Plugin extends HC.plugins.shape_modifier.coneify {
+
+
+    class coneifyxby extends coneify {
         static name = 'coneify x by y';
 
         create(shape) {
-            return HC.plugins.shape_modifier.coneify.prototype.create.call(this, shape, 'y', new THREE.Vector3(1, 0, 0));
+            return super.create(shape, 'y', new THREE.Vector3(1, 0, 0));
         }
     }
-}
-{
-    HC.plugins.shape_modifier.coneifyxybz = class Plugin extends HC.plugins.shape_modifier.coneify {
+
+
+    class coneifyxybz extends coneify {
         static name = 'coneify xy by z';
 
         create(shape) {
-            return HC.plugins.shape_modifier.coneify.prototype.create.call(this, shape, 'z', new THREE.Vector3(1, 1, 0));
+            return super.create(shape, 'z', new THREE.Vector3(1, 1, 0));
         }
     }
-}
+
+export {coneify, coneifyxby, coneifyxybz, coneifyxzby};
+

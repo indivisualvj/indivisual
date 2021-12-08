@@ -1,5 +1,9 @@
-{
-    HC.plugins.shape_modifier.depth = class Plugin extends HC.ShapeModifierPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShapeModifierPlugin} from "../ShapeModifierPlugin";
+
+class depth extends ShapeModifierPlugin {
         static name = 'depth center';
 
         create(geometry, mode) {
@@ -50,13 +54,14 @@
             return geometry;
         }
     }
-}
-{
-    HC.plugins.shape_modifier.depthzigzag = class Plugin extends HC.plugins.shape_modifier.depth {
+
+
+    class depthzigzag extends depth {
         static name = 'depth zigzag';
 
         create(geometry) {
-            return HC.plugins.shape_modifier.depth.prototype.create.call(this, geometry, 'zigzag');
+            return super.create(geometry, 'zigzag');
         }
     }
-}
+
+export {depth, depthzigzag};

@@ -232,7 +232,7 @@ class Layer extends _Layer {
     /**
      *
      * @param name
-     * @returns {HC.ShapeModifierPlugin}
+     * @returns {ShapeModifierPlugin}
      */
     getShapeModifierPlugin(name) {
         return this.getPlugin('shape_modifier', name);
@@ -250,7 +250,7 @@ class Layer extends _Layer {
     /**
      *
      * @param name
-     * @returns {HC.ShapeDelayPlugin}
+     * @returns {ShapeDelayPlugin}
      */
     shapeDelayPlugin(name) {
         return this.getPlugin('shape_delay', name);

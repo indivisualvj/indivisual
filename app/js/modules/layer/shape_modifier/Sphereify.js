@@ -1,5 +1,9 @@
-{
-    HC.plugins.shape_modifier.sphereify = class Plugin extends HC.ShapeModifierPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShapeModifierPlugin} from "../ShapeModifierPlugin";
+
+class sphereify extends ShapeModifierPlugin {
         static name = 'sphereify';
 
         create(geometry) {
@@ -38,4 +42,6 @@
             return geometry
         }
     }
-}
+
+export {sphereify};
+

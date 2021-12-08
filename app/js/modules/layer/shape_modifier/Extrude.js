@@ -1,5 +1,9 @@
-{
-    HC.plugins.shape_modifier.extrude = class Plugin extends HC.ShapeModifierPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShapeModifierPlugin} from "../ShapeModifierPlugin";
+
+class extrude extends ShapeModifierPlugin {
         static name = 'extrude';
         static tutorial = {
             shape_modc: {
@@ -63,4 +67,5 @@
             return geometry;
         }
     }
-}
+
+export {extrude};

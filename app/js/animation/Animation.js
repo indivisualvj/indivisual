@@ -735,7 +735,7 @@ class Animation extends Program {
             for (let k in data) {
                 this.config.DisplaySettingsManager.updateItem(k, data[k]);
             }
-            this.displayManager.reset();
+            this.displayManager.reset(this.getResolution());
             // this.fullReset(true);
 
         } else {

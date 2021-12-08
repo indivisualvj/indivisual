@@ -41,7 +41,7 @@ class Layer extends _Layer {
     /**
      *
      * @param name
-     * @returns {HC.LightingLookatPlugin}
+     * @returns {LightingLookatPlugin}
      */
     getLightingLookatPlugin(name) {
         return this.getPlugin('lighting_lookat', name);
@@ -50,7 +50,7 @@ class Layer extends _Layer {
     /**
      *
      * @param name
-     * @returns {HC.LightingPatternPlugin}
+     * @returns {LightingPatternPlugin}
      */
     getLightingPatternPlugin(name) {
         return this.getPlugin('lighting_pattern', name);
@@ -59,7 +59,7 @@ class Layer extends _Layer {
     /**
      *
      * @param name
-     * @returns {HC.LightingTypePlugin}
+     * @returns {LightingTypePlugin}
      */
     getLightingTypePlugin(name) {
         return this.getPlugin('lighting_type', name);
@@ -105,7 +105,7 @@ class Layer extends _Layer {
     /**
      *
      * @param name
-     * @returns {HC.PatternRotationPlugin}
+     * @returns {PatternRotationPlugin}
      */
     getPatternRotationPlugin(name) {
         return this.getPlugin('pattern_rotation', name);
@@ -114,7 +114,7 @@ class Layer extends _Layer {
     /**
      *
      * @param name
-     * @returns {HC.ShapeLookatPlugin}
+     * @returns {ShapeLookatPlugin}
      */
     getShapeLookatPlugin(name) {
         return this.getPlugin('shape_lookat', name);
@@ -132,7 +132,7 @@ class Layer extends _Layer {
     /**
      *
      * @param name
-     * @returns {HC.OffsetModePlugin}
+     * @returns {OffsetModePlugin}
      */
     getOffsetModePlugin(name) {
         return this.getPlugin('offset_mode', name);
@@ -168,7 +168,7 @@ class Layer extends _Layer {
     /**
      *
      * @param name
-     * @returns {HC.RotationModePlugin}
+     * @returns {RotationModePlugin}
      */
     getRotationModePlugin(name) {
         return this.getPlugin('rotation_mode', name);
@@ -177,7 +177,7 @@ class Layer extends _Layer {
     /**
      *
      * @param name
-     * @returns {HC.RotationDirectionPlugin}
+     * @returns {RotationDirectionPlugin}
      */
     getRotationDirectionPlugin(name) {
         return this.getPlugin('rotation_direction', name);
@@ -195,7 +195,7 @@ class Layer extends _Layer {
     /**
      *
      * @param name
-     * @returns {HC.SizingModePlugin}
+     * @returns {SizingModePlugin}
      */
     getSizingModePlugin(name) {
         return this.getPlugin('sizing_mode', name);
@@ -204,7 +204,7 @@ class Layer extends _Layer {
     /**
      *
      * @param name
-     * @returns {HC.SizingFlipPlugin}
+     * @returns {SizingFlipPlugin}
      */
     getSizingFlipPlugin(name) {
         return this.getPlugin('sizing_flip', name);
@@ -222,7 +222,7 @@ class Layer extends _Layer {
     /**
      *
      * @param name
-     * @returns {HC.ShapeTransformPlugin}
+     * @returns {ShapeTransformPlugin}
      */
     getShapeTransformPlugin(name) {
         return this.getPlugin('shape_transform', name);
@@ -240,7 +240,7 @@ class Layer extends _Layer {
     /**
      *
      * @param name
-     * @returns {HC.ShapeRhythmPlugin}
+     * @returns {ShapeRhythmPlugin}
      */
     getShapeRhythmPlugin(name) {
         return this.getPlugin('shape_rhythm', name);
@@ -258,7 +258,7 @@ class Layer extends _Layer {
     /**
      *
      * @param name
-     * @returns {HC.ShapePairingPlugin}
+     * @returns {ShapePairingPlugin}
      */
     getShapePairingPlugin(name) {
         return this.getPlugin('shape_pairing', name);
@@ -276,7 +276,7 @@ class Layer extends _Layer {
     /**
      *
      * @param name
-     * @returns {HC.ColoringModePlugin}
+     * @returns {ColoringModePlugin}
      */
     getColoringModePlugin(name) {
         return this.getPlugin('coloring_mode', name);
@@ -285,7 +285,7 @@ class Layer extends _Layer {
     /**
      *
      * @param name
-     * @returns {HC.FilterModePlugin}
+     * @returns {FilterModePlugin}
      */
     getFilterModePlugin(name) {
         return this.getPlugin('filter_mode', name);
@@ -303,7 +303,7 @@ class Layer extends _Layer {
     /**
      *
      * @param name
-     * @returns {HC.MaterialStylePlugin}
+     * @returns {MaterialStylePlugin}
      */
     getMaterialStylePlugin(name) {
         return this.getPlugin('material_style', name);
@@ -312,7 +312,7 @@ class Layer extends _Layer {
     /**
      *
      * @param name
-     * @returns {HC.CameraModePlugin}
+     * @returns {CameraModePlugin}
      */
     getCameraModePlugin(name) {
         return this.getPlugin('camera_mode', name);

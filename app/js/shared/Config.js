@@ -8,6 +8,7 @@ import {ControlSetManager} from "../manager/ControlSetManager";
 import {Messaging} from "./Messaging";
 import {EventManager} from "../manager/EventManager";
 import {PluginManager} from "../manager/PluginManager";
+import {Shape} from "../animation/Shape";
 
 class Config {
 
@@ -428,6 +429,7 @@ class Config {
             PluginManager.assignLayerPlugins(settings, 'camera_mode', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'shape_transform', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'shape_rhythm', HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'shape_delay', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'sizing_mode', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'sizing_flip', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'shape_pairing', HC.plugins, this),
@@ -453,7 +455,7 @@ class Config {
                 let section = sectionKeys[pi];
 
                 // create plugin namespaces to work in
-                HC.Shape.prototype.injected.plugins[section] = {};
+                Shape.injected.plugins[section] = {};
 
                 this._loadPlugins(settings, section, HC.plugins[section]);
             }

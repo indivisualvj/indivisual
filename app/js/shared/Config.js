@@ -437,6 +437,7 @@ class Config {
             PluginManager.assignLayerPlugins(settings, 'shape_pairing', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'rotation_mode', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'rotation_direction', HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'rotation_offset_mode', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'pattern_rotation', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'offset_mode', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'coloring_mode', HC.plugins, this),

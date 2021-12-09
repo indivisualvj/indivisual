@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern_mover.stack = class Plugin extends HC.PatternMoverPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternMoverPlugin} from "../PatternMoverPlugin";
+
+class stack extends PatternMoverPlugin {
         static name = 'stack';
         injections = {
             ox: false,
@@ -160,9 +164,9 @@
             shape.move(mx, my, mz);
         }
     }
-}
-{
-    HC.plugins.pattern_mover.shuffle = class Plugin extends HC.PatternMoverPlugin {
+
+
+    class shuffle extends PatternMoverPlugin {
         static name = 'shuffle';
         injections = {
             ox: false,
@@ -294,9 +298,9 @@
             shape.move(mx, my, mz);
         }
     }
-}
-{
-    HC.plugins.pattern_mover.xchange = class Plugin extends HC.PatternMoverPlugin {
+
+
+    class xchange extends PatternMoverPlugin {
         static name = 'xchange';
         injections = {
             ox: false,
@@ -429,4 +433,5 @@
             shape.move(mx, my, mz);
         }
     }
-}
+
+export {shuffle, stack, xchange};

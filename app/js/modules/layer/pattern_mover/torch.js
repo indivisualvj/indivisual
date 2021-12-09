@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern_mover.torch = class Plugin extends HC.PatternMoverPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternMoverPlugin} from "../PatternMoverPlugin";
+
+class torch extends PatternMoverPlugin {
         static name = 'torch';
         mover = {
             x: 0,
@@ -70,4 +74,6 @@
             layer.getPatternPlugin().positionIn3dSpace(shape, x, y, z);
         }
     }
-}
+
+
+export {torch};

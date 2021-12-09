@@ -1,15 +1,20 @@
-{
-    HC.plugins.pattern_mover.bounce = class Plugin extends HC.PatternMoverPlugin {
-        static name = 'bounce h';
-        mover = {
-            x: 0,
-            y: 0
-        };
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternMoverPlugin} from "../PatternMoverPlugin";
+
+class pan extends PatternMoverPlugin {
+        static name = 'pan h';
         injections = {
             panmox: 0,
             panmoy: 0,
             panhox: 0,
             panhoy: 0
+        };
+
+        mover = {
+            x: 0,
+            y: 0
         };
 
         apply(shape, vertical) {
@@ -27,8 +32,7 @@
                 let shapeDir = layer.getShapeDirection(shape);
                 let jump = this.settings.pattern_padding * shapeDir;
 
-                let speed = layer.currentSpeed();
-                jump *= this.animation.diffPrc * (layer.shapeSize(1) * shape.size() * speed.prc) / 4;
+                jump *= (0.1 * this.animation.diff);
 
                 if (vertical) {
                     this.mover.y += jump;
@@ -70,23 +74,24 @@
 
             y += py + params.panmoy;
 
-            layer.getPatternPlugin().positionIn3dSpace(shape, x, y, z);
+            this.layer.getPatternPlugin().positionIn3dSpace(shape, x, y, z);
+
         }
     }
-}
-{
-    HC.plugins.pattern_mover.bouncev = class Plugin extends HC.PatternMoverPlugin {
-        static name = 'bounce v';
+
+
+    class panv extends PatternMoverPlugin {
+        static name = 'pan v';
 
         apply(shape) {
             let layer = this.layer;
-            layer.getPatternMoverPlugin('bounce').apply(shape, true);
+            layer.getPatternMoverPlugin('pan').apply(shape, true);
         }
     }
-}
-{
-    HC.plugins.pattern_mover.bouncer = class Plugin extends HC.PatternMoverPlugin {
-        static name = 'bounce h|v';
+
+
+    class panr extends PatternMoverPlugin {
+        static name = 'pan h|v';
         dir = false;
 
         apply(shape) {
@@ -96,10 +101,11 @@
                 this.dir = randomBool();
             }
             if (this.dir) {
-                layer.getPatternMoverPlugin('bounce').apply(shape, false);
+                layer.getPatternMoverPlugin('pan').apply(shape, false);
             } else {
-                layer.getPatternMoverPlugin('bounce').apply(shape, true);
+                layer.getPatternMoverPlugin('pan').apply(shape, true);
             }
         }
     }
-}
+
+export {pan, panv, panr};

@@ -270,7 +270,6 @@ class Config {
      *
      */
     initControlControlSets() {
-
         return this._initControlSets(PluginManager.getControlSets(), this.ControlValues);
     }
 
@@ -426,26 +425,27 @@ class Config {
     _loadAnimationPlugins(settings, callback) {
 
         let calls = [
-            PluginManager.assignLayerPlugins(settings, 'camera_mode', HC.plugins, this),
-            PluginManager.assignLayerPlugins(settings, 'shape_transform', HC.plugins, this),
-            PluginManager.assignLayerPlugins(settings, 'shape_modifier', HC.plugins, this),
-            PluginManager.assignLayerPlugins(settings, 'shape_rhythm', HC.plugins, this),
-            PluginManager.assignLayerPlugins(settings, 'shape_lookat', HC.plugins, this),
-            PluginManager.assignLayerPlugins(settings, 'shape_delay', HC.plugins, this),
-            PluginManager.assignLayerPlugins(settings, 'sizing_mode', HC.plugins, this),
-            PluginManager.assignLayerPlugins(settings, 'sizing_flip', HC.plugins, this),
-            PluginManager.assignLayerPlugins(settings, 'shape_pairing', HC.plugins, this),
-            PluginManager.assignLayerPlugins(settings, 'rotation_mode', HC.plugins, this),
-            PluginManager.assignLayerPlugins(settings, 'rotation_direction', HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'camera_mode',          HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'coloring_mode',        HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'filter_mode',          HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'lighting_lookat',      HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'lighting_pattern',     HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'lighting_type',        HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'material_style',       HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'offset_mode',          HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'pattern_mover',        HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'pattern_rotation',     HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'rotation_direction',   HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'rotation_mode',        HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'rotation_offset_mode', HC.plugins, this),
-            PluginManager.assignLayerPlugins(settings, 'pattern_rotation', HC.plugins, this),
-            PluginManager.assignLayerPlugins(settings, 'offset_mode', HC.plugins, this),
-            PluginManager.assignLayerPlugins(settings, 'coloring_mode', HC.plugins, this),
-            PluginManager.assignLayerPlugins(settings, 'filter_mode', HC.plugins, this),
-            PluginManager.assignLayerPlugins(settings, 'material_style', HC.plugins, this),
-            PluginManager.assignLayerPlugins(settings, 'lighting_type', HC.plugins, this),
-            PluginManager.assignLayerPlugins(settings, 'lighting_lookat', HC.plugins, this),
-            PluginManager.assignLayerPlugins(settings, 'lighting_pattern', HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'shape_delay',          HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'shape_lookat',         HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'shape_modifier',       HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'shape_pairing',        HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'shape_rhythm',         HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'shape_transform',      HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'sizing_flip',          HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'sizing_mode',          HC.plugins, this),
         ];
 
         Promise.all(calls).then(() => {

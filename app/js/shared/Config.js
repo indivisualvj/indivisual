@@ -430,6 +430,7 @@ class Config {
             PluginManager.assignLayerPlugins(settings, 'shape_transform', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'shape_modifier', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'shape_rhythm', HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'shape_lookat', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'shape_delay', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'sizing_mode', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'sizing_flip', HC.plugins, this),

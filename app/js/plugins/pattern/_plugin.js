@@ -103,6 +103,20 @@ HC.plugins.pattern = HC.plugins.pattern || {};
 
         /**
          *
+         * @param depthMultiplier
+         * @param reduce
+         * @returns {Vector3}
+         */
+        random2dPosition(depthMultiplier, reduce) {
+            return new THREE.Vector3(
+                randomInt(0, this.layer.resolution('half').x * this.settings.pattern_paddingx - (reduce || 0), true),
+                randomInt(0, this.layer.resolution('half').y * this.settings.pattern_paddingy - (reduce || 0), true),
+                this.layer.cameraDefaultDistance(depthMultiplier || 0) * this.settings.pattern_paddingz
+            );
+        }
+
+        /**
+         *
          * @param shape
          * @param extend
          * @param depthMultiplier

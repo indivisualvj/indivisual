@@ -41,6 +41,7 @@ class Logger
             console.log(key, value);
         }
 
+        // todo: create mechanism that tries to predict if there is a longer loading process in progress and shows loading screen
         requestAnimationFrame(function () {
             let co = document.getElementById('log');
             if (co) {

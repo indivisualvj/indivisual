@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-{
-    HC.TextureBackgroundModePlugin = class TextureBackgroundModePlugin extends HC.BackgroundModePlugin {
+import {BackgroundModePlugin} from "./BackgroundModePlugin";
+
+class TextureBackgroundModePlugin extends BackgroundModePlugin {
 
         texture;
 
@@ -26,4 +27,5 @@
             HC.traverse(this);
         }
     }
-}
+
+export {TextureBackgroundModePlugin};

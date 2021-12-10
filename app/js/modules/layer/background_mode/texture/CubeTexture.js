@@ -1,5 +1,9 @@
-{
-    HC.plugins.background_mode.cubetexture = class Plugin extends HC.TextureBackgroundModePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {TextureBackgroundModePlugin} from "../TextureBackgroundModePlugin";
+
+class cubetexture extends TextureBackgroundModePlugin {
         static index = 41;
 
         apply() {
@@ -25,4 +29,5 @@
             }
         }
     }
-}
+
+export {cubetexture};

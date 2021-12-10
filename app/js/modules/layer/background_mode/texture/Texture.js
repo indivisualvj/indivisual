@@ -1,5 +1,9 @@
-{
-    HC.plugins.background_mode.texture = class Plugin extends HC.TextureBackgroundModePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {TextureBackgroundModePlugin} from "../TextureBackgroundModePlugin";
+
+class texture extends TextureBackgroundModePlugin {
         static index = 40;
 
         apply() {
@@ -27,4 +31,5 @@
             }
         }
     }
-}
+
+export {texture};

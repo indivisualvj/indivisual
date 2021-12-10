@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-{
-    HC.GeometryBackgroundModePlugin = class GeometryBackgroundModePlugin extends HC.BackgroundModePlugin {
+import {BackgroundModePlugin} from "./BackgroundModePlugin";
+
+class GeometryBackgroundModePlugin extends BackgroundModePlugin {
         mesh;
         material;
         geometry;
@@ -25,4 +26,5 @@
             HC.traverse(this);
         }
     }
-}
+
+export {GeometryBackgroundModePlugin};

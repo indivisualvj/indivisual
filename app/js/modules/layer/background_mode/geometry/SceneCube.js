@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-{
-    HC.plugins.background_mode.scenecube = class Plugin extends HC.GeometryBackgroundModePlugin {
+import {GeometryBackgroundModePlugin} from "../GeometryBackgroundModePlugin";
+
+class scenecube extends GeometryBackgroundModePlugin {
         static index = 60;
         material;
         counter = 0;
@@ -70,4 +71,5 @@
             }
         }
     }
-}
+
+export {scenecube};

@@ -1,10 +1,8 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-HC.plugins.background_mode = HC.plugins.background_mode || {};
-HC.plugins.background_mode = HC.plugins.background_mode || {};
-{
-    HC.BackgroundModePlugin = class BackgroundModePlugin extends HC.AnimationTexturePlugin {
+
+class BackgroundModePlugin extends HC.AnimationTexturePlugin {
         static background = [];
 
         setControlSets(controlSets) {
@@ -20,10 +18,10 @@ HC.plugins.background_mode = HC.plugins.background_mode || {};
          */
         current(background) {
             if (background !== undefined) {
-                HC.BackgroundModePlugin.background[this.layer.index] = background;
+                BackgroundModePlugin.background[this.layer.index] = background;
             }
 
-            return HC.BackgroundModePlugin.background[this.layer.index];
+            return BackgroundModePlugin.background[this.layer.index];
         }
 
         needsUpdate(suffix) {
@@ -61,5 +59,5 @@ HC.plugins.background_mode = HC.plugins.background_mode || {};
             this._dispose();
         }
     }
-}
 
+export {BackgroundModePlugin};

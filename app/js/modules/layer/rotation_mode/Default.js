@@ -9,7 +9,7 @@ const Judder = {
     }
 };
 
-class _default extends RotationModePlugin {
+class Default extends RotationModePlugin {
     /**
      * @see HC.RotationModePlugin.injections
      */
@@ -144,4 +144,4 @@ class _default extends RotationModePlugin {
     }
 }
 
-export {_default};
+export {Default};

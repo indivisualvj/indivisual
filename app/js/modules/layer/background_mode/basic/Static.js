@@ -1,5 +1,9 @@
-{
-    HC.plugins.background_mode.static = class Plugin extends HC.BackgroundModePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {BackgroundModePlugin} from "../BackgroundModePlugin";
+
+class Static extends BackgroundModePlugin {
         static index = 10;
         static tutorial = {
             color: {
@@ -14,4 +18,5 @@
             }
         }
     }
-}
+
+export {Static};

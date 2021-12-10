@@ -1,9 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {_default} from "./Default";
+import {Default} from "./Default";
 
-class one extends _default {
+class one extends Default {
     /**
      * @see RotationModePlugin.injections
      */
@@ -23,7 +23,7 @@ class one extends _default {
 }
 
 
-class chess extends _default {
+class chess extends Default {
     /**
      * @see RotationModePlugin.injections
      */

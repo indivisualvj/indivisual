@@ -454,6 +454,9 @@ class Config {
             PluginManager.loadLayerPlugins(settings, 'mesh_material', HC.plugins, this, 'camera'),
             PluginManager.loadLayerPlugins(settings, 'mesh_material', HC.plugins, this, 'texture'),
             PluginManager.loadLayerPlugins(settings, 'mesh_material', HC.plugins, this, 'shader'),
+            PluginManager.loadLayerPlugins(settings, 'background_mode', HC.plugins, this, 'basic'),
+            PluginManager.loadLayerPlugins(settings, 'background_mode', HC.plugins, this, 'geometry'),
+            PluginManager.loadLayerPlugins(settings, 'background_mode', HC.plugins, this, 'texture'),
         ];
 
         Promise.all(calls).then(() => {

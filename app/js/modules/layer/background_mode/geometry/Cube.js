@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-{
-    HC.plugins.background_mode.cube = class Plugin extends HC.GeometryBackgroundModePlugin {
+import {GeometryBackgroundModePlugin} from "../GeometryBackgroundModePlugin";
+
+class cube extends GeometryBackgroundModePlugin {
         static index = 50;
 
         apply() {
@@ -41,4 +42,5 @@
             }
         }
     }
-}
+
+export {cube};

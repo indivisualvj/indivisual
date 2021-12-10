@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-{
-    HC.plugins.background_mode.sphere = class Plugin extends HC.GeometryBackgroundModePlugin {
+import {GeometryBackgroundModePlugin} from "../GeometryBackgroundModePlugin";
+
+class sphere extends GeometryBackgroundModePlugin {
         static index = 51;
 
         apply() {
@@ -39,4 +40,5 @@
             }
         }
     }
-}
+
+export {sphere};

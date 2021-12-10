@@ -1,5 +1,9 @@
-{
-    HC.plugins.background_mode.flash = class Plugin extends HC.BackgroundModePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {BackgroundModePlugin} from "../BackgroundModePlugin";
+
+class flash extends BackgroundModePlugin {
         static name = 'flash background color';
         static index = 20;
         static tutorial = {
@@ -39,15 +43,16 @@
             }
         }
     }
-}
-{
-    HC.plugins.background_mode.flashcomplementary = class Plugin extends HC.plugins.background_mode.flash {
+
+
+class flashcomplementary extends flash {
         static name = 'flash random shape\'s complementary';
         static index = 30;
 
         apply() {
             let layer = this.layer;
-            HC.plugins.background_mode.flash.prototype.apply.call(this, layer.shapeColor(true, true));
+            super.apply(layer.shapeColor(true, true));
         }
     }
-}
+
+export {flash, flashcomplementary};

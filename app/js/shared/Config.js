@@ -9,6 +9,7 @@ import {Messaging} from "./Messaging";
 import {EventManager} from "../manager/EventManager";
 import {PluginManager} from "../manager/PluginManager";
 import {Shape} from "../animation/Shape";
+import {Logger} from "./Logger";
 
 class Config {
 
@@ -423,6 +424,11 @@ class Config {
      * @private
      */
     _loadAnimationPlugins(settings, callback) {
+
+        let searchPath = HC.filePath(APP_DIR, 'js', 'modules', 'layer');
+        Messaging.samples(searchPath, (files) => {
+            Logger.loading('plugins', 'animation', 'loading', files.length);
+        });
 
         let calls = [
             PluginManager.assignLayerPlugins(settings, 'camera_mode',          HC.plugins, this),

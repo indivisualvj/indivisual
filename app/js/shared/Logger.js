@@ -1,4 +1,5 @@
 import {Messaging} from "./Messaging";
+import {TimeoutManager} from "../manager/TimeoutManager";
 
 class Logger
 {
@@ -29,6 +30,45 @@ class Logger
         });
     }
 
+    static contexts = {};
+
+    static registerLoadingContext(context, maxItems) {
+        if (!context in this.contexts) {
+            this.contexts[context] = {counter: 0, maxItems: maxItems};
+        }
+    }
+
+    static loading(context, key, value, maxItems) {
+        if (!context in this.contexts && maxItems) {
+            this.registerLoadingContext(context, maxItems);
+        }
+        let loading = document.getElementById('loading');
+        if (loading) {
+            loading.style.display = 'block';
+            TimeoutManager.add('loading.' + context, 250, () => {
+                loading.style.display = 'none';
+            });
+            loading.innerText = `loading ${context} (${value} ${key})`;
+        } else {
+            this.log(key, value);
+        }
+
+        this.incrementLoadingCounter(context);
+    }
+
+    static incrementLoadingCounter(context) {
+        if (context in this.contexts) {
+            this.contexts[context].counter++;
+            if (this.contexts[context].counter >= this.contexts[context].maxItems) {
+                this.removeLoadingContext(context);
+            }
+        }
+    }
+
+    static removeLoadingContext(context) {
+        delete this.contexts[context];
+    }
+
     /**
      *
      * @param key
@@ -41,7 +81,6 @@ class Logger
             console.log(key, value);
         }
 
-        // todo: create mechanism that tries to predict if there is a longer loading process in progress and shows loading screen
         requestAnimationFrame(function () {
             let co = document.getElementById('log');
             if (co) {

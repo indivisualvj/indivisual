@@ -4,101 +4,91 @@
 import {ShaderPlugin} from "../ShaderPlugin";
 
 class bleepy_blocks extends ShaderPlugin {
-        static index = 200;
-        static name = 'bleepy-blocks';
-
-        create() {
-            if (!this.pass) {
-                this.pass = new THREE.ShaderPass(this.shader);
-            }
-
-            return this.pass;
-        }
-
-        static settings = {
-            apply: false,
-            random: false,
-            time: {
+    static index = 200;
+    static name = 'bleepy-blocks';
+    static settings = {
+        apply: false,
+        random: false,
+        time: {
+            value: 1.0,
+            _type: [-10, 10, 0.01],
+            audio: false,
+            stepwise: false,
+            oscillate: "incremental"
+        },
+        tiles: {
+            value: 64,
+            _type: [1, 1024, 1],
+            audio: false,
+            stepwise: false,
+            oscillate: "off"
+        },
+        intensity: {
+            value: .5,
+            _type: [0, 2, 0.01],
+            audio: false,
+            stepwise: false,
+            oscillate: "off"
+        },
+        size: {
+            x: {
                 value: 1.0,
-                _type: [-10, 10, 0.01],
-                audio: false,
-                stepwise: false,
-                oscillate: "incremental"
-            },
-            tiles: {
-                value: 64,
-                _type: [1, 1024, 1],
+                _type: [0, 3, 0.01],
                 audio: false,
                 stepwise: false,
                 oscillate: "off"
             },
-            intensity: {
-                value: .5,
+            y: {
+                value: 1.0,
+                _type: [0, 3, 0.01],
+                audio: false,
+                stepwise: false,
+                oscillate: "off"
+            },
+        },
+        color: {
+            r: {
+                value: 0.35,
                 _type: [0, 2, 0.01],
                 audio: false,
                 stepwise: false,
                 oscillate: "off"
             },
-            size: {
-                x: {
-                    value: 1.0,
-                    _type: [0, 3, 0.01],
-                    audio: false,
-                    stepwise: false,
-                    oscillate: "off"
-                },
-                y: {
-                    value: 1.0,
-                    _type: [0, 3, 0.01],
-                    audio: false,
-                    stepwise: false,
-                    oscillate: "off"
-                },
+            g: {
+                value: 0.8,
+                _type: [0, 2, 0.01],
+                audio: false,
+                stepwise: false,
+                oscillate: "off"
             },
-            color: {
-                r: {
-                    value: 0.35,
-                    _type: [0, 2, 0.01],
-                    audio: false,
-                    stepwise: false,
-                    oscillate: "off"
-                },
-                g: {
-                    value: 0.8,
-                    _type: [0, 2, 0.01],
-                    audio: false,
-                    stepwise: false,
-                    oscillate: "off"
-                },
-                b: {
-                    value: 1.4,
-                    _type: [0, 2, 0.01],
-                    audio: false,
-                    stepwise: false,
-                    oscillate: "off"
-                }
-            },
-        };
+            b: {
+                value: 1.4,
+                _type: [0, 2, 0.01],
+                audio: false,
+                stepwise: false,
+                oscillate: "off"
+            }
+        },
+    };
+    shader = {
+        uniforms: {
+            "tDiffuse": {type: "t", value: null},
+            "resolution": {type: "v2", value: new THREE.Vector2(800, 600)},
+            "size": {type: "v2", value: new THREE.Vector2(1.0, 1.0)},
+            "time": {type: "f", value: 0.95},
+            "intensity": {type: "f", value: 0.5},
+            "tiles": {type: "i", value: 64},
+            "color": {type: "v3", value: new THREE.Color(.35, 0.8, 1.4)},
+        },
 
-        shader = {
-            uniforms: {
-                "tDiffuse": { type: "t", value: null },
-                "resolution": { type: "v2", value: new THREE.Vector2( 800, 600) },
-                "size": { type: "v2", value: new THREE.Vector2( 1.0, 1.0 ) },
-                "time": { type: "f", value: 0.95 },
-                "intensity": { type: "f", value: 0.5 },
-                "tiles": { type: "i", value: 64 },
-                "color": { type: "v3", value: new THREE.Color(.35, 0.8, 1.4) },
-            },
-
-            vertexShader: `
+        vertexShader: `
                 varying vec2 vUv;
                 void main() {
                     vUv = vec2( uv.x, uv.y );
                     gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
                 }`
-            ,
-            fragmentShader: `
+        ,
+        fragmentShader: `
                 // By Daedelus: https://www.shadertoy.com/user/Daedelus
                 // license: Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
                 #include <common>
@@ -141,7 +131,15 @@ class bleepy_blocks extends ShaderPlugin {
                     mainImage(gl_FragColor, gl_FragCoord.xy);
                 }
             `
-        }
     }
+
+    create() {
+        if (!this.pass) {
+            this.pass = new THREE.ShaderPass(this.shader);
+        }
+
+        return this.pass;
+    }
+}
 
 export {bleepy_blocks};

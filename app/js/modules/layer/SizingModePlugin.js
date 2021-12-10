@@ -2,8 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-class SizingModePlugin extends HC.AnimationPlugin
-{
+class SizingModePlugin extends HC.AnimationPlugin {
     setControlSets(controlSets) {
         super.setControlSets(controlSets);
         // make all such plugins make use of corresponding controlset only

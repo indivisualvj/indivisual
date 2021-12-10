@@ -4,33 +4,25 @@
 import {ShaderPlugin} from "../ShaderPlugin";
 
 class toon extends ShaderPlugin {
-        static index = 245;
-        create() {
-            if (!this.pass) {
-                this.pass = new THREE.ShaderPass(this.shader);
-            }
+    static index = 245;
+    static settings = {
+        apply: false,
+        random: false
+    }
+    /**
+     * @author https://www.shadertoy.com/user/wizgrav / https://www.shadertoy.com/view/ldsfzH
+     */
+    shader = {
 
-            return this.pass;
-        }
+        uniforms: {
 
-        static settings = {
-            apply: false,
-            random: false
-        }
-        /**
-         * @author https://www.shadertoy.com/user/wizgrav / https://www.shadertoy.com/view/ldsfzH
-         */
-        shader = {
+            "tDiffuse": {type: "t", value: null},
+            "resolution": {type: "v2", value: new THREE.Vector2(1280, 720)},
+        },
 
-            uniforms: {
+        vertexShader: `varying vec2 vUv;void main() {vUv = vec2( uv.x, uv.y );gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );}`,
 
-                "tDiffuse": { type: "t", value: null },
-                "resolution":    { type: "v2", value: new THREE.Vector2( 1280, 720 ) },
-            },
-
-            vertexShader: `varying vec2 vUv;void main() {vUv = vec2( uv.x, uv.y );gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );}`,
-
-            fragmentShader: `
+        fragmentShader: `
                 uniform sampler2D tDiffuse;
                 uniform vec2 resolution;
                 varying vec2 vUv;
@@ -122,7 +114,15 @@ class toon extends ShaderPlugin {
                     gl_FragColor = vec4(c,1.0);
                 }
             `
-        }
     }
+
+    create() {
+        if (!this.pass) {
+            this.pass = new THREE.ShaderPass(this.shader);
+        }
+
+        return this.pass;
+    }
+}
 
 export {toon};

@@ -4,55 +4,45 @@
 import {ShaderPlugin} from "../ShaderPlugin";
 
 class drawing extends ShaderPlugin {
-        static index = 140;
+    static index = 140;
+    static settings = {
+        apply: false,
+        random: false,
+        onebit: {value: false},
+        intensity: {
+            value: 8,
+            _type: [2, 16, 1],
+            audio: false,
+            stepwise: false,
+            oscillate: "off"
+        },
+        radius: {
+            value: 2.0,
+            _type: [1., 16, .25],
+            audio: false,
+            stepwise: false,
+            oscillate: "off"
+        },
+    }
+    /**
+     * @author alteredq / http://alteredqualia.com/
+     *
+     * Full-screen textured quad shader
+     */
+    shader = {
 
-        create() {
-            if (!this.pass) {
-                this.pass = new THREE.ShaderPass(this.shader);
-            }
+        uniforms: {
 
-            return this.pass;
-        }
+            "tDiffuse": {type: "t", value: null},
+            "onebit": {type: "1i", value: 1},
+            "intensity": {type: "1i", value: 8},
+            "radius": {type: "f", value: 2.0},
+            "resolution": {type: "v2", value: new THREE.Vector2(800, 600)}
 
-        static settings = {
-            apply: false,
-            random: false,
-            onebit: {value: false},
-            intensity: {
-                value: 8,
-                _type: [2, 16, 1],
-                audio: false,
-                stepwise: false,
-                oscillate: "off"
-            },
-            radius: {
-                value: 2.0,
-                _type: [1., 16, .25],
-                audio: false,
-                stepwise: false,
-                oscillate: "off"
-            },
-        }
+        },
 
-        /**
-         * @author alteredq / http://alteredqualia.com/
-         *
-         * Full-screen textured quad shader
-         */
-        shader = {
-
-            uniforms: {
-
-                "tDiffuse": { type: "t", value: null },
-                "onebit": { type: "1i", value: 1 },
-                "intensity": { type: "1i", value: 8 },
-                "radius": { type: "f", value: 2.0 },
-                "resolution": { type: "v2", value: new THREE.Vector2( 800, 600) }
-
-            },
-
-            vertexShader: `varying vec2 vUv;void main() {vUv = uv;gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );}`,
-            fragmentShader: `
+        vertexShader: `varying vec2 vUv;void main() {vUv = uv;gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );}`,
+        fragmentShader: `
                 varying vec2 vUv;
         
                 uniform sampler2D tDiffuse;
@@ -133,7 +123,15 @@ class drawing extends ShaderPlugin {
                     gl_FragColor = col_out;
                 }
             `
-        }
     }
+
+    create() {
+        if (!this.pass) {
+            this.pass = new THREE.ShaderPass(this.shader);
+        }
+
+        return this.pass;
+    }
+}
 
 export {drawing};

@@ -3,8 +3,7 @@
  */
 import {OffsetModePlugin} from "../OffsetModePlugin";
 
-class xing extends OffsetModePlugin
-{
+class xing extends OffsetModePlugin {
     static name = 'xing';
     injections = {
         direction: 0

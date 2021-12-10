@@ -4,44 +4,35 @@
 import {ShaderPlugin} from "../ShaderPlugin";
 
 class edge_detection_rgb extends ShaderPlugin {
-        static index = 145;
-        static name = 'edge-detection-rgb';
-        create() {
-            if (!this.pass) {
-                this.pass = new THREE.ShaderPass(this.shader);
-            }
+    static index = 145;
+    static name = 'edge-detection-rgb';
+    static settings = {
+        apply: false,
+        random: false,
+        opacity: {
+            value: 0.75,
+            _type: [0, 1, 0.001],
+            audio: false,
+            stepwise: false,
+            oscillate: "off"
+        },
+    };
+    shader = {
+        uniforms: {
+            "tDiffuse": {type: "t", value: null},
+            "resolution": {type: "v2", value: new THREE.Vector2(512, 512)},
+            "opacity": {type: "f", value: 1.0}
+        },
 
-            return this.pass;
-        }
-
-        static settings = {
-            apply: false,
-            random: false,
-            opacity: {
-                value: 0.75,
-                _type: [0, 1, 0.001],
-                audio: false,
-                stepwise: false,
-                oscillate: "off"
-            },
-        };
-
-        shader = {
-            uniforms: {
-                "tDiffuse": { type: "t", value: null },
-                "resolution":    { type: "v2", value: new THREE.Vector2( 512, 512 ) },
-                "opacity": { type: "f", value: 1.0 }
-            },
-
-            vertexShader: `
+        vertexShader: `
                 varying vec2 vUv;
                 void main() {
                     vUv = vec2( uv.x, uv.y );
                     gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
                 }`
-            ,
+        ,
 
-            fragmentShader: `
+        fragmentShader: `
                 uniform vec2 resolution;
                 varying vec2 vUv;
                 uniform float opacity;
@@ -81,7 +72,15 @@ class edge_detection_rgb extends ShaderPlugin {
                     mainImage(gl_FragColor, vUv);
                 }
             `
-        }
     }
+
+    create() {
+        if (!this.pass) {
+            this.pass = new THREE.ShaderPass(this.shader);
+        }
+
+        return this.pass;
+    }
+}
 
 export {edge_detection_rgb};

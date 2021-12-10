@@ -4,53 +4,44 @@
 import {ShaderPlugin} from "../ShaderPlugin";
 
 class noise extends ShaderPlugin {
-        static index = 110;
-
-        create() {
-            if (!this.pass) {
-                this.pass = new THREE.ShaderPass(this.shader);
-            }
-
-            return this.pass;
+    static index = 110;
+    static settings = {
+        apply: false,
+        random: false,
+        smoothness: {
+            value: 0.02,
+            _type: [0, 32, 0.01],
+            audio: false,
+            stepwise: false,
+            oscillate: "off"
+        },
+        threshold: {
+            value: 1,
+            _type: [0.5, 2, 0.01],
+            audio: false,
+            stepwise: false,
+            oscillate: "off"
         }
+    };
+    /**
+     * copy and mashup of something found on https://www.shadertoy.com/
+     */
+    shader = {
+        uniforms: {
+            "tDiffuse": {type: "t", value: null},
+            "smoothness": {type: "f", value: 0.0},
+            "threshold": {type: "f", value: 1.0},
+            "resolution": {type: "v2", value: new THREE.Vector2(800, 600)}
+        },
 
-        static settings = {
-            apply: false,
-            random: false,
-            smoothness: {
-                value: 0.02,
-                _type: [0, 32, 0.01],
-                audio: false,
-                stepwise: false,
-                oscillate: "off"
-            },
-            threshold: {
-                value: 1,
-                _type: [0.5, 2, 0.01],
-                audio: false,
-                stepwise: false,
-                oscillate: "off"
-            }
-        };
-        /**
-         * copy and mashup of something found on https://www.shadertoy.com/
-         */
-        shader = {
-            uniforms: {
-                "tDiffuse": { type: "t", value: null },
-                "smoothness":     { type: "f", value: 0.0 },
-                "threshold":     { type: "f", value: 1.0 },
-                "resolution": { type: "v2", value: new THREE.Vector2( 800, 600) }
-            },
-
-            vertexShader: `
+        vertexShader: `
                 varying vec2 vUv;
                 void main() {
                     vUv = uv;
                     gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
                 }`
-            ,
-            fragmentShader: `
+        ,
+        fragmentShader: `
                 uniform sampler2D tDiffuse;
                 uniform vec2 resolution;
                 uniform float smoothness;
@@ -114,7 +105,15 @@ class noise extends ShaderPlugin {
                     col=pow(abs(col),vec3(.99));
                     gl_FragColor = vec4(col,1.) * ocol;
                 }`
-        }
     }
+
+    create() {
+        if (!this.pass) {
+            this.pass = new THREE.ShaderPass(this.shader);
+        }
+
+        return this.pass;
+    }
+}
 
 export {noise};

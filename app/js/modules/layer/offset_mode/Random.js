@@ -3,8 +3,7 @@
  */
 import {OffsetModePlugin} from "../OffsetModePlugin";
 
-class random extends OffsetModePlugin
-{
+class random extends OffsetModePlugin {
     static name = 'random';
     injections = {
         value: false

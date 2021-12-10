@@ -1,7 +1,6 @@
 import {SizingFlipPlugin} from "../SizingFlipPlugin";
 
-class flipx2 extends SizingFlipPlugin
-{
+class flipx2 extends SizingFlipPlugin {
     apply(shape) {
         if (shape.index % 2 === 0) {
             shape.flip(-1, 1, 1);
@@ -10,8 +9,7 @@ class flipx2 extends SizingFlipPlugin
 }
 
 
-class flipy2 extends SizingFlipPlugin
-{
+class flipy2 extends SizingFlipPlugin {
     apply(shape) {
         if (shape.index % 2 === 0) {
             shape.flip(1, -1, 1);
@@ -20,8 +18,7 @@ class flipy2 extends SizingFlipPlugin
 }
 
 
-class flipxy2 extends SizingFlipPlugin
-{
+class flipxy2 extends SizingFlipPlugin {
     apply(shape) {
         if (shape.index % 2 === 0) {
             shape.flip(-1, -1, 1);
@@ -30,8 +27,7 @@ class flipxy2 extends SizingFlipPlugin
 }
 
 
-class flipxy3 extends SizingFlipPlugin
-{
+class flipxy3 extends SizingFlipPlugin {
     apply(shape) {
         if (shape.index % 3 === 0) {
             shape.flip(-1, 1, 1);

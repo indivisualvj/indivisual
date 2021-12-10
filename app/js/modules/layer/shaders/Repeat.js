@@ -4,77 +4,67 @@
 import {ShaderPlugin} from "../ShaderPlugin";
 
 class repeat extends ShaderPlugin {
-        static index = 45;
-
-        create() {
-            if (!this.pass) {
-                this.pass = new THREE.ShaderPass(this.shader);
-            }
-
-            return this.pass;
-        }
-
-        static settings = {
-            apply: false,
-            random: false,
-            divider: {
-                x: {
-                    value: 2,
-                    _type: [0, 32, 1],
-                    audio: false,
-                    stepwise: false,
-                    oscillate: "off"
-                },
-                y: {
-                    value: 2,
-                    _type: [0, 32, 1],
-                    audio: false,
-                    stepwise: false,
-                    oscillate: "off"
-                }
-            },
-            zoom: {
-                value: 1,
-                _type: [0, 10, .01],
-                audio: false,
-                stepwise: false,
-                oscillate: "off",
-            },
-            operation: {
-                value: 0,
-                _type: [0, 15, 1],
+    static index = 45;
+    static settings = {
+        apply: false,
+        random: false,
+        divider: {
+            x: {
+                value: 2,
+                _type: [0, 32, 1],
                 audio: false,
                 stepwise: false,
                 oscillate: "off"
             },
-            flipX: {
-                value: 0,
-                _type: [0, 1, 1],
-                audio: false,
-                stepwise: false,
-                oscillate: "off"
-            },
-            flipY: {
-                value: 0,
-                _type: [0, 1, 1],
+            y: {
+                value: 2,
+                _type: [0, 32, 1],
                 audio: false,
                 stepwise: false,
                 oscillate: "off"
             }
+        },
+        zoom: {
+            value: 1,
+            _type: [0, 10, .01],
+            audio: false,
+            stepwise: false,
+            oscillate: "off",
+        },
+        operation: {
+            value: 0,
+            _type: [0, 15, 1],
+            audio: false,
+            stepwise: false,
+            oscillate: "off"
+        },
+        flipX: {
+            value: 0,
+            _type: [0, 1, 1],
+            audio: false,
+            stepwise: false,
+            oscillate: "off"
+        },
+        flipY: {
+            value: 0,
+            _type: [0, 1, 1],
+            audio: false,
+            stepwise: false,
+            oscillate: "off"
         }
+    }
+    shader = {
+        uniforms: {
+            "tDiffuse": {type: "t", value: null},
+            "resolution": {type: "v2", value: new THREE.Vector2(800, 600)},
+            "divider": {type: "v2", value: new THREE.Vector2(800, 600)},
+            "operation": {type: "i", value: 0},
+            "zoom": {type: "f", value: 1.0},
+            "flipX": {type: "i", value: 0},
+            "flipY": {type: "i", value: 0}
+        },
 
-        shader = {
-            uniforms: {
-                "tDiffuse": {type: "t", value: null},
-                "resolution": {type: "v2", value: new THREE.Vector2(800, 600)},
-                "divider": {type: "v2", value: new THREE.Vector2(800, 600)},
-                "operation": {type: "i", value: 0},
-                "zoom": {type: "f", value: 1.0},
-                "flipX": {type: "i", value: 0},
-                "flipY": {type: "i", value: 0}
-            },
-
-            vertexShader: `
+        vertexShader: `
                 varying vec2 vUv;
                 void main() {
                     vUv = uv;            
@@ -82,7 +72,7 @@ class repeat extends ShaderPlugin {
                 }
             `,
 
-            fragmentShader: `
+        fragmentShader: `
 
                 uniform sampler2D tDiffuse;
                 varying vec2 vUv;
@@ -122,8 +112,16 @@ class repeat extends ShaderPlugin {
                     gl_FragColor = operator(s, d, operation);
                 }
             `,
-        }
     }
+
+    create() {
+        if (!this.pass) {
+            this.pass = new THREE.ShaderPass(this.shader);
+        }
+
+        return this.pass;
+    }
+}
 
 const BlendOperations = `
 vec4 multiply( vec4 s, vec4 d ) {

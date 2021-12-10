@@ -3,8 +3,7 @@
  */
 import {OffsetModePlugin} from "../OffsetModePlugin";
 
-class sphere extends OffsetModePlugin
-{
+class sphere extends OffsetModePlugin {
     static name = 'sphere';
 
     apply(shape) {

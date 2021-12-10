@@ -4,72 +4,72 @@
 import {ShapeModifierPlugin} from "../ShapeModifierPlugin";
 
 class coneify extends ShapeModifierPlugin {
-        static name = 'coneify xyz by y';
+    static name = 'coneify xyz by y';
 
-        create(geometry, source, axes) {
+    create(geometry, source, axes) {
 
-            source = source || 'y';
-            axes = axes || new THREE.Vector3(1, 1, 1);
+        source = source || 'y';
+        axes = axes || new THREE.Vector3(1, 1, 1);
 
-            let vertices = geometry.getAttribute('position');
+        let vertices = geometry.getAttribute('position');
 
-            if (vertices) {
-                this.min = this.max = 0;
-                let vtc = new THREE.Vector3();
-                for (let i = 0; i < vertices.count; i++) {
-                    vtc.fromBufferAttribute(vertices, i);
-                    let v = vtc[source];
-                    this.min = Math.min(v, this.min);
-                    this.max = Math.max(v, this.max);
-                }
-
-                for (let i = 0; i < vertices.count; i++) {
-                    vtc.fromBufferAttribute(vertices, i);
-                    let v = vtc[source] * this.settings.shape_modifier_volume;
-                    let div = Math.abs(this.min - this.max);
-                    v /= div;
-
-                    vertices.setX(i, vtc.x + vtc.x * v * axes.x);
-                    vertices.setZ(i, vtc.y + vtc.y * v * axes.y);
-                    vertices.setZ(i, vtc.z + vtc.z * v * axes.z);
-                }
-
-                vertices.needsUpdate = true;
-
-            } else {
-                console.warn('No transform for ' + geometry.type);
+        if (vertices) {
+            this.min = this.max = 0;
+            let vtc = new THREE.Vector3();
+            for (let i = 0; i < vertices.count; i++) {
+                vtc.fromBufferAttribute(vertices, i);
+                let v = vtc[source];
+                this.min = Math.min(v, this.min);
+                this.max = Math.max(v, this.max);
             }
 
-            return geometry
+            for (let i = 0; i < vertices.count; i++) {
+                vtc.fromBufferAttribute(vertices, i);
+                let v = vtc[source] * this.settings.shape_modifier_volume;
+                let div = Math.abs(this.min - this.max);
+                v /= div;
+
+                vertices.setX(i, vtc.x + vtc.x * v * axes.x);
+                vertices.setZ(i, vtc.y + vtc.y * v * axes.y);
+                vertices.setZ(i, vtc.z + vtc.z * v * axes.z);
+            }
+
+            vertices.needsUpdate = true;
+
+        } else {
+            console.warn('No transform for ' + geometry.type);
         }
+
+        return geometry
     }
+}
 
 
-    class coneifyxzby extends coneify {
-        static name = 'coneify xz by y';
+class coneifyxzby extends coneify {
+    static name = 'coneify xz by y';
 
-        create(shape) {
-            return super.create(shape, 'y', new THREE.Vector3(1, 0, 1));
-        }
+    create(shape) {
+        return super.create(shape, 'y', new THREE.Vector3(1, 0, 1));
     }
+}
 
 
-    class coneifyxby extends coneify {
-        static name = 'coneify x by y';
+class coneifyxby extends coneify {
+    static name = 'coneify x by y';
 
-        create(shape) {
-            return super.create(shape, 'y', new THREE.Vector3(1, 0, 0));
-        }
+    create(shape) {
+        return super.create(shape, 'y', new THREE.Vector3(1, 0, 0));
     }
+}
 
 
-    class coneifyxybz extends coneify {
-        static name = 'coneify xy by z';
+class coneifyxybz extends coneify {
+    static name = 'coneify xy by z';
 
-        create(shape) {
-            return super.create(shape, 'z', new THREE.Vector3(1, 1, 0));
-        }
+    create(shape) {
+        return super.create(shape, 'z', new THREE.Vector3(1, 1, 0));
     }
+}
 
 export {coneify, coneifyxby, coneifyxybz, coneifyxzby};
 

@@ -4,11 +4,11 @@
 import {PatternMoverPlugin} from "../PatternMoverPlugin";
 
 class off extends PatternMoverPlugin {
-        static name = 'off';
-        static index = 1;
+    static name = 'off';
+    static index = 1;
 
-        apply() {
-        }
+    apply() {
     }
+}
 
 export {off};

@@ -5,45 +5,45 @@ import {FilterModePlugin} from "../FilterModePlugin";
 
 class flicker extends FilterModePlugin {
 
-   injections = {
-       current: {
-           opacity: 1
-       },
-       next: {
-           opacity: 0.
-       },
-       opacity: 0
-   };
+    injections = {
+        current: {
+            opacity: 1
+        },
+        next: {
+            opacity: 0.
+        },
+        opacity: 0
+    };
 
-   apply(shape) {
-       let speed = this.layer.shapeSpeed(shape);
-       let params = this.params(shape);
+    apply(shape) {
+        let speed = this.layer.shapeSpeed(shape);
+        let params = this.params(shape);
 
-       if (!params.opacity) {
-           params.opacity = shape.color.o;
-       }
+        if (!params.opacity) {
+            params.opacity = shape.color.o;
+        }
 
-       if (!params.tween && (speed.prc === 0 || this.audioAnalyser.peak)) {
-           let sc = this.layer.shapeCount();
-           let part = sc / 10;
+        if (!params.tween && (speed.prc === 0 || this.audioAnalyser.peak)) {
+            let sc = this.layer.shapeCount();
+            let part = sc / 10;
 
-           if (randomBool(round(sc/(part * this.settings.filter_volume))) || params.next.opacity === 0) {
-               params.next.opacity = params.opacity * .33;
-               params.current.opacity = 1.5;
-               let tween = this.tweenShape(shape, params.current, params.next);
-               tween.easing(TWEEN.Easing.Circular.Out);
-               tween.onUpdate(() => {
-                   shape.color.o = params.current.opacity;
-               });
-               tween.onComplete(function () {
-                   params.tween = false;
-               });
-               this.tweenStart(tween);
+            if (randomBool(round(sc / (part * this.settings.filter_volume))) || params.next.opacity === 0) {
+                params.next.opacity = params.opacity * .33;
+                params.current.opacity = 1.5;
+                let tween = this.tweenShape(shape, params.current, params.next);
+                tween.easing(TWEEN.Easing.Circular.Out);
+                tween.onUpdate(() => {
+                    shape.color.o = params.current.opacity;
+                });
+                tween.onComplete(function () {
+                    params.tween = false;
+                });
+                this.tweenStart(tween);
 
-               params.tween = tween;
-           }
-       }
-   }
+                params.tween = tween;
+            }
+        }
+    }
 }
 
 export {flicker}

@@ -2,8 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-class ColoringModePlugin extends HC.AnimationPlugin
-{
+class ColoringModePlugin extends HC.AnimationPlugin {
     setControlSets(controlSets) {
         super.setControlSets(controlSets);
         // make all such plugins make use of corresponding controlset only

@@ -4,93 +4,92 @@
 import {ShaderPlugin} from "../ShaderPlugin";
 
 if (!IS_CONTROLLER) {
-        _importThreeShader('CopyShader');
-        _importThreeShader('LuminosityHighPassShader');
-        _importThreePostprocessing('UnrealBloomPass');
+    _importThreeShader('CopyShader');
+    _importThreeShader('LuminosityHighPassShader');
+    _importThreePostprocessing('UnrealBloomPass');
+}
+
+class bloom extends ShaderPlugin {
+    static index = 40;
+    static settings = {
+        apply: false,
+        random: false,
+        strength: {
+            value: 1.5,
+            _type: [0, 3, 0.01],
+            audio: false,
+            stepwise: false,
+            oscillate: "off"
+        },
+        threshold: {
+            value: 0.5,
+            _type: [0, 1, 0.01],
+            audio: false,
+            stepwise: false,
+            oscillate: "off"
+        },
+        radius: {
+            value: 0,
+            _type: [0, 1, 0.01],
+            audio: false,
+            stepwise: false,
+            oscillate: "off"
+        }
     }
 
-    class bloom extends ShaderPlugin {
-        static index = 40;
-
-        create() {
-            if (!this.pass) {
-                THREE.UnrealBloomPass.prototype.getCompositeMaterial = this.getCompositeMaterial;
-                this.pass = new THREE.UnrealBloomPass(this.layer.resolution());
-            }
-            this.pass.setSize(this.layer.resolution().x, this.layer.resolution().y);
-
-            return this.pass;
+    create() {
+        if (!this.pass) {
+            THREE.UnrealBloomPass.prototype.getCompositeMaterial = this.getCompositeMaterial;
+            this.pass = new THREE.UnrealBloomPass(this.layer.resolution());
         }
+        this.pass.setSize(this.layer.resolution().x, this.layer.resolution().y);
 
-        static settings = {
-            apply: false,
-            random: false,
-            strength: {
-                value: 1.5,
-                _type: [0, 3, 0.01],
-                audio: false,
-                stepwise: false,
-                oscillate: "off"
-            },
-            threshold: {
-                value: 0.5,
-                _type: [0, 1, 0.01],
-                audio: false,
-                stepwise: false,
-                oscillate: "off"
-            },
-            radius: {
-                value: 0,
-                _type: [0, 1, 0.01],
-                audio: false,
-                stepwise: false,
-                oscillate: "off"
-            }
-        }
+        return this.pass;
+    }
 
-        getCompositeMaterial ( nMips ) {
-            return new THREE.ShaderMaterial( {
-                defines: {
-                    'NUM_MIPS': nMips
+    getCompositeMaterial(nMips) {
+        return new THREE.ShaderMaterial({
+            defines: {
+                'NUM_MIPS': nMips
+            },
+            uniforms: {
+                'blurTexture1': {
+                    value: null
                 },
-                uniforms: {
-                    'blurTexture1': {
-                        value: null
-                    },
-                    'blurTexture2': {
-                        value: null
-                    },
-                    'blurTexture3': {
-                        value: null
-                    },
-                    'blurTexture4': {
-                        value: null
-                    },
-                    'blurTexture5': {
-                        value: null
-                    },
-                    'dirtTexture': {
-                        value: null
-                    },
-                    'bloomStrength': {
-                        value: 1.0
-                    },
-                    'bloomFactors': {
-                        value: null
-                    },
-                    'bloomTintColors': {
-                        value: null
-                    },
-                    'bloomRadius': {
-                        value: 0.0
-                    }
+                'blurTexture2': {
+                    value: null
                 },
-                vertexShader: `varying vec2 vUv;
+                'blurTexture3': {
+                    value: null
+                },
+                'blurTexture4': {
+                    value: null
+                },
+                'blurTexture5': {
+                    value: null
+                },
+                'dirtTexture': {
+                    value: null
+                },
+                'bloomStrength': {
+                    value: 1.0
+                },
+                'bloomFactors': {
+                    value: null
+                },
+                'bloomTintColors': {
+                    value: null
+                },
+                'bloomRadius': {
+                    value: 0.0
+                }
+            },
+            vertexShader: `varying vec2 vUv;
 				void main() {
 					vUv = uv;
 					gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
 				}`,
-                fragmentShader: `varying vec2 vUv;
+            fragmentShader: `varying vec2 vUv;
                 uniform bool opacify;
 				uniform sampler2D blurTexture1;
 				uniform sampler2D blurTexture2;
@@ -119,8 +118,8 @@ if (!IS_CONTROLLER) {
                     float opc = sqrt(sum/3.0);
                     gl_FragColor = vec4(col.rgb, opc);
 				}`
-            } );
-        }
+        });
     }
+}
 
 export {bloom};

@@ -3,8 +3,7 @@
  */
 import {FilterModePlugin} from "../FilterModePlugin";
 
-class chess2 extends FilterModePlugin
-{
+class chess2 extends FilterModePlugin {
     static name = 'chess²';
     invert = false;
 
@@ -59,8 +58,7 @@ class chess2 extends FilterModePlugin
 }
 
 
-class chess2flash extends FilterModePlugin
-{
+class chess2flash extends FilterModePlugin {
     static name = 'chess²flash';
 
     apply(shape) {
@@ -70,8 +68,7 @@ class chess2flash extends FilterModePlugin
 }
 
 
-class chess2strobe extends FilterModePlugin
-{
+class chess2strobe extends FilterModePlugin {
     static name = 'chess²strobe';
 
     apply(shape) {

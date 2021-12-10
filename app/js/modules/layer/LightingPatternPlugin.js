@@ -2,8 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-class LightingPatternPlugin extends HC.AnimationPlugin
-{
+class LightingPatternPlugin extends HC.AnimationPlugin {
 
     setControlSets(controlSets) {
         super.setControlSets(controlSets);

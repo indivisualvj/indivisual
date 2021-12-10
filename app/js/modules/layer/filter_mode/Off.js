@@ -3,8 +3,7 @@
  */
 import {FilterModePlugin} from "../FilterModePlugin";
 
-class off extends FilterModePlugin
-{
+class off extends FilterModePlugin {
     static name = 'off';
     static index = 1;
 

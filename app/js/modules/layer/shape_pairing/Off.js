@@ -3,8 +3,7 @@
  */
 import {ShapePairingPlugin} from "../ShapePairingPlugin";
 
-class off extends ShapePairingPlugin
-{
+class off extends ShapePairingPlugin {
     apply(shape) {
     }
 }

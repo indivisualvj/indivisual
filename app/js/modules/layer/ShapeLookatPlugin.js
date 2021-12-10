@@ -2,8 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-class ShapeLookatPlugin extends HC.AnimationPlugin
-{
+class ShapeLookatPlugin extends HC.AnimationPlugin {
     setControlSets(controlSets) {
         super.setControlSets(controlSets);
         // make all such plugins make use of corresponding controlset only

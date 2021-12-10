@@ -4,50 +4,40 @@
 import {ShaderPlugin} from "../ShaderPlugin";
 
 class smudge_blur extends ShaderPlugin {
-        static index = 109;
-        static name = 'smudge-blur';
+    static index = 109;
+    static name = 'smudge-blur';
+    static settings = {
+        apply: false,
+        random: false,
 
-        create() {
-            if (!this.pass) {
-                this.pass = new THREE.ShaderPass(this.shader);
-            }
+        radius: {
+            value: 0.015,
+            _type: [0, 1, 0.001],
+            audio: false,
+            stepwise: false,
+            oscillate: "off"
+        },
+        iterations: {
+            value: 32,
+            _type: [1, 128, 1],
+            audio: false,
+            stepwise: false,
+            oscillate: "off"
+        },
 
-            return this.pass;
-        }
+    }
+    shader = {
 
-        static settings = {
-            apply: false,
-            random: false,
+        uniforms: {
+            "iterations": {type: "f", value: 32},
+            "radius": {type: "f", value: 0.015},
+            "resolution": {type: "v2", value: new THREE.Vector2(1, 1)},
+            "tDiffuse": {type: "t", value: null}
+        },
 
-            radius: {
-                value: 0.015,
-                _type: [0, 1, 0.001],
-                audio: false,
-                stepwise: false,
-                oscillate: "off"
-            },
-            iterations: {
-                value: 32,
-                _type: [1, 128, 1],
-                audio: false,
-                stepwise: false,
-                oscillate: "off"
-            },
+        vertexShader: 'varying vec2 vUv;void main() {vUv = uv;gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );}',
 
-        }
-
-        shader = {
-
-            uniforms: {
-                "iterations":     { type: "f", value: 32 },
-                "radius": {type: "f", value: 0.015},
-                "resolution": { type: "v2", value: new THREE.Vector2( 1, 1) },
-                "tDiffuse": { type: "t", value: null }
-            },
-
-            vertexShader: 'varying vec2 vUv;void main() {vUv = uv;gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );}',
-
-            fragmentShader: ` 
+        fragmentShader: ` 
                 // 'Smudge Blur' by tesuji (2011)
                 // An attempt at bokeh blur with extra warpyness
                 uniform float radius;
@@ -72,7 +62,15 @@ class smudge_blur extends ShaderPlugin {
                     gl_FragColor = vec4(color,1.0);
                 }
             `,
-        }
     }
+
+    create() {
+        if (!this.pass) {
+            this.pass = new THREE.ShaderPass(this.shader);
+        }
+
+        return this.pass;
+    }
+}
 
 export {smudge_blur};

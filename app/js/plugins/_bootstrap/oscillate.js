@@ -1,4 +1,4 @@
-HC.Osci = {
+HC.Osci = { // todo: can be converted to static module
 
     /**
      *

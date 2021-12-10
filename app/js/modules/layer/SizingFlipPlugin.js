@@ -2,8 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-class SizingFlipPlugin extends HC.AnimationPlugin
-{
+class SizingFlipPlugin extends HC.AnimationPlugin {
 
     setControlSets(controlSets) {
         super.setControlSets(controlSets);

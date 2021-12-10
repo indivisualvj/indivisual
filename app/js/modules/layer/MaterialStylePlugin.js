@@ -2,8 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-class MaterialStylePlugin extends HC.AnimationPlugin
-{
+class MaterialStylePlugin extends HC.AnimationPlugin {
     injections = {
         stroke: false
     };

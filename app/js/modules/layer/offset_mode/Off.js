@@ -3,8 +3,7 @@
  */
 import {OffsetModePlugin} from "../OffsetModePlugin";
 
-class off extends OffsetModePlugin
-{
+class off extends OffsetModePlugin {
     static name = 'off';
     static index = 1;
 

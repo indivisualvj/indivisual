@@ -3,8 +3,7 @@
  */
 import {OffsetModePlugin} from "../OffsetModePlugin";
 
-class grow extends OffsetModePlugin
-{
+class grow extends OffsetModePlugin {
 
     apply(shape) {
         let m = (shape.index + 1) / -2;
@@ -17,8 +16,7 @@ class grow extends OffsetModePlugin
 }
 
 
-class shrink extends OffsetModePlugin
-{
+class shrink extends OffsetModePlugin {
 
     apply(shape) {
         let layer = this.layer;

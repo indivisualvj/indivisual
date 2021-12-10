@@ -4,26 +4,25 @@
 import {ShaderPlugin} from "../ShaderPlugin";
 
 if (!IS_CONTROLLER) {
-        _importThreeShader('SMAAShader');
-        _importThreePostprocessing('SMAAPass');
+    _importThreeShader('SMAAShader');
+    _importThreePostprocessing('SMAAPass');
+}
+
+class smaa extends ShaderPlugin {
+    static index = 5;
+    static settings = {
+        apply: false,
+        random: false
     }
 
-    class smaa extends ShaderPlugin {
-        static index = 5;
-
-        create() {
-            if (!this.pass) {
-                this.pass = new THREE.SMAAPass(this.layer.resolution().x, this.layer.resolution().y);
-            }
-            this.pass.setSize(this.layer.resolution().x, this.layer.resolution().y);
-
-            return this.pass;
+    create() {
+        if (!this.pass) {
+            this.pass = new THREE.SMAAPass(this.layer.resolution().x, this.layer.resolution().y);
         }
+        this.pass.setSize(this.layer.resolution().x, this.layer.resolution().y);
 
-        static settings = {
-            apply: false,
-            random: false
-        }
+        return this.pass;
     }
+}
 
 export {smaa};

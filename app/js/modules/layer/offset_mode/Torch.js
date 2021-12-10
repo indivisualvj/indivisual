@@ -3,8 +3,7 @@
  */
 import {OffsetModePlugin} from "../OffsetModePlugin";
 
-class torch extends OffsetModePlugin
-{
+class torch extends OffsetModePlugin {
     static name = 'torch';
     mover;
     velocity = new THREE.Vector2(randomInt(10, 20, true), randomInt(10, 20, true));

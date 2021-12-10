@@ -1,3 +1,5 @@
+// todo: can be converted to module
+
 HC.RoundedRect = class RoundedRect {
 
     /**

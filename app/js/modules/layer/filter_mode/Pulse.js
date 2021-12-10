@@ -3,8 +3,7 @@
  */
 import {FilterModePlugin} from "../FilterModePlugin";
 
-class pulse extends FilterModePlugin
-{
+class pulse extends FilterModePlugin {
     apply(shape) {
         let layer = this.layer;
 

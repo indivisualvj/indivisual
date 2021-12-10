@@ -4,8 +4,7 @@
 
 import {OffsetModePlugin} from "../OffsetModePlugin";
 
-class chess extends OffsetModePlugin
-{
+class chess extends OffsetModePlugin {
 
     apply(shape) {
         let layer = this.layer;
@@ -25,8 +24,7 @@ class chess extends OffsetModePlugin
 }
 
 
-class chessxyz extends OffsetModePlugin
-{
+class chessxyz extends OffsetModePlugin {
     static name = 'chess XYZ';
 
     apply(shape) {

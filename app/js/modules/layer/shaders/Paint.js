@@ -4,70 +4,60 @@
 import {ShaderPlugin} from "../ShaderPlugin";
 
 class paint extends ShaderPlugin {
-        static index = 130;
-
-        create() {
-            if (!this.pass) {
-                this.pass = new THREE.ShaderPass(this.shader);
-            }
-
-            return this.pass;
+    static index = 130;
+    static settings = {
+        apply: false,
+        random: false,
+        colorOffset: {
+            value: 0.95,
+            _type: [0, 2, 0.01],
+            audio: false,
+            stepwise: false,
+            oscillate: "off"
+        },
+        colorFactor: {
+            value: 0,
+            _type: [0, 2, 0.01],
+            audio: false,
+            stepwise: false,
+            oscillate: "off"
+        },
+        sampleDistance: {
+            value: 0.54,
+            _type: [-10, 10, 0.01],
+            audio: false,
+            stepwise: false,
+            oscillate: "off"
+        },
+        waveFactor: {
+            value: 0.00127,
+            _type: [0, 0.5, 0.0001],
+            audio: false,
+            stepwise: false,
+            oscillate: "off"
         }
+    };
+    /**
+     * copy of something found on https://www.shadertoy.com/
+     */
+    shader = {
+        uniforms: {
+            "tDiffuse": {type: "t", value: null},
+            "resolution": {type: "v2", value: new THREE.Vector2(800, 600)},
+            "colorOffset": {type: "f", value: 0.95},
+            "colorFactor": {type: "f", value: 0},
+            "sampleDistance": {type: "f", value: 0.54},
+            "waveFactor": {type: "f", value: 0.00127}
+        },
 
-        static settings = {
-            apply: false,
-            random: false,
-            colorOffset: {
-                value: 0.95,
-                _type: [0, 2, 0.01],
-                audio: false,
-                stepwise: false,
-                oscillate: "off"
-            },
-            colorFactor: {
-                value: 0,
-                _type: [0, 2, 0.01],
-                audio: false,
-                stepwise: false,
-                oscillate: "off"
-            },
-            sampleDistance: {
-                value: 0.54,
-                _type: [-10, 10, 0.01],
-                audio: false,
-                stepwise: false,
-                oscillate: "off"
-            },
-            waveFactor: {
-                value: 0.00127,
-                _type: [0, 0.5, 0.0001],
-                audio: false,
-                stepwise: false,
-                oscillate: "off"
-            }
-        };
-
-        /**
-         * copy of something found on https://www.shadertoy.com/
-         */
-        shader = {
-            uniforms: {
-                "tDiffuse": { type: "t", value: null },
-                "resolution": { type: "v2", value: new THREE.Vector2( 800, 600) },
-                "colorOffset": { type: "f", value: 0.95 },
-                "colorFactor": { type: "f", value: 0 },
-                "sampleDistance": { type: "f", value: 0.54 },
-                "waveFactor": { type: "f", value: 0.00127 }
-            },
-
-            vertexShader: `
+        vertexShader: `
                 varying vec2 vUv;
                 void main() {
                     vUv = vec2( uv.x, uv.y );
                     gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
                 }`
-            ,
-            fragmentShader: `
+        ,
+        fragmentShader: `
                 uniform sampler2D tDiffuse;
                 varying vec2 vUv;
                 uniform vec2 resolution;
@@ -122,7 +112,15 @@ class paint extends ShaderPlugin {
                     }
                     gl_FragColor = color;
                 }`
-        }
     }
+
+    create() {
+        if (!this.pass) {
+            this.pass = new THREE.ShaderPass(this.shader);
+        }
+
+        return this.pass;
+    }
+}
 
 export {paint};

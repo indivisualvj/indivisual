@@ -3,8 +3,7 @@
  */
 import {OffsetModePlugin} from "../OffsetModePlugin";
 
-class circle extends OffsetModePlugin
-{
+class circle extends OffsetModePlugin {
     static name = 'circle';
     angle = 0;
 
@@ -33,8 +32,7 @@ class circle extends OffsetModePlugin
 }
 
 
-class circle2 extends OffsetModePlugin
-{
+class circle2 extends OffsetModePlugin {
     static name = 'circle chess';
 
     apply(shape) {
@@ -44,8 +42,7 @@ class circle2 extends OffsetModePlugin
 }
 
 
-class rumble extends OffsetModePlugin
-{
+class rumble extends OffsetModePlugin {
 
     injections = {
         angle: false,
@@ -131,8 +128,7 @@ class rumble extends OffsetModePlugin
 }
 
 
-class rumblepeak extends OffsetModePlugin
-{
+class rumblepeak extends OffsetModePlugin {
     static name = 'rumble on peak';
 
     apply(shape) {

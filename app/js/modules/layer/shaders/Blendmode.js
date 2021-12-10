@@ -20,112 +20,101 @@ import {ShaderPlugin} from "../ShaderPlugin";
  */
 
 
-    class blendmode extends ShaderPlugin {
-        static index = 30;
-
-        create() {
-            if (!this.pass) {
-                this.pass = new THREE.ShaderPass(this.shader);
-            }
-
-            return this.pass;
+class blendmode extends ShaderPlugin {
+    static index = 30;
+    static settings = {
+        apply: false,
+        random: false,
+        strength: {
+            value: 0.5,
+            _type: [-2, 2, 0.01],
+            audio: false,
+            stepwise: false,
+            oscillate: "off"
+        },
+        operator_one: {
+            value: 0,
+            _type: [0, 15, 1],
+            audio: false,
+            stepwise: false,
+            oscillate: "off"
+        },
+        operator_two: {
+            value: 1,
+            _type: [0, 15, 1],
+            audio: false,
+            stepwise: false,
+            oscillate: "off"
         }
-
-        static settings = {
-            apply: false,
-            random: false,
-            strength: {
-                value: 0.5,
-                _type: [-2, 2, 0.01],
-                audio: false,
-                stepwise: false,
-                oscillate: "off"
+    };
+    dependencies = {
+        operator_one: {
+            "0": {
+                "0": null,
+                "9": null
             },
-            operator_one: {
-                value: 0,
-                _type: [0, 15, 1],
-                audio: false,
-                stepwise: false,
-                oscillate: "off"
+            "1": {"1": null},
+            "2": {
+                "9": null,
+                "12": null
             },
-            operator_two: {
-                value: 1,
-                _type: [0, 15, 1],
-                audio: false,
-                stepwise: false,
-                oscillate: "off"
+            "3": {"9": null},
+            "5": {"5": null},
+            "6": {
+                "1": null,
+                "6": null
+            },
+            "7": {"10": null},
+            "8": {
+                "0": null,
+                "5": null,
+                "9": null,
+                "10": null
+            },
+            "9": {
+                "1": null,
+                "10": null
+            },
+            "10": {
+                "1": null,
+                "3": null,
+                "4": null,
+                "5": null,
+                "8": null,
+                "11": null,
+                "12": null,
+                "15": null
+            },
+            "11": {
+                "1": null,
+                "2": null,
+                "6": null,
+                "12": null
+            },
+            "15": {
+                "0": null,
+                "6": null
             }
-        };
+        },
+        operator_two: 'operator_one'
+    }
+    /**
+     * @author unknown + indivisualvj / https://github.com/indivisualvj
+     */
+    shader = {
 
-        dependencies = {
-            operator_one: {
-                "0": {
-                    "0": null,
-                    "9": null
-                },
-                "1": {"1": null},
-                "2": {
-                    "9": null,
-                    "12": null
-                },
-                "3": {"9": null},
-                "5": {"5": null},
-                "6": {
-                    "1": null,
-                    "6": null
-                },
-                "7": {"10": null},
-                "8": {
-                    "0": null,
-                    "5": null,
-                    "9": null,
-                    "10": null
-                },
-                "9": {
-                    "1": null,
-                    "10": null
-                },
-                "10": {
-                    "1": null,
-                    "3": null,
-                    "4": null,
-                    "5": null,
-                    "8": null,
-                    "11": null,
-                    "12": null,
-                    "15": null
-                },
-                "11": {
-                    "1": null,
-                    "2": null,
-                    "6": null,
-                    "12": null
-                },
-                "15": {
-                    "0": null,
-                    "6": null
-                }
-            },
-            operator_two: 'operator_one'
-        }
+        uniforms: {
 
-        /**
-         * @author unknown + indivisualvj / https://github.com/indivisualvj
-         */
-        shader = {
+            "tDiffuse": {type: "t", value: null},
+            "resolution": {type: "v2", value: new THREE.Vector2(800, 600)},
+            "strength": {type: "f", value: 1.0},
+            "operator_one": {type: "i", value: 1},
+            "operator_two": {type: "i", value: 1}
+        },
 
-            uniforms: {
+        vertexShader: `varying vec2 vUv;void main() {vUv = vec2( uv.x, uv.y );gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );}`,
 
-                "tDiffuse": { type: "t", value: null },
-                "resolution": { type: "v2", value: new THREE.Vector2( 800, 600) },
-                "strength": { type: "f", value: 1.0 },
-                "operator_one": { type: "i", value: 1 },
-                "operator_two": { type: "i", value: 1 }
-            },
-
-            vertexShader: `varying vec2 vUv;void main() {vUv = vec2( uv.x, uv.y );gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );}`,
-
-            fragmentShader: `
+        fragmentShader: `
                 uniform sampler2D tDiffuse;
                 varying vec2 vUv;
                 uniform vec2 resolution;
@@ -498,7 +487,15 @@ import {ShaderPlugin} from "../ShaderPlugin";
                     gl_FragColor = vec4(result + result, ocol.a);
                 }
             `
-        }
     }
+
+    create() {
+        if (!this.pass) {
+            this.pass = new THREE.ShaderPass(this.shader);
+        }
+
+        return this.pass;
+    }
+}
 
 export {blendmode};

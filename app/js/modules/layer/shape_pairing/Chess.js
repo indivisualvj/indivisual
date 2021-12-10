@@ -3,8 +3,7 @@
  */
 import {ShapePairingPlugin} from "../ShapePairingPlugin";
 
-class chess extends ShapePairingPlugin
-{
+class chess extends ShapePairingPlugin {
     apply(shape) {
         let layer = this.layer;
         if (shape.index % 2 === 1) {

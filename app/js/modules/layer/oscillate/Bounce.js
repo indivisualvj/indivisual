@@ -1,5 +1,9 @@
-{
-    HC.plugins.oscillate.bounce = class Plugin extends HC.OscillatePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {OscillatePlugin} from "../OscillatePlugin";
+
+class bounce extends OscillatePlugin {
         static name = 'bounce 0 to 1 (current)';
         preset = 1;
 
@@ -10,9 +14,9 @@
             return this.activate(key, Math.pow(prc, 2) * 4);
         }
     }
-}
-{
-    HC.plugins.oscillate.bounceminusfulls = class Plugin extends HC.OscillatePlugin {
+
+
+    class bounceminusfulls extends OscillatePlugin {
         static name = 'bounce -1 to 1 on fulls';
         preset = 1;
 
@@ -38,4 +42,5 @@
             return this.activate(key, v);
         }
     }
-}
+
+export {bounce, bounceminusfulls};

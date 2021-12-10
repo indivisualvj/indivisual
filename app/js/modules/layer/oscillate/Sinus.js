@@ -1,5 +1,9 @@
-{
-    HC.plugins.oscillate.sinus = class Plugin extends HC.OscillatePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {OscillatePlugin} from "../OscillatePlugin";
+
+class sinus extends OscillatePlugin {
         static name = 'sinus -1/1 (current)';
         static index = 40;
 
@@ -9,9 +13,9 @@
             return this.activate(key, HC.Osci.sinus(speed.prc));
         }
     }
-}
-{
-    HC.plugins.oscillate.sininout = class Plugin extends HC.OscillatePlugin {
+
+
+    class sininout extends OscillatePlugin {
         static name = 'sinus 0/1 (current)';
         static index = 40;
 
@@ -21,9 +25,9 @@
             return this.activate(key, HC.Osci.sinInOut(speed.prc));
         }
     }
-}
-{
-    HC.plugins.oscillate.sininoutdotfive = class Plugin extends HC.OscillatePlugin {
+
+
+    class sininoutdotfive extends OscillatePlugin {
         static name = 'sinus 0.5/1.5 (current)';
         static index = 40;
 
@@ -33,9 +37,9 @@
             return this.activate(key, HC.Osci.sinInOut(speed.prc, .5));
         }
     }
-}
-{
-    HC.plugins.oscillate.sininouthexa = class Plugin extends HC.OscillatePlugin {
+
+
+    class sininouthexa extends OscillatePlugin {
         static name = 'sinus 0/1 (hexa)';
         static index = 40;
 
@@ -44,9 +48,9 @@
             return this.activate(key, HC.Osci.sinInOut(speed.prc));
         }
     }
-}
-{
-    HC.plugins.oscillate.sininoutdotfivehexa = class Plugin extends HC.OscillatePlugin {
+
+
+    class sininoutdotfivehexa extends OscillatePlugin {
         static name = 'sinus 0.5/1.5 (hexa)';
         static index = 40;
 
@@ -55,9 +59,9 @@
             return this.activate(key, HC.Osci.sinInOut(speed.prc, .5));
         }
     }
-}
-{
-    HC.plugins.oscillate.sininoutdotfive32 = class Plugin extends HC.OscillatePlugin {
+
+
+    class sininoutdotfive32 extends OscillatePlugin {
         static name = 'sinus 0.5/1.5 (32)';
         static index = 40;
 
@@ -66,9 +70,9 @@
             return this.activate(key, HC.Osci.sinInOut(speed.prc, .5));
         }
     }
-}
-{
-    HC.plugins.oscillate.sinusfulls = class Plugin extends HC.OscillatePlugin {
+
+
+    class sinusfulls extends OscillatePlugin {
         static name = 'sinus -1/1 (fulls)';
         static index = 40;
 
@@ -77,9 +81,9 @@
             return this.activate(key, HC.Osci.sinus(speed.prc));
         }
     }
-}
-{
-    HC.plugins.oscillate.sinus32 = class Plugin extends HC.OscillatePlugin {
+
+
+    class sinus32 extends OscillatePlugin {
         static name = 'sinus -1/1 (32)';
         static index = 40;
 
@@ -89,9 +93,9 @@
             return this.activate(key, HC.Osci.sinus(speed.prc));
         }
     }
-}
-{
-    HC.plugins.oscillate.sinus64 = class Plugin extends HC.OscillatePlugin {
+
+
+    class sinus64 extends OscillatePlugin {
         static name = 'sinus -1/1 (64)';
         static index = 40;
 
@@ -100,9 +104,9 @@
             return this.activate(key, HC.Osci.sinus(speed.prc));
         }
     }
-}
-{
-    HC.plugins.oscillate.oscillator = class Plugin extends HC.OscillatePlugin {
+
+
+    class oscillator extends OscillatePlugin {
         static name = 'oscillator';
         static index = 40;
         osci = {
@@ -125,9 +129,9 @@
             return this.activate(key, HC.Osci.wobble(this.beatKeeper, 0, this.osci));
         }
     }
-}
-{
-    HC.plugins.oscillate.sinusosci1 = class Plugin extends HC.OscillatePlugin {
+
+
+    class sinusosci1 extends OscillatePlugin {
         static name = 'sinus by osci1_period';
         static index = 40;
         osci = {
@@ -149,9 +153,9 @@
 
         }
     }
-}
-{
-    HC.plugins.oscillate.sinusosci2 = class Plugin extends HC.OscillatePlugin {
+
+
+    class sinusosci2 extends OscillatePlugin {
         static name = 'sinus by osci2_period';
         static index = 40;
         osci = {
@@ -173,9 +177,7 @@
 
         }
     }
-}
-    {
-        HC.plugins.oscillate.sinusosci3 = class Plugin extends HC.OscillatePlugin {
+        class sinusosci3 extends OscillatePlugin {
             static name = 'sinus by osci3_period';
             static index = 40;
             osci = {
@@ -197,4 +199,6 @@
 
             }
         }
-    }
+
+
+export {sininoutdotfive32, sininoutdotfive, sininoutdotfivehexa, sininouthexa, sinus, sinus64, sinusosci1, sinusosci2, sinusosci3, sinus32, sinusfulls, sininout, oscillator};

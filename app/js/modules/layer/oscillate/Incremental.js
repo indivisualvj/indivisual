@@ -1,15 +1,9 @@
-{
-    HC.plugins.oscillate.timestamp = class Plugin extends HC.OscillatePlugin {
-        static name = 'timestamp';
-        static index = 10;
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {OscillatePlugin} from "../OscillatePlugin";
 
-        apply(key) {
-            return this.activate(key, (this.animation.now - this.beatKeeper.beatStartTime) / (60000 / this.config.ControlSettings.tempo));
-        }
-    }
-}
-{
-    HC.plugins.oscillate.incremental = class Plugin extends HC.OscillatePlugin {
+    class incremental extends OscillatePlugin {
         static name = 'incremental';
         static index = 10;
 
@@ -21,9 +15,9 @@
             return this.activate(key, v);
         }
     }
-}
-{
-    HC.plugins.oscillate.incrementalpeak = class Plugin extends HC.OscillatePlugin {
+
+
+    class incrementalpeak extends OscillatePlugin {
         static name = 'incremental (race on peak)';
         static index = 10;
         preset = {velocity: 1, progress: 0};
@@ -41,14 +35,5 @@
             return this.activate(key, pa.progress);
         }
     }
-}
-{
-    HC.plugins.oscillate.audio = class Plugin extends HC.OscillatePlugin {
-        static name = 'audio';
-        static index = 10;
 
-        apply(key) {
-            return this.activate(key, Math.min(1, 2.5 * this.audioAnalyser.volume));
-        }
-    }
-}
+export {incrementalpeak, incremental};

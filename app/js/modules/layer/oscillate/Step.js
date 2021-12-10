@@ -1,5 +1,9 @@
-{
-    HC.plugins.oscillate.fourstep = class Plugin extends HC.OscillatePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {OscillatePlugin} from "../OscillatePlugin";
+
+class fourstep extends OscillatePlugin {
         static name = 'fourstep 0/1 on peak';
         static index = 30;
         preset = {value: 1, next: 1};
@@ -10,9 +14,9 @@
             return this.activate(key, pa.value);
         }
     }
-}
-{
-    HC.plugins.oscillate.fourstepfulls = class Plugin extends HC.OscillatePlugin {
+
+
+    class fourstepfulls extends OscillatePlugin {
         static name = 'fourstep 0/1 on fulls';
         static index = 30;
         preset = {value: 1, next: 1};
@@ -23,9 +27,9 @@
             return this.activate(key, pa.value);
         }
     }
-}
-{
-    HC.plugins.oscillate.fourstepminus = class Plugin extends HC.OscillatePlugin {
+
+
+    class fourstepminus extends OscillatePlugin {
         preset = {value: 1, next: 1};
         static name = 'fourstep -1/1 on peak';
         static index = 30;
@@ -36,9 +40,9 @@
             return this.activate(key, pa.value);
         }
     }
-}
-{
-    HC.plugins.oscillate.fourstephalfsminus = class Plugin extends HC.OscillatePlugin {
+
+
+    class fourstephalfsminus extends OscillatePlugin {
         static name = 'fourstep -1/1 on halfs';
         static index = 30;
         preset = {value: 1, next: 1};
@@ -49,9 +53,9 @@
             return this.activate(key, pa.value);
         }
     }
-}
-{
-    HC.plugins.oscillate.fourstepfullsminus = class Plugin extends HC.OscillatePlugin {
+
+
+    class fourstepfullsminus extends OscillatePlugin {
         static name = 'fourstep -1/1 on fulls';
         static index = 30;
         preset = {value: 1, next: 1};
@@ -62,4 +66,5 @@
             return this.activate(key, pa.value);
         }
     }
-}
+
+export {fourstepfullsminus, fourstepfulls, fourstephalfsminus, fourstepminus, fourstep};

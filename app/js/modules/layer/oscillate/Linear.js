@@ -1,5 +1,9 @@
-{
-    HC.plugins.oscillate.lininoutdotfive = class Plugin extends HC.OscillatePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {OscillatePlugin} from "../OscillatePlugin";
+
+class lininoutdotfive extends OscillatePlugin {
         static name = 'linear 0.5/1.5 (current)';
         static index = 60;
 
@@ -8,9 +12,9 @@
             return this.layer.getOscillatePlugin('lininout').apply(key, speed, .5);
         }
     }
-}
-{
-    HC.plugins.oscillate.lininoutdotfivedouble = class Plugin extends HC.OscillatePlugin {
+
+
+    class lininoutdotfivedouble extends OscillatePlugin {
         static name = 'linear 0.5/1.5 (double)';
         static index = 60;
 
@@ -19,9 +23,9 @@
             return this.layer.getOscillatePlugin('lininout').apply(key, speed, .5);
         }
     }
-}
-{
-    HC.plugins.oscillate.lininoutdotfivequad = class Plugin extends HC.OscillatePlugin {
+
+
+    class lininoutdotfivequad extends OscillatePlugin {
         static name = 'linear 0.5/1.5 (quad)';
         static index = 60;
 
@@ -30,9 +34,9 @@
             return this.layer.getOscillatePlugin('lininout').apply(key, speed, .5);
         }
     }
-}
-{
-    HC.plugins.oscillate.lininoutdotfiveocta = class Plugin extends HC.OscillatePlugin {
+
+
+    class lininoutdotfiveocta extends OscillatePlugin {
         static name = 'linear 0.5/1.5 (octa)';
         static index = 60;
 
@@ -41,9 +45,9 @@
             return this.layer.getOscillatePlugin('lininout').apply(key, speed, .5);
         }
     }
-}
-{
-    HC.plugins.oscillate.lininoutdotfivehexa = class Plugin extends HC.OscillatePlugin {
+
+
+    class lininoutdotfivehexa extends OscillatePlugin {
         static name = 'linear 0.5/1.5 (hexa)';
         static index = 60;
 
@@ -52,4 +56,5 @@
             return this.layer.getOscillatePlugin('lininout').apply(key, speed, .5);
         }
     }
-}
+
+export {lininoutdotfivedouble, lininoutdotfivehexa, lininoutdotfiveocta, lininoutdotfivequad, lininoutdotfive};

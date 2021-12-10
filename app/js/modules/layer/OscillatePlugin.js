@@ -1,6 +1,8 @@
-HC.plugins.oscillate = HC.plugins.oscillate || {};
-{
-    HC.OscillatePlugin = class Plugin extends HC.AnimationPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+
+class OscillatePlugin extends HC.AnimationPlugin {
 
         /**
          *
@@ -85,4 +87,5 @@ HC.plugins.oscillate = HC.plugins.oscillate || {};
             }
         }
     }
-}
+
+    export {OscillatePlugin};

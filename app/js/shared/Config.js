@@ -433,6 +433,7 @@ class Config {
             PluginManager.assignLayerPlugins(settings, 'lighting_type',        HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'material_style',       HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'offset_mode',          HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'oscillate',            HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'pattern_mover',        HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'pattern_rotation',     HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'rotation_direction',   HC.plugins, this),

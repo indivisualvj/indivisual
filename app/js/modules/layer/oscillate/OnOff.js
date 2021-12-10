@@ -1,5 +1,9 @@
-{
-    HC.plugins.oscillate.onoffpeak = class Plugin extends HC.OscillatePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {OscillatePlugin} from "../OscillatePlugin";
+
+class onoffpeak extends OscillatePlugin {
         static name = 'on & off (peak)';
         static index = 80;
 
@@ -15,9 +19,9 @@
             return this.activate(key, pa);
         }
     }
-}
-{
-    HC.plugins.oscillate.onoffhalf = class Plugin extends HC.OscillatePlugin {
+
+
+    class onoffhalf extends OscillatePlugin {
         static name = 'on & off (half)';
         static index = 80;
 
@@ -34,9 +38,9 @@
             return this.activate(key, pa);
         }
     }
-}
-{
-    HC.plugins.oscillate.onofffull = class Plugin extends HC.OscillatePlugin {
+
+
+    class onofffull extends OscillatePlugin {
         static name = 'on & off (full)';
         static index = 80;
 
@@ -53,9 +57,9 @@
             return this.activate(key, pa);
         }
     }
-}
-{
-    HC.plugins.oscillate.onoffdouble = class Plugin extends HC.OscillatePlugin {
+
+
+    class onoffdouble extends OscillatePlugin {
         static name = 'on & off (double)';
         static index = 80;
 
@@ -72,9 +76,9 @@
             return this.activate(key, pa);
         }
     }
-}
-{
-    HC.plugins.oscillate.onoffquarter = class Plugin extends HC.OscillatePlugin {
+
+
+    class onoffquarter extends OscillatePlugin {
         static name = 'on & off (quarter)';
         static index = 80;
 
@@ -91,4 +95,5 @@
             return this.activate(key, pa);
         }
     }
-}
+
+export {onofffull, onoffhalf, onoffpeak, onoffquarter, onoffdouble};

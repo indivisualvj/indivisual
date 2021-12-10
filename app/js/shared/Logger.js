@@ -75,7 +75,7 @@ class Logger
 
                 co.scrollTop = co.scrollHeight;
 
-            } else {
+            } else if (_console) {
                 console.log(key, value);
             }
         });

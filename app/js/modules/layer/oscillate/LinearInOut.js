@@ -1,5 +1,9 @@
-{
-    HC.plugins.oscillate.lininout = class Plugin extends HC.OscillatePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {OscillatePlugin} from "../OscillatePlugin";
+
+class lininout extends OscillatePlugin {
         static name = 'linear 0/1 (current)';
         static index = 60;
 
@@ -9,9 +13,9 @@
             return this.activate(key, prc);
         }
     }
-}
-{
-    HC.plugins.oscillate.lininouthexa = class Plugin extends HC.OscillatePlugin {
+
+
+    class lininouthexa extends OscillatePlugin {
         static name = 'linear 0/1 (hexa)';
         static index = 60;
 
@@ -21,9 +25,9 @@
             return this.activate(key, prc);
         }
     }
-}
-{
-    HC.plugins.oscillate.lininoutocta = class Plugin extends HC.OscillatePlugin {
+
+
+    class lininoutocta extends OscillatePlugin {
         static name = 'linear 0/1 (octa)';
         static index = 60;
 
@@ -33,9 +37,9 @@
             return this.activate(key, prc);
         }
     }
-}
-{
-    HC.plugins.oscillate.lininoutquad = class Plugin extends HC.OscillatePlugin {
+
+
+    class lininoutquad extends OscillatePlugin {
         static name = 'linear 0/1 (quad)';
         static index = 60;
 
@@ -45,9 +49,9 @@
             return this.activate(key, prc);
         }
     }
-}
-{
-    HC.plugins.oscillate.lininoutdouble = class Plugin extends HC.OscillatePlugin {
+
+
+    class lininoutdouble extends OscillatePlugin {
         static name = 'linear 0/1 (double)';
         static index = 60;
 
@@ -57,9 +61,9 @@
             return this.activate(key, prc);
         }
     }
-}
-{
-    HC.plugins.oscillate.lininoutfull = class Plugin extends HC.OscillatePlugin {
+
+
+    class lininoutfull extends OscillatePlugin {
         static name = 'linear 0/1 (full)';
         static index = 60;
 
@@ -69,9 +73,9 @@
             return this.activate(key, prc);
         }
     }
-}
-{
-    HC.plugins.oscillate.lininouthalf = class Plugin extends HC.OscillatePlugin {
+
+
+    class lininouthalf extends OscillatePlugin {
         static name = 'linear 0/1 (half)';
         static index = 60;
 
@@ -81,9 +85,9 @@
             return this.activate(key, prc);
         }
     }
-}
-{
-    HC.plugins.oscillate.lininoutquarter = class Plugin extends HC.OscillatePlugin {
+
+
+    class lininoutquarter extends OscillatePlugin {
         static name = 'linear 0/1 (quarter)';
         static index = 60;
 
@@ -93,4 +97,5 @@
             return this.activate(key, prc);
         }
     }
-}
+
+export {lininoutdouble, lininoutfull, lininouthalf, lininoutquarter, lininouthexa, lininoutocta, lininoutquad, lininout};

@@ -1,5 +1,9 @@
-{
-    HC.plugins.oscillate.cosinus = class Plugin extends HC.OscillatePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {OscillatePlugin} from "../OscillatePlugin";
+
+class cosinus extends OscillatePlugin {
         static name = 'cosinus -1/1 (current)';
         static index = 50;
 
@@ -9,9 +13,9 @@
             return this.activate(key, HC.Osci.cosinus(speed.prc));
         }
     }
-}
-{
-    HC.plugins.oscillate.cosinout = class Plugin extends HC.OscillatePlugin {
+
+
+    class cosinout extends OscillatePlugin {
         static name = 'cosinus 0/1 (current)';
         static index = 50;
 
@@ -21,9 +25,9 @@
             return this.activate(key, HC.Osci.cosInOut(speed.prc));
         }
     }
-}
-{
-    HC.plugins.oscillate.cosinoutdotfive = class Plugin extends HC.OscillatePlugin {
+
+
+    class cosinoutdotfive extends OscillatePlugin {
         static name = 'cosinus 0.5/1.5 (current)';
         static index = 50;
 
@@ -33,9 +37,9 @@
             return this.activate(key, HC.Osci.cosInOut(speed.prc, .5));
         }
     }
-}
-{
-    HC.plugins.oscillate.cosinouthexa = class Plugin extends HC.OscillatePlugin {
+
+
+    class cosinouthexa extends OscillatePlugin {
         static name = 'cosinus 0/1 (hexa)';
         static index = 50;
 
@@ -44,9 +48,9 @@
             return this.activate(key, HC.Osci.cosInOut(speed.prc));
         }
     }
-}
-{
-    HC.plugins.oscillate.cosinoutdotfivehexa = class Plugin extends HC.OscillatePlugin {
+
+
+    class cosinoutdotfivehexa extends OscillatePlugin {
         static name = 'cosinus 0.5/1.5 (hexa)';
         static index = 50;
 
@@ -55,9 +59,9 @@
             return this.activate(key, HC.Osci.cosInOut(speed.prc, .5));
         }
     }
-}
-{
-    HC.plugins.oscillate.cosinoutdotfive32 = class Plugin extends HC.OscillatePlugin {
+
+
+    class cosinoutdotfive32 extends OscillatePlugin {
         static name = 'cosinus 0.5/1.5 (32)';
         static index = 50;
 
@@ -66,9 +70,9 @@
             return this.activate(key, HC.Osci.cosInOut(speed.prc, .5));
         }
     }
-}
-{
-    HC.plugins.oscillate.cosinusfulls = class Plugin extends HC.OscillatePlugin {
+
+
+    class cosinusfulls extends OscillatePlugin {
         static name = 'cosinus -1/1 (fulls)';
         static index = 50;
 
@@ -77,9 +81,9 @@
             return this.activate(key, HC.Osci.cosinus(speed.prc));
         }
     }
-}
-{
-    HC.plugins.oscillate.cosinus32 = class Plugin extends HC.OscillatePlugin {
+
+
+    class cosinus32 extends OscillatePlugin {
         static name = 'cosinus -1/1 (32)';
         static index = 50;
 
@@ -88,9 +92,9 @@
             return this.activate(key, HC.Osci.cosinus(speed.prc));
         }
     }
-}
-{
-    HC.plugins.oscillate.cosinus64 = class Plugin extends HC.OscillatePlugin {
+
+
+    class cosinus64 extends OscillatePlugin {
         static name = 'cosinus -1/1 (64)';
         static index = 50;
 
@@ -99,9 +103,9 @@
             return this.activate(key, HC.Osci.cosinus(speed.prc));
         }
     }
-}
-{
-    HC.plugins.oscillate.oscillator = class Plugin extends HC.OscillatePlugin {
+
+
+    class oscillator extends OscillatePlugin {
         static name = 'oscillate';
         static index = 50;
         osci = {
@@ -125,9 +129,9 @@
             return this.activate(key, HC.Osci.wobble(this.beatKeeper, 0, this.osci));
         }
     }
-}
-{
-    HC.plugins.oscillate.cosinusosci1 = class Plugin extends HC.OscillatePlugin {
+
+
+    class cosinusosci1 extends OscillatePlugin {
         static name = 'cosinus by osci1_period';
         static index = 50;
         osci = {
@@ -149,9 +153,9 @@
 
         }
     }
-}
-{
-    HC.plugins.oscillate.cosinusosci2 = class Plugin extends HC.OscillatePlugin {
+
+
+    class cosinusosci2 extends OscillatePlugin {
         static name = 'cosinus by osci2_period';
         static index = 50;
         osci = {
@@ -173,9 +177,9 @@
 
         }
     }
-}
-{
-    HC.plugins.oscillate.cosinusosci3 = class Plugin extends HC.OscillatePlugin {
+
+
+    class cosinusosci3 extends OscillatePlugin {
         osci = {
             osci1_period: 0,
             osci1_amp: 0,
@@ -197,4 +201,5 @@
 
         }
     }
-}
+
+export {cosinout, cosinouthexa, cosinoutdotfivehexa, cosinus32, cosinus64, cosinusosci1, cosinusosci3, cosinusosci2, cosinusfulls, cosinus, cosinoutdotfive, cosinoutdotfive32};

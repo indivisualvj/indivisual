@@ -1,5 +1,9 @@
-{
-    HC.plugins.oscillate.blitzpeak = class Plugin extends HC.OscillatePlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {OscillatePlugin} from "../OscillatePlugin";
+
+class blitzpeak extends OscillatePlugin {
         static name = 'blitz (peak)';
         static index = 70;
 
@@ -17,9 +21,9 @@
             return this.activate(key, pa);
         }
     }
-}
-{
-    HC.plugins.oscillate.blitzpeakslow = class Plugin extends HC.OscillatePlugin {
+
+
+    class blitzpeakslow extends OscillatePlugin {
         static name = 'blitz (peak/slow)';
         static index = 70;
 
@@ -37,9 +41,9 @@
             return this.activate(key, pa);
         }
     }
-}
-{
-    HC.plugins.oscillate.blitzfull = class Plugin extends HC.OscillatePlugin {
+
+
+    class blitzfull extends OscillatePlugin {
         static name = 'blitz (full)';
         static index = 70;
 
@@ -59,9 +63,9 @@
             return this.activate(key, pa);
         }
     }
-}
-{
-    HC.plugins.oscillate.blitzhalf = class Plugin extends HC.OscillatePlugin {
+
+
+    class blitzhalf extends OscillatePlugin {
         static name = 'blitz (half)';
         static index = 70;
 
@@ -81,9 +85,9 @@
             return this.activate(key, pa);
         }
     }
-}
-{
-    HC.plugins.oscillate.blitzquarter = class Plugin extends HC.OscillatePlugin {
+
+
+    class blitzquarter extends OscillatePlugin {
         static name = 'blitz (quarter)';
         static index = 70;
 
@@ -102,9 +106,9 @@
             return this.activate(key, pa);
         }
     }
-}
-{
-    HC.plugins.oscillate.blitzeight = class Plugin extends HC.OscillatePlugin {
+
+
+    class blitzeight extends OscillatePlugin {
         static name = 'blitz (eight)';
         static index = 70;
 
@@ -124,4 +128,5 @@
             return this.activate(key, pa);
         }
     }
-}
+
+export {blitzfull, blitzhalf, blitzpeak, blitzpeakslow, blitzquarter, blitzeight};

@@ -92,7 +92,7 @@ HC.Osci = {
      * @returns {number}
      */
     wobble(beatKeeper, progress, settings, func) {
-        let p = 1;
+        let p = 0;
 
         let duration = 60000 / settings.tempo;
         let div = beatKeeper.rhythmDivider(settings.rhythm) / 2;

@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-{
-    HC.plugins.shaders.noise = class Plugin extends HC.ShaderPlugin {
+import {ShaderPlugin} from "../ShaderPlugin";
+
+class noise extends ShaderPlugin {
         static index = 110;
 
         create() {
@@ -115,4 +116,5 @@
                 }`
         }
     }
-}
+
+export {noise};

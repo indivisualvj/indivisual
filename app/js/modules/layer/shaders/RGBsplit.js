@@ -1,9 +1,13 @@
-{
-    if (!IS_CONTROLLER) {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+if (!IS_CONTROLLER) {
         _importThreeShader('RGBShiftShader');
     }
 
-    HC.plugins.shaders.rgbsplit = class Plugin extends HC.ShaderPlugin {
+    class rgbsplit extends ShaderPlugin {
         static index = 190;
 
         create() {
@@ -33,4 +37,5 @@
             }
         }
     }
-}
+
+export {rgbsplit};

@@ -1,5 +1,9 @@
-{
-    HC.plugins.shaders.ledmatrix = class Plugin extends HC.ShaderPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+class ledmatrix extends ShaderPlugin {
         static index = 210;
 
         create() {
@@ -99,4 +103,5 @@
 	`
         }
     }
-}
+
+export {ledmatrix};

@@ -1,4 +1,10 @@
 /**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+
+/**
  * multiply    a * b
  * screen    1 - (1 - a) * (1 - b)
  * darken    min(a, b)
@@ -13,8 +19,8 @@
  * burn    1 - (1 - a) / b
  */
 
-{
-    HC.plugins.shaders.blendmode = class Plugin extends HC.ShaderPlugin {
+
+    class blendmode extends ShaderPlugin {
         static index = 30;
 
         create() {
@@ -494,4 +500,5 @@
             `
         }
     }
-}
+
+export {blendmode};

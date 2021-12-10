@@ -1,8 +1,12 @@
-{
-    if (!IS_CONTROLLER) {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+if (!IS_CONTROLLER) {
         _importThreeShader('MirrorShader');
     }
-    HC.plugins.shaders.mirror = class Plugin extends HC.ShaderPlugin {
+    class mirror extends ShaderPlugin {
         static index = 50;
 
         create() {
@@ -25,4 +29,5 @@
             }
         }
     }
-}
+
+export {mirror};

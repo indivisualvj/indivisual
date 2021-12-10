@@ -1,11 +1,15 @@
-{
-    if (!IS_CONTROLLER) {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+if (!IS_CONTROLLER) {
         _importThreeShader('CopyShader');
         _importThreeShader('LuminosityHighPassShader');
         _importThreePostprocessing('UnrealBloomPass');
     }
 
-    HC.plugins.shaders.bloom = class Plugin extends HC.ShaderPlugin {
+    class bloom extends ShaderPlugin {
         static index = 40;
 
         create() {
@@ -119,6 +123,4 @@
         }
     }
 
-
-
-}
+export {bloom};

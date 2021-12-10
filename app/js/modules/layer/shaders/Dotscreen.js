@@ -1,9 +1,13 @@
-{
-    if (!IS_CONTROLLER) {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+if (!IS_CONTROLLER) {
         _importThreeShader('DotScreenShader');
     }
 
-    HC.plugins.shaders.dotscreen = class Plugin extends HC.ShaderPlugin {
+    class dotscreen extends ShaderPlugin {
         static index = 200;
 
         create() {
@@ -33,4 +37,5 @@
             }
         }
     }
-}
+
+export {dotscreen};

@@ -1,5 +1,9 @@
-{
-    HC.plugins.shaders.edgeglow = class Plugin extends HC.ShaderPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+class edgeglow extends ShaderPlugin {
         static index = 150;
 
         create() {
@@ -133,4 +137,5 @@
 
         }
     }
-}
+
+export {edgeglow};

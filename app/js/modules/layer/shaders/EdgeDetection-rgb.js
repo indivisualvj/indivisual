@@ -1,5 +1,9 @@
-{
-    HC.plugins.shaders.edge_detection_rgb = class Plugin extends HC.ShaderPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+class edge_detection_rgb extends ShaderPlugin {
         static index = 145;
         static name = 'edge-detection-rgb';
         create() {
@@ -78,5 +82,6 @@
                 }
             `
         }
-    };
-}
+    }
+
+export {edge_detection_rgb};

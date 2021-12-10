@@ -1,5 +1,9 @@
-{
-    HC.plugins.shaders.bleepy_blocks = class Plugin extends HC.ShaderPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+class bleepy_blocks extends ShaderPlugin {
         static index = 200;
         static name = 'bleepy-blocks';
 
@@ -139,4 +143,5 @@
             `
         }
     }
-}
+
+export {bleepy_blocks};

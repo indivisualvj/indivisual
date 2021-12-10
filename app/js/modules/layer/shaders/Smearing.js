@@ -1,10 +1,14 @@
-{
-    HC.plugins.shaders.smearing = class Plugin extends HC.ShaderPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+class smearing extends ShaderPlugin {
         static index = 185;
 
         create() {
             if (!this.pass) {
-                this.pass = new THREE.SmearingPass();
+                this.pass = new SmearingPass();
             }
             this.pass.setSize(this.layer.resolution().x, this.layer.resolution().y);
 
@@ -22,54 +26,54 @@
             }
         }
     }
-}
+
 
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-THREE.SmearingPass = function () {
+const SmearingPass = function () {
 
-    let shader = THREE.SmearingShader;
-    this.uniforms = THREE.UniformsUtils.clone(shader.uniforms);
+        let shader = SmearingShader;
+        this.uniforms = THREE.UniformsUtils.clone(shader.uniforms);
 
-    let parameters = {
-        minFilter: THREE.LinearFilter,
-        magFilter: THREE.LinearFilter,
-        format: THREE.RGBAFormat,
-        stencilBuffer: false
-    };
+        let parameters = {
+            minFilter: THREE.LinearFilter,
+            magFilter: THREE.LinearFilter,
+            format: THREE.RGBAFormat,
+            stencilBuffer: false
+        };
 
-    this.target1 = new THREE.WebGLRenderTarget( 1280, 720, parameters );
-    this.target2 = this.target1.clone();
-    this.targetSwitch = false;
+        this.target1 = new THREE.WebGLRenderTarget(1280, 720, parameters);
+        this.target2 = this.target1.clone();
+        this.targetSwitch = false;
 
-    this.material = new THREE.ShaderMaterial({
-        defines: shader.defines || {},
-        uniforms: this.uniforms,
-        vertexShader: shader.vertexShader,
-        fragmentShader: shader.fragmentShader
-    });
+        this.material = new THREE.ShaderMaterial({
+            defines: shader.defines || {},
+            uniforms: this.uniforms,
+            vertexShader: shader.vertexShader,
+            fragmentShader: shader.fragmentShader
+        });
 
-    this.material.transparent = false;
+        this.material.transparent = false;
 
-    this.renderToScreen = false;
-    this.enabled = true;
-    this.needsSwap = true;
-    this.clear = false;
+        this.renderToScreen = false;
+        this.enabled = true;
+        this.needsSwap = true;
+        this.clear = false;
 
-    this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-    this.scene = new THREE.Scene();
-    this.scene.autoUpdate = false;
+        this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+        this.scene = new THREE.Scene();
+        this.scene.autoUpdate = false;
 
-    this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
-    this.quad.matrixAutoUpdate = false;
-    this.quad.updateMatrix();
-    this.scene.add(this.quad);
+        this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
+        this.quad.matrixAutoUpdate = false;
+        this.quad.updateMatrix();
+        this.scene.add(this.quad);
+    }
+;
 
-};
-
-THREE.SmearingPass.prototype = {
+SmearingPass.prototype = {
 
     render: function (renderer, writeBuffer, readBuffer) {
 
@@ -91,22 +95,22 @@ THREE.SmearingPass.prototype = {
         this.targetSwitch = !this.targetSwitch;
     },
 
-    setSize: function ( width, height ) {
+    setSize: function (width, height) {
         this.target1.setSize(width, height);
         this.target2.setSize(width, height);
     }
+}
 
-};
 
-THREE.SmearingShader = {
+const SmearingShader = {
 
-    uniforms: {
-        "tLast": {type: "t", value: null},
-        "tCurrent": {type: "t", value: null},
-        "opacity": {type: "f", value: .8}
-    },
+        uniforms: {
+            "tLast": {type: "t", value: null},
+            "tCurrent": {type: "t", value: null},
+            "opacity": {type: "f", value: .8}
+        },
 
-    vertexShader: `
+        vertexShader: `
         varying vec2 vUv;
         void main() {
             vUv = uv;
@@ -114,7 +118,7 @@ THREE.SmearingShader = {
         }
     `,
 
-    fragmentShader: `
+        fragmentShader: `
 
         uniform float opacity;
         uniform sampler2D tCurrent;
@@ -134,3 +138,5 @@ THREE.SmearingShader = {
         }
     `
 }
+
+export {smearing};

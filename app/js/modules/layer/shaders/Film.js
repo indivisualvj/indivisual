@@ -1,5 +1,9 @@
-{
-    HC.plugins.shaders.film = class Plugin extends HC.ShaderPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+class film extends ShaderPlugin {
         static index = 70;
 
         create() {
@@ -149,4 +153,5 @@
 
         }
     }
-}
+
+export {film};

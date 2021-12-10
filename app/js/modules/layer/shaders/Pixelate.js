@@ -1,5 +1,9 @@
-{
-    HC.plugins.shaders.pixelate = class Plugin extends HC.ShaderPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+class pixelate extends ShaderPlugin {
         static index = 220;
 
         create() {
@@ -77,4 +81,5 @@
 
         }
     }
-}
+
+export {pixelate};

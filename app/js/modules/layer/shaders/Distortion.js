@@ -1,5 +1,9 @@
-{
-    HC.plugins.shaders.distortion = class Plugin extends HC.ShaderPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+class distortion extends ShaderPlugin {
         static index = 90;
 
         create() {
@@ -114,4 +118,5 @@
 
         }
     }
-}
+
+export {distortion};

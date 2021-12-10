@@ -1,5 +1,9 @@
-{
-    HC.plugins.shaders.twist = class Plugin extends HC.ShaderPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+class twist extends ShaderPlugin {
         static index = 180;
 
         create() {
@@ -105,4 +109,5 @@
 
         }
     }
-}
+
+export {twist};

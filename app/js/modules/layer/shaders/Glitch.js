@@ -1,5 +1,9 @@
-{
-    HC.plugins.shaders.glitch = class Plugin extends HC.ShaderPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+class glitch extends ShaderPlugin {
         static index = 100;
 
         create() {
@@ -120,4 +124,5 @@
 
         }
     }
-}
+
+export {glitch};

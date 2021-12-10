@@ -1,5 +1,9 @@
-{
-    HC.plugins.shaders.blur = class Plugin extends HC.ShaderPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+class blur extends ShaderPlugin {
         static index = 120;
 
         create() {
@@ -107,4 +111,6 @@
 
         }
     }
-}
+
+
+export {blur};

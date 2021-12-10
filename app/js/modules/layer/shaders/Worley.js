@@ -1,5 +1,9 @@
-{
-    HC.plugins.shaders.worley = class Plugin extends HC.ShaderPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+class worley extends ShaderPlugin {
         static index = 160;
 
         create() {
@@ -124,4 +128,5 @@
 
         }
     }
-}
+
+export {worley};

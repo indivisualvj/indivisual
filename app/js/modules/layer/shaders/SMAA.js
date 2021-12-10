@@ -1,10 +1,14 @@
-{
-    if (!IS_CONTROLLER) {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+if (!IS_CONTROLLER) {
         _importThreeShader('SMAAShader');
         _importThreePostprocessing('SMAAPass');
     }
 
-    HC.plugins.shaders.smaa = class Plugin extends HC.ShaderPlugin {
+    class smaa extends ShaderPlugin {
         static index = 5;
 
         create() {
@@ -21,4 +25,5 @@
             random: false
         }
     }
-}
+
+export {smaa};

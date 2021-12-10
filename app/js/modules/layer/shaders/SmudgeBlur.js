@@ -1,5 +1,9 @@
-{
-    HC.plugins.shaders.smudge_blur = class Plugin extends HC.ShaderPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+class smudge_blur extends ShaderPlugin {
         static index = 109;
         static name = 'smudge-blur';
 
@@ -70,4 +74,5 @@
             `,
         }
     }
-}
+
+export {smudge_blur};

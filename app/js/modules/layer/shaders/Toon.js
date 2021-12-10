@@ -1,5 +1,9 @@
-{
-    HC.plugins.shaders.toon = class Plugin extends HC.ShaderPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+class toon extends ShaderPlugin {
         static index = 245;
         create() {
             if (!this.pass) {
@@ -120,4 +124,5 @@
             `
         }
     }
-}
+
+export {toon};

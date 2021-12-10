@@ -1,5 +1,9 @@
-{
-    HC.plugins.shaders.kaleidoscope = class Plugin extends HC.ShaderPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+class kaleidoscope extends ShaderPlugin {
         static index = 60;
 
         create() {
@@ -114,4 +118,5 @@
 
         }
     }
-}
+
+export {kaleidoscope};

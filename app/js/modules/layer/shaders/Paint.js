@@ -1,5 +1,9 @@
-{
-    HC.plugins.shaders.paint = class Plugin extends HC.ShaderPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+class paint extends ShaderPlugin {
         static index = 130;
 
         create() {
@@ -120,4 +124,5 @@
                 }`
         }
     }
-}
+
+export {paint};

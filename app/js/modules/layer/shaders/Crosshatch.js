@@ -1,5 +1,9 @@
-{
-    HC.plugins.shaders.crosshatch = class Plugin extends HC.ShaderPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+class crosshatch extends ShaderPlugin {
         static index = 240;
 
         create() {
@@ -80,4 +84,5 @@
 
         }
     }
-}
+
+export {crosshatch};

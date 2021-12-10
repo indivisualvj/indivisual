@@ -1,8 +1,12 @@
-{
-    if (!IS_CONTROLLER) {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+if (!IS_CONTROLLER) {
         _importThreeShader('FXAAShader');
     }
-    HC.plugins.shaders.fxaa = class Plugin extends HC.ShaderPlugin {
+    class fxaa extends ShaderPlugin {
         static index = 10;
 
         create() {
@@ -51,4 +55,5 @@
             return v / this.layer.resolution().y;
         }
     }
-}
+
+export {fxaa};

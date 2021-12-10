@@ -1,5 +1,9 @@
-{
-    HC.plugins.shaders.hexagonsampling = class Plugin extends HC.ShaderPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShaderPlugin} from "../ShaderPlugin";
+
+class hexagonsampling extends ShaderPlugin {
         static index = 230;
 
         create() {
@@ -135,4 +139,5 @@
 
         }
     }
-}
+
+export {hexagonsampling};

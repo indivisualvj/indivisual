@@ -197,7 +197,6 @@ class Config {
      * @param callback
      */
     loadConfig(callback) {
-
         let resources = this.config;
 
         let _load = (index, _callback) => {
@@ -424,11 +423,6 @@ class Config {
      * @private
      */
     _loadAnimationPlugins(settings, callback) {
-
-        let searchPath = HC.filePath(APP_DIR, 'js', 'modules', 'layer');
-        Messaging.samples(searchPath, (files) => {
-            Logger.loading('plugins', 'animation', 'loading', files.length);
-        });
 
         let calls = [
             PluginManager.assignLayerPlugins(settings, 'camera_mode',          HC.plugins, this),

@@ -38,6 +38,13 @@ class Logger
         }
     }
 
+    /**
+     *
+     * @param context
+     * @param key
+     * @param value
+     * @param maxItems
+     */
     static loading(context, key, value, maxItems) {
         if (!context in this.contexts && maxItems) {
             this.registerLoadingContext(context, maxItems);

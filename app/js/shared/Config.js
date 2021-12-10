@@ -424,7 +424,7 @@ class Config {
      * @private
      */
     _loadAnimationPlugins(settings, callback) {
-
+// todo: when ported, move subplugin classes to folders and move plugins to "basic" folder
         let calls = [
             PluginManager.loadLayerPlugins(settings, 'camera_mode',          HC.plugins, this),
             PluginManager.loadLayerPlugins(settings, 'coloring_mode',        HC.plugins, this),

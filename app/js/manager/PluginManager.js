@@ -21,11 +21,13 @@ class PluginManager
      * @param section
      * @param target
      * @param config
+     * @param [dir]
      * @return {Promise<unknown>}
      */
-    static assignLayerPlugins(settings, section, target, config) {
+    static loadLayerPlugins(settings, section, target, config, dir) {
+        let path = HC.filePath('layer', section, dir);
         return new Promise((resolve) => {
-            this._importPlugins(HC.filePath('layer', section)).then((plugins) => {
+            this._importPlugins(path).then((plugins) => {
                 this._assignPlugins(settings, section, plugins, target, config);
                 resolve();
             });

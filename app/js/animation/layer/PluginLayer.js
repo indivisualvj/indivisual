@@ -4,8 +4,8 @@
 import {_Layer} from "./NextLayer";
 import {Shape} from "../Shape";
 
-class Layer extends _Layer {
-
+class Layer extends _Layer
+{
 
     /**
      *
@@ -18,7 +18,7 @@ class Layer extends _Layer {
         name = name || this.settings[plugin]; // specific plugin OR value from corresponding setting
 
         return this.plugins[plugin][name];// || false;
-    };
+    }
 
     /**
      *
@@ -27,7 +27,7 @@ class Layer extends _Layer {
      */
     getOverrideMaterialInputPlugin(name) {
         return this.getPlugin('override_material_input', name);
-    };
+    }
 
     /**
      *
@@ -36,7 +36,7 @@ class Layer extends _Layer {
      */
     getOverrideBackgroundModePlugin(name) {
         return this.getPlugin('override_background_mode', name);
-    };
+    }
 
 
     /**
@@ -46,7 +46,7 @@ class Layer extends _Layer {
      */
     getLightingLookatPlugin(name) {
         return this.getPlugin('lighting_lookat', name);
-    };
+    }
 
     /**
      *
@@ -55,7 +55,7 @@ class Layer extends _Layer {
      */
     getLightingPatternPlugin(name) {
         return this.getPlugin('lighting_pattern', name);
-    };
+    }
 
     /**
      *
@@ -64,23 +64,23 @@ class Layer extends _Layer {
      */
     getLightingTypePlugin(name) {
         return this.getPlugin('lighting_type', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.ShaderPlugin}
+     * @returns {ShaderPlugin}
      */
     getShaderPlugin(name) {
         return this.getPlugin('shaders', name);
-    };
+    }
 
     /**
      *
      * @param name
      * @param key
      * @param properties
-     * @returns {HC.ShaderPlugin}
+     * @returns {ShaderPlugin}
      */
     getShaderPassPlugin(name, key, properties) {
 
@@ -88,7 +88,8 @@ class Layer extends _Layer {
             this.plugins['passes'] = {};
         }
 
-        let plugin = this.getPlugin('passes', key, true);
+        /** @type{ShaderPlugin} */
+        let plugin = this.getPlugin('passes', key);
         if (!plugin) {
             plugin = this.loadPlugin('shaders', name);
             this.setPlugin('passes', key, plugin);
@@ -100,7 +101,7 @@ class Layer extends _Layer {
         plugin.construct(this.animation, this, settings, 'shaders', key);
 
         return plugin;
-    };
+    }
 
 
     /**
@@ -110,7 +111,7 @@ class Layer extends _Layer {
      */
     getPatternRotationPlugin(name) {
         return this.getPlugin('pattern_rotation', name);
-    };
+    }
 
     /**
      *
@@ -119,16 +120,16 @@ class Layer extends _Layer {
      */
     getShapeLookatPlugin(name) {
         return this.getPlugin('shape_lookat', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.BackgroundModePlugin}
+     * @returns {BackgroundModePlugin}
      */
     getBackgroundModePlugin(name) {
         return this.getPlugin('background_mode', name);
-    };
+    }
 
     /**
      *
@@ -137,7 +138,7 @@ class Layer extends _Layer {
      */
     getOffsetModePlugin(name) {
         return this.getPlugin('offset_mode', name);
-    };
+    }
 
     /**
      *
@@ -146,7 +147,7 @@ class Layer extends _Layer {
      */
     getPatternPlugin(name) {
         return this.getPlugin('pattern', name);
-    };
+    }
 
     /**
      *
@@ -155,7 +156,7 @@ class Layer extends _Layer {
      */
     getPatternOverlayPlugin(name) {
         return this.getPlugin('pattern_overlay', name);
-    };
+    }
 
     /**
      *
@@ -164,7 +165,7 @@ class Layer extends _Layer {
      */
     getRotationOffsetModePlugin(name) {
         return this.getPlugin('rotation_offset_mode', name);
-    };
+    }
 
     /**
      *
@@ -173,7 +174,7 @@ class Layer extends _Layer {
      */
     getRotationModePlugin(name) {
         return this.getPlugin('rotation_mode', name);
-    };
+    }
 
     /**
      *
@@ -182,7 +183,7 @@ class Layer extends _Layer {
      */
     getRotationDirectionPlugin(name) {
         return this.getPlugin('rotation_direction', name);
-    };
+    }
 
     /**
      *
@@ -191,7 +192,7 @@ class Layer extends _Layer {
      */
     getPatternMoverPlugin(name) {
         return this.getPlugin('pattern_mover', name);
-    };
+    }
 
     /**
      *
@@ -200,7 +201,7 @@ class Layer extends _Layer {
      */
     getSizingModePlugin(name) {
         return this.getPlugin('sizing_mode', name);
-    };
+    }
 
     /**
      *
@@ -209,7 +210,7 @@ class Layer extends _Layer {
      */
     getSizingFlipPlugin(name) {
         return this.getPlugin('sizing_flip', name);
-    };
+    }
 
     /**
      *
@@ -218,7 +219,7 @@ class Layer extends _Layer {
      */
     getShapeGeometryPlugin(name) {
         return this.getPlugin('shape_geometry', name);
-    };
+    }
 
     /**
      *
@@ -227,7 +228,7 @@ class Layer extends _Layer {
      */
     getShapeTransformPlugin(name) {
         return this.getPlugin('shape_transform', name);
-    };
+    }
 
     /**
      *
@@ -236,7 +237,7 @@ class Layer extends _Layer {
      */
     getShapeModifierPlugin(name) {
         return this.getPlugin('shape_modifier', name);
-    };
+    }
 
     /**
      *
@@ -245,7 +246,7 @@ class Layer extends _Layer {
      */
     getShapeRhythmPlugin(name) {
         return this.getPlugin('shape_rhythm', name);
-    };
+    }
 
     /**
      *
@@ -254,7 +255,7 @@ class Layer extends _Layer {
      */
     shapeDelayPlugin(name) {
         return this.getPlugin('shape_delay', name);
-    };
+    }
 
     /**
      *
@@ -263,16 +264,16 @@ class Layer extends _Layer {
      */
     getShapePairingPlugin(name) {
         return this.getPlugin('shape_pairing', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.OscillatePlugin}
+     * @returns {OscillatePlugin}
      */
     getOscillatePlugin(name) {
         return this.getPlugin('oscillate', name);
-    };
+    }
 
     /**
      *
@@ -281,7 +282,7 @@ class Layer extends _Layer {
      */
     getColoringModePlugin(name) {
         return this.getPlugin('coloring_mode', name);
-    };
+    }
 
     /**
      *
@@ -290,16 +291,16 @@ class Layer extends _Layer {
      */
     getFilterModePlugin(name) {
         return this.getPlugin('filter_mode', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.MeshMaterialPlugin}
+     * @returns {MeshMaterialPlugin}
      */
     getMeshMaterialPlugin(name) {
         return this.getPlugin('mesh_material', name);
-    };
+    }
 
     /**
      *
@@ -308,7 +309,7 @@ class Layer extends _Layer {
      */
     getMaterialStylePlugin(name) {
         return this.getPlugin('material_style', name);
-    };
+    }
 
     /**
      *
@@ -317,7 +318,7 @@ class Layer extends _Layer {
      */
     getCameraModePlugin(name) {
         return this.getPlugin('camera_mode', name);
-    };
+    }
 
     /**
      *
@@ -327,7 +328,7 @@ class Layer extends _Layer {
      */
     getShapePluginParams(plugin, shape) {
         return this.getPlugin(plugin).params(shape);
-    };
+    }
 
     /**
      *
@@ -336,7 +337,7 @@ class Layer extends _Layer {
      */
     getShapeDuration(shape) {
         return this.getShapePluginParams('shape_rhythm', shape).duration;
-    };
+    }
 
     /**
      *
@@ -345,7 +346,7 @@ class Layer extends _Layer {
      */
     getShapeDirection(shape) {
         return this.getShapePluginParams('rotation_direction', shape).dir;
-    };
+    }
 
     /**
      *
@@ -372,7 +373,7 @@ class Layer extends _Layer {
                 }
             }
         }
-    };
+    }
 
     /**
      *
@@ -407,7 +408,7 @@ class Layer extends _Layer {
                 this.setPlugin(plugin, key, instance);
             }
         }
-    };
+    }
 
     /**
      *
@@ -416,7 +417,7 @@ class Layer extends _Layer {
      */
     loadPlugin(plugin, name) {
         return new HC.plugins[plugin][name](this.animation, this);
-    };
+    }
 
     /**
      *
@@ -426,7 +427,7 @@ class Layer extends _Layer {
      */
     setPlugin(plugin, name, instance) {
         this.plugins[plugin][name] = instance;
-    };
+    }
 
 }
 

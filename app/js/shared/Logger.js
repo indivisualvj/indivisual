@@ -30,50 +30,24 @@ class Logger
         });
     }
 
-    static contexts = {};
-
-    static registerLoadingContext(context, maxItems) {
-        if (!context in this.contexts) {
-            this.contexts[context] = {counter: 0, maxItems: maxItems};
-        }
-    }
-
     /**
      *
-     * @param context
      * @param key
      * @param value
-     * @param maxItems
+     * @param timeout
      */
-    static loading(context, key, value, maxItems) {
-        if (!context in this.contexts && maxItems) {
-            this.registerLoadingContext(context, maxItems);
-        }
+    static loading(key, value, timeout) {
         let loading = document.getElementById('loading');
         if (loading) {
             loading.style.display = 'block';
-            TimeoutManager.add('loading.' + context, 250, () => {
+            TimeoutManager.add('Logger.loading', timeout ?? 250000, () => {
                 loading.style.display = 'none';
             });
-            loading.innerText = `loading ${context} (${value} ${key})`;
+            loading.innerText = (key ? ` ${key} ${value} ...` : 'initializing ...');
         } else {
             this.log(key, value);
         }
 
-        this.incrementLoadingCounter(context);
-    }
-
-    static incrementLoadingCounter(context) {
-        if (context in this.contexts) {
-            this.contexts[context].counter++;
-            if (this.contexts[context].counter >= this.contexts[context].maxItems) {
-                this.removeLoadingContext(context);
-            }
-        }
-    }
-
-    static removeLoadingContext(context) {
-        delete this.contexts[context];
     }
 
     /**

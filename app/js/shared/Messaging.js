@@ -392,7 +392,7 @@ class Messaging {
 
         Messaging.program.ready = true;
 
-        Logger.log(Messaging.program.name, 'syncing...', true);
+        Logger.loading(Messaging.program.name, 'syncing...');
 
         let data = {
             sid: this.sid,

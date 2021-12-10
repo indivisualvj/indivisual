@@ -166,7 +166,7 @@ class PluginManager
             let subset = plugins[s];
             for (let p in subset) {
                 subset[p].boot(initiator, config);
-                Logger.loading('plugins', s + '.' + p, 'booted');
+                Logger.loading(s + '.' + p, 'booted');
             }
         }
     }
@@ -183,7 +183,7 @@ class PluginManager
             let plugin = plugins[k];
             plugin = new plugin(initiator, settings);
             plugins[k] = plugin;
-            Logger.loading('plugins', k, 'instantiated');
+            Logger.loading(k, 'instantiated');
             if (hook) {
                 hook(plugin);
             }
@@ -213,7 +213,7 @@ class PluginManager
                     for (const plugin of arguments[0]) {
                         for (const pluginKey in plugin) {
                             plugins[pluginKey] = plugin[pluginKey];
-                            Logger.loading('plugins', dir + '/' + pluginKey, 'imported');
+                            Logger.loading(dir + '/' + pluginKey, 'imported');
                         }
                     }
                     resolve(plugins);
@@ -251,7 +251,7 @@ class PluginManager
 
             target[section][pluginKey] = plugin;
             settings[section][pluginKey] = name.toLowerCase();
-            Logger.loading('plugins', section + '.' + pluginKey, 'assigned');
+            Logger.loading(section + '.' + pluginKey, 'assigned');
         }
     }
 

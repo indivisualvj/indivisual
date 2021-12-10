@@ -198,6 +198,7 @@ class Config {
      */
     loadConfig(callback) {
         let resources = this.config;
+        Logger.loading('loading', 'config');
 
         let _load = (index, _callback) => {
 

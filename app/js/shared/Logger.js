@@ -40,7 +40,7 @@ class Logger
         let loading = document.getElementById('loading');
         if (loading) {
             loading.style.display = 'block';
-            TimeoutManager.add('Logger.loading', timeout ?? 250000, () => {
+            TimeoutManager.add('Logger.loading', timeout ?? 300000, () => {
                 loading.style.display = 'none';
             });
             loading.innerText = (key ? ` ${key} ${value} ...` : 'initializing ...');

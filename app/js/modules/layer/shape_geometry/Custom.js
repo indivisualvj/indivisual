@@ -1,5 +1,9 @@
-{
-    HC.plugins.shape_geometry.custom = class Plugin extends HC.ShapeGeometryPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+
+class custom extends ShapeGeometryPlugin {
         static index = 99;
         static name = 'custom';
 
@@ -12,10 +16,10 @@
             return geometry;
         }
     }
-}
 
-{
-    HC.plugins.shape_geometry.crect = class Plugin extends HC.ShapeGeometryPlugin {
+
+
+    class crect extends ShapeGeometryPlugin {
         static index = 99;
         static name = 'custom rect';
 
@@ -29,9 +33,9 @@
             return geometry;
         }
     }
-}
-{
-    HC.plugins.shape_geometry.ckandis = class Plugin extends HC.ShapeGeometryPlugin {
+
+
+    class ckandis extends ShapeGeometryPlugin {
         static index = 99;
         static name = 'custom kandis';
 
@@ -45,9 +49,9 @@
             return geometry;
         }
     }
-}
-{
-    HC.plugins.shape_geometry.cleaf = class Plugin extends HC.ShapeGeometryPlugin {
+
+
+    class cleaf extends ShapeGeometryPlugin {
         static index = 99;
         static name = 'custom leaf';
 
@@ -61,9 +65,9 @@
             return geometry;
         }
     }
-}
-{
-    HC.plugins.shape_geometry.cframe = class Plugin extends HC.ShapeGeometryPlugin {
+
+
+    class cframe extends ShapeGeometryPlugin {
         static index = 99;
         static name = 'custom frame';
         static tutorial = {
@@ -87,9 +91,9 @@
             return geometry;
         }
     }
-}
-{
-    HC.plugins.shape_geometry.cring = class Plugin extends HC.ShapeGeometryPlugin {
+
+
+    class cring extends ShapeGeometryPlugin {
         static index = 99;
         static name = 'custom ring';
         static tutorial = {
@@ -113,4 +117,5 @@
             return geometry;
         }
     }
-}
+
+export {cframe, cleaf, crect, cring, custom, ckandis};

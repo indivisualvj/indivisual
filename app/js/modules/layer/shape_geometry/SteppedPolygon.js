@@ -1,5 +1,9 @@
-{
-    HC.plugins.shape_geometry.steppedpolygon = class Plugin extends HC.ShapeGeometryPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+
+class steppedpolygon extends ShapeGeometryPlugin {
         static index = 20;
         static name = 'polygon (stepped)';
         static tutorial = {
@@ -57,4 +61,5 @@
             return geometry;
         }
     }
-}
+
+export {steppedpolygon};

@@ -1,5 +1,9 @@
-{
-    HC.plugins.shape_geometry.ring = class Plugin extends HC.ShapeGeometryPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+
+class ring extends ShapeGeometryPlugin {
         static index = 30;
         static tutorial = {
             shape_moda: {
@@ -36,4 +40,5 @@
             return THREE.BufferGeometryUtils.mergeBufferGeometries(geometries);
         }
     }
-}
+
+export {ring};

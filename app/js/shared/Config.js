@@ -439,6 +439,7 @@ class Config {
             PluginManager.assignLayerPlugins(settings, 'rotation_mode',        HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'rotation_offset_mode', HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'shape_delay',          HC.plugins, this),
+            PluginManager.assignLayerPlugins(settings, 'shape_geometry',       HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'shape_lookat',         HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'shape_modifier',       HC.plugins, this),
             PluginManager.assignLayerPlugins(settings, 'shape_pairing',        HC.plugins, this),

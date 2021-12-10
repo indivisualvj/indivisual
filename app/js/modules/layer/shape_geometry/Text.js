@@ -1,10 +1,14 @@
-{
-    let coolvetica = false;
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+
+let coolvetica = false;
     if (!IS_CONTROLLER) {
         _importThreeGeometry('TextGeometry'); // fixme does not load zuverlässig
     }
 
-    HC.plugins.shape_geometry.text = class Plugin extends HC.ShapeGeometryPlugin {
+    class text extends ShapeGeometryPlugin {
         static name = 'text (coolvetica)';
 
         create() {
@@ -42,4 +46,5 @@
             return coolvetica;
         }
     }
-}
+
+export {text};

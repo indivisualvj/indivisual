@@ -1,5 +1,9 @@
-{
-    HC.plugins.shape_geometry.barbell = class Plugin extends HC.ShapeGeometryPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+
+class barbell extends ShapeGeometryPlugin {
         static name = 'barbell';
         static tutorial = {
             shape_moda: {
@@ -23,4 +27,5 @@
             return geo;
         }
     }
-}
+
+export {barbell};

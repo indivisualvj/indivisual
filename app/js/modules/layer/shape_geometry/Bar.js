@@ -1,5 +1,9 @@
-{
-    HC.plugins.shape_geometry.bar = class Plugin extends HC.ShapeGeometryPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+
+class bar extends ShapeGeometryPlugin {
         static tutorial = {
             shape_moda: {
                 text: 'set the initial direction of the shape'
@@ -14,4 +18,5 @@
             return geometry;
         }
     }
-}
+
+export {bar};

@@ -1,5 +1,9 @@
-{
-    HC.plugins.shape_geometry.polygon = class Plugin extends HC.ShapeGeometryPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+
+class polygon extends ShapeGeometryPlugin {
         static index = 20;
         static tutorial = {
             shapes: {
@@ -51,4 +55,6 @@
             }).create();
         }
     }
-}
+
+
+export {polygon};

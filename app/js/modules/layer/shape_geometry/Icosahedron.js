@@ -1,5 +1,9 @@
-{
-    HC.plugins.shape_geometry.icosahedron = class Plugin extends HC.ShapeGeometryPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+
+class icosahedron extends ShapeGeometryPlugin {
         static index = 40;
         static tutorial = {
             shape_moda: {
@@ -19,4 +23,5 @@
             return new THREE.IcosahedronGeometry(layer.shapeSize(.5), this.getModA(0, 0, 5));
         }
     }
-}
+
+export {icosahedron};

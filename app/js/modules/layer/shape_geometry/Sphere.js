@@ -1,5 +1,9 @@
-{
-    HC.plugins.shape_geometry.sphere = class Plugin extends HC.ShapeGeometryPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+
+class sphere extends ShapeGeometryPlugin {
         static index = 41;
         static tutorial = {
             shape_moda: {
@@ -22,4 +26,6 @@
             return new THREE.SphereGeometry(layer.shapeSize(.5), this.getModA(1, 1, 128), this.getModB(1, 1, 128));
         }
     }
-}
+
+
+export {sphere};

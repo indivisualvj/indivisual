@@ -160,7 +160,7 @@ class Layer extends _Layer {
     /**
      *
      * @param name
-     * @returns {HC.RotationOffsetModePlugin}
+     * @returns {RotationOffsetModePlugin}
      */
     getRotationOffsetModePlugin(name) {
         return this.getPlugin('rotation_offset_mode', name);
@@ -187,7 +187,7 @@ class Layer extends _Layer {
     /**
      *
      * @param name
-     * @returns {HC.PatternMoverPlugin}
+     * @returns {PatternMoverPlugin}
      */
     getPatternMoverPlugin(name) {
         return this.getPlugin('pattern_mover', name);
@@ -214,7 +214,7 @@ class Layer extends _Layer {
     /**
      *
      * @param name
-     * @returns {HC.ShapeGeometryPlugin}
+     * @returns {ShapeGeometryPlugin}
      */
     getShapeGeometryPlugin(name) {
         return this.getPlugin('shape_geometry', name);

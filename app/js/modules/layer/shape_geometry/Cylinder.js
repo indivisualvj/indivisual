@@ -1,5 +1,9 @@
-{
-    HC.plugins.shape_geometry.cylinder = class Plugin extends HC.ShapeGeometryPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+
+class cylinder extends ShapeGeometryPlugin {
         static index = 50;
         static tutorial = {
             shape_moda: {
@@ -24,9 +28,9 @@
             return geometry;
         }
     }
-}
-{
-    HC.plugins.shape_geometry.pipe = class Plugin extends HC.plugins.shape_geometry.cylinder {
+
+
+    class pipe extends cylinder {
         create() {
             let layer = this.layer;
 
@@ -38,4 +42,5 @@
             return geometry;
         }
     }
-}
+
+export {pipe, cylinder};

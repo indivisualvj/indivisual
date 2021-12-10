@@ -1,5 +1,9 @@
-{
-    HC.plugins.shape_geometry.tile = class Plugin extends HC.ShapeGeometryPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+
+class tile extends ShapeGeometryPlugin {
         static index = 10;
         static tutorial = {
             shape_moda: {
@@ -24,4 +28,5 @@
             return geometry;
         }
     }
-}
+
+export {tile};

@@ -1,9 +1,13 @@
-{
-    if (!IS_CONTROLLER) {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+
+if (!IS_CONTROLLER) {
         _importThreeGeometry('RoundedBoxGeometry');
     }
 
-    HC.plugins.shape_geometry.rounded_box = class Plugin extends HC.ShapeGeometryPlugin {
+    class rounded_box extends ShapeGeometryPlugin {
         static name = 'cube (rounded)';
         static tutorial = {
             shape_moda: {
@@ -22,4 +26,5 @@
             return new THREE.RoundedBoxGeometry(size, size, size, this.getModA(1, 2, 32), 4 * this.getModB(0, 0));
         }
     }
-}
+
+export {rounded_box};

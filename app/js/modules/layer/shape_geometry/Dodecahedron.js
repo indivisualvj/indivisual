@@ -1,5 +1,9 @@
-{
-    HC.plugins.shape_geometry.dodecahedron = class Plugin extends HC.ShapeGeometryPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+
+class dodecahedron extends ShapeGeometryPlugin {
         static index = 40;
         static tutorial = {
             shape_moda: {
@@ -13,4 +17,5 @@
             return new THREE.DodecahedronGeometry(layer.shapeSize(.5), this.getModA(0, 0, 5));
         }
     }
-}
+
+export {dodecahedron};

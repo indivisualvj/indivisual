@@ -1,5 +1,9 @@
-{
-    HC.plugins.shape_geometry.bacillus = class Plugin extends HC.ShapeGeometryPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+
+class bacillus extends ShapeGeometryPlugin {
         static tutorial = {
             shape_moda: {
                 text: 'set the initial direction of the shape'
@@ -25,4 +29,5 @@
             return geometry;
         }
     }
-}
+
+export {bacillus};

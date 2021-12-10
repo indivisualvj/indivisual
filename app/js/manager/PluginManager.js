@@ -247,7 +247,7 @@ class PluginManager
             let pluginKey = pluginKeys[i];
             let plugin = plugins[pluginKey];
             let name = plugin.name || pluginKey.toKebapCase();
-            pluginKey = pluginKey.toLowerCase();
+            pluginKey = pluginKey.toLowerCase(); // fixme: change plugin classnames to CamelCase and convert to snake_case here
 
             target[section][pluginKey] = plugin;
             settings[section][pluginKey] = name.toLowerCase();

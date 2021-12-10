@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+import {RoundedRect} from "../../../shared/Geometries";
+import {GeometryUtils} from "../../../shared/GeometryUtils";
 
 class tile extends ShapeGeometryPlugin {
     static index = 10;
@@ -20,8 +22,8 @@ class tile extends ShapeGeometryPlugin {
     create() {
         let layer = this.layer;
 
-        let geometry = new HC.RoundedRect(layer.shapeSize(1), this.getModA(1, 1), this.getModB(1, 12)).create();
-        HC.GeometryUtils.front2back(geometry);
+        let geometry = new RoundedRect(layer.shapeSize(1), this.getModA(1, 1), this.getModB(1, 12)).create();
+        GeometryUtils.front2back(geometry);
 
         geometry.rotateZ(45 * RAD * this.getModC(0, 0));
 

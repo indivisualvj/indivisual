@@ -1,4 +1,5 @@
-HC.Osci = { // todo: can be converted to static module
+class Oscillators
+{
 
     /**
      *
@@ -6,27 +7,27 @@ HC.Osci = { // todo: can be converted to static module
      * @param add
      * @returns {*}
      */
-    linInOut(prc, add) {
+    static linInOut(prc, add) {
         return (add || 0) + 2 * (prc > .5 ? 1 - prc : prc);
-    },
+    }
 
     /**
      *
      * @param prc
      * @param add
      */
-    sinInOut(prc, add) {
+    static sinInOut(prc, add) {
         return (add || 0) + this.sinus(prc) / 2 + .5;
-    },
+    }
 
     /**
      *
      * @param prc
      * @param add
      */
-    cosInOut(prc, add) {
+    static cosInOut(prc, add) {
         return (add || 0) + this.cosinus(prc) / 2 + .5;
-    },
+    }
 
     /**
      *
@@ -34,12 +35,12 @@ HC.Osci = { // todo: can be converted to static module
      * @param add
      * @returns {*}
      */
-    sinus(prc, add) {
+    static sinus(prc, add) {
         let p = Math.PI * 2 * prc;
         p = Math.sin(p);
 
         return (add || 0) + p;
-    },
+    }
 
     /**
      *
@@ -47,12 +48,12 @@ HC.Osci = { // todo: can be converted to static module
      * @param add
      * @returns {*}
      */
-    cosinus(prc, add) {
+    static cosinus(prc, add) {
         let p = Math.PI * 2 * prc;
         p = Math.cos(p);
 
         return (add || 0) + p;
-    },
+    }
 
     /**
      *
@@ -64,7 +65,7 @@ HC.Osci = { // todo: can be converted to static module
      * @param isPeak
      * @param frameTime
      */
-    step(pa, steps, speed, onpeak, negative, isPeak, frameTime) {
+    static step(pa, steps, speed, onpeak, negative, isPeak, frameTime) {
         if ((onpeak && isPeak) || (!onpeak && speed.starting())) {
             let n = pa.next;
             while (n === pa.next) {
@@ -81,7 +82,7 @@ HC.Osci = { // todo: can be converted to static module
             let step = diff / 0.075 * frameTime / (speed.duration * 2);
             pa.value += step;
         }
-    },
+    }
 
     /**
      *
@@ -91,7 +92,7 @@ HC.Osci = { // todo: can be converted to static module
      * @param func
      * @returns {number}
      */
-    wobble(beatKeeper, progress, settings, func) {
+    static wobble(beatKeeper, progress, settings, func) {
         let p = 0;
 
         let duration = 60000 / settings.tempo;
@@ -117,4 +118,7 @@ HC.Osci = { // todo: can be converted to static module
 
         return p;
     }
-};
+}
+
+export {Oscillators};
+

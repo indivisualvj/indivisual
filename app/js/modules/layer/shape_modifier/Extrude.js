@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShapeModifierPlugin} from "../ShapeModifierPlugin";
+import {GeometryUtils} from "../../../shared/GeometryUtils";
 
 class extrude extends ShapeModifierPlugin {
     static name = 'extrude';
@@ -61,7 +62,7 @@ class extrude extends ShapeModifierPlugin {
             geometry = new THREE.ExtrudeGeometry(shape, conf);
             geometry.center();
 
-            HC.GeometryUtils.front2back(geometry);
+            GeometryUtils.front2back(geometry);
         }
 
         return geometry;

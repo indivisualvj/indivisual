@@ -1,6 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {GeometryUtils} from "../../shared/GeometryUtils";
 
 class ShapeGeometryPlugin extends HC.AnimationPlugin {
 
@@ -13,10 +14,10 @@ class ShapeGeometryPlugin extends HC.AnimationPlugin {
     apply() {
         if (!this.geometry) { // all meshes use the same geometry
             let geometry = this.create();
-            geometry = HC.GeometryUtils.mergeVertices(geometry, this.settings.shape_merge_tolerance);
+            geometry = GeometryUtils.mergeVertices(geometry, this.settings.shape_merge_tolerance);
 
             if (this.controlSets.material.properties.material_mapping === 'f2b') {
-                HC.GeometryUtils.front2back(geometry);
+                GeometryUtils.front2back(geometry);
             }
 
             if (!this.ready()) { // return (fallback) geometry
@@ -35,6 +36,7 @@ class ShapeGeometryPlugin extends HC.AnimationPlugin {
 
     create() {
         console.error('HC.ShapeGeometryPlugin: .create() must be implemented in derived plugin.');
+        return null;
     }
 
     getModA(min, fallback, max) {

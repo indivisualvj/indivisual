@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShapeTransformPlugin} from "../ShapeTransformPlugin";
+import {Oscillators} from "../../../shared/Oscillators";
 
 class wobble extends ShapeTransformPlugin {
     static name = 'wobble xyz';
@@ -54,9 +55,9 @@ class wobble extends ShapeTransformPlugin {
             vtcb._rumble.y += this.animation.diffPrc * randomFloat(0, .25 * Math.PI, 2, true);
             vtcb._rumble.z += this.animation.diffPrc * randomFloat(0, .25 * Math.PI, 2, true);
 
-            let w1 = multiplier * HC.Osci.wobble(this.beatKeeper, vtcb._rumble.x, this.osci);
-            let w2 = multiplier * HC.Osci.wobble(this.beatKeeper, vtcb._rumble.y, this.osci);
-            let w3 = multiplier * HC.Osci.wobble(this.beatKeeper, vtcb._rumble.z, this.osci);
+            let w1 = multiplier * Oscillators.wobble(this.beatKeeper, vtcb._rumble.x, this.osci);
+            let w2 = multiplier * Oscillators.wobble(this.beatKeeper, vtcb._rumble.y, this.osci);
+            let w3 = multiplier * Oscillators.wobble(this.beatKeeper, vtcb._rumble.z, this.osci);
 
             vertices.setXYZ(i,
                 vtcb.x + w1 * axes.x,

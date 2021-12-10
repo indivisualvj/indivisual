@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {CameraModePlugin} from "../CameraModePlugin";
+import {Oscillators} from "../../../shared/Oscillators";
 
 class rumble extends CameraModePlugin {
     static name = 'static rumble';
@@ -60,9 +61,9 @@ class rumble extends CameraModePlugin {
 
         let multiplier = params.multiplier;
 
-        let w1 = multiplier * HC.Osci.wobble(this.beatKeeper, params.rumble.x, sttngs);
-        let w2 = multiplier * HC.Osci.wobble(this.beatKeeper, params.rumble.y, sttngs);
-        let w3 = multiplier * HC.Osci.wobble(this.beatKeeper, params.rumble.z, sttngs);
+        let w1 = multiplier * Oscillators.wobble(this.beatKeeper, params.rumble.x, sttngs);
+        let w2 = multiplier * Oscillators.wobble(this.beatKeeper, params.rumble.y, sttngs);
+        let w3 = multiplier * Oscillators.wobble(this.beatKeeper, params.rumble.z, sttngs);
 
         let m = layer.shapeSize(4);
 

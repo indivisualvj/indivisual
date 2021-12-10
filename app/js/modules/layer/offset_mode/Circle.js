@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {OffsetModePlugin} from "../OffsetModePlugin";
+import {Oscillators} from "../../../shared/Oscillators";
 
 class circle extends OffsetModePlugin {
     static name = 'circle';
@@ -113,9 +114,9 @@ class rumble extends OffsetModePlugin {
 
         }
 
-        let w1 = multiplier * HC.Osci.wobble(this.beatKeeper, params.rumble.x, sttngs);
-        let w2 = multiplier * HC.Osci.wobble(this.beatKeeper, params.rumble.y, sttngs);
-        let w3 = multiplier * HC.Osci.wobble(this.beatKeeper, params.rumble.z, sttngs);
+        let w1 = multiplier * Oscillators.wobble(this.beatKeeper, params.rumble.x, sttngs);
+        let w2 = multiplier * Oscillators.wobble(this.beatKeeper, params.rumble.y, sttngs);
+        let w3 = multiplier * Oscillators.wobble(this.beatKeeper, params.rumble.z, sttngs);
 
         let m = layer.shapeSize(4);
 

@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {OscillatePlugin} from "../OscillatePlugin";
+import {Oscillators} from "../../../shared/Oscillators";
 
 class sinus extends OscillatePlugin {
     static name = 'sinus -1/1 (current)';
@@ -10,7 +11,7 @@ class sinus extends OscillatePlugin {
     apply(key) {
         let layer = this.layer;
         let speed = layer.currentSpeed();
-        return this.activate(key, HC.Osci.sinus(speed.prc));
+        return this.activate(key, Oscillators.sinus(speed.prc));
     }
 }
 
@@ -22,7 +23,7 @@ class sininout extends OscillatePlugin {
     apply(key) {
         let layer = this.layer;
         let speed = layer.currentSpeed();
-        return this.activate(key, HC.Osci.sinInOut(speed.prc));
+        return this.activate(key, Oscillators.sinInOut(speed.prc));
     }
 }
 
@@ -34,7 +35,7 @@ class sininoutdotfive extends OscillatePlugin {
     apply(key) {
         let layer = this.layer;
         let speed = layer.currentSpeed();
-        return this.activate(key, HC.Osci.sinInOut(speed.prc, .5));
+        return this.activate(key, Oscillators.sinInOut(speed.prc, .5));
     }
 }
 
@@ -45,7 +46,7 @@ class sininouthexa extends OscillatePlugin {
 
     apply(key) {
         let speed = this.beatKeeper.getSpeed('hexa');
-        return this.activate(key, HC.Osci.sinInOut(speed.prc));
+        return this.activate(key, Oscillators.sinInOut(speed.prc));
     }
 }
 
@@ -56,7 +57,7 @@ class sininoutdotfivehexa extends OscillatePlugin {
 
     apply(key) {
         let speed = this.beatKeeper.getSpeed('hexa');
-        return this.activate(key, HC.Osci.sinInOut(speed.prc, .5));
+        return this.activate(key, Oscillators.sinInOut(speed.prc, .5));
     }
 }
 
@@ -67,7 +68,7 @@ class sininoutdotfive32 extends OscillatePlugin {
 
     apply(key) {
         let speed = this.beatKeeper.getSpeed('32');
-        return this.activate(key, HC.Osci.sinInOut(speed.prc, .5));
+        return this.activate(key, Oscillators.sinInOut(speed.prc, .5));
     }
 }
 
@@ -78,7 +79,7 @@ class sinusfulls extends OscillatePlugin {
 
     apply(key) {
         let speed = this.beatKeeper.getSpeed('full');
-        return this.activate(key, HC.Osci.sinus(speed.prc));
+        return this.activate(key, Oscillators.sinus(speed.prc));
     }
 }
 
@@ -90,7 +91,7 @@ class sinus32 extends OscillatePlugin {
     apply(key) {
         let layer = this.layer;
         let speed = this.beatKeeper.getSpeed('32');
-        return this.activate(key, HC.Osci.sinus(speed.prc));
+        return this.activate(key, Oscillators.sinus(speed.prc));
     }
 }
 
@@ -101,7 +102,7 @@ class sinus64 extends OscillatePlugin {
 
     apply(key) {
         let speed = this.beatKeeper.getSpeed('64');
-        return this.activate(key, HC.Osci.sinus(speed.prc));
+        return this.activate(key, Oscillators.sinus(speed.prc));
     }
 }
 
@@ -126,7 +127,7 @@ class oscillator extends OscillatePlugin {
             }
         }
         this.osci.tempo = this.config.ControlSettings.tempo;
-        return this.activate(key, HC.Osci.wobble(this.beatKeeper, 0, this.osci));
+        return this.activate(key, Oscillators.wobble(this.beatKeeper, 0, this.osci));
     }
 }
 
@@ -149,7 +150,7 @@ class sinusosci1 extends OscillatePlugin {
         this.osci.tempo = this.config.ControlSettings.tempo;
         this.osci.osci1_period = this.settings.osci1_period;
         this.osci.rhythm = this.settings.rhythm;
-        return this.activate(key, HC.Osci.wobble(this.beatKeeper, 0, this.osci));
+        return this.activate(key, Oscillators.wobble(this.beatKeeper, 0, this.osci));
 
     }
 }
@@ -173,7 +174,7 @@ class sinusosci2 extends OscillatePlugin {
         this.osci.tempo = this.config.ControlSettings.tempo;
         this.osci.osci2_period = this.settings.osci2_period;
         this.osci.rhythm = this.settings.rhythm;
-        return this.activate(key, HC.Osci.wobble(this.beatKeeper, 0, this.osci));
+        return this.activate(key, Oscillators.wobble(this.beatKeeper, 0, this.osci));
 
     }
 }
@@ -196,7 +197,7 @@ class sinusosci3 extends OscillatePlugin {
         this.osci.tempo = this.config.ControlSettings.tempo;
         this.osci.osci3_period = this.settings.osci3_period;
         this.osci.rhythm = this.settings.rhythm;
-        return this.activate(key, HC.Osci.wobble(this.beatKeeper, 0, this.osci));
+        return this.activate(key, Oscillators.wobble(this.beatKeeper, 0, this.osci));
 
     }
 }

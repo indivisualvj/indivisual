@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {OscillatePlugin} from "../OscillatePlugin";
+import {Oscillators} from "../../../shared/Oscillators";
 
 class fourstep extends OscillatePlugin {
     static name = 'fourstep 0/1 on peak';
@@ -10,7 +11,7 @@ class fourstep extends OscillatePlugin {
 
     apply(key) {
         let pa = this.params(key);
-        HC.Osci.step(pa, 4, this.beatKeeper.getSpeed('full'), true, false, this.audioAnalyser.peak, this.animation.diff);
+        Oscillators.step(pa, 4, this.beatKeeper.getSpeed('full'), true, false, this.audioAnalyser.peak, this.animation.diff);
         return this.activate(key, pa.value);
     }
 }
@@ -23,7 +24,7 @@ class fourstepfulls extends OscillatePlugin {
 
     apply(key) {
         let pa = this.params(key);
-        HC.Osci.step(pa, 4, this.beatKeeper.getSpeed('full'), false, false, this.audioAnalyser.peak, this.animation.diff);
+        Oscillators.step(pa, 4, this.beatKeeper.getSpeed('full'), false, false, this.audioAnalyser.peak, this.animation.diff);
         return this.activate(key, pa.value);
     }
 }
@@ -36,7 +37,7 @@ class fourstepminus extends OscillatePlugin {
 
     apply(key) {
         let pa = this.params(key);
-        HC.Osci.step(pa, 4, this.beatKeeper.getSpeed('full'), true, true, this.audioAnalyser.peak, this.animation.diff);
+        Oscillators.step(pa, 4, this.beatKeeper.getSpeed('full'), true, true, this.audioAnalyser.peak, this.animation.diff);
         return this.activate(key, pa.value);
     }
 }
@@ -49,7 +50,7 @@ class fourstephalfsminus extends OscillatePlugin {
 
     apply(key) {
         let pa = this.params(key);
-        HC.Osci.step(pa, 4, this.beatKeeper.getSpeed('half'), false, true, this.audioAnalyser.peak, this.animation.diff);
+        Oscillators.step(pa, 4, this.beatKeeper.getSpeed('half'), false, true, this.audioAnalyser.peak, this.animation.diff);
         return this.activate(key, pa.value);
     }
 }
@@ -62,7 +63,7 @@ class fourstepfullsminus extends OscillatePlugin {
 
     apply(key) {
         let pa = this.params(key);
-        HC.Osci.step(pa, 4, this.beatKeeper.getSpeed('full'), false, true, this.audioAnalyser.peak, this.animation.diff);
+        Oscillators.step(pa, 4, this.beatKeeper.getSpeed('full'), false, true, this.audioAnalyser.peak, this.animation.diff);
         return this.activate(key, pa.value);
     }
 }

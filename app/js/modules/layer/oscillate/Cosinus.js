@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {OscillatePlugin} from "../OscillatePlugin";
+import {Oscillators} from "../../../shared/Oscillators";
 
 class cosinus extends OscillatePlugin {
     static name = 'cosinus -1/1 (current)';
@@ -10,7 +11,7 @@ class cosinus extends OscillatePlugin {
     apply(key) {
         let layer = this.layer;
         let speed = layer.currentSpeed();
-        return this.activate(key, HC.Osci.cosinus(speed.prc));
+        return this.activate(key, Oscillators.cosinus(speed.prc));
     }
 }
 
@@ -22,7 +23,7 @@ class cosinout extends OscillatePlugin {
     apply(key) {
         let layer = this.layer;
         let speed = layer.currentSpeed();
-        return this.activate(key, HC.Osci.cosInOut(speed.prc));
+        return this.activate(key, Oscillators.cosInOut(speed.prc));
     }
 }
 
@@ -34,7 +35,7 @@ class cosinoutdotfive extends OscillatePlugin {
     apply(key) {
         let layer = this.layer;
         let speed = layer.currentSpeed();
-        return this.activate(key, HC.Osci.cosInOut(speed.prc, .5));
+        return this.activate(key, Oscillators.cosInOut(speed.prc, .5));
     }
 }
 
@@ -45,7 +46,7 @@ class cosinouthexa extends OscillatePlugin {
 
     apply(key) {
         let speed = this.beatKeeper.getSpeed('hexa');
-        return this.activate(key, HC.Osci.cosInOut(speed.prc));
+        return this.activate(key, Oscillators.cosInOut(speed.prc));
     }
 }
 
@@ -56,7 +57,7 @@ class cosinoutdotfivehexa extends OscillatePlugin {
 
     apply(key) {
         let speed = this.beatKeeper.getSpeed('hexa');
-        return this.activate(key, HC.Osci.cosInOut(speed.prc, .5));
+        return this.activate(key, Oscillators.cosInOut(speed.prc, .5));
     }
 }
 
@@ -67,7 +68,7 @@ class cosinoutdotfive32 extends OscillatePlugin {
 
     apply(key) {
         let speed = this.beatKeeper.getSpeed('32');
-        return this.activate(key, HC.Osci.cosInOut(speed.prc, .5));
+        return this.activate(key, Oscillators.cosInOut(speed.prc, .5));
     }
 }
 
@@ -78,7 +79,7 @@ class cosinusfulls extends OscillatePlugin {
 
     apply(key) {
         let speed = this.beatKeeper.getSpeed('full');
-        return this.activate(key, HC.Osci.cosinus(speed.prc));
+        return this.activate(key, Oscillators.cosinus(speed.prc));
     }
 }
 
@@ -89,7 +90,7 @@ class cosinus32 extends OscillatePlugin {
 
     apply(key) {
         let speed = this.beatKeeper.getSpeed('32');
-        return this.activate(key, HC.Osci.cosinus(speed.prc));
+        return this.activate(key, Oscillators.cosinus(speed.prc));
     }
 }
 
@@ -100,7 +101,7 @@ class cosinus64 extends OscillatePlugin {
 
     apply(key) {
         let speed = this.beatKeeper.getSpeed('64');
-        return this.activate(key, HC.Osci.cosinus(speed.prc));
+        return this.activate(key, Oscillators.cosinus(speed.prc));
     }
 }
 
@@ -126,7 +127,7 @@ class oscillator extends OscillatePlugin {
         }
         this.osci.tempo = this.config.ControlSettings.tempo;
 
-        return this.activate(key, HC.Osci.wobble(this.beatKeeper, 0, this.osci));
+        return this.activate(key, Oscillators.wobble(this.beatKeeper, 0, this.osci));
     }
 }
 
@@ -149,7 +150,7 @@ class cosinusosci1 extends OscillatePlugin {
         this.osci.tempo = this.config.ControlSettings.tempo;
         this.osci.osci1_period = this.settings.osci1_period;
         this.osci.rhythm = this.settings.rhythm;
-        return this.activate(key, HC.Osci.wobble(this.beatKeeper, 0, this.osci, Math.cos));
+        return this.activate(key, Oscillators.wobble(this.beatKeeper, 0, this.osci, Math.cos));
 
     }
 }
@@ -173,7 +174,7 @@ class cosinusosci2 extends OscillatePlugin {
         this.osci.tempo = this.config.ControlSettings.tempo;
         this.osci.osci2_period = this.settings.osci2_period;
         this.osci.rhythm = this.settings.rhythm;
-        return this.activate(key, HC.Osci.wobble(this.beatKeeper, 0, this.osci, Math.cos));
+        return this.activate(key, Oscillators.wobble(this.beatKeeper, 0, this.osci, Math.cos));
 
     }
 }
@@ -197,7 +198,7 @@ class cosinusosci3 extends OscillatePlugin {
         this.osci.tempo = this.config.ControlSettings.tempo;
         this.osci.osci3_period = this.settings.osci3_period;
         this.osci.rhythm = this.settings.rhythm;
-        return this.activate(key, HC.Osci.wobble(this.beatKeeper, 0, this.osci, Math.cos));
+        return this.activate(key, Oscillators.wobble(this.beatKeeper, 0, this.osci, Math.cos));
 
     }
 }

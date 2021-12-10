@@ -1,6 +1,9 @@
-// todo: can be converted to module
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {GeometryUtils} from "./GeometryUtils";
 
-HC.RoundedRect = class RoundedRect {
+class RoundedRect {
 
     /**
      *
@@ -46,7 +49,7 @@ HC.RoundedRect = class RoundedRect {
     }
 }
 
-HC.DirectionalCircle = class DirectionalCircle {
+class DirectionalCircle {
 
     /**
      *
@@ -74,7 +77,7 @@ HC.DirectionalCircle = class DirectionalCircle {
     }
 }
 
-HC.DirectionalRing = class DirectionalRing {
+class DirectionalRing {
 
     /**
      *
@@ -103,7 +106,7 @@ HC.DirectionalRing = class DirectionalRing {
     }
 }
 
-HC.DirectionalShape = class DirectionalShape {
+class DirectionalShape {
 
     /**
      *
@@ -141,7 +144,7 @@ HC.DirectionalShape = class DirectionalShape {
     }
 }
 
-HC.Rect = class Rect {
+class Rect {
 
     /**
      *
@@ -169,7 +172,7 @@ HC.Rect = class Rect {
     }
 }
 
-HC.RightTriangle = class RightTriangle {
+class RightTriangle {
 
     /**
      *
@@ -196,7 +199,7 @@ HC.RightTriangle = class RightTriangle {
     }
 }
 
-HC.CustomGeometry = class CustomGeometry {
+class CustomGeometry {
 
     /**
      *
@@ -224,8 +227,10 @@ HC.CustomGeometry = class CustomGeometry {
             points.push(vec);
         }
         let geometry = new THREE.BufferGeometry().setFromPoints(points);
-        HC.GeometryUtils.sortVertices(geometry);
+        GeometryUtils.sortVertices(geometry);
 
         return geometry;
     }
 }
+
+export {RightTriangle, DirectionalCircle, Rect, RoundedRect, DirectionalRing, DirectionalShape, CustomGeometry};

@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ColoringModePlugin} from "../ColoringModePlugin";
+import {Oscillators} from "../../../shared/Oscillators";
 
 class onergb extends ColoringModePlugin {
     static name = 'one RGB';
@@ -11,7 +12,7 @@ class onergb extends ColoringModePlugin {
         if (this.isFirstShape(shape)) {
 
             let prc = (this.animation.now - this.beatKeeper.beatStartTime) / (60000 / this.config.ControlSettings.tempo) / 100 * this.settings.coloring_volume;
-            prc = HC.Osci.sinInOut(prc) * 5;
+            prc = Oscillators.sinInOut(prc) * 5;
 
             prc *= RAD * 180 * this.settings.coloring_volume;
 

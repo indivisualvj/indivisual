@@ -4,10 +4,10 @@
 import {MeshShaderMaterialPlugin} from "../MeshShaderMaterialPlugin";
 
 class voronoi_basic extends MeshShaderMaterialPlugin {
-        static name = 'voronoi-basic';
-        shader = {
-            uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
-            fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
+    static name = 'voronoi-basic';
+    shader = {
+        uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
+        fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
                 
                 // The MIT License
                 // Copyright © 2013 Inigo Quilez
@@ -61,8 +61,8 @@ class voronoi_basic extends MeshShaderMaterialPlugin {
                     fragColor = vec4( col, 1.0 );
                 }
             ` + MeshShaderMaterialPlugin.fragmentSuffix,
-            vertexShader: MeshShaderMaterialPlugin.vertexShader
-        }
+        vertexShader: MeshShaderMaterialPlugin.vertexShader
     }
+}
 
 export {voronoi_basic};

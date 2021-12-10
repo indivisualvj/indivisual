@@ -5,6 +5,24 @@ import {MeshMaterialPlugin} from "./MeshMaterialPlugin";
 
 class MeshShaderMaterialPlugin extends MeshMaterialPlugin {
     static index = 99;
+    static standardUniforms = {
+        uTime: {type: 'f', value: 1.0},
+        opacity: {type: 'f', value: 1.0},
+    };
+    static fragmentPrefix = `
+        uniform float uTime;
+        uniform float opacity;
+        varying vec2 vUv;
+        vec2 resolution = vec2(1.0);
+        vec2 iResolution = vec2(1.0);
+    `;
+    static fragmentSuffix = `
+        void main() {
+            mainImage(gl_FragColor, vUv);
+            gl_FragColor.a *= opacity;
+        }
+    `;
+    static vertexShader = "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}";
     active = false;
 
     apply(geometry, index) {
@@ -42,25 +60,6 @@ class MeshShaderMaterialPlugin extends MeshMaterialPlugin {
     reset() {
         HC.traverse(this);
     }
-
-    static standardUniforms = {
-        uTime: { type: 'f', value: 1.0 },
-        opacity: { type: 'f', value: 1.0 },
-    };
-    static fragmentPrefix = `
-        uniform float uTime;
-        uniform float opacity;
-        varying vec2 vUv;
-        vec2 resolution = vec2(1.0);
-        vec2 iResolution = vec2(1.0);
-    `;
-    static fragmentSuffix = `
-        void main() {
-            mainImage(gl_FragColor, vUv);
-            gl_FragColor.a *= opacity;
-        }
-    `;
-    static vertexShader = "varying vec2 vUv;void main(){vUv = uv;vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );gl_Position = projectionMatrix * mvPosition;}";
 }
 
 export {MeshShaderMaterialPlugin};

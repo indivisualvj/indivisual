@@ -2,11 +2,11 @@
 import {MeshShaderMaterialPlugin} from "../MeshShaderMaterialPlugin";
 
 class strained_lights extends MeshShaderMaterialPlugin {
-        static name = 'strained-lights'
+    static name = 'strained-lights'
 
-        shader = {
-            uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
-            fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
+    shader = {
+        uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
+        fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
             
             // credits: Dave_Hoskins Hash functions: https://www.shadertoy.com/view/4djSRW
 
@@ -56,8 +56,8 @@ class strained_lights extends MeshShaderMaterialPlugin {
                 o.a = 1.;
             }
             ` + MeshShaderMaterialPlugin.fragmentSuffix,
-            vertexShader: MeshShaderMaterialPlugin.vertexShader
-        }
+        vertexShader: MeshShaderMaterialPlugin.vertexShader
     }
+}
 
 export {strained_lights};

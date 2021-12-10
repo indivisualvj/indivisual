@@ -2,10 +2,10 @@
 import {MeshShaderMaterialPlugin} from "../MeshShaderMaterialPlugin";
 
 class digitalambience extends MeshShaderMaterialPlugin {
-        static name = 'digital-ambience';
-        shader = {
-            uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
-            fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
+    static name = 'digital-ambience';
+    shader = {
+        uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
+        fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
             
             vec2 rotate(vec2 p, float a)
             {
@@ -95,8 +95,8 @@ class digitalambience extends MeshShaderMaterialPlugin {
                 //col = clamp(col, vec3(0.0), vec3(1.0));
                 gl_FragColor = vec4(col, opacity);
             }`,
-            vertexShader: MeshShaderMaterialPlugin.vertexShader
-        }
+        vertexShader: MeshShaderMaterialPlugin.vertexShader
     }
+}
 
 export {digitalambience};

@@ -4,10 +4,10 @@
 import {MeshShaderMaterialPlugin} from "../MeshShaderMaterialPlugin";
 
 class flow_body extends MeshShaderMaterialPlugin {
-        static name = 'flow-body';
-        shader = {
-            uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
-            fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
+    static name = 'flow-body';
+    shader = {
+        uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
+        fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
                                 
                 #define DOTS
                 const float LN2 = 0.693147181;	// natural log of 2 used to convert Log2 to LogE
@@ -67,9 +67,9 @@ class flow_body extends MeshShaderMaterialPlugin {
                 //	fragColor = vec4(c, sxy.x, sxy.y, 1.0);
                 }
             ` + MeshShaderMaterialPlugin.fragmentSuffix,
-            vertexShader: MeshShaderMaterialPlugin.vertexShader
-            
-        }
+        vertexShader: MeshShaderMaterialPlugin.vertexShader
+
     }
+}
 
 export {flow_body};

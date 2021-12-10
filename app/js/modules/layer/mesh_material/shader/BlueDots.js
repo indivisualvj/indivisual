@@ -4,10 +4,10 @@
 import {MeshShaderMaterialPlugin} from "../MeshShaderMaterialPlugin";
 
 class blue_dots extends MeshShaderMaterialPlugin {
-        static name = 'blue-dots';
-        shader = {
-            uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
-            fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
+    static name = 'blue-dots';
+    shader = {
+        uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
+        fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
                 const float Pi = 3.14159265359;
                 
                 #define Time uTime
@@ -284,9 +284,9 @@ class blue_dots extends MeshShaderMaterialPlugin {
                     fragColor = vec4(GammaEncode(clamp01(outCol.xyz)), 1.0); return;
                 }
                 ` + MeshShaderMaterialPlugin.fragmentSuffix
-            ,
-            vertexShader: MeshShaderMaterialPlugin.vertexShader
-        }
+        ,
+        vertexShader: MeshShaderMaterialPlugin.vertexShader
     }
+}
 
 export {blue_dots};

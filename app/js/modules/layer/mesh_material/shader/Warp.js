@@ -2,10 +2,10 @@
 import {MeshShaderMaterialPlugin} from "../MeshShaderMaterialPlugin";
 
 class warp extends MeshShaderMaterialPlugin {
-        shader = {
+    shader = {
 
-            uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
-            fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
+        uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
+        fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
         
                 void mainImage( out vec4 fragColor, in vec2 fragCoord ) {
                     vec2 p = fragCoord - vec2(.9,.5);
@@ -20,8 +20,8 @@ class warp extends MeshShaderMaterialPlugin {
                 }
             `
             + MeshShaderMaterialPlugin.fragmentSuffix,
-            vertexShader: MeshShaderMaterialPlugin.vertexShader
-        }
+        vertexShader: MeshShaderMaterialPlugin.vertexShader
     }
+}
 
 export {warp};

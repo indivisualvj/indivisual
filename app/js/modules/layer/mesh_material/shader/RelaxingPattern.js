@@ -3,15 +3,15 @@ import {MeshShaderMaterialPlugin} from "../MeshShaderMaterialPlugin";
 
 class relaxing_pattern extends MeshShaderMaterialPlugin {
 
-        static name = "relaxing-pattern";
+    static name = "relaxing-pattern";
 
-        shader = {
-            uniforms: {
-                uTime: {type: 'f', value: 1.0},
-                opacity: { type: 'f', value: 1.0 },
-                audio: { type: "fv", value: []}
-            },
-            fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
+    shader = {
+        uniforms: {
+            uTime: {type: 'f', value: 1.0},
+            opacity: {type: 'f', value: 1.0},
+            audio: {type: "fv", value: []}
+        },
+        fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
             uniform float audio[5];
             
             #define iTime uTime
@@ -95,9 +95,9 @@ class relaxing_pattern extends MeshShaderMaterialPlugin {
                 fragColor = vec4(col, 1.0);
             }
             ` + MeshShaderMaterialPlugin.fragmentSuffix,
-            vertexShader: MeshShaderMaterialPlugin.vertexShader
-            
-        }
+        vertexShader: MeshShaderMaterialPlugin.vertexShader
+
     }
+}
 
 export {relaxing_pattern};

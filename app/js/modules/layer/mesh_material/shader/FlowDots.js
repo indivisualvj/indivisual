@@ -4,10 +4,10 @@
 import {MeshShaderMaterialPlugin} from "../MeshShaderMaterialPlugin";
 
 class flow_dots extends MeshShaderMaterialPlugin {
-        static name = 'flow-dots';
-        shader = {
-            uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
-            fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
+    static name = 'flow-dots';
+    shader = {
+        uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
+        fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
                 
                 const float divs = 12.0;
     
@@ -36,9 +36,9 @@ class flow_dots extends MeshShaderMaterialPlugin {
                 //    fragColor = vec4(c, sxy.x, sxy.y, 1.0);
                 }
             ` + MeshShaderMaterialPlugin.fragmentSuffix,
-            vertexShader: MeshShaderMaterialPlugin.vertexShader
-            
-        }
+        vertexShader: MeshShaderMaterialPlugin.vertexShader
+
     }
+}
 
 export {flow_dots};

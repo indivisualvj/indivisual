@@ -4,10 +4,10 @@
 import {MeshShaderMaterialPlugin} from "../MeshShaderMaterialPlugin";
 
 class sparkle_plexus extends MeshShaderMaterialPlugin {
-        static name = 'sparkle-plexus';
-        shader = {
-            uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
-            fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
+    static name = 'sparkle-plexus';
+    shader = {
+        uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
+        fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
                 
                 #define S(a,b,t) smoothstep(a,b,t)
                 
@@ -102,9 +102,9 @@ class sparkle_plexus extends MeshShaderMaterialPlugin {
                     fragColor = vec4(col,1.0);
                 }
             ` + MeshShaderMaterialPlugin.fragmentSuffix,
-            vertexShader: MeshShaderMaterialPlugin.vertexShader
-            
-        }
+        vertexShader: MeshShaderMaterialPlugin.vertexShader
+
     }
+}
 
 export {sparkle_plexus};

@@ -4,12 +4,12 @@
 import {MeshMaterialPlugin} from "../MeshMaterialPlugin";
 
 class standard extends MeshMaterialPlugin {
-        static index = 4;
+    static index = 4;
 
-        apply(geometry) {
-            this.material = new THREE.MeshStandardMaterial();
-            return new THREE.Mesh(geometry, this.material);
-        }
+    apply(geometry) {
+        this.material = new THREE.MeshStandardMaterial();
+        return new THREE.Mesh(geometry, this.material);
     }
+}
 
 export {standard};

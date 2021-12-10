@@ -4,10 +4,10 @@
 import {MeshShaderMaterialPlugin} from "../MeshShaderMaterialPlugin";
 
 class floating_points extends MeshShaderMaterialPlugin {
-        static name = 'floating-points';
-        shader = {
-            uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
-            fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
+    static name = 'floating-points';
+    shader = {
+        uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
+        fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
                 
                 float DistanceToLine(vec3 LineStart, vec3 LineEnd, vec3 Point)
                 {
@@ -59,9 +59,9 @@ class floating_points extends MeshShaderMaterialPlugin {
                     fragColor = vec4(color, 1);
                 }
             ` + MeshShaderMaterialPlugin.fragmentSuffix,
-            vertexShader: MeshShaderMaterialPlugin.vertexShader
-            
-        }
+        vertexShader: MeshShaderMaterialPlugin.vertexShader
+
     }
+}
 
 export {floating_points};

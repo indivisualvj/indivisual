@@ -3,9 +3,9 @@ import {MeshShaderMaterialPlugin} from "../MeshShaderMaterialPlugin";
 
 class clouds extends MeshShaderMaterialPlugin {
 
-        shader = {
-            uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
-            fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
+    shader = {
+        uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
+        fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
     
                 const float cloudscale = 1.1;
                 const float speed = 0.03;
@@ -118,9 +118,9 @@ class clouds extends MeshShaderMaterialPlugin {
                     gl_FragColor = vec4( result, opacity );
                 }
             `,
-            vertexShader: MeshShaderMaterialPlugin.vertexShader
-            
-        }
+        vertexShader: MeshShaderMaterialPlugin.vertexShader
+
     }
+}
 
 export {clouds};

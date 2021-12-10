@@ -4,9 +4,9 @@ import {MeshShaderMaterialPlugin} from "../MeshShaderMaterialPlugin";
 
 class bubbles extends MeshShaderMaterialPlugin {
 
-        shader = {
-            uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
-            fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
+    shader = {
+        uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
+        fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
 
             void main () {
                 vec2 uv = -1.0 + 2.0*vUv.xy;
@@ -40,9 +40,9 @@ class bubbles extends MeshShaderMaterialPlugin {
                 float distB = 1.0 - color.b;
                 gl_FragColor = vec4(color, opacity * (-.75+(distR+distG+distB)));
             }`
-            ,
-            vertexShader: MeshShaderMaterialPlugin.vertexShader
-        }
+        ,
+        vertexShader: MeshShaderMaterialPlugin.vertexShader
     }
+}
 
 export {bubbles};

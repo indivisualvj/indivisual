@@ -5,9 +5,9 @@ import {MeshShaderMaterialPlugin} from "../MeshShaderMaterialPlugin";
 
 class cellular extends MeshShaderMaterialPlugin {
 
-        shader = {
-            uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
-            fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
+    shader = {
+        uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
+        fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
                 
                 #define PI 3.14159265359
                 
@@ -68,9 +68,9 @@ class cellular extends MeshShaderMaterialPlugin {
                     gl_FragColor = vec4(pix,opacity * (3.-(distR+distG+distB)));
                 }
             `,
-            vertexShader: MeshShaderMaterialPlugin.vertexShader
-            
-        }
+        vertexShader: MeshShaderMaterialPlugin.vertexShader
+
     }
+}
 
 export {cellular};

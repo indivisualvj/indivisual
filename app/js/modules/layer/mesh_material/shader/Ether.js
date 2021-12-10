@@ -7,9 +7,9 @@ import {MeshShaderMaterialPlugin} from "../MeshShaderMaterialPlugin";
 
 class ether extends MeshShaderMaterialPlugin {
 
-        shader = {
-            uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
-            fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
+    shader = {
+        uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
+        fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
             
             #define t uTime
             mat2 m(float a){float c=cos(a), s=sin(a);return mat2(c,-s,s,c);}
@@ -34,9 +34,9 @@ class ether extends MeshShaderMaterialPlugin {
                 fragColor = vec4(cl, 1.);
             }
             ` + MeshShaderMaterialPlugin.fragmentSuffix,
-            vertexShader: MeshShaderMaterialPlugin.vertexShader
-            
-        }
+        vertexShader: MeshShaderMaterialPlugin.vertexShader
+
     }
+}
 
 export {ether};

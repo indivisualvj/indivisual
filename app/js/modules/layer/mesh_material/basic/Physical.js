@@ -4,12 +4,12 @@
 import {MeshMaterialPlugin} from "../MeshMaterialPlugin";
 
 class physical extends MeshMaterialPlugin {
-        static index = 5;
+    static index = 5;
 
-        apply(geometry) {
-            this.material = new THREE.MeshPhysicalMaterial();
-            return new THREE.Mesh(geometry, this.material);
-        }
+    apply(geometry) {
+        this.material = new THREE.MeshPhysicalMaterial();
+        return new THREE.Mesh(geometry, this.material);
     }
+}
 
 export {physical};

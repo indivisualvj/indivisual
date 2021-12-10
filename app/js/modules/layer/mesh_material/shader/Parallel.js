@@ -3,13 +3,13 @@ import {MeshShaderMaterialPlugin} from "../MeshShaderMaterialPlugin";
 
 class parallel extends MeshShaderMaterialPlugin {
 
-        shader = {
-            uniforms: {
-                uTime: { type: 'f', value: 1.0 },
-                opacity: { type: 'f', value: 1.0 },
-                uColor: { type: 'v3', value: { r: 1.0, g: 1.0, b: 1.0 } }
-            },
-            fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
+    shader = {
+        uniforms: {
+            uTime: {type: 'f', value: 1.0},
+            opacity: {type: 'f', value: 1.0},
+            uColor: {type: 'v3', value: {r: 1.0, g: 1.0, b: 1.0}}
+        },
+        fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
                 uniform vec3 uColor;
                 
                 void main () {
@@ -44,9 +44,9 @@ class parallel extends MeshShaderMaterialPlugin {
                             gl_FragColor = vec4(0);
                 }
             `
-            ,
-            vertexShader: MeshShaderMaterialPlugin.vertexShader
-        }
+        ,
+        vertexShader: MeshShaderMaterialPlugin.vertexShader
     }
+}
 
 export {parallel};

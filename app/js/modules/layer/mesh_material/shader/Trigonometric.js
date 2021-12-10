@@ -8,9 +8,9 @@ import {MeshShaderMaterialPlugin} from "../MeshShaderMaterialPlugin";
 
 class trigonometric extends MeshShaderMaterialPlugin {
 
-        shader = {
-            uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
-            fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
+    shader = {
+        uniforms: {...MeshShaderMaterialPlugin.standardUniforms},
+        fragmentShader: MeshShaderMaterialPlugin.fragmentPrefix + `
             
             vec2 iterate (in vec2 p, in vec4 t) {
                 return p - 0.05*cos(t.xz + p.x*p.y + cos(t.yw+1.5*3.1415927*p.yx)+p.yx*p.yx );
@@ -51,8 +51,8 @@ class trigonometric extends MeshShaderMaterialPlugin {
                 gl_FragColor = vec4( col, opacity );
             }
             `,
-            vertexShader: MeshShaderMaterialPlugin.vertexShader
-        }
+        vertexShader: MeshShaderMaterialPlugin.vertexShader
     }
+}
 
 export {trigonometric};

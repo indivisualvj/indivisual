@@ -73,8 +73,8 @@ class Animation extends Program {
         let renderer = new Renderer(this, {
             layers: new Array(config.ControlValues.layers)
         });
-        this.renderer = renderer;
         renderer.initLayers(false);
+        this.renderer = renderer;
 
         let displayManager = new DisplayManager(this, {
             display: new Array(config.DisplayValues.display.length)

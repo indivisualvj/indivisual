@@ -345,7 +345,6 @@ class Server
          */
         this.app.get('/app/*.js', (req, res) => {
             let url = req.originalUrl.replace('/', '');
-            this._loading(url, req);
             url = path.resolve(url);
             res.sendFile(url);
         });
@@ -356,7 +355,6 @@ class Server
         this.app.get('/bin/vanilla.js', (req, res) => {
 
             let sources = ['js/shared/vanilla'];
-            this._loading(sources[0], req);
             let file = _sources(req.originalUrl, sources);
 
             res.sendFile(file);
@@ -368,7 +366,6 @@ class Server
         this.app.get('/bin/plugins.js', (req, res) => {
 
             let sources = ['js/plugins'];
-            this._loading(sources[0], req);
             let file = _sources(req.originalUrl, sources);
 
             res.sendFile(file);
@@ -395,11 +392,9 @@ class Server
             } else {
                 suffix = '';
             }
-            url += suffix;
 
-            this._loading(url, req);
-            url = path.resolve(url);
-            console.log('serving', url);
+            url = path.resolve(url + suffix);
+            console.log('sending', url);
             res.sendFile(url);
         });
 
@@ -418,7 +413,6 @@ class Server
          */
         this.app.get('/lib/*.js', (req, res) => {
             let url = req.originalUrl.substr(1);
-            this._loading(url, req);
             res.sendFile(HC.filePath(_APP, url));
         });
 

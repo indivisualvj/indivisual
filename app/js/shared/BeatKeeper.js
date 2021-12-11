@@ -8,7 +8,7 @@ class BeatKeeper {
     beatStartTime = 0;
     firstTrigger = false;
     triggerCounter = 0;
-    timeout = false;
+    timeout;
     bpm = 0;
     tempo = 120;
 
@@ -18,7 +18,7 @@ class BeatKeeper {
     now;
 
     /**
-     * @type {TWEEN.Group}
+     * @type {TWEEN.Group|_Group}
      */
     tween;
 
@@ -29,7 +29,7 @@ class BeatKeeper {
 
     /**
      *
-     * @type {Object.<string, HC.Speed>}
+     * @type {Object.<string, Speed>}
      */
     speeds = BeatKeeper.initSpeeds();
 
@@ -169,7 +169,7 @@ class BeatKeeper {
     /**
      *
      * @param rhythm
-     * @returns {HC.Speed}
+     * @returns {Speed}
      */
     getSpeed(rhythm) {
 
@@ -188,7 +188,7 @@ class BeatKeeper {
 
     /**
      *
-     * @returns {HC.Speed}
+     * @returns {Speed}
      */
     getDefaultSpeed() {
         return this.getSpeed('quarter');

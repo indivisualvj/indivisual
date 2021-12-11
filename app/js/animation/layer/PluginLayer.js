@@ -10,8 +10,8 @@ class Layer extends _Layer
     /**
      *
      * @param plugin
-     * @param name
-     * @returns {AnimationPlugin}
+     * @param [name]
+     * @returns {*}
      */
     getPlugin(plugin, name) {
 
@@ -22,7 +22,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {OverrideMaterialInputPlugin}
      */
     getOverrideMaterialInputPlugin(name) {
@@ -31,7 +31,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {OverrideMaterialInputPlugin}
      */
     getOverrideBackgroundModePlugin(name) {
@@ -41,7 +41,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {LightingLookatPlugin}
      */
     getLightingLookatPlugin(name) {
@@ -50,7 +50,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {LightingPatternPlugin}
      */
     getLightingPatternPlugin(name) {
@@ -59,7 +59,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {LightingTypePlugin}
      */
     getLightingTypePlugin(name) {
@@ -68,7 +68,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {ShaderPlugin}
      */
     getShaderPlugin(name) {
@@ -106,7 +106,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {PatternRotationPlugin}
      */
     getPatternRotationPlugin(name) {
@@ -115,7 +115,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {ShapeLookatPlugin}
      */
     getShapeLookatPlugin(name) {
@@ -124,7 +124,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {BackgroundModePlugin}
      */
     getBackgroundModePlugin(name) {
@@ -133,7 +133,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {OffsetModePlugin}
      */
     getOffsetModePlugin(name) {
@@ -142,7 +142,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {PatternPlugin}
      */
     getPatternPlugin(name) {
@@ -151,7 +151,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {PatternPlugin}
      */
     getPatternOverlayPlugin(name) {
@@ -160,7 +160,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {RotationOffsetModePlugin}
      */
     getRotationOffsetModePlugin(name) {
@@ -169,7 +169,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {RotationModePlugin}
      */
     getRotationModePlugin(name) {
@@ -178,7 +178,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {RotationDirectionPlugin}
      */
     getRotationDirectionPlugin(name) {
@@ -187,7 +187,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {PatternMoverPlugin}
      */
     getPatternMoverPlugin(name) {
@@ -196,7 +196,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {SizingModePlugin}
      */
     getSizingModePlugin(name) {
@@ -205,7 +205,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {SizingFlipPlugin}
      */
     getSizingFlipPlugin(name) {
@@ -214,7 +214,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {ShapeGeometryPlugin}
      */
     getShapeGeometryPlugin(name) {
@@ -223,7 +223,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {ShapeTransformPlugin}
      */
     getShapeTransformPlugin(name) {
@@ -232,7 +232,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {ShapeModifierPlugin}
      */
     getShapeModifierPlugin(name) {
@@ -241,7 +241,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {ShapeRhythmPlugin}
      */
     getShapeRhythmPlugin(name) {
@@ -250,7 +250,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {ShapeDelayPlugin}
      */
     shapeDelayPlugin(name) {
@@ -259,7 +259,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {ShapePairingPlugin}
      */
     getShapePairingPlugin(name) {
@@ -268,7 +268,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {OscillatePlugin}
      */
     getOscillatePlugin(name) {
@@ -277,7 +277,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {ColoringModePlugin}
      */
     getColoringModePlugin(name) {
@@ -286,7 +286,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {FilterModePlugin}
      */
     getFilterModePlugin(name) {
@@ -295,7 +295,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {MeshMaterialPlugin}
      */
     getMeshMaterialPlugin(name) {
@@ -304,7 +304,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {MaterialStylePlugin}
      */
     getMaterialStylePlugin(name) {
@@ -313,7 +313,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param name
+     * @param [name]
      * @returns {CameraModePlugin}
      */
     getCameraModePlugin(name) {

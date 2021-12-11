@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
+import {Vector2} from "three";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
 class repeat extends ShaderPlugin {
     static index = 45;
@@ -56,8 +58,8 @@ class repeat extends ShaderPlugin {
     shader = {
         uniforms: {
             "tDiffuse": {type: "t", value: null},
-            "resolution": {type: "v2", value: new THREE.Vector2(800, 600)},
-            "divider": {type: "v2", value: new THREE.Vector2(800, 600)},
+            "resolution": {type: "v2", value: new Vector2(800, 600)},
+            "divider": {type: "v2", value: new Vector2(800, 600)},
             "operation": {type: "i", value: 0},
             "zoom": {type: "f", value: 1.0},
             "flipX": {type: "i", value: 0},
@@ -116,7 +118,7 @@ class repeat extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(this.shader);
+            this.pass = new ShaderPass(this.shader);
         }
 
         return this.pass;

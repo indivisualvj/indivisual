@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShapeModifierPlugin} from "../ShapeModifierPlugin";
+import {Vector3} from "three";
 
 class coneify extends ShapeModifierPlugin {
     static name = 'coneify xyz by y';
@@ -9,13 +10,13 @@ class coneify extends ShapeModifierPlugin {
     create(geometry, source, axes) {
 
         source = source || 'y';
-        axes = axes || new THREE.Vector3(1, 1, 1);
+        axes = axes || new Vector3(1, 1, 1);
 
         let vertices = geometry.getAttribute('position');
 
         if (vertices) {
             this.min = this.max = 0;
-            let vtc = new THREE.Vector3();
+            let vtc = new Vector3();
             for (let i = 0; i < vertices.count; i++) {
                 vtc.fromBufferAttribute(vertices, i);
                 let v = vtc[source];
@@ -49,7 +50,7 @@ class coneifyxzby extends coneify {
     static name = 'coneify xz by y';
 
     create(shape) {
-        return super.create(shape, 'y', new THREE.Vector3(1, 0, 1));
+        return super.create(shape, 'y', new Vector3(1, 0, 1));
     }
 }
 
@@ -58,7 +59,7 @@ class coneifyxby extends coneify {
     static name = 'coneify x by y';
 
     create(shape) {
-        return super.create(shape, 'y', new THREE.Vector3(1, 0, 0));
+        return super.create(shape, 'y', new Vector3(1, 0, 0));
     }
 }
 
@@ -67,7 +68,7 @@ class coneifyxybz extends coneify {
     static name = 'coneify xy by z';
 
     create(shape) {
-        return super.create(shape, 'z', new THREE.Vector3(1, 1, 0));
+        return super.create(shape, 'z', new Vector3(1, 1, 0));
     }
 }
 

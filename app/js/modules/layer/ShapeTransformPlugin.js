@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {AnimationPlugin} from "../AnimationPlugin";
+import {Vector3} from "three";
 
 class ShapeTransformPlugin extends AnimationPlugin {
 
@@ -13,7 +14,7 @@ class ShapeTransformPlugin extends AnimationPlugin {
             shape.geometry.computeBoundingSphere();
             let vertices = shape.geometry.getAttribute('position');
             this.vertices = [];
-            let v = new THREE.Vector3();
+            let v = new Vector3();
             for (let i = 0; i < vertices.count; i++) {
                 v.fromBufferAttribute(vertices, i);
                 this.vertices.push(v.clone());

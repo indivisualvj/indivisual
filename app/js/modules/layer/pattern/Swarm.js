@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {PatternPlugin} from "../PatternPlugin";
+import {Quaternion, Vector3} from "three";
 
 class swarm extends PatternPlugin {
     static name = 'swarm';
@@ -31,7 +32,7 @@ class swarm extends PatternPlugin {
             this.layer.getPatternPlugin('cube').apply(shape);
             this.settings.pattern_padding /= 2;
 
-            params.targetLook = new THREE.Vector3();
+            params.targetLook = new Vector3();
             this.randPosition(params);
         }
         params.speed = this.layer.shapeSpeed(shape);
@@ -58,7 +59,7 @@ class swarm extends PatternPlugin {
         let layer = this.layer;
         let params = this.params(shape);
         let speed = params.speed;
-        let wp = new THREE.Vector3();
+        let wp = new Vector3();
         shape.getWorldPosition(wp);
         let dist = wp.distanceTo(params.targetLook);
 
@@ -136,9 +137,9 @@ class swarm extends PatternPlugin {
             params.shape.getWorldPosition(params.targetLook);
         }
 
-        params.quatFrom = new THREE.Quaternion().copy(cam.quaternion);
+        params.quatFrom = new Quaternion().copy(cam.quaternion);
         cam.lookAt(params.targetLook);
-        params.quatTo = new THREE.Quaternion().copy(cam.quaternion);
+        params.quatTo = new Quaternion().copy(cam.quaternion);
         cam.quaternion.copy(params.quatFrom);
 
         let step = this.animation.getFrameDurationPercent(speed.duration, .25);

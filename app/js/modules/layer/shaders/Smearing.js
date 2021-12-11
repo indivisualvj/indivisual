@@ -2,6 +2,17 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
+import {
+    Mesh,
+    OrthographicCamera,
+    PlaneBufferGeometry,
+    RGBAFormat,
+    Scene,
+    ShaderMaterial,
+    UniformsUtils,
+    WebGLRenderTarget,
+    LinearFilter
+} from "three";
 
 class smearing extends ShaderPlugin {
     static index = 185;
@@ -26,28 +37,23 @@ class smearing extends ShaderPlugin {
     }
 }
 
-
-/**
- * @author indivisualvj / https://github.com/indivisualvj
- */
-
 const SmearingPass = function () {
 
         let shader = SmearingShader;
-        this.uniforms = THREE.UniformsUtils.clone(shader.uniforms);
+        this.uniforms = UniformsUtils.clone(shader.uniforms);
 
         let parameters = {
-            minFilter: THREE.LinearFilter,
-            magFilter: THREE.LinearFilter,
-            format: THREE.RGBAFormat,
+            minFilter: LinearFilter,
+            magFilter: LinearFilter,
+            format: RGBAFormat,
             stencilBuffer: false
         };
 
-        this.target1 = new THREE.WebGLRenderTarget(1280, 720, parameters);
+        this.target1 = new WebGLRenderTarget(1280, 720, parameters);
         this.target2 = this.target1.clone();
         this.targetSwitch = false;
 
-        this.material = new THREE.ShaderMaterial({
+        this.material = new ShaderMaterial({
             defines: shader.defines || {},
             uniforms: this.uniforms,
             vertexShader: shader.vertexShader,
@@ -61,11 +67,11 @@ const SmearingPass = function () {
         this.needsSwap = true;
         this.clear = false;
 
-        this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-        this.scene = new THREE.Scene();
+        this.camera = new OrthographicCamera(-1, 1, 1, -1, 0, 1);
+        this.scene = new Scene();
         this.scene.autoUpdate = false;
 
-        this.quad = new THREE.Mesh(new THREE.PlaneBufferGeometry(2, 2), null);
+        this.quad = new Mesh(new PlaneBufferGeometry(2, 2), null);
         this.quad.matrixAutoUpdate = false;
         this.quad.updateMatrix();
         this.scene.add(this.quad);

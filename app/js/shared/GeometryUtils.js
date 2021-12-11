@@ -1,6 +1,8 @@
-if (!IS_CONTROLLER) {
-    _importThreeModule('examples/js/utils', 'BufferGeometryUtils');
-}
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {mergeVertices} from "three/examples/jsm/utils/BufferGeometryUtils";
+import {BufferAttribute, Vector3} from "three";
 
 class GeometryUtils
 {
@@ -13,13 +15,13 @@ class GeometryUtils
         geometry.computeBoundingBox();
 
         let box = geometry.boundingBox;
-        let size = new THREE.Vector3();
+        let size = new Vector3();
         box.getSize(size);
 
         let attPos = geometry.attributes.position;
         let attUv = geometry.attributes.uv;
         let uvs = [];
-        let vec3 = new THREE.Vector3(); // temp vector
+        let vec3 = new Vector3(); // temp vector
         for (let i = 0; i < attPos.count; i++) {
             vec3.fromBufferAttribute(attPos, i);
             let x = ((vec3.x - box.min.x) / size.x);
@@ -38,7 +40,7 @@ class GeometryUtils
         }
 
         if (!attUv) {
-            geometry.setAttribute('uv', new THREE.BufferAttribute(new Float32Array(uvs), 2));
+            geometry.setAttribute('uv', new BufferAttribute(new Float32Array(uvs), 2));
         }
 
         geometry.attributes.uv.needsUpdate = true;
@@ -54,16 +56,16 @@ class GeometryUtils
 
         let p = geometry.attributes.position;
         let n = geometry.attributes.normal;
-        let v1 = new THREE.Vector3();
-        let f = new THREE.Vector3();
+        let v1 = new Vector3();
+        let f = new Vector3();
 
         for (let i = 0; i < n.count; i++) {
             v1.fromBufferAttribute(p, i);
             f.fromBufferAttribute(n, i);
             if (f.z < 0) {
-                let v2 = new THREE.Vector3();
+                let v2 = new Vector3();
                 v2.fromBufferAttribute(p, i+1);
-                let v3 = new THREE.Vector3();
+                let v3 = new Vector3();
                 v3.fromBufferAttribute(p, i+2);
 
                 p.setXYZ(i  , v3.x, v3.y, v3.z);
@@ -90,7 +92,7 @@ class GeometryUtils
      */
     static mergeVertices(geometry, tolerance) {
         if (geometry.attributes.position && tolerance > 0) {
-            return THREE.BufferGeometryUtils.mergeVertices(geometry, tolerance);
+            return mergeVertices(geometry, tolerance);
         }
 
         return geometry;

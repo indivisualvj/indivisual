@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
+import {Color, Vector2} from "three";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
 class bleepy_blocks extends ShaderPlugin {
     static index = 200;
@@ -73,12 +75,12 @@ class bleepy_blocks extends ShaderPlugin {
     shader = {
         uniforms: {
             "tDiffuse": {type: "t", value: null},
-            "resolution": {type: "v2", value: new THREE.Vector2(800, 600)},
-            "size": {type: "v2", value: new THREE.Vector2(1.0, 1.0)},
+            "resolution": {type: "v2", value: new Vector2(800, 600)},
+            "size": {type: "v2", value: new Vector2(1.0, 1.0)},
             "time": {type: "f", value: 0.95},
             "intensity": {type: "f", value: 0.5},
             "tiles": {type: "i", value: 64},
-            "color": {type: "v3", value: new THREE.Color(.35, 0.8, 1.4)},
+            "color": {type: "v3", value: new Color(.35, 0.8, 1.4)},
         },
 
         vertexShader: `
@@ -135,7 +137,7 @@ class bleepy_blocks extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(this.shader);
+            this.pass = new ShaderPass(this.shader);
         }
 
         return this.pass;

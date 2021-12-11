@@ -3,6 +3,14 @@
  */
 import {Messaging} from "../../../../shared/Messaging";
 import {MeshCameraMaterialPlugin} from "../MeshCameraMaterialPlugin";
+import {
+    CubeCamera,
+    CubeRefractionMapping,
+    LinearMipmapLinearFilter, Mesh,
+    MeshPhongMaterial,
+    RGBFormat,
+    WebGLCubeRenderTarget
+} from "three";
 
 class refractive extends MeshCameraMaterialPlugin {
 
@@ -33,17 +41,17 @@ class refractive extends MeshCameraMaterialPlugin {
         geometry.computeBoundingBox();
         let box3 = geometry.boundingBox;
         let height = box3.max.y - box3.min.y;
-        let cubeRenderTarget = new THREE.WebGLCubeRenderTarget(height, {
-            format: THREE.RGBFormat,
+        let cubeRenderTarget = new WebGLCubeRenderTarget(height, {
+            format: RGBFormat,
             generateMipmaps: true,
-            minFilter: THREE.LinearMipmapLinearFilter,
-            mapping: THREE.CubeRefractionMapping,
+            minFilter: LinearMipmapLinearFilter,
+            mapping: CubeRefractionMapping,
         });
-        let cubecam = new THREE.CubeCamera(1, 10000, cubeRenderTarget);
+        let cubecam = new CubeCamera(1, 10000, cubeRenderTarget);
         this.cameras.add(cubecam);
 
-        this.material = new THREE.MeshPhongMaterial({envMap: cubeRenderTarget.texture});
-        let mesh = new THREE.Mesh(geometry, this.material);
+        this.material = new MeshPhongMaterial({envMap: cubeRenderTarget.texture});
+        let mesh = new Mesh(geometry, this.material);
         mesh.name = this.id(index);
 
         let inst = this;

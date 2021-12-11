@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {PatternPlugin} from "../PatternPlugin";
+import {CircleGeometry, Euler, Line3, Mesh, MeshPhongMaterial, Vector3} from "three";
 
 class pivot extends PatternPlugin {
         static name = 'random pivot (shape speed)';
@@ -19,7 +20,7 @@ class pivot extends PatternPlugin {
             let params = this.params(shape);
             if (!params.centered) {
                 let res = this.layer.resolution('half');
-                this.centerPoint = new THREE.Vector3(res.x, -res.y, 0);
+                this.centerPoint = new Vector3(res.x, -res.y, 0);
                 shape.position().copy(this.centerPoint);
                 params.centered = true;
             }
@@ -33,13 +34,13 @@ class pivot extends PatternPlugin {
                         this.layer._shapes.remove(this.points[i]._mesh);
                     }
 
-                    let p = this.random2dPosition(0);//new THREE.Vector3(640, -600*i, 0);//
+                    let p = this.random2dPosition(0);//new Vector3(640, -600*i, 0);//
                     p.z = 0;
                     this.points[i] = p;
 
-                    this.geometry = new THREE.CircleGeometry(this.layer.shapeSize(.125/2), 12);
-                    this.material = new THREE.MeshPhongMaterial({emissive: 0xffffff});
-                    let m = new THREE.Mesh(this.geometry, this.material);
+                    this.geometry = new CircleGeometry(this.layer.shapeSize(.125/2), 12);
+                    this.material = new MeshPhongMaterial({emissive: 0xffffff});
+                    let m = new Mesh(this.geometry, this.material);
                     this.layer._shapes.add(m);
                     m.position.copy(p);
                     p._mesh = m;
@@ -53,11 +54,11 @@ class pivot extends PatternPlugin {
             let a = shape.rotationZ();
             let x = Math.cos(a);
             let y = Math.sin(a);
-            let v1 = new THREE.Vector3(x, y, 0);
-            let e = new THREE.Euler(0, 0, RAD*90);
+            let v1 = new Vector3(x, y, 0);
+            let e = new Euler(0, 0, RAD*90);
             v1.applyEuler(e);
             let v2 = v1.clone();
-            e = new THREE.Euler(0, 0, RAD*180);
+            e = new Euler(0, 0, RAD*180);
             v2.applyEuler(e);
 
             v1.multiplyScalar(1000);
@@ -90,11 +91,10 @@ class pivot extends PatternPlugin {
 
         closestPointOnLine (pointA, pointB, pointToCheck) {
 
-            let l = new THREE.Line3(pointA, pointB, pointToCheck);
-            let c = l.closestPointToPoint(pointToCheck, false, new THREE.Vector3());
-            let dist = c.distanceTo(pointToCheck);
+            let l = new Line3(pointA, pointB, pointToCheck);
+            let c = l.closestPointToPoint(pointToCheck, false, new Vector3());
 
-            return dist;
+            return c.distanceTo(pointToCheck);
         }
     }
 

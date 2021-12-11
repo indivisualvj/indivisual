@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {SizingModePlugin} from "../SizingModePlugin";
+import {Vector3} from "three";
 
 class sphere extends SizingModePlugin {
     static name = 'sphere';
@@ -16,7 +17,7 @@ class sphere extends SizingModePlugin {
     }
 
     calculate(shape, revert, center) {
-        let s = 1;
+        let s;
         let layer = this.layer;
         let pos = shape.position();
         let dist = Math.max(pos.distanceTo(center), 1);
@@ -40,7 +41,7 @@ class sphere extends SizingModePlugin {
         let y = this.settings.sizing_y * s;
         let z = this.settings.sizing_z * s;
 
-        return new THREE.Vector3(x, y, z);
+        return new Vector3(x, y, z);
     }
 }
 

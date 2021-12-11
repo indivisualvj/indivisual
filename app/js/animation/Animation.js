@@ -14,6 +14,7 @@ import {EventManager} from "../manager/EventManager";
 import {Messaging} from "../shared/Messaging";
 import {PreviewManager} from "../manager/PreviewManager";
 import {Logger} from "../shared/Logger";
+import {Vector2} from "three";
 
 class Animation extends Program {
     /**
@@ -787,7 +788,7 @@ class Animation extends Program {
             if (sp.length > 1) {
                 let w = parseInt(sp[0]);
                 let h = parseInt(sp[1]);
-                resolution = {x: w, y: h, aspect: w / h, diameter: new THREE.Vector2(w, h).length()};
+                resolution = {x: w, y: h, aspect: w / h, diameter: new Vector2(w, h).length()};
             }
         }
 

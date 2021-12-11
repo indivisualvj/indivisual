@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {AnimationPlugin} from "../AnimationPlugin";
+import {Vector3} from "three";
 
 class ShapeLookatPlugin extends AnimationPlugin {
     setControlSets(controlSets) {
@@ -19,7 +20,7 @@ class ShapeLookatPlugin extends AnimationPlugin {
 
     centerVector() {
         let v = this.layer.cameraDefaultDistance();
-        return new THREE.Vector3(
+        return new Vector3(
             v * this.settings.shape_lookat_centerx,
             v * this.settings.shape_lookat_centery,
             v * this.settings.shape_lookat_centerz

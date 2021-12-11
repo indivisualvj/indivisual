@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
+import {Vector2} from "three";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
 class worley extends ShaderPlugin {
     static index = 160;
@@ -43,7 +45,7 @@ class worley extends ShaderPlugin {
             "time": {type: "f", value: 0.0},
             "strength": {type: "f", value: 0.25},
             scale: {type: 'f', value: 1.0},
-            "resolution": {type: "v2", value: new THREE.Vector2(800, 600)}
+            "resolution": {type: "v2", value: new Vector2(800, 600)}
 
         },
 
@@ -120,7 +122,7 @@ class worley extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(this.shader);
+            this.pass = new ShaderPass(this.shader);
         }
 
         return this.pass;

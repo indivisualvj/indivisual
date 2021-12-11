@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
+import {Vector2} from "three";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
 class toon extends ShaderPlugin {
     static index = 245;
@@ -17,7 +19,7 @@ class toon extends ShaderPlugin {
         uniforms: {
 
             "tDiffuse": {type: "t", value: null},
-            "resolution": {type: "v2", value: new THREE.Vector2(1280, 720)},
+            "resolution": {type: "v2", value: new Vector2(1280, 720)},
         },
 
         vertexShader: `varying vec2 vUv;void main() {vUv = vec2( uv.x, uv.y );gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );}`,
@@ -118,7 +120,7 @@ class toon extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(this.shader);
+            this.pass = new ShaderPass(this.shader);
         }
 
         return this.pass;

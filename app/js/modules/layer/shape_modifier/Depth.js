@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShapeModifierPlugin} from "../ShapeModifierPlugin";
+import {Vector3} from "three";
 
 class depth extends ShapeModifierPlugin {
     static name = 'depth center';
@@ -14,7 +15,7 @@ class depth extends ShapeModifierPlugin {
 
         if (vertices) {
 
-            let vtc = new THREE.Vector3();
+            let vtc = new Vector3();
             for (let i = 0; i < vertices.count; i++) {
                 vtc.fromBufferAttribute(vertices, i);
 

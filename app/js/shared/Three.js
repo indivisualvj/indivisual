@@ -1,11 +1,14 @@
+import {Scene, Texture} from "three";
+
 /**
  *
  * @param obj
  */
-HC.dispose = function (obj) {
+
+const dispose = function (obj) {
     let disposable;
 
-    if (obj instanceof THREE.Scene) {
+    if (obj instanceof Scene) {
         return;
     }
 
@@ -21,7 +24,7 @@ HC.dispose = function (obj) {
         let keys = Object.keys(obj.material);
         for (let k in keys) {
             let key = keys[k];
-            if (obj.material[key] instanceof THREE.Texture) {
+            if (obj.material[key] instanceof Texture) {
                 obj.material[key].dispose();
             }
         }
@@ -35,7 +38,7 @@ HC.dispose = function (obj) {
     }
 }
 
-HC.traverse = function (obj) {
+const traverse = function (obj) {
     if (!isObject(obj)) return;
 
     if (obj.dispose && typeof obj.dispose === 'function') {
@@ -52,7 +55,7 @@ HC.traverse = function (obj) {
         let prop = obj[key];
         if (prop) {
             if (prop.traverse && typeof prop.traverse === 'function') {
-                prop.traverse(HC.dispose);
+                prop.traverse(dispose);
 
             } else if (prop.dispose && typeof prop.dispose === 'function') {
                 prop.dispose();
@@ -60,3 +63,5 @@ HC.traverse = function (obj) {
         }
     }
 }
+
+export {dispose, traverse};

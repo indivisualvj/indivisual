@@ -2,14 +2,15 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {MeshMaterialPlugin} from "../MeshMaterialPlugin";
+import {EdgesGeometry, Points, PointsMaterial} from "three";
 
 class point extends MeshMaterialPlugin {
     static index = 10;
     static name = 'points';
 
     apply(geometry, index) {
-        this.material = new THREE.PointsMaterial();
-        return new THREE.Points(geometry, this.material);
+        this.material = new PointsMaterial();
+        return new Points(geometry, this.material);
     }
 }
 
@@ -22,11 +23,11 @@ class pointedges extends MeshMaterialPlugin {
     edges;
 
     apply(geometry, index) {
-        this.material = new THREE.PointsMaterial();
+        this.material = new PointsMaterial();
         if (!this.edges) {
-            this.edges = new THREE.EdgesGeometry(geometry);
+            this.edges = new EdgesGeometry(geometry);
         }
-        this.mesh = new THREE.Points(this.edges, this.material);
+        this.mesh = new Points(this.edges, this.material);
 
         return this.mesh;
     }

@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
+import {Vector2} from "three";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
 
 /**
@@ -106,7 +108,7 @@ class blendmode extends ShaderPlugin {
         uniforms: {
 
             "tDiffuse": {type: "t", value: null},
-            "resolution": {type: "v2", value: new THREE.Vector2(800, 600)},
+            "resolution": {type: "v2", value: new Vector2(800, 600)},
             "strength": {type: "f", value: 1.0},
             "operator_one": {type: "i", value: 1},
             "operator_two": {type: "i", value: 1}
@@ -491,7 +493,7 @@ class blendmode extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(this.shader);
+            this.pass = new ShaderPass(this.shader);
         }
 
         return this.pass;

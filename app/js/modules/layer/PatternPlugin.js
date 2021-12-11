@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {AnimationPlugin} from "../AnimationPlugin";
+import * as HC from '../../shared/Three';
+import {Vector3} from "three";
 
 class PatternPlugin extends AnimationPlugin
 {
@@ -61,7 +63,7 @@ class PatternPlugin extends AnimationPlugin
      * @returns {Vector3}
      */
     patternCenterVector(invertY) {
-        return new THREE.Vector3(this.patternCenterX(), this.patternCenterY() * (invertY ? -1 : 1), this.patternCenterZ());
+        return new Vector3(this.patternCenterX(), this.patternCenterY() * (invertY ? -1 : 1), this.patternCenterZ());
     }
 
     /**
@@ -72,7 +74,7 @@ class PatternPlugin extends AnimationPlugin
      * @param z
      */
     positionIn3dSpace(shape, x, y, z) {
-        let cp = new THREE.Vector3(x, y, z);
+        let cp = new Vector3(x, y, z);
         let plugin = this.layer.getPatternRotationPlugin();
         plugin.positionIn3dSpace(shape, cp);
     }
@@ -85,7 +87,7 @@ class PatternPlugin extends AnimationPlugin
      * @param z
      */
     positionIn2dSpace(shape, x, y, z) {
-        let cp = new THREE.Vector3(x, y, z);
+        let cp = new Vector3(x, y, z);
         cp.add(this.getPatternPlugin().patternCenterVector(true));
         shape.position().copy(cp);
     }
@@ -98,7 +100,7 @@ class PatternPlugin extends AnimationPlugin
      * @returns {Vector3}
      */
     random3dPosition(depthMultiplier, reduce) {
-        return new THREE.Vector3(
+        return new Vector3(
             randomInt(0, this.layer.resolution('half').x * this.settings.pattern_paddingx - (reduce || 0), true),
             randomInt(0, this.layer.resolution('half').y * this.settings.pattern_paddingy - (reduce || 0), true),
             randomInt(0, this.layer.cameraDefaultDistance(depthMultiplier || 0) * this.settings.pattern_paddingz, true)
@@ -108,11 +110,11 @@ class PatternPlugin extends AnimationPlugin
     /**
      *
      * @param depthMultiplier
-     * @param reduce
+     * @param [reduce]
      * @returns {Vector3}
      */
     random2dPosition(depthMultiplier, reduce) {
-        return new THREE.Vector3(
+        return new Vector3(
             randomInt(0, this.layer.resolution('half').x * this.settings.pattern_paddingx - (reduce || 0), true),
             randomInt(0, this.layer.resolution('half').y * this.settings.pattern_paddingy - (reduce || 0), true),
             this.layer.cameraDefaultDistance(depthMultiplier || 0) * this.settings.pattern_paddingz
@@ -123,13 +125,13 @@ class PatternPlugin extends AnimationPlugin
      *
      * @param shape
      * @param extend
-     * @param depthMultiplier
-     * @param velocity
+     * @param [depthMultiplier]
+     * @param [velocity]
      * @returns {Vector3}
      */
     boundsCheck(shape, extend, depthMultiplier, velocity) {
 
-        let direction = new THREE.Vector3(0, 0, 0);
+        let direction = new Vector3(0, 0, 0);
 
         // source: https://discourse.threejs.org/t/functions-to-calculate-the-visible-width-height-at-a-given-z-depth-from-a-perspective-camera/269
         const visibleHeightAtZDepth = ( depth, camera ) => {
@@ -152,7 +154,7 @@ class PatternPlugin extends AnimationPlugin
 
         // bounds check
 
-        let world = new THREE.Vector3();
+        let world = new Vector3();
         shape.getWorldPosition(world);
 
         let mx = visibleWidthAtZDepth(world.z, this.layer.getCamera()) / 2;

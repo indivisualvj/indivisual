@@ -2,6 +2,12 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {MeshTextureMaterialPlugin} from "../MeshTextureMaterialPlugin";
+import {
+    CubeReflectionMapping,
+    LinearMipmapLinearFilter,
+    Mesh,
+    MeshPhysicalMaterial
+} from "three";
 
 class reflectivebackground extends MeshTextureMaterialPlugin {
     static name = 'reflective (cubetexture background)';
@@ -15,15 +21,15 @@ class reflectivebackground extends MeshTextureMaterialPlugin {
 
         let inst = this;
         let file = this.settings.background_input;
-        this.material = new THREE.MeshPhysicalMaterial({envMap: null});
-        let mesh = new THREE.Mesh(geometry, this.material);
+        this.material = new MeshPhysicalMaterial({envMap: null});
+        let mesh = new Mesh(geometry, this.material);
         mesh.name = this.id(index);
 
         let _onLoad = (texture) => {
             texture.name = file;
             texture.generateMipmaps = true;
-            texture.minFilter = THREE.LinearMipMapLinearFilter;
-            texture.mapping = THREE.CubeReflectionMapping;
+            texture.minFilter = LinearMipmapLinearFilter;
+            texture.mapping = CubeReflectionMapping;
             this.material.envMap = texture;
             this.material.needsUpdate = true;
         };

@@ -2,11 +2,12 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {AnimationPlugin} from "../../AnimationPlugin";
+import * as HC from '../../../shared/Three';
 
 class MeshMaterialPlugin extends AnimationPlugin {
 
     /**
-     * @type {THREE.Material}
+     * @type {Material}
      */
     material;
 

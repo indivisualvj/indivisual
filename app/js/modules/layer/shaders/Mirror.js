@@ -2,10 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
-
-if (!IS_CONTROLLER) {
-    _importThreeShader('MirrorShader');
-}
+import {MirrorShader} from "three/examples/jsm/shaders/MirrorShader";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
 class mirror extends ShaderPlugin {
     static index = 50;
@@ -23,7 +21,7 @@ class mirror extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(THREE.MirrorShader);
+            this.pass = new ShaderPass(MirrorShader);
         }
 
         return this.pass;

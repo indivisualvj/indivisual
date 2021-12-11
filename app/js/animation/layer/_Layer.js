@@ -3,6 +3,10 @@
  */
 import {TimeoutManager} from "../../manager/TimeoutManager";
 import {EventManager} from "../../manager/EventManager";
+import {Group, PerspectiveCamera, Vector2, Scene} from "three";
+import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer";
+import {RenderPass} from "three/examples/jsm/postprocessing/RenderPass";
+import * as HC from "../../shared/Three";
 
 class _Layer
 {
@@ -44,12 +48,12 @@ class _Layer
     controlSets;
 
     /**
-     * @type {Array.<THREE.Light>}
+     * @type {Array.<Light>}
      */
     lights = [];
 
     /**
-     * @type {THREE.AmbientLight|null}
+     * @type {AmbientLight|null}
      */
     ambientLight;
 
@@ -126,34 +130,34 @@ class _Layer
 
     /**
      *
-     * @type {THREE.Group}
+     * @type {Group}
      * @protected
      */
     _rotation;
 
     /**
      *
-     * @type {THREE.Group}
+     * @type {Group}
      * @protected
      */
     _shapes;
 
     /**
      *
-     * @type {THREE.Group}
+     * @type {Group}
      * @protected
      */
     _lighting;
 
     /**
      *
-     * @type {THREE.Group}
+     * @type {Group}
      * @protected
      */
     _background;
 
     /**
-     * @type {THREE.Texture}
+     * @type {Texture}
      * @protected
      */
     _hiddenBackgroundTexture;
@@ -169,7 +173,7 @@ class _Layer
     tween;
 
     /**
-     * @type {THREE.Scene}
+     * @type {Scene}
      */
     _layer;
 
@@ -189,15 +193,15 @@ class _Layer
         this.settings = settings;
 
         this.tween = new TWEEN.Group();
-        this._layer = new THREE.Scene();
+        this._layer = new Scene();
         this._layer.name = '_layer' + index;
 
         let three = animation.renderer.three;
-        let camera = new THREE.PerspectiveCamera(50, 1, 0.1, 500000);
-        let composer = new THREE.EffectComposer(three.renderer, three.target);
+        let camera = new PerspectiveCamera(50, 1, 0.1, 500000);
+        let composer = new EffectComposer(three.renderer, three.target);
         composer.readBuffer.stencilBuffer = true;
         composer.writeBuffer.stencilBuffer = true;
-        let renderPass = new THREE.RenderPass(three.scene, camera, null);
+        let renderPass = new RenderPass(three.scene, camera, null);
         composer.addPass(renderPass);
 
         this.three = {
@@ -223,11 +227,11 @@ class _Layer
             this._rotation.traverse(HC.dispose);
         }
 
-        this._rotation = new THREE.Group();
+        this._rotation = new Group();
         this._rotation.name = '_rotation' + this.index;
         this.position(0, 0, 0);
 
-        this._shapes = new THREE.Group();
+        this._shapes = new Group();
         this._shapes.name = '_shapes' + this.index;
         this._shapes.position.set(-this.resolution('half').x, this.resolution('half').y, 0);
 
@@ -246,10 +250,10 @@ class _Layer
         let height = resolution.y;
 
         this._resolution = {
-            full: new THREE.Vector2(width, height),
-            half: new THREE.Vector2(width / 2, height / 2),
-            relative: new THREE.Vector2(width, height).divide(new THREE.Vector2(1280, 720)),
-            'default': new THREE.Vector2(1280, 720)
+            full: new Vector2(width, height),
+            half: new Vector2(width / 2, height / 2),
+            relative: new Vector2(width, height).divide(new Vector2(1280, 720)),
+            'default': new Vector2(1280, 720)
         };
 
         this._resolution.full.aspect = resolution.aspect;
@@ -258,7 +262,7 @@ class _Layer
 
     /**
      *
-     * @param variant
+     * @param [variant]
      * @returns {Vector2|*}
      */
     resolution(variant) {
@@ -343,20 +347,20 @@ class _Layer
     _dispose() {
         let sc = this.three.scene;
         this.settings = false;
-        this.controlSets = false;
-        this.shapes = false;
+        this.controlSets = null;
+        this.shapes = null;
         this.plugins = {};
-        this._shapes = false;
+        this._shapes = null;
 
         sc.remove(this._layer);
         this._layer.traverse(HC.dispose);
-        this._lighting = false;
-        this._rotation = false;
-        this._shapes = false;
+        this._lighting = null;
+        this._rotation = null;
+        this._shapes = null;
 
         if (this.shape) {
             this.shape.sceneObject().traverse(HC.dispose);
-            this.shape = false;
+            this.shape = null;
         }
 
         this._resetAnimation();
@@ -516,8 +520,7 @@ class _Layer
     /**
      *
      * @param sh
-     * @param fx
-     * @returns {*}
+     * @return {{length}|*}
      */
     shaders(sh) {
 

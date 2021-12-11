@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
+import {Vector2} from "three";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
 class hexagonsampling extends ShaderPlugin {
     static index = 230;
@@ -28,7 +30,7 @@ class hexagonsampling extends ShaderPlugin {
 
             "tDiffuse": {type: "t", value: null},
             "divisor": {type: 'f', value: 80},
-            "resolution": {type: "v2", value: new THREE.Vector2(800, 600)}
+            "resolution": {type: "v2", value: new Vector2(800, 600)}
 
         },
 
@@ -131,7 +133,7 @@ class hexagonsampling extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(this.shader);
+            this.pass = new ShaderPass(this.shader);
         }
 
         return this.pass;

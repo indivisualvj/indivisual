@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
+import {Vector2} from "three";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
 class drawing extends ShaderPlugin {
     static index = 140;
@@ -37,7 +39,7 @@ class drawing extends ShaderPlugin {
             "onebit": {type: "1i", value: 1},
             "intensity": {type: "1i", value: 8},
             "radius": {type: "f", value: 2.0},
-            "resolution": {type: "v2", value: new THREE.Vector2(800, 600)}
+            "resolution": {type: "v2", value: new Vector2(800, 600)}
 
         },
 
@@ -127,7 +129,7 @@ class drawing extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(this.shader);
+            this.pass = new ShaderPass(this.shader);
         }
 
         return this.pass;

@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {MeshMaterialPlugin} from "./MeshMaterialPlugin";
+import * as HC from '../../../shared/Three';
+import {Mesh, ShaderMaterial} from "three";
 
 class MeshShaderMaterialPlugin extends MeshMaterialPlugin {
     static index = 99;
@@ -27,11 +29,11 @@ class MeshShaderMaterialPlugin extends MeshMaterialPlugin {
 
     apply(geometry, index) {
         this.active = true;
-        let material = new THREE.ShaderMaterial(this.shader);
-        material.color = new THREE.Color();
+        let material = new ShaderMaterial(this.shader);
+        material.color = new Color();
         this.material = material;
 
-        let mesh = new THREE.Mesh(geometry, this.material);
+        let mesh = new Mesh(geometry, this.material);
         this.mesh = mesh;
 
         mesh.onBeforeRender = () => {
@@ -42,7 +44,7 @@ class MeshShaderMaterialPlugin extends MeshMaterialPlugin {
                 if (material.uniforms.uColor) {
                     let color = this.layer.materialColor;
                     let sc = this.layer.shapeColor(false);
-                    material.uniforms.uColor.value = new THREE.Color(color || sc);
+                    material.uniforms.uColor.value = new Color(color || sc);
                 }
                 if (material.uniforms.audio) {
                     material.uniforms.audio.value = this.audioAnalyser.getFrequencyRangeValues();

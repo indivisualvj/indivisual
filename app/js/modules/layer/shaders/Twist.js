@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
+import {Vector2} from "three";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
 class twist extends ShaderPlugin {
     static index = 180;
@@ -53,7 +55,7 @@ class twist extends ShaderPlugin {
             radius: {type: 'f', value: 0.5},
             angle: {type: 'f', value: 5},
             offset: {type: 'v2', value: {x: 0.5, y: 0.5}},
-            "resolution": {type: "v2", value: new THREE.Vector2(800, 600)}
+            "resolution": {type: "v2", value: new Vector2(800, 600)}
 
         },
 
@@ -101,7 +103,7 @@ class twist extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(this.shader);
+            this.pass = new ShaderPass(this.shader);
         }
 
         return this.pass;

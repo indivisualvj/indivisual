@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {MeshMaterialPlugin} from "../MeshMaterialPlugin";
+import {EdgesGeometry, LineBasicMaterial, LineSegments} from "three";
 
 class edges extends MeshMaterialPlugin {
     static index = 10;
@@ -10,11 +11,11 @@ class edges extends MeshMaterialPlugin {
     edges;
 
     apply(geometry) {
-        this.material = new THREE.LineBasicMaterial();
+        this.material = new LineBasicMaterial();
         if (!this.edges) {
-            this.edges = new THREE.EdgesGeometry(geometry);
+            this.edges = new EdgesGeometry(geometry);
         }
-        this.mesh = new THREE.LineSegments(this.edges, this.material);
+        this.mesh = new LineSegments(this.edges, this.material);
 
         this.mesh.computeLineDistances();
 

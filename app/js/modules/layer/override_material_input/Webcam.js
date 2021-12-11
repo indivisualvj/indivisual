@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {OverrideMaterialInputPlugin} from "../OverrideMaterialInputPlugin";
+import {LinearFilter, VideoTexture} from "three";
 
 class webcam extends OverrideMaterialInputPlugin {
 
@@ -41,8 +42,8 @@ class webcam extends OverrideMaterialInputPlugin {
                     });
                     this.stream = stream;
 
-                    let videoTexture = new THREE.VideoTexture(video);
-                    videoTexture.minFilter = THREE.LinearFilter;
+                    let videoTexture = new VideoTexture(video);
+                    videoTexture.minFilter = LinearFilter;
                     that.properties.map = videoTexture;
                     that.properties.emissiveMap = videoTexture;
                 }).catch(function (error) {

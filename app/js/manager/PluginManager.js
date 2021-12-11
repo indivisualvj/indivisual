@@ -208,17 +208,20 @@ class PluginManager
 
             Messaging.samples(searchPath, (files) => {
                 files.forEach((file) => {
-                    imports.push(import(HC.filePath(importPath, file.name)));
+                    let path = HC.filePath(importPath, file.name);
+                    imports.push(import(path));
                 });
 
-                Promise.all(imports).then(function () {
-                    for (const plugin of arguments[0]) {
+                Promise.all(imports).then(function (imported) {
+                    for (const plugin of imported) {
                         for (const pluginKey in plugin) {
                             plugins[pluginKey] = plugin[pluginKey];
                             Logger.loading(dir + '/' + pluginKey, 'imported');
                         }
                     }
                     resolve(plugins);
+                }).catch(e => {
+                    console.log('error', files, imports);
                 });
             });
         });

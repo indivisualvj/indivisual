@@ -2,10 +2,11 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {CameraModePlugin} from "../CameraModePlugin";
+import {Vector3} from "three";
 
 class mirror extends CameraModePlugin {
     static name = 'mirror XYZ position (current)';
-    mirror = new THREE.Vector3(1, 1, 1);
+    mirror = new Vector3(1, 1, 1);
 
     apply(peak) {
 
@@ -22,7 +23,7 @@ class mirror extends CameraModePlugin {
         cam.position.y *= this.mirror.y;
         cam.position.z *= this.mirror.z;
 
-        cam.lookAt(new THREE.Vector3(0, 0, 0));
+        cam.lookAt(new Vector3(0, 0, 0));
     }
 }
 

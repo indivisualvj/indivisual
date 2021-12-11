@@ -2,12 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
-
-if (!IS_CONTROLLER) {
-    _importThreeShader('CopyShader');
-    _importThreeShader('LuminosityHighPassShader');
-    _importThreePostprocessing('UnrealBloomPass');
-}
+import {UnrealBloomPass} from "three/examples/jsm/postprocessing/UnrealBloomPass";
+import {ShaderMaterial} from "three";
 
 class bloom extends ShaderPlugin {
     static index = 40;
@@ -39,8 +35,8 @@ class bloom extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            THREE.UnrealBloomPass.prototype.getCompositeMaterial = this.getCompositeMaterial;
-            this.pass = new THREE.UnrealBloomPass(this.layer.resolution());
+            UnrealBloomPass.prototype.getCompositeMaterial = this.getCompositeMaterial;
+            this.pass = new UnrealBloomPass(this.layer.resolution());
         }
         this.pass.setSize(this.layer.resolution().x, this.layer.resolution().y);
 
@@ -48,7 +44,7 @@ class bloom extends ShaderPlugin {
     }
 
     getCompositeMaterial(nMips) {
-        return new THREE.ShaderMaterial({
+        return new ShaderMaterial({
             defines: {
                 'NUM_MIPS': nMips
             },

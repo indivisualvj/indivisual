@@ -2,8 +2,11 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
+import {Vector2} from "three";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
-class noise extends ShaderPlugin {
+class noise extends ShaderPlugin 
+{
     static index = 110;
     static settings = {
         apply: false,
@@ -31,7 +34,7 @@ class noise extends ShaderPlugin {
             "tDiffuse": {type: "t", value: null},
             "smoothness": {type: "f", value: 0.0},
             "threshold": {type: "f", value: 1.0},
-            "resolution": {type: "v2", value: new THREE.Vector2(800, 600)}
+            "resolution": {type: "v2", value: new Vector2(800, 600)}
         },
 
         vertexShader: `
@@ -109,7 +112,7 @@ class noise extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(this.shader);
+            this.pass = new ShaderPass(this.shader);
         }
 
         return this.pass;

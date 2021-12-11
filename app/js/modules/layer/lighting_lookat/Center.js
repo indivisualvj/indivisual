@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {LightingLookatPlugin} from "../LightingLookatPlugin";
+import {Object3D} from "three";
 
 class center extends LightingLookatPlugin {
 
@@ -12,7 +13,7 @@ class center extends LightingLookatPlugin {
     apply(light) {
 
         if (!this.target || this.isFirstShape(light)) {
-            this.target = new THREE.Object3D();
+            this.target = new Object3D();
             this.layer._lighting.add(this.target);
 
         }
@@ -32,7 +33,7 @@ class straight extends LightingLookatPlugin {
         let i = light.userData.index;
         if (!this.targets || !(i in this.targets)) {
             this.targets = [];
-            let target = new THREE.Object3D();
+            let target = new Object3D();
             this.targets[i] = target;
             this.layer._lighting.add(target);
         }

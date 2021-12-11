@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {PatternPlugin} from "../PatternPlugin";
+import {Vector3} from "three";
 
 class bacillus extends PatternPlugin {
         static name = 'bacillus';
@@ -21,7 +22,7 @@ class bacillus extends PatternPlugin {
             let avz = randomInt(prcn, prcp) / shape.size() * this.settings.pattern_padding * this.settings.pattern_paddingz;
 
             if (!params.velocity) {
-                params.velocity = new THREE.Vector3(avx, avy, avz);
+                params.velocity = new Vector3(avx, avy, avz);
 
                 shape.position().copy(this.random2dPosition(0), layer.shapeSize(1));
             }

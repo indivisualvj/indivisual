@@ -2,11 +2,12 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {AnimationPlugin} from "../AnimationPlugin";
+import {Euler, Vector3} from "three";
 
 class PatternRotationPlugin extends AnimationPlugin
 {
-    euler = new THREE.Euler();
-    vector = new THREE.Vector3();
+    euler = new Euler();
+    vector = new Vector3();
 
     setControlSets(controlSets) {
         super.setControlSets(controlSets);

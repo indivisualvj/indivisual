@@ -2,8 +2,11 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
+import {Vector2} from "three";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
-class paint extends ShaderPlugin {
+class paint extends ShaderPlugin 
+{
     static index = 130;
     static settings = {
         apply: false,
@@ -43,7 +46,7 @@ class paint extends ShaderPlugin {
     shader = {
         uniforms: {
             "tDiffuse": {type: "t", value: null},
-            "resolution": {type: "v2", value: new THREE.Vector2(800, 600)},
+            "resolution": {type: "v2", value: new Vector2(800, 600)},
             "colorOffset": {type: "f", value: 0.95},
             "colorFactor": {type: "f", value: 0},
             "sampleDistance": {type: "f", value: 0.54},
@@ -116,7 +119,7 @@ class paint extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(this.shader);
+            this.pass = new ShaderPass(this.shader);
         }
 
         return this.pass;

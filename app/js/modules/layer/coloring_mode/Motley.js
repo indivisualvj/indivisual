@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ColoringModePlugin} from "../ColoringModePlugin";
+import {Vector3} from "three";
 
 class motley extends ColoringModePlugin {
     static name = 'motley';
@@ -16,7 +17,7 @@ class motley extends ColoringModePlugin {
         if (!params.velocity) {
             let min = 1;
             let max = 3;
-            params.velocity = new THREE.Vector3(
+            params.velocity = new Vector3(
                 randomFloat(min, max, 2, true),
                 randomFloat(min, max, 2, true),
                 randomFloat(min, max, 2, true)

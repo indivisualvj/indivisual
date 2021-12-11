@@ -2,10 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
-
-if (!IS_CONTROLLER) {
-    _importThreeShader('RGBShiftShader');
-}
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
+import {RGBShiftShader} from "three/examples/jsm/shaders/RGBShiftShader";
 
 class rgbsplit extends ShaderPlugin {
     static index = 190;
@@ -30,7 +28,7 @@ class rgbsplit extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(THREE.RGBShiftShader);
+            this.pass = new ShaderPass(RGBShiftShader);
         }
 
         return this.pass;

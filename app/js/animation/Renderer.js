@@ -6,6 +6,8 @@ import {EventManager} from "../manager/EventManager";
 import {LayeredControlSetManager} from "../manager/LayeredControlSetManager";
 import {Layer} from "./layer/ShapeLayer";
 import {PluginManager} from "../manager/PluginManager";
+import {Group, PCFSoftShadowMap, Scene, WebGLRenderer, PerspectiveCamera} from "three";
+import * as HC from "../shared/Three";
 
 class Renderer {
 
@@ -24,7 +26,7 @@ class Renderer {
 
     /**
      *
-     * @type {{renderer: THREE.WebGLRenderer, perspective2: THREE.PerspectiveCamera, perspective0: THREE.PerspectiveCamera, perspective1: THREE.PerspectiveCamera, scene: THREE.Scene}}
+     * @type {{renderer: WebGLRenderer, perspective2: PerspectiveCamera, perspective0: PerspectiveCamera, perspective1: PerspectiveCamera, scene: Scene}}
      */
     three = {
         renderer: null,
@@ -103,9 +105,9 @@ class Renderer {
             let canvas = new OffscreenCanvas(1, 1);
 
             let conf = {alpha: true, antialias: ANTIALIAS, canvas: canvas};
-            this.three.renderer = new THREE.WebGLRenderer(conf);
+            this.three.renderer = new WebGLRenderer(conf);
             this.three.renderer.shadowMap.enabled = true;
-            this.three.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            this.three.renderer.shadowMap.type = PCFSoftShadowMap;
             this.three.renderer.view = canvas;
 
             canvas.id = 'threeWebGL';
@@ -114,10 +116,10 @@ class Renderer {
                 EventManager.fireEvent(EVENT_WEBGL_CONTEXT_LOST);
             });
 
-            this.three.scene = new THREE.Scene();
-            this.three.perspective0 = new THREE.PerspectiveCamera(50, 1, 0.1, 500000);
-            this.three.perspective1 = new THREE.PerspectiveCamera(50, 1, 0.1, 500000);
-            this.three.perspective2 = new THREE.PerspectiveCamera(50, 1, 0.1, 500000);
+            this.three.scene = new Scene();
+            this.three.perspective0 = new PerspectiveCamera(50, 1, 0.1, 500000);
+            this.three.perspective1 = new PerspectiveCamera(50, 1, 0.1, 500000);
+            this.three.perspective2 = new PerspectiveCamera(50, 1, 0.1, 500000);
 
 
             // Observe a scene or a renderer
@@ -139,7 +141,7 @@ class Renderer {
             this.three.scene.remove(this._layers);
             this._layers.traverse(HC.dispose);
         }
-        this._layers = new THREE.Group();
+        this._layers = new Group();
         this.three.scene.add(this._layers);
 
         for (let i = 0; i < this.layers.length; i++) {

@@ -1,12 +1,6 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-
-if (!IS_CONTROLLER) {
-    _importThreePostprocessing('Pass');
-    _importThreePostprocessing('RenderPass');
-    _importThreePostprocessing('ShaderPass');
-}
 import {AnimationPlugin} from "../AnimationPlugin";
 
 class ShaderPlugin extends AnimationPlugin {

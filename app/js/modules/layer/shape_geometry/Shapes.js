@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+import {PlaneGeometry} from "three";
+import {RightTriangle} from "../../../shared/Geometries";
 
 class plane extends ShapeGeometryPlugin {
     static tutorial = {
@@ -19,13 +21,12 @@ class plane extends ShapeGeometryPlugin {
     create() {
         let layer = this.layer;
 
-        let geometry = new THREE.PlaneGeometry(
+        return new PlaneGeometry(
             layer.resolution().x,
             layer.resolution().y,
             this.getModA(1, 1),
             this.getModB(1, 1)
         );
-        return geometry;
     }
 }
 
@@ -37,7 +38,7 @@ class righttriangle extends ShapeGeometryPlugin {
         let layer = this.layer;
 
 
-        return new HC.RightTriangle({width: layer.shapeSize(1), height: layer.shapeSize(1)}).create();
+        return new RightTriangle({width: layer.shapeSize(1), height: layer.shapeSize(1)}).create();
     }
 }
 

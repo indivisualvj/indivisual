@@ -2,10 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
-
-if (!IS_CONTROLLER) {
-    _importThreeShader('DotScreenShader');
-}
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
+import {DotScreenShader} from "three/examples/jsm/shaders/DotScreenShader";
 
 class dotscreen extends ShaderPlugin {
     static index = 200;
@@ -30,7 +28,7 @@ class dotscreen extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(THREE.DotScreenShader);
+            this.pass = new ShaderPass(DotScreenShader);
         }
 
         return this.pass;

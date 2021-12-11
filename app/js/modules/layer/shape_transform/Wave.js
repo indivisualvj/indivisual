@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShapeTransformPlugin} from "../ShapeTransformPlugin";
+import {Vector3} from "three";
 
 class wave extends ShapeTransformPlugin {
     static name = 'wave (xyz by y)';
@@ -10,7 +11,7 @@ class wave extends ShapeTransformPlugin {
 
     apply(shape, sources, axes) {
         sources = sources || ['y'];
-        axes = axes || new THREE.Vector3(1, 1, 1);
+        axes = axes || new Vector3(1, 1, 1);
 
         if (this.angle === undefined) {
             this.angle = 0;
@@ -59,7 +60,7 @@ class wavexzby extends wave {
     static name = 'wave (xz by y)';
 
     apply(shape) {
-        super.apply(shape, ['y'], new THREE.Vector3(1, 0, 1));
+        super.apply(shape, ['y'], new Vector3(1, 0, 1));
     }
 }
 
@@ -68,7 +69,7 @@ class wavexby extends wave {
     static name = 'wave (x by y)';
 
     apply(shape) {
-        super.apply(shape, ['y'], new THREE.Vector3(1, 0, 0));
+        super.apply(shape, ['y'], new Vector3(1, 0, 0));
     }
 }
 
@@ -77,7 +78,7 @@ class wavexybz extends wave {
     static name = 'wave (xy by z)';
 
     apply(shape) {
-        super.apply(shape, ['z'], new THREE.Vector3(1, 1, 0));
+        super.apply(shape, ['z'], new Vector3(1, 1, 0));
     }
 }
 
@@ -86,7 +87,7 @@ class waveall extends wave {
     static name = 'wave (all)';
 
     apply(shape) {
-        super.apply(shape, ['x', 'y', 'z'], new THREE.Vector3(1, 1, 1));
+        super.apply(shape, ['x', 'y', 'z'], new Vector3(1, 1, 1));
     }
 }
 

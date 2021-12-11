@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {CameraModePlugin} from "../CameraModePlugin";
+import {Vector3} from "three";
 
 class thirdperson extends CameraModePlugin {
     static name = 'third person view';
@@ -12,9 +13,9 @@ class thirdperson extends CameraModePlugin {
         if (layer.shapes.length === 0) return;
         let camera = layer.getCamera();
         let shape = layer.getShape(0);
-        let lookAt = new THREE.Vector3();
+        let lookAt = new Vector3();
         shape.getWorldPosition(lookAt);
-        let relativeCameraOffset = new THREE.Vector3(
+        let relativeCameraOffset = new Vector3(
             layer.shapeSize(1) * this.settings.camera_x,
             layer.shapeSize(1) * this.settings.camera_y,
             layer.shapeSize(-1) - layer.shapeSize(1) * this.settings.camera_z,

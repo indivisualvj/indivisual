@@ -2,8 +2,11 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
+import {Vector2} from "three";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
-class kaleidoscope extends ShaderPlugin {
+class kaleidoscope extends ShaderPlugin
+{
     static index = 60;
     static settings = {
         apply: false,
@@ -65,7 +68,7 @@ class kaleidoscope extends ShaderPlugin {
             "tDiffuse": {type: "t", value: null},
             "sides": {type: "f", value: 6.0},
             "angle": {type: "f", value: 0.0},
-            "offset": {type: "v2", value: new THREE.Vector2(.5, .5)}
+            "offset": {type: "v2", value: new Vector2(.5, .5)}
 
         },
 
@@ -110,7 +113,7 @@ class kaleidoscope extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(this.shader);
+            this.pass = new ShaderPass(this.shader);
         }
 
         return this.pass;

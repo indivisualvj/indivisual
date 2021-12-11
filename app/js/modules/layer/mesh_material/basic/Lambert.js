@@ -2,13 +2,14 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {MeshMaterialPlugin} from "../MeshMaterialPlugin";
+import {Mesh, MeshLambertMaterial} from "three";
 
 class lambert extends MeshMaterialPlugin {
     static index = 2;
 
     apply(geometry) {
-        this.material = new THREE.MeshLambertMaterial();
-        return new THREE.Mesh(geometry, this.material);
+        this.material = new MeshLambertMaterial();
+        return new Mesh(geometry, this.material);
     }
 }
 

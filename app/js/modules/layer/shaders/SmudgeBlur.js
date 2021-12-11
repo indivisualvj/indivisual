@@ -2,8 +2,11 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
+import {Vector2} from "three";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
-class smudge_blur extends ShaderPlugin {
+class smudge_blur extends ShaderPlugin 
+{
     static index = 109;
     static name = 'smudge-blur';
     static settings = {
@@ -31,7 +34,7 @@ class smudge_blur extends ShaderPlugin {
         uniforms: {
             "iterations": {type: "f", value: 32},
             "radius": {type: "f", value: 0.015},
-            "resolution": {type: "v2", value: new THREE.Vector2(1, 1)},
+            "resolution": {type: "v2", value: new Vector2(1, 1)},
             "tDiffuse": {type: "t", value: null}
         },
 
@@ -66,7 +69,7 @@ class smudge_blur extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(this.shader);
+            this.pass = new ShaderPass(this.shader);
         }
 
         return this.pass;

@@ -2,12 +2,13 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {PatternRotationPlugin} from "../PatternRotationPlugin";
+import {Euler, Vector3} from "three";
 
 class rubiks extends PatternRotationPlugin {
     rubiks = false;
     slice = false;
     axes = ['x', 'y', 'z'];
-    vector = new THREE.Vector3(1, 1, 1);
+    vector = new Vector3(1, 1, 1);
     shared = {
         locking: {
             disabled: true
@@ -39,7 +40,7 @@ class rubiks extends PatternRotationPlugin {
     getShapeEuler(shape) {
         let plugin = this.layer.getPatternPlugin('cube');
         let grid = plugin.cubePosition(shape);
-        let eu = new THREE.Euler();
+        let eu = new Euler();
 
         let slice = this.slice.index;
         let axis = this.slice.axis;

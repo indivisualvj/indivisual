@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {BackgroundModePlugin} from "./BackgroundModePlugin";
+import * as HC from '../../../shared/Three';
 
 class TextureBackgroundModePlugin extends BackgroundModePlugin {
 

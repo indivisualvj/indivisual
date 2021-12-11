@@ -2,11 +2,9 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+import {TextGeometry} from "three/examples/jsm/geometries/TextGeometry";
 
 let coolvetica = false;
-if (!IS_CONTROLLER) {
-    _importThreeGeometry('TextGeometry'); // fixme does not load zuverlässig
-}
 
 class text extends ShapeGeometryPlugin {
     static name = 'text (coolvetica)';
@@ -15,7 +13,7 @@ class text extends ShapeGeometryPlugin {
         let geometry;
         // fixme does not load zuverlässig after reload and even after reset layer only if re preset
         if (this.ready()) {
-            geometry = new THREE.TextGeometry(this.settings.shape_vertices || 'indivisual', {
+            geometry = new TextGeometry(this.settings.shape_vertices || 'indivisual', {
                 font: coolvetica,
                 size: this.layer.shapeSize(.19),
                 curveSegments: this.getModA(1, 1, 12),

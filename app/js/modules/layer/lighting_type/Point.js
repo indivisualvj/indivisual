@@ -2,10 +2,11 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {LightingTypePlugin} from "../LightingTypePlugin";
+import {PointLight} from "three";
 
 class point extends LightingTypePlugin {
     create() {
-        let light = new THREE.PointLight(0xffffff);
+        let light = new PointLight(0xffffff);
         light.shadow.mapSize.width = 2048;
         light.shadow.mapSize.height = 2048;
         // light.shadow.camera.fov = 90;

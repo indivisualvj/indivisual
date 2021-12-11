@@ -3,6 +3,7 @@
  */
 import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
 import {DirectionalRing} from "../../../shared/Geometries";
+import {mergeBufferGeometries} from "three/examples/jsm/utils/BufferGeometryUtils";
 
 class ring extends ShapeGeometryPlugin {
     static index = 30;
@@ -38,7 +39,7 @@ class ring extends ShapeGeometryPlugin {
             geometries.push(circ);
         }
 
-        return THREE.BufferGeometryUtils.mergeBufferGeometries(geometries);
+        return mergeBufferGeometries(geometries);
     }
 }
 

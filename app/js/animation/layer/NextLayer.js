@@ -3,6 +3,7 @@
  */
 import {_Layer} from "./LightingLayer";
 import {Shape} from "../Shape";
+import {BoxGeometry, Mesh, MeshBasicMaterial, PlaneGeometry} from "three";
 
 class Layer extends _Layer
 {
@@ -15,7 +16,7 @@ class Layer extends _Layer
      */
     nextShape(index, dummy) {
         let mesh = dummy
-            ? new THREE.Mesh(new THREE.BoxGeometry(), new THREE.MeshBasicMaterial())
+            ? new Mesh(new BoxGeometry(), new MeshBasicMaterial())
             : this.nextMesh(index);
 
         let shape = new Shape(mesh, index, randomColor());
@@ -57,7 +58,7 @@ class Layer extends _Layer
     /**
      *
      * @param index
-     * @returns {THREE.Mesh}
+     * @returns {Mesh|boolean}
      */
     nextMesh(index) {
 
@@ -86,7 +87,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @returns {THREE.BufferGeometry}
+     * @returns {Geometry|PlaneGeometry}
      */
     nextGeometry() {
         let plugin = this.getShapeGeometryPlugin();
@@ -102,7 +103,7 @@ class Layer extends _Layer
 
         }
 
-        return new THREE.PlaneGeometry(this.shapeSize(.1), this.shapeSize(1));
+        return new PlaneGeometry(this.shapeSize(.1), this.shapeSize(1));
     };
 
     /**

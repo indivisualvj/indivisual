@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+import {Shape, ShapeGeometry} from "three";
 
 class bacillus extends ShapeGeometryPlugin {
     static tutorial = {
@@ -13,7 +14,7 @@ class bacillus extends ShapeGeometryPlugin {
     create() {
         let layer = this.layer;
 
-        let shape = new THREE.Shape();
+        let shape = new Shape();
 
         let hw = layer.shapeSize(.5) * .75;
         let hh = layer.shapeSize(.5) / 6;
@@ -24,7 +25,7 @@ class bacillus extends ShapeGeometryPlugin {
         shape.lineTo(-hw, -hh);
         shape.absarc(-hw, 0, r, 1.5 * Math.PI, 2.5 * Math.PI, true);
 
-        let geometry = new THREE.ShapeGeometry(shape, this.getModB(1, 8));
+        let geometry = new ShapeGeometry(shape, this.getModB(1, 8));
         geometry.rotateZ(45 * RAD * this.getModA(0, 0));
         return geometry;
     }

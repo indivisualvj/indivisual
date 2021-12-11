@@ -2,11 +2,12 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {CameraModePlugin} from "../CameraModePlugin";
+import {Quaternion, Vector3} from "three";
 
 class lookatshape extends CameraModePlugin {
     static name = 'look at a shape';
-    targetLook = new THREE.Vector3(0, 0, 0);
-    currentLook = new THREE.Vector3(0, 0, 0);
+    targetLook = new Vector3(0, 0, 0);
+    currentLook = new Vector3(0, 0, 0);
     shape = false;
     entry = 0;
     _tween = false;
@@ -14,8 +15,8 @@ class lookatshape extends CameraModePlugin {
     quatTo = false;
     shared = {
         shape: false,
-        targetLook: new THREE.Vector3(),
-        currentLook: new THREE.Vector3()
+        targetLook: new Vector3(),
+        currentLook: new Vector3()
     };
 
     apply(peak, setPosition) {
@@ -45,9 +46,9 @@ class lookatshape extends CameraModePlugin {
         if (this._tween) {
             this.shape.getWorldPosition(this.targetLook);
 
-            this.quatFrom = new THREE.Quaternion().copy(cam.quaternion);
+            this.quatFrom = new Quaternion().copy(cam.quaternion);
             cam.lookAt(this.targetLook);
-            this.quatTo = new THREE.Quaternion().copy(cam.quaternion);
+            this.quatTo = new Quaternion().copy(cam.quaternion);
             cam.quaternion.copy(this.quatFrom);
 
             let distance = cam.position.distanceTo(this.targetLook);

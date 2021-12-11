@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {_Layer} from "./DoingLayer";
+import * as HC from "../../shared/Three";
+import {AmbientLight, Fog, Group} from "three";
 
 class LightingLayer extends _Layer {
 
@@ -18,7 +20,7 @@ class LightingLayer extends _Layer {
             this._lighting.traverse(HC.dispose);
         }
 
-        this._lighting = new THREE.Group();
+        this._lighting = new Group();
         this._lighting.position.x = this.resolution('half').x;
         this._lighting.position.y = -this.resolution('half').y;
         this._lighting.name = '_lighting' + this.index;
@@ -51,10 +53,10 @@ class LightingLayer extends _Layer {
     _lightColor(value) {
 
         if (this.lights.length) {
-            let c = new THREE.Color(value);
+            let c = new Color(value);
 
             if (c.r === 0 && c.g === 0 && c.b === 0) { // is black. change to white.
-                c = new THREE.Color(0xffffff);
+                c = new Color(0xffffff);
             }
 
             for (let k in this.lights) {
@@ -103,8 +105,7 @@ class LightingLayer extends _Layer {
         }
 
         if (this.settings.lighting_fog) {
-            let fog = new THREE.Fog(0x000000, this.settings.lighting_fog_near, this.settings.lighting_fog_far);
-            this._layer.fog = fog;
+            this._layer.fog = new Fog(0x000000, this.settings.lighting_fog_near, this.settings.lighting_fog_far);
         }
     }
 
@@ -123,7 +124,7 @@ class LightingLayer extends _Layer {
         }
 
         if (this.settings.lighting_ambient) {
-            let light = new THREE.AmbientLight(0xffffff);
+            let light = new AmbientLight(0xffffff);
             this._lighting.add(light);
             this.ambientLight = light;
         }

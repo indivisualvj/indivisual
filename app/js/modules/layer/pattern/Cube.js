@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {PatternPlugin} from "../PatternPlugin";
+import {Vector3} from "three";
 
 class cube extends PatternPlugin {
         static name = 'cube';
@@ -102,7 +103,7 @@ class cube extends PatternPlugin {
             let params = this.params(shape);
             if (params.position === false) {
 
-                params.position = new THREE.Vector3();
+                params.position = new Vector3();
                 this.getDistributionOnCube(this.layer.shapeCount(), shape.index, params.position);
 
             }

@@ -3,6 +3,7 @@
  */
 import {MeshCameraMaterialPlugin} from "../MeshCameraMaterialPlugin";
 import {Messaging} from "../../../../shared/Messaging";
+import {CubeCamera, LinearMipmapLinearFilter, Mesh, MeshPhongMaterial, RGBFormat, WebGLCubeRenderTarget} from "three";
 
 class reflective extends MeshCameraMaterialPlugin {
 
@@ -24,9 +25,9 @@ class reflective extends MeshCameraMaterialPlugin {
 
     /**
      *
-     * @param {THREE.BufferGeometry} geometry
+     * @param {BufferGeometry} geometry
      * @param index
-     * @returns {THREE.Mesh}
+     * @returns {Mesh}
      */
     apply(geometry, index) {
 
@@ -34,19 +35,19 @@ class reflective extends MeshCameraMaterialPlugin {
 
         let box3 = geometry.boundingBox;
         let height = box3.max.y - box3.min.y;
-        let cubeRenderTarget = new THREE.WebGLCubeRenderTarget(height, {
-            format: THREE.RGBFormat,
+        let cubeRenderTarget = new WebGLCubeRenderTarget(height, {
+            format: RGBFormat,
             generateMipmaps: true,
-            minFilter: THREE.LinearMipmapLinearFilter
+            minFilter: LinearMipmapLinearFilter
         });
-        let cubecam = new THREE.CubeCamera(1, 10000, cubeRenderTarget);
+        let cubecam = new CubeCamera(1, 10000, cubeRenderTarget);
 
         this.cameras.add(cubecam);
 
-        this.material = new THREE.MeshPhongMaterial({
+        this.material = new MeshPhongMaterial({
             envMap: cubeRenderTarget.texture
         });
-        let mesh = new THREE.Mesh(geometry, this.material);
+        let mesh = new Mesh(geometry, this.material);
         mesh.name = this.id(index);
         this.config.getEventManager().register(EVENT_RENDERER_BEFORE_RENDER, this.id(index), (renderer) => {
             if (this.layer.isVisible()) {

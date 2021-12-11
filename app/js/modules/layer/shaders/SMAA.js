@@ -2,11 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
-
-if (!IS_CONTROLLER) {
-    _importThreeShader('SMAAShader');
-    _importThreePostprocessing('SMAAPass');
-}
+import {SMAAPass} from "three/examples/jsm/postprocessing/SMAAPass";
 
 class smaa extends ShaderPlugin {
     static index = 5;
@@ -17,7 +13,7 @@ class smaa extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.SMAAPass(this.layer.resolution().x, this.layer.resolution().y);
+            this.pass = new SMAAPass(this.layer.resolution().x, this.layer.resolution().y);
         }
         this.pass.setSize(this.layer.resolution().x, this.layer.resolution().y);
 

@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+import {BoxGeometry} from "three";
 
 class cube extends ShapeGeometryPlugin {
     static name = 'cube';
@@ -22,7 +23,7 @@ class cube extends ShapeGeometryPlugin {
 
         let size = layer.shapeSize(1);
 
-        return new THREE.BoxGeometry(size, size, size, this.getModA(1, 1), this.getModB(1, 1), this.getModC(1, 1));
+        return new BoxGeometry(size, size, size, this.getModA(1, 1), this.getModB(1, 1), this.getModC(1, 1));
     }
 }
 

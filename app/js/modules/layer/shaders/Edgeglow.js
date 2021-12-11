@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
+import {Color, Vector2} from "three";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
 class edgeglow extends ShaderPlugin {
     static index = 150;
@@ -47,9 +49,9 @@ class edgeglow extends ShaderPlugin {
         uniforms: {
 
             "tDiffuse": {type: "t", value: null},
-            "color": {type: "c", value: new THREE.Color(0xffffff)},
+            "color": {type: "c", value: new Color(0xffffff)},
             "edgemode": {type: "i", value: 0},
-            "resolution": {type: "v2", value: new THREE.Vector2(800, 600)}
+            "resolution": {type: "v2", value: new Vector2(800, 600)}
 
         },
 
@@ -129,7 +131,7 @@ class edgeglow extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(this.shader);
+            this.pass = new ShaderPass(this.shader);
         }
 
         return this.pass;

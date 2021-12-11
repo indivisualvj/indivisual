@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {CameraModePlugin} from "../CameraModePlugin";
+import {Vector3} from "three";
 
 class switchposition extends CameraModePlugin {
     static name = 'switch position (current)';
@@ -20,7 +21,7 @@ class switchposition extends CameraModePlugin {
             let pos = cam.position;
 
             pos.copy(this.layer.getPatternPlugin().random3dPosition());
-            cam.lookAt(new THREE.Vector3(0, 0, 0));
+            cam.lookAt(new Vector3(0, 0, 0));
 
             return true;
         }
@@ -55,10 +56,9 @@ class switchlookat extends CameraModePlugin {
         let change = this.layer.getCameraModePlugin('switchposition').apply(peak);
 
         if (change) {
-            let shape = this.layer.randomShape();
-            this.shape = shape;
+            this.shape = this.layer.randomShape();
             if (!this.lookAtVector) {
-                this.lookAtVector = new THREE.Vector3();
+                this.lookAtVector = new Vector3();
             }
         }
 

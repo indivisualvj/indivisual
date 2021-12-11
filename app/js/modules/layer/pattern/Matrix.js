@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {PatternPlugin} from "../PatternPlugin";
+import {Vector2} from "three";
 
 class matrix extends PatternPlugin {
         static name = 'matrix';
@@ -50,7 +51,7 @@ class matrix extends PatternPlugin {
             let params = this.params(shape);
 
             if (params.position === false) {
-                params.position = new THREE.Vector2();
+                params.position = new Vector2();
                 this.getDistributionOnMatrix(this.columnCount(), this.rowCount(), shape.index, params.position);
             }
 

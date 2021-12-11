@@ -2,9 +2,10 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {PatternRotationPlugin} from "../PatternRotationPlugin";
+import {Vector3} from "three";
 
 class all extends PatternRotationPlugin {
-    vector = new THREE.Vector3(1, 1, 1);
+    vector = new Vector3(1, 1, 1);
 
     apply() {
     }
@@ -12,7 +13,7 @@ class all extends PatternRotationPlugin {
 
 
 class xaxis extends PatternRotationPlugin {
-    vector = new THREE.Vector3(1, 0, 0);
+    vector = new Vector3(1, 0, 0);
 
     apply() {
     }
@@ -20,7 +21,7 @@ class xaxis extends PatternRotationPlugin {
 
 
 class yaxis extends PatternRotationPlugin {
-    vector = new THREE.Vector3(0, 1, 0);
+    vector = new Vector3(0, 1, 0);
 
     apply() {
     }
@@ -28,7 +29,7 @@ class yaxis extends PatternRotationPlugin {
 
 
 class zaxis extends PatternRotationPlugin {
-    vector = new THREE.Vector3(0, 0, 1);
+    vector = new Vector3(0, 0, 1);
 
     apply() {
     }

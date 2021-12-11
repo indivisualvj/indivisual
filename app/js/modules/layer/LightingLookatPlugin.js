@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {AnimationPlugin} from "../AnimationPlugin";
+import {Vector3} from "three";
 
 
 class LightingLookatPlugin extends AnimationPlugin {
@@ -22,7 +23,7 @@ class LightingLookatPlugin extends AnimationPlugin {
 
     centerVector() {
         let v = this.layer.cameraDefaultDistance(.25);
-        return new THREE.Vector3(
+        return new Vector3(
             v * this.settings.lighting_lookat_centerx,
             v * this.settings.lighting_lookat_centery,
             v * this.settings.lighting_lookat_centerz

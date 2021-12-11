@@ -344,9 +344,10 @@ class Server
          *
          */
         this.app.get('/app/*.js', (req, res) => {
-            let url = req.originalUrl.replace('/', '');
-            url = path.resolve(url);
-            res.sendFile(url);
+            let url = req.originalUrl.substr(1);
+            this._loading(url, req);
+            let file = this._parse(url);
+            res.sendFile(file);
         });
 
         /**
@@ -393,9 +394,9 @@ class Server
                 suffix = '';
             }
 
-            url = path.resolve(url + suffix);
-            console.log('sending', url);
-            res.sendFile(url);
+            let file = this._parse(url + suffix);
+            console.log('sending', file);
+            res.sendFile(file);
         });
 
         /**
@@ -404,8 +405,8 @@ class Server
         this.app.get('/app/js/*/*', (req, res) => {
             let url = req.originalUrl.replace('/', '') + '.js';
             this._loading(url, req);
-            url = path.resolve(url);
-            res.sendFile(url);
+            let file = this._parse(url);
+            res.sendFile(file);
         });
 
         /**
@@ -452,8 +453,8 @@ class Server
         /**
          *
          */
-        this.app.get('*', (req, res) => {
-            console.log('sending fallback', req.originalUrl);
+        this.app.get('/favicon.ico', (req, res) => {
+            // console.log('sending fallback', req.originalUrl);
             res.sendFile(_APP + '/favicon.ico');
         });
     }
@@ -495,6 +496,26 @@ class Server
 
 
         return sent;
+    }
+
+    _parse(url) {
+        let binFile = HC.filePath(_BIN, url);
+        let binPath = binFile.substr(0, binFile.lastIndexOf('/'));
+        let sourcePath = url.substr(0, url.lastIndexOf('/'));
+        let dotCount = sourcePath.split('/').length;
+        let dots = new Array(dotCount).fill('..').join('/');
+        let nodeModulesPath = HC.filePath(dots, 'node_modules');
+        let threeModulePath = HC.filePath(nodeModulesPath, 'three', 'build', 'three.module.js');
+        _existCreate(binPath);
+        let code = fs.readFileSync(path.resolve(url), "utf8");
+        code = code.replaceAll(/from ["']three["']/g, `from "${threeModulePath}"`);
+
+        let regexp = new RegExp(/from ["'](three\/[^"']+)['"]/g);
+        code = code.replaceAll(regexp, `from "${nodeModulesPath}/$1"`);
+
+        fs.writeFileSync(binFile, code);
+
+        return binFile;
     }
 
 }
@@ -764,7 +785,7 @@ function _store(data, unstorable = []) {
 
         let section = session[data.action];
 
-        let settings = false;
+        let settings;
         if ('layer' in data) {
             if (!(data.layer in section)) {
                 section[data.layer] = {};
@@ -952,11 +973,10 @@ function _callIfDefined(callback) {
 /**
  *
  * @param dir
- * @param feedback
- * @returns {string}
+ * @return {string}
  * @private
  */
-function _existCreate(dir, feedback) {
+function _existCreate(dir) {
     let returnValue = '';
     try {
         if (!fs.existsSync(dir)) {

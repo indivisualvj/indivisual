@@ -2,11 +2,12 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {OffsetModePlugin} from "../OffsetModePlugin";
+import {Vector2} from "three";
 
 class torch extends OffsetModePlugin {
     static name = 'torch';
     mover;
-    velocity = new THREE.Vector2(randomInt(10, 20, true), randomInt(10, 20, true));
+    velocity = new Vector2(randomInt(10, 20, true), randomInt(10, 20, true));
     helper;
 
     apply(shape) {

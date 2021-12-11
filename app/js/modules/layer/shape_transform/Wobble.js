@@ -3,6 +3,7 @@
  */
 import {ShapeTransformPlugin} from "../ShapeTransformPlugin";
 import {Oscillators} from "../../../shared/Oscillators";
+import {Vector3} from "three";
 
 class wobble extends ShapeTransformPlugin {
     static name = 'wobble xyz';
@@ -15,7 +16,7 @@ class wobble extends ShapeTransformPlugin {
     }
 
     apply(shape, axes) {
-        axes = axes || new THREE.Vector3(1, 1, 1);
+        axes = axes || new Vector3(1, 1, 1);
 
         if (!this.angle) {
             this.angle = 360;
@@ -38,7 +39,7 @@ class wobble extends ShapeTransformPlugin {
         let vertices = shape.geometry.getAttribute('position');
         let vbackup = this.vertices;
 
-        let vtc = new THREE.Vector3();
+        let vtc = new Vector3();
         for (let i = 0; i < vertices.count; i++) {
 
             vtc.fromBufferAttribute(vertices, i);
@@ -73,7 +74,7 @@ class wobblex extends wobble {
     static name = 'wobble x';
 
     apply(shape) {
-        super.apply(shape, new THREE.Vector3(1, 0, 0));
+        super.apply(shape, new Vector3(1, 0, 0));
     }
 }
 
@@ -82,7 +83,7 @@ class wobbley extends wobble {
     static name = 'wobble y';
 
     apply(shape) {
-        super.apply(shape, new THREE.Vector3(0, 1, 0));
+        super.apply(shape, new Vector3(0, 1, 0));
     }
 }
 
@@ -91,7 +92,7 @@ class wobblez extends wobble {
     static name = 'wobble z';
 
     apply(shape) {
-        super.apply(shape, new THREE.Vector3(0, 0, 1));
+        super.apply(shape, new Vector3(0, 0, 1));
     }
 }
 

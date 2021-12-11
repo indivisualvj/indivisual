@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {MeshMaterialPlugin} from "./MeshMaterialPlugin";
+import * as HC from "../../../shared/Three";
+import {Group} from "three";
 
 class MeshCameraMaterialPlugin extends MeshMaterialPlugin {
 
@@ -11,7 +13,7 @@ class MeshCameraMaterialPlugin extends MeshMaterialPlugin {
     before(geometry) {
 
         if (!this.cameras) {
-            this.cameras = new THREE.Group();
+            this.cameras = new Group();
             this.cameras.name = this.id('cameras');
             this.layer.three.scene.add(this.cameras);
             this.cameras.position.copy(this.layer._rotation.position);

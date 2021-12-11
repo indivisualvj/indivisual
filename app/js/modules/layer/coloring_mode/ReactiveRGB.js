@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ColoringModePlugin} from "../ColoringModePlugin";
+import {Vector2} from "three";
 
 class reactivergb extends ColoringModePlugin {
     static name = 'reactive RGB';
@@ -34,7 +35,7 @@ class reactivergb extends ColoringModePlugin {
 
         let prc;
         if (radial === true) {
-            let ps = new THREE.Vector2(shape.x(), shape.y());
+            let ps = new Vector2(shape.x(), shape.y());
             let dv = layer.resolution('half');
             ps.sub(dv);
 

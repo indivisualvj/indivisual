@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {GeometryUtils} from "./GeometryUtils";
+import {BufferGeometry, CircleGeometry, RingGeometry, Shape, ShapeGeometry, Vector2, Vector3} from "three";
 
 class RoundedRect {
 
@@ -13,20 +14,20 @@ class RoundedRect {
      */
     constructor(edgeSize, cornerRadius, curveSegments) {
         edgeSize *= .95;
-        this.radius = new THREE.Vector2(edgeSize, edgeSize).length() * cornerRadius * 0.0025;
+        this.radius = new Vector2(edgeSize, edgeSize).length() * cornerRadius * 0.0025;
         this.hw = edgeSize / 2;
         this.hh = edgeSize / 2;
         this.radius = Math.min(this.hw, this.radius);
-        // this.corner = new THREE.Vector2(this.radius, this.radius).length();
+        // this.corner = new Vector2(this.radius, this.radius).length();
         this.curveSegments = curveSegments;
     }
 
     /**
      *
-     * @returns {THREE.ShapeGeometry}
+     * @returns {ShapeGeometry}
      */
     create() {
-        let shape = new THREE.Shape();
+        let shape = new Shape();
         let radius = this.radius;
         let ninety = Math.PI / 2;
         let hw = this.hw;
@@ -45,7 +46,7 @@ class RoundedRect {
         shape.absarc(-hw + radius, -hh - radius, radius, 90 * RAD, 180 * RAD);
         // shape.lineTo(-hw, hh-radius);
 
-        return new THREE.ShapeGeometry(shape, this.curveSegments);
+        return new ShapeGeometry(shape, this.curveSegments);
     }
 }
 
@@ -63,7 +64,7 @@ class DirectionalCircle {
 
     /**
      *
-     * @returns {THREE.CircleGeometry}
+     * @returns {CircleGeometry}
      */
     create() {
 
@@ -73,7 +74,7 @@ class DirectionalCircle {
         let div = Math.PI * 0.5;
         let hseg = -div + (div / edges) * dir;
 
-        return new THREE.CircleGeometry(radius, edges, hseg);
+        return new CircleGeometry(radius, edges, hseg);
     }
 }
 
@@ -93,7 +94,7 @@ class DirectionalRing {
 
     /**
      *
-     * @returns {THREE.RingGeometry}
+     * @returns {RingGeometry}
      */
     create() {
 
@@ -102,7 +103,7 @@ class DirectionalRing {
         let div = Math.PI * 0.5;
         let hseg = -div + (div / edges) * dir;
 
-        return new THREE.RingGeometry(this.innerRadius, this.outerRadius, edges, 1, hseg);
+        return new RingGeometry(this.innerRadius, this.outerRadius, edges, 1, hseg);
     }
 }
 
@@ -120,10 +121,10 @@ class DirectionalShape {
 
     /**
      *
-     * @returns {THREE.ShapeGeometry}
+     * @returns {ShapeGeometry}
      */
     create() {
-        let shape = new THREE.Shape();
+        let shape = new Shape();
         let radius = this._radius;
         let dir = this._direction;
         let edges = this._edges;
@@ -140,7 +141,7 @@ class DirectionalShape {
             let y = Math.cos(step * i + hseg) * radius;
             shape.lineTo(x, -y);
         }
-        return new THREE.ShapeGeometry(shape);
+        return new ShapeGeometry(shape);
     }
 }
 
@@ -157,18 +158,18 @@ class Rect {
 
     /**
      *
-     * @returns {THREE.ShapeGeometry}
+     * @returns {ShapeGeometry}
      */
     create() {
 
-        let shape = new THREE.Shape();
+        let shape = new Shape();
         shape.moveTo(-this._hw, this._hh);
         shape.lineTo(this._hw, this._hh);
         shape.lineTo(this._hw, -this._hh);
         shape.lineTo(-this._hw, -this._hh);
         shape.lineTo(-this._hw, this._hh);
 
-        return new THREE.ShapeGeometry(shape);
+        return new ShapeGeometry(shape);
     }
 }
 
@@ -185,17 +186,17 @@ class RightTriangle {
 
     /**
      *
-     * @returns {THREE.ShapeGeometry}
+     * @returns {ShapeGeometry}
      */
     create() {
 
-        let shape = new THREE.Shape();
+        let shape = new Shape();
         shape.moveTo(-this._hw, this._hh);
         shape.lineTo(this._hw, this._hh);
         shape.lineTo(this._hw, -this._hh);
         shape.lineTo(-this._hw, this._hh);
 
-        return new THREE.ShapeGeometry(shape);
+        return new ShapeGeometry(shape);
     }
 }
 
@@ -211,7 +212,7 @@ class CustomGeometry {
      *
      * @param vtcs
      * @param multiplier
-     * @returns {THREE.BufferGeometry}
+     * @returns {BufferGeometry}
      */
     fromString(vtcs, multiplier) {
 
@@ -223,10 +224,10 @@ class CustomGeometry {
         let points = [];
         for (let i = 0; i < vtcs.length; i++) {
             let vtc = vtcs[i];
-            let vec = new THREE.Vector3(round(multiplier * vtc[0], 0), round(multiplier * vtc[1], 0), 0);
+            let vec = new Vector3(round(multiplier * vtc[0], 0), round(multiplier * vtc[1], 0), 0);
             points.push(vec);
         }
-        let geometry = new THREE.BufferGeometry().setFromPoints(points);
+        let geometry = new BufferGeometry().setFromPoints(points);
         GeometryUtils.sortVertices(geometry);
 
         return geometry;

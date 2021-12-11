@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {PatternPlugin} from "../PatternPlugin";
+import {Vector3} from "three";
 
 class move extends PatternPlugin {
         static name = 'move';
@@ -32,7 +33,7 @@ class move extends PatternPlugin {
             }
 
             let roto = shape.rotation();
-            let dir = new THREE.Vector3(0, 0, 1);
+            let dir = new Vector3(0, 0, 1);
             dir.applyEuler(roto);
 
             let m = params.velocity * this.animation.diffPrc * this.settings.pattern_padding;

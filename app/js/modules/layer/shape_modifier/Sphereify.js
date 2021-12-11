@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShapeModifierPlugin} from "../ShapeModifierPlugin";
+import {Vector3} from "three";
 
 class sphereify extends ShapeModifierPlugin {
     static name = 'sphereify';
@@ -15,7 +16,7 @@ class sphereify extends ShapeModifierPlugin {
 
             this.radius = 0;
 
-            let vtc = new THREE.Vector3();
+            let vtc = new Vector3();
             for (let i = 0; i < vertices.count; i++) {
                 vtc.fromBufferAttribute(vertices, i);
                 this.radius = Math.max(vtc.length(), this.radius);

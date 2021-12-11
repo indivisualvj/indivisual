@@ -3,6 +3,8 @@
  */
 import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
 import {DirectionalCircle} from "../../../shared/Geometries";
+import {Messaging} from "../../../shared/Messaging";
+import {mergeBufferGeometries} from "three/examples/jsm/utils/BufferGeometryUtils";
 
 class steppedpolygon extends ShapeGeometryPlugin {
     static index = 20;
@@ -33,7 +35,7 @@ class steppedpolygon extends ShapeGeometryPlugin {
                     material: {material_blending: 'NormalBlending'}
                 };
                 this.animation.updateSettings(this.config.ControlSettings.layer, data, false, false, true);
-                messaging.emitSettings(this.config.ControlSettings.layer, data, false, false, true);
+                Messaging.emitSettings(this.config.ControlSettings.layer, data, false, false, true);
             },
         }
     };
@@ -56,7 +58,7 @@ class steppedpolygon extends ShapeGeometryPlugin {
             circ.translate(0, 0, (steps + i));
             geometries.push(circ);
         }
-        let geometry = THREE.BufferGeometryUtils.mergeBufferGeometries(geometries);
+        let geometry = mergeBufferGeometries(geometries);
         geometry.center();
 
         return geometry;

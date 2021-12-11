@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
 class crosshatch extends ShaderPlugin {
     static index = 240;
@@ -76,7 +77,7 @@ class crosshatch extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(this.shader);
+            this.pass = new ShaderPass(this.shader);
         }
 
         return this.pass;

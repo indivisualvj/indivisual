@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+import {CylinderGeometry} from "three";
 
 class cylinder extends ShapeGeometryPlugin {
     static index = 50;
@@ -22,7 +23,7 @@ class cylinder extends ShapeGeometryPlugin {
 
         let size = layer.shapeSize(1);
         let halfSize = layer.shapeSize(.5);
-        let geometry = new THREE.CylinderGeometry(halfSize, halfSize, size, this.getModA(3, 16), this.getModB(1, 1), false);
+        let geometry = new CylinderGeometry(halfSize, halfSize, size, this.getModA(3, 16), this.getModB(1, 1), false);
         geometry.rotateX(90 * RAD + this.getModC(0, 0) * 45 * RAD);
 
         return geometry;
@@ -36,7 +37,7 @@ class pipe extends cylinder {
 
         let size = layer.shapeSize(1);
         let halfSize = layer.shapeSize(.5);
-        let geometry = new THREE.CylinderGeometry(halfSize, halfSize, size, this.getModA(3, 16), this.getModB(1, 1), true);
+        let geometry = new CylinderGeometry(halfSize, halfSize, size, this.getModA(3, 16), this.getModB(1, 1), true);
         geometry.rotateX(90 * RAD + this.getModC(0, 0) * 45 * RAD);
 
         return geometry;

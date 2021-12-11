@@ -1,6 +1,8 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import * as THREE from "three";
+
 class Shape {
 
     parent;

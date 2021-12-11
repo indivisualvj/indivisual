@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {AnimationTexturePlugin} from "../AnimationTexturePlugin";
+import * as HC from '../../shared/Three';
 
 class OverrideMaterialInputPlugin extends AnimationTexturePlugin
 {

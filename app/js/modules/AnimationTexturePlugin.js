@@ -7,7 +7,7 @@ class AnimationTexturePlugin extends AnimationPlugin
 {
     /**
      *
-     * @param texture {THREE.Texture}
+     * @param texture {Texture}
      * @param prefix
      */
     updateTexture(texture, prefix) {

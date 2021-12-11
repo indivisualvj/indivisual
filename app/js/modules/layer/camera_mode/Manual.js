@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {CameraModePlugin} from "../CameraModePlugin";
+import {Vector3} from "three";
 
 class manual extends CameraModePlugin {
     static index = 1;
@@ -14,7 +15,7 @@ class manual extends CameraModePlugin {
         let dd = layer.cameraDefaultDistance();
 
         cam.zoom = this.settings.camera_mode_volume;
-        cam.lookAt(new THREE.Vector3(0, 0, 0));
+        cam.lookAt(new Vector3(0, 0, 0));
         cam.position.set(
             this.settings.camera_x * dd,
             this.settings.camera_y * dd,
@@ -37,7 +38,7 @@ class manualcenter extends manual {
     static name = 'static lookat center';
 
     apply() {
-        super.apply(new THREE.Vector3(0, 0, 0));
+        super.apply(new Vector3(0, 0, 0));
     }
 }
 

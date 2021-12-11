@@ -7,10 +7,6 @@ import {Config} from "./shared/Config";
 import {Messaging} from "./shared/Messaging";
 import {Logger} from "./shared/Logger";
 
-// workaround:
-_importThreeLoader('FontLoader');
-_importThreePostprocessing('EffectComposer');
-
 /**
  *
  */

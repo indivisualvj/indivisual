@@ -3,6 +3,7 @@
  */
 import {ShapeModifierPlugin} from "../ShapeModifierPlugin";
 import {GeometryUtils} from "../../../shared/GeometryUtils";
+import {ExtrudeGeometry, Shape, Vector3} from "three";
 
 class extrude extends ShapeModifierPlugin {
     static name = 'extrude';
@@ -22,11 +23,11 @@ class extrude extends ShapeModifierPlugin {
             shape = geometry.parameters.shapes;
 
         } else {
-            shape = new THREE.Shape();
+            shape = new Shape();
             geometry.center();
 
             let vertices = geometry.getAttribute('position');
-            let v = new THREE.Vector3();
+            let v = new Vector3();
             for (let i = 0; i < vertices.count; i++) {
                 v.fromBufferAttribute(vertices, i);
 
@@ -59,7 +60,7 @@ class extrude extends ShapeModifierPlugin {
                 bevelSegments: Math.ceil(this.settings.shape_modc / 2),
             };
 
-            geometry = new THREE.ExtrudeGeometry(shape, conf);
+            geometry = new ExtrudeGeometry(shape, conf);
             geometry.center();
 
             GeometryUtils.front2back(geometry);

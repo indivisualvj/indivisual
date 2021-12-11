@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
+import {Vector2} from "three";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
 class pixelate extends ShaderPlugin {
     static index = 220;
@@ -33,8 +35,8 @@ class pixelate extends ShaderPlugin {
         uniforms: {
 
             "tDiffuse": {type: "t", value: null},
-            size: {type: "v2", value: new THREE.Vector2(10, 10)},
-            "resolution": {type: "v2", value: new THREE.Vector2(800, 600)}
+            size: {type: "v2", value: new Vector2(10, 10)},
+            "resolution": {type: "v2", value: new Vector2(800, 600)}
 
         },
 
@@ -73,7 +75,7 @@ class pixelate extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(this.shader);
+            this.pass = new ShaderPass(this.shader);
         }
 
         return this.pass;

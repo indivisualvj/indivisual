@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+import {SphereGeometry} from "three";
 
 class sphere extends ShapeGeometryPlugin {
     static index = 41;
@@ -23,7 +24,7 @@ class sphere extends ShapeGeometryPlugin {
     create() {
         let layer = this.layer;
 
-        return new THREE.SphereGeometry(layer.shapeSize(.5), this.getModA(1, 1, 128), this.getModB(1, 1, 128));
+        return new SphereGeometry(layer.shapeSize(.5), this.getModA(1, 1, 128), this.getModB(1, 1, 128));
     }
 }
 

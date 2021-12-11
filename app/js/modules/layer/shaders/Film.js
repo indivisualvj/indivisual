@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
 class film extends ShaderPlugin {
     static index = 70;
@@ -145,7 +146,7 @@ class film extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(this.shader);
+            this.pass = new ShaderPass(this.shader);
         }
 
         return this.pass;

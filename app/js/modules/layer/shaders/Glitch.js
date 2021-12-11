@@ -2,8 +2,11 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
+import {Vector2} from "three";
 
-class glitch extends ShaderPlugin {
+class glitch extends ShaderPlugin 
+{
     static index = 100;
     static settings = {
         apply: false,
@@ -64,8 +67,8 @@ class glitch extends ShaderPlugin {
             "tDiffuse": {type: "t", value: null},
             "twist": {type: "f", value: 1.0},
             "brightness": {type: "f", value: 1.0},
-            offset: {type: 'v2', value: new THREE.Vector2(1.0, 1.0)},
-            zoom: {type: 'v2', value: new THREE.Vector2(1.0, 1.0)}
+            offset: {type: 'v2', value: new Vector2(1.0, 1.0)},
+            zoom: {type: 'v2', value: new Vector2(1.0, 1.0)}
 
         },
 
@@ -116,7 +119,7 @@ class glitch extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(this.shader);
+            this.pass = new ShaderPass(this.shader);
         }
 
         return this.pass;

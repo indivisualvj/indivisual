@@ -2,10 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
-
-if (!IS_CONTROLLER) {
-    _importThreeShader('FXAAShader');
-}
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
+import {FXAAShader} from "three/examples/jsm/shaders/FXAAShader";
 
 class fxaa extends ShaderPlugin {
     static index = 10;
@@ -34,7 +32,7 @@ class fxaa extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(THREE.FXAAShader);
+            this.pass = new ShaderPass(FXAAShader);
         }
 
         return this.pass;

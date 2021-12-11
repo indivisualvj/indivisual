@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
+import {Vector2} from "three";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
 class distortion extends ShaderPlugin {
     static index = 90;
@@ -47,8 +49,8 @@ class distortion extends ShaderPlugin {
         uniforms: {
             "multiplier": {type: "f", value: 5.0},
             "strength": {type: "f", value: 0.12},
-            "offset": {type: "v2", value: new THREE.Vector2(0.5, 0.5)},
-            "resolution": {type: "v2", value: new THREE.Vector2(800, 600)},
+            "offset": {type: "v2", value: new Vector2(0.5, 0.5)},
+            "resolution": {type: "v2", value: new Vector2(800, 600)},
             "tDiffuse": {type: "t", value: null}
         },
 
@@ -110,7 +112,7 @@ class distortion extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(this.shader);
+            this.pass = new ShaderPass(this.shader);
         }
 
         return this.pass;

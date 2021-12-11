@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+import {PlaneGeometry} from "three";
 
 class bar extends ShapeGeometryPlugin {
     static tutorial = {
@@ -12,7 +13,7 @@ class bar extends ShapeGeometryPlugin {
 
     create() {
         let layer = this.layer;
-        let geometry = new THREE.PlaneGeometry(layer.shapeSize(1), layer.shapeSize(.1));
+        let geometry = new PlaneGeometry(layer.shapeSize(1), layer.shapeSize(.1));
         geometry.rotateZ(45 * RAD * this.getModA(0, 0));
 
         return geometry;

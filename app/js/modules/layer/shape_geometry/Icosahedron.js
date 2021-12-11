@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+import {IcosahedronGeometry} from "three";
 
 class icosahedron extends ShapeGeometryPlugin {
     static index = 40;
@@ -20,7 +21,7 @@ class icosahedron extends ShapeGeometryPlugin {
     create() {
         let layer = this.layer;
 
-        return new THREE.IcosahedronGeometry(layer.shapeSize(.5), this.getModA(0, 0, 5));
+        return new IcosahedronGeometry(layer.shapeSize(.5), this.getModA(0, 0, 5));
     }
 }
 

@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
+import {Vector2} from "three";
+import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
 class ledmatrix extends ShaderPlugin {
     static index = 210;
@@ -51,7 +53,7 @@ class ledmatrix extends ShaderPlugin {
             "size": {type: "f", value: 4.0},
             "blur": {type: "f", value: 4.0},
             punchedplate: {type: "1i", value: 0},
-            "resolution": {type: "v2", value: new THREE.Vector2(800, 600)}
+            "resolution": {type: "v2", value: new Vector2(800, 600)}
 
         },
 
@@ -95,7 +97,7 @@ class ledmatrix extends ShaderPlugin {
 
     create() {
         if (!this.pass) {
-            this.pass = new THREE.ShaderPass(this.shader);
+            this.pass = new ShaderPass(this.shader);
         }
 
         return this.pass;

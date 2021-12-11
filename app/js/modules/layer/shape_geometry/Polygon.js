@@ -3,6 +3,7 @@
  */
 import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
 import {DirectionalCircle} from "../../../shared/Geometries";
+import {Messaging} from "../../../shared/Messaging";
 
 class polygon extends ShapeGeometryPlugin {
     static index = 20;
@@ -33,14 +34,14 @@ class polygon extends ShapeGeometryPlugin {
                     },
                 };
                 this.animation.updateSettings(this.config.ControlSettings.layer, data, true, false, true);
-                messaging.emitSettings(this.config.ControlSettings.layer, data, true, true, true);
+                Messaging.emitSettings(this.config.ControlSettings.layer, data, true, true, true);
             }
         }
     };
 
     /**
      *
-     * @returns {THREE.CircleGeometry}
+     * @returns {CircleGeometry}
      */
     create() {
         let layer = this.layer;

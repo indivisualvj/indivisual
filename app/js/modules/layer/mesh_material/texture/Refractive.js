@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {MeshTextureMaterialPlugin} from "../MeshTextureMaterialPlugin";
+import {CubeRefractionMapping, LinearMipMapLinearFilter, Mesh, MeshPhongMaterial} from "three";
 
 class refractivebackground extends MeshTextureMaterialPlugin {
     static name = 'refractive (cubetexture background)';
@@ -18,15 +19,15 @@ class refractivebackground extends MeshTextureMaterialPlugin {
 
         let inst = this;
         let file = this.settings.background_input;
-        this.material = new THREE.MeshPhongMaterial({envMap: null});
-        let mesh = new THREE.Mesh(geometry, this.material);
+        this.material = new MeshPhongMaterial({envMap: null});
+        let mesh = new Mesh(geometry, this.material);
         mesh.name = this.id(index);
 
         let _onLoad = (texture) => {
             texture.name = file;
             texture.generateMipmaps = true;
-            texture.minFilter = THREE.LinearMipMapLinearFilter;
-            texture.mapping = THREE.CubeRefractionMapping;
+            texture.minFilter = LinearMipMapLinearFilter;
+            texture.mapping = CubeRefractionMapping;
             this.material.envMap = texture;
             this.material.needsUpdate = true;
         };

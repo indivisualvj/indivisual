@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+import {TetrahedronGeometry} from "three";
 
 class tetrahedron extends ShapeGeometryPlugin {
     static index = 40;
@@ -14,7 +15,7 @@ class tetrahedron extends ShapeGeometryPlugin {
     create() {
         let layer = this.layer;
 
-        return new THREE.TetrahedronGeometry(layer.shapeSize(.5), this.getModA(0, 0, 5));
+        return new TetrahedronGeometry(layer.shapeSize(.5), this.getModA(0, 0, 5));
     }
 }
 

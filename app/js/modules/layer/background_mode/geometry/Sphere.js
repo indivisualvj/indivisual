@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {GeometryBackgroundModePlugin} from "../GeometryBackgroundModePlugin";
+import {DoubleSide, Mesh, MeshPhysicalMaterial, SphereBufferGeometry} from "three";
 
 class sphere extends GeometryBackgroundModePlugin {
         static index = 51;
@@ -10,19 +11,19 @@ class sphere extends GeometryBackgroundModePlugin {
             if (this.needsUpdate()) {
                 this.current(this.id());
 
-                let color = new THREE.Color(this.settings.background_color);
+                let color = new Color(this.settings.background_color);
                 let res = this.layer.resolution().clone();
                 res.multiplyScalar(this.settings.background_volume);
-                let geo = new THREE.SphereBufferGeometry(res.length() * 2, 16, 16);
+                let geo = new SphereBufferGeometry(res.length() * 2, 16, 16);
                 geo.rotateY(Math.PI / 2);
                 this.geometry = geo;
 
-                this.material = new THREE.MeshPhysicalMaterial({
+                this.material = new MeshPhysicalMaterial({
                     color: color,
-                    side: THREE.DoubleSide
+                    side: DoubleSide
                 });
 
-                let mesh = new THREE.Mesh(geo, this.material);
+                let mesh = new Mesh(geo, this.material);
                 mesh.receiveShadow = true;
                 this.mesh = mesh;
 

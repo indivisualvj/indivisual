@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {AnimationPlugin} from "../AnimationPlugin";
+import {Euler, Vector3} from "three";
 
 class LightingPatternPlugin extends AnimationPlugin {
 
@@ -13,7 +14,7 @@ class LightingPatternPlugin extends AnimationPlugin {
 
     centerVector() {
         let v = this.layer.cameraDefaultDistance();
-        return new THREE.Vector3(
+        return new Vector3(
             v * this.settings.lighting_pattern_centerx,
             v * this.settings.lighting_pattern_centery,
             v * this.settings.lighting_pattern_centerz
@@ -21,8 +22,8 @@ class LightingPatternPlugin extends AnimationPlugin {
     }
 
     positionIn2dSpace(light, x, y, z) {
-        let cp = new THREE.Vector3(x, y, z);
-        cp.applyEuler(new THREE.Euler(0, 0, -this.settings.lighting_pattern_rotation * 90 * RAD));
+        let cp = new Vector3(x, y, z);
+        cp.applyEuler(new Euler(0, 0, -this.settings.lighting_pattern_rotation * 90 * RAD));
         cp.add(this.centerVector());
         light.position.copy(cp);
     }

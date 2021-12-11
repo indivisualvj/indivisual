@@ -14,7 +14,7 @@ class Static extends BackgroundModePlugin {
         apply() {
             if (this.needsUpdate()) {
                 this.current(this.id());
-                this.layer.setBackground(new THREE.Color(this.settings.background_color));
+                this.layer.setBackground(new Color(this.settings.background_color));
             }
         }
     }

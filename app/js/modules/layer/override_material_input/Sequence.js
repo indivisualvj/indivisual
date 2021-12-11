@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {OverrideMaterialInputPlugin} from "../OverrideMaterialInputPlugin";
+import {CanvasTexture} from "three";
 
 class sequence extends OverrideMaterialInputPlugin {
 
@@ -28,7 +29,7 @@ class sequence extends OverrideMaterialInputPlugin {
 
         /**
          *
-         * @param map {THREE.Texture}
+         * @param map {Texture}
          * @param image
          */
         updateTexture(map, image) {
@@ -74,7 +75,7 @@ class sequence extends OverrideMaterialInputPlugin {
                 height: height,
             };
 
-            let tex = new THREE.CanvasTexture(canvas);
+            let tex = new CanvasTexture(canvas);
             this.properties.map = tex;
             this.properties.emissiveMap = tex;
         }

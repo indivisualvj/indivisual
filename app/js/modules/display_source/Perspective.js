@@ -2,12 +2,21 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {DisplaySourcePlugin} from "../DisplaySourcePlugin";
+import {WebGLRenderer} from "three";
 
 class Perspective extends DisplaySourcePlugin
 {
-
     static index = 30;
 
+    /**
+     * @type {WebGLRenderer}
+     */
+    threeRenderer;
+
+    /**
+     *
+     * @type {string}
+     */
     type = 'perspective';
 
     /**
@@ -20,9 +29,9 @@ class Perspective extends DisplaySourcePlugin
         this._bounds = false;
         this._last = 0;
 
-        this.renderer = new THREE.WebGLRenderer({alpha: true, antialias: ANTIALIAS});
-        this.renderer.view = this.renderer.domElement;
-        this.renderer.view.id = this.id;
+        this.threeRenderer = new WebGLRenderer({alpha: true, antialias: ANTIALIAS});
+        this.threeRenderer.view = this.threeRenderer.domElement;
+        this.threeRenderer.view.id = this.id;
     }
 
     /**
@@ -33,7 +42,7 @@ class Perspective extends DisplaySourcePlugin
     update(width, height) {
         this.width = width;
         this.height = height;
-        this.renderer.setSize(this.width, this.height);
+        this.threeRenderer.setSize(this.width, this.height);
     }
 
     /**
@@ -43,7 +52,7 @@ class Perspective extends DisplaySourcePlugin
      */
     current(fallback) {
         this.next();
-        return this.renderer.view;
+        return this.threeRenderer.view;
     }
 
     /**
@@ -52,9 +61,9 @@ class Perspective extends DisplaySourcePlugin
     next() {
         if (this._last !== this.animation.now) {
             let key = this.id;
-            let layer = this.animation.renderer.currentLayer;
+            let layer = this.animation.threeRenderer.currentLayer;
             let three = layer.three;
-            let cam = this.animation.renderer.three[key];
+            let cam = this.animation.threeRenderer.three[key];
             if (cam) {
                 let lcam = three.camera;
                 cam.position.x = lcam.position.x;
@@ -68,7 +77,7 @@ class Perspective extends DisplaySourcePlugin
 
                 cam.updateProjectionMatrix();
 
-                this.renderer.render(three.scene, cam);
+                this.threeRenderer.render(three.scene, cam);
             }
             this._last = this.animation.now;
         }

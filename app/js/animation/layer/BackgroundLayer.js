@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {_Layer} from "./AnimatedLayer";
+import * as HC from "../../shared/Three";
+import {Color, Group, Object3D, Texture} from "three";
 
 class Layer extends _Layer {
 
@@ -14,11 +16,11 @@ class Layer extends _Layer {
 
         this._resetBackground(false);
 
-        if (value instanceof THREE.Object3D) {
+        if (value instanceof Object3D) {
             this._resetBackground(true);
             this._background.add(value);
         }
-        if (value instanceof THREE.Color || value instanceof THREE.Texture) {
+        if (value instanceof Color || value instanceof Texture) {
             this._layer.background = value;
         }
     }
@@ -56,7 +58,7 @@ class Layer extends _Layer {
         this._layer.background = null;
 
         if (recreate !== false) {
-            this._background = new THREE.Group();
+            this._background = new Group();
             this._background.position.x = this.resolution('half').x;
             this._background.position.y = -this.resolution('half').y;
             this._background.name = '_background' + this.index;

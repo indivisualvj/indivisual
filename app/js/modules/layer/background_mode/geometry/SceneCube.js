@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {GeometryBackgroundModePlugin} from "../GeometryBackgroundModePlugin";
+import {BoxBufferGeometry, DoubleSide, Mesh, MeshBasicMaterial, WebGLRenderTarget} from "three";
 
 class scenecube extends GeometryBackgroundModePlugin {
         static index = 60;
@@ -14,33 +15,33 @@ class scenecube extends GeometryBackgroundModePlugin {
             if (this.needsUpdate()) {
                 this.current(this.id());
 
-                let color = new THREE.Color(this.settings.background_color);
+                let color = new Color(this.settings.background_color);
                 let res = this.layer.resolution().clone();
                 let edge = Math.min(res.x, res.y);
 
                 let wraps = THREE[this.settings.background_wraps];
                 let wrapt = THREE[this.settings.background_wrapt];
-                this.target1 = new THREE.WebGLRenderTarget(edge, edge, {
+                this.target1 = new WebGLRenderTarget(edge, edge, {
                     wrapT: wrapt, wrapS: wraps
                 });
 
-                this.target2 = new THREE.WebGLRenderTarget(edge, edge, {
+                this.target2 = new WebGLRenderTarget(edge, edge, {
                     wrapT: wrapt, wrapS: wraps
                 });
 
 
                 res.multiplyScalar(2.5);
-                let geo = new THREE.BoxBufferGeometry(res.x, res.y, res.x);
+                let geo = new BoxBufferGeometry(res.x, res.y, res.x);
                 this.geometry = geo;
 
-                this.material = new THREE.MeshBasicMaterial({
+                this.material = new MeshBasicMaterial({
                     color: color,
-                    side: THREE.DoubleSide,
+                    side: DoubleSide,
                     map: this.target1.texture,
                     transparent: true
                 });
 
-                let mesh = new THREE.Mesh(geo, this.material);
+                let mesh = new Mesh(geo, this.material);
                 mesh.scale.multiplyScalar(this.settings.background_volume);
                 mesh.scale.x *= -1;
                 mesh.name = this.id();

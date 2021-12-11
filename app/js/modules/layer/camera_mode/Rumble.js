@@ -3,6 +3,7 @@
  */
 import {CameraModePlugin} from "../CameraModePlugin";
 import {Oscillators} from "../../../shared/Oscillators";
+import {Vector3} from "three";
 
 class rumble extends CameraModePlugin {
     static name = 'static rumble';
@@ -74,7 +75,7 @@ class rumble extends CameraModePlugin {
         let cam = layer.getCamera();
         layer.getCameraModePlugin('manual').apply();
         cam.zoom = 1;
-        cam.position.add(new THREE.Vector3(x, y, z));
+        cam.position.add(new Vector3(x, y, z));
     }
 }
 

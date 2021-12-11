@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {BackgroundModePlugin} from "./BackgroundModePlugin";
+import * as HC from '../../../shared/Three';
+import {Texture} from "three";
 
 class GeometryBackgroundModePlugin extends BackgroundModePlugin {
         mesh;
@@ -14,7 +16,7 @@ class GeometryBackgroundModePlugin extends BackgroundModePlugin {
                 let keys = Object.keys(mat);
                 for (let k in keys) {
                     let key = keys[k];
-                    if (mat[key] instanceof THREE.Texture) {
+                    if (mat[key] instanceof Texture) {
                         let texture = mat[key];
                         this.updateTexture(texture, 'background');
                     }

@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {GeometryBackgroundModePlugin} from "../GeometryBackgroundModePlugin";
+import {BoxBufferGeometry, Color, DoubleSide, Mesh, MeshPhysicalMaterial} from "three";
 
 class cube extends GeometryBackgroundModePlugin {
         static index = 50;
@@ -10,19 +11,19 @@ class cube extends GeometryBackgroundModePlugin {
             if (this.needsUpdate()) {
                 this.current(this.id());
 
-                let color = new THREE.Color(this.settings.background_color);
+                let color = new Color(this.settings.background_color);
                 let res = this.layer.resolution().clone();
                 res.multiplyScalar(2.5);
-                let geo = new THREE.BoxBufferGeometry(res.x, res.y, res.x);
+                let geo = new BoxBufferGeometry(res.x, res.y, res.x);
                 this.geometry = geo;
 
-                let mat = new THREE.MeshPhysicalMaterial({
+                let mat = new MeshPhysicalMaterial({
                     color: color,
-                    side: THREE.DoubleSide
+                    side: DoubleSide
                 });
                 this.material = mat;
 
-                let mesh = new THREE.Mesh(geo, mat);
+                let mesh = new Mesh(geo, mat);
                 mesh.scale.multiplyScalar(this.settings.background_volume);
                 mesh.scale.x *= -1;
                 mesh.receiveShadow = true;

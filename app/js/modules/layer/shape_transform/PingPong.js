@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShapeTransformPlugin} from "../ShapeTransformPlugin";
+import {Box3, Vector3} from "three";
 
 class pingpong extends ShapeTransformPlugin {
     static name = 'pingpong';
@@ -21,7 +22,7 @@ class pingpong extends ShapeTransformPlugin {
         let vertices = shape.geometry.getAttribute('position');
         let speeds = this.vertices;
 
-        let vtc = new THREE.Vector3();
+        let vtc = new Vector3();
         for (let i = 0; i < vertices.count; i++) {
             let speed = speeds[i];
             vtc.fromBufferAttribute(vertices, i);
@@ -57,10 +58,10 @@ class pingpong extends ShapeTransformPlugin {
     }
 
     /**
-     * @param {THREE.Vector3} min
-     * @param {THREE.Vector3} max
-     * @param {THREE.Vector3} direction
-     * @param {THREE.Vector3} point
+     * @param {Vector3} min
+     * @param {Vector3} max
+     * @param {Vector3} direction
+     * @param {Vector3} point
      */
     fixBounds(min, max, direction, point) {
 
@@ -91,7 +92,7 @@ class pingpong extends ShapeTransformPlugin {
             min.multiplyScalar(.25);
             max.multiplyScalar(.25);
 
-            let box = new THREE.Box3(min, max);
+            let box = new Box3(min, max);
             if (box.containsPoint(point)) {
 
             }
@@ -100,8 +101,8 @@ class pingpong extends ShapeTransformPlugin {
 
 
     /**
-     * @param {THREE.Vector3} speed
-     * @param {THREE.Vector3} reference
+     * @param {Vector3} speed
+     * @param {Vector3} reference
      */
     setSpeeds(speed, reference) {
         speed.x = this.randomSpeed();

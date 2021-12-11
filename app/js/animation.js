@@ -17,7 +17,7 @@ _importThreePostprocessing('EffectComposer');
 document.addEventListener('DOMContentLoaded', function () {
 
     const animation = new Animation(G_INSTANCE);
-    let config = new Config(animation);
+    const config = new Config(animation);
 
     Messaging.init(animation);
     Messaging.connect(function (reconnect, animation) {

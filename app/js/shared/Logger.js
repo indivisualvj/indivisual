@@ -1,4 +1,5 @@
 import {Messaging} from "./Messaging";
+import {TimeoutManager} from "../manager/TimeoutManager";
 
 class Logger
 {
@@ -27,6 +28,26 @@ class Logger
                 co.scrollTop = co.scrollHeight;
             }
         });
+    }
+
+    /**
+     *
+     * @param key
+     * @param value
+     * @param timeout
+     */
+    static loading(key, value, timeout) {
+        let loading = document.getElementById('loading');
+        if (loading) {
+            loading.style.display = 'block';
+            TimeoutManager.add('Logger.loading', timeout ?? 300000, () => {
+                loading.style.display = 'none';
+            });
+            loading.innerText = (key ? ` ${key} ${value} ...` : 'initializing ...');
+        } else {
+            this.log(key, value);
+        }
+
     }
 
     /**
@@ -75,7 +96,7 @@ class Logger
 
                 co.scrollTop = co.scrollHeight;
 
-            } else {
+            } else if (_console) {
                 console.log(key, value);
             }
         });

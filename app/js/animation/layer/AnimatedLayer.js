@@ -4,7 +4,8 @@
 
 import {_Layer} from "./_Layer";
 
-class Layer extends _Layer {
+class Layer extends _Layer
+{
 
     animate() {
         this._handleResets();

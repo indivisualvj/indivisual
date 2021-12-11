@@ -5,6 +5,8 @@ import {ControlSet} from "../../shared/ControlSet";
 
 class session extends ControlSet
 {
+    static index = 10;
+
     settings = {
         session: 'root'
     };
@@ -18,6 +20,8 @@ class session extends ControlSet
 
 class controls extends ControlSet
 {
+    static index = 20;
+
     open = true;
 
     settings = {
@@ -213,4 +217,4 @@ class controls extends ControlSet
     };
 }
 
-export {session, controls}
+export {controls, session}

@@ -1,7 +1,8 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {DisplaySourcePlugin} from "../../shared/DisplaySourcePlugin";
+import {DisplaySourcePlugin} from "../DisplaySourcePlugin";
+import {Shape} from "../../animation/Shape";
 
 class Sequence extends DisplaySourcePlugin
 {
@@ -618,7 +619,7 @@ class Sequence extends DisplaySourcePlugin
 
             let instance = new HC.plugins[plugin][key]();
             instance.construct(this.animation, this, {}, plugin, key);
-            instance.inject();
+            instance.inject(Shape);
 
             this.oscillators[key] = instance;
         }

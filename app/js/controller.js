@@ -12,8 +12,8 @@ import {Logger} from "./shared/Logger";
  */
 document.addEventListener('DOMContentLoaded', function () {
 
-    let controller = new Controller(G_INSTANCE);
-    let config = new Config(controller);
+    const controller = new Controller(G_INSTANCE);
+    const config = new Config(controller);
 
     Messaging.init(controller);
     Messaging.connect(function (reconnect, controller) {

@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {DisplaySourcePlugin} from "../../shared/DisplaySourcePlugin";
+import {DisplaySourcePlugin} from "../DisplaySourcePlugin";
 
 class Perspective extends DisplaySourcePlugin
 {

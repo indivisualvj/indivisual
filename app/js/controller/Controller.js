@@ -187,22 +187,22 @@ class Controller extends Program {
         })
         Messaging.sync((session) => {
             if ('controls' in session) {
-                Logger.log('controls', 'synced');
+                Logger.loading('controls', 'synced');
                 let controls = session.controls;
                 this.updateControls(controls, true, false, true);
             }
             if ('displays' in session) {
-                Logger.log('displays', 'synced');
+                Logger.loading('displays', 'synced');
                 let displays = session.displays;
                 this.updateDisplays(displays, true, false, true);
             }
             if ('sources' in session) {
-                Logger.log('sources', 'synced');
+                Logger.loading('sources', 'synced');
                 let sources = session.sources;
                 this.updateSources(sources, true, false, true);
             }
             if ('settings' in session) {
-                Logger.log('settings', 'synced');
+                Logger.loading('settings', 'synced');
                 let settings = session.settings;
                 for (let layer in settings) {
                     this.updateSettings(layer, settings[layer], true, false, true);
@@ -211,6 +211,8 @@ class Controller extends Program {
 
             syncing = false;
             this.updateControl('layer', this.config.ControlSettings.layer, true, false, false);
+
+            Logger.loading(null, null,250);
 
             this._checkDisplayVisibility();
         });

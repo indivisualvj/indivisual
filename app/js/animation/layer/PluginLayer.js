@@ -2,84 +2,85 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {_Layer} from "./NextLayer";
+import {Shape} from "../Shape";
 
-class Layer extends _Layer {
-
+class Layer extends _Layer
+{
 
     /**
      *
      * @param plugin
      * @param name
-     * @returns {HC.AnimationPlugin}
+     * @returns {AnimationPlugin}
      */
     getPlugin(plugin, name) {
 
         name = name || this.settings[plugin]; // specific plugin OR value from corresponding setting
 
         return this.plugins[plugin][name];// || false;
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.OverrideMaterialInputPlugin}
+     * @returns {OverrideMaterialInputPlugin}
      */
     getOverrideMaterialInputPlugin(name) {
         return this.getPlugin('override_material_input', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.OverrideMaterialInputPlugin}
+     * @returns {OverrideMaterialInputPlugin}
      */
     getOverrideBackgroundModePlugin(name) {
         return this.getPlugin('override_background_mode', name);
-    };
+    }
 
 
     /**
      *
      * @param name
-     * @returns {HC.LightingLookatPlugin}
+     * @returns {LightingLookatPlugin}
      */
     getLightingLookatPlugin(name) {
         return this.getPlugin('lighting_lookat', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.LightingPatternPlugin}
+     * @returns {LightingPatternPlugin}
      */
     getLightingPatternPlugin(name) {
         return this.getPlugin('lighting_pattern', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.LightingTypePlugin}
+     * @returns {LightingTypePlugin}
      */
     getLightingTypePlugin(name) {
         return this.getPlugin('lighting_type', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.ShaderPlugin}
+     * @returns {ShaderPlugin}
      */
     getShaderPlugin(name) {
         return this.getPlugin('shaders', name);
-    };
+    }
 
     /**
      *
      * @param name
      * @param key
      * @param properties
-     * @returns {HC.ShaderPlugin}
+     * @returns {ShaderPlugin}
      */
     getShaderPassPlugin(name, key, properties) {
 
@@ -87,7 +88,8 @@ class Layer extends _Layer {
             this.plugins['passes'] = {};
         }
 
-        let plugin = this.getPlugin('passes', key, true);
+        /** @type{ShaderPlugin} */
+        let plugin = this.getPlugin('passes', key);
         if (!plugin) {
             plugin = this.loadPlugin('shaders', name);
             this.setPlugin('passes', key, plugin);
@@ -99,224 +101,224 @@ class Layer extends _Layer {
         plugin.construct(this.animation, this, settings, 'shaders', key);
 
         return plugin;
-    };
+    }
 
 
     /**
      *
      * @param name
-     * @returns {HC.PatternRotationPlugin}
+     * @returns {PatternRotationPlugin}
      */
     getPatternRotationPlugin(name) {
         return this.getPlugin('pattern_rotation', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.ShapeLookatPlugin}
+     * @returns {ShapeLookatPlugin}
      */
     getShapeLookatPlugin(name) {
         return this.getPlugin('shape_lookat', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.BackgroundModePlugin}
+     * @returns {BackgroundModePlugin}
      */
     getBackgroundModePlugin(name) {
         return this.getPlugin('background_mode', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.OffsetModePlugin}
+     * @returns {OffsetModePlugin}
      */
     getOffsetModePlugin(name) {
         return this.getPlugin('offset_mode', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.PatternPlugin}
+     * @returns {PatternPlugin}
      */
     getPatternPlugin(name) {
         return this.getPlugin('pattern', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.PatternPlugin}
+     * @returns {PatternPlugin}
      */
     getPatternOverlayPlugin(name) {
         return this.getPlugin('pattern_overlay', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.RotationOffsetModePlugin}
+     * @returns {RotationOffsetModePlugin}
      */
     getRotationOffsetModePlugin(name) {
         return this.getPlugin('rotation_offset_mode', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.RotationModePlugin}
+     * @returns {RotationModePlugin}
      */
     getRotationModePlugin(name) {
         return this.getPlugin('rotation_mode', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.RotationDirectionPlugin}
+     * @returns {RotationDirectionPlugin}
      */
     getRotationDirectionPlugin(name) {
         return this.getPlugin('rotation_direction', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.PatternMoverPlugin}
+     * @returns {PatternMoverPlugin}
      */
     getPatternMoverPlugin(name) {
         return this.getPlugin('pattern_mover', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.SizingModePlugin}
+     * @returns {SizingModePlugin}
      */
     getSizingModePlugin(name) {
         return this.getPlugin('sizing_mode', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.SizingFlipPlugin}
+     * @returns {SizingFlipPlugin}
      */
     getSizingFlipPlugin(name) {
         return this.getPlugin('sizing_flip', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.ShapeGeometryPlugin}
+     * @returns {ShapeGeometryPlugin}
      */
     getShapeGeometryPlugin(name) {
         return this.getPlugin('shape_geometry', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.ShapeTransformPlugin}
+     * @returns {ShapeTransformPlugin}
      */
     getShapeTransformPlugin(name) {
         return this.getPlugin('shape_transform', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.ShapeModifierPlugin}
+     * @returns {ShapeModifierPlugin}
      */
     getShapeModifierPlugin(name) {
         return this.getPlugin('shape_modifier', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.ShapeRhythmPlugin}
+     * @returns {ShapeRhythmPlugin}
      */
     getShapeRhythmPlugin(name) {
         return this.getPlugin('shape_rhythm', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.ShapeDelayPlugin}
+     * @returns {ShapeDelayPlugin}
      */
     shapeDelayPlugin(name) {
         return this.getPlugin('shape_delay', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.ShapePairingPlugin}
+     * @returns {ShapePairingPlugin}
      */
     getShapePairingPlugin(name) {
         return this.getPlugin('shape_pairing', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.OscillatePlugin}
+     * @returns {OscillatePlugin}
      */
     getOscillatePlugin(name) {
         return this.getPlugin('oscillate', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.ColoringModePlugin}
+     * @returns {ColoringModePlugin}
      */
     getColoringModePlugin(name) {
         return this.getPlugin('coloring_mode', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.FilterModePlugin}
+     * @returns {FilterModePlugin}
      */
     getFilterModePlugin(name) {
         return this.getPlugin('filter_mode', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.MeshMaterialPlugin}
+     * @returns {MeshMaterialPlugin}
      */
     getMeshMaterialPlugin(name) {
         return this.getPlugin('mesh_material', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.MaterialStylePlugin}
+     * @returns {MaterialStylePlugin}
      */
     getMaterialStylePlugin(name) {
         return this.getPlugin('material_style', name);
-    };
+    }
 
     /**
      *
      * @param name
-     * @returns {HC.CameraModePlugin}
+     * @returns {CameraModePlugin}
      */
     getCameraModePlugin(name) {
         return this.getPlugin('camera_mode', name);
-    };
+    }
 
     /**
      *
@@ -326,7 +328,7 @@ class Layer extends _Layer {
      */
     getShapePluginParams(plugin, shape) {
         return this.getPlugin(plugin).params(shape);
-    };
+    }
 
     /**
      *
@@ -335,7 +337,7 @@ class Layer extends _Layer {
      */
     getShapeDuration(shape) {
         return this.getShapePluginParams('shape_rhythm', shape).duration;
-    };
+    }
 
     /**
      *
@@ -344,7 +346,7 @@ class Layer extends _Layer {
      */
     getShapeDirection(shape) {
         return this.getShapePluginParams('rotation_direction', shape).dir;
-    };
+    }
 
     /**
      *
@@ -371,7 +373,7 @@ class Layer extends _Layer {
                 }
             }
         }
-    };
+    }
 
     /**
      *
@@ -402,11 +404,11 @@ class Layer extends _Layer {
                 let instance = this.loadPlugin(plugin, key);
                 instance.construct(this.animation, this, this.settings, plugin, key);
                 instance.setControlSets(this.controlSets);
-                instance.inject();
+                instance.inject(Shape);
                 this.setPlugin(plugin, key, instance);
             }
         }
-    };
+    }
 
     /**
      *
@@ -415,7 +417,7 @@ class Layer extends _Layer {
      */
     loadPlugin(plugin, name) {
         return new HC.plugins[plugin][name](this.animation, this);
-    };
+    }
 
     /**
      *
@@ -425,7 +427,42 @@ class Layer extends _Layer {
      */
     setPlugin(plugin, name, instance) {
         this.plugins[plugin][name] = instance;
-    };
+    }
+
+
+    /**
+     *
+     * @returns {OverrideMaterialInputPlugin}
+     */
+    getOverrideMaterialInput() {
+        let seq = this.config.SourceSettings.override_material_input;
+        if (seq === 'webcam') {
+            return this.getOverrideMaterialInputPlugin('webcam');
+
+        } else if (seq !== 'none') {
+            return this.getOverrideMaterialInputPlugin('sequence');
+
+        }
+
+        return this.getOverrideMaterialInputPlugin('texture');
+    }
+
+    /**
+     *
+     * @returns {OverrideMaterialInputPlugin}
+     */
+    getOverrideBackgroundMode() {
+        let seq = this.config.SourceSettings.override_background_mode;
+        if (seq === 'webcam') {
+            return this.getOverrideBackgroundModePlugin('webcam');
+
+        } else if (seq !== 'none') {
+            return this.getOverrideBackgroundModePlugin('sequence');
+
+        }
+
+        return null;
+    }
 
 }
 

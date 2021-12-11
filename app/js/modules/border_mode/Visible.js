@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {BorderModePlugin} from "../../shared/BorderModePlugin";
+import {BorderModePlugin} from "../BorderModePlugin";
 
 class Visible extends BorderModePlugin
 {

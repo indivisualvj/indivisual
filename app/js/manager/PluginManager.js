@@ -12,10 +12,28 @@ import {SourceManager} from "./SourceManager";
 import {LayeredControlSetManager} from "./LayeredControlSetManager";
 import {Logger} from "../shared/Logger";
 import {Messaging} from "../shared/Messaging";
-import {TimeoutManager} from "./TimeoutManager";
 
 class PluginManager
 {
+    /**
+     *
+     * @param settings
+     * @param section
+     * @param target
+     * @param config
+     * @param [dir]
+     * @return {Promise<unknown>}
+     */
+    static loadLayerPlugins(settings, section, target, config, dir) {
+        let path = HC.filePath('layer', section, dir);
+        return new Promise((resolve) => {
+            this._importPlugins(path).then((plugins) => {
+                this._assignPlugins(settings, section, plugins, target, config);
+                resolve();
+            });
+        });
+    }
+
     /**
      *
      * @param settings
@@ -24,7 +42,7 @@ class PluginManager
      */
     static assignAudioPlugins(settings, config, callback) {
 
-        this._importPlugins('audio', (plugins) => {
+        this._importPlugins('audio').then((plugins) => {
             AudioManager.plugins = AudioManager.plugins || {};
             this._assignPlugins(settings, 'audio', plugins, AudioManager.plugins, config);
             callback();
@@ -39,7 +57,7 @@ class PluginManager
      */
     static assignShuffleModePlugins(settings, config, callback) {
 
-        this._importPlugins('shuffle_mode', (plugins) => {
+        this._importPlugins('shuffle_mode').then((plugins) => {
             Renderer.plugins = Renderer.plugins || {};
             this._assignPlugins(settings, 'shuffle_mode', plugins, Renderer.plugins, config);
             callback();
@@ -53,7 +71,7 @@ class PluginManager
      * @param callback
      */
     static assignDisplayVisibilityPlugins(settings, config, callback) {
-        this._importPlugins('display_visibility', (plugins) => {
+        this._importPlugins('display_visibility').then((plugins) => {
             DisplayManager.plugins = DisplayManager.plugins || {};
             this._assignPlugins(settings, 'display_visibility', plugins, DisplayManager.plugins, config);
             callback();
@@ -67,7 +85,7 @@ class PluginManager
      * @param callback
      */
     static assignBorderModePlugins(settings, config, callback) {
-        this._importPlugins('border_mode', (plugins) => {
+        this._importPlugins('border_mode').then((plugins) => {
             DisplayManager.plugins = DisplayManager.plugins || {};
             this._assignPlugins(settings, 'border_mode', plugins, DisplayManager.plugins, config);
             callback();
@@ -81,7 +99,7 @@ class PluginManager
      * @param callback
      */
     static assignDisplaySourcePlugins(settings, config, callback) {
-        this._importPlugins('display_source', (plugins) => {
+        this._importPlugins('display_source').then((plugins) => {
             SourceManager.plugins = SourceManager.plugins || {};
             this._assignPlugins(settings, 'display_source', plugins, SourceManager.plugins, config);
             callback();
@@ -96,10 +114,8 @@ class PluginManager
     static assignControlSets(target, callback) {
         LayeredControlSetManager.plugins = { control_set: {} };
 
-        this._importPlugins(HC.filePath('control_set', 'animation'), (plugins) => {
-            let keys = Object.keys(plugins);
-
-            keys.sort(this._sort(plugins));
+        this._importPlugins(HC.filePath('control_set', 'animation')).then((plugins) => {
+            let keys = Object.sortedKeys(plugins);
 
             for (let k in keys) {
 
@@ -120,7 +136,7 @@ class PluginManager
      * @return {{session?: session, controls?: controls}}
      */
     static getControlSets() {
-        return ControlControlSets;
+        return this._sort(ControlControlSets);
     }
 
     /**
@@ -128,7 +144,7 @@ class PluginManager
      * @return {{override?: override, sequenceN?: sequenceN, sample?: sample, source?: source}}
      */
     static getSourceSets() {
-        return SourceControlSets;
+        return this._sort(SourceControlSets);
     }
 
     /**
@@ -136,7 +152,10 @@ class PluginManager
      * @return {{displays?: {}, video?: {}}}
      */
     static getDisplaySets() {
-        return DisplayControlSets;
+        return { // workaround to achieve the correct order
+            video: DisplayControlSets.video,
+            displays: DisplayControlSets.displays
+        };
     }
     /**
      *
@@ -149,7 +168,7 @@ class PluginManager
             let subset = plugins[s];
             for (let p in subset) {
                 subset[p].boot(initiator, config);
-                Logger.log(s + '.' + p, 'booted');
+                Logger.loading(s + '.' + p, 'booted');
             }
         }
     }
@@ -166,33 +185,41 @@ class PluginManager
             let plugin = plugins[k];
             plugin = new plugin(initiator, settings);
             plugins[k] = plugin;
-            Logger.log(k, 'instantiated');
+            Logger.loading(k, 'instantiated');
             if (hook) {
                 hook(plugin);
             }
         }
     }
 
-    static _importPlugins(dir, callback) {
-        let searchPath = HC.filePath(APP_DIR, 'js', 'modules', dir);
-        let importPath = HC.filePath('..', 'modules', dir);
-        let plugins = {};
-        let imports = [];
-        Messaging.samples(searchPath, (files) => {
-            files.forEach((file) => {
-                imports.push((_loaded) => {
-                    import(HC.filePath(importPath, file.name)).then((plugin) => {
+    /**
+     *
+     * @param dir
+     * @return {Promise<unknown>}
+     * @private
+     */
+    static _importPlugins(dir) {
+
+        return new Promise((resolve) => {
+            let searchPath = HC.filePath(APP_DIR, 'js', 'modules', dir);
+            let importPath = HC.filePath('..', 'modules', dir);
+            let plugins = {};
+            let imports = [];
+
+            Messaging.samples(searchPath, (files) => {
+                files.forEach((file) => {
+                    imports.push(import(HC.filePath(importPath, file.name)));
+                });
+
+                Promise.all(imports).then(function () {
+                    for (const plugin of arguments[0]) {
                         for (const pluginKey in plugin) {
                             plugins[pluginKey] = plugin[pluginKey];
-                            Logger.log(dir + '/' + pluginKey, 'imported');
+                            Logger.loading(dir + '/' + pluginKey, 'imported');
                         }
-                        _loaded();
-                    });
+                    }
+                    resolve(plugins);
                 });
-            });
-
-            TimeoutManager.chainExecuteCalls(imports, () => {
-                callback(plugins);
             });
         });
     }
@@ -208,51 +235,44 @@ class PluginManager
      */
     static _assignPlugins(settings, section, plugins, target, config) {
 
-        let pluginKeys = Object.keys(plugins);
+        if (!(section in settings)) {
+            settings[section] = {};
+        }
+        if (!(section in target)) {
+            target[section] = {};
+        }
 
-        pluginKeys.sort(this._sort(plugins));
+        let pluginKeys = Object.sortedKeys(plugins);
 
         for (let i = 0; i < pluginKeys.length; i++) {
 
             let pluginKey = pluginKeys[i];
             let plugin = plugins[pluginKey];
-            pluginKey = pluginKey.toSnakeCase();
-
-            let name = plugin.name || pluginKey;
-
-            if (!(section in settings)) {
-                settings[section] = {};
-            }
-            if (!(section in target)) {
-                target[section] = {};
-            }
+            let name = plugin.name || pluginKey.toKebapCase();
+            pluginKey = pluginKey.toLowerCase(); // fixme: change plugin classnames to CamelCase and convert to snake_case here
 
             target[section][pluginKey] = plugin;
             settings[section][pluginKey] = name.toLowerCase();
-            Logger.log(section + '.' + pluginKey, 'assigned');
+            Logger.loading(section + '.' + pluginKey, 'assigned');
         }
     }
 
 
     /**
      *
-     * @param plugins
+     * @param _object
      * @return {(function(*, *): (*))|*}
      * @private
      */
-    static _sort (plugins) {
-        return (a, b) => {
-            let ai = plugins[a].index || 99999;
-            let bi = plugins[b].index || 99999;
-            let an = plugins[a].name || a;
-            let bn = plugins[b].name || b;
-
-            let cmpi = ai - bi;
-            if (cmpi === 0) {
-                return an.localeCompare(bn);
-            }
-            return cmpi;
+    static _sort (_object) {
+        let sets = {};
+        let keys = Object.sortedKeys(_object);
+        for (let i = 0; i < keys.length; i++) {
+            let key = keys[i];
+            sets[key] = _object[key];
         }
+
+        return sets;
     }
 }
 

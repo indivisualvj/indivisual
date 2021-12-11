@@ -79,8 +79,8 @@ class Animation extends Program {
         let displayManager = new DisplayManager(this, {
             display: new Array(config.DisplayValues.display.length)
         });
-        displayManager.resize(this.getResolution());
         this.displayManager = displayManager;
+        displayManager.resize(this.getResolution());
 
         this.sourceManager = new SourceManager(this, {
             config: config,
@@ -406,19 +406,19 @@ class Animation extends Program {
         let callback = (session) => {
 
             if ('displays' in session) {
-                Logger.log('displays', 'synced');
+                Logger.loading('displays', 'synced');
                 let displays = session.displays;
                 this.updateDisplays(displays, true, false, true);
             }
 
             if ('sources' in session) {
-                Logger.log('sources', 'synced');
+                Logger.loading('sources', 'synced');
                 let sources = session.sources;
                 this.updateSources(sources, true, false, true);
             }
 
             if ('settings' in session) {
-                Logger.log('settings', 'synced');
+                Logger.loading('settings', 'synced');
                 let settings = session.settings;
 
                 for (let k in settings) {
@@ -427,7 +427,7 @@ class Animation extends Program {
             }
 
             if ('controls' in session) {
-                Logger.log('controls', 'synced');
+                Logger.loading('controls', 'synced');
                 let controls = session.controls;
                 this.updateControls(controls, true, false, true);
             }
@@ -443,6 +443,8 @@ class Animation extends Program {
                     this.updatePlay();
                 });
             }
+
+            Logger.loading(null, null,250);
         };
 
         Messaging.sync(callback);
@@ -735,7 +737,7 @@ class Animation extends Program {
             for (let k in data) {
                 this.config.DisplaySettingsManager.updateItem(k, data[k]);
             }
-            this.displayManager.reset();
+            this.displayManager.reset(this.getResolution());
             // this.fullReset(true);
 
         } else {

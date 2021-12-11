@@ -425,8 +425,8 @@ class DisplayManager {
     /**
      *
      */
-    reset() {
-        this.updateDisplays();
+    reset(resolution) {
+        this.resize(resolution);
     }
 
     /**

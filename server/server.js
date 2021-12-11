@@ -363,17 +363,6 @@ class Server
         /**
          *
          */
-        this.app.get('/bin/controlset.js', (req, res) => {
-
-            let sources = ['js/control_set'];
-            let file = _sources(req.originalUrl, sources);
-
-            res.sendFile(file);
-        });
-
-        /**
-         *
-         */
         this.app.get('/bin/plugins.js', (req, res) => {
 
             let sources = ['js/plugins'];
@@ -405,7 +394,7 @@ class Server
             }
 
             url = path.resolve(url + suffix);
-            console.log('serving', url);
+            console.log('sending', url);
             res.sendFile(url);
         });
 
@@ -414,6 +403,7 @@ class Server
          */
         this.app.get('/app/js/*/*', (req, res) => {
             let url = req.originalUrl.replace('/', '') + '.js';
+            this._loading(url, req);
             url = path.resolve(url);
             res.sendFile(url);
         });
@@ -422,7 +412,8 @@ class Server
          *
          */
         this.app.get('/lib/*.js', (req, res) => {
-            res.sendFile(HC.filePath(_APP, req.originalUrl.substr(1)));
+            let url = req.originalUrl.substr(1);
+            res.sendFile(HC.filePath(_APP, url));
         });
 
         /**
@@ -465,6 +456,20 @@ class Server
             console.log('sending fallback', req.originalUrl);
             res.sendFile(_APP + '/favicon.ico');
         });
+    }
+
+    _loading(url, req) {
+        let referer = req.headers.referer;
+        if (referer) {
+            let to = referer.replace(/.+\/(\w+)\.html/, '$1');
+            let name = to + '@root'; // fixme: fake SID. how to zolf zis?
+            let data = {
+                key: 'loading',
+                value: url,
+            }
+            this.io.to(name).emit('loading', data);
+        }
+
     }
 
     _emit(data) {

@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {ShuffleModePlugin} from "../../shared/ShuffleModePlugin";
+import {ShuffleModePlugin} from "../ShuffleModePlugin";
 
 class FowardBeat extends ShuffleModePlugin {
     static name = 'forward (beat)';

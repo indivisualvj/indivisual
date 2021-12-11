@@ -16,6 +16,7 @@ class Shape {
     normalScale;
     materialNeedsUpdate = true;
     plugins;
+    static injected = {plugins: {}};
 
     /**
      *
@@ -43,7 +44,7 @@ class Shape {
         this.geometry = mesh.geometry;
         this.normalScale = new THREE.Vector3(1, 1, 1).length();
 
-        HC.Shape.prototype.initPlugins(this);
+        this.initPlugins();
 
     }
 
@@ -406,6 +407,10 @@ class Shape {
                 mat.blendDst = b;
             }
         }
+    }
+
+    initPlugins() {
+        this.plugins = clone(Shape.injected.plugins);
     }
 }
 

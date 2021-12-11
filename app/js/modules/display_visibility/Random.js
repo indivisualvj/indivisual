@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {DisplayVisibilityPlugin} from "../../shared/DisplayVisibilityPlugin";
+import {DisplayVisibilityPlugin} from "../DisplayVisibilityPlugin";
 
 class Random extends DisplayVisibilityPlugin {
 

@@ -8,6 +8,8 @@ import {ControlSetManager} from "../manager/ControlSetManager";
 import {Messaging} from "./Messaging";
 import {EventManager} from "../manager/EventManager";
 import {PluginManager} from "../manager/PluginManager";
+import {Shape} from "../animation/Shape";
+import {Logger} from "./Logger";
 
 class Config {
 
@@ -48,16 +50,17 @@ class Config {
             callback: (data, finished) => {
                 let settings = jsyaml.load(data.contents);
 
-                this._loadAnimationPlugins(settings);
-                this.ShaderSettings = this._loadShaderSettings(settings.shaders);
-                this.Passes = [null];
-                for (let sh in this.ShaderSettings) {
-                    this.Passes.push(sh);
-                }
-                this._loadRhythms(settings);
-                this.AnimationValues = settings;
-                this.AnimationValues.shaders[''] = '';
-                finished();
+                this._loadAnimationPlugins(settings, f=> {
+                    this.ShaderSettings = this._loadShaderSettings(settings.shaders);
+                    this.Passes = [null];
+                    for (let sh in this.ShaderSettings) {
+                        this.Passes.push(sh);
+                    }
+                    this._loadRhythms(settings);
+                    this.AnimationValues = settings;
+                    this.AnimationValues.shaders[''] = '';
+                    finished();
+                });
             }
         },
         {
@@ -194,8 +197,8 @@ class Config {
      * @param callback
      */
     loadConfig(callback) {
-
         let resources = this.config;
+        Logger.loading('loading', 'config');
 
         let _load = (index, _callback) => {
 
@@ -268,7 +271,6 @@ class Config {
      *
      */
     initControlControlSets() {
-
         return this._initControlSets(PluginManager.getControlSets(), this.ControlValues);
     }
 
@@ -410,7 +412,6 @@ class Config {
      * @private
      */
     _loadDisplaySourcePlugins(settings, callback) {
-        Object.assign(HC.plugins.override_background_mode, HC.plugins.override_material_input);
         PluginManager.assignDisplaySourcePlugins(settings, this, callback);
     }
 
@@ -418,23 +419,69 @@ class Config {
     /**
      *
      * @param settings
+     * @param callback
      * @private
      */
-    _loadAnimationPlugins(settings) {
+    _loadAnimationPlugins(settings, callback) {
+// todo: when ported, move subplugin classes to folders and move plugins to "basic" folder
+        HC.plugins = HC.plugins ?? {};
 
-        Object.assign(HC.plugins.pattern_overlay, HC.plugins.pattern);
+        let calls = [
+            PluginManager.loadLayerPlugins(settings, 'background_mode',      HC.plugins, this,  'basic'),    
+            PluginManager.loadLayerPlugins(settings, 'background_mode',      HC.plugins, this,  'geometry'), 
+            PluginManager.loadLayerPlugins(settings, 'background_mode',      HC.plugins, this,  'texture'),  
+            PluginManager.loadLayerPlugins(settings, 'camera_mode',          HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'coloring_mode',        HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'filter_mode',          HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'lighting_lookat',      HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'lighting_pattern',     HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'lighting_type',        HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'material_style',       HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'mesh_material',        HC.plugins, this,  'basic'),    
+            PluginManager.loadLayerPlugins(settings, 'mesh_material',        HC.plugins, this,  'camera'),   
+            PluginManager.loadLayerPlugins(settings, 'mesh_material',        HC.plugins, this,  'shader'),   
+            PluginManager.loadLayerPlugins(settings, 'mesh_material',        HC.plugins, this,  'texture'),  
+            PluginManager.loadLayerPlugins(settings, 'offset_mode',          HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'oscillate',            HC.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'override_background_mode',            HC.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'override_material_input',            HC.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'pattern',        HC.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'pattern_mover',        HC.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'pattern_overlay',        HC.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'pattern_rotation',     HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'rotation_direction',   HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'rotation_mode',        HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'rotation_offset_mode', HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'shaders',              HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'shape_delay',          HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'shape_geometry',       HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'shape_lookat',         HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'shape_modifier',       HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'shape_pairing',        HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'shape_rhythm',         HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'shape_transform',      HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'sizing_flip',          HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'sizing_mode',          HC.plugins, this), 
+        ];
 
-        let sectionKeys = Object.keys(HC.plugins);
+        Promise.all(calls).then(() => {
+            Object.assign(HC.plugins.pattern_overlay, HC.plugins.pattern);
+            Object.assign(HC.plugins.override_background_mode, HC.plugins.override_material_input);
 
-        for (let pi = 0; pi < sectionKeys.length; pi++) {
+            let sectionKeys = Object.keys(HC.plugins);
 
-            let section = sectionKeys[pi];
+            for (let pi = 0; pi < sectionKeys.length; pi++) {
 
-            // create plugin namespaces to work in
-            HC.Shape.prototype.injected.plugins[section] = {};
+                let section = sectionKeys[pi];
 
-            this._loadPlugins(settings, section, HC.plugins[section]);
-        }
+                // create plugin namespaces to work in
+                Shape.injected.plugins[section] = {};
+
+                this._loadPlugins(settings, section, HC.plugins[section]);
+            }
+
+            callback();
+        });
     }
 
     /**

@@ -8,7 +8,7 @@ class Rotation extends ControlSet
     static index = 140;
 
     settings = {
-        rotation_mode: 'default',
+        rotation_mode: '_default',
         rotation_sync: true,
         rotation_direction: 'random',
         rotation_easing: 'off',

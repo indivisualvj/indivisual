@@ -41,7 +41,7 @@ class refractive extends MeshCameraMaterialPlugin {
         geometry.computeBoundingBox();
         let box3 = geometry.boundingBox;
         let height = box3.max.y - box3.min.y;
-        let cubeRenderTarget = new WebGLCubeRenderTarget(height, {
+        let cubeRenderTarget = new WebGLCubeRenderTarget(4 * height, {
             format: RGBFormat,
             generateMipmaps: true,
             minFilter: LinearMipmapLinearFilter,

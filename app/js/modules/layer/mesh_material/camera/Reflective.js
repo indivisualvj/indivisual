@@ -25,7 +25,7 @@ class reflective extends MeshCameraMaterialPlugin {
 
     /**
      *
-     * @param {BufferGeometry} geometry
+     * @param {Geometry} geometry
      * @param index
      * @returns {Mesh}
      */
@@ -35,7 +35,7 @@ class reflective extends MeshCameraMaterialPlugin {
 
         let box3 = geometry.boundingBox;
         let height = box3.max.y - box3.min.y;
-        let cubeRenderTarget = new WebGLCubeRenderTarget(height, {
+        let cubeRenderTarget = new WebGLCubeRenderTarget(4 * height, {
             format: RGBFormat,
             generateMipmaps: true,
             minFilter: LinearMipmapLinearFilter

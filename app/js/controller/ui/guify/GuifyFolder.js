@@ -123,7 +123,7 @@ class GuifyFolder extends GuifyItem {
      * @param object
      * @param options
      * @param onChange
-     * @param opts
+     * @param [opts]
      * @returns {GuifyController}
      */
     addSelectController(label, property, object, options, onChange, opts) {

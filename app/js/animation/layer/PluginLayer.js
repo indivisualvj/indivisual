@@ -11,7 +11,7 @@ class Layer extends _Layer
      *
      * @param plugin
      * @param name
-     * @returns {HC.AnimationPlugin}
+     * @returns {AnimationPlugin}
      */
     getPlugin(plugin, name) {
 
@@ -23,7 +23,7 @@ class Layer extends _Layer
     /**
      *
      * @param name
-     * @returns {HC.OverrideMaterialInputPlugin}
+     * @returns {OverrideMaterialInputPlugin}
      */
     getOverrideMaterialInputPlugin(name) {
         return this.getPlugin('override_material_input', name);
@@ -32,7 +32,7 @@ class Layer extends _Layer
     /**
      *
      * @param name
-     * @returns {HC.OverrideMaterialInputPlugin}
+     * @returns {OverrideMaterialInputPlugin}
      */
     getOverrideBackgroundModePlugin(name) {
         return this.getPlugin('override_background_mode', name);
@@ -143,7 +143,7 @@ class Layer extends _Layer
     /**
      *
      * @param name
-     * @returns {HC.PatternPlugin}
+     * @returns {PatternPlugin}
      */
     getPatternPlugin(name) {
         return this.getPlugin('pattern', name);
@@ -152,7 +152,7 @@ class Layer extends _Layer
     /**
      *
      * @param name
-     * @returns {HC.PatternPlugin}
+     * @returns {PatternPlugin}
      */
     getPatternOverlayPlugin(name) {
         return this.getPlugin('pattern_overlay', name);

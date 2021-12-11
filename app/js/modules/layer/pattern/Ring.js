@@ -69,4 +69,4 @@ class lightspeed extends PatternPlugin {
         }
     }
 
-export {ring};
+export {ring, lightspeed, triangle};

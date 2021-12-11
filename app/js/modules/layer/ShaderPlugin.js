@@ -7,7 +7,7 @@ if (!IS_CONTROLLER) {
     _importThreePostprocessing('RenderPass');
     _importThreePostprocessing('ShaderPass');
 }
-import {AnimationPlugin} from "../../shared/AnimationPlugin";
+import {AnimationPlugin} from "../AnimationPlugin";
 
 class ShaderPlugin extends AnimationPlugin {
 

@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {AnimationTexturePlugin} from "../../shared/AnimationTexturePlugin";
+import {AnimationTexturePlugin} from "../AnimationTexturePlugin";
 
 class OverrideMaterialInputPlugin extends AnimationTexturePlugin
 {

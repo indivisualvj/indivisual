@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {AudioPlugin} from "../../shared/AudioPlugin";
+import {AudioPlugin} from "../AudioPlugin";
 
 class MediaFile extends AudioPlugin {
     static index = 20;

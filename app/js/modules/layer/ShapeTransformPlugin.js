@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {AnimationPlugin} from "../../shared/AnimationPlugin";
+import {AnimationPlugin} from "../AnimationPlugin";
 
 class ShapeTransformPlugin extends AnimationPlugin {
 

@@ -2,7 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {GeometryUtils} from "../../shared/GeometryUtils";
-import {AnimationPlugin} from "../../shared/AnimationPlugin";
+import {AnimationPlugin} from "../AnimationPlugin";
 
 class ShapeGeometryPlugin extends AnimationPlugin {
 

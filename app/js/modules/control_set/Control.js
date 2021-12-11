@@ -35,7 +35,7 @@ class controls extends ControlSet
                 }
             } else if (HC.Hotkey.isPressed('shift')) {
                 let _done = false;
-                this.program.midi.loading(() => { // fixme: no direct access to midi
+                this.program.midi.loading(() => { // todo: no direct access to midi
                     return _done;
                 });
                 this.program.resetLayers().finally(() => {

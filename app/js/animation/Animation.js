@@ -68,7 +68,7 @@ class Animation extends Program {
         this.audioManager = new AudioManager(config);
         this.audioAnalyser = new AudioAnalyser(this);
         this.beatKeeper = new BeatKeeper(() => {return this.now;}, config);
-        // fixme why not hold in config like all the other settings?
+        // todo why not hold in config like all the other settings?
         this.settingsManager = new LayeredControlSetManager(config.AnimationValues, config);
 
         let renderer = new Renderer(this, {

@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern.slime = class Plugin extends HC.PatternPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternPlugin} from "../PatternPlugin";
+
+class slime extends PatternPlugin {
         static name = 'slime';
         next = {x: 0, y: 0, z: 0};
         direction = 1;
@@ -73,4 +77,5 @@
             }
         }
     }
-}
+
+export {slime};

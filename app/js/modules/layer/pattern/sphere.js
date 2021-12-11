@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern.sphere = class Plugin extends HC.PatternPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternPlugin} from "../PatternPlugin";
+
+class sphere extends PatternPlugin {
         static name = 'sphere';
         points = {};
 
@@ -61,9 +65,9 @@
             return this.points[shape.index] || {x: 0, y: 0, z: 0};
         }
     }
-}
-{
-    HC.plugins.pattern.spray = class Plugin extends HC.PatternPlugin {
+
+
+class spray extends PatternPlugin {
         static name = 'spray';
         injections = {initial: false, velocity: false};
 
@@ -107,9 +111,9 @@
             );
         }
     }
-}
-{
-    HC.plugins.pattern.pulse = class Plugin extends HC.PatternPlugin {
+
+
+class pulse extends PatternPlugin {
         static name = 'pulse';
         injections = {
             initial: false,
@@ -164,9 +168,9 @@
             );
         }
     }
-}
-{
-    HC.plugins.pattern.drift = class Plugin extends HC.PatternPlugin {
+
+
+class drift extends PatternPlugin {
         static name = 'drift';
 
         apply(shape) {
@@ -174,4 +178,5 @@
             layer.getPatternPlugin('spray').apply(shape);
         }
     }
-}
+
+export {spray, sphere, pulse, drift};

@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern.hive = class Plugin extends HC.PatternPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternPlugin} from "../PatternPlugin";
+
+class hive extends PatternPlugin {
         static name = 'hive (hexagon)';
 
         apply(shape) {
@@ -33,9 +37,9 @@
             this.sharedMoverParams(ox, oy, gapx, gapy);
         }
     }
-}
-{
-    HC.plugins.pattern.trihive = class Plugin extends HC.PatternPlugin {
+
+
+class trihive extends PatternPlugin {
         static name = 'hive (triangle)';
 
         injections = {
@@ -92,9 +96,9 @@
             this.sharedMoverParams(ox, oy, gapx, gapy);
         }
     }
-}
-{
-    HC.plugins.pattern.ruehive = class Plugin extends HC.PatternPlugin {
+
+
+class ruehive extends PatternPlugin {
         static name = 'hive (rue)';
 
         apply(shape) {
@@ -128,4 +132,5 @@
             this.sharedMoverParams(ox, oy, gapx, gapy);
         }
     }
-}
+
+export {hive, ruehive, trihive};

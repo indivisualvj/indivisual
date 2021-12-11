@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern.matrix = class Plugin extends HC.PatternPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternPlugin} from "../PatternPlugin";
+
+class matrix extends PatternPlugin {
         static name = 'matrix';
         static index = 2;
         columns = false;
@@ -70,4 +74,5 @@
             return this.rows;
         }
     }
-}
+
+export {matrix};

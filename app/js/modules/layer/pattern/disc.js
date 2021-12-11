@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern.disc = class Plugin extends HC.PatternPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternPlugin} from "../PatternPlugin";
+
+class disc extends PatternPlugin {
         static name = 'disc';
         injections = {shellIndex: false};
         squareDiameter = (Math.sqrt(2 * 2 + 2 * 2) / 2);
@@ -51,4 +55,5 @@
             this.positionIn3dSpace(shape, x, y, z);
         }
     }
-}
+
+export {disc};

@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern.lineh = class Plugin extends HC.PatternPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternPlugin} from "../PatternPlugin";
+
+class lineh extends PatternPlugin {
         static name = 'lineh';
 
         apply(shape) {
@@ -25,9 +29,9 @@
             return {x: x, y: y, z: z};
         }
     }
-}
-{
-    HC.plugins.pattern.linev = class Plugin extends HC.PatternPlugin {
+
+
+class linev extends PatternPlugin {
         static name = 'linev';
 
         apply(shape) {
@@ -53,4 +57,5 @@
             return {x: x, y: y, z: z};
         }
     }
-}
+
+export {lineh, linev};

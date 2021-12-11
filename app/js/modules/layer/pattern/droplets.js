@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern.dropletsv = class Plugin extends HC.PatternPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternPlugin} from "../PatternPlugin";
+
+class dropletsv extends PatternPlugin {
         static name = 'dropletsv';
         injections = {velocity: false};
 
@@ -30,9 +34,9 @@
             shape.y(shape.y() + speed);
         }
     }
-}
-{
-    HC.plugins.pattern.dropletsh = class Plugin extends HC.PatternPlugin {
+
+
+class dropletsh extends PatternPlugin {
         static name = 'dropletsh';
         injections = {velocity: false};
 
@@ -63,4 +67,5 @@
             shape.x(shape.x() + speed);
         }
     }
-}
+
+export {dropletsh, dropletsv};

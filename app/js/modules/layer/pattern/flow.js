@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern.flow = class Plugin extends HC.PatternPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternPlugin} from "../PatternPlugin";
+
+class flow extends PatternPlugin {
         static name = 'flow';
         injections = {
             velocity: {
@@ -55,4 +59,5 @@
             shape.move(vx, vy, vz);
         }
     }
-}
+
+export {flow};

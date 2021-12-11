@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern.bacillus = class Plugin extends HC.PatternPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternPlugin} from "../PatternPlugin";
+
+class bacillus extends PatternPlugin {
         static name = 'bacillus';
         injections = {velocity: false};
 
@@ -97,13 +101,14 @@
             }
         }
     }
-}
-{
-    HC.plugins.pattern.rocket = class Plugin extends HC.plugins.pattern.bacillus {
+
+
+class rocket extends bacillus {
         static name = 'rocket';
 
         apply(shape) {
             super.apply(shape, true);
         }
     }
-}
+
+export {bacillus, rocket};

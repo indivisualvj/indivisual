@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern.pivot = class Plugin extends HC.PatternPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternPlugin} from "../PatternPlugin";
+
+class pivot extends PatternPlugin {
         static name = 'random pivot (shape speed)';
 
         points = false;
@@ -93,4 +97,5 @@
             return dist;
         }
     }
-}
+
+export {pivot};

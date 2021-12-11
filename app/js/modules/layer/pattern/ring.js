@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern.ring = class Plugin extends HC.PatternPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternPlugin} from "../PatternPlugin";
+
+class ring extends PatternPlugin {
         static name = 'ring';
 
         apply(shape, sides) {
@@ -29,9 +33,9 @@
             this.positionIn3dSpace(shape, x, -y, z);
         }
     }
-}
-{
-    HC.plugins.pattern.triangle = class Plugin extends HC.PatternPlugin {
+
+
+class triangle extends PatternPlugin {
         static name = 'triangle';
 
         apply(shape) {
@@ -39,9 +43,9 @@
             layer.getPatternPlugin('ring').apply(shape, 3);
         }
     }
-}
-{
-    HC.plugins.pattern.lightspeed = class Plugin extends HC.PatternPlugin {
+
+
+class lightspeed extends PatternPlugin {
         static name = 'lightspeed';
 
         apply(shape) {
@@ -64,4 +68,5 @@
             shape.position(x, y, z);
         }
     }
-}
+
+export {ring};

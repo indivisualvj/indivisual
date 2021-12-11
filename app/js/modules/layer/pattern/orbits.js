@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern.orbits = class Plugin extends HC.PatternPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternPlugin} from "../PatternPlugin";
+
+class orbits extends PatternPlugin {
         static name = 'orbits';
         injections = {};
 
@@ -68,4 +72,5 @@
             this.positionIn3dSpace(shape, x, y, z);
         }
     }
-}
+
+export {orbits};

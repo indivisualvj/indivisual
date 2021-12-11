@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern.pass = class Plugin extends HC.PatternPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternPlugin} from "../PatternPlugin";
+
+class pass extends PatternPlugin {
         static name = 'pass horizontal';
         dir = 1;
         injections = {
@@ -47,4 +51,5 @@
             }
         }
     }
-}
+
+export {pass};

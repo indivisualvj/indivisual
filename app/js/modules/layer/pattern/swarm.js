@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern.swarm = class Plugin extends HC.PatternPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternPlugin} from "../PatternPlugin";
+
+class swarm extends PatternPlugin {
         static name = 'swarm';
         shared = {
             locking: {
@@ -198,4 +202,5 @@
             return this;
         }
     }
-}
+
+export {swarm};

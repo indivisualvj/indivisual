@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern.atom = class Plugin extends HC.PatternPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternPlugin} from "../PatternPlugin";
+
+class atom extends PatternPlugin {
         static name = 'atom';
         next = {x: 0, y: 0, z: 0};
         injections = {
@@ -32,4 +36,5 @@
             }
         }
     }
-}
+
+export {atom};

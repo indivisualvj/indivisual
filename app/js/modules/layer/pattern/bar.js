@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern.bar = class Plugin extends HC.PatternPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternPlugin} from "../PatternPlugin";
+
+class bar extends PatternPlugin {
         static name = 'bar';
         orientation = 0;
         position = 0;
@@ -58,4 +62,5 @@
             }
         }
     }
-}
+
+export {bar};

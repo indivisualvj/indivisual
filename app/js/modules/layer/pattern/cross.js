@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern.cross = class Plugin extends HC.PatternPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternPlugin} from "../PatternPlugin";
+
+class cross extends PatternPlugin {
         static name = 'cross';
 
         apply(shape) {
@@ -23,4 +27,5 @@
             this.positionIn3dSpace(shape, x, y, z);
         }
     }
-}
+
+export {cross};

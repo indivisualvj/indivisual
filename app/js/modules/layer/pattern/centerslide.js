@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern.centerslide = class Plugin extends HC.PatternPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternPlugin} from "../PatternPlugin";
+
+class centerslide extends PatternPlugin {
         static name = 'centerslide';
         injections = {
             next: {x: 0, y: 0, z: 0},
@@ -48,4 +52,5 @@
             }
         }
     }
-}
+
+export {centerslide};

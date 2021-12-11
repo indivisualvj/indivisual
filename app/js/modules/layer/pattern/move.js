@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern.move = class Plugin extends HC.PatternPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternPlugin} from "../PatternPlugin";
+
+class move extends PatternPlugin {
         static name = 'move';
         injections = {
             velocity: false,
@@ -55,4 +59,5 @@
             }
         }
     }
-}
+
+export {move};

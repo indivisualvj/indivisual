@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern.fall = class Plugin extends HC.PatternPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternPlugin} from "../PatternPlugin";
+
+class fall extends PatternPlugin {
         static name = 'fall';
         injections = {
             velocity: {
@@ -50,13 +54,14 @@
             );
         }
     }
-}
-{
-    HC.plugins.pattern.stairs = class Plugin extends HC.plugins.pattern.fall {
+
+
+class stairs extends fall {
         static name = 'stairs';
 
         apply(shape) {
             super.apply(shape, true);
         }
     }
-}
+
+export {fall, stairs};

@@ -1,5 +1,9 @@
-{
-    HC.plugins.pattern.cube = class Plugin extends HC.PatternPlugin {
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {PatternPlugin} from "../PatternPlugin";
+
+class cube extends PatternPlugin {
         static name = 'cube';
         injections = {position: false};
 
@@ -110,4 +114,5 @@
             return Math.ceil(Math.pow(this.layer.shapeCount(), 1 / 3));
         }
     }
-}
+
+export {cube};

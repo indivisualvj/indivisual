@@ -383,7 +383,8 @@ class Server
                 suffix = '';
             }
 
-            let file = this._parse(url + suffix);
+            let file = url + suffix;
+            file = file.endsWith('.js') ? this._parse(file) : path.resolve(file);
             console.log('sending', file);
             res.sendFile(file);
         });

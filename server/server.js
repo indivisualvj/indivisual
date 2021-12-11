@@ -345,6 +345,7 @@ class Server
          */
         this.app.get('/app/*.js', (req, res) => {
             let url = req.originalUrl.replace('/', '');
+            this._loading(url, req);
             url = path.resolve(url);
             res.sendFile(url);
         });
@@ -355,17 +356,7 @@ class Server
         this.app.get('/bin/vanilla.js', (req, res) => {
 
             let sources = ['js/shared/vanilla'];
-            let file = _sources(req.originalUrl, sources);
-
-            res.sendFile(file);
-        });
-
-        /**
-         *
-         */
-        this.app.get('/bin/controlset.js', (req, res) => {
-
-            let sources = ['js/control_set'];
+            this._loading(sources[0], req);
             let file = _sources(req.originalUrl, sources);
 
             res.sendFile(file);
@@ -377,6 +368,7 @@ class Server
         this.app.get('/bin/plugins.js', (req, res) => {
 
             let sources = ['js/plugins'];
+            this._loading(sources[0], req);
             let file = _sources(req.originalUrl, sources);
 
             res.sendFile(file);
@@ -403,8 +395,10 @@ class Server
             } else {
                 suffix = '';
             }
+            url += suffix;
 
-            url = path.resolve(url + suffix);
+            this._loading(url, req);
+            url = path.resolve(url);
             console.log('serving', url);
             res.sendFile(url);
         });
@@ -414,6 +408,7 @@ class Server
          */
         this.app.get('/app/js/*/*', (req, res) => {
             let url = req.originalUrl.replace('/', '') + '.js';
+            this._loading(url, req);
             url = path.resolve(url);
             res.sendFile(url);
         });
@@ -422,7 +417,9 @@ class Server
          *
          */
         this.app.get('/lib/*.js', (req, res) => {
-            res.sendFile(HC.filePath(_APP, req.originalUrl.substr(1)));
+            let url = req.originalUrl.substr(1);
+            this._loading(url, req);
+            res.sendFile(HC.filePath(_APP, url));
         });
 
         /**
@@ -465,6 +462,18 @@ class Server
             console.log('sending fallback', req.originalUrl);
             res.sendFile(_APP + '/favicon.ico');
         });
+    }
+
+    _loading(url, req) {
+        let referer = req.headers.referer;
+        let to = referer.replace(/.+\/(\w+)\.html/, '$1');
+        let name = to + '@root'; // fixme: fake SID. how to zolf zis?
+        let data = {
+            key: 'loading',
+            value: url,
+        }
+        this.io.to(name).emit('loading', data);
+
     }
 
     _emit(data) {

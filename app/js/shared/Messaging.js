@@ -55,6 +55,7 @@ class Messaging {
      */
     static initEvents() {
         this.on('log', this.onLog);
+        this.on('loading', this.onLoading);
         this.on('controls', this.onControls);
         this.on('displays', this.onDisplays);
         this.on('sources', this.onSources);
@@ -212,8 +213,15 @@ class Messaging {
      * @param data
      */
     static onLog(data) {
-
         Logger.log(data.key, data.value);
+    }
+
+    /**
+     *
+     * @param data
+     */
+    static onLoading(data) {
+        Logger.loading(data.key, data.value, data.timeout);
     }
 
     /**

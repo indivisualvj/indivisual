@@ -129,5 +129,5 @@
 }
 
 [data-class="hidden"] {
-    display: none;
+    display: none !important;
 }

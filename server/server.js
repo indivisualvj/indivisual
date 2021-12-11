@@ -364,17 +364,6 @@ class Server
         /**
          *
          */
-        this.app.get('/bin/plugins.js', (req, res) => {
-
-            let sources = ['js/plugins'];
-            let file = _sources(req.originalUrl, sources);
-
-            res.sendFile(file);
-        });
-
-        /**
-         *
-         */
         this.app.get('*worker/*.js', (req, res) => {
             res.sendFile(path.resolve('app/js' + req.originalUrl));
         });

@@ -34,7 +34,7 @@ class PresetManager {
 
     /**
      *
-     * @type {Array}
+     * @type {{}}
      */
     default = {
         name: '_default',

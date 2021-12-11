@@ -30,9 +30,7 @@ class ControlSetManager
      */
     update(set, property, value) {
         let cs = this.get(set);
-        let v = cs.set(property, value);
-
-        return v;
+        return cs.set(property, value);
     }
 
     /**
@@ -74,7 +72,7 @@ class ControlSetManager
     /**
      *
      * @param set
-     * @return {HC.ControlSet}
+     * @return {ControlSet}
      */
     get(set) {
         return this.controlSets[set];
@@ -165,7 +163,7 @@ class ControlSetManager
 
     /**
      *
-     * @returns {Proxy}
+     * @return {boolean|Record<string, ControlSet>|*}
      */
     settingsProxy() {
 
@@ -195,8 +193,8 @@ class ControlSetManager
                         return props[name];
                     // }
                 // }
-
-                return undefined;
+                //
+                // return undefined;
             },
 
             set(target, name, value, receiver) {

@@ -32,7 +32,7 @@ class Display {
 
     /**
      *
-     * @type {number}
+     * @type {number|boolean}
      */
     blitz = 0;
 

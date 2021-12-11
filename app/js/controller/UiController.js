@@ -255,7 +255,7 @@ class Controller extends _Controller
         let roots = this.guis;
         let open = this.nextOpenFolder();
 
-        // start a search on shift if possible or..
+        // start a search on shift if possible or...
         // expand next open (only root guis are affected)
         if (!shiftKey && !open.isExpanded()) {
             if (ci < roots.length) {

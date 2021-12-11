@@ -3,7 +3,7 @@
  */
 import {MeshMaterialPlugin} from "./MeshMaterialPlugin";
 import * as HC from '../../../shared/Three';
-import {Mesh, ShaderMaterial} from "three";
+import {Color, Mesh, ShaderMaterial} from "three";
 
 class MeshShaderMaterialPlugin extends MeshMaterialPlugin {
     static index = 99;

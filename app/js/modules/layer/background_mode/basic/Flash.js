@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {BackgroundModePlugin} from "../BackgroundModePlugin";
+import {Color} from "three";
 
 class flash extends BackgroundModePlugin {
         static name = 'flash background color';

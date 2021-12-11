@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {AnimationPlugin} from "./AnimationPlugin";
+import * as THREE from "three";
 
 class AnimationTexturePlugin extends AnimationPlugin
 {

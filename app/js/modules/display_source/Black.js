@@ -53,7 +53,7 @@ class Black extends DisplaySourcePlugin {
     /**
      *
      * @param fallback
-     * @returns {HTMLCanvasElement}
+     * @returns {HTMLCanvasElement|OffscreenCanvas}
      */
     current(fallback) {
         return this.canvas;

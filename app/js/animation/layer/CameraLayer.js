@@ -8,7 +8,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @returns {THREE.PerspectiveCamera}
+     * @returns {PerspectiveCamera}
      */
     getCamera() {
         return this.three.camera;

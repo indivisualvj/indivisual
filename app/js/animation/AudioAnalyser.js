@@ -55,7 +55,7 @@ class AudioAnalyser {
     peakBPM = 0;
     /**
      *
-     * @type {boolean}
+     * @type {boolean|number}
      */
     peakReliable = false;
     /**

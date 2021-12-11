@@ -2,6 +2,8 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {Messaging} from "../shared/Messaging";
+import {Cache, CubeTextureLoader, TextureLoader} from "three";
+import {FontLoader} from "three/examples/jsm/loaders/FontLoader";
 
 class AssetManager {
     static images = {};
@@ -15,7 +17,7 @@ class AssetManager {
      */
     static init() {
         if (!IS_CONTROLLER) {
-            THREE.Cache.enabled = true;
+            Cache.enabled = true;
         }
     }
 
@@ -156,7 +158,7 @@ class AssetManager {
      * @param callback
      */
     static loadFont(url, callback) {
-        new THREE.FontLoader().load(url, function (font) {
+        new FontLoader().load(url, function (font) {
             callback(font);
         });
     }
@@ -180,7 +182,7 @@ class AssetManager {
             return;
         }
 
-        new THREE.TextureLoader().load(url, (tex) => {
+        new TextureLoader().load(url, (tex) => {
             this._cacheSet(url, tex);
             callback = this._progressGet(url, true);
             callback(tex);
@@ -228,7 +230,7 @@ class AssetManager {
                 return a.localeCompare(b);
             });
 
-            new THREE.CubeTextureLoader().setPath(HC.filePath(url, '')).load(images, (tex) => {
+            new CubeTextureLoader().setPath(HC.filePath(url, '')).load(images, (tex) => {
                 this._cacheSet(url, tex);
                 callback = this._progressGet(url, true);
                 callback(tex);
@@ -335,7 +337,7 @@ class AssetManager {
         this.textures = [];
 
         if (IS_ANIMATION) {
-            THREE.Cache.clear();
+            Cache.clear();
         }
     }
 
@@ -365,7 +367,7 @@ class AssetManager {
      *
      * @param url
      * @param callback
-     * @returns {boolean|THREE.Texture}
+     * @returns {boolean|Texture}
      * @private
      */
     static _cacheGet(url, callback) {

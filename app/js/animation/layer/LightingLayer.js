@@ -3,7 +3,7 @@
  */
 import {_Layer} from "./DoingLayer";
 import * as HC from "../../shared/Three";
-import {AmbientLight, Fog, Group} from "three";
+import {AmbientLight, Fog, Group, Color} from "three";
 
 class LightingLayer extends _Layer {
 

@@ -118,7 +118,7 @@ class _Layer
 
     /**
      *
-     * @type {Object.<string, HC.Plugin>}
+     * @type {Object.<string, Plugin>}
      */
     plugins = {};
 
@@ -168,7 +168,7 @@ class _Layer
     three;
 
     /**
-     * @type {TWEEN.Group}
+     * @type {TWEEN.Group|_Group}
      */
     tween;
 

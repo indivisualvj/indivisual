@@ -1,9 +1,6 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {Messaging} from "../shared/Messaging";
-import {EventManager} from "./EventManager";
-import {ControlSetManager} from "./ControlSetManager";
 
 class LayeredControlSetManager
 {

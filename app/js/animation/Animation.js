@@ -332,7 +332,7 @@ class Animation extends Program {
 
     /**
      *
-     * @returns {number}
+     * @return {string}
      */
     rmsAverage() {
         let rmsa = this._rmss / this._rmsc;

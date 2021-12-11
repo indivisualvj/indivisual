@@ -116,8 +116,8 @@ Shapetastic = function (display, animation) {
         let m = renderer.currentLayer.shapeSize(.5);
         if (n) {
 
-            let vn = new THREE.Vector2(n[0], n[1]);
-            let ve = new THREE.Vector2(vtc[0], vtc[1]);
+            let vn = new THREE.Vector2(n[0], n[1]); // fixme:
+            let ve = new THREE.Vector2(vtc[0], vtc[1]);// fixme:
             let d = Math.abs(vn.distanceTo(ve));
             if (nodist || d < .03) {
                 let x = cx + n[0] * m;

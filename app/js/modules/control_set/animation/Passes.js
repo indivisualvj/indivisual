@@ -87,7 +87,7 @@ class Passes extends ControlSet
     /**
      *
      * @param index
-     * @returns {string}
+     * @returns {string|null}
      */
     getShaderName(index) {
         let pass = this.getShaderPass(index);

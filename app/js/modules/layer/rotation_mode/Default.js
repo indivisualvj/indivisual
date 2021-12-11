@@ -20,7 +20,7 @@ class Default extends RotationModePlugin {
 
         if (params.tween) {
             // apply is only called if duration is over.
-            // hence this tween must be overdue and has to be stopped.
+            // hence, this tween must be overdue and has to be stopped.
             params.tween.stop();
         }
 

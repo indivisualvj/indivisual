@@ -188,7 +188,7 @@ class ControlSet {
                     return false;
                 }
 
-            } else if (set != prop) { // yeah but keep it alone! !== does not work ;)
+            } else if (set != prop) { // yeah. but keep it alone! !== does not work ;)
                 // console.log('no default', set, prop);
                 return false;
             }

@@ -48,7 +48,7 @@ class BackgroundModePlugin extends AnimationTexturePlugin {
         }
 
         /**
-         * use this in derived plugins to cleanup
+         * use this in derived plugins to clean up
          * @protected
          */
         _dispose() {

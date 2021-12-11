@@ -2,8 +2,9 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {GeometryUtils} from "../../shared/GeometryUtils";
+import {AnimationPlugin} from "../../shared/AnimationPlugin";
 
-class ShapeGeometryPlugin extends HC.AnimationPlugin {
+class ShapeGeometryPlugin extends AnimationPlugin {
 
     setControlSets(controlSets) {
         super.setControlSets(controlSets);

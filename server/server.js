@@ -460,13 +460,15 @@ class Server
 
     _loading(url, req) {
         let referer = req.headers.referer;
-        let to = referer.replace(/.+\/(\w+)\.html/, '$1');
-        let name = to + '@root'; // fixme: fake SID. how to zolf zis?
-        let data = {
-            key: 'loading',
-            value: url,
+        if (referer) {
+            let to = referer.replace(/.+\/(\w+)\.html/, '$1');
+            let name = to + '@root'; // fixme: fake SID. how to zolf zis?
+            let data = {
+                key: 'loading',
+                value: url,
+            }
+            this.io.to(name).emit('loading', data);
         }
-        this.io.to(name).emit('loading', data);
 
     }
 

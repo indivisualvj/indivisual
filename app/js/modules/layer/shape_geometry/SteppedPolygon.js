@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+import {DirectionalCircle} from "../../../shared/Geometries";
 
 class steppedpolygon extends ShapeGeometryPlugin {
     static index = 20;
@@ -47,7 +48,7 @@ class steppedpolygon extends ShapeGeometryPlugin {
         let step = size / steps;
         let geometries = [];
         for (let i = 1; i <= steps; i++) {
-            let circ = new HC.DirectionalCircle({
+            let circ = new DirectionalCircle({
                 edges: edges,
                 direction: dir,
                 radius: i * step

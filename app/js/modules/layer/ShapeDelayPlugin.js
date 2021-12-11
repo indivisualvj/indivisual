@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {AnimationPlugin} from "../../shared/AnimationPlugin";
 
-class ShapeDelayPlugin extends HC.AnimationPlugin {
+class ShapeDelayPlugin extends AnimationPlugin {
 
     injections = {
         delay: 0

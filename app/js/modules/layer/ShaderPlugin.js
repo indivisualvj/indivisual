@@ -7,8 +7,9 @@ if (!IS_CONTROLLER) {
     _importThreePostprocessing('RenderPass');
     _importThreePostprocessing('ShaderPass');
 }
+import {AnimationPlugin} from "../../shared/AnimationPlugin";
 
-class ShaderPlugin extends HC.AnimationPlugin {
+class ShaderPlugin extends AnimationPlugin {
 
     pass;
 

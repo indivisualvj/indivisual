@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {AnimationPlugin} from "../../shared/AnimationPlugin";
 
-class RotationModePlugin extends HC.AnimationPlugin {
+class RotationModePlugin extends AnimationPlugin {
     injections = {
         current: {
             x: 0,

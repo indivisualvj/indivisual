@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {AnimationPlugin} from "../../shared/AnimationPlugin";
 
-class PatternPlugin extends HC.AnimationPlugin
+class PatternPlugin extends AnimationPlugin
 {
 
     setControlSets(controlSets) {

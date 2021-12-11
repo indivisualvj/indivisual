@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {AnimationPlugin} from "../../shared/AnimationPlugin";
 
-class ShapePairingPlugin extends HC.AnimationPlugin {
+class ShapePairingPlugin extends AnimationPlugin {
 
     setControlSets(controlSets) {
         super.setControlSets(controlSets);

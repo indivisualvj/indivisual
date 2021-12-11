@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {AnimationPlugin} from "../../shared/AnimationPlugin";
 
-class FilterModePlugin extends HC.AnimationPlugin {
+class FilterModePlugin extends AnimationPlugin {
     setControlSets(controlSets) {
         super.setControlSets(controlSets);
         // make all such plugins make use of corresponding controlset only

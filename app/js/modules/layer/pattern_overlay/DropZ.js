@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {AnimationPlugin} from "../../../shared/AnimationPlugin";
 
-class dropz extends HC.AnimationPlugin
+class dropz extends AnimationPlugin
 {
     static name = 'drop Z';
     static tutorial = {

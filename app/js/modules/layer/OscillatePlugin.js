@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {AnimationPlugin} from "../../shared/AnimationPlugin";
 
-class OscillatePlugin extends HC.AnimationPlugin {
+class OscillatePlugin extends AnimationPlugin {
 
     /**
      *
@@ -11,10 +12,10 @@ class OscillatePlugin extends HC.AnimationPlugin {
      * @param settings
      * @param tree
      * @param key
-     * @returns {HC.Plugin}
+     * @returns {AnimationPlugin}
      */
     construct(animation, layer, settings, tree, key) {
-        HC.AnimationPlugin.prototype.construct.call(this, animation, layer, settings, tree, key);
+        super.construct(animation, layer, settings, tree, key);
         this.cache = this.cache || {};
 
         return this;

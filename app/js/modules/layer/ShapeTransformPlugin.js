@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {AnimationPlugin} from "../../shared/AnimationPlugin";
 
-class ShapeTransformPlugin extends HC.AnimationPlugin {
+class ShapeTransformPlugin extends AnimationPlugin {
 
     vertices;
 

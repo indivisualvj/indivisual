@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {AnimationTexturePlugin} from "../../shared/AnimationTexturePlugin";
 
-class OverrideMaterialInputPlugin extends HC.AnimationTexturePlugin
+class OverrideMaterialInputPlugin extends AnimationTexturePlugin
 {
 
     clip;

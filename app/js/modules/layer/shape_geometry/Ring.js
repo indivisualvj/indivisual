@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+import {DirectionalRing} from "../../../shared/Geometries";
 
 class ring extends ShapeGeometryPlugin {
     static index = 30;
@@ -28,7 +29,7 @@ class ring extends ShapeGeometryPlugin {
 
         let geometries = [];
         for (let i = step; i <= layer.shapeSize(.5); i += step) {
-            let circ = new HC.DirectionalRing({
+            let circ = new DirectionalRing({
                 innerRadius: i - hstep,
                 outerRadius: i,
                 edges: edges,

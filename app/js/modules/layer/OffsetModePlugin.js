@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {AnimationPlugin} from "../../shared/AnimationPlugin";
 
-class OffsetModePlugin extends HC.AnimationPlugin {
+class OffsetModePlugin extends AnimationPlugin {
 
     setControlSets(controlSets) {
         super.setControlSets(controlSets);

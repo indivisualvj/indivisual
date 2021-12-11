@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {AnimationPlugin} from "../../shared/AnimationPlugin";
 
-class PatternRotationPlugin extends HC.AnimationPlugin
+class PatternRotationPlugin extends AnimationPlugin
 {
     euler = new THREE.Euler();
     vector = new THREE.Vector3();

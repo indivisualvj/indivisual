@@ -424,6 +424,8 @@ class Config {
      */
     _loadAnimationPlugins(settings, callback) {
 // todo: when ported, move subplugin classes to folders and move plugins to "basic" folder
+        HC.plugins = HC.plugins ?? {};
+
         let calls = [
             PluginManager.loadLayerPlugins(settings, 'background_mode',      HC.plugins, this,  'basic'),    
             PluginManager.loadLayerPlugins(settings, 'background_mode',      HC.plugins, this,  'geometry'), 

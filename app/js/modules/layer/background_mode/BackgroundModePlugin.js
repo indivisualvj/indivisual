@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {AnimationTexturePlugin} from "../../../shared/AnimationTexturePlugin";
 
-class BackgroundModePlugin extends HC.AnimationTexturePlugin {
+class BackgroundModePlugin extends AnimationTexturePlugin {
         static background = [];
 
         setControlSets(controlSets) {

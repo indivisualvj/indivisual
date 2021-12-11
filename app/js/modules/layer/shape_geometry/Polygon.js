@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShapeGeometryPlugin} from "../ShapeGeometryPlugin";
+import {DirectionalCircle} from "../../../shared/Geometries";
 
 class polygon extends ShapeGeometryPlugin {
     static index = 20;
@@ -48,7 +49,7 @@ class polygon extends ShapeGeometryPlugin {
         let dir = this.getModB(0, 0);
         let size = layer.shapeSize(.5);
 
-        return new HC.DirectionalCircle({
+        return new DirectionalCircle({
             edges: edges,
             direction: dir,
             radius: size

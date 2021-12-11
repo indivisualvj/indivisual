@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {AnimationPlugin} from "../../shared/AnimationPlugin";
 
-class ShapeRhythmPlugin extends HC.AnimationPlugin {
+class ShapeRhythmPlugin extends AnimationPlugin {
 
     injections = {
         speed: false,

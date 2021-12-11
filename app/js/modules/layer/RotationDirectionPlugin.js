@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
+import {AnimationPlugin} from "../../shared/AnimationPlugin";
 
-class RotationDirectionPlugin extends HC.AnimationPlugin {
+class RotationDirectionPlugin extends AnimationPlugin {
     injections = {
         dir: 0,
         directions: {

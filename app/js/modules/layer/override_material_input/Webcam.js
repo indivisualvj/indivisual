@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-{
-    HC.plugins.override_material_input.webcam = class Plugin extends HC.OverrideMaterialInputPlugin {
+import {OverrideMaterialInputPlugin} from "../OverrideMaterialInputPlugin";
+
+class webcam extends OverrideMaterialInputPlugin {
 
         /**
          * @type {MediaStream}
@@ -61,4 +62,5 @@
             super.reset();
         }
     }
-}
+
+export {webcam};

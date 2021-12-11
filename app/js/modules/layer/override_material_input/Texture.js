@@ -1,8 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-{
-    HC.plugins.override_material_input.texture = class Plugin extends HC.OverrideMaterialInputPlugin {
+import {OverrideMaterialInputPlugin} from "../OverrideMaterialInputPlugin";
+
+class texture extends OverrideMaterialInputPlugin {
 
         file;
         loading = undefined;
@@ -88,4 +89,5 @@
             }
         }
     }
-}
+
+export {texture};

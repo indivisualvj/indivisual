@@ -429,6 +429,41 @@ class Layer extends _Layer
         this.plugins[plugin][name] = instance;
     }
 
+
+    /**
+     *
+     * @returns {OverrideMaterialInputPlugin}
+     */
+    getOverrideMaterialInput() {
+        let seq = this.config.SourceSettings.override_material_input;
+        if (seq === 'webcam') {
+            return this.getOverrideMaterialInputPlugin('webcam');
+
+        } else if (seq !== 'none') {
+            return this.getOverrideMaterialInputPlugin('sequence');
+
+        }
+
+        return this.getOverrideMaterialInputPlugin('texture');
+    }
+
+    /**
+     *
+     * @returns {OverrideMaterialInputPlugin}
+     */
+    getOverrideBackgroundMode() {
+        let seq = this.config.SourceSettings.override_background_mode;
+        if (seq === 'webcam') {
+            return this.getOverrideBackgroundModePlugin('webcam');
+
+        } else if (seq !== 'none') {
+            return this.getOverrideBackgroundModePlugin('sequence');
+
+        }
+
+        return null;
+    }
+
 }
 
 export {Layer as _Layer}

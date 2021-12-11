@@ -73,14 +73,14 @@ class Animation extends Program {
         let renderer = new Renderer(this, {
             layers: new Array(config.ControlValues.layers)
         });
-        renderer.initLayers(false);
         this.renderer = renderer;
+        renderer.initLayers(false);
 
         let displayManager = new DisplayManager(this, {
             display: new Array(config.DisplayValues.display.length)
         });
-        displayManager.resize(this.getResolution());
         this.displayManager = displayManager;
+        displayManager.resize(this.getResolution());
 
         this.sourceManager = new SourceManager(this, {
             config: config,

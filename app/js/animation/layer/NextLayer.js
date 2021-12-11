@@ -1,10 +1,11 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {_Layer} from "./MemberLayer";
+import {_Layer} from "./LightingLayer";
 import {Shape} from "../Shape";
 
-class Layer extends _Layer {
+class Layer extends _Layer
+{
 
     /**
      *

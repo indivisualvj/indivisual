@@ -1,6 +1,9 @@
+/**
+ * @author indivisualvj / https://github.com/indivisualvj
+ */
+import {OverrideMaterialInputPlugin} from "../OverrideMaterialInputPlugin";
 
-{
-    HC.plugins.override_material_input.sequence = class Plugin extends HC.OverrideMaterialInputPlugin {
+class sequence extends OverrideMaterialInputPlugin {
 
         apply(i) {
             let seq = this.sourceManager.getSequence(i);
@@ -76,4 +79,5 @@
             this.properties.emissiveMap = tex;
         }
     }
-}
+
+export {sequence};

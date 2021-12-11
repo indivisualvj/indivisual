@@ -412,7 +412,6 @@ class Config {
      * @private
      */
     _loadDisplaySourcePlugins(settings, callback) {
-        Object.assign(HC.plugins.override_background_mode, HC.plugins.override_material_input);
         PluginManager.assignDisplaySourcePlugins(settings, this, callback);
     }
 
@@ -441,7 +440,9 @@ class Config {
             PluginManager.loadLayerPlugins(settings, 'mesh_material',        HC.plugins, this,  'shader'),   
             PluginManager.loadLayerPlugins(settings, 'mesh_material',        HC.plugins, this,  'texture'),  
             PluginManager.loadLayerPlugins(settings, 'offset_mode',          HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'oscillate',            HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'oscillate',            HC.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'override_background_mode',            HC.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'override_material_input',            HC.plugins, this),
             PluginManager.loadLayerPlugins(settings, 'pattern_mover',        HC.plugins, this), 
             PluginManager.loadLayerPlugins(settings, 'pattern_rotation',     HC.plugins, this), 
             PluginManager.loadLayerPlugins(settings, 'rotation_direction',   HC.plugins, this), 
@@ -461,6 +462,7 @@ class Config {
 
         Promise.all(calls).then(() => {
             Object.assign(HC.plugins.pattern_overlay, HC.plugins.pattern);
+            Object.assign(HC.plugins.override_background_mode, HC.plugins.override_material_input);
 
             let sectionKeys = Object.keys(HC.plugins);
 

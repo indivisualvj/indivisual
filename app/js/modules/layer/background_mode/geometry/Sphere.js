@@ -2,7 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {GeometryBackgroundModePlugin} from "../GeometryBackgroundModePlugin";
-import {DoubleSide, Mesh, MeshPhysicalMaterial, SphereBufferGeometry} from "three";
+import {Color, DoubleSide, Mesh, MeshPhysicalMaterial, SphereBufferGeometry} from "three";
 
 class sphere extends GeometryBackgroundModePlugin {
         static index = 51;

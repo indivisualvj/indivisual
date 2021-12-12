@@ -62,7 +62,7 @@ class SequenceUi {
     constructor(controller, settingsFolder) {
         this.config = controller.config;
         this.key = settingsFolder.getKey();
-        this.index = HC.numberExtract(this.key, 'sequence');
+        this.index = numberExtract(this.key, 'sequence');
         this.settingsFolder = settingsFolder;
 
         this._initUi();

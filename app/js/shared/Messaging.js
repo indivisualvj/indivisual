@@ -421,7 +421,7 @@ class Messaging {
      * @param callback
      */
     static load(base, dir, file, callback) {
-        let path = HC.filePath(base, dir);
+        let path = filePath(base, dir);
         let data = {
             action: 'load',
             dir: dir,
@@ -440,7 +440,7 @@ class Messaging {
      * @param callback
      */
     static config(base, dir, file, callback) {
-        let path = HC.filePath(base, dir);
+        let path = filePath(base, dir);
         let data = {
             action: 'config',
             dir: dir,
@@ -459,7 +459,7 @@ class Messaging {
      * @param callback
      */
     static save(base, dir, file, data, callback) {
-        let path = HC.filePath(base, dir);
+        let path = filePath(base, dir);
         let conf = {
             action: 'save',
             dir: path,
@@ -478,7 +478,7 @@ class Messaging {
      * @param callback
      */
     static mkdir(base, dir, data, callback) {
-        let path = HC.filePath(base, dir);
+        let path = filePath(base, dir);
         let conf = {
             action: 'mkdir',
             dir: path,
@@ -524,7 +524,7 @@ class Messaging {
      * @param data
      */
     static sample(dir, file, data) {
-        let path = HC.filePath(SAMPLE_DIR, dir);
+        let path = filePath(SAMPLE_DIR, dir);
         let conf = {
             action: 'write',
             dir: path,
@@ -543,7 +543,7 @@ class Messaging {
      * @param callback
      */
     static delete(base, dir, file, callback) {
-        let path = HC.filePath(base, dir);
+        let path = filePath(base, dir);
         let data = {
             action: 'delete',
             dir: path,
@@ -562,7 +562,7 @@ class Messaging {
      * @param callback
      */
     static rename(base, dir, file, nu, callback) {
-        let path = HC.filePath(base, dir);
+        let path = filePath(base, dir);
         let data = {
             action: 'rename',
             dir: path,

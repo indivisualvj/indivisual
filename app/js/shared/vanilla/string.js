@@ -1,8 +1,8 @@
 /**
- * // fixme: move to static module?
+ *
  * @returns {string}
  */
-HC.filePath = function() {
+function filePath() {
     let args = Array.prototype.slice.call(arguments).filter(v => {
         return v !== null && v !== undefined;
     });
@@ -14,7 +14,7 @@ HC.filePath = function() {
  * @param file
  * @returns {{fps: number, tempo: number, resolution: {x: number, y: number}}}
  */
-HC.parseFileMeta = function (file) {
+function parseFileMeta(file) {
 
     let meta = {
         tempo: 120,
@@ -53,7 +53,7 @@ HC.parseFileMeta = function (file) {
  * @param prefix
  * @returns {*}
  */
-HC.numberExtract = function(item, prefix) {
+function numberExtract(item, prefix) {
     let regex = new RegExp(prefix + '(\\d+)_?\\w*');
     let i = item.replace(regex, '$1');
     i = parseInt(i);
@@ -71,10 +71,10 @@ HC.numberExtract = function(item, prefix) {
  * @param otype
  * @returns {string|{}|*[]|null|undefined|any|boolean|number}
  */
-HC.parse = function (value, otype) {
+function parse(value, otype) {
 
     if (isString(value) && value.length === 0) {
-        return HC.createEmptyOfType(otype);
+        return createEmptyOfType(otype);
     }
     else if (value === 'true') {
         return true;
@@ -100,10 +100,10 @@ HC.parse = function (value, otype) {
  * @param args
  * @returns {*}
  */
-HC.parseArray = function(args) {
+function parseArray(args) {
     for (let i in args) {
         let a = args[i];
-        args[i] = HC.parse(a);
+        args[i] = parse(a);
     }
 
     return args;
@@ -114,7 +114,7 @@ HC.parseArray = function(args) {
  * @param typeName
  * @returns {string|{}|null|*[]|undefined}
  */
-HC.createEmptyOfType = function (typeName) {
+function createEmptyOfType(typeName) {
     switch (typeName) {
         case 'object':
             return {};

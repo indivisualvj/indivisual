@@ -34,7 +34,7 @@ class texture extends OverrideMaterialInputPlugin {
             if (!this.loading && !this.properties.map) {
                 if (file) {
                     let inst = this;
-                    let path = HC.filePath(IMAGE_DIR, file);
+                    let path = filePath(IMAGE_DIR, file);
                     this.loading = true;
 
                     this.config.getAssetManager().loadMaterialMap(this.properties, path, function (mat) {

@@ -587,18 +587,18 @@ class Controller extends Program {
         if (display !== false) {
 
             if (item.match(/sequence\d_(start|end)$/)) {
-                this._fireClipIndicatorUpdate(HC.numberExtract(item, 'sequence'));
+                this._fireClipIndicatorUpdate(numberExtract(item, 'sequence'));
 
             } else if (item.match(/sequence\d_(|input)$/)) {
-                this._fireClipUpdate(HC.numberExtract(item, 'sequence'));
+                this._fireClipUpdate(numberExtract(item, 'sequence'));
 
             } else if (item.match(/_(enabled)/)) {
                 if (!value) {
-                    this._disableSample(HC.numberExtract(item, 'sample'))
+                    this._disableSample(numberExtract(item, 'sample'))
                 }
 
             } else if (item.match(/_(load)/)) {
-                let smp = HC.numberExtract(item, 'sample');
+                let smp = numberExtract(item, 'sample');
                 this.loadClip(smp);
             }
 

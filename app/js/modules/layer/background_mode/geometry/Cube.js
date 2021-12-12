@@ -33,7 +33,7 @@ class cube extends GeometryBackgroundModePlugin {
 
                 let file = this.config.getAssetManager().getImage(this.settings.background_input);
                 if (file) {
-                    this.config.getAssetManager().loadMaterialMap(mat, HC.filePath(IMAGE_DIR, file), function (mat) {
+                    this.config.getAssetManager().loadMaterialMap(mat, filePath(IMAGE_DIR, file), function (mat) {
                         if (!mat.emissiveMap) {
                             mat.emissiveMap = mat.map;
                         }

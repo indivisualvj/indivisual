@@ -99,7 +99,7 @@ class SampleUi {
 
         this.node.addEventListener('dragend', (e) => {
             if (e.dataTransfer.dropEffect === 'link' && currentSequence) {
-                let seq = HC.numberExtract(currentSequence.getAttribute('data-sequence'), 'sequence');
+                let seq = numberExtract(currentSequence.getAttribute('data-sequence'), 'sequence');
                 onDragEnd(seq, this.index);
                 currentSequence = null;
             }

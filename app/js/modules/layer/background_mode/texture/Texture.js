@@ -17,7 +17,7 @@ class texture extends TextureBackgroundModePlugin {
                 if (file) {
                     this.current(id);
                     let inst = this;
-                    let path = HC.filePath(IMAGE_DIR, file);
+                    let path = filePath(IMAGE_DIR, file);
 
                     this.config.getAssetManager().loadTexture(path, function (texture) {
                         texture.center.set(.5, .5);

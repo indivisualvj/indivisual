@@ -600,23 +600,23 @@ class Animation extends Program {
         if (display) {
             if (item.match(/^sample\d+_load/) && value) {
                 if (IS_PREVIEW) {
-                    this.sourceManager.loadSample(HC.numberExtract(item, 'sample'), value);
+                    this.sourceManager.loadSample(numberExtract(item, 'sample'), value);
                 }
                 this.updateSource(item, false, false, true, false);
 
             } else if (item.match(/^sample\d+_/)) {
-                this.sourceManager.updateSample(HC.numberExtract(item, 'sample'));
+                this.sourceManager.updateSample(numberExtract(item, 'sample'));
 
                 if (item.match(/sample\d+_(enabled|record)/)) { // never let samples be selected on enabled/record status change
-                    EventManager.fireEvent(EVENT_SAMPLE_STATUS_CHANGED, this.sourceManager.getSample(HC.numberExtract(item, 'sample')));
+                    EventManager.fireEvent(EVENT_SAMPLE_STATUS_CHANGED, this.sourceManager.getSample(numberExtract(item, 'sample')));
                 }
 
             } else if (item.match(/display\d+_source/)) {
-                let display = this.displayManager.getDisplay(HC.numberExtract(item, 'display'));
+                let display = this.displayManager.getDisplay(numberExtract(item, 'display'));
                 this.sourceManager.updateSource(display);
 
             } else if (item.match(/display\d+_sequence/)) {
-                this.sourceManager.updateSource(this.displayManager.getDisplay(HC.numberExtract(item, 'display')));
+                this.sourceManager.updateSource(this.displayManager.getDisplay(numberExtract(item, 'display')));
             }
         }
 
@@ -635,7 +635,7 @@ class Animation extends Program {
 
         if (item.match(/^display\d+_\d/)) { // resize
             if (value) {
-                this.displayManager.centerDisplay(HC.numberExtract(item, 'display'), value);
+                this.displayManager.centerDisplay(numberExtract(item, 'display'), value);
                 this.updateDisplay(item, false, display, true);
             }
             this.config.DisplaySettingsManager.updateItem(item, value);
@@ -674,7 +674,7 @@ class Animation extends Program {
 
             if (item.match(/^display\d+_/)) {
 
-                let i = HC.numberExtract(item, 'display');
+                let i = numberExtract(item, 'display');
 
                 if (item.match(/_mask$/)) { // mask
                     this.displayManager.updateDisplay(i, 'mask');

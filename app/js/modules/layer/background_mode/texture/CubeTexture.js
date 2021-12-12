@@ -16,7 +16,7 @@ class cubetexture extends TextureBackgroundModePlugin {
                 let file = this.config.getAssetManager().getCube(i);
                 if (file) {
                     this.current(id);
-                    let path = HC.filePath(CUBE_DIR, file);
+                    let path = filePath(CUBE_DIR, file);
 
                     this.config.getAssetManager().loadCubeTexture(path, (texture) => {
                         this.texture = texture;

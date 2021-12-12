@@ -31,7 +31,7 @@ class sphere extends GeometryBackgroundModePlugin {
 
                 let file = this.config.getAssetManager().getImage(this.settings.background_input);
                 if (file) {
-                    this.config.getAssetManager().loadMaterialMap(this.material, HC.filePath(IMAGE_DIR, file), function (mat) {
+                    this.config.getAssetManager().loadMaterialMap(this.material, filePath(IMAGE_DIR, file), function (mat) {
                         if (!mat.emissiveMap) {
                             mat.emissiveMap = mat.map;
                         }

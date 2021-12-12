@@ -277,7 +277,7 @@ class ControlSet {
             if (otype !== type) {
                 // cast to whatever
                 if (type === 'string' && otype !== 'string') {
-                    value = HC.parse(value, otype);
+                    value = parse(value, otype);
 
                     // cast to string
                 } else if (type !== 'string' && otype === 'string') {

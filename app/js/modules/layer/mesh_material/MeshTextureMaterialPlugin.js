@@ -12,7 +12,7 @@ class MeshTextureMaterialPlugin extends MeshMaterialPlugin {
     }
 
     loadCubeTexture(name, callback) {
-        let path = HC.filePath(CUBE_DIR, name);
+        let path = filePath(CUBE_DIR, name);
         this.config.getAssetManager().loadCubeTexture(path, function (texture) {
             callback(texture);
         });

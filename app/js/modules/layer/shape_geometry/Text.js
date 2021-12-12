@@ -32,7 +32,7 @@ class text extends ShapeGeometryPlugin {
     }
 
     _loadCoolvetica() {
-        this.config.getAssetManager().loadFont(HC.filePath(FONT_DIR, 'coolvetica.json'), function (font) {
+        this.config.getAssetManager().loadFont(filePath(FONT_DIR, 'coolvetica.json'), function (font) {
             coolvetica = font;
         });
     }

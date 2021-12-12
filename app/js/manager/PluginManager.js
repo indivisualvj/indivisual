@@ -25,7 +25,7 @@ class PluginManager
      * @return {Promise<unknown>}
      */
     static loadLayerPlugins(settings, section, target, config, dir) {
-        let path = HC.filePath('layer', section, dir);
+        let path = filePath('layer', section, dir);
         return new Promise((resolve) => {
             this._importPlugins(path).then((plugins) => {
                 this._assignPlugins(settings, section, plugins, target, config);
@@ -114,7 +114,7 @@ class PluginManager
     static assignControlSets(target, callback) {
         LayeredControlSetManager.plugins = { control_set: {} };
 
-        this._importPlugins(HC.filePath('control_set', 'animation')).then((plugins) => {
+        this._importPlugins(filePath('control_set', 'animation')).then((plugins) => {
             let keys = Object.sortedKeys(plugins);
 
             for (let k in keys) {
@@ -201,14 +201,14 @@ class PluginManager
     static _importPlugins(dir) {
 
         return new Promise((resolve) => {
-            let searchPath = HC.filePath(APP_DIR, 'js', 'modules', dir);
-            let importPath = HC.filePath('..', 'modules', dir);
+            let searchPath = filePath(APP_DIR, 'js', 'modules', dir);
+            let importPath = filePath('..', 'modules', dir);
             let plugins = {};
             let imports = [];
 
             Messaging.samples(searchPath, (files) => {
                 files.forEach((file) => {
-                    let path = HC.filePath(importPath, file.name);
+                    let path = filePath(importPath, file.name);
                     imports.push(import(path));
                 });
 

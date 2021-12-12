@@ -298,7 +298,7 @@ class SourceManager {
 
         let sample = this.getSample(i);
         if (sample) {
-            let dir = HC.filePath(SAMPLE_DIR, name);
+            let dir = filePath(SAMPLE_DIR, name);
             let callback = () => {
                 Messaging._emit({action: 'unlinkall', dir: dir}, (files) => {
                     console.log('unlinkall', dir, files.length + ' files deleted');
@@ -342,7 +342,7 @@ class SourceManager {
         this.storeWorker.postMessage({
             length: sample.frameCount,
             samples: sample.samples,
-            path: HC.filePath(SAMPLE_DIR, name),
+            path: filePath(SAMPLE_DIR, name),
             scale: scale,
             id: sample.id
         }, sample.samples);
@@ -368,7 +368,7 @@ class SourceManager {
         sample.width = this.displayManager.width;
         sample.height = this.displayManager.height;
 
-        let file = HC.filePath(SAMPLE_DIR, name);
+        let file = filePath(SAMPLE_DIR, name);
 
         Messaging._emit({action: 'samples', file: file}, (files) => {
 
@@ -392,7 +392,7 @@ class SourceManager {
                 this.loadWorker.postMessage({
                     length: sample.frameCount,
                     files: files,
-                    path: HC.filePath(SAMPLE_DIR, name),
+                    path: filePath(SAMPLE_DIR, name),
                     id: sample.id,
                     blobs: blobs
                 }, blobs);
@@ -419,7 +419,7 @@ class SourceManager {
             let clip = new Clip(sample.id);
             sample.setClip(clip);
 
-            let file = HC.filePath(SAMPLE_DIR, sample.id);
+            let file = filePath(SAMPLE_DIR, sample.id);
 
             Messaging.samples(file, (files) => {
 
@@ -436,7 +436,7 @@ class SourceManager {
                 for (let i = 0; i < frameCount; i += step) {
                     let ri = Math.floor(i);
                     let file = files[ri];
-                    file = HC.filePath(SAMPLE_DIR, sample.id, ri + '.png');
+                    file = filePath(SAMPLE_DIR, sample.id, ri + '.png');
                     let image = new Image();
                     image.src = file;
                     image._index = index++;

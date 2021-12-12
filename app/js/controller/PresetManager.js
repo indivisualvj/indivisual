@@ -354,7 +354,7 @@ class PresetManager {
         let settings = this.settingsManager.prepareLayer(this.config.ControlSettings.layer);
         let dir = ctrl.getParent().getLabel();
         let label = ctrl.getLabel();
-        settings.info.name = HC.filePath(dir, label);
+        settings.info.name = filePath(dir, label);
 
         Messaging.save(STORAGE_DIR, dir, label, settings, (result) => {
             Logger.log(result);
@@ -389,7 +389,7 @@ class PresetManager {
                 settings: preset
             };
 
-            preset.info.name = HC.filePath(opts.dir, opts.name);
+            preset.info.name = filePath(opts.dir, opts.name);
 
             Messaging.save(STORAGE_DIR, opts.dir, opts.name, opts.settings, (result) => {
                 Logger.log(result);

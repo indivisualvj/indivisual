@@ -105,7 +105,7 @@ class Sequence extends DisplaySourcePlugin
                 let display = data[2];
 
                 if (display && item.startsWith('sequence')) {
-                    let seq = HC.numberExtract(item, 'sequence');
+                    let seq = numberExtract(item, 'sequence');
 
                     if (item.match(/^sequence\d+_input$/)) {
                         sourceManager.updatePluginNrSource('sequence', seq);

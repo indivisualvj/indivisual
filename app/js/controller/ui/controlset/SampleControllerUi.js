@@ -17,7 +17,7 @@ class SampleControllerUi extends ControlSetGuifyUi {
 
     addControllers(onDragStart, onDragEnd) {
         for (let i in this.controlSet.types) {
-            i = HC.numberExtract(i, 'sample')
+            i = numberExtract(i, 'sample')
             let key = getSampleKey(i);
             this.addFolder(key)
 

@@ -40,7 +40,7 @@ class ScriptProcessor {
 
                     let instance = ex.shift();
                     let func = ex.shift();
-                    let args = HC.parseArray(ex);
+                    let args = parseArray(ex);
 
                     instance = this._getInstance(instance);
 

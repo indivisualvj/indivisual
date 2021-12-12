@@ -64,7 +64,7 @@ class Default extends RotationModePlugin {
     }
 
     easing() {
-        let easing = this.settings.rotation_easing; // todo: screams after a plugin solution
+        let easing = this.settings.rotation_easing; // : screams after a plugin solution
         switch (easing) {
             case 'quint':
                 return TWEEN.Easing.Quintic.InOut;

@@ -1,7 +1,7 @@
 // Shader created by inigo quilez - iq/2013
 // License Creative Commons Attribution-NonCommercial-ShareAlike 3.0 Unported License.
 // Other "Iterations" shaders:
-// todo:
+// :
 //     "guts"            : https://www.shadertoy.com/view/MssGW4
 //     "shiny"           : https://www.shadertoy.com/view/MslXz8
 import {MeshShaderMaterialPlugin} from "../MeshShaderMaterialPlugin";

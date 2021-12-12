@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ControlSet} from "../../shared/ControlSet";
+import {Hotkey} from "../../shared/Event";
 
 class session extends ControlSet
 {
@@ -28,12 +29,12 @@ class controls extends ControlSet
         play: true,
 
         reset: () => {
-            if (HC.Hotkey.isPressed('shift') && HC.Hotkey.isPressed('ctrl')) {
+            if (Hotkey.isPressed('shift') && Hotkey.isPressed('ctrl')) {
                 let yes = confirm('Reset everything?');
                 if (yes) {
                     this.program.fullReset();
                 }
-            } else if (HC.Hotkey.isPressed('shift')) {
+            } else if (Hotkey.isPressed('shift')) {
                 let _done = false;
                 this.program.midi.loading(() => { // todo: no direct access to midi
                     return _done;
@@ -55,7 +56,7 @@ class controls extends ControlSet
             this.program.pushSources();
         },
         rst_shaders: () => {
-            this.program.resetShaders(HC.Hotkey.isPressed('shift')).finally(()=>{});
+            this.program.resetShaders(Hotkey.isPressed('shift')).finally(()=>{});
         },
         enable_mic: () => {
             this.program.updateControl('audio', 'microphone', true, true, false);
@@ -147,71 +148,71 @@ class controls extends ControlSet
 
     events = {
         enable_mic: (inst) => {
-            return new HC.Hotkey('ctrl+shift+f9', (e) => {
+            return new Hotkey('ctrl+shift+f9', (e) => {
                 this.settings.enable_mic();
             });
         },
         reset_overrides: (inst) => {
-            return new HC.Hotkey('ctrl+shift+f10', (e) => {
+            return new Hotkey('ctrl+shift+f10', (e) => {
                 this.settings.reset_overrides();
             });
         },
         layout_control: (inst) => {
-            return new HC.Hotkey('ctrl+1', (e) => {
+            return new Hotkey('ctrl+1', (e) => {
                 this.settings.layout_control();
             });
         },
         layout_display: (inst) => {
-            return new HC.Hotkey('ctrl+2', (e) => {
+            return new Hotkey('ctrl+2', (e) => {
                 this.settings.layout_display();
             });
         },
         layout_source: (inst) => {
-            return new HC.Hotkey('ctrl+3', (e) => {
+            return new Hotkey('ctrl+3', (e) => {
                 this.settings.layout_source();
             });
         },
         layout_override: (inst) => {
-            return new HC.Hotkey('ctrl+4', (e) => {
+            return new Hotkey('ctrl+4', (e) => {
                 this.settings.layout_override();
             });
         },
         layout_animation: (inst) => {
-            return new HC.Hotkey('ctrl+5', (e) => {
+            return new Hotkey('ctrl+5', (e) => {
                 this.settings.layout_animation();
             });
         },
         layout_sequence: (inst) => {
-            return new HC.Hotkey('ctrl+6', (e) => {
+            return new Hotkey('ctrl+6', (e) => {
                 this.settings.layout_sequence();
             });
         },
         layout_presets: (inst) => {
-            return new HC.Hotkey('ctrl+7', (e) => {
+            return new Hotkey('ctrl+7', (e) => {
                 this.settings.layout_presets();
             });
         },
         layout_close: (inst) => {
-            return new HC.Hotkey('ctrl+0', (e) => {
+            return new Hotkey('ctrl+0', (e) => {
                 this.settings.layout_close();
             });
         },
-        play: (inst) => { return new HC.Hotkey('space', (e) => {
+        play: (inst) => { return new Hotkey('space', (e) => {
             this.program.updateControl('play', !this.config.ControlSettings.play, true, true, false);
         }, 'spc')},
-        reset: (inst) => { return new HC.Hotkey('delete,shift+delete,ctrl+shift+delete', (e) => {
+        reset: (inst) => { return new Hotkey('delete,shift+delete,ctrl+shift+delete', (e) => {
             inst.settings.reset();
         }, 'del')},
-        preview: (inst) => { return new HC.Hotkey('home', (e) => {
+        preview: (inst) => { return new Hotkey('home', (e) => {
             this.program.updateControl('preview', !this.config.ControlSettings.preview, true, true, false);
         }, 'hm')},
-        push_layers: (inst) => { return new HC.Hotkey('end', (e) => {
+        push_layers: (inst) => { return new Hotkey('end', (e) => {
             inst.settings.push_layers();
         }, 'end')},
-        push_sources: (inst) => { return new HC.Hotkey('pagedown', (e) => {
+        push_sources: (inst) => { return new Hotkey('pagedown', (e) => {
             inst.settings.push_sources();
         }, 'pgd')},
-        rst_shaders: (inst) => { return new HC.Hotkey('pageup,shift+pageup', (e) => {
+        rst_shaders: (inst) => { return new Hotkey('pageup,shift+pageup', (e) => {
             inst.settings.rst_shaders();
         }, 'pgu')},
     };

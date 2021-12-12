@@ -4,6 +4,7 @@
 import {Messaging} from "../../../shared/Messaging";
 import {ControlSetUi} from "./ControlSetUi";
 import {Logger} from "../../../shared/Logger";
+import {Event} from "../../../shared/Event";
 
 
 class ControlSetGuifyUi extends ControlSetUi {
@@ -186,7 +187,7 @@ class ControlSetGuifyUi extends ControlSetUi {
 
         if (events) {
             let e = events(this.controlSet);
-            if (e instanceof HC.Event) {
+            if (e instanceof Event) {
                 controller.setMnemonic(e.label);
                 e.register(window);
             }

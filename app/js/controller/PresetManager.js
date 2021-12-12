@@ -8,6 +8,7 @@ import {PresetUi} from "./ui/PresetUi";
 import {ScriptProcessor} from "./ScriptProcessor";
 import {LayeredControlSetManager} from "../manager/LayeredControlSetManager";
 import {Logger} from "../shared/Logger";
+import {Hotkey} from "../shared/Event";
 
 class PresetManager {
 
@@ -449,7 +450,7 @@ class PresetManager {
                     this._newPreset(ctrl);
                 },
                 fill: (ctrl) => {
-                    this._loadPresets(ctrl, HC.Hotkey.isPressed('shift')).finally();
+                    this._loadPresets(ctrl, Hotkey.isPressed('shift')).finally();
                 },
                 save: (ctrl) => {
                     this._savePresets(ctrl);
@@ -481,7 +482,7 @@ class PresetManager {
             type: 'button',
             label: label,
             action: (ctrl) => {
-                this._loadPreset(ctrl, HC.Hotkey.isPressed('ctrl'));
+                this._loadPreset(ctrl, Hotkey.isPressed('ctrl'));
             },
             save: (ctrl) => {
                 this._savePreset(ctrl);

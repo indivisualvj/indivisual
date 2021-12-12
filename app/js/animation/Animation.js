@@ -15,6 +15,7 @@ import {Messaging} from "../shared/Messaging";
 import {PreviewManager} from "../manager/PreviewManager";
 import {Logger} from "../shared/Logger";
 import {Vector2} from "three";
+import {Hotkey} from "../shared/Event";
 
 class Animation extends Program {
     /**
@@ -812,7 +813,7 @@ class Animation extends Program {
         });
     }
     initEvents() {
-        HC.Hotkey.add('space', (e) => {
+        Hotkey.add('space', (e) => {
             this.updateControl('play', !this.config.ControlSettings.play, true, true, false);
         });
 

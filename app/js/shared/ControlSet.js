@@ -63,7 +63,7 @@ class ControlSet {
 
     /**
      *
-     * @type {Object.<string, HC.Event>}
+     * @type {Object.<string, Event>}
      */
     events = {};
 

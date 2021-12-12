@@ -5,6 +5,7 @@ import {_Controller} from "./UiController";
 import {Guify} from "./ui/guify/Guify";
 import {GuifyFolder} from "./ui/guify/GuifyFolder";
 import {TimeoutManager} from "../manager/TimeoutManager";
+import {Hotkey} from "../shared/Event";
 
 class Controller extends _Controller {
 
@@ -41,7 +42,7 @@ class Controller extends _Controller {
         this._initMnemonics();
         this._initLayerKeys();
 
-        HC.Hotkey.add('*', (e) => {
+        Hotkey.add('*', (e) => {
             if (e.key === 'Shift') {
                 this._onShift(e);
             } else if (e.key === 'Backspace') {
@@ -110,7 +111,7 @@ class Controller extends _Controller {
 
         for (let ci = 0; ci < MNEMONICS.length; ci++) {
             let char = MNEMONICS[ci];
-            HC.Hotkey.add(char + ',shift+' + char, (e, h) => {
+            Hotkey.add(char + ',shift+' + char, (e, h) => {
                 if (e.ctrlKey || e.altKey) {
                     return;
                 }
@@ -144,7 +145,7 @@ class Controller extends _Controller {
             let id = layers[key];
             id = key > 0 ? parseInt(id) : 10;
 
-            HC.Hotkey.add(key, (e) => {
+            Hotkey.add(key, (e) => {
                 e.preventDefault();
                 let layer = id - 1;
 
@@ -155,7 +156,7 @@ class Controller extends _Controller {
             let id = layers[key];
             id = key > 0 ? parseInt(id) : 10;
 
-            HC.Hotkey.add('shift+' + key, (e) => {
+            Hotkey.add('shift+' + key, (e) => {
                 e.preventDefault();
                 let layer = id + 9;
 

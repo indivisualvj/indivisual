@@ -19,7 +19,7 @@ class rounded_box extends ShapeGeometryPlugin {
         let layer = this.layer;
 
         let size = layer.shapeSize(1);
-
+        // fixme radius depends on resolution?!
         return new RoundedBoxGeometry(size, size, size, this.getModA(1, 2, 32), 4 * this.getModB(0, 0));
     }
 }

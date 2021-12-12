@@ -6,6 +6,15 @@ import {Euler, Vector3} from "three";
 
 class LightingPatternPlugin extends AnimationPlugin {
 
+    /**
+     *
+     * @param light{Light}
+     * @param [sides]{number}
+     */
+    apply(light, sides) {
+
+    }
+
     setControlSets(controlSets) {
         super.setControlSets(controlSets);
         // make all such plugins make use of corresponding controlset only

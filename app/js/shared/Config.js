@@ -338,7 +338,7 @@ class Config {
             let pluginKey = pluginKeys[i];
             let plugin = plugins[pluginKey];
 
-            settings[section][pluginKey] = plugin.name || pluginKey;
+            settings[section][pluginKey] = (plugin.name || pluginKey).toLowerCase();
 
         }
     }

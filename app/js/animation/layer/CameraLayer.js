@@ -26,7 +26,7 @@ class Layer extends _Layer
 
     /**
      *
-     * @param multiplier
+     * @param [multiplier]
      * @returns {number}
      */
     cameraDefaultDistance(multiplier) {

@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-var HC = HC || {};
+
 HC.BlendOperator = HC.BlendOperator || {};
 HC.BlendOperator.repeat = {
     shader: `

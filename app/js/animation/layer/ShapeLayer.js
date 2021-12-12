@@ -36,6 +36,11 @@ class Layer extends _Layer
         return hex;
     }
 
+    /**
+     *
+     * @param index
+     * @return {null|Shape}
+     */
     getShape(index) {
         if (index in this.shapes) {
             return this.shapes[index];

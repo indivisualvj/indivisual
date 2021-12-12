@@ -1,5 +1,4 @@
-var HC = HC || {};
-var THREE = THREE || {};
+const HC = {};
 
 const DEBUG = true;
 

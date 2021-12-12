@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 {
+    // fixme: can be ported now
     HC.Event = class Event {
 
         /**

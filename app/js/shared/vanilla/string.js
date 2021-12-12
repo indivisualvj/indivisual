@@ -1,5 +1,5 @@
 /**
- *
+ * // fixme: move to static module?
  * @returns {string}
  */
 HC.filePath = function() {

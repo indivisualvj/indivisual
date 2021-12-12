@@ -495,17 +495,54 @@ class Server
         let dotCount = sourcePath.split('/').length;
         let dots = new Array(dotCount).fill('..').join('/');
         let nodeModulesPath = HC.filePath(dots, 'node_modules');
-        let threeModulePath = HC.filePath(nodeModulesPath, 'three', 'build', 'three.module.js');
+
         _existCreate(binPath);
-        let code = fs.readFileSync(path.resolve(url), "utf8");
-        code = code.replaceAll(/from ["']three["']/g, `from "${threeModulePath}"`);
+        let content = fs.readFileSync(path.resolve(url), "utf8");
+        let matches = content.match(/from +["'](.+)["'];?/g);
 
-        let regexp = new RegExp(/from ["'](three\/[^"']+)['"]/g);
-        code = code.replaceAll(regexp, `from "${nodeModulesPath}/$1"`);
+        for (const matchesKey in matches) {
+            let match = matches[matchesKey];
+            let moduleName = match.replace(/from +["'](.+)["'];?/, '$1');
+            let modulePath = this._getModule(moduleName, dots);
 
-        fs.writeFileSync(binFile, code);
+            if (modulePath) {
+                let regex = new RegExp("from +[\"']" + moduleName + "[\"']", 'g');
+                console.log(modulePath);
+                content = content
+                    .replaceAll(regex, 'from "' + modulePath + '"');
+            } else {
+
+            }
+        }
+
+        fs.writeFileSync(binFile, content);
 
         return binFile;
+    }
+
+    _getModule(name, prefix) {
+
+        if (!name.startsWith('.')) {
+            let nodeModulesPath = HC.filePath(_ROOT, 'node_modules');
+            let fullPath = HC.filePath(nodeModulesPath, name);
+            let path = fullPath.substr(0, fullPath.lastIndexOf('/'));
+            if (fs.existsSync(fullPath)) {
+                if (fs.statSync(fullPath).isDirectory()) {
+                    let pkgJson = require(HC.filePath(fullPath, 'package.json'));
+                    if (pkgJson.module) {
+                        return HC.filePath(prefix, 'node_modules', name, pkgJson.module);
+                    }
+                } else {
+                    console.warn(fullPath);
+                }
+            }
+
+            if (fs.existsSync(path)) {
+                return HC.filePath(prefix, 'node_modules', name);
+            }
+        }
+
+        return null;
     }
 
 }

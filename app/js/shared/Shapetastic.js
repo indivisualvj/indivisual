@@ -1,11 +1,10 @@
 /**
  * inspired by maptastic
  * @author indivisualvj / https://github.com/indivisualvj
- *
- * @param display {Display}
- * @param animation {Animation}
  */
-Shapetastic = function (display, animation) {
+import * as THREE from "three";
+
+const Shapetastic = function (display, animation) {
 
     let renderer = animation.renderer;
     let ctx = display.canvas.ctx;
@@ -116,8 +115,8 @@ Shapetastic = function (display, animation) {
         let m = renderer.currentLayer.shapeSize(.5);
         if (n) {
 
-            let vn = new THREE.Vector2(n[0], n[1]); // fixme:
-            let ve = new THREE.Vector2(vtc[0], vtc[1]);// fixme:
+            let vn = new THREE.Vector2(n[0], n[1]);
+            let ve = new THREE.Vector2(vtc[0], vtc[1]);
             let d = Math.abs(vn.distanceTo(ve));
             if (nodist || d < .03) {
                 let x = cx + n[0] * m;
@@ -582,7 +581,7 @@ Shapetastic = function (display, animation) {
      */
     let _saveVertices = function (vtcs, jo) {
 
-        for (i = 0; i < vtcs.length; i++) {
+        for (let i = 0; i < vtcs.length; i++) {
             vtcs[i][0] = round(vtcs[i][0], 3);
             vtcs[i][1] = round(vtcs[i][1], 3);
         }
@@ -769,3 +768,5 @@ Shapetastic = function (display, animation) {
         }
     };
 };
+
+export {Shapetastic};

@@ -1,11 +1,11 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-
 import {EventManager} from "./EventManager";
 import {Display} from "../animation/Display";
 import {TimeoutManager} from "./TimeoutManager";
 import {PluginManager} from "./PluginManager";
+import {Shapetastic} from "../shared/Shapetastic";
 
 class DisplayManager {
 

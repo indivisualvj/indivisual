@@ -1,4 +1,7 @@
+@import "loading.css";
+
 body {
+    font-family: Hack, monospace;
     width: 100%;
     height: 100vh;
     background: black;

@@ -16,14 +16,14 @@ const _PORT = options.port ? options.port : conf.port;
 const _HTTPS = typeof options.https != "undefined";
 
 let sessions = {};
-let members = ['animation', 'controller', 'client', 'setup', 'monitor'];
+let members = ['animation', 'controller', 'client', 'setup', 'preview'];
 
 let targetsGroups = {
     animation: ['controls', 'displays', 'sources', 'settings', 'log', 'midi'],
     controller: ['controls', 'displays', 'sources', 'settings', 'log', 'attr', 'midi', 'data'],
     client: ['controls', 'displays', 'sources', 'settings', 'log', 'midi'],
     setup: ['displays', 'data', 'settings'],
-    monitor: ['displays', 'controls', 'settings', 'sources'], // displays added to have updates on resolution. HC.Monitor.init() takes care of the other settings.
+    preview: ['displays', 'controls', 'settings', 'sources'], // displays added to have updates on resolution. PreviewManager.init() takes care of the other settings.
     log: ['log']
 };
 
@@ -32,7 +32,7 @@ let sourcesGroups = {
     controller: ['controls', 'displays', 'sources', 'settings', 'log', 'attr', 'midi'],
     client: ['log'],
     setup: ['displays', 'data', 'settings'],
-    monitor: ['log']
+    preview: ['log']
 };
 
 let log = {};
@@ -40,7 +40,7 @@ let log = {};
 let checkups = [
     function (ses) {
         if (ses && 'controls' in ses) {
-            if (ses.controls.monitor) {
+            if (ses.controls.preview) {
                 return false;
             }
         }
@@ -53,7 +53,7 @@ let groupsCheckups = {
     controller: [],
     client: checkups,
     setup: checkups,
-    monitor: []
+    preview: []
 };
 
 
@@ -163,7 +163,7 @@ class Server
                     let result = {};
                     for (let i = 0; i < keys.length; i++) {
                         let key = keys[i];
-                        if (_validTarget(target, key, false)) { // false instead of session to avoid checkups (regarding monitor)
+                        if (_validTarget(target, key, false)) { // false instead of session to avoid checkups (regarding preview)
                             result[key] = session[key];
                         }
                     }
@@ -324,7 +324,6 @@ class Server
         }, 2 * 1000);
     }
 
-
     _initGet() {
 
         /**
@@ -344,6 +343,27 @@ class Server
         /**
          *
          */
+        this.app.get('/app/*.js', (req, res) => {
+            let url = req.originalUrl.substr(1);
+            this._loading(url, req);
+            let file = this._parse(url);
+            res.sendFile(file);
+        });
+
+        /**
+         *
+         */
+        this.app.get('/bin/vanilla.js', (req, res) => {
+
+            let sources = ['js/shared/vanilla'];
+            let file = _sources(req.originalUrl, sources);
+
+            res.sendFile(file);
+        });
+
+        /**
+         *
+         */
         this.app.get('*worker/*.js', (req, res) => {
             res.sendFile(path.resolve('app/js' + req.originalUrl));
         });
@@ -351,61 +371,40 @@ class Server
         /**
          *
          */
-        this.app.get('/node_modules/*.js', (req, res) => {
-            let url = req.originalUrl.replace('/', '');
-            url = path.resolve(url);
-            res.sendFile(url);
+        this.app.get('*node_modules/*', (req, res) => {
+            let url = req.originalUrl;
+            url = url.replace(new RegExp('.*(node_modules/.*)'), '$1');
+            url = url.replace(new RegExp('(.*)(\\?.*)'), '$1');
+
+            let suffix = url.replace(new RegExp('([^\\.]*)(\\.[^\\.]+)$'), '$2');
+            if (suffix === url) {
+                suffix = '.js';
+            } else {
+                suffix = '';
+            }
+
+            let file = url + suffix;
+            file = file.endsWith('.js') ? this._parse(file) : path.resolve(file);
+            console.log('sending', file);
+            res.sendFile(file);
         });
 
         /**
          *
          */
-        this.app.get('/app/lib/*', (req, res) => {
+        this.app.get('/app/js/*/*', (req, res) => {
             let url = req.originalUrl.replace('/', '') + '.js';
-            url = path.resolve(url);
-            res.sendFile(url);
-        });
-
-        /**
-         *
-         */
-        this.app.get('/bin/animation.js', (req, res) => {
-
-            let sources = [].concat(conf.shared).concat(conf.animation);
-            let file = _sources(req, sources);
-
+            this._loading(url, req);
+            let file = this._parse(url);
             res.sendFile(file);
-
-        });
-
-        /**
-         *
-         */
-        this.app.get('/bin/controller.js', (req, res) => {
-
-            let sources = [].concat(conf.shared).concat(conf.controller);
-            let file = _sources(req, sources);
-
-            res.sendFile(file);
-        });
-
-        /**
-         *
-         */
-        this.app.get('/bin/addons.js', (req, res) => {
-
-            let sources = [].concat(conf.addons);
-            let file = _sources(req, sources);
-
-            res.sendFile(file);
-
         });
 
         /**
          *
          */
         this.app.get('/lib/*.js', (req, res) => {
-            res.sendFile(HC.filePath(_APP, req.originalUrl.substr(1)));
+            let url = req.originalUrl.substr(1);
+            res.sendFile(HC.filePath(_APP, url));
         });
 
         /**
@@ -444,10 +443,24 @@ class Server
         /**
          *
          */
-        this.app.get('*', (req, res) => {
-            console.log('sending fallback', req.originalUrl);
+        this.app.get('/favicon.ico', (req, res) => {
+            // console.log('sending fallback', req.originalUrl);
             res.sendFile(_APP + '/favicon.ico');
         });
+    }
+
+    _loading(url, req) {
+        let referer = req.headers.referer;
+        if (referer) {
+            let to = referer.replace(/.+\/(\w+)\.html/, '$1');
+            let name = to + '@root'; // fixme: fake SID. how to zolf zis?
+            let data = {
+                key: 'loading',
+                value: url,
+            }
+            this.io.to(name).emit('loading', data);
+        }
+
     }
 
     _emit(data) {
@@ -475,6 +488,63 @@ class Server
         return sent;
     }
 
+    _parse(url) {
+        let binFile = HC.filePath(_BIN, url);
+        let binPath = binFile.substr(0, binFile.lastIndexOf('/'));
+        let sourcePath = url.substr(0, url.lastIndexOf('/'));
+        let dotCount = sourcePath.split('/').length;
+        let dots = new Array(dotCount).fill('..').join('/');
+        let nodeModulesPath = HC.filePath(dots, 'node_modules');
+
+        _existCreate(binPath);
+        let content = fs.readFileSync(path.resolve(url), "utf8");
+        let matches = content.match(/from +["'](.+)["'];?/g);
+
+        for (const matchesKey in matches) {
+            let match = matches[matchesKey];
+            let moduleName = match.replace(/from +["'](.+)["'];?/, '$1');
+            let modulePath = this._getModule(moduleName, dots);
+
+            if (modulePath) {
+                let regex = new RegExp("from +[\"']" + moduleName + "[\"']", 'g');
+                console.log(modulePath);
+                content = content
+                    .replaceAll(regex, 'from "' + modulePath + '"');
+            } else {
+
+            }
+        }
+
+        fs.writeFileSync(binFile, content);
+
+        return binFile;
+    }
+
+    _getModule(name, prefix) {
+
+        if (!name.startsWith('.')) {
+            let nodeModulesPath = HC.filePath(_ROOT, 'node_modules');
+            let fullPath = HC.filePath(nodeModulesPath, name);
+            let path = fullPath.substr(0, fullPath.lastIndexOf('/'));
+            if (fs.existsSync(fullPath)) {
+                if (fs.statSync(fullPath).isDirectory()) {
+                    let pkgJson = require(HC.filePath(fullPath, 'package.json'));
+                    if (pkgJson.module) {
+                        return HC.filePath(prefix, 'node_modules', name, pkgJson.module);
+                    }
+                } else {
+                    console.warn(fullPath);
+                }
+            }
+
+            if (fs.existsSync(path)) {
+                return HC.filePath(prefix, 'node_modules', name);
+            }
+        }
+
+        return null;
+    }
+
 }
 
 exports.Server = Server;
@@ -495,19 +565,19 @@ function _logConnectionInfo() {
 
 /**
  *
- * @param req
+ * @param originalUrl
  * @param sources
  * @returns {string}
  * @private
  */
-function _sources(req, sources) {
+function _sources(originalUrl, sources) {
 
     let compress = false;
-    let name = req.originalUrl.replace('bin/', '');
+    let name = originalUrl.replace('/bin/', '');
 
     _existCreate(_BIN);
 
-    let file = HC.filePath(_BIN, name.substr(1)); // do not use file_path! req originalUrl already contains leading slash ...
+    let file = HC.filePath(_BIN, name); // do not use file_path! req originalUrl already contains leading slash ...
     let files = [];
     let __find = function (list, base) {
         for (let i = 0; i < list.length; i++) {
@@ -524,9 +594,6 @@ function _sources(req, sources) {
             if (exists) {
                 if (fs.statSync(f).isDirectory()) {
                     let subs = exists ? fs.readdirSync(f) : [];
-
-                    __find(subs, f);
-
                     subs.sort(function (a, b) {
                         let fa = HC.filePath(f, a);
                         let fb = HC.filePath(f, b);
@@ -540,6 +607,7 @@ function _sources(req, sources) {
                         return a.localeCompare(b);
                     });
 
+                    __find(subs, f);
                 } else {
                     files.push(f);
                 }
@@ -744,7 +812,7 @@ function _store(data, unstorable = []) {
 
         let section = session[data.action];
 
-        let settings = false;
+        let settings;
         if ('layer' in data) {
             if (!(data.layer in section)) {
                 section[data.layer] = {};
@@ -932,11 +1000,10 @@ function _callIfDefined(callback) {
 /**
  *
  * @param dir
- * @param feedback
- * @returns {string}
+ * @return {string}
  * @private
  */
-function _existCreate(dir, feedback) {
+function _existCreate(dir) {
     let returnValue = '';
     try {
         if (!fs.existsSync(dir)) {

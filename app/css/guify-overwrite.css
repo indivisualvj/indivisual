@@ -37,6 +37,7 @@
 
 .guify-folder-contents_1FExAJ[data-border] {
     padding-top: 8px;
+    padding-bottom: 1px;
     background: #1a1a1a !important;
 }
 
@@ -106,6 +107,6 @@ input[type=checkbox].guify-checkbox_hxzak + label {
 }
 
 .guify-component-container[role="button"][data-mnemonic]:before {
-    top: 0px;
+    top: 0;
     left: 16px;
 }

@@ -7,6 +7,7 @@
     "command-line-args": "^5.0.2",
     "expand-home-dir": "^0.0.3",
     "express": "^4.16.4",
+    "hack-font": "^3.3.0",
     "hotkeys-js": "^3.8.7",
     "js-yaml": "^4.1.0",
     "socket.io": "^2.4.0",

@@ -1,29 +1,31 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible">
-        <title>indivisual</title>
-        <meta name="description" content="VJ-Synthesizer">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-        <link rel="stylesheet" href="css/animation.css">
-        <script src="socket.io/socket.io.js"></script>
-        <script src="node_modules/three/build/three.js"></script>
-        <script src="node_modules/js-yaml/dist/js-yaml.js"></script>
-        <script src="node_modules/hotkeys-js/dist/hotkeys.js"></script>
-        <script src="lib/tween.js"></script>
-        <script src="bin/addons.js"></script>
-        <script src="lib/maptastic.js"></script>
-        <script src="lib/cliptastic.js"></script>
-        <script src="lib/cssmatrix.js"></script>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible">
+    <title>indivisual</title>
+    <meta name="description" content="VJ-Synthesizer">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel='stylesheet' href='node_modules/hack-font/build/web/hack.css'>
+    <link rel="stylesheet" href="css/animation.css">
+    <script src="socket.io/socket.io.js"></script>
 
-        <script src="lib/stats.js"></script>
-        <script type="application/javascript">
-            var G_INSTANCE  = 'animation';
-        </script>
+    <script src="node_modules/js-yaml/dist/js-yaml.js"></script>
+    <script src="lib/tween.js"></script>
+    <script src="lib/maptastic.js"></script>
+    <script src="lib/cliptastic.js"></script>
 
-        <script src="bin/animation.js"></script>
-    </head>
-    <body id="body" >
-    </body>
+    <script src="lib/cssmatrix.js"></script>
+    <script src="lib/stats.js"></script>
+    <script type="application/javascript">
+        let G_INSTANCE  = 'animation';
+    </script>
+    <script src="app/js/bootstrap.js"></script>
+    <script src="bin/vanilla.js"></script>
+
+    <script type="module" src="app/js/animation.js"></script>
+</head>
+<body id="body" >
+<div id="loading">initializing ...</div>
+</body>
 </html>

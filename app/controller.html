@@ -1,58 +1,58 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible">
-        <title>indivisual Controller</title>
-        <meta name="description" content="VJ-Synthesizer Remote Controller">
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-        <link rel='stylesheet' href='//cdn.jsdelivr.net/npm/hack-font@3.3.0/build/web/hack.css'>
-        <link rel="stylesheet" href="css/controller.css">
-
-        <script src="socket.io/socket.io.js"></script>
-        <script src="lib/guify.js"></script>
-        <script src="node_modules/js-yaml/dist/js-yaml.js"></script>
-        <script src="node_modules/hotkeys-js/dist/hotkeys.js"></script>
-        <script src="lib/tween.js"></script>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible">
+    <title>indivisual Controller</title>
+    <meta name="description" content="VJ-Synthesizer Remote Controller">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href='node_modules/hack-font/build/web/hack.css'>
+    <link rel="stylesheet" href="css/controller.css">
+    <script src="socket.io/socket.io.js"></script>
+    <script src="lib/guify.js"></script>
+    <script src="node_modules/js-yaml/dist/js-yaml.js"></script>
+    <script src="lib/tween.js"></script>
 
 
 
 
 
-        <script type="application/javascript">
-            var G_INSTANCE  = 'controller';
-        </script>
+    <script type="application/javascript">
+        var G_INSTANCE  = 'controller';
+    </script>
+    <script src="app/js/bootstrap.js"></script>
+    <script src="bin/vanilla.js"></script>
 
-        <script src="bin/controller.js"></script>
-    </head>
-    <body>
-        <pre id="osd"></pre>
-        <div class="left w45p">
-            <div id="monitor" class="item fh">
-                <iframe src="" class="monitor control"></iframe>
-                <div class="blockfocus expandable">
-                    <pre id="log"></pre>
-                </div>
-            </div>
-            <div class="item fh">
-                <div id="SampleBar" class="control guify-main fullscreenable"></div>
-            </div>
-            <div class="item">
-                <div id="SequenceSettings" class="control guify-main fullscreenable"></div>
-                <div id="Presets" class="control guify-main fullscreenable"></div>
-            </div>
+    <script type="module" src="app/js/controller.js"></script>
+</head>
+<body>
+<div id="loading">initializing ...</div>
+<pre id="osd"></pre>
+<div class="left w45p">
+    <div id="preview" class="item fh">
+        <iframe src="" class="preview control"></iframe>
+        <div class="blockfocus expandable">
+            <pre id="log"></pre>
         </div>
-        <div class="left w55p">
-            <div class="item fh">
-                <div id="StatusBar" class="control guify-main fullscreenable"></div>
-            </div>
-            <div id="guify" class="item">
-                <div id="ControlSettings" class="control guify-main fullscreenable"></div>
-                <div id="DisplaySettings" class="control guify-main fullscreenable"></div>
-                <div id="SourceSettings" class="control guify-main fullscreenable"></div>
-                <div id="AnimationSettings" class="control guify-main fullscreenable"></div>
-            </div>
-        </div>
-    </body>
+    </div>
+    <div class="item fh">
+        <div id="SampleBar" class="control guify-main fullscreenable"></div>
+    </div>
+    <div class="item">
+        <div id="SequenceSettings" class="control guify-main fullscreenable"></div>
+        <div id="Presets" class="control guify-main fullscreenable"></div>
+    </div>
+</div>
+<div class="left w55p">
+    <div class="item fh">
+        <div id="StatusBar" class="control guify-main fullscreenable"></div>
+    </div>
+    <div id="guify" class="item">
+        <div id="ControlSettings" class="control guify-main fullscreenable"></div>
+        <div id="DisplaySettings" class="control guify-main fullscreenable"></div>
+        <div id="SourceSettings" class="control guify-main fullscreenable"></div>
+        <div id="AnimationSettings" class="control guify-main fullscreenable"></div>
+    </div>
+</div>
+</body>
 </html>

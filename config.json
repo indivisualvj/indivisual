@@ -3,29 +3,6 @@
 
   "port": 8081,
 
-  "shared": [
-    "js/entrypoint",
-    "js/shared",
-    "js/display",
-    "js/plugins",
-    "js/controlsets"
-  ],
-
-  "animation": [
-    "lib/three/postprocessing",
-    "js/animation.js",
-    "js/animation"
-  ],
-
-  "controller": [
-    "js/controller.js",
-    "js/controller"
-  ],
-
-  "addons": [
-
-  ],
-
   "directories": {
     "app": "app",
     "bin": "bin",

@@ -2,10 +2,11 @@
 @import "data-color.css";
 @import "icons.css";
 @import "samples.css";
-@import "monitor.css";
+@import "preview.css";
 @import "log.css";
 @import "sequence.css";
-@import "explorer.css";
+@import "presets.css";
+@import "loading.css";
 @import "guify-overwrite.css";
 @import "general.css";
 

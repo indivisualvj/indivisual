@@ -35,10 +35,10 @@ To get an idea of what can be done with it, visit my [YouTube channel](https://w
 There is no clean code in there. There also is no explicit design pattern 
 except a plugin concept designed by myself.
 
-However i tried to cleanup and remove the messiest parts of it since i retired 
-from my part time job as a VJ performing video life acts in some well known clubs in Munich.
+However, I tried to clean up and remove the messiest parts of it since i retired 
+from my part-time job as a VJ performing video life acts in some well known clubs in Munich.
 
-Therefore things do not work together perfectly sometimes.
+Therefore, things do not work together perfectly sometimes.
 
 But still it is pretty much fun to play with!
 
@@ -92,13 +92,13 @@ Try the tutorials from presets/_tutorials
 
 
 ### MIDI Controllers
-- If you own a [Arturia Beatstep](https://www.arturia.com/beatstep/overview), simply connect it. If the device uses factory settings, it will work immediately and the layout will just work fine.
-- Otherwise you have to build up your own layout. Have a look at [MidiController.yml](app/structure/MidiController.yml) 
+- If you own an [Arturia Beatstep](https://www.arturia.com/beatstep/overview), simply connect it. If the device uses factory settings, it will work immediately and the layout will just work fine.
+- Otherwise, you have to build up your own layout. Have a look at [MidiController.yml](app/structure/MidiController.yml) 
 - ... more explanation here ...  
 
 
 ### Plugins
-indivisual comes with a set of funny plugins. Nevertheless you might want to extend it with some of your own ideas.
+indivisual comes with a set of funny plugins. Nevertheless, you might want to extend it with some of your own ideas.
 In this case you can add your own plugins for the most settings available.
 
 To find out more read plugins [tutorial](docs/plugins.md).
@@ -109,7 +109,7 @@ To find out more read plugins [tutorial](docs/plugins.md).
 
 
 ## Contributing
-If you have any suggestion or features or you found some bugs,
+If you have any suggestion, features, or you found a bug,
 feel free to contribute to this project.
 Just open a pull request or an issue.
 

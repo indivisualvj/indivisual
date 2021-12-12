@@ -2,6 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {BackgroundModePlugin} from "../BackgroundModePlugin";
+import {Color} from "three";
 
 class Static extends BackgroundModePlugin {
         static index = 10;

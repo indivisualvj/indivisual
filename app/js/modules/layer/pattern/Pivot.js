@@ -34,7 +34,7 @@ class pivot extends PatternPlugin {
                         this.layer._shapes.remove(this.points[i]._mesh);
                     }
 
-                    let p = this.random2dPosition(0);//new Vector3(640, -600*i, 0);//
+                    let p = this.random2dPosition(this.layer.shapeSize(1));
                     p.z = 0;
                     this.points[i] = p;
 

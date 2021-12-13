@@ -28,7 +28,7 @@ class gravitation extends PatternPlugin {
         let particle = params.particle;
 
         if (!particle) {
-            particle = new Particle(shape, this.random2dPosition(0));
+            particle = new Particle(shape, this.random2dPosition());
             this.particles.push(particle);
             params.particle = particle;
         }

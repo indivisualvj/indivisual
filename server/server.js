@@ -453,7 +453,7 @@ class Server
         let referer = req.headers.referer;
         if (referer) {
             let to = referer.replace(/.+\/(\w+)\.html/, '$1');
-            let name = to + '@root'; // fixme: fake SID. how to zolf zis?
+            let name = to + '@root'; // fixme: fake SID. manage sids using cookies!
             let data = {
                 key: 'loading',
                 value: url,

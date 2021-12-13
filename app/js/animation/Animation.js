@@ -382,7 +382,6 @@ class Animation extends Program {
                         Messaging.emitMidi('glow', MIDI_ROW_TWO[i], {timeout: 125});
                     }
                     if (use !== 'off') {
-                        console.log('glow sample', use);
                         Messaging.emitMidi('glow', MIDI_ROW_ONE[use], {timeout: 125});
                     }
                 }

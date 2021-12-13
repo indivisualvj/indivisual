@@ -34,7 +34,7 @@ class DisplaySourcePlugin extends ModulePlugin {
     canvas;
 
     /**
-     * @type {Program}
+     * @type {Animation}
      */
     animation;
 

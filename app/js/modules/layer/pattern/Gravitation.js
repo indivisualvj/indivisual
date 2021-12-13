@@ -4,13 +4,13 @@
  */
 
 import {PatternPlugin} from "../PatternPlugin";
+import {Vector3} from "three";
 
 
 class gravitation extends PatternPlugin {
     static name = 'gravitation';
 
     particles = [];
-    N = 10;
 
     before(shape) {
         if (this.isFirstShape(shape)) {
@@ -33,7 +33,12 @@ class gravitation extends PatternPlugin {
             params.particle = particle;
         }
 
-        shape.position(particle.x, -particle.y, particle.z);
+        let pos = particle.getPosition();
+        pos.multiplyScalar(.99); // something pulls them all to the center...
+        particle.setPosition(pos);
+        particle.mass = Math.pow(shape.size(), 3);
+
+        this.positionIn2dSpace(shape, particle.x, particle.y, particle.z);
 
     }
 
@@ -94,27 +99,30 @@ class gravitation extends PatternPlugin {
  *
  */
 class Particle {
-    maxMass = 30;
     initVelocityMax = 1;
-
-    injections = {
-        particle: false
-    };
 
     /**
      *
-     * @param shape
+     * @param shape{Shape}
      * @param pos
      */
     constructor(shape, pos) {
         this.mass = shape.size();
-        this.x = pos.x;
-        this.y = pos.y;
-        this.z = pos.z;
+        this.setPosition(pos);
         this.vx = randomFloat(-this.initVelocityMax, this.initVelocityMax, 2); // velocities
         this.vy = randomFloat(-this.initVelocityMax, this.initVelocityMax, 2);
         this.fx = 0; // forces we will accumulate
         this.fy = 0;
+    }
+
+    getPosition() {
+        return new Vector3(this.x, this.y, this.z);
+    }
+
+    setPosition(pos) {
+        this.x = pos.x;
+        this.y = pos.y;
+        this.z = pos.z;
     }
 }
 

@@ -12,7 +12,7 @@ class Info extends ControlSet
     settings = {
         name: 0,
         version: 1.0,
-        tutorial: {}
+        tutorial: {} // fixme: remove tutorial from presets. add it to plugins
     };
 
     types = {

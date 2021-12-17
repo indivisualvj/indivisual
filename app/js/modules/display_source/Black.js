@@ -26,7 +26,7 @@ class Black extends DisplaySourcePlugin {
         this.height = height;
 
         if (needsUpdate) {
-            this.init(this.index);
+            this.init(this.getIndex());
         }
     }
 
@@ -34,8 +34,7 @@ class Black extends DisplaySourcePlugin {
      *
      */
     init(index) {
-        this.index = index; // todo: do we need this.index assignment?
-        this.id = this.type + index;
+        super.init(index);
 
         if (!this.canvas) {
             this.canvas = new OffscreenCanvas(1, 1);

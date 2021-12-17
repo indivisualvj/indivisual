@@ -552,9 +552,9 @@ class _Layer
 
     /**
      *
-     * @returns {*|boolean}
+     * @return {Speed}
      */
-    currentSpeed() { // todo: can we move it elsewhere?
+    currentSpeed() {
         return this.beatKeeper.getSpeed(this.settings.rhythm);
     }
 

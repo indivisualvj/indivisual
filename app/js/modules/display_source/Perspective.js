@@ -24,9 +24,8 @@ class Perspective extends DisplaySourcePlugin
      * @param index
      */
     init(index) {
-        this.index = index; // todo: do we need this.index assignment?
-        this.id = this.type + index;
-        this._bounds = false;
+        super.init(index);
+        this._bounds = null;
         this._last = 0;
 
         this.threeRenderer = new WebGLRenderer({alpha: true, antialias: ANTIALIAS});

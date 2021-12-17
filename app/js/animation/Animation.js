@@ -128,7 +128,7 @@ class Animation extends Program {
                     }
                 }
 
-                this.autoVolume();
+                this.autoGain();
             }
 
             this.postStatus(detectedSpeed);
@@ -289,9 +289,9 @@ class Animation extends Program {
     }
 
     /**
-     * // todo: autoGain
+     *
      */
-    autoVolume() {
+    autoGain() {
         let gain = 0;
         if (this.audioAnalyser.avgVolume < 0.10) {
             gain += 0.1;
@@ -435,20 +435,23 @@ class Animation extends Program {
 
             this.sourceManager.updateSources();
             this.reset();
-
-            if (IS_PREVIEW) { // todo: does not belong in load session i guess
-                this.previewManager = new PreviewManager();
-                this.previewManager.init(this.config, () => {
-                    this.displayManager.updateDisplay(0);
-                    this.initResize();
-                    this.updatePlay();
-                });
-            }
+            this.initPreview();
 
             Logger.loading(null, null,250);
         };
 
         Messaging.sync(callback);
+    }
+
+    initPreview() {
+        if (IS_PREVIEW) {
+            this.previewManager = new PreviewManager();
+            this.previewManager.init(this.config, () => {
+                this.displayManager.updateDisplay(0);
+                this.initResize();
+                this.updatePlay();
+            });
+        }
     }
 
     /**

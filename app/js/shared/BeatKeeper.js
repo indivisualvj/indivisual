@@ -173,7 +173,7 @@ class BeatKeeper {
      */
     getSpeed(rhythm) {
 
-        let speed = false;
+        let speed;
 
         if (rhythm in this.speeds) {
             speed = this.speeds[rhythm];

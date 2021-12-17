@@ -20,7 +20,7 @@ class rounded_box extends ShapeGeometryPlugin {
 
         let size = layer.shapeSize(1);
 
-        return new RoundedBoxGeometry(size, size, size, this.getModA(1, 2, 32), 4 * this.getModB(0, 0));
+        return new RoundedBoxGeometry(size, size, size, this.getModA(1, 2, 32), size * .0025 * this.getModB(0, 0));
     }
 }
 

@@ -88,10 +88,9 @@ class PatternPlugin extends AnimationPlugin
      */
     positionIn2dSpace(shape, x, y, z) {
         let cp = new Vector3(x, y, z);
-        cp.add(this.getPatternPlugin().patternCenterVector(true));
+        cp.add(this.layer.getPatternPlugin().patternCenterVector(true));
         shape.position().copy(cp);
     }
-
 
     /**
      *
@@ -109,15 +108,14 @@ class PatternPlugin extends AnimationPlugin
 
     /**
      *
-     * @param depthMultiplier
      * @param [reduce]
      * @returns {Vector3}
      */
-    random2dPosition(depthMultiplier, reduce) {
+    random2dPosition(reduce) {
         return new Vector3(
-            randomInt(0, this.layer.resolution('half').x * this.settings.pattern_paddingx - (reduce || 0), true),
-            randomInt(0, this.layer.resolution('half').y * this.settings.pattern_paddingy - (reduce || 0), true),
-            this.layer.cameraDefaultDistance(depthMultiplier || 0) * this.settings.pattern_paddingz
+            randomInt(0, this.layer.resolution('half').x * this.settings.pattern_paddingx - (reduce ?? 0), true),
+            randomInt(0, this.layer.resolution('half').y * this.settings.pattern_paddingy - (reduce ?? 0), true),
+            0
         );
     }
 

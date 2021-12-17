@@ -8,8 +8,6 @@ class Sequence extends DisplaySourcePlugin
 {
     static index = 10;
 
-    _index;
-
     /**
      *
      * @type {string}
@@ -45,7 +43,7 @@ class Sequence extends DisplaySourcePlugin
      *
      * @type {boolean}
      */
-    speedup = false;
+    speedup = false; // todo: progress module
     /**
      *
      * @type {boolean}
@@ -123,8 +121,8 @@ class Sequence extends DisplaySourcePlugin
      * @param index
      */
     init(index) {
-        this._index = index;
-        this.id = this.type + index;
+        super.init(index);
+
         this.canvas = new OffscreenCanvas(1, 1);
         this.canvas.id = this.id;
         this.canvas.ctx = this.canvas.getContext('2d');
@@ -142,9 +140,6 @@ class Sequence extends DisplaySourcePlugin
         this.loadOscillators();
     }
 
-    getIndex() {
-        return this._index;
-    }
 
     /**
      *

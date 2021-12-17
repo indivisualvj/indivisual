@@ -24,9 +24,8 @@ class Perspective extends DisplaySourcePlugin
      * @param index
      */
     init(index) {
-        this.index = index; // todo: do we need this.index assignment?
-        this.id = this.type + index;
-        this._bounds = false;
+        super.init(index);
+        this._bounds = null;
         this._last = 0;
 
         this.threeRenderer = new WebGLRenderer({alpha: true, antialias: ANTIALIAS});
@@ -61,9 +60,9 @@ class Perspective extends DisplaySourcePlugin
     next() {
         if (this._last !== this.animation.now) {
             let key = this.id;
-            let layer = this.animation.threeRenderer.currentLayer;
+            let layer = this.animation.renderer.currentLayer;
             let three = layer.three;
-            let cam = this.animation.threeRenderer.three[key];
+            let cam = this.animation.renderer.three[key];
             if (cam) {
                 let lcam = three.camera;
                 cam.position.x = lcam.position.x;

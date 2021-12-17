@@ -21,7 +21,7 @@ class DisplaySourcePlugin extends ModulePlugin {
     /**
      * @type {number}
      */
-    index;
+    _index;
 
     /**
      * @type {string}
@@ -34,7 +34,7 @@ class DisplaySourcePlugin extends ModulePlugin {
     canvas;
 
     /**
-     * @type {Program}
+     * @type {Animation}
      */
     animation;
 
@@ -110,7 +110,8 @@ class DisplaySourcePlugin extends ModulePlugin {
      *
      */
     init(index) {
-        this.index = index;
+        this._index = index;
+        this.id = this.type + index;
     }
 
     /**
@@ -119,6 +120,10 @@ class DisplaySourcePlugin extends ModulePlugin {
      */
     getThis() {
         return this;
+    }
+
+    getIndex() {
+        return this._index;
     }
 
     /**

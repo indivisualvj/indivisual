@@ -23,8 +23,8 @@ class bacillus extends PatternPlugin {
 
             if (!params.velocity) {
                 params.velocity = new Vector3(avx, avy, avz);
-
-                shape.position().copy(this.random2dPosition(0), layer.shapeSize(1));
+                let pos = this.random2dPosition(layer.shapeSize(1));
+                this.positionIn2dSpace(shape, pos.x, pos.y, pos.z);
             }
 
             let mpc =this.animation.diffPrc * 0.3;

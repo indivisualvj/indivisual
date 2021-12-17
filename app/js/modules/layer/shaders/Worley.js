@@ -63,9 +63,7 @@ class worley extends ShaderPlugin {
         ].join("\n"),
 
         fragmentShader: [
-
-
-            "        uniform float time;",
+            "uniform float time;",
             "uniform float strength;",
             "uniform float scale;",
             "uniform vec2 resolution;",

@@ -1,4 +1,3 @@
-const HC = {}
 const conf = require("../config.json");
 const fs = require("fs");
 const path = require("path");
@@ -189,7 +188,7 @@ class Server
                 _log('files', data);
                 console.log('searching files in ' + data.file);
 
-                let files = _find(HC.filePath(_HOME, data.file));
+                let files = _find(filePath(_HOME, data.file));
                 data.data = files;
 
                 callback(files);
@@ -228,8 +227,8 @@ class Server
              *
              */
             socket.on('rename', (data, callback) => {
-                let old = HC.filePath(_HOME, data.dir, data.file);
-                let nu = HC.filePath(_HOME, data.dir, data.nu);
+                let old = filePath(_HOME, data.dir, data.file);
+                let nu = filePath(_HOME, data.dir, data.nu);
                 fs.rename(old, nu, function () {
                     let msg = data.file + ' renamed to ' + data.nu;
                     callback(msg);
@@ -240,8 +239,8 @@ class Server
              *
              */
             socket.on('delete', (data, callback) => {
-                let old = HC.filePath(_HOME, data.dir, data.file);
-                let nu = HC.filePath(_HOME, data.dir, '._' + data.file);
+                let old = filePath(_HOME, data.dir, data.file);
+                let nu = filePath(_HOME, data.dir, '._' + data.file);
                 fs.rename(old, nu, function () {
                     let msg = data.file + ' deleted';
                     console.log(msg);
@@ -253,7 +252,7 @@ class Server
              *
              */
             socket.on('unlinkall', (data, callback) => {
-                let dir = HC.filePath(_ROOT, data.dir);
+                let dir = filePath(_ROOT, data.dir);
                 _unlinkAll(dir, callback);
             });
 
@@ -266,7 +265,7 @@ class Server
              *
              */
             socket.on('load', (data, callback) => {
-                data.file = HC.filePath(_HOME, data.file);
+                data.file = filePath(_HOME, data.file);
                 _load(data, callback);
             });
         });
@@ -282,7 +281,7 @@ class Server
 
                 if (!session.blocked && session.active) {
 
-                    let path = HC.filePath(_SESSIONS, key);
+                    let path = filePath(_SESSIONS, key);
 
                     session.active = false;
                     let config = {
@@ -404,35 +403,35 @@ class Server
          */
         this.app.get('/lib/*.js', (req, res) => {
             let url = req.originalUrl.substr(1);
-            res.sendFile(HC.filePath(_APP, url));
+            res.sendFile(filePath(_APP, url));
         });
 
         /**
          *
          */
         this.app.get('/css/*.css', (req, res) => {
-            res.sendFile(HC.filePath(_APP, req.originalUrl.substr(1)));
+            res.sendFile(filePath(_APP, req.originalUrl.substr(1)));
         });
 
         /**
          *
          */
         this.app.get('/img/*.png', (req, res) => {
-            res.sendFile(HC.filePath(_APP, req.originalUrl.substr(1)));
+            res.sendFile(filePath(_APP, req.originalUrl.substr(1)));
         });
 
         /**
          *
          */
         this.app.get('/samples/*/*.png', (req, res) => {
-            res.sendFile(HC.filePath(_ROOT, req.originalUrl.substr(1)));
+            res.sendFile(filePath(_ROOT, req.originalUrl.substr(1)));
         });
 
         /**
          *
          */
         this.app.get('/assets/*', (req, res) => {
-            let url = HC.filePath(_HOME, req.originalUrl.substr(1));
+            let url = filePath(_HOME, req.originalUrl.substr(1));
             res.sendFile(url, {}, function (err) {
                 if (err) {
                     console.log(url, err);
@@ -453,7 +452,7 @@ class Server
         let referer = req.headers.referer;
         if (referer) {
             let to = referer.replace(/.+\/(\w+)\.html/, '$1');
-            let name = to + '@root'; // fixme: fake SID. how to zolf zis?
+            let name = to + '@root'; // fixme: fake SID. manage sids using cookies!
             let data = {
                 key: 'loading',
                 value: url,
@@ -489,12 +488,12 @@ class Server
     }
 
     _parse(url) {
-        let binFile = HC.filePath(_BIN, url);
+        let binFile = filePath(_BIN, url);
         let binPath = binFile.substr(0, binFile.lastIndexOf('/'));
         let sourcePath = url.substr(0, url.lastIndexOf('/'));
         let dotCount = sourcePath.split('/').length;
         let dots = new Array(dotCount).fill('..').join('/');
-        let nodeModulesPath = HC.filePath(dots, 'node_modules');
+        let nodeModulesPath = filePath(dots, 'node_modules');
 
         _existCreate(binPath);
         let content = fs.readFileSync(path.resolve(url), "utf8");
@@ -523,14 +522,14 @@ class Server
     _getModule(name, prefix) {
 
         if (!name.startsWith('.')) {
-            let nodeModulesPath = HC.filePath(_ROOT, 'node_modules');
-            let fullPath = HC.filePath(nodeModulesPath, name);
+            let nodeModulesPath = filePath(_ROOT, 'node_modules');
+            let fullPath = filePath(nodeModulesPath, name);
             let path = fullPath.substr(0, fullPath.lastIndexOf('/'));
             if (fs.existsSync(fullPath)) {
                 if (fs.statSync(fullPath).isDirectory()) {
-                    let pkgJson = require(HC.filePath(fullPath, 'package.json'));
+                    let pkgJson = require(filePath(fullPath, 'package.json'));
                     if (pkgJson.module) {
-                        return HC.filePath(prefix, 'node_modules', name, pkgJson.module);
+                        return filePath(prefix, 'node_modules', name, pkgJson.module);
                     }
                 } else {
                     console.warn(fullPath);
@@ -538,7 +537,7 @@ class Server
             }
 
             if (fs.existsSync(path)) {
-                return HC.filePath(prefix, 'node_modules', name);
+                return filePath(prefix, 'node_modules', name);
             }
         }
 
@@ -577,11 +576,11 @@ function _sources(originalUrl, sources) {
 
     _existCreate(_BIN);
 
-    let file = HC.filePath(_BIN, name); // do not use file_path! req originalUrl already contains leading slash ...
+    let file = filePath(_BIN, name); // do not use file_path! req originalUrl already contains leading slash ...
     let files = [];
     let __find = function (list, base) {
         for (let i = 0; i < list.length; i++) {
-            let f = HC.filePath(base, list[i]);
+            let f = filePath(base, list[i]);
 
             let exists = false;
 
@@ -595,8 +594,8 @@ function _sources(originalUrl, sources) {
                 if (fs.statSync(f).isDirectory()) {
                     let subs = exists ? fs.readdirSync(f) : [];
                     subs.sort(function (a, b) {
-                        let fa = HC.filePath(f, a);
-                        let fb = HC.filePath(f, b);
+                        let fa = filePath(f, a);
+                        let fb = filePath(f, b);
                         let ad = fs.statSync(fa).isDirectory() ? 1 : 0;
                         let bd = fs.statSync(fb).isDirectory() ? 1 : 0;
 
@@ -633,8 +632,8 @@ function _save(data, callback) {
     callback = callback || function () {
     };
 
-    let dir = HC.filePath(_HOME, data.dir);
-    let file = HC.filePath(dir, data.file);
+    let dir = filePath(_HOME, data.dir);
+    let file = filePath(dir, data.file);
 
     _existCreate(dir);
 
@@ -666,11 +665,11 @@ function _save(data, callback) {
 function _restore(data, callback) {
 
     sessions[data.sid] = {active: false, blocked: true};
-    let root = HC.filePath(_HOME, _SESSIONS, data.sid);
+    let root = filePath(_HOME, _SESSIONS, data.sid);
     let config = {
         sid: data.sid,
         section: 'controls',
-        file: HC.filePath(root, 'controls.json')
+        file: filePath(root, 'controls.json')
     };
 
     let _txt = function (section, file) {
@@ -694,17 +693,17 @@ function _restore(data, callback) {
         _validate(config, result);
 
         config.section = 'displays';
-        config.file = HC.filePath(root, 'displays.json');
+        config.file = filePath(root, 'displays.json');
         _load(config, function (result) {
             _validate(config, result);
 
             config.section = 'sources';
-            config.file = HC.filePath(root, 'sources.json');
+            config.file = filePath(root, 'sources.json');
             _load(config, function (result) {
                 _validate(config, result);
 
                 config.section = 'settings';
-                config.file = HC.filePath(root, 'settings.json');
+                config.file = filePath(root, 'settings.json');
                 _load(config, function (result) {
                     _validate(config, result);
 
@@ -776,7 +775,7 @@ function _validTarget(target, action, session) {
 function _writeBinary(data, callback) {
 
     let dir = data.dir;
-    let file = HC.filePath(dir, data.file);
+    let file = filePath(dir, data.file);
 
     _existCreate(dir);
 
@@ -1041,7 +1040,7 @@ function _getNetworkIPs() {
  *
  * @returns {string}
  */
-HC.filePath = function() {
+function filePath() {
     let args = Array.prototype.slice.call(arguments).filter(v => {
         return v !== null && v !== undefined;
     });

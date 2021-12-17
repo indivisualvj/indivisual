@@ -6,7 +6,7 @@ const express = require('express');
 const sio = require('socket.io');
 const https = require('https');
 const http = require('http');
-const HC = require('./server/server');
+const Server = require('./server/server').Server;
 
 let options = require('./server/options');
 
@@ -31,7 +31,7 @@ if (_HTTPS) {
 
 let io = sio.listen(server);
 
-let srv = new HC.Server(app, server, io);
+let srv = new Server(app, server, io);
 
 if (process.argv.length > 2) {
     if (process.argv[2] === 'log') {

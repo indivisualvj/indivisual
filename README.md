@@ -66,12 +66,6 @@ Server options can be found [here](docs/server-options.md)
 - Sizing & Offset
 - Shaders (Postprocessing)
 
-Have a look at my [Tutorials playlist](https://www.youtube.com/playlist?list=PLQn3ZXgzn8P3BI43-pDmU4rVFzVmQh5DQ)
-
-Try the tutorials from presets/_tutorials 
-
-![](docs/images/TutorialOverview.png)
-
 
 ### Understand
 - A lot of settings are based on three.js settings. To understand these, you have to dig into three.js [docs](https://threejs.org/docs/index.html#manual/en/introduction/Creating-a-scene)  

@@ -12,7 +12,6 @@ class Info extends ControlSet
     settings = {
         name: 0,
         version: 1.0,
-        tutorial: {} // fixme: remove tutorial from presets. add it to plugins
     };
 
     types = {
@@ -20,9 +19,6 @@ class Info extends ControlSet
         version: ['half']
     };
 
-    hasTutorial() {
-        return (typeof this.properties.tutorial === 'object');
-    }
 }
 
 export {Info}

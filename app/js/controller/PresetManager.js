@@ -227,10 +227,6 @@ class PresetManager {
         }
 
         data = this.settingsManager.prepareLayer(layer);
-        if (this.settingsManager.get(layer, 'info').hasTutorial()) {
-            new ScriptProcessor(this, name, Object.create(data.info.tutorial)).log();
-            data.info.tutorial = {};
-        }
 
         Messaging.emitSettings(layer, data, false, false, true, _emitted);
     }

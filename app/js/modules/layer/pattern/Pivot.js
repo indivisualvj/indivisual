@@ -3,6 +3,7 @@
  */
 import {PatternPlugin} from "../PatternPlugin";
 import {CircleGeometry, Euler, Line3, Mesh, MeshPhongMaterial, Vector3} from "three";
+import {Shape} from "../../../animation/Shape";
 
 class pivot extends PatternPlugin {
     static name = 'random pivot (shape speed)';
@@ -34,16 +35,18 @@ class pivot extends PatternPlugin {
                     this.layer._shapes.remove(this.points[i]._mesh);
                 }
 
-                let p = this.random2dPosition(this.layer.shapeSize(1));
-                p.z = 0;
-                this.points[i] = p;
+                let position = this.random2dPosition();
+                position.z = 0;
+                this.points[i] = position;
 
                 this.geometry = new CircleGeometry(this.layer.shapeSize(.125 / 2), 12);
                 this.material = new MeshPhongMaterial({emissive: 0xffffff});
-                let m = new Mesh(this.geometry, this.material);
-                this.layer._shapes.add(m);
-                m.position.copy(p);
-                p._mesh = m;
+                let pointMesh = new Mesh(this.geometry, this.material);
+                this.layer._shapes.add(pointMesh);
+                position.add(this.centerPoint);
+                pointMesh.position.copy(position);
+
+                position._mesh = pointMesh;
             }
         }
     }

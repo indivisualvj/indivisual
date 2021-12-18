@@ -4,7 +4,7 @@
 import {FilterModePlugin} from "../FilterModePlugin";
 
 class chess2 extends FilterModePlugin {
-    static name = 'chess²';
+    static name = 'chess² (pulse)';
     invert = false;
 
     apply(shape, plugin) {
@@ -59,7 +59,7 @@ class chess2 extends FilterModePlugin {
 
 
 class chess2flash extends FilterModePlugin {
-    static name = 'chess²flash';
+    static name = 'chess² (flash)';
 
     apply(shape) {
         let layer = this.layer;
@@ -69,7 +69,7 @@ class chess2flash extends FilterModePlugin {
 
 
 class chess2strobe extends FilterModePlugin {
-    static name = 'chess²strobe';
+    static name = 'chess² (strobe)';
 
     apply(shape) {
         let layer = this.layer;
@@ -77,4 +77,19 @@ class chess2strobe extends FilterModePlugin {
     }
 }
 
-export {chess2, chess2flash, chess2strobe};
+class chess extends FilterModePlugin
+{
+    static name = 'chess (complementary)'
+
+    apply(shape, plugin) {
+        if (shape.index % 2 === 0) {
+            let ni = shape.index + 1;
+            if (ni >= 0 && ni < this.layer.shapes.length) {
+                let src = this.layer.getShape(ni).color;
+                shape.color.h = src.h + 180;
+            }
+        }
+    }
+}
+
+export {chess2, chess2flash, chess2strobe, chess};

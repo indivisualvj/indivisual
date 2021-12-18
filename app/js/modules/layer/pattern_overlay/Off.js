@@ -3,8 +3,7 @@
  */
 import {PatternPlugin} from "../PatternPlugin";
 
-class Off extends PatternPlugin
-{
+class Off extends PatternPlugin {
     static index = 1;
     static name = 'off';
 

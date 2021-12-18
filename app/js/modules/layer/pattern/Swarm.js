@@ -76,7 +76,7 @@ class swarm extends PatternPlugin {
             v *= 2;
         }
 
-        let step = Math.sqrt(v) * this.diameter/250;
+        let step = Math.sqrt(v) * this.diameter / 250;
         shape.sceneObject().translateZ(step);
 
     }

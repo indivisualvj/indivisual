@@ -3,8 +3,7 @@
  */
 import {ControlSet} from "../../../shared/ControlSet";
 
-class Oscillator extends ControlSet
-{
+class Oscillator extends ControlSet {
     static index = 30;
 
     settings = {

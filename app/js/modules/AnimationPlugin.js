@@ -2,8 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 
-class AnimationPlugin
-{
+class AnimationPlugin {
     /**
      * @type {Animation}
      */
@@ -48,7 +47,7 @@ class AnimationPlugin
     key;
 
     id(suffix) {
-        return this.layer.index + '.' + this.tree + '.' + this.key + (suffix!==undefined?'.' + suffix:'');
+        return this.layer.index + '.' + this.tree + '.' + this.key + (suffix !== undefined ? '.' + suffix : '');
     }
 
     /**

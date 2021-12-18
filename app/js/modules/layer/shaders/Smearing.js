@@ -3,6 +3,7 @@
  */
 import {ShaderPlugin} from "../ShaderPlugin";
 import {
+    LinearFilter,
     Mesh,
     OrthographicCamera,
     PlaneBufferGeometry,
@@ -10,8 +11,7 @@ import {
     Scene,
     ShaderMaterial,
     UniformsUtils,
-    WebGLRenderTarget,
-    LinearFilter
+    WebGLRenderTarget
 } from "three";
 
 class smearing extends ShaderPlugin {

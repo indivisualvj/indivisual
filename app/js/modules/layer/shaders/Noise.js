@@ -5,8 +5,7 @@ import {ShaderPlugin} from "../ShaderPlugin";
 import {Vector2} from "three";
 import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
-class noise extends ShaderPlugin 
-{
+class noise extends ShaderPlugin {
     static index = 110;
     static settings = {
         apply: false,

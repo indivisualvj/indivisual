@@ -3,8 +3,7 @@
  */
 import {AudioPlugin} from "../AudioPlugin";
 
-class Microphone extends AudioPlugin
-{
+class Microphone extends AudioPlugin {
     static index = 10;
     static tutorial = {
         howto: {

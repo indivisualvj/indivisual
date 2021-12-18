@@ -3,8 +3,7 @@
  */
 import {AnimationPlugin} from "../AnimationPlugin";
 
-class PatternMoverPlugin extends AnimationPlugin
-{
+class PatternMoverPlugin extends AnimationPlugin {
 
     setControlSets(controlSets) {
         super.setControlSets(controlSets);

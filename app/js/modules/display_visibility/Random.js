@@ -18,14 +18,13 @@ class Random extends DisplayVisibilityPlugin {
                 let index = randomInt(0, count);
                 let display = this.getDisplay(index);
                 if (display) {
-                    this.visible[display.index] = {
-                    };
+                    this.visible[display.index] = {};
                 }
             }
         }
     }
 
-    apply (display) {
+    apply(display) {
         display.visible = display.index in this.visible;
     }
 }

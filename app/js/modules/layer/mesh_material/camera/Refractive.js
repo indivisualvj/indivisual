@@ -6,7 +6,8 @@ import {MeshCameraMaterialPlugin} from "../MeshCameraMaterialPlugin";
 import {
     CubeCamera,
     CubeRefractionMapping,
-    LinearMipmapLinearFilter, Mesh,
+    LinearMipmapLinearFilter,
+    Mesh,
     MeshPhongMaterial,
     RGBFormat,
     WebGLCubeRenderTarget

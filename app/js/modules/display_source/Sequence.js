@@ -4,8 +4,7 @@
 import {DisplaySourcePlugin} from "../DisplaySourcePlugin";
 import {Shape} from "../../animation/Shape";
 
-class Sequence extends DisplaySourcePlugin
-{
+class Sequence extends DisplaySourcePlugin {
     static index = 10;
 
     /**
@@ -336,7 +335,7 @@ class Sequence extends DisplaySourcePlugin
         }
 
         if (this.dirty) {
-            let prc = Math.min(100, ((pointer-this.start) / this.length) * 100);
+            let prc = Math.min(100, ((pointer - this.start) / this.length) * 100);
             if (Math.ceil(prc) % 2 === 0) {
                 this.config.getMessaging().emitAttr('#' + this.id, 'data-progress', prc);
             }

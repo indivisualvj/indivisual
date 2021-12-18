@@ -2,12 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {MeshTextureMaterialPlugin} from "../MeshTextureMaterialPlugin";
-import {
-    CubeReflectionMapping,
-    LinearMipmapLinearFilter,
-    Mesh,
-    MeshPhysicalMaterial
-} from "three";
+import {CubeReflectionMapping, LinearMipmapLinearFilter, Mesh, MeshPhysicalMaterial} from "three";
 
 class reflectivebackground extends MeshTextureMaterialPlugin {
     static name = 'reflective (cubetexture background)';

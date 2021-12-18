@@ -20,7 +20,7 @@ class StackOneOff extends DisplayVisibilityPlugin {
         }
     }
 
-    apply (display) {
+    apply(display) {
         display.visible = display.index !== this.getDisplay(this.current).index;
     }
 }
@@ -37,7 +37,7 @@ class StackOneOffReversed extends StackOneOff {
             this.current--;
 
             if (this.current < 0) {
-                this.current = this.displayManager.displayMap.length-1;
+                this.current = this.displayManager.displayMap.length - 1;
             }
         }
     }
@@ -49,7 +49,7 @@ class StackOneOn extends StackOneOff {
 
     static name = 'stack one on';
 
-    apply (display) {
+    apply(display) {
         display.visible = display.index === this.getDisplay(this.current).index;
     }
 }
@@ -60,7 +60,7 @@ class StackOneOnReversed extends StackOneOffReversed {
 
     static name = 'stack one on reversed';
 
-    apply (display) {
+    apply(display) {
         display.visible = display.index === this.getDisplay(this.current).index;
     }
 }
@@ -74,7 +74,7 @@ class RandomOneOff extends StackOneOff {
     doFirstItemStuff() {
         let speed = this.getSpeed();
         if (speed.starting()) {
-            this.current = randomInt(0, this.displayManager.displayMap.length-1);
+            this.current = randomInt(0, this.displayManager.displayMap.length - 1);
         }
     }
 }
@@ -88,7 +88,7 @@ class RandomOneOn extends StackOneOn {
     doFirstItemStuff() {
         let speed = this.getSpeed();
         if (speed.starting()) {
-            this.current = randomInt(0, this.displayManager.displayMap.length-1);
+            this.current = randomInt(0, this.displayManager.displayMap.length - 1);
         }
     }
 }

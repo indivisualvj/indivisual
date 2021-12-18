@@ -1,5 +1,4 @@
-class ModulePlugin
-{
+class ModulePlugin {
     static index;
 
     static boot() {

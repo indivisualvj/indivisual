@@ -28,7 +28,7 @@ class BorderModePlugin extends ModulePlugin {
         BorderModePlugin.plugins = plugins;
     }
 
-    apply (ctx, points, pc, speed, prc) {
+    apply(ctx, points, pc, speed, prc) {
 
     }
 

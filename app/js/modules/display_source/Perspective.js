@@ -4,8 +4,7 @@
 import {DisplaySourcePlugin} from "../DisplaySourcePlugin";
 import {WebGLRenderer} from "three";
 
-class Perspective extends DisplaySourcePlugin
-{
+class Perspective extends DisplaySourcePlugin {
     static index = 30;
 
     /**

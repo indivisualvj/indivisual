@@ -3,8 +3,7 @@
  */
 import {ModulePlugin} from "./ModulePlugin";
 
-class ShuffleModePlugin extends ModulePlugin
-{
+class ShuffleModePlugin extends ModulePlugin {
     settings;
     layer = 0;
 

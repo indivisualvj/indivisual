@@ -3,8 +3,7 @@
  */
 import {DisplaySourcePlugin} from "../DisplaySourcePlugin";
 
-class Offline extends DisplaySourcePlugin
-{
+class Offline extends DisplaySourcePlugin {
     static index = 50;
 
     getThis() {

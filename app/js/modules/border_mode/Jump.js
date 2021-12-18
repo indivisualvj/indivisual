@@ -8,7 +8,7 @@ class JumpClockwise extends BorderModePlugin {
     static name = 'jump clockwise';
     static index = 30;
 
-    apply (ctx, points, pc, speed, prc) {
+    apply(ctx, points, pc, speed, prc) {
         ctx.beginPath();
         ctx.moveTo(points[0], points[1]);
         let step = 1 / (pc);
@@ -49,7 +49,7 @@ class JumpAntiClockwise extends BorderModePlugin {
     static name = 'jump anti-clockwise';
     static index = 31;
 
-    apply (ctx, points, pc, speed, prc) {
+    apply(ctx, points, pc, speed, prc) {
         points = this.points_reverse(points);
         BorderModePlugin.plugins.jumpclockwise.apply(ctx, points, pc, speed, prc);
     }

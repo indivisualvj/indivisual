@@ -3,8 +3,7 @@
  */
 import {ControlSet} from "../../../shared/ControlSet";
 
-class Sizing extends ControlSet
-{
+class Sizing extends ControlSet {
     static index = 160;
 
     settings = {

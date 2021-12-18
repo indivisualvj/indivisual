@@ -3,12 +3,11 @@
  */
 import {BorderModePlugin} from "../BorderModePlugin";
 
-class RandomSector extends BorderModePlugin
-{
+class RandomSector extends BorderModePlugin {
     static name = 'random sector';
     static index = 43;
 
-    apply (ctx, points, pc, speed, prc) {
+    apply(ctx, points, pc, speed, prc) {
         ctx.beginPath();
         if (((speed === false && this.displayManager.audioAnalyser.peak) || prc === 0) || !ctx.canvas._side) {
             ctx.canvas._side = randomInt(1, pc - 1);

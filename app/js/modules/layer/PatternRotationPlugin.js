@@ -4,8 +4,7 @@
 import {AnimationPlugin} from "../AnimationPlugin";
 import {Euler, Vector3} from "three";
 
-class PatternRotationPlugin extends AnimationPlugin
-{
+class PatternRotationPlugin extends AnimationPlugin {
     euler = new Euler();
     vector = new Vector3();
 

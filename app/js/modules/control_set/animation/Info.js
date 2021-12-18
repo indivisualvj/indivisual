@@ -3,8 +3,7 @@
  */
 import {ControlSet} from "../../../shared/ControlSet";
 
-class Info extends ControlSet
-{
+class Info extends ControlSet {
     static index = 5;
     static _name = 'info';
     visible = false;

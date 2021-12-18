@@ -3,11 +3,10 @@
  */
 import {BorderModePlugin} from "../BorderModePlugin";
 
-class Visible extends BorderModePlugin
-{
+class Visible extends BorderModePlugin {
     static index = 10;
 
-    apply (ctx, points, pc, speed, prc) {
+    apply(ctx, points, pc, speed, prc) {
         ctx.beginPath();
         ctx.moveTo(points[0], points[1]);
         for (let i = 2; i < points.length; i += 2) {

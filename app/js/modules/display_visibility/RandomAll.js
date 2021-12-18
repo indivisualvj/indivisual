@@ -3,7 +3,7 @@
  */
 import {DisplayVisibilityPlugin} from "../DisplayVisibilityPlugin";
 
-class RandomAll extends DisplayVisibilityPlugin  {
+class RandomAll extends DisplayVisibilityPlugin {
 
     static index = 999;
     static name = 'random all';
@@ -29,12 +29,12 @@ class RandomAll extends DisplayVisibilityPlugin  {
 
     doFirstItemStuff() {
         if (this.getSpeed().starting() && randomBool(4)) {
-            this.currentMode = randomInt(0, this.modeCount-1);
+            this.currentMode = randomInt(0, this.modeCount - 1);
         }
         RandomAll.plugins[this.modeKeys[this.currentMode]].doFirstItemStuff();
     }
 
-    apply (display) {
+    apply(display) {
         RandomAll.plugins[this.modeKeys[this.currentMode]].apply(display);
     }
 }

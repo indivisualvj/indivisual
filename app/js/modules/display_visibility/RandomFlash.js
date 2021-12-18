@@ -31,7 +31,7 @@ class RandomFlash extends DisplayVisibilityPlugin {
         }
     }
 
-    apply (display) {
+    apply(display) {
         if (display.index in this.flashing) {
             let props = this.flashing[display.index];
             display.visible = props.frames > 0;
@@ -45,7 +45,7 @@ class RandomFlash extends DisplayVisibilityPlugin {
 
 export {RandomFlash}
 
-class RandomBlitz extends RandomFlash  {
+class RandomBlitz extends RandomFlash {
 
     static name = 'random blitz';
 
@@ -66,7 +66,7 @@ class RandomBlitz extends RandomFlash  {
         }
     }
 
-    apply (display) {
+    apply(display) {
         if (display.index in this.flashing) {
             let props = this.flashing[display.index];
             display.blitz = props.frames;
@@ -80,12 +80,11 @@ class RandomBlitz extends RandomFlash  {
 
 export {RandomBlitz}
 
-class RandomSmear extends RandomFlash
-{
+class RandomSmear extends RandomFlash {
 
     static name = 'random smear';
 
-    apply (display) {
+    apply(display) {
         if (display.index in this.flashing) {
             let props = this.flashing[display.index];
             display.smear = props.frames > 0;

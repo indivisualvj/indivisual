@@ -5,8 +5,7 @@ import {ShaderPlugin} from "../ShaderPlugin";
 import {Vector2} from "three";
 import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
-class kaleidoscope extends ShaderPlugin
-{
+class kaleidoscope extends ShaderPlugin {
     static index = 60;
     static settings = {
         apply: false,

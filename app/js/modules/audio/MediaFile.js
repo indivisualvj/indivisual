@@ -13,6 +13,26 @@ class MediaFile extends AudioPlugin {
     static dropEvent = false;
     buffer;
 
+    static boot(initiator, config) {
+        if (IS_ANIMATION) {
+            console.log('MediaFile', 'adding events for playback on media file drop');
+            document.addEventListener('dragover', function (e) {
+                e.preventDefault();
+            }, false);
+
+            let onDocumentDrop = function (e) {
+                e.preventDefault();
+
+                if (e.dataTransfer.files.length) {
+                    MediaFile.dropEvent = e;
+                    config.getMessaging().program.updateControl('audio', 'media_file', true, true, false);
+                }
+            };
+
+            document.addEventListener('drop', onDocumentDrop, false);
+        }
+    }
+
     init(callback) {
         if (MediaFile.dropEvent) {
             this.onDrop(MediaFile.dropEvent, callback);
@@ -66,26 +86,6 @@ class MediaFile extends AudioPlugin {
             if (callback) {
                 callback(this.source);
             }
-        }
-    }
-
-    static boot(initiator, config) {
-        if (IS_ANIMATION) {
-            console.log('MediaFile', 'adding events for playback on media file drop');
-            document.addEventListener('dragover', function (e) {
-                e.preventDefault();
-            }, false);
-
-            let onDocumentDrop = function (e) {
-                e.preventDefault();
-
-                if (e.dataTransfer.files.length) {
-                    MediaFile.dropEvent = e;
-                    config.getMessaging().program.updateControl('audio', 'media_file', true, true, false);
-                }
-            };
-
-            document.addEventListener('drop', onDocumentDrop, false);
         }
     }
 }

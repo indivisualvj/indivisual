@@ -8,7 +8,7 @@ class GrowClockwise extends BorderModePlugin {
     static name = 'grow clockwise';
     static index = 20;
 
-    apply (ctx, points, pc, speed, prc) {
+    apply(ctx, points, pc, speed, prc) {
         ctx.beginPath();
         ctx.moveTo(points[0], points[1]);
         let step = 1 / (pc - 1);
@@ -42,12 +42,11 @@ class GrowClockwise extends BorderModePlugin {
     }
 }
 
-class GrowAntiClockwise extends BorderModePlugin
-{
+class GrowAntiClockwise extends BorderModePlugin {
     static name = 'grow anti-clockwise';
     static index = 21;
 
-    apply (ctx, points, pc, speed, prc) {
+    apply(ctx, points, pc, speed, prc) {
         points = this.points_reverse(points);
         BorderModePlugin.plugins.growclockwise.apply(ctx, points, pc, speed, prc);
     }

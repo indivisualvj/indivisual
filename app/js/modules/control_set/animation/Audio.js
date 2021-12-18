@@ -3,8 +3,7 @@
  */
 import {ControlSet} from "../../../shared/ControlSet";
 
-class Audio extends ControlSet
-{
+class Audio extends ControlSet {
 
     static index = 20;
     static _name = 'audio & timing';

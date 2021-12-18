@@ -5,8 +5,7 @@ import {ShaderPlugin} from "../ShaderPlugin";
 import {Vector2} from "three";
 import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
-class smudge_blur extends ShaderPlugin 
-{
+class smudge_blur extends ShaderPlugin {
     static index = 109;
     static name = 'smudge-blur';
     static settings = {

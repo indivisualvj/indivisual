@@ -3,8 +3,7 @@
  */
 import {ControlSet} from "../../../shared/ControlSet";
 
-class LightingLookat extends ControlSet
-{
+class LightingLookat extends ControlSet {
     static index = 50;
 
     settings = {

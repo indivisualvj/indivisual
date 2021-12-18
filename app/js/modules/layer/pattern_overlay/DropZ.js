@@ -3,8 +3,7 @@
  */
 import {AnimationPlugin} from "../../AnimationPlugin";
 
-class dropz extends AnimationPlugin
-{
+class dropz extends AnimationPlugin {
     static name = 'drop Z';
     static tutorial = {
         activate: {
@@ -12,7 +11,7 @@ class dropz extends AnimationPlugin
             action: function () {
                 this.animation.closeAll();
                 this.animation.animationSettingsGui.getChild('pattern').setOpen(true);
-                this.animation.updateSetting(this.config.ControlSettings.layer, {pattern:{pattern_overlay_volume: 1}}, true, true);
+                this.animation.updateSetting(this.config.ControlSettings.layer, {pattern: {pattern_overlay_volume: 1}}, true, true);
             }
         },
         invert: {
@@ -20,12 +19,12 @@ class dropz extends AnimationPlugin
             action: function () {
                 this.animation.closeAll();
                 this.animation.animationSettingsGui.getChild('layer').setOpen(true);
-                this.animation.updateSetting(this.config.ControlSettings.layer, {layer:{layer_rotationy: 180}}, true, true);
+                this.animation.updateSetting(this.config.ControlSettings.layer, {layer: {layer_rotationy: 180}}, true, true);
             }
         }
     };
 
-    apply (shape) {
+    apply(shape) {
         let params = this.params(shape);
         let duration = this.layer.getShapeDuration(shape);
 
@@ -54,7 +53,7 @@ class dropz extends AnimationPlugin
                 params.velocity = 0;
             }
 
-        //countdown
+            //countdown
         } else {
             params.delay -= this.animation.diff;
         }

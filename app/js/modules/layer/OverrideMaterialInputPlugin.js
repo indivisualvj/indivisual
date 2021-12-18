@@ -4,8 +4,7 @@
 import {AnimationTexturePlugin} from "../AnimationTexturePlugin";
 import * as HC from '../../shared/Three';
 
-class OverrideMaterialInputPlugin extends AnimationTexturePlugin
-{
+class OverrideMaterialInputPlugin extends AnimationTexturePlugin {
 
     clip;
 

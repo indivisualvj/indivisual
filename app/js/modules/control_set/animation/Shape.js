@@ -3,8 +3,7 @@
  */
 import {ControlSet} from "../../../shared/ControlSet";
 
-class Shape extends ControlSet
-{
+class Shape extends ControlSet {
     static index = 100;
 
     hooks = {

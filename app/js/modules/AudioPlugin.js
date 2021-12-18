@@ -3,8 +3,7 @@
  */
 import {ModulePlugin} from "./ModulePlugin";
 
-class AudioPlugin extends ModulePlugin
-{
+class AudioPlugin extends ModulePlugin {
     /**
      * @type {AudioManager}
      */

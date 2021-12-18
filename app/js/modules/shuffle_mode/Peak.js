@@ -8,6 +8,12 @@ class ForwardPeak extends ShuffleModePlugin {
     static index = 10;
     static peaks = 0;
 
+    static boot(initiator, config) {
+        config.getEventManager().register(EVENT_AUDIO_PEAK, this.objectName, () => {
+            ForwardPeak.peaks++;
+        });
+    }
+
     apply() {
         let every = this.settings.shuffle_every;
 
@@ -27,12 +33,6 @@ class ForwardPeak extends ShuffleModePlugin {
         if (this.layer > pile.length - 1) {
             this.layer = 0;
         }
-    }
-
-    static boot(initiator, config) {
-        config.getEventManager().register(EVENT_AUDIO_PEAK, this.objectName, () => {
-            ForwardPeak.peaks++;
-        });
     }
 }
 

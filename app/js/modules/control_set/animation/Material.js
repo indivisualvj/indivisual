@@ -3,8 +3,7 @@
  */
 import {ControlSet} from "../../../shared/ControlSet";
 
-class Material extends ControlSet
-{
+class Material extends ControlSet {
     static index = 110;
 
     hooks = {

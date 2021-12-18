@@ -3,8 +3,7 @@
  */
 import {DisplaySourcePlugin} from "../DisplaySourcePlugin";
 
-class Renderer extends DisplaySourcePlugin
-{
+class Renderer extends DisplaySourcePlugin {
     static index = 1;
 
     /**

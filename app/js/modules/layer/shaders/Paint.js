@@ -5,8 +5,7 @@ import {ShaderPlugin} from "../ShaderPlugin";
 import {Vector2} from "three";
 import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
-class paint extends ShaderPlugin 
-{
+class paint extends ShaderPlugin {
     static index = 130;
     static settings = {
         apply: false,

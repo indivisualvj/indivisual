@@ -4,11 +4,9 @@
 
 import {audio} from "./Audio";
 import {waveall} from "./Wave";
-import {mul} from "three/examples/jsm/renderers/nodes/ShaderNode";
 import {Oscillators} from "../../../shared/Oscillators";
 
-class BounceAudio extends audio
-{
+class BounceAudio extends audio {
     static name = 'bounce (audio->peak)';
 
     multiplier = 0;
@@ -32,8 +30,7 @@ class BounceAudio extends audio
     }
 }
 
-class BounceWave extends waveall
-{
+class BounceWave extends waveall {
     static name = 'bounce (wave->peak)';
 
     multiplier = 0;
@@ -66,8 +63,7 @@ class BounceWave extends waveall
     }
 }
 
-class BounceWaveQuarter extends BounceWave
-{
+class BounceWaveQuarter extends BounceWave {
     static name = 'bounce (wave->quarters)'
 
     apply(shape, speed) {
@@ -81,9 +77,9 @@ class BounceWaveQuarter extends BounceWave
     }
 }
 
-class BounceWaveHalf extends BounceWaveQuarter
-{
+class BounceWaveHalf extends BounceWaveQuarter {
     static name = 'bounce (wave->halfs)'
+
     apply(shape) {
         let speed = this.beatKeeper.getSpeed('half');
         super.apply(shape, speed);

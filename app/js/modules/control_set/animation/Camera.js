@@ -15,7 +15,7 @@ class Camera extends ControlSet {
         camera_x_oscillate: 'off',
         camera_y: 0,
         camera_y_oscillate: 'off',
-        camera_z:  1,
+        camera_z: 1,
         camera_z_oscillate: 'off',
         camera_rotationx: 0,
         camera_rotationx_oscillate: 'off',

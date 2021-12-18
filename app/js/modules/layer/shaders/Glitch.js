@@ -5,8 +5,7 @@ import {ShaderPlugin} from "../ShaderPlugin";
 import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 import {Vector2} from "three";
 
-class glitch extends ShaderPlugin 
-{
+class glitch extends ShaderPlugin {
     static index = 100;
     static settings = {
         apply: false,

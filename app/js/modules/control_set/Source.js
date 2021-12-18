@@ -3,8 +3,7 @@
  */
 import {ControlSet, IterableControlSet} from "../../shared/ControlSet";
 
-class override extends ControlSet
-{
+class override extends ControlSet {
     static index = 10;
 
     settings = {
@@ -12,22 +11,17 @@ class override extends ControlSet
         override_background_mode: 'none',
     };
 
-    types = {
-
-    };
+    types = {};
 
     styles = {
         override_material_input: [''],
         override_background_mode: ['']
     };
 
-    values = {
-
-    };
+    values = {};
 }
 
-class source extends ControlSet
-{
+class source extends ControlSet {
     static index = 20;
 
     settings = {
@@ -35,9 +29,7 @@ class source extends ControlSet
         group1: ''
     };
 
-    types = {
-
-    };
+    types = {};
 
     styles = {
         display_source: ['half', 'clear'],
@@ -163,8 +155,7 @@ class source extends ControlSet
     }
 }
 
-class sequenceN extends IterableControlSet
-{
+class sequenceN extends IterableControlSet {
     static index = 40;
     prefix = 'sequence';
     folders = [];
@@ -224,9 +215,7 @@ class sequenceN extends IterableControlSet
         sequence_blendmode: 'blendmode',
     };
 
-    prefixes = {
-
-    };
+    prefixes = {};
 
     parents = {
         sequence_input: '',
@@ -277,7 +266,7 @@ class sequenceN extends IterableControlSet
     createResets(index, pluggedValues) {
         let _reset = (seq) => {
             let key = getSequenceKey(seq);
-            this.settings[key +  '_X'] = () => {
+            this.settings[key + '_X'] = () => {
                 let updates = {};
                 updates[key + '_jump'] = false;
                 updates[key + '_audio'] = false;
@@ -304,7 +293,7 @@ class sequenceN extends IterableControlSet
 
         let _rereset = (seq) => {
             let key = getSequenceKey(seq);
-            this.settings[key +  '_XX'] = () => {
+            this.settings[key + '_XX'] = () => {
                 let updates = {};
                 updates[key + '_overlay'] = this.settings[key + '_overlay'];
                 updates[key + '_input'] = this.settings[key + '_input'];
@@ -321,8 +310,7 @@ class sequenceN extends IterableControlSet
     }
 }
 
-class sample extends ControlSet
-{
+class sample extends ControlSet {
     static index = 20;
 
     settings = {
@@ -370,8 +358,7 @@ class sample extends ControlSet
         bts_32: ['quint'],
     };
 
-    values = {
-    };
+    values = {};
 
     init(pluggedValues) {
         this.createValues(pluggedValues);

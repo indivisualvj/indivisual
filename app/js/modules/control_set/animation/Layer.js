@@ -3,8 +3,7 @@
  */
 import {ControlSet} from "../../../shared/ControlSet";
 
-class Layer extends ControlSet
-{
+class Layer extends ControlSet {
 
     static index = 10;
 

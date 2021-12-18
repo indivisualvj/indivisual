@@ -3,8 +3,7 @@
  */
 import {ModulePlugin} from "./ModulePlugin";
 
-class DisplayVisibilityPlugin extends ModulePlugin
-{
+class DisplayVisibilityPlugin extends ModulePlugin {
     /**
      * @type {DisplayManager}
      */
@@ -55,7 +54,7 @@ class DisplayVisibilityPlugin extends ModulePlugin
      * @param {Display} display
      * @returns {boolean}
      */
-    before (display) {
+    before(display) {
 
         if (display.index === 0) {
             this.doFirstItemStuff();

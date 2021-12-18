@@ -4,23 +4,19 @@
 import {ControlSet} from "../../shared/ControlSet";
 import {Hotkey} from "../../shared/Event";
 
-class session extends ControlSet
-{
+class session extends ControlSet {
     static index = 10;
 
     settings = {
         session: 'root'
     };
 
-    types = {
-    };
+    types = {};
 
-    styles = {
-    };
+    styles = {};
 }
 
-class controls extends ControlSet
-{
+class controls extends ControlSet {
     static index = 20;
 
     open = true;
@@ -56,7 +52,8 @@ class controls extends ControlSet
             this.program.pushSources();
         },
         rst_shaders: () => {
-            this.program.resetShaders(Hotkey.isPressed('shift')).finally(()=>{});
+            this.program.resetShaders(Hotkey.isPressed('shift')).finally(() => {
+            });
         },
         enable_mic: () => {
             this.program.updateControl('audio', 'microphone', true, true, false);
@@ -197,24 +194,36 @@ class controls extends ControlSet
                 this.settings.layout_close();
             });
         },
-        play: (inst) => { return new Hotkey('space', (e) => {
-            this.program.updateControl('play', !this.config.ControlSettings.play, true, true, false);
-        }, 'spc')},
-        reset: (inst) => { return new Hotkey('delete,shift+delete,ctrl+shift+delete', (e) => {
-            inst.settings.reset();
-        }, 'del')},
-        preview: (inst) => { return new Hotkey('home', (e) => {
-            this.program.updateControl('preview', !this.config.ControlSettings.preview, true, true, false);
-        }, 'hm')},
-        push_layers: (inst) => { return new Hotkey('end', (e) => {
-            inst.settings.push_layers();
-        }, 'end')},
-        push_sources: (inst) => { return new Hotkey('pagedown', (e) => {
-            inst.settings.push_sources();
-        }, 'pgd')},
-        rst_shaders: (inst) => { return new Hotkey('pageup,shift+pageup', (e) => {
-            inst.settings.rst_shaders();
-        }, 'pgu')},
+        play: (inst) => {
+            return new Hotkey('space', (e) => {
+                this.program.updateControl('play', !this.config.ControlSettings.play, true, true, false);
+            }, 'spc')
+        },
+        reset: (inst) => {
+            return new Hotkey('delete,shift+delete,ctrl+shift+delete', (e) => {
+                inst.settings.reset();
+            }, 'del')
+        },
+        preview: (inst) => {
+            return new Hotkey('home', (e) => {
+                this.program.updateControl('preview', !this.config.ControlSettings.preview, true, true, false);
+            }, 'hm')
+        },
+        push_layers: (inst) => {
+            return new Hotkey('end', (e) => {
+                inst.settings.push_layers();
+            }, 'end')
+        },
+        push_sources: (inst) => {
+            return new Hotkey('pagedown', (e) => {
+                inst.settings.push_sources();
+            }, 'pgd')
+        },
+        rst_shaders: (inst) => {
+            return new Hotkey('pageup,shift+pageup', (e) => {
+                inst.settings.rst_shaders();
+            }, 'pgu')
+        },
     };
 }
 

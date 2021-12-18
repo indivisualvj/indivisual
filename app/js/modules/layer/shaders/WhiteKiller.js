@@ -2,7 +2,7 @@
  * @author indivisualvj / https://github.com/indivisualvj
  */
 import {ShaderPlugin} from "../ShaderPlugin";
-import {Color, Vector2} from "three";
+import {Color} from "three";
 import {ShaderPass} from "three/examples/jsm/postprocessing/ShaderPass";
 
 class brightness_killer extends ShaderPlugin {

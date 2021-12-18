@@ -4,8 +4,7 @@
 import {AnimationPlugin} from "./AnimationPlugin";
 import * as THREE from "three";
 
-class AnimationTexturePlugin extends AnimationPlugin
-{
+class AnimationTexturePlugin extends AnimationPlugin {
     /**
      *
      * @param texture {Texture}

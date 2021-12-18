@@ -5,8 +5,7 @@ import {ControlSet, IterableControlSet} from "../../shared/ControlSet";
 
 const video = {};
 
-video._general = class _general extends ControlSet
-{
+video._general = class _general extends ControlSet {
 
     static index = 10;
 
@@ -135,8 +134,7 @@ video._general = class _general extends ControlSet
 
 }
 
-video._perspective = class _perspective extends ControlSet
-{
+video._perspective = class _perspective extends ControlSet {
 
     static index = 10;
 
@@ -174,8 +172,7 @@ video._perspective = class _perspective extends ControlSet
     };
 }
 
-video.displayN = class displayN extends IterableControlSet
-{
+video.displayN = class displayN extends IterableControlSet {
 
     static index = 10;
     prefix = 'display';
@@ -263,8 +260,7 @@ video.displayN = class displayN extends IterableControlSet
 
 const displays = {};
 
-displays._general = class _general extends ControlSet
-{
+displays._general = class _general extends ControlSet {
 
     static index = 20;
 
@@ -300,8 +296,7 @@ displays._general = class _general extends ControlSet
 
 }
 
-displays.diplayN = class displayN extends IterableControlSet
-{
+displays.diplayN = class displayN extends IterableControlSet {
 
     static index = 20;
 

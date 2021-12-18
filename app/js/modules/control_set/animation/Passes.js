@@ -3,8 +3,7 @@
  */
 import {ControlSet} from "../../../shared/ControlSet";
 
-class Passes extends ControlSet
-{
+class Passes extends ControlSet {
     static index = 190;
     static _name = 'shader passes';
     visible = false;

@@ -3,8 +3,7 @@
  */
 import {BorderModePlugin} from "../BorderModePlugin";
 
-class RandomAll extends BorderModePlugin
-{
+class RandomAll extends BorderModePlugin {
     static index = 999;
     static name = 'random all';
 
@@ -25,9 +24,9 @@ class RandomAll extends BorderModePlugin
         }
     }
 
-    apply (ctx, points, pc, speed, prc) {
+    apply(ctx, points, pc, speed, prc) {
         if (speed.starting()) {
-            this.currentMode = randomInt(0, this.modeCount-1);
+            this.currentMode = randomInt(0, this.modeCount - 1);
         }
         BorderModePlugin.plugins[this.modeKeys[this.currentMode]].apply(ctx, points, pc, speed, prc);
     }

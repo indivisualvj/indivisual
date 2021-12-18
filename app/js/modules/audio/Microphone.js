@@ -7,7 +7,7 @@ class Microphone extends AudioPlugin {
     static index = 10;
     static tutorial = {
         howto: {
-            text: 'Please make shure that you either have a microphone connected or set audio input to monitor the right output device'
+            text: 'make shure that you either have a microphone connected or set audio input to monitor the right output device'
         }
     };
     stream;

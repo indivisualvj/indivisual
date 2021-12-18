@@ -371,7 +371,7 @@ class PresetManager {
         let label = index.toString();
 
         do {
-            label = prompt('Please specify a name (no duplicates)', label);
+            label = prompt('specify a name (no duplicates)', label);
         } while (label && ctrl.getChild(label + '.json'));
 
         if (label) {
@@ -418,7 +418,7 @@ class PresetManager {
         let label = '__NEW__';
 
         do {
-            label = prompt('Please specify a name (no duplicates)', label);
+            label = prompt('specify a name (no duplicates)', label);
         } while (label && parent.getChild(label));
 
         if (label) {
@@ -518,7 +518,7 @@ class PresetManager {
         let label = ctrl.getLabel();
 
         do {
-            label = prompt('Please specify a name (no duplicates)', label);
+            label = prompt('specify a name (no duplicates)', label);
         } while (label && ctrl.getParent().getChild(label));
 
         if (label) {
@@ -545,7 +545,7 @@ class PresetManager {
         }
 
         do {
-            label = prompt('Please specify a name (no duplicates)', label);
+            label = prompt('specify a name (no duplicates)', label);
         } while (label && ctrl.getParent().getChild(label + suffix));
 
         if (label) {

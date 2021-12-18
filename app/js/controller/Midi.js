@@ -162,7 +162,7 @@ class Midi {
      */
     _onFailure(error) {
         // when we get a failed response, run this code
-        console.log("No access to MIDI devices or your browser doesn't support WebMIDI API. Please use WebMIDIAPIShim " + error);
+        console.log("no access to MIDI devices or your browser doesn't support WebMIDI API. use WebMIDIAPIShim " + error);
     }
 
     /**

@@ -24,6 +24,9 @@ import {ShaderPassUi} from "./ui/ShaderPassUi";
 import {AssetManager} from "../manager/AssetManager";
 import {Logger} from "../shared/Logger";
 import {PluginManager} from "../manager/PluginManager";
+import {AudioManager} from "../manager/AudioManager";
+import {Renderer} from "../animation/Renderer";
+import {DisplayManager} from "../manager/DisplayManager";
 
 class Controller extends Program {
 
@@ -487,7 +490,10 @@ class Controller extends Program {
 
         if (typeof value !== 'object') {
             Logger.log(item, value);
-            this.explainPlugin(item, value, HC);
+            this.explainPlugin(item, value, AudioManager.plugins);
+            this.explainPlugin(item, value, Renderer.plugins);
+            this.explainPlugin(item, value, DisplayManager.plugins);
+            this.explainPlugin(item, value, SourceManager.plugins);
         }
 
         if (item === 'beat') {

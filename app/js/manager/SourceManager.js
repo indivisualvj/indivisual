@@ -9,7 +9,7 @@ import {PluginManager} from "./PluginManager";
 
 class SourceManager {
 
-    static plugins;
+    static plugins = {};
 
     /**
      * @type {Animation}

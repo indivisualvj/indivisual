@@ -5,7 +5,11 @@ import {PluginManager} from "./PluginManager";
 
 class AudioManager
 {
-    static plugins;
+    /**
+     *
+     * @type {{string: AudioPlugin}}
+     */
+    static plugins = {};
 
     constructor(config) {
         PluginManager.bootPlugins(AudioManager.plugins, this, config);

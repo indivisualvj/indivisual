@@ -5,6 +5,7 @@ import {GuifyFolder} from "./ui/guify/GuifyFolder";
 import {TimeoutManager} from "../manager/TimeoutManager";
 import {Sample} from "../shared/Sample";
 import {ScriptProcessor} from "./ScriptProcessor";
+import {Layer} from "../animation/layer/ShapeLayer";
 
 class Controller extends _Controller
 {
@@ -160,7 +161,7 @@ class Controller extends _Controller
      */
     explainPlugin(item, value, tree) {
 
-        tree = tree || HC.plugins;
+        tree = tree || Layer.plugins;
 
         if (item in tree) {
             if (value in tree[item]) {

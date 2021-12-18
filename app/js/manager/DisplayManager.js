@@ -9,7 +9,7 @@ import {Shapetastic} from "../shared/Shapetastic";
 
 class DisplayManager {
 
-    static plugins;
+    static plugins = {};
 
     settings = {
         visibility: {

@@ -10,6 +10,7 @@ import {EventManager} from "../manager/EventManager";
 import {PluginManager} from "../manager/PluginManager";
 import {Shape} from "../animation/Shape";
 import {Logger} from "./Logger";
+import {Layer} from "../animation/layer/ShapeLayer";
 
 class Config {
 
@@ -414,52 +415,50 @@ class Config {
      */
     _loadAnimationPlugins(settings, callback) {
 // : when ported, move subplugin classes to folders and move plugins to "basic" folder
-        HC.plugins = HC.plugins ?? {};
-
         let calls = [
-            PluginManager.loadLayerPlugins(settings, 'background_mode',          HC.plugins, this,  'basic'),    
-            PluginManager.loadLayerPlugins(settings, 'background_mode',          HC.plugins, this,  'geometry'), 
-            PluginManager.loadLayerPlugins(settings, 'background_mode',          HC.plugins, this,  'texture'),  
-            PluginManager.loadLayerPlugins(settings, 'camera_mode',              HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'coloring_mode',            HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'filter_mode',              HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'lighting_lookat',          HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'lighting_pattern',         HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'lighting_type',            HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'material_style',           HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'mesh_material',            HC.plugins, this,  'basic'),    
-            PluginManager.loadLayerPlugins(settings, 'mesh_material',            HC.plugins, this,  'camera'),   
-            PluginManager.loadLayerPlugins(settings, 'mesh_material',            HC.plugins, this,  'shader'),   
-            PluginManager.loadLayerPlugins(settings, 'mesh_material',            HC.plugins, this,  'texture'),  
-            PluginManager.loadLayerPlugins(settings, 'offset_mode',              HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'oscillate',                HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'override_background_mode', HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'override_material_input',  HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'pattern',                  HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'pattern_mover',            HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'pattern_overlay',          HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'pattern_rotation',         HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'rotation_direction',       HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'rotation_mode',            HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'rotation_offset_mode',     HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'shaders',                  HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'shape_delay',              HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'shape_geometry',           HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'shape_lookat',             HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'shape_modifier',           HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'shape_pairing',            HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'shape_rhythm',             HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'shape_transform',          HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'sizing_flip',              HC.plugins, this), 
-            PluginManager.loadLayerPlugins(settings, 'sizing_mode',              HC.plugins, this), 
+            PluginManager.loadLayerPlugins(settings, 'background_mode',          Layer.plugins, this,  'basic'),
+            PluginManager.loadLayerPlugins(settings, 'background_mode',          Layer.plugins, this,  'geometry'),
+            PluginManager.loadLayerPlugins(settings, 'background_mode',          Layer.plugins, this,  'texture'),
+            PluginManager.loadLayerPlugins(settings, 'camera_mode',              Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'coloring_mode',            Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'filter_mode',              Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'lighting_lookat',          Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'lighting_pattern',         Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'lighting_type',            Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'material_style',           Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'mesh_material',            Layer.plugins, this,  'basic'),
+            PluginManager.loadLayerPlugins(settings, 'mesh_material',            Layer.plugins, this,  'camera'),
+            PluginManager.loadLayerPlugins(settings, 'mesh_material',            Layer.plugins, this,  'shader'),
+            PluginManager.loadLayerPlugins(settings, 'mesh_material',            Layer.plugins, this,  'texture'),
+            PluginManager.loadLayerPlugins(settings, 'offset_mode',              Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'oscillate',                Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'override_background_mode', Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'override_material_input',  Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'pattern',                  Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'pattern_mover',            Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'pattern_overlay',          Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'pattern_rotation',         Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'rotation_direction',       Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'rotation_mode',            Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'rotation_offset_mode',     Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'shaders',                  Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'shape_delay',              Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'shape_geometry',           Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'shape_lookat',             Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'shape_modifier',           Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'shape_pairing',            Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'shape_rhythm',             Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'shape_transform',          Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'sizing_flip',              Layer.plugins, this),
+            PluginManager.loadLayerPlugins(settings, 'sizing_mode',              Layer.plugins, this),
 
         ];
 
         Promise.all(calls).then(() => {
-            Object.assign(HC.plugins.pattern_overlay, HC.plugins.pattern);
-            Object.assign(HC.plugins.override_background_mode, HC.plugins.override_material_input);
+            Object.assign(Layer.plugins.pattern_overlay, Layer.plugins.pattern);
+            Object.assign(Layer.plugins.override_background_mode, Layer.plugins.override_material_input);
 
-            let sectionKeys = Object.keys(HC.plugins);
+            let sectionKeys = Object.keys(Layer.plugins);
 
             for (let pi = 0; pi < sectionKeys.length; pi++) {
 
@@ -468,7 +467,7 @@ class Config {
                 // create plugin namespaces to work in
                 Shape.injected.plugins[section] = {};
 
-                this._reAssignPluginValues(settings, section, HC.plugins[section]);
+                this._reAssignPluginValues(settings, section, Layer.plugins[section]);
             }
 
             callback();
@@ -500,7 +499,7 @@ class Config {
         let keys = Object.sortedKeys(values);
         for (let i = 0; i < keys.length; i++) {
             let key = keys[i];
-            let plug = HC.plugins.shaders[key];
+            let plug = Layer.plugins.shaders[key];
             settings[key] = plug.settings || {};
         }
 

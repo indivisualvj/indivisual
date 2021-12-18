@@ -11,7 +11,7 @@ import * as HC from "../shared/Three";
 
 class Renderer {
 
-    static plugins;
+    static plugins = {};
 
     /**
      * @type {Array}

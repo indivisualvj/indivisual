@@ -10,6 +10,7 @@ import * as HC from "../../shared/Three";
 
 class _Layer
 {
+    static plugins = {};
 
     /**
      * @type {Animation}
@@ -120,7 +121,7 @@ class _Layer
      *
      * @type {Object.<string, Plugin>}
      */
-    plugins = {};
+    _plugins = {};
 
     /**
      *
@@ -349,7 +350,7 @@ class _Layer
         this.settings = false;
         this.controlSets = null;
         this.shapes = null;
-        this.plugins = {};
+        this._plugins = {};
         this._shapes = null;
 
         sc.remove(this._layer);

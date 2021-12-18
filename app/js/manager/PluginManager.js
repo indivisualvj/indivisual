@@ -43,7 +43,6 @@ class PluginManager
     static assignAudioPlugins(settings, config, callback) {
 
         this._importPlugins('audio').then((plugins) => {
-            AudioManager.plugins = AudioManager.plugins || {};
             this._assignPlugins(settings, 'audio', plugins, AudioManager.plugins, config);
             callback();
         });
@@ -58,7 +57,6 @@ class PluginManager
     static assignShuffleModePlugins(settings, config, callback) {
 
         this._importPlugins('shuffle_mode').then((plugins) => {
-            Renderer.plugins = Renderer.plugins || {};
             this._assignPlugins(settings, 'shuffle_mode', plugins, Renderer.plugins, config);
             callback();
         });
@@ -72,7 +70,6 @@ class PluginManager
      */
     static assignDisplayVisibilityPlugins(settings, config, callback) {
         this._importPlugins('display_visibility').then((plugins) => {
-            DisplayManager.plugins = DisplayManager.plugins || {};
             this._assignPlugins(settings, 'display_visibility', plugins, DisplayManager.plugins, config);
             callback();
         });
@@ -86,7 +83,6 @@ class PluginManager
      */
     static assignBorderModePlugins(settings, config, callback) {
         this._importPlugins('border_mode').then((plugins) => {
-            DisplayManager.plugins = DisplayManager.plugins || {};
             this._assignPlugins(settings, 'border_mode', plugins, DisplayManager.plugins, config);
             callback();
         });
@@ -100,7 +96,6 @@ class PluginManager
      */
     static assignDisplaySourcePlugins(settings, config, callback) {
         this._importPlugins('display_source').then((plugins) => {
-            SourceManager.plugins = SourceManager.plugins || {};
             this._assignPlugins(settings, 'display_source', plugins, SourceManager.plugins, config);
             callback();
         });
@@ -112,8 +107,6 @@ class PluginManager
      * @param callback
      */
     static assignControlSets(target, callback) {
-        LayeredControlSetManager.plugins = { control_set: {} };
-
         this._importPlugins(filePath('control_set', 'animation')).then((plugins) => {
             let keys = Object.sortedKeys(plugins);
 

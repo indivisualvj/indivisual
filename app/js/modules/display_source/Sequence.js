@@ -3,6 +3,7 @@
  */
 import {DisplaySourcePlugin} from "../DisplaySourcePlugin";
 import {Shape} from "../../animation/Shape";
+import {Layer} from "../../animation/layer/ShapeLayer";
 
 class Sequence extends DisplaySourcePlugin {
     static index = 10;
@@ -603,7 +604,7 @@ class Sequence extends DisplaySourcePlugin {
     loadOscillators() {
 
         let plugin = 'oscillate';
-        let items = HC.plugins[plugin];
+        let items = Layer.plugins[plugin];
 
         this.oscillators[plugin] = this.oscillators[plugin] || {};
 
@@ -611,7 +612,7 @@ class Sequence extends DisplaySourcePlugin {
         for (let i = 0; i < keys.length; i++) {
             let key = keys[i];
 
-            let instance = new HC.plugins[plugin][key]();
+            let instance = new Layer.plugins[plugin][key]();
             instance.construct(this.animation, this, {}, plugin, key);
             instance.inject(Shape);
 

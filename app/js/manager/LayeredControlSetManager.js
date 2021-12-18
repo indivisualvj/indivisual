@@ -4,7 +4,7 @@
 
 class LayeredControlSetManager
 {
-    static plugins;
+    static plugins = { control_set: {} };
 
     /**
      *

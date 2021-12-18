@@ -17,7 +17,7 @@ class Layer extends _Layer
 
         name = name || this.settings[plugin]; // specific plugin OR value from corresponding setting
 
-        return this.plugins[plugin][name];// || false;
+        return this._plugins[plugin][name];// || false;
     }
 
     /**
@@ -84,11 +84,11 @@ class Layer extends _Layer
      */
     getShaderPassPlugin(name, key, properties) {
 
-        if (!('passes' in this.plugins)) {
-            this.plugins['passes'] = {};
+        if (!('passes' in this._plugins)) {
+            this._plugins['passes'] = {};
         }
 
-        /** @type{ShaderPlugin} */
+        /** @type {ShaderPlugin} */
         let plugin = this.getPlugin('passes', key);
         if (!plugin) {
             plugin = this.loadPlugin('shaders', name);
@@ -352,20 +352,20 @@ class Layer extends _Layer
      *
      */
     resetPlugins() {
-        let pluginKeys = Object.keys(HC.plugins);
+        let pluginKeys = Object.keys(Layer.plugins);
 
         for (let pi = 0; pi < pluginKeys.length; pi++) {
 
             let plugin = pluginKeys[pi];
-            let items = HC.plugins[plugin];
+            let items = Layer.plugins[plugin];
 
-            this.plugins[plugin] = this.plugins[plugin] || {};
+            this._plugins[plugin] = this._plugins[plugin] || {};
 
             let keys = Object.keys(items);
             for (let i = 0; i < keys.length; i++) {
                 let key = keys[i];
 
-                if (plugin in this.plugins && key in this.plugins[plugin]) {
+                if (plugin in this._plugins && key in this._plugins[plugin]) {
                     let plug = this.getPlugin(plugin, key);
                     if (plug.reset) {
                         plug.reset();
@@ -381,20 +381,20 @@ class Layer extends _Layer
      */
     _reloadPlugins() {
 
-        let pluginKeys = Object.keys(HC.plugins);
+        let pluginKeys = Object.keys(Layer.plugins);
 
         for (let pi = 0; pi < pluginKeys.length; pi++) {
 
             let plugin = pluginKeys[pi];
-            let items = HC.plugins[plugin];
+            let items = Layer.plugins[plugin];
 
-            this.plugins[plugin] = this.plugins[plugin] || {};
+            this._plugins[plugin] = this._plugins[plugin] || {};
 
             let keys = Object.keys(items);
             for (let i = 0; i < keys.length; i++) {
                 let key = keys[i];
 
-                if (plugin in this.plugins && key in this.plugins[plugin]) {
+                if (plugin in this._plugins && key in this._plugins[plugin]) {
                     let plug = this.getPlugin(plugin, key);
 
                     if (plug.reset) {
@@ -416,7 +416,7 @@ class Layer extends _Layer
      * @param name
      */
     loadPlugin(plugin, name) {
-        return new HC.plugins[plugin][name](this.animation, this);
+        return new Layer.plugins[plugin][name](this.animation, this);
     }
 
     /**
@@ -426,7 +426,7 @@ class Layer extends _Layer
      * @param instance
      */
     setPlugin(plugin, name, instance) {
-        this.plugins[plugin][name] = instance;
+        this._plugins[plugin][name] = instance;
     }
 
 

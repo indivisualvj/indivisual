@@ -386,7 +386,7 @@ class SourceManager {
                         this.loadWorker.onmessage = null;
                         sample.samples = ev.data.blobs;
                         sample.pointer = sample.frameCount;
-                        sample.finish();// fixme: preview does not listen
+                        sample.finish();
                     }
                 };
                 this.loadWorker.postMessage({

@@ -32,7 +32,7 @@ class controls extends ControlSet {
                 }
             } else if (Hotkey.isPressed('shift')) {
                 let _done = false;
-                this.program.midi.loading(() => { // todo: no direct access to midi
+                this.program.midi.loading(() => {
                     return _done;
                 });
                 this.program.resetLayers().finally(() => {
@@ -214,7 +214,7 @@ class controls extends ControlSet {
                 inst.settings.push_layers();
             }, 'end')
         },
-        push_sources: (inst) => {
+        push_sources: (inst) => { // fixme: sources do not work properly in preview mode
             return new Hotkey('pagedown', (e) => {
                 inst.settings.push_sources();
             }, 'pgd')

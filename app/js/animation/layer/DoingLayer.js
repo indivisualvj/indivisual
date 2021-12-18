@@ -117,7 +117,7 @@ class Layer extends _Layer {
      * @returns {*}
      */
     doOverrideMaterialInput() {
-
+// todo: this has to be a renderer plugin
         let seq = this.config.SourceSettings.override_material_input;
         let map = this.settings.material_input;
         let color = false;
@@ -144,7 +144,7 @@ class Layer extends _Layer {
      * @returns {*}
      */
     doOverrideBackgroundMode() {
-
+// todo: this has to be a renderer plugin
         let seq = this.config.SourceSettings.override_background_mode;
 
         if (seq === 'webcam') {

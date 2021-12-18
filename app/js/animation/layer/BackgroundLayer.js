@@ -33,7 +33,7 @@ class Layer extends _Layer {
         if (!value && this._layer.background) {
             this._hiddenBackgroundTexture = this._layer.background;
             this._layer.background = null;
-// fixme: maybe does not work properly. or something else
+
         } else if (value && this._hiddenBackgroundTexture) {
             this._layer.background = this._hiddenBackgroundTexture;
             this._hiddenBackgroundTexture = null;

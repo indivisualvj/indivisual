@@ -9,7 +9,7 @@ class ShapeTransformPlugin extends AnimationPlugin {
     vertices;
 
     before(shape) {
-        if (this._doesThings() && !this.vertices) {
+        if (this._doesThings() && !this.vertices) { // fixme: missing vertices if material fill/edge on peak
             shape.geometry.computeBoundingBox();
             shape.geometry.computeBoundingSphere();
             let vertices = shape.geometry.getAttribute('position');

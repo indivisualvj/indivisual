@@ -54,11 +54,12 @@ class Logger
      *
      * @param key
      * @param value
-     * @param force
-     * @param _console
+     * @param [forward]
+     * @param [logToConsole]
      */
-    static log(key, value, force, _console) {
-        if (_console) {
+    static log(key, value, forward, logToConsole) {
+
+        if (logToConsole || DEBUG) {
             console.log(key, value);
         }
 
@@ -70,7 +71,7 @@ class Logger
                     value = value.toString();
                 }
 
-                if (IS_CONTROLLER || force) {
+                if (forward) {
                     Messaging.emitLog(key, value);
                 }
 
@@ -95,9 +96,6 @@ class Logger
                 co.appendChild(elem);
 
                 co.scrollTop = co.scrollHeight;
-
-            } else if (_console) {
-                console.log(key, value);
             }
         });
     }

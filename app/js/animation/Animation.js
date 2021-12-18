@@ -36,7 +36,7 @@ class Animation extends Program {
 
     constructor(name) {
         super(name);
-        this.now = HC.now();
+        this.now = performance.now();
         this.last = this.now;
         this.running = false;
         this.diff = 0;
@@ -244,7 +244,7 @@ class Animation extends Program {
      *
      */
     updateRuntime() {
-        this.now = HC.now() - this.lastUpdate;
+        this.now = performance.now() - this.lastUpdate;
         this.diff = this.now - this.last;
         this.duration = 1000 / this.config.DisplaySettings.fps;
         this.diffPrc = this.diff / (1000 / 60);
@@ -804,7 +804,7 @@ class Animation extends Program {
     initSuperGau() {
         EventManager.register(EVENT_WEBGL_CONTEXT_LOST, this.name, () => {
             // now reset...
-            Logger.log('HC.Renderer', 'another context loss...', true, true);
+            Logger.log('Renderer', 'another context loss...', true, true);
 
             for (let i = 0; i < this.config.SourceValues.sample.length; i++) {
                 this.updateSource(getSampleKey(i), false, true, true, false);

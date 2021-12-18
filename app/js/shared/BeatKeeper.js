@@ -69,16 +69,6 @@ class BeatKeeper {
             speed.pitch = offset;
             speed.duration = clamp(duration - offset, duration * .85, duration * 1.15);
 
-            // if (DEBUG && Math.abs(offset) > duration && speed.divider === 4) {
-            //     console.log(
-            //         this.speeds.eight.pitch.toFixed(2),
-            //         this.speeds.quarter.pitch.toFixed(2),
-            //         this.speeds.half.pitch.toFixed(2),
-            //         this.speeds.full.pitch.toFixed(2),
-            //         this.speeds.double.pitch.toFixed(2)
-            //     );
-            // }
-
             this._tween(speed);
         });
 
@@ -104,7 +94,7 @@ class BeatKeeper {
 
         if (this.timeout) { // following trigger
             clearTimeout(this.timeout);
-            let diff = HC.now() - this.firstTrigger;
+            let diff = performance.now() - this.firstTrigger;
             let bpm = this.triggerCounter / (diff / 60000);
 
             this.triggerCounter++;
@@ -119,7 +109,7 @@ class BeatKeeper {
             Messaging.program.updateControl('tempo', bpm, true, false, false);
 
         } else { // first trigger
-            this.firstTrigger = HC.now();
+            this.firstTrigger = performance.now();
             this.triggerCounter++;
 
             clearTimeout(this.timeout);
@@ -244,10 +234,8 @@ class BeatKeeper {
     resetCounters(beatStartTime) {
         this.beatStartTime = beatStartTime;
         let duration = 60000 / this.config.ControlSettings.tempo;
-        let elapsed = HC.now() - this.beatStartTime;
+        let elapsed = performance.now() - this.beatStartTime;
         let ebeats = Math.floor((elapsed / duration) / 4);
-
-        // Logger.log('resetCounters', {ebeats:ebeats}, false, DEBUG);
 
         for (let s in this.speeds) {
             s = this.speeds[s];

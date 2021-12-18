@@ -1,6 +1,4 @@
-const HC = {};
-
-const DEBUG = true;
+const DEBUG = false;
 
 const APP_DIR = 'app';
 const STORAGE_DIR = 'storage';
@@ -13,7 +11,6 @@ const CUBE_DIR = ASSET_DIR + '/cubes';
 const VIDEO_DIR = ASSET_DIR + '/videos';
 
 const _HASH = document.location.hash ? document.location.hash.substr(1) : '';
-const _SERVER = 'server';
 const _CONTROLLER = 'controller';
 const _ANIMATION = 'animation';
 const _SETUP = 'setup';
@@ -70,8 +67,3 @@ const OSD_TIMEOUT = 2000;
 const RAD = Math.PI / 180;
 const DEG = 180 / Math.PI;
 const ANTIALIAS = true;
-
-HC.now = window.performance.now.bind(window.performance);
-if (TWEEN) {
-    TWEEN.now = HC.now;
-}

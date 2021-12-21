@@ -5,7 +5,7 @@ import {GuifyFolder} from "./ui/guify/GuifyFolder";
 import {TimeoutManager} from "../manager/TimeoutManager";
 import {Sample} from "../shared/Sample";
 import {ScriptProcessor} from "./ScriptProcessor";
-import {Layer} from "../animation/layer/ShapeLayer";
+import {Layer} from "../animation/layer/_Layer";
 
 class Controller extends _Controller
 {

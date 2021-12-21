@@ -1,7 +1,7 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {_Layer} from "./LightingLayer";
+import {_Layer} from "./DoingLayer";
 import {Shape} from "../Shape";
 import {BoxGeometry, Mesh, MeshBasicMaterial, PlaneGeometry} from "three";
 
@@ -35,7 +35,7 @@ class Layer extends _Layer
         }
 
         return shape;
-    };
+    }
 
     /**
      *
@@ -44,7 +44,7 @@ class Layer extends _Layer
     nextShapeModifier(geometry) {
         let modifier = this.getShapeModifierPlugin();
         return this.doPlugin(modifier, geometry);
-    };
+    }
 
     /**
      *
@@ -53,7 +53,7 @@ class Layer extends _Layer
     nextShapeDirection(shape) {
         let direction = this.getRotationDirectionPlugin();
         this.doPlugin(direction, shape);
-    };
+    }
 
     /**
      *
@@ -83,7 +83,7 @@ class Layer extends _Layer
         }
 
         return false;
-    };
+    }
 
     /**
      *
@@ -104,7 +104,7 @@ class Layer extends _Layer
         }
 
         return new PlaneGeometry(this.shapeSize(.1), this.shapeSize(1));
-    };
+    }
 
     /**
      *
@@ -115,7 +115,7 @@ class Layer extends _Layer
         let delay = this.shapeDelayPlugin();
         this.doPlugin(delay, shape);
 
-    };
+    }
 
     /**
      *
@@ -132,7 +132,7 @@ class Layer extends _Layer
             let min = max / 1.5;
             this.getShapeRhythmPlugin().params(shape).duration = randomInt(min, max);
         }
-    };
+    }
 
     /**
      *
@@ -141,7 +141,7 @@ class Layer extends _Layer
     nextShapeRotation(shape) {
         let rotation = this.getRotationModePlugin();
         this.doPlugin(rotation, shape);
-    };
+    }
 
 }
 

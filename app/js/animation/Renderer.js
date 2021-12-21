@@ -4,7 +4,7 @@
 
 import {EventManager} from "../manager/EventManager";
 import {LayeredControlSetManager} from "../manager/LayeredControlSetManager";
-import {Layer} from "./layer/ShapeLayer";
+import {Layer} from "./layer/_Layer";
 import {PluginManager} from "../manager/PluginManager";
 import {Group, PCFSoftShadowMap, Scene, WebGLRenderer, PerspectiveCamera} from "three";
 import * as HC from "../shared/Three";

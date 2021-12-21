@@ -10,7 +10,7 @@ import {EventManager} from "../manager/EventManager";
 import {PluginManager} from "../manager/PluginManager";
 import {Shape} from "../animation/Shape";
 import {Logger} from "./Logger";
-import {Layer} from "../animation/layer/ShapeLayer";
+import {Layer} from "../animation/layer/_Layer";
 
 class Config {
 

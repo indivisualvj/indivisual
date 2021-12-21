@@ -1,10 +1,9 @@
 /**
  * @author indivisualvj / https://github.com/indivisualvj
  */
-import {_Layer} from "./CameraLayer";
 import {LayeredControlSetManager} from "../../manager/LayeredControlSetManager";
 
-class Layer extends _Layer {
+class Layer {
 
     /**
      *
@@ -293,7 +292,7 @@ class Layer extends _Layer {
             let okey = key + '_oscillate';
             if (this.settings[okey] !== undefined) {
                 let osci = this.settings[okey];
-                if (osci in Layer.plugins.oscillate) {
+                if (osci in this._plugins.oscillate) {
                     let plugin = this.getOscillatePlugin(osci);
                     if (plugin && plugin.apply) {
                         if (enable) {

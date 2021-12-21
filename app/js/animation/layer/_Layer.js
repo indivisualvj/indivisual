@@ -7,10 +7,11 @@ import {Group, PerspectiveCamera, Vector2, Scene} from "three";
 import {EffectComposer} from "three/examples/jsm/postprocessing/EffectComposer";
 import {RenderPass} from "three/examples/jsm/postprocessing/RenderPass";
 import * as HC from "../../shared/Three";
+import {_Layer} from "./ShapeLayer";
+import {Shape} from "../Shape";
 
-class _Layer
+class Layer extends _Layer
 {
-    static plugins = {};
 
     /**
      * @type {Animation}
@@ -186,6 +187,7 @@ class _Layer
      * @param settings
      */
     constructor (animation, index, controlSets, settings) {
+        super();
         this.animation = animation;
         this.config = animation.config;
         this.beatKeeper = animation.beatKeeper;
@@ -287,7 +289,6 @@ class _Layer
         this._resetShapes();
         this._resetLighting();
         this._resetBackground();
-        this._updateShaders();
         this._updateShaderPasses();
         this._initListeners();
     }
@@ -386,55 +387,110 @@ class _Layer
         this.lastUpdate = 0;
     }
 
+    animate() {
+        this._handleResets();
+
+        this.updateTween();
+
+        this.doOscillate(true);
+
+        this.rotation(this.settings.layer_rotationx, this.settings.layer_rotationy, this.settings.layer_rotationz);
+        this.position(this.settings.layer_positionx, this.settings.layer_positiony, this.settings.layer_positionz);
+
+        this.doCameraMode();
+
+        this.materialColor = this.doOverrideMaterialInput();
+
+        this._animateShape(this.shape);
+        this.doPatternRotation(); // preset current pattern euler from layer's shape rotation
+
+        for (let i = 0; i < this.shapes.length; i++) {
+            let shape = this.getShape(i);
+            this._animateShape(shape, true);
+            shape.materialNeedsUpdate = this.shapeMaterialsNeedUpdate;
+        }
+
+        this.shapeMaterialsNeedUpdate = false;
+
+        this.doLighting(this.materialColor);
+        this.doOverrideBackgroundMode();
+        this.doBackground();
+
+        this.doOscillate(false);
+    }
+
+    updateTween() {
+        this.tween.update(this.animation.now - this.lastUpdate, false);
+    }
+
     /**
      *
-     * @returns {null|[]}
+     */
+    _handleResets() {
+        if (this.needsReset) {
+            console.log('layer.' + this.index, '_fullReset');
+            this._fullReset();
+        }
+        if (this.shapesNeedReset) {
+            console.log('layer.' + this.index, '_resetShapes');
+            this._resetShapes();
+        }
+        if (this.shadersNeedUpdate) {
+            console.log('layer.' + this.index, '_updateShaderPasses');
+            this._updateShaderPasses();
+        }
+        if (this.lightingNeedsReset) {
+            console.log('layer.' + this.index, '_resetLighting');
+            this._resetLighting();
+        }
+        if (this.fogNeedsReset) {
+            console.log('layer.' + this.index, '_resetFog');
+            this._resetFog();
+        }
+        if (this.ambientNeedsReset) {
+            console.log('layer.' + this.index, '_resetAmbientLight');
+            this._resetAmbientLight();
+        }
+    }
+
+    /**
+     *
+     * @param shape
      * @protected
      */
-    _updateShaders() {
-        let shaders = null;
-        let li = 0;
+    _animateShape(shape) {
 
-        for (let key in this.settings.shaders) {
-            let sh = this.settings.shaders[key];
+        let duration = this.getShapeRhythmPlugin();
+        let delay = this.shapeDelayPlugin();
 
-            if (sh && sh.apply) {
+        // wait until delay is over
+        if (!delay.finished(shape)) {
+            delay.update(shape, this.animation.diff);
 
-                let plugin = this.getShaderPlugin(key);
-                if (plugin) {
-                    plugin.create();
-                    plugin.updateResolution();
-                    if (!shaders) {
-                        shaders = [];
-                    }
+            // wait until duration is over
+        } else if (!duration.finished(shape)) {
+            duration.update(shape, this.animation.diff);
 
-                    while (shaders.length < sh.index) {
-                        shaders.push(false);
-                    }
-                    if (li === 0 && sh.index === 0) { // append
-                        shaders.push(plugin);
+            // reconfigure when finished
+        } else {
+            this.nextShapeRhythm(shape);
+            this.nextShapeDelay(shape);
+            this.nextShapeDirection(shape);
+            this.nextShapeRotation(shape);
 
-                    } else { // insert
-                        shaders.splice(sh.index, 0, plugin);
-                    }
-
-                    li = sh.index;
-                }
-            }
         }
 
-        if (shaders) {
-            for (let i = 0; i < shaders.length; i++) {
-                if (!shaders[i]) {
-                    shaders.splice(i, 1);
-                    i--;
-                }
-            }
+        if (shape.isVisible()) {
+            this.doPattern(shape);
+            this.doOffsetMode(shape);
+            this.doShapeTransform(shape);
+            this.doSizing(shape);
+            this.doRotationOffset(shape);
+            this.doShapeLookat(shape);
+            this.doLockingShapeRotation(shape);
+            this.doColoring(shape);
+            this.doMaterial(shape);
         }
-
-        this.shaders(shaders);
-
-        return shaders;
     }
 
     /**
@@ -520,14 +576,14 @@ class _Layer
 
     /**
      *
-     * @param sh
-     * @return {{length}|*}
+     * @param [sh]
+     * @returns {*}
      */
     shaders(sh) {
 
         if (sh !== undefined) {
             let composer = this.three.composer;
-            composer.passes = [composer.passes[0]];
+            composer.passes = [this.three.renderPass];
 
             composer.reset();
 
@@ -537,6 +593,7 @@ class _Layer
                     let pass = sh[i].create();
                     composer.addPass(pass);
                     pass.renderToScreen = false;
+
                 }
 
                 sh[i - 1].create().renderToScreen = true;
@@ -557,6 +614,42 @@ class _Layer
      */
     currentSpeed() {
         return this.beatKeeper.getSpeed(this.settings.rhythm);
+    }
+
+
+    /**
+     *
+     * @protected
+     */
+    _reloadPlugins() {
+
+        let pluginKeys = Object.keys(Layer.plugins);
+
+        for (let pi = 0; pi < pluginKeys.length; pi++) {
+
+            let plugin = pluginKeys[pi];
+            let items = Layer.plugins[plugin];
+
+            this._plugins[plugin] = this._plugins[plugin] || {};
+
+            let keys = Object.keys(items);
+            for (let i = 0; i < keys.length; i++) {
+                let key = keys[i];
+
+                if (plugin in this._plugins && key in this._plugins[plugin]) {
+                    let plug = this.getPlugin(plugin, key);
+
+                    if (plug.reset) {
+                        plug.reset();
+                    }
+                }
+                let instance = this.loadPlugin(plugin, key);
+                instance.construct(this.animation, this, this.settings, plugin, key);
+                instance.setControlSets(this.controlSets);
+                instance.inject(Shape);
+                this.setPlugin(plugin, key, instance);
+            }
+        }
     }
 
     /**
@@ -626,4 +719,4 @@ class _Layer
     }
 }
 
-export {_Layer as _Layer}
+export {Layer}

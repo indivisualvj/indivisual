@@ -6,6 +6,7 @@ import {Shape} from "../Shape";
 
 class Layer extends _Layer
 {
+    static plugins = {};
 
     /**
      *

@@ -3,7 +3,7 @@
  */
 import {DisplaySourcePlugin} from "../DisplaySourcePlugin";
 import {Shape} from "../../animation/Shape";
-import {Layer} from "../../animation/layer/ShapeLayer";
+import {Layer} from "../../animation/layer/_Layer";
 
 class Sequence extends DisplaySourcePlugin {
     static index = 10;

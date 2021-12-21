@@ -65,8 +65,8 @@ class sequence extends OverrideMaterialInputPlugin {
         this.canvas = canvas;
         this.context = canvas.getContext('2d');
 
-        let offsetX = .5 * (this.width - width);
-        let offsetY = .5 * (this.height - height);
+        let offsetX = .5 * (image.width - width);
+        let offsetY = .5 * (image.height - height);
 
         this.clip = {
             x: offsetX,

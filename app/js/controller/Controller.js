@@ -324,10 +324,10 @@ class Controller extends Program {
                 continue;
             }
 
-            this.updateSettings(i, data, false, false, true);
+            this.updateSettings(i, data, true, false, true);
 
             this.presetMan.setChanged(i+1, true);
-            Messaging.emitSettings(i, data, false, false, true);
+            Messaging.emitSettings(i, data, true, false, false);
         }
     }
 
